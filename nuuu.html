@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Page</title>
+</head>
+<body>
+  <h2>Search Page</h2>
+  <form action="nuuu.html" method="GET">
+    <input type="text" name="query" placeholder="Search...">
+    <button type="submit">Search</button>
+  </form>
+  
+  <div id="results">
+    <!-- Display the search query without escaping for testing reflected XSS -->
+    <p>You searched for: 
+      <span>
+        <!-- Intentionally unsafe code for XSS testing -->
+        <script>
+          const params = new URLSearchParams(window.location.search);
+          document.write(params.get('query') || '');
+        </script>
+      </span>
+    </p>
+  </div>
+</body>
+</html>
