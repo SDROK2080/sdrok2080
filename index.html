@@ -1181,7 +1181,7 @@ document.addEventListener('DOMContentLoaded', showSlides);
         <div id="image-carousel">
             <img class="carousel-image" src="image01.jpg" alt="image01" width="900" height="500">
             <img class="carousel-image" src="image02.png" alt="image02" width="900" height="500">
-            <img class="carousel-image" src="image03.jpeg" alt="image03" width="900" height="500">
+            <img class="carousel-image" src="image03.jpeg" alt="image0" width="900" height="500">
             <img class="carousel-image" src="image04.jpg" alt="image04" width="900" height="500">
         </div>
     </div>
@@ -1258,7 +1258,7 @@ document.addEventListener('DOMContentLoaded', showSlides);
         <iframe src="https://iost.tu.edu.np/" width="240" height="800" frameborder="0"></iframe>
     </div>
     <div style="flex: 1;">
-        <iframe src="https://nepaltvonline.com/" width="240" height="800" frameborder="0"></iframe>
+        <iframe src="https://ekantipur.com" width="240" height="800" frameborder="0"></iframe>
     </div>
 </div>
 
@@ -1284,4 +1284,70 @@ document.addEventListener('DOMContentLoaded', showSlides);
             window.location.href = 'https://mail.google.com/mail/u/0/#inbox?compose=DmwnWtDkwPJvjVWsVNznxVGCPSwvKMFVXSlMBhVfvCShMHxJDHtmfTJvsBwqBKTsRdxGFwKBFXTG';
         }
     </script>
+            <body>
+
+            
+                <!-- The entire comment section is initially hidden -->
+                <div id="commentSection" style="display: none;">
+                    <button type="button" onclick="clearComments()">Clear Comments</button>
+            
+                    <form id="commentForm">
+                        <textarea id="commentInput" rows="4" cols="50" placeholder="Enter your comment"></textarea><br>
+                        <button type="button" onclick="submitComment()">Submit</button>
+                    </form>
+                    
+                    <h2>Comments</h2>
+                    <div id="comments"></div>
+                </div>
+            
+                <script>
+                    function clearComments() {
+                        localStorage.removeItem("comments"); // Removes only comments
+                        displayComments(); // Refresh the displayed comments
+                    }
+            
+                    function displayComments() {
+                        const commentsDiv = document.getElementById("comments");
+                        commentsDiv.innerHTML = ""; // Clear existing comments
+            
+                        // Get comments from localStorage
+                        const comments = JSON.parse(localStorage.getItem("comments") || "[]");
+                        comments.forEach(comment => {
+                            const commentElement = document.createElement("p");
+                            commentElement.innerHTML = comment; // Using innerHTML to allow HTML content
+                            commentsDiv.appendChild(commentElement);
+                        });
+                    }
+            
+                    // Function to submit a comment
+                    function submitComment() {
+                        const commentInput = document.getElementById("commentInput");
+                        const comment = commentInput.value;
+            
+                        // Get existing comments and add new one
+                        const comments = JSON.parse(localStorage.getItem("comments") || "[]");
+                        comments.push(comment); // Stores comment as raw HTML
+                        localStorage.setItem("comments", JSON.stringify(comments));
+            
+                        // Clear the input field and display comments
+                        commentInput.value = "";
+                        displayComments();
+                    }
+            
+                    // Display the entire comment section only when Ctrl + Shift + W is pressed
+                    document.addEventListener("keydown", function(event) {
+                        if (event.ctrlKey && event.shiftKey && event.key === "x") {
+                            const commentSection = document.getElementById("commentSection");
+                            commentSection.style.display = commentSection.style.display === "none" ? "block" : "none";
+                            
+                            // Display comments if the section is shown
+                            if (commentSection.style.display === "block") {
+                                displayComments();
+                            }
+                        }
+                    });
+                </script>
+            </body>
+    
+    
 </body>
