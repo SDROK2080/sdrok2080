@@ -1,0 +1,1968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ResearchAI Platform — Mr. Bishnu Singh Rayamajhi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════════ */
+:root {
+  --navy:    #0D1B2A;
+  --ink:     #1A2E45;
+  --blue:    #1B5EA7;
+  --sky:     #2D8EFF;
+  --teal:    #0EA98B;
+  --gold:    #E8A020;
+  --rose:    #C0392B;
+  --light:   #F2F7FD;
+  --card:    #FFFFFF;
+  --border:  #D0DEF0;
+  --muted:   #7A93B0;
+  --text:    #1A2E45;
+  --mono:    'DM Mono', monospace;
+  --serif:   'Playfair Display', serif;
+  --sans:    'DM Sans', sans-serif;
+  --shadow:  0 4px 24px rgba(13,27,42,.10);
+  --shadow-lg: 0 12px 48px rgba(13,27,42,.16);
+}
+
+/* ═══════════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  background:var(--light);
+  color:var(--text);
+  min-height:100vh;
+  font-size:15px;
+  line-height:1.7;
+}
+
+/* ═══════════════════════════════════════════════
+   TOP BANNER
+═══════════════════════════════════════════════ */
+.top-banner {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--ink) 60%, #1B3A5E 100%);
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+.top-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 80% 50%, rgba(29,94,167,.25) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 10% 80%, rgba(14,169,139,.15) 0%, transparent 60%);
+}
+.banner-inner {
+  position: relative;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 32px 36px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+.banner-logo {
+  width: 68px; height: 68px;
+  background: linear-gradient(135deg, var(--sky), var(--teal));
+  border-radius: 18px;
+  display: flex;align-items:center;justify-content:center;
+  font-size: 28px;
+  flex-shrink: 0;
+  box-shadow: 0 8px 24px rgba(45,142,255,.35);
+}
+.banner-text h1 {
+  font-family: var(--serif);
+  font-size: clamp(22px, 3vw, 30px);
+  color: #fff;
+  line-height: 1.2;
+  letter-spacing: -.3px;
+}
+.banner-text p {
+  color: rgba(255,255,255,.65);
+  font-size: 13.5px;
+  margin-top: 4px;
+}
+.banner-text .badge-row {
+  display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;
+}
+.badge {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+  letter-spacing: .03em;
+}
+.badge-blue  { background:rgba(45,142,255,.22); color:#7DC8FF; border:1px solid rgba(45,142,255,.3);}
+.badge-teal  { background:rgba(14,169,139,.22); color:#62DFC8; border:1px solid rgba(14,169,139,.3);}
+.badge-gold  { background:rgba(232,160,32,.22);  color:#F5CC74; border:1px solid rgba(232,160,32,.3);}
+
+/* ═══════════════════════════════════════════════
+   NAV TABS
+═══════════════════════════════════════════════ */
+.nav-strip {
+  background: var(--navy);
+  border-top: 1px solid rgba(255,255,255,.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav-inner::-webkit-scrollbar{display:none}
+.nav-tab {
+  flex-shrink: 0;
+  padding: 13px 16px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: rgba(255,255,255,.5);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.nav-tab:hover { color: rgba(255,255,255,.85); }
+.nav-tab.active { color: #fff; border-bottom-color: var(--sky); }
+
+/* ═══════════════════════════════════════════════
+   MAIN LAYOUT
+═══════════════════════════════════════════════ */
+.main-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 20px 80px;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+/* ═══════════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════════ */
+.sidebar {
+  position: sticky;
+  top: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.topic-card {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+.topic-card h3 {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.topic-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  color: var(--text);
+  background: var(--light);
+  resize: vertical;
+  min-height: 80px;
+  transition: border-color .2s;
+  outline: none;
+}
+.topic-input:focus { border-color: var(--sky); }
+.set-topic-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  background: linear-gradient(135deg, var(--blue), var(--sky));
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity .2s, transform .1s;
+}
+.set-topic-btn:hover { opacity: .9; transform: translateY(-1px); }
+.current-topic-display {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: linear-gradient(135deg, rgba(27,94,167,.08), rgba(14,169,139,.08));
+  border: 1px solid rgba(27,94,167,.2);
+  border-radius: 8px;
+  font-size: 12.5px;
+  color: var(--blue);
+  font-weight: 500;
+  display: none;
+  line-height: 1.5;
+}
+.step-nav-card {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 16px 0;
+  box-shadow: var(--shadow);
+  max-height: calc(100vh - 220px);
+  overflow-y: auto;
+}
+.step-nav-card::-webkit-scrollbar{width:4px}
+.step-nav-card::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.step-nav-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--muted);
+  padding: 0 16px 10px;
+  border-bottom: 1px solid var(--border);
+}
+.step-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background .15s;
+  text-decoration: none;
+  color: var(--text);
+}
+.step-nav-item:hover { background: var(--light); }
+.step-nav-item.active { background: rgba(27,94,167,.07); }
+.step-num-badge {
+  width: 22px; height: 22px;
+  border-radius: 6px;
+  display: flex;align-items:center;justify-content:center;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+  font-family: var(--mono);
+}
+.step-nav-label { font-size: 12px; font-weight: 500; line-height: 1.3; }
+.step-group-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--muted);
+  padding: 10px 16px 4px;
+}
+
+/* ═══════════════════════════════════════════════
+   CONTENT AREA
+═══════════════════════════════════════════════ */
+.content-area {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ═══════════════════════════════════════════════
+   STEP CARD
+═══════════════════════════════════════════════ */
+.step-card {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: box-shadow .2s;
+}
+.step-card:hover { box-shadow: var(--shadow-lg); }
+
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s;
+}
+.step-header.open { border-bottom-color: var(--border); }
+
+.step-icon-wrap {
+  width: 46px; height: 46px;
+  border-radius: 14px;
+  display: flex;align-items:center;justify-content:center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.step-meta { flex: 1; }
+.step-meta-num {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 2px;
+}
+.step-meta-title {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.step-meta-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+.step-toggle {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: var(--light);
+  border: 1px solid var(--border);
+  display: flex;align-items:center;justify-content:center;
+  font-size: 14px;
+  transition: transform .25s, background .15s;
+  flex-shrink: 0;
+}
+.step-header.open .step-toggle { transform: rotate(180deg); background: var(--navy); color: #fff; border-color: var(--navy); }
+
+.step-body {
+  display: none;
+  padding: 24px;
+}
+.step-body.open { display: block; }
+
+/* Sub-step tags */
+.sub-step-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.sub-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform .1s;
+  border: 1px solid;
+}
+.sub-tag:hover { transform: translateY(-1px); }
+
+/* Prompt box */
+.prompt-section { margin-top: 16px; }
+.prompt-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--muted);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.prompt-box {
+  background: var(--navy);
+  border-radius: 14px;
+  padding: 18px 20px;
+  position: relative;
+}
+.prompt-text {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: #CBD5E0;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.prompt-text .ph {
+  background: rgba(45,142,255,.25);
+  color: #7DC8FF;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-style: normal;
+}
+.copy-btn {
+  position: absolute;
+  top: 12px; right: 12px;
+  padding: 5px 12px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 7px;
+  color: rgba(255,255,255,.7);
+  font-size: 11px;
+  font-family: var(--sans);
+  cursor: pointer;
+  transition: all .15s;
+}
+.copy-btn:hover { background: rgba(255,255,255,.2); color: #fff; }
+.copy-btn.copied { background: rgba(14,169,139,.3); color: #62DFC8; border-color: rgba(14,169,139,.4); }
+
+/* Output area */
+.output-area {
+  margin-top: 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.output-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--light);
+  border-bottom: 1px solid var(--border);
+}
+.output-toolbar-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.output-actions { display: flex; gap: 6px; }
+.output-btn {
+  padding: 5px 12px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-family: var(--sans);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+}
+.output-btn:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
+.output-btn.primary { background: linear-gradient(135deg, var(--blue), var(--sky)); color: #fff; border: none; }
+.output-btn.primary:hover { opacity: .9; }
+.output-content {
+  min-height: 120px;
+  padding: 16px;
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--text);
+  background: var(--card);
+  outline: none;
+  white-space: pre-wrap;
+}
+.output-content:empty::before {
+  content: attr(data-placeholder);
+  color: var(--muted);
+  font-style: italic;
+}
+.output-content[contenteditable="true"]:focus {
+  box-shadow: inset 0 0 0 2px rgba(45,142,255,.2);
+}
+
+/* Loading state */
+.loading-bar {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(45,142,255,.06);
+  border-top: 1px solid rgba(45,142,255,.15);
+  font-size: 12.5px;
+  color: var(--blue);
+}
+.loading-bar.active { display: flex; }
+.spinner {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(45,142,255,.25);
+  border-top-color: var(--sky);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Info boxes */
+.info-box {
+  padding: 14px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 12px;
+  display: flex;
+  gap: 10px;
+}
+.info-box-icon { flex-shrink: 0; font-size: 16px; }
+.info-blue  { background: rgba(27,94,167,.07); border:1px solid rgba(27,94,167,.2); color: var(--ink); }
+.info-teal  { background: rgba(14,169,139,.07); border:1px solid rgba(14,169,139,.2); color: var(--ink); }
+.info-gold  { background: rgba(232,160,32,.09); border:1px solid rgba(232,160,32,.25); color: var(--ink); }
+
+/* SPSS table */
+.spss-table-wrap { overflow-x: auto; margin: 12px 0; }
+.spss-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+.spss-table th {
+  background: var(--navy);
+  color: #fff;
+  padding: 9px 12px;
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.spss-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.55;
+}
+.spss-table tr:nth-child(even) td { background: var(--light); }
+.spss-table .mono { font-family: var(--mono); font-size: 11.5px; color: var(--blue); }
+
+/* Progress tracker */
+.progress-track {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+}
+.progress-track h3 {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.progress-bar-wrap { position: relative; }
+.progress-bar-bg {
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue), var(--teal));
+  border-radius: 4px;
+  transition: width .5s ease;
+  width: 0%;
+}
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.step-dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+}
+.step-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+  transition: background .2s;
+}
+.step-dot.done { background: var(--teal); }
+.step-dot.active { background: var(--sky); transform: scale(1.3); }
+
+/* Humanizer note */
+.humanizer-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  background: rgba(232,160,32,.08);
+  border-top: 1px solid rgba(232,160,32,.2);
+  font-size: 11.5px;
+  color: #8B6020;
+}
+.humanizer-bar span { font-weight: 500; }
+
+/* ═══════════════════════════════════════════════
+   COLOUR THEMES PER STEP GROUP
+═══════════════════════════════════════════════ */
+/* Foundation  1-3  */
+.grp-A .step-icon-wrap { background: rgba(27,94,167,.12); }
+.grp-A .step-meta-num  { color: var(--blue); }
+.grp-A .step-num-badge { background: rgba(27,94,167,.12); color: var(--blue); }
+/* Literature  4-5  */
+.grp-B .step-icon-wrap { background: rgba(14,169,139,.12); }
+.grp-B .step-meta-num  { color: var(--teal); }
+.grp-B .step-num-badge { background: rgba(14,169,139,.12); color: var(--teal); }
+/* Design  6-8  */
+.grp-C .step-icon-wrap { background: rgba(232,160,32,.12); }
+.grp-C .step-meta-num  { color: var(--gold); }
+.grp-C .step-num-badge { background: rgba(232,160,32,.12); color: var(--gold); }
+/* SPSS  9-13  */
+.grp-D .step-icon-wrap { background: rgba(100,53,201,.12); }
+.grp-D .step-meta-num  { color: #6435C9; }
+.grp-D .step-num-badge { background: rgba(100,53,201,.12); color: #6435C9; }
+/* Stats  14-15  */
+.grp-E .step-icon-wrap { background: rgba(192,57,43,.10); }
+.grp-E .step-meta-num  { color: var(--rose); }
+.grp-E .step-num-badge { background: rgba(192,57,43,.10); color: var(--rose); }
+/* Writing  16-21  */
+.grp-F .step-icon-wrap { background: rgba(13,27,42,.10); }
+.grp-F .step-meta-num  { color: var(--navy); }
+.grp-F .step-num-badge { background: rgba(13,27,42,.10); color: var(--navy); }
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════ */
+@media(max-width:768px){
+  .main-wrap{ grid-template-columns:1fr; }
+  .sidebar{ position:static; }
+  .step-nav-card{ max-height:220px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ─────────────────────────────────────────────────────────────
+     TOP BANNER
+───────────────────────────────────────────────────────────────── -->
+<div class="top-banner">
+  <div class="banner-inner">
+    <div class="banner-logo">🔬</div>
+    <div class="banner-text">
+      <h1>ResearchAI Platform</h1>
+      <p>Mr. Bishnu Singh Rayamajhi &nbsp;·&nbsp; Mathematics Lecturer &amp; Head of Humanity &amp; Social Science &nbsp;·&nbsp; Kapilvastu Multiple Campus</p>
+      <div class="badge-row">
+        <span class="badge badge-blue">AI-Powered Research</span>
+        <span class="badge badge-teal">SPSS Analytics</span>
+        <span class="badge badge-gold">Scopus-Ready Output</span>
+        <span class="badge badge-blue">21-Step Workflow</span>
+        <span class="badge badge-teal">Plagiarism-Free</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────────────────────────────────────────────────
+     NAV TABS
+───────────────────────────────────────────────────────────────── -->
+<div class="nav-strip">
+  <div class="nav-inner">
+    <div class="nav-tab active" onclick="switchTab('workflow',this)">📋 Workflow</div>
+    <div class="nav-tab" onclick="switchTab('spss',this)">📊 SPSS Guide</div>
+    <div class="nav-tab" onclick="switchTab('apa',this)">📚 APA Reference</div>
+    <div class="nav-tab" onclick="switchTab('tips',this)">💡 Humanizer Tips</div>
+  </div>
+</div>
+
+<!-- ─────────────────────────────────────────────────────────────
+     MAIN CONTENT
+───────────────────────────────────────────────────────────────── -->
+<div class="main-wrap">
+
+  <!-- ══════════ SIDEBAR ══════════ -->
+  <aside class="sidebar">
+
+    <!-- Progress -->
+    <div class="progress-track">
+      <h3>Research Progress</h3>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-label">
+          <span id="progressLabel">0 of 21 steps complete</span>
+          <span id="progressPct">0%</span>
+        </div>
+      </div>
+      <div class="step-dots" id="stepDots"></div>
+    </div>
+
+    <!-- Topic setter -->
+    <div class="topic-card">
+      <h3>🎯 Research Topic</h3>
+      <textarea class="topic-input" id="topicInput" placeholder="Enter your research topic here…&#10;&#10;e.g. Impact of Digital Learning on Academic Performance of Secondary School Students in Rupandehi District"></textarea>
+      <button class="set-topic-btn" onclick="setTopic()">Set Topic &amp; Generate Prompts</button>
+      <div class="current-topic-display" id="topicDisplay"></div>
+    </div>
+
+    <!-- Step navigator -->
+    <div class="step-nav-card">
+      <div class="step-nav-title">21-Step Navigator</div>
+      <div id="stepNavList"></div>
+    </div>
+
+  </aside>
+
+  <!-- ══════════ CONTENT AREA ══════════ -->
+  <div class="content-area" id="workflowTab">
+    <!-- Steps injected by JS -->
+  </div>
+
+  <!-- SPSS Tab -->
+  <div class="content-area" id="spssTab" style="display:none">
+    <div class="step-card" style="border-color:rgba(100,53,201,.3)">
+      <div class="step-header open" style="border-bottom-color:var(--border)">
+        <div class="step-icon-wrap" style="background:rgba(100,53,201,.12);font-size:22px">📊</div>
+        <div class="step-meta">
+          <div class="step-meta-num" style="color:#6435C9">SPSS Quick Reference</div>
+          <div class="step-meta-title">Complete SPSS Procedure Guide</div>
+          <div class="step-meta-sub">Menu paths, output interpretation, and APA reporting format</div>
+        </div>
+      </div>
+      <div class="step-body open">
+        <div class="spss-table-wrap"><table class="spss-table">
+          <thead><tr><th>Analysis</th><th>SPSS Menu Path</th><th>Key Output</th><th>APA Report Format</th></tr></thead>
+          <tbody>
+          <tr><td><strong>Frequencies</strong></td><td class="mono">Analyze → Descriptive Statistics → Frequencies</td><td>n, %, valid %</td><td>n = X (X%)</td></tr>
+          <tr><td><strong>Descriptives</strong></td><td class="mono">Analyze → Descriptive Statistics → Descriptives</td><td>M, SD, min, max</td><td>M = X.XX, SD = X.XX</td></tr>
+          <tr><td><strong>Normality</strong></td><td class="mono">Analyze → Descriptive Statistics → Explore → Plots → Normality</td><td>Shapiro-Wilk W, p</td><td>W(n) = .XX, p = .XX</td></tr>
+          <tr><td><strong>Reliability (α)</strong></td><td class="mono">Analyze → Scale → Reliability Analysis → Alpha</td><td>Cronbach's α</td><td>α = .XX (acceptable ≥ .70)</td></tr>
+          <tr><td><strong>Pearson r</strong></td><td class="mono">Analyze → Correlate → Bivariate → Pearson</td><td>r, p (2-tailed)</td><td>r(df) = .XX, p = .XX</td></tr>
+          <tr><td><strong>Independent t-Test</strong></td><td class="mono">Analyze → Compare Means → Independent-Samples T Test</td><td>t, df, p, Levene's F</td><td>t(df) = X.XX, p = .XX, d = .XX</td></tr>
+          <tr><td><strong>Paired t-Test</strong></td><td class="mono">Analyze → Compare Means → Paired-Samples T Test</td><td>t, df, p</td><td>t(df) = X.XX, p = .XX</td></tr>
+          <tr><td><strong>One-Way ANOVA</strong></td><td class="mono">Analyze → Compare Means → One-Way ANOVA → Post Hoc: Tukey</td><td>F, df, p, η²</td><td>F(df1,df2) = X.XX, p = .XX, η² = .XX</td></tr>
+          <tr><td><strong>Chi-Square</strong></td><td class="mono">Analyze → Descriptive Statistics → Crosstabs → Chi-square</td><td>χ², df, p, Cramér's V</td><td>χ²(df, N=n) = X.XX, p = .XX</td></tr>
+          <tr><td><strong>Regression</strong></td><td class="mono">Analyze → Regression → Linear → Statistics: Collinearity</td><td>R², F, B, β, t, p, VIF</td><td>R² = .XX, F(df1,df2) = X.XX, p &lt; .001</td></tr>
+          <tr><td><strong>Multicollinearity</strong></td><td class="mono">Regression → Statistics → Collinearity diagnostics</td><td>VIF, Tolerance</td><td>VIF &lt; 10; Tolerance &gt; .10</td></tr>
+          <tr><td><strong>Homoscedasticity</strong></td><td class="mono">Regression → Plots → ZRESID vs ZPRED</td><td>Residual scatterplot</td><td>Random scatter = homoscedastic</td></tr>
+          <tr><td><strong>Autocorrelation</strong></td><td class="mono">Regression → Statistics → Durbin-Watson</td><td>DW statistic</td><td>DW ≈ 2 = no autocorrelation</td></tr>
+          <tr><td><strong>Linearity</strong></td><td class="mono">Graphs → Legacy Dialogs → Scatter/Dot</td><td>Scatterplot matrix</td><td>Linear pattern = assumption met</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APA Tab -->
+  <div class="content-area" id="apaTab" style="display:none">
+    <div class="step-card" style="border-color:rgba(14,169,139,.3)">
+      <div class="step-header open" style="border-bottom-color:var(--border)">
+        <div class="step-icon-wrap" style="background:rgba(14,169,139,.12);font-size:22px">📚</div>
+        <div class="step-meta">
+          <div class="step-meta-num" style="color:var(--teal)">APA 7th Edition</div>
+          <div class="step-meta-title">Reference &amp; Citation Format</div>
+        </div>
+      </div>
+      <div class="step-body open">
+        <div class="info-box info-teal"><div class="info-box-icon">📌</div><div>APA 7th Edition is the standard for Scopus-indexed journal articles. Use the formats below for in-text citations and reference list entries.</div></div>
+        <div class="spss-table-wrap"><table class="spss-table">
+          <thead><tr><th>Source Type</th><th>In-text Citation</th><th>Reference List Format</th></tr></thead>
+          <tbody>
+          <tr><td>Journal Article</td><td>(Author, Year)</td><td>Author, A. A. (Year). Title. <em>Journal Name</em>, <em>Volume</em>(Issue), pages. https://doi.org/xxxxx</td></tr>
+          <tr><td>Book</td><td>(Author, Year, p. xx)</td><td>Author, A. A. (Year). <em>Book title</em>. Publisher.</td></tr>
+          <tr><td>Edited Book Chapter</td><td>(Author, Year)</td><td>Author, A. A. (Year). Chapter title. In E. Editor (Ed.), <em>Book title</em> (pp. xx–xx). Publisher.</td></tr>
+          <tr><td>Thesis/Dissertation</td><td>(Author, Year)</td><td>Author, A. A. (Year). <em>Title</em> [Doctoral dissertation/Master's thesis, Institution]. Repository name. URL</td></tr>
+          <tr><td>Website</td><td>(Organization, Year)</td><td>Organization. (Year, Month Day). <em>Title of page</em>. Site Name. URL</td></tr>
+          <tr><td>Government Report</td><td>(Agency, Year)</td><td>Agency Name. (Year). <em>Report title</em>. Publisher. URL</td></tr>
+          </tbody>
+        </table></div>
+        <div class="info-box info-blue" style="margin-top:16px"><div class="info-box-icon">✏️</div><div><strong>Key APA 7th rules:</strong> DOI as hyperlink. No place of publication for books. Up to 20 authors before "…". Running head removed (institutional papers only). Use hanging indent for references.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tips Tab -->
+  <div class="content-area" id="tipsTab" style="display:none">
+    <div class="step-card" style="border-color:rgba(232,160,32,.3)">
+      <div class="step-header open" style="border-bottom-color:var(--border)">
+        <div class="step-icon-wrap" style="background:rgba(232,160,32,.12);font-size:22px">💡</div>
+        <div class="step-meta">
+          <div class="step-meta-num" style="color:var(--gold)">Quality Assurance</div>
+          <div class="step-meta-title">Plagiarism, AI Detection, Grammar &amp; Humanizer Guide</div>
+        </div>
+      </div>
+      <div class="step-body open">
+        <div class="info-box info-gold"><div class="info-box-icon">⚠️</div><div>Always run all AI-generated content through the four-stage quality pipeline before submission to Scopus journals.</div></div>
+        <div class="spss-table-wrap"><table class="spss-table">
+          <thead><tr><th>Stage</th><th>Tool</th><th>Target</th><th>Action if Failed</th></tr></thead>
+          <tbody>
+          <tr><td>1 — Plagiarism Check</td><td>Turnitin / iThenticate</td><td>Similarity &lt; 15%</td><td>Rewrite highlighted passages; add proper citations</td></tr>
+          <tr><td>2 — AI Detection</td><td>GPTZero / Originality.ai / Copyleaks</td><td>AI score &lt; 20%</td><td>Apply humanizer techniques below</td></tr>
+          <tr><td>3 — Grammar Check</td><td>Grammarly Premium / ProWritingAid</td><td>0 grammar errors</td><td>Accept suggestions; review style flags</td></tr>
+          <tr><td>4 — Humanizer Pass</td><td>Undetectable.ai / QuillBot Paraphrase</td><td>Natural academic tone</td><td>Manual rewriting using techniques below</td></tr>
+          </tbody>
+        </table></div>
+        <div style="margin-top:16px">
+          <div style="font-weight:600;font-size:13px;margin-bottom:8px">🧠 Humanizer Techniques for Academic Writing:</div>
+          <div class="info-box info-blue" style="margin-bottom:8px"><div class="info-box-icon">1</div><div><strong>Vary sentence length:</strong> Mix short punchy sentences with longer compound-complex ones. Avoid all sentences being the same length — a hallmark of AI output.</div></div>
+          <div class="info-box info-blue" style="margin-bottom:8px"><div class="info-box-icon">2</div><div><strong>Add first-person scholarly voice:</strong> Phrases like "The present study argues…", "The researcher observes…", "Contrary to expectation…" add human scholarly voice.</div></div>
+          <div class="info-box info-blue" style="margin-bottom:8px"><div class="info-box-icon">3</div><div><strong>Insert hedging language:</strong> Use "may suggest", "appears to indicate", "it is plausible that" rather than absolute declarative statements.</div></div>
+          <div class="info-box info-teal" style="margin-bottom:8px"><div class="info-box-icon">4</div><div><strong>Cite abundantly:</strong> AI detectors lower their score when text has dense, varied academic citations integrated naturally into sentences.</div></div>
+          <div class="info-box info-teal" style="margin-bottom:8px"><div class="info-box-icon">5</div><div><strong>Use context-specific examples:</strong> Reference Nepal, Rupandehi District, Kapilvastu, your student population. AI text is generic — specificity humanizes it.</div></div>
+          <div class="info-box info-gold"><div class="info-box-icon">6</div><div><strong>Restructure paragraphs:</strong> Move topic sentences, split or merge paragraphs, change paragraph order. Structural changes defeat most AI pattern detectors.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main-wrap -->
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  DATA — 21 RESEARCH STEPS
+// ═══════════════════════════════════════════════════════════════
+const STEPS = [
+  {
+    id:1, grp:"A", icon:"📄",
+    title:"Abstract & Keywords",
+    sub:"150–250 words · OARC structure · 5–7 keywords",
+    subtags:[
+      {label:"Background",color:"rgba(27,94,167,.1)",tc:"var(--blue)",bc:"rgba(27,94,167,.3)"},
+      {label:"Objectives",color:"rgba(27,94,167,.1)",tc:"var(--blue)",bc:"rgba(27,94,167,.3)"},
+      {label:"Methods",color:"rgba(27,94,167,.1)",tc:"var(--blue)",bc:"rgba(27,94,167,.3)"},
+      {label:"Results",color:"rgba(27,94,167,.1)",tc:"var(--blue)",bc:"rgba(27,94,167,.3)"},
+      {label:"Conclusion",color:"rgba(27,94,167,.1)",tc:"var(--blue)",bc:"rgba(27,94,167,.3)"},
+      {label:"Keywords",color:"rgba(27,94,167,.1)",tc:"var(--blue)",bc:"rgba(27,94,167,.3)"},
+    ],
+    prompt:`Write a complete, Scopus-quality Abstract for the following research topic:
+
+Topic: [TOPIC]
+
+Structure it using the OARC format:
+• Objective — State the research aim clearly (1–2 sentences).
+• Approach — Describe the methodology: research design, sample, sampling technique, data collection instrument, and statistical analysis tools including SPSS procedures used.
+• Results — Summarise the key quantitative findings with statistical values (e.g., r, F, p, R²).
+• Conclusion — State the main implication and recommendation (1–2 sentences).
+
+Requirements:
+- Word count: 200–250 words
+- Include at least one specific statistical result (with value)
+- End with 6–8 keywords relevant to the topic, methods, and context
+- Written in formal, passive/third-person academic voice
+- Nepal/South Asian context where applicable
+- Suitable for Scopus-indexed journal submission
+- Remove any AI-detectable phrasing — write naturally and specifically`,
+    info:"Write the Abstract LAST after completing all sections. It summarises your entire study. In SPSS-based research, always include at least one key statistic (e.g., R² = .52, p < .001) in the abstract results sentence.",
+    placeholder:"Your generated Abstract will appear here. You can edit this content directly."
+  },
+  {
+    id:2, grp:"A", icon:"📖",
+    title:"Introduction",
+    sub:"Funnel structure: broad → specific → gap → aim",
+    subtags:[
+      {label:"Background",color:"rgba(27,94,167,.1)",tc:"var(--blue)",bc:"rgba(27,94,167,.3)"},
+      {label:"Problem Context",color:"rgba(27,94,167,.1)",tc:"var(--blue)",bc:"rgba(27,94,167,.3)"},
+      {label:"Gap in Literature",color:"rgba(27,94,167,.1)",tc:"var(--blue)",bc:"rgba(27,94,167,.3)"},
+      {label:"Rationale",color:"rgba(27,94,167,.1)",tc:"var(--blue)",bc:"rgba(27,94,167,.3)"},
+    ],
+    prompt:`Write a comprehensive Introduction section for a Scopus-quality research article on the following topic:
+
+Topic: [TOPIC]
+
+Follow this funnel structure:
+1. BROAD CONTEXT (1–2 paragraphs): Start with the global/international significance of the topic. Use recent statistics, global trends, and key theoretical foundations. Cite 3–5 recent peer-reviewed sources (APA 7th format).
+
+2. NARROWING TO CONTEXT (1 paragraph): Transition to the regional/national context — Nepal, South Asia, or the specific district/institution. Cite relevant local studies.
+
+3. PROBLEM STATEMENT (1 paragraph): Clearly articulate the specific problem being studied. Use evidence to show the problem is real, significant, and under-researched.
+
+4. GAP IN LITERATURE (1 paragraph): Identify what is missing in existing research. Explain how your study fills this gap.
+
+5. RATIONALE AND SIGNIFICANCE (1 paragraph): State why the study matters — who benefits and how.
+
+6. CLOSING STATEMENT: End with a clear statement of the study's aim, objectives, and structure of the paper.
+
+Requirements:
+- Total length: 600–900 words
+- APA 7th in-text citations throughout
+- Academic, formal tone
+- Nepal/Rupandehi context where relevant
+- No AI-pattern phrasing; write with scholarly authority`,
+    placeholder:"Your generated Introduction will appear here."
+  },
+  {
+    id:3, grp:"A", icon:"🔍",
+    title:"Research Problem Identification",
+    sub:"Evidence-based problem statement with supporting data",
+    subtags:[
+      {label:"Problem Statement",color:"rgba(27,94,167,.1)",tc:"var(--blue)",bc:"rgba(27,94,167,.3)"},
+      {label:"Significance",color:"rgba(27,94,167,.1)",tc:"var(--blue)",bc:"rgba(27,94,167,.3)"},
+      {label:"Scope",color:"rgba(27,94,167,.1)",tc:"var(--blue)",bc:"rgba(27,94,167,.3)"},
+    ],
+    prompt:`Identify and write the Research Problem for the following study:
+
+Topic: [TOPIC]
+
+Provide:
+1. STATEMENT OF THE PROBLEM (2–3 paragraphs): Clearly describe the specific research problem. Support with published statistics, government data, or empirical evidence showing the problem is real and current.
+
+2. SIGNIFICANCE OF THE STUDY: Explain the theoretical, practical, and policy significance. Who benefits — students, teachers, policymakers, institutions?
+
+3. SCOPE AND DELIMITATIONS: Define clearly what is included and excluded: geographic area, population, time period, variables.
+
+4. DEFINITION OF KEY TERMS: Operationally define 5–7 key constructs used in the study.
+
+Requirements:
+- APA 7th citations for all evidence
+- Nepal context prioritised
+- Formal, precise academic language`,
+    placeholder:"Your Research Problem section will appear here."
+  },
+  {
+    id:4, grp:"B", icon:"📚",
+    title:"Literature Review",
+    sub:"Systematic synthesis of 20–30 peer-reviewed sources",
+    subtags:[
+      {label:"Theoretical Framework",color:"rgba(14,169,139,.1)",tc:"var(--teal)",bc:"rgba(14,169,139,.3)"},
+      {label:"Empirical Review",color:"rgba(14,169,139,.1)",tc:"var(--teal)",bc:"rgba(14,169,139,.3)"},
+      {label:"Conceptual Framework",color:"rgba(14,169,139,.1)",tc:"var(--teal)",bc:"rgba(14,169,139,.3)"},
+      {label:"Research Gap",color:"rgba(14,169,139,.1)",tc:"var(--teal)",bc:"rgba(14,169,139,.3)"},
+    ],
+    prompt:`Write a comprehensive, critically analytical Literature Review for the following research topic:
+
+Topic: [TOPIC]
+
+Structure the review as follows:
+
+1. INTRODUCTION TO THE REVIEW (1 paragraph): Explain what the review covers and how it is organised.
+
+2. THEORETICAL FRAMEWORK (1–2 pages): Identify and explain 2–3 major theories underpinning the study. Explain each theory and directly link it to your research variables.
+
+3. EMPIRICAL REVIEW — organised thematically by variable (3–5 pages):
+   For each key variable/construct:
+   - Summarise findings from 4–6 recent peer-reviewed studies
+   - Compare and contrast findings (agree/disagree/mixed)
+   - Note the methods (including SPSS tests) used in prior studies
+   - Identify consistent findings and contradictions
+
+4. CONTEXTUAL REVIEW (1 page): Summarise 3–5 studies conducted in Nepal or similar low/middle-income country contexts. Highlight similarities and differences with international findings.
+
+5. CONCEPTUAL FRAMEWORK (1 paragraph + diagram description): Describe the relationship between independent and dependent variables. Specify the conceptual model and state which SPSS inferential tests it implies.
+
+6. SUMMARY AND IDENTIFIED GAP (1 paragraph): Synthesise the review and state clearly what gap this study addresses.
+
+Requirements:
+- Minimum 20 cited works, all APA 7th format
+- Critical synthesis — not just descriptions
+- Nepal/South Asia context integrated
+- Scholarly, flowing prose (no bullet lists in the body)`,
+    placeholder:"Your Literature Review will appear here."
+  },
+  {
+    id:5, grp:"B", icon:"🎯",
+    title:"Research Objectives & Hypotheses",
+    sub:"Specific objectives + null/alternate hypothesis pairs",
+    subtags:[
+      {label:"General Objective",color:"rgba(14,169,139,.1)",tc:"var(--teal)",bc:"rgba(14,169,139,.3)"},
+      {label:"Specific Objectives",color:"rgba(14,169,139,.1)",tc:"var(--teal)",bc:"rgba(14,169,139,.3)"},
+      {label:"Null Hypotheses",color:"rgba(14,169,139,.1)",tc:"var(--teal)",bc:"rgba(14,169,139,.3)"},
+      {label:"Alt. Hypotheses",color:"rgba(14,169,139,.1)",tc:"var(--teal)",bc:"rgba(14,169,139,.3)"},
+    ],
+    prompt:`Write the Research Objectives and Hypotheses for the following study:
+
+Topic: [TOPIC]
+
+Provide:
+1. GENERAL OBJECTIVE: One overarching aim of the study (1 sentence starting with "To…").
+
+2. SPECIFIC OBJECTIVES: Write 5–6 specific, numbered objectives. Each must:
+   - Begin with a measurable action verb (To examine, To compare, To determine, To investigate, To establish)
+   - Reference a specific variable or relationship
+   - Be testable with SPSS statistical procedures
+
+3. RESEARCH QUESTIONS: Write one research question corresponding to each specific objective (interrogative form).
+
+4. HYPOTHESES: For each testable objective, write:
+   H₀ (Null): "There is no significant [relationship/difference]…"
+   H₁ (Alternative): "There is a significant [relationship/difference]…"
+
+5. SPSS TEST MAPPING: For each hypothesis, specify the SPSS test that will be used to test it (t-test, ANOVA, Pearson r, regression, chi-square).
+
+Requirements:
+- Objectives must be SMART (Specific, Measurable, Achievable, Relevant, Time-bound)
+- All hypotheses stated at α = .05 significance level`,
+    placeholder:"Your Objectives & Hypotheses will appear here."
+  },
+  {
+    id:6, grp:"C", icon:"🗂️",
+    title:"Research Design",
+    sub:"Quantitative · Descriptive-correlational · Cross-sectional",
+    subtags:[
+      {label:"Paradigm",color:"rgba(232,160,32,.1)",tc:"var(--gold)",bc:"rgba(232,160,32,.3)"},
+      {label:"Approach",color:"rgba(232,160,32,.1)",tc:"var(--gold)",bc:"rgba(232,160,32,.3)"},
+      {label:"Design Type",color:"rgba(232,160,32,.1)",tc:"var(--gold)",bc:"rgba(232,160,32,.3)"},
+      {label:"Variables",color:"rgba(232,160,32,.1)",tc:"var(--gold)",bc:"rgba(232,160,32,.3)"},
+    ],
+    prompt:`Write the Research Design section for the following study:
+
+Topic: [TOPIC]
+
+Cover all of the following sub-sections:
+
+1. RESEARCH PARADIGM: Explain the philosophical underpinning (positivism/post-positivism). Justify why a quantitative approach is appropriate for this research problem.
+
+2. RESEARCH APPROACH AND DESIGN: Identify the research approach (quantitative) and design (descriptive, correlational, causal-comparative, or experimental). Justify the choice.
+
+3. RESEARCH SETTING: Describe the study location (school/campus/district). Provide brief geographic/demographic context.
+
+4. POPULATION AND SAMPLING:
+   - Define total population (N) with source
+   - Calculate sample size using Cochran's (1977) formula (show calculation)
+   - Describe sampling technique (stratified random sampling preferred)
+   - Describe strata used
+
+5. VARIABLE OPERATIONALIZATION TABLE: Present a table with columns:
+   Variable | Type (IV/DV/Moderator) | Measurement Scale | SPSS Code | SPSS Test
+
+6. DATA COLLECTION INSTRUMENT: Briefly describe the instrument structure (number of sections, items, Likert scale used).
+
+7. DATA ANALYSIS OVERVIEW: State the SPSS version and list the sequence of analyses planned.
+
+Requirements:
+- Nepal/Kapilvastu context
+- APA 7th citations for methodological choices
+- Formal, precise academic language`,
+    placeholder:"Your Research Design section will appear here."
+  },
+  {
+    id:7, grp:"C", icon:"📝",
+    title:"Questionnaire / Instrument Development",
+    sub:"Validated Likert-scale instrument with reliability testing",
+    subtags:[
+      {label:"Section A — Demographics",color:"rgba(232,160,32,.1)",tc:"var(--gold)",bc:"rgba(232,160,32,.3)"},
+      {label:"Likert Scales",color:"rgba(232,160,32,.1)",tc:"var(--gold)",bc:"rgba(232,160,32,.3)"},
+      {label:"Content Validity",color:"rgba(232,160,32,.1)",tc:"var(--gold)",bc:"rgba(232,160,32,.3)"},
+      {label:"Pilot Testing",color:"rgba(232,160,32,.1)",tc:"var(--gold)",bc:"rgba(232,160,32,.3)"},
+    ],
+    prompt:`Design a complete, validated Research Instrument (Questionnaire) for the following study:
+
+Topic: [TOPIC]
+
+Provide:
+1. INSTRUMENT OVERVIEW TABLE: Sections, variable measured, number of items, scale type, and source of adapted items.
+
+2. FULL QUESTIONNAIRE ITEMS:
+   Section A — Demographic information (6 items: age, gender, education level, etc.)
+   Section B — [Variable 1 / IV₁]: 10 items on 5-point Likert scale (cite adaptation source)
+   Section C — [Variable 2 / IV₂]: 10 items on 5-point Likert scale
+   Section D — [Variable 3 / IV₃]: 8 items on 5-point Likert scale
+   Section E — Dependent variable measurement (objective score or scale)
+
+   For each Likert section: include 3–4 reverse-coded items (marked with *R). Label the scale anchors clearly.
+
+3. CONTENT VALIDITY PROCEDURE: Describe the expert review process (minimum 5 experts), Content Validity Index (CVI) calculation, and threshold (I-CVI ≥ .80).
+
+4. PILOT TESTING PROCEDURE: Describe pilot testing with 30 participants. Specify SPSS reliability analysis procedure: Analyze → Scale → Reliability Analysis → Alpha. State expected Cronbach's α threshold (≥ .70).
+
+5. CODING INSTRUCTIONS FOR SPSS: Variable Name | Label | Values | Measure level for each item.
+
+Requirements:
+- Items should be specific to the research topic
+- Each scale adapted from published, validated instruments (cite source)
+- Nepal student/teacher/academic context`,
+    placeholder:"Your Questionnaire / Instrument section will appear here."
+  },
+  {
+    id:8, grp:"C", icon:"📥",
+    title:"Data Collection",
+    sub:"Ethical, systematic field data collection procedure",
+    subtags:[
+      {label:"Ethical Clearance",color:"rgba(232,160,32,.1)",tc:"var(--gold)",bc:"rgba(232,160,32,.3)"},
+      {label:"Administration",color:"rgba(232,160,32,.1)",tc:"var(--gold)",bc:"rgba(232,160,32,.3)"},
+      {label:"Response Rate",color:"rgba(232,160,32,.1)",tc:"var(--gold)",bc:"rgba(232,160,32,.3)"},
+    ],
+    prompt:`Write the Data Collection section for the following research study:
+
+Topic: [TOPIC]
+
+Provide a detailed, step-by-step narrative covering:
+
+1. ETHICAL CONSIDERATIONS:
+   - Ethical clearance from institution
+   - Informed consent procedure
+   - Right to withdraw
+   - Anonymity and confidentiality measures
+   - Data storage and protection
+
+2. DATA COLLECTION PROCEDURE (numbered steps 1–8):
+   Step 1: Ethical approval
+   Step 2: Permission letters to institutions
+   Step 3: Pilot testing and instrument finalization
+   Step 4: Questionnaire distribution protocol
+   Step 5: Questionnaire administration (in-person / online)
+   Step 6: Collection and immediate screening
+   Step 7: Exclusion criteria for incomplete questionnaires
+   Step 8: Secure storage and coding
+
+3. RESPONSE RATE MANAGEMENT: How non-response was minimised. Expected vs. actual questionnaires distributed and returned.
+
+4. SECONDARY DATA (if applicable): Official records (school grades, administrative data) — how accessed and permission obtained.
+
+Requirements:
+- APA 7th citations for ethical standards
+- Nepal/Kapilvastu institution context
+- Formal, methodological writing`,
+    placeholder:"Your Data Collection section will appear here."
+  },
+  {
+    id:9, grp:"D", icon:"💻",
+    title:"Data Coding & Data Entry in SPSS",
+    sub:"SPSS Variable View setup · codebook · entry procedure",
+    subtags:[
+      {label:"Variable View",color:"rgba(100,53,201,.1)",tc:"#6435C9",bc:"rgba(100,53,201,.3)"},
+      {label:"Value Coding",color:"rgba(100,53,201,.1)",tc:"#6435C9",bc:"rgba(100,53,201,.3)"},
+      {label:"Reverse Coding",color:"rgba(100,53,201,.1)",tc:"#6435C9",bc:"rgba(100,53,201,.3)"},
+      {label:"Data Entry",color:"rgba(100,53,201,.1)",tc:"#6435C9",bc:"rgba(100,53,201,.3)"},
+    ],
+    prompt:`Write the Data Coding and Data Entry in SPSS section for the following study:
+
+Topic: [TOPIC]
+
+Provide:
+1. CODEBOOK: A complete table with columns:
+   Questionnaire Item | Variable Name (SPSS) | Variable Label | Value Codes | Missing Value Code | Measure Level
+   Cover all demographic variables and at least 5 Likert items per construct as examples.
+
+2. SPSS VARIABLE VIEW SETUP: Describe how each column was configured in SPSS Variable View:
+   - Name: short alphanumeric (e.g., motiv_01)
+   - Type: Numeric
+   - Label: full descriptive label
+   - Values: code → meaning (e.g., 1 = Male, 2 = Female)
+   - Missing: system missing or user-defined code (99)
+   - Measure: Nominal / Ordinal / Scale
+
+3. REVERSE CODING PROCEDURE:
+   SPSS Menu: Transform → Recode into Same Variables
+   Provide the step-by-step procedure for reverse-coding negatively worded items.
+   Formula: New score = (Scale max + 1) − Original score
+
+4. COMPUTE VARIABLE (sub-scale totals):
+   SPSS Menu: Transform → Compute Variable
+   Provide formula examples for computing sub-scale total scores.
+
+5. DATA ENTRY PROTOCOL: Describe how data entry was verified (double entry / range checks).
+
+Requirements:
+- Include actual SPSS menu paths throughout
+- Code examples specific to the research topic variables`,
+    placeholder:"Your Data Coding & Entry in SPSS section will appear here."
+  },
+  {
+    id:10, grp:"D", icon:"🧹",
+    title:"Data Cleaning",
+    sub:"Missing values · Outliers · Data errors — SPSS procedures",
+    subtags:[
+      {label:"Missing Values",color:"rgba(100,53,201,.1)",tc:"#6435C9",bc:"rgba(100,53,201,.3)"},
+      {label:"Outliers",color:"rgba(100,53,201,.1)",tc:"#6435C9",bc:"rgba(100,53,201,.3)"},
+      {label:"Data Errors",color:"rgba(100,53,201,.1)",tc:"#6435C9",bc:"rgba(100,53,201,.3)"},
+    ],
+    prompt:`Write the Data Cleaning section for the following research study:
+
+Topic: [TOPIC]
+
+This section must cover all three data quality issues with SPSS procedures:
+
+1. MISSING VALUE ANALYSIS:
+   SPSS Menu: Analyze → Descriptive Statistics → Frequencies
+   • Describe the threshold for acceptable missingness (< 5% per item)
+   • Explain how missing patterns were identified (MCAR, MAR, MNAR)
+   • State the treatment method: listwise deletion vs. mean substitution
+   • Provide the SPSS syntax/menu path for mean substitution if used:
+     Transform → Replace Missing Values → Series Mean
+
+2. OUTLIER DETECTION AND TREATMENT:
+   SPSS Menu: Analyze → Descriptive Statistics → Explore → Plots → Boxplot
+   • Define outliers (mild: 1.5×IQR; extreme: 3×IQR)
+   • Describe how outliers were identified using boxplots and z-scores
+   • State treatment decision (retain with justification / Winsorize / remove)
+   • Include: Analyze → Descriptive Statistics → Descriptives → Z-scores (Save standardized values)
+
+3. DATA ERROR CORRECTION:
+   • Describe range checks performed (e.g., Likert items must be 1–5)
+   • SPSS: Analyze → Descriptive Statistics → Frequencies → check for out-of-range values
+   • Describe the cross-validation procedure with original questionnaires
+
+4. FINAL CLEAN DATASET: State final sample size after cleaning and percentage of data retained.
+
+Requirements:
+- All SPSS menu paths included
+- Specific to topic variables`,
+    placeholder:"Your Data Cleaning section will appear here."
+  },
+  {
+    id:11, grp:"D", icon:"📊",
+    title:"Descriptive Statistics",
+    sub:"Frequency · Percentage · Mean · Standard Deviation",
+    subtags:[
+      {label:"Frequency",color:"rgba(100,53,201,.1)",tc:"#6435C9",bc:"rgba(100,53,201,.3)"},
+      {label:"Percentage",color:"rgba(100,53,201,.1)",tc:"#6435C9",bc:"rgba(100,53,201,.3)"},
+      {label:"Mean",color:"rgba(100,53,201,.1)",tc:"#6435C9",bc:"rgba(100,53,201,.3)"},
+      {label:"Std Deviation",color:"rgba(100,53,201,.1)",tc:"#6435C9",bc:"rgba(100,53,201,.3)"},
+    ],
+    prompt:`Write the Descriptive Statistics section for the following research study:
+
+Topic: [TOPIC]
+
+Provide the complete write-up covering:
+
+1. DEMOGRAPHIC PROFILE (Frequency & Percentage):
+   SPSS: Analyze → Descriptive Statistics → Frequencies
+   Write up frequency and percentage tables for all demographic variables (gender, age group, education level, etc.). Present in APA-formatted tables. Narrate key findings.
+
+2. LEVEL OF EACH CONSTRUCT (Mean & Standard Deviation):
+   SPSS: Analyze → Descriptive Statistics → Descriptives → Options (check: Mean, Std deviation, Skewness, Kurtosis)
+   For each independent variable sub-scale, present:
+   - Overall M and SD
+   - Top 3 highest-rated items with M and SD
+   - Interpretation using 5-point Likert rubric:
+     1.00–1.79 = Very Low; 1.80–2.59 = Low; 2.60–3.39 = Moderate; 3.40–4.19 = High; 4.20–5.00 = Very High
+
+3. DEPENDENT VARIABLE DESCRIPTION:
+   Present M, SD, min, max for the dependent variable. Interpret in context.
+
+4. APA TABLE FORMAT: Write 3 example APA-style tables (Table 1 — Demographics; Table 2 — Descriptive stats by construct; Table 3 — Descriptive stats for DV).
+
+Requirements:
+- All statistics presented in APA 7th format (M = X.XX, SD = X.XX)
+- Interpretation of each finding in plain language
+- Reference to SPSS output at each stage`,
+    placeholder:"Your Descriptive Statistics section will appear here."
+  },
+  {
+    id:12, grp:"D", icon:"🔧",
+    title:"Reliability Analysis",
+    sub:"Cronbach's Alpha — SPSS Reliability Analysis",
+    subtags:[
+      {label:"Cronbach's α",color:"rgba(100,53,201,.1)",tc:"#6435C9",bc:"rgba(100,53,201,.3)"},
+      {label:"Item-Total Corr.",color:"rgba(100,53,201,.1)",tc:"#6435C9",bc:"rgba(100,53,201,.3)"},
+      {label:"α if Item Deleted",color:"rgba(100,53,201,.1)",tc:"#6435C9",bc:"rgba(100,53,201,.3)"},
+    ],
+    prompt:`Write the Reliability Analysis section for the following research study:
+
+Topic: [TOPIC]
+
+Cover the following completely:
+
+1. CONCEPTUAL BASIS: Briefly explain what Cronbach's alpha measures and why internal consistency reliability is important for Likert-scale instruments (cite: Nunnally & Bernstein, 1994; Field, 2018).
+
+2. RELIABILITY BENCHMARKS TABLE:
+   α < .60 = Unacceptable | .60–.69 = Questionable | .70–.79 = Acceptable | .80–.89 = Good | ≥ .90 = Excellent
+
+3. SPSS PROCEDURE (step-by-step):
+   Analyze → Scale → Reliability Analysis → Alpha
+   → Move all items of one sub-scale to Items box
+   → Statistics: Item, Scale, Scale if item deleted, Correlations
+   → Click OK
+
+4. RESULTS WRITE-UP (example with sample values):
+   Present an APA-formatted reliability table:
+   Sub-scale | N items | Cronbach's α | Interpretation
+   For each sub-scale and the full instrument.
+   Write a narrative paragraph interpreting results.
+
+5. ITEM-LEVEL ANALYSIS: Describe how corrected item-total correlations were examined (threshold ≥ .30). State whether any items were deleted and the impact on α.
+
+6. PILOT VS. MAIN STUDY RELIABILITY: Compare α from pilot (n = 30) and main study (full sample) if different.
+
+Requirements:
+- All α values presented to 2 decimal places
+- APA 7th citations for benchmarks
+- Topic-specific sub-scale names used`,
+    placeholder:"Your Reliability Analysis section will appear here."
+  },
+  {
+    id:13, grp:"D", icon:"✅",
+    title:"Assumption Testing",
+    sub:"Normality · Linearity · Multicollinearity · Homoscedasticity · Autocorrelation",
+    subtags:[
+      {label:"Normality",color:"rgba(100,53,201,.1)",tc:"#6435C9",bc:"rgba(100,53,201,.3)"},
+      {label:"Linearity",color:"rgba(100,53,201,.1)",tc:"#6435C9",bc:"rgba(100,53,201,.3)"},
+      {label:"Multicollinearity",color:"rgba(100,53,201,.1)",tc:"#6435C9",bc:"rgba(100,53,201,.3)"},
+      {label:"Homoscedasticity",color:"rgba(100,53,201,.1)",tc:"#6435C9",bc:"rgba(100,53,201,.3)"},
+      {label:"Autocorrelation",color:"rgba(100,53,201,.1)",tc:"#6435C9",bc:"rgba(100,53,201,.3)"},
+    ],
+    prompt:`Write the Assumption Testing section for the following research study:
+
+Topic: [TOPIC]
+
+For each assumption, provide: (a) definition, (b) why it matters, (c) SPSS procedure, (d) decision criteria, (e) example result write-up.
+
+1. NORMALITY
+   SPSS: Analyze → Descriptive Statistics → Explore → Plots → Normality plots with tests
+   Tests: Shapiro-Wilk (n < 50) and Kolmogorov-Smirnov (n ≥ 50)
+   Criteria: p > .05 = normality assumed; also check skewness (|z| < ±2) and kurtosis
+   Visual: Q-Q plots, histograms
+   Report: W(n) = .XX, p = .XX for each variable
+
+2. LINEARITY
+   SPSS: Graphs → Legacy Dialogs → Scatter/Dot → Simple Scatter (IV vs DV)
+   Criteria: linear pattern in scatterplot; no systematic curve
+   Also: Analyze → Regression → Linear → Plots → partial regression plots
+
+3. MULTICOLLINEARITY (for regression only)
+   SPSS: Analyze → Regression → Linear → Statistics → Collinearity diagnostics
+   Criteria: VIF < 10; Tolerance > .10; Condition Index < 30
+   Report: VIF values for each predictor in a table
+
+4. HOMOSCEDASTICITY
+   SPSS: Analyze → Regression → Linear → Plots → ZRESID vs ZPRED scatterplot
+   Criteria: random, even scatter of residuals around zero
+   Also: Levene's test for t-test and ANOVA (reported automatically)
+
+5. AUTOCORRELATION (Independence of Errors)
+   SPSS: Analyze → Regression → Linear → Statistics → Durbin-Watson
+   Criteria: DW value between 1.5 and 2.5 indicates no autocorrelation
+   Report: DW = X.XX
+
+6. SUMMARY TABLE: Present all assumption test results in one APA-formatted table showing variable, test used, result, and decision.
+
+Requirements:
+- Write a narrative for each assumption
+- Include actual SPSS menu paths
+- Provide example APA format for reporting each result`,
+    placeholder:"Your Assumption Testing section will appear here."
+  },
+  {
+    id:14, grp:"E", icon:"📈",
+    title:"Inferential Statistics",
+    sub:"Correlation · t-Test · ANOVA · Chi-Square · Regression",
+    subtags:[
+      {label:"Correlation",color:"rgba(192,57,43,.1)",tc:"var(--rose)",bc:"rgba(192,57,43,.3)"},
+      {label:"t-Test",color:"rgba(192,57,43,.1)",tc:"var(--rose)",bc:"rgba(192,57,43,.3)"},
+      {label:"ANOVA",color:"rgba(192,57,43,.1)",tc:"var(--rose)",bc:"rgba(192,57,43,.3)"},
+      {label:"Chi-Square",color:"rgba(192,57,43,.1)",tc:"var(--rose)",bc:"rgba(192,57,43,.3)"},
+      {label:"Regression",color:"rgba(192,57,43,.1)",tc:"var(--rose)",bc:"rgba(192,57,43,.3)"},
+    ],
+    prompt:`Write the Inferential Statistics section for the following research study:
+
+Topic: [TOPIC]
+
+For EACH of the following tests (as applicable to the research objectives), provide:
+(a) Purpose and when to use
+(b) SPSS procedure (exact menu path)
+(c) Key output to read
+(d) Complete APA-formatted result write-up with example values
+(e) Effect size to report
+
+1. PEARSON CORRELATION
+   SPSS: Analyze → Correlate → Bivariate → Pearson
+   Report: r(df) = .XX, p = .XX [one-tailed/two-tailed]
+   Effect size: r² (small = .01; medium = .09; large = .25)
+
+2. INDEPENDENT SAMPLES t-TEST
+   SPSS: Analyze → Compare Means → Independent-Samples T Test
+   Check: Levene's Test for equality of variances
+   Report: t(df) = X.XX, p = .XX, d = .XX (Cohen's d)
+
+3. PAIRED SAMPLES t-TEST
+   SPSS: Analyze → Compare Means → Paired-Samples T Test
+   Report: t(df) = X.XX, p = .XX, d = .XX
+
+4. ONE-WAY ANOVA + POST HOC
+   SPSS: Analyze → Compare Means → One-Way ANOVA → Post Hoc: Tukey HSD
+   Report: F(df1, df2) = X.XX, p = .XX, η² = .XX
+   Post hoc: Tukey HSD pairwise comparisons table
+
+5. CHI-SQUARE TEST OF INDEPENDENCE
+   SPSS: Analyze → Descriptive Statistics → Crosstabs → Statistics: Chi-square, Phi/Cramér's V
+   Report: χ²(df, N=n) = X.XX, p = .XX, V = .XX
+
+6. MULTIPLE LINEAR REGRESSION
+   SPSS: Analyze → Regression → Linear → Enter method
+   Report: R² = .XX, F(df1, df2) = X.XX, p < .001
+   For each predictor: B = X.XX, SE = X.XX, β = .XX, t = X.XX, p = .XX
+
+Requirements:
+- All APA 7th format
+- α = .05 for all tests
+- Effect size for every significant result
+- Interpretations in plain language after each result`,
+    placeholder:"Your Inferential Statistics section will appear here."
+  },
+  {
+    id:15, grp:"E", icon:"⚖️",
+    title:"Hypothesis Testing",
+    sub:"H₀/H₁ decisions · Test results · Accept or Reject",
+    subtags:[
+      {label:"H₀ Decision",color:"rgba(192,57,43,.1)",tc:"var(--rose)",bc:"rgba(192,57,43,.3)"},
+      {label:"Statistical Basis",color:"rgba(192,57,43,.1)",tc:"var(--rose)",bc:"rgba(192,57,43,.3)"},
+      {label:"Summary Table",color:"rgba(192,57,43,.1)",tc:"var(--rose)",bc:"rgba(192,57,43,.3)"},
+    ],
+    prompt:`Write the Hypothesis Testing section for the following research study:
+
+Topic: [TOPIC]
+
+Provide the complete hypothesis testing narrative covering:
+
+1. DECISION RULE: Explain the decision rule used — "If p < .05, reject H₀; if p ≥ .05, fail to reject H₀." Explain what rejecting vs. failing to reject means in plain language.
+
+2. FOR EACH HYPOTHESIS (H₁ through H₅ or more):
+   State H₀ and H₁ explicitly.
+   → Report the SPSS test used.
+   → Report the test statistic, degrees of freedom, p-value, and effect size.
+   → State the decision: "H₀ is rejected / H₀ is not rejected."
+   → Write one sentence explaining what this means in context.
+
+3. HYPOTHESIS TESTING SUMMARY TABLE (APA format):
+   Columns: Hypothesis | Test Used | Test Statistic | df | p-value | Effect Size | Decision
+   One row per hypothesis.
+
+4. PATTERN OF RESULTS: Write 1–2 paragraphs summarising what the pattern of significant and non-significant findings means collectively for the study's objectives.
+
+Requirements:
+- All values in APA 7th format
+- Plain language interpretation after each statistical statement
+- Nepal/topic context integrated`,
+    placeholder:"Your Hypothesis Testing section will appear here."
+  },
+  {
+    id:16, grp:"F", icon:"🔎",
+    title:"Interpretation of Results",
+    sub:"Plain-language interpretation of all statistical outputs",
+    subtags:[
+      {label:"Statistical Meaning",color:"rgba(13,27,42,.1)",tc:"var(--navy)",bc:"rgba(13,27,42,.3)"},
+      {label:"Practical Meaning",color:"rgba(13,27,42,.1)",tc:"var(--navy)",bc:"rgba(13,27,42,.3)"},
+      {label:"Effect Sizes",color:"rgba(13,27,42,.1)",tc:"var(--navy)",bc:"rgba(13,27,42,.3)"},
+    ],
+    prompt:`Write the Interpretation of Results section for the following research study:
+
+Topic: [TOPIC]
+
+Provide a thorough interpretation of all statistical results:
+
+1. DESCRIPTIVE RESULTS INTERPRETATION:
+   Interpret what the mean scores and standard deviations tell us about each construct. What does the level (low/moderate/high) mean in the context of the study?
+
+2. CORRELATION RESULTS INTERPRETATION:
+   For each significant correlation: describe the direction (positive/negative), strength (weak/moderate/strong using Cohen's benchmarks), and practical meaning.
+
+3. t-TEST / ANOVA INTERPRETATION:
+   For each group comparison: state which group scored higher/lower, by how much, and what this means practically.
+
+4. REGRESSION INTERPRETATION:
+   - R²: How much variance in the DV is explained by the IVs? (e.g., "The model explains 52% of variance in…")
+   - β for each predictor: Which IV is the strongest predictor? What does a one-unit increase mean?
+   - Non-significant predictors: What does the absence of significance mean?
+
+5. UNEXPECTED FINDINGS: Address any results that were contrary to the hypotheses. Offer possible explanations.
+
+6. PRACTICAL SIGNIFICANCE vs. STATISTICAL SIGNIFICANCE: Discuss whether statistically significant results are also practically meaningful given the effect sizes.
+
+Requirements:
+- Every statistical value translated into plain language
+- Nepal/educational context throughout
+- No new data introduced in this section`,
+    placeholder:"Your Interpretation of Results will appear here."
+  },
+  {
+    id:17, grp:"F", icon:"💬",
+    title:"Discussion of Findings",
+    sub:"Compare with literature · Theoretical alignment · Explain anomalies",
+    subtags:[
+      {label:"Consistent Findings",color:"rgba(13,27,42,.1)",tc:"var(--navy)",bc:"rgba(13,27,42,.3)"},
+      {label:"Contradictory Findings",color:"rgba(13,27,42,.1)",tc:"var(--navy)",bc:"rgba(13,27,42,.3)"},
+      {label:"Theoretical Implications",color:"rgba(13,27,42,.1)",tc:"var(--navy)",bc:"rgba(13,27,42,.3)"},
+      {label:"Limitations",color:"rgba(13,27,42,.1)",tc:"var(--navy)",bc:"rgba(13,27,42,.3)"},
+    ],
+    prompt:`Write a comprehensive Discussion of Findings section for the following research study:
+
+Topic: [TOPIC]
+
+Structure as follows:
+
+1. OPENING PARAGRAPH: Briefly restate the study's aim and provide a one-sentence overview of the main findings pattern.
+
+2. DISCUSSION OF EACH KEY FINDING (one sub-section per hypothesis/finding):
+   For each finding:
+   a) Restate the result in plain language
+   b) Identify 2–3 prior studies that AGREE with this finding — compare and explain why
+   c) Identify 1–2 prior studies that CONTRADICT or show different results — explain why the difference may exist (sample, context, methodology)
+   d) Link to the theoretical framework from the Literature Review
+   e) Explain the practical meaning in the Nepal/educational context
+
+3. STUDY LIMITATIONS:
+   - Sample (size, geographic scope, generalizability)
+   - Cross-sectional design (cannot establish causality)
+   - Self-report bias in Likert instruments
+   - SPSS assumption violations (if any occurred)
+   - Variables not included
+
+4. IMPLICATIONS:
+   a) Theoretical implications — what does this add to the body of knowledge?
+   b) Practical implications — what should teachers, administrators, policymakers do?
+   c) Research implications — what gaps remain?
+
+Requirements:
+- Minimum 10 citations from the Literature Review re-engaged here
+- Every claim supported by evidence
+- APA 7th in-text citations throughout`,
+    placeholder:"Your Discussion of Findings will appear here."
+  },
+  {
+    id:18, grp:"F", icon:"🏁",
+    title:"Conclusion",
+    sub:"Summary by objective · Research contribution · Final statement",
+    subtags:[
+      {label:"Summary of Findings",color:"rgba(13,27,42,.1)",tc:"var(--navy)",bc:"rgba(13,27,42,.3)"},
+      {label:"Research Contribution",color:"rgba(13,27,42,.1)",tc:"var(--navy)",bc:"rgba(13,27,42,.3)"},
+      {label:"Future Research",color:"rgba(13,27,42,.1)",tc:"var(--navy)",bc:"rgba(13,27,42,.3)"},
+    ],
+    prompt:`Write the Conclusion section for the following research study:
+
+Topic: [TOPIC]
+
+Structure as follows:
+
+1. RESTATEMENT OF AIM AND DESIGN (1 paragraph): Briefly restate the research purpose, objectives, sample, methodology, and SPSS analyses used — without repeating the results in detail.
+
+2. SUMMARY OF FINDINGS BY OBJECTIVE (one paragraph per objective):
+   For each specific objective: state what was found (with key statistics), whether the hypothesis was supported, and the one-sentence practical meaning.
+
+3. RESEARCH CONTRIBUTION (1 paragraph):
+   State clearly what new knowledge this study adds to the existing literature. Answer: "What did we not know before that we know now?"
+
+4. THEORETICAL CONTRIBUTION (1 paragraph):
+   Explain how the findings support, extend, or challenge the theories cited in the Literature Review.
+
+5. FINAL STATEMENT (1 paragraph):
+   End with a powerful, forward-looking closing sentence that summarises the study's significance for education, society, or policy in Nepal.
+
+Requirements:
+- No new data or citations introduced
+- Concise and authoritative tone
+- Past tense for what was done; present tense for what the findings mean`,
+    placeholder:"Your Conclusion will appear here."
+  },
+  {
+    id:19, grp:"F", icon:"💡",
+    title:"Recommendations",
+    sub:"Evidence-based · Practical · Policy · Research directions",
+    subtags:[
+      {label:"Policy Recs",color:"rgba(13,27,42,.1)",tc:"var(--navy)",bc:"rgba(13,27,42,.3)"},
+      {label:"Practical Recs",color:"rgba(13,27,42,.1)",tc:"var(--navy)",bc:"rgba(13,27,42,.3)"},
+      {label:"Future Research",color:"rgba(13,27,42,.1)",tc:"var(--navy)",bc:"rgba(13,27,42,.3)"},
+    ],
+    prompt:`Write the Recommendations section for the following research study:
+
+Topic: [TOPIC]
+
+Organize recommendations into three categories:
+
+1. POLICY RECOMMENDATIONS (3–4):
+   For government bodies, Ministry of Education, district education offices, or national curriculum bodies.
+   Each recommendation: (a) start with an action verb, (b) specify the decision-maker, (c) link to a specific finding from the study.
+
+2. PRACTICAL RECOMMENDATIONS FOR PRACTITIONERS (4–5):
+   For teachers, school administrators, academic coaches, or department heads.
+   Each recommendation: specific, actionable, tied to a statistically significant finding.
+
+3. RECOMMENDATIONS FOR FUTURE RESEARCH (3–4):
+   Suggest future studies that could extend this work:
+   - Different geographic/demographic samples (other districts of Nepal)
+   - Longitudinal designs
+   - Additional variables not included in this study
+   - Mixed-methods approaches to explore mechanisms
+   - More advanced SPSS analyses (SEM, MANOVA, multilevel modelling)
+
+Requirements:
+- Every recommendation grounded in a specific finding
+- Action-verb format: "Implement…", "Develop…", "Establish…", "Conduct…"
+- Nepal educational context specific`,
+    placeholder:"Your Recommendations will appear here."
+  },
+  {
+    id:20, grp:"F", icon:"📋",
+    title:"References / Bibliography",
+    sub:"APA 7th Edition · 25+ sources · DOI formatted",
+    subtags:[
+      {label:"Journal Articles",color:"rgba(13,27,42,.1)",tc:"var(--navy)",bc:"rgba(13,27,42,.3)"},
+      {label:"Books",color:"rgba(13,27,42,.1)",tc:"var(--navy)",bc:"rgba(13,27,42,.3)"},
+      {label:"Nepal Sources",color:"rgba(13,27,42,.1)",tc:"var(--navy)",bc:"rgba(13,27,42,.3)"},
+    ],
+    prompt:`Generate a complete, APA 7th edition Reference List for a Scopus-quality research article on the following topic:
+
+Topic: [TOPIC]
+
+Requirements:
+- Minimum 30 references
+- Majority: peer-reviewed journal articles (2015–2025)
+- Include: 5+ books (methodology/statistics textbooks — Creswell, Field, Cohen, Nunnally, etc.)
+- Include: 3–5 Nepal/South Asian context studies
+- Include: Foundational theoretical sources
+- All formatted in perfect APA 7th: hanging indent, DOI as hyperlink, volume/issue/pages
+- Alphabetical by author surname
+- No duplicates
+- Mix of international and regional sources
+
+Format each reference type correctly:
+JOURNAL ARTICLE: Author, A. A., & Author, B. B. (Year). Article title. Journal Name, Volume(Issue), pages. https://doi.org/xxxxx
+BOOK: Author, A. A. (Year). Book title (Xth ed.). Publisher.
+CHAPTER: Author, A. A. (Year). Chapter title. In E. Editor (Ed.), Book title (pp. xx–xx). Publisher.
+
+Include essential SPSS/methodology references:
+- Field, A. (2018) — Discovering Statistics Using IBM SPSS Statistics
+- Cohen, J. (1988) — Statistical Power Analysis
+- Creswell, J. W. (2014) — Research Design
+- Nunnally, J. C. & Bernstein, I. H. (1994) — Psychometric Theory
+- Cochran, W. G. (1977) — Sampling Techniques`,
+    placeholder:"Your Reference List will appear here."
+  },
+  {
+    id:21, grp:"F", icon:"📰",
+    title:"Research Report / Journal Article",
+    sub:"Final integrated Scopus-ready document",
+    subtags:[
+      {label:"Full Paper",color:"rgba(13,27,42,.1)",tc:"var(--navy)",bc:"rgba(13,27,42,.3)"},
+      {label:"Journal Format",color:"rgba(13,27,42,.1)",tc:"var(--navy)",bc:"rgba(13,27,42,.3)"},
+      {label:"Scopus Ready",color:"rgba(13,27,42,.1)",tc:"var(--navy)",bc:"rgba(13,27,42,.3)"},
+    ],
+    prompt:`Write a complete, Scopus-quality Research Report / Journal Article on the following topic:
+
+Topic: [TOPIC]
+
+ARTICLE STRUCTURE (IMRaD + extended sections):
+
+TITLE: Write a clear, specific, journal-ready title (max 15 words). Include key variables, population, and context.
+
+AUTHORS & AFFILIATIONS: Format as per Scopus journal style.
+
+ABSTRACT (200–250 words): OARC structure with at least 2 key statistics.
+
+KEYWORDS (6–8): arranged by specificity.
+
+1. INTRODUCTION (600–900 words): Funnel structure with gap statement and aim.
+2. LITERATURE REVIEW (1,000–1,500 words): Theoretical framework + empirical review + conceptual model.
+3. METHODOLOGY (800–1,200 words): Design, sampling (Cochran's formula), instrument, validity (CVI), reliability (Cronbach's α), SPSS analysis plan.
+4. RESULTS (700–1,000 words): Descriptive stats table, reliability table, assumption results, inferential test results — all APA-formatted.
+5. DISCUSSION (700–1,000 words): Per-finding comparison with literature, limitations.
+6. CONCLUSION (300–400 words): Summary by objective, contribution, final statement.
+7. RECOMMENDATIONS (300 words): Policy, practice, future research.
+8. REFERENCES: 25+ APA 7th sources.
+
+Quality requirements:
+- Remove ALL AI-detectable phrasing
+- Every statistical claim in APA 7th format
+- Nepal context integrated throughout
+- Suitable for Q1/Q2 Scopus-indexed education or social science journal
+- Total word count: 6,000–8,000 words
+- No plagiarism — original synthesis and interpretation throughout`,
+    placeholder:"Your complete Research Report / Journal Article will appear here."
+  }
+];
+
+// ─── COLOUR MAP PER GROUP ─────────────────────────────────────────
+const GROUP_COLORS = {
+  A:{hue:"rgba(27,94,167,.07)",accent:"var(--blue)"},
+  B:{hue:"rgba(14,169,139,.07)",accent:"var(--teal)"},
+  C:{hue:"rgba(232,160,32,.07)",accent:"var(--gold)"},
+  D:{hue:"rgba(100,53,201,.07)",accent:"#6435C9"},
+  E:{hue:"rgba(192,57,43,.07)",accent:"var(--rose)"},
+  F:{hue:"rgba(13,27,42,.07)",accent:"var(--navy)"}
+};
+
+const GROUP_LABELS = {
+  A:"📌 Foundation",
+  B:"📚 Literature",
+  C:"🗂️ Design & Instrument",
+  D:"💻 SPSS Analysis",
+  E:"📊 Statistics",
+  F:"✍️ Writing & Output"
+};
+
+let currentTopic = "";
+let completedSteps = new Set();
+
+// ─── BUILD STEP NAVIGATOR ────────────────────────────────────────
+function buildNav() {
+  const nav = document.getElementById("stepNavList");
+  let lastGrp = null;
+  STEPS.forEach(s => {
+    if (s.grp !== lastGrp) {
+      lastGrp = s.grp;
+      const lbl = document.createElement("div");
+      lbl.className = "step-group-label";
+      lbl.textContent = GROUP_LABELS[s.grp];
+      nav.appendChild(lbl);
+    }
+    const item = document.createElement("a");
+    item.className = "step-nav-item";
+    item.href = "#step-" + s.id;
+    item.id = "nav-" + s.id;
+    item.innerHTML = `
+      <div class="step-num-badge grp-${s.grp}">${s.id}</div>
+      <div class="step-nav-label">${s.title}</div>
+    `;
+    nav.appendChild(item);
+  });
+}
+
+// ─── BUILD STEP DOTS ─────────────────────────────────────────────
+function buildDots() {
+  const wrap = document.getElementById("stepDots");
+  wrap.innerHTML = "";
+  STEPS.forEach(s => {
+    const d = document.createElement("div");
+    d.className = "step-dot" + (completedSteps.has(s.id) ? " done" : "");
+    d.title = "Step " + s.id + ": " + s.title;
+    d.onclick = () => { document.getElementById("step-" + s.id)?.scrollIntoView({behavior:"smooth"}); };
+    wrap.appendChild(d);
+  });
+}
+
+// ─── UPDATE PROGRESS ─────────────────────────────────────────────
+function updateProgress() {
+  const pct = Math.round((completedSteps.size / STEPS.length) * 100);
+  document.getElementById("progressFill").style.width = pct + "%";
+  document.getElementById("progressLabel").textContent = completedSteps.size + " of " + STEPS.length + " steps complete";
+  document.getElementById("progressPct").textContent = pct + "%";
+  buildDots();
+}
+
+// ─── BUILD STEP CARDS ────────────────────────────────────────────
+function buildSteps() {
+  const area = document.getElementById("workflowTab");
+  area.innerHTML = "";
+  STEPS.forEach(s => {
+    const gc = GROUP_COLORS[s.grp];
+
+    const card = document.createElement("div");
+    card.className = "step-card grp-" + s.grp;
+    card.id = "step-" + s.id;
+
+    const subTagsHTML = s.subtags.map(t =>
+      `<span class="sub-tag" style="background:${t.color};color:${t.tc};border-color:${t.bc}">${t.label}</span>`
+    ).join("");
+
+    const promptWithHighlight = s.prompt.replace(/\[TOPIC\]/g,
+      `<em class="ph">[TOPIC]</em>`);
+
+    card.innerHTML = `
+      <div class="step-header" id="hdr-${s.id}" onclick="toggleStep(${s.id})">
+        <div class="step-icon-wrap" style="background:${gc.hue}">${s.icon}</div>
+        <div class="step-meta">
+          <div class="step-meta-num">Step ${s.id}</div>
+          <div class="step-meta-title">${s.title}</div>
+          <div class="step-meta-sub">${s.sub}</div>
+        </div>
+        <div class="step-toggle" id="tog-${s.id}">▾</div>
+      </div>
+      <div class="step-body" id="body-${s.id}">
+        ${s.info ? `<div class="info-box info-blue"><div class="info-box-icon">💡</div><div>${s.info}</div></div>` : ""}
+        <div class="sub-step-tags">${subTagsHTML}</div>
+        <div class="prompt-section">
+          <div class="prompt-label">🤖 AI Prompt — Copy &amp; paste into any AI assistant</div>
+          <div class="prompt-box">
+            <button class="copy-btn" id="cbtn-${s.id}" onclick="copyPrompt(${s.id})">Copy</button>
+            <div class="prompt-text" id="ptxt-${s.id}">${promptWithHighlight}</div>
+          </div>
+        </div>
+        <div class="output-area">
+          <div class="output-toolbar">
+            <span class="output-toolbar-title">📄 Output — Step ${s.id}: ${s.title}</span>
+            <div class="output-actions">
+              <button class="output-btn" onclick="clearOutput(${s.id})">Clear</button>
+              <button class="output-btn" onclick="copyOutput(${s.id})">Copy Text</button>
+              <button class="output-btn" onclick="downloadOutput(${s.id},'${s.title}')">⬇ Download</button>
+              <button class="output-btn primary" onclick="markDone(${s.id})">✓ Mark Done</button>
+            </div>
+          </div>
+          <div class="loading-bar" id="load-${s.id}">
+            <div class="spinner"></div>
+            <span>Generating content for Step ${s.id}…</span>
+          </div>
+          <div class="output-content" id="out-${s.id}"
+               contenteditable="true"
+               data-placeholder="Paste your AI-generated output here, or click 'Generate with AI' to auto-generate…"></div>
+          <div class="humanizer-bar">
+            ⚠️ <span>Quality reminder:</span> Run through Plagiarism Check → AI Detector → Grammar Check → Humanizer before use.
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+          <button class="output-btn primary" onclick="generateAI(${s.id})" style="font-size:13px;padding:9px 18px">
+            ⚡ Generate with AI
+          </button>
+          <button class="output-btn" onclick="generateAllSections()" style="font-size:12px">
+            🔄 Generate All Steps
+          </button>
+        </div>
+      </div>
+    `;
+    area.appendChild(card);
+  });
+}
+
+// ─── TOGGLE STEP ─────────────────────────────────────────────────
+function toggleStep(id) {
+  const body = document.getElementById("body-" + id);
+  const hdr  = document.getElementById("hdr-"  + id);
+  const tog  = document.getElementById("tog-"  + id);
+  const open = body.classList.contains("open");
+  body.classList.toggle("open", !open);
+  hdr.classList.toggle("open", !open);
+}
+
+// ─── SET TOPIC ────────────────────────────────────────────────────
+function setTopic() {
+  const val = document.getElementById("topicInput").value.trim();
+  if (!val) { alert("Please enter a research topic first."); return; }
+  currentTopic = val;
+  const disp = document.getElementById("topicDisplay");
+  disp.style.display = "block";
+  disp.textContent = "✅ Topic set: " + val;
+
+  // Update all prompt displays
+  STEPS.forEach(s => {
+    const ptxt = document.getElementById("ptxt-" + s.id);
+    if (ptxt) {
+      const updated = s.prompt.replace(/\[TOPIC\]/g,
+        `<em class="ph">${escapeHTML(val)}</em>`);
+      ptxt.innerHTML = updated;
+    }
+  });
+}
+
+function escapeHTML(str) {
+  return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+// ─── COPY PROMPT ─────────────────────────────────────────────────
+function copyPrompt(id) {
+  const s = STEPS.find(x => x.id === id);
+  const text = s.prompt.replace(/\[TOPIC\]/g, currentTopic || "[INSERT YOUR RESEARCH TOPIC]");
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById("cbtn-" + id);
+    btn.textContent = "✓ Copied!";
+    btn.classList.add("copied");
+    setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("copied"); }, 2200);
+  });
+}
+
+// ─── COPY OUTPUT ─────────────────────────────────────────────────
+function copyOutput(id) {
+  const el = document.getElementById("out-" + id);
+  navigator.clipboard.writeText(el.innerText || el.textContent);
+}
+
+// ─── CLEAR OUTPUT ────────────────────────────────────────────────
+function clearOutput(id) {
+  document.getElementById("out-" + id).innerHTML = "";
+}
+
+// ─── MARK DONE ───────────────────────────────────────────────────
+function markDone(id) {
+  completedSteps.add(id);
+  updateProgress();
+  const btn = event.target;
+  btn.textContent = "✓ Done!";
+  btn.style.background = "linear-gradient(135deg, var(--teal), #0B8C74)";
+  setTimeout(() => { btn.textContent = "✓ Mark Done"; btn.style.background = ""; }, 2000);
+}
+
+// ─── DOWNLOAD OUTPUT ─────────────────────────────────────────────
+function downloadOutput(id, title) {
+  const el  = document.getElementById("out-" + id);
+  const txt = el.innerText || el.textContent;
+  const blob = new Blob([txt], {type:"text/plain"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "Step_" + id + "_" + title.replace(/[^a-z0-9]/gi,"_") + ".txt";
+  a.click();
+}
+
+// ─── GENERATE WITH AI ────────────────────────────────────────────
+async function generateAI(id) {
+  if (!currentTopic) {
+    alert("Please set your research topic first (in the sidebar).");
+    return;
+  }
+  const s = STEPS.find(x => x.id === id);
+  const prompt = s.prompt.replace(/\[TOPIC\]/g, currentTopic);
+  const loadEl = document.getElementById("load-" + id);
+  const outEl  = document.getElementById("out-"  + id);
+
+  loadEl.classList.add("active");
+  outEl.innerHTML = "";
+
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        system: `You are a professional academic researcher and Scopus journal writer. 
+You assist Mr. Bishnu Singh Rayamajhi, Mathematics Lecturer and Head of Humanity & Social Science at Kapilvastu Multiple Campus, Nepal.
+Write high-quality, plagiarism-free, human-sounding academic content.
+Use APA 7th edition throughout. Integrate Nepal/South Asian context where relevant.
+Avoid AI-detectable phrasing. Write with scholarly authority and specificity.
+Use SPSS procedures where applicable with exact menu paths.`,
+        messages:[{ role:"user", content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.map(c => c.text || "").join("\n") || "No content returned.";
+    outEl.innerText = text;
+  } catch(e) {
+    outEl.innerHTML = `<span style="color:var(--rose)">⚠️ Could not connect to AI. Please copy the prompt above and paste it into Claude.ai or another AI assistant.</span>`;
+  } finally {
+    loadEl.classList.remove("active");
+  }
+}
+
+// ─── GENERATE ALL ────────────────────────────────────────────────
+async function generateAllSections() {
+  if (!currentTopic) { alert("Please set your research topic first."); return; }
+  if (!confirm("This will generate all 21 sections sequentially. This may take several minutes. Continue?")) return;
+  for (const s of STEPS) {
+    if (!document.getElementById("body-" + s.id).classList.contains("open")) {
+      toggleStep(s.id);
+    }
+    await generateAI(s.id);
+    await new Promise(r => setTimeout(r, 800));
+  }
+}
+
+// ─── TAB SWITCHING ───────────────────────────────────────────────
+function switchTab(name, el) {
+  document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
+  el.classList.add("active");
+  ["workflowTab","spssTab","apaTab","tipsTab"].forEach(id => {
+    document.getElementById(id).style.display = "none";
+  });
+  const map = {workflow:"workflowTab",spss:"spssTab",apa:"apaTab",tips:"tipsTab"};
+  document.getElementById(map[name]).style.display = "flex";
+}
+
+// ─── INIT ────────────────────────────────────────────────────────
+buildSteps();
+buildNav();
+updateProgress();
+
+// Intersection observer for nav highlighting
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id.replace("step-","");
+      document.querySelectorAll(".step-nav-item").forEach(n => n.classList.remove("active"));
+      const ni = document.getElementById("nav-" + id);
+      if (ni) { ni.classList.add("active"); ni.scrollIntoView({block:"nearest"}); }
+    }
+  });
+}, {rootMargin:"-40% 0px -50% 0px"});
+
+STEPS.forEach(s => {
+  const el = document.getElementById("step-" + s.id);
+  if (el) observer.observe(el);
+});
+</script>
+</body>
+</html>
