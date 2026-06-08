@@ -34,7 +34,7 @@
    RESET & BASE
 ═══════════════════════════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-behavior:auto}
 body{
   font-family:var(--sans);
   background:var(--light);
@@ -1702,7 +1702,12 @@ function buildNav() {
     }
     const item = document.createElement("a");
     item.className = "step-nav-item";
-    item.href = "#step-" + s.id;
+    item.href = "javascript:void(0)";
+    item.addEventListener("click", function(e) {
+      e.preventDefault();
+      const target = document.getElementById("step-" + s.id);
+      if (target) target.scrollIntoView({behavior:"smooth", block:"start"});
+    });
     item.id = "nav-" + s.id;
     item.innerHTML = `
       <div class="step-num-badge grp-${s.grp}">${s.id}</div>
@@ -1961,8 +1966,7 @@ const observer = new IntersectionObserver(entries => {
       const id = e.target.id.replace("step-","");
       document.querySelectorAll(".step-nav-item").forEach(n => n.classList.remove("active"));
       const ni = document.getElementById("nav-" + id);
-      if (ni) { ni.classList.add("active"); ni.scrollIntoView({block:"nearest"}); }
-    }
+      if (ni) { ni.classList.add("active"); }    }
   });
 }, {rootMargin:"-40% 0px -50% 0px"});
 
