@@ -1,0 +1,3258 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ResearchAI Platform — KMC | Bishnu Singh Rayamajhi</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+/* ═══════════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════════ */
+:root {
+  --bg-0: #0A0C18;
+  --bg-1: #0D0F1A;
+  --bg-2: #131625;
+  --bg-3: #1A1D35;
+  --bg-4: #212547;
+  --panel: #161929;
+  --border: rgba(108,99,255,0.15);
+  --border-light: rgba(255,255,255,0.06);
+  --accent: #6C63FF;
+  --accent-dim: rgba(108,99,255,0.12);
+  --accent-glow: rgba(108,99,255,0.35);
+  --teal: #00D4AA;
+  --teal-dim: rgba(0,212,170,0.12);
+  --amber: #FFB347;
+  --amber-dim: rgba(255,179,71,0.12);
+  --rose: #FF6584;
+  --rose-dim: rgba(255,101,132,0.12);
+  --sky: #38BDF8;
+  --text-0: #F0F2FF;
+  --text-1: #B8BDD8;
+  --text-2: #7A7FA8;
+  --text-3: #4A5080;
+  --sidebar-w: 260px;
+  --topbar-h: 64px;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-lg: 16px;
+  --mono: 'JetBrains Mono', monospace;
+  --ff-display: 'Space Grotesk', sans-serif;
+  --ff-body: 'Inter', sans-serif;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  --shadow-accent: 0 4px 24px rgba(108,99,255,0.25);
+}
+[data-theme="light"] {
+  --bg-0: #F0F1FA;
+  --bg-1: #F5F6FF;
+  --bg-2: #ECEEFF;
+  --bg-3: #E0E3F5;
+  --bg-4: #D4D8F0;
+  --panel: #FFFFFF;
+  --border: rgba(108,99,255,0.18);
+  --border-light: rgba(0,0,0,0.07);
+  --text-0: #1A1D35;
+  --text-1: #3A3F6A;
+  --text-2: #6A70A0;
+  --text-3: #9A9DC0;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+
+/* ═══════════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--ff-body);
+  background: var(--bg-1);
+  color: var(--text-0);
+  min-height: 100vh;
+  display: flex;
+  overflow-x: hidden;
+  font-size: 14px;
+  line-height: 1.6;
+}
+a { color: var(--accent); text-decoration: none; }
+button { cursor: pointer; font-family: var(--ff-body); }
+textarea, input, select {
+  font-family: var(--ff-body);
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  color: var(--text-0);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  width: 100%;
+  transition: border 0.2s, box-shadow 0.2s;
+  outline: none;
+  font-size: 14px;
+}
+textarea:focus, input:focus, select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+select option { background: var(--bg-2); }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--bg-4); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ═══════════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════════ */
+.sidebar {
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--bg-0);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  overflow: hidden;
+}
+.sidebar-canvas {
+  position: absolute;
+  inset: 0;
+  opacity: 0.18;
+  pointer-events: none;
+}
+.sidebar-inner { position: relative; z-index: 1; display: flex; flex-direction: column; height: 100%; }
+.sidebar-brand {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border-light);
+}
+.brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--accent-dim);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  width: 100%;
+}
+.brand-icon {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, var(--accent), var(--teal));
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.brand-text { min-width: 0; }
+.brand-name {
+  font-family: var(--ff-display);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text-0);
+  letter-spacing: 0.02em;
+}
+.brand-sub { font-size: 10px; color: var(--text-2); letter-spacing: 0.05em; text-transform: uppercase; }
+.sidebar-user {
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-light);
+}
+.user-info { display: flex; align-items: center; gap: 10px; }
+.user-avatar {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, #6C63FF, #00D4AA);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ff-display);
+  font-weight: 700;
+  font-size: 13px;
+  color: white;
+  flex-shrink: 0;
+}
+.user-name { font-size: 12px; font-weight: 600; color: var(--text-0); }
+.user-role { font-size: 10px; color: var(--text-2); }
+.sidebar-nav { flex: 1; overflow-y: auto; padding: 12px 0; }
+.nav-section-label {
+  padding: 4px 20px 6px;
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-3);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 20px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  border-radius: 0;
+  position: relative;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  color: var(--text-2);
+  font-size: 13px;
+  font-weight: 400;
+}
+.nav-item:hover { background: var(--bg-2); color: var(--text-0); }
+.nav-item.active {
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-weight: 500;
+}
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 4px; bottom: 4px;
+  width: 3px;
+  background: var(--accent);
+  border-radius: 0 2px 2px 0;
+}
+.nav-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+.nav-num {
+  margin-left: auto;
+  font-size: 9px;
+  background: var(--bg-4);
+  color: var(--text-2);
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-family: var(--mono);
+}
+.nav-item.active .nav-num { background: var(--accent); color: white; }
+.sidebar-footer {
+  padding: 12px 20px;
+  border-top: 1px solid var(--border-light);
+}
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--bg-2);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border: 1px solid var(--border-light);
+}
+.theme-toggle span { font-size: 12px; color: var(--text-2); }
+.toggle-btn {
+  width: 36px; height: 20px;
+  background: var(--bg-4);
+  border-radius: 10px;
+  position: relative;
+  transition: background 0.2s;
+  border: none;
+}
+.toggle-btn::after {
+  content: '';
+  position: absolute;
+  left: 3px; top: 3px;
+  width: 14px; height: 14px;
+  background: var(--text-2);
+  border-radius: 50%;
+  transition: transform 0.2s, background 0.2s;
+}
+[data-theme="light"] .toggle-btn { background: var(--accent); }
+[data-theme="light"] .toggle-btn::after { transform: translateX(16px); background: white; }
+
+/* ═══════════════════════════════════════════════
+   TOPBAR
+═══════════════════════════════════════════════ */
+.topbar {
+  position: fixed;
+  left: var(--sidebar-w);
+  right: 0; top: 0;
+  height: var(--topbar-h);
+  background: var(--bg-0);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 28px;
+  z-index: 90;
+  gap: 16px;
+}
+.topbar-title {
+  font-family: var(--ff-display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-0);
+  flex: 1;
+}
+.topbar-subtitle { font-size: 12px; color: var(--text-2); font-weight: 400; }
+.topbar-actions { display: flex; align-items: center; gap: 10px; }
+.tb-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--teal-dim);
+  border: 1px solid rgba(0,212,170,0.2);
+  border-radius: 20px;
+  font-size: 11px;
+  color: var(--teal);
+  font-weight: 500;
+}
+.tb-dot { width: 6px; height: 6px; background: var(--teal); border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+.api-key-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 14px;
+  background: var(--accent-dim);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+.api-key-btn:hover { background: var(--accent); color: white; }
+
+/* ═══════════════════════════════════════════════
+   MAIN LAYOUT
+═══════════════════════════════════════════════ */
+.main {
+  margin-left: var(--sidebar-w);
+  margin-top: var(--topbar-h);
+  flex: 1;
+  min-height: calc(100vh - var(--topbar-h));
+  background: var(--bg-1);
+}
+.page { display: none; padding: 28px; }
+.page.active { display: block; }
+
+/* ═══════════════════════════════════════════════
+   CARDS & PANELS
+═══════════════════════════════════════════════ */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.card-accent { border-color: var(--border); }
+.card-title {
+  font-family: var(--ff-display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-0);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-desc { font-size: 12px; color: var(--text-2); margin-bottom: 16px; }
+.card-h { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+
+/* ═══════════════════════════════════════════════
+   STAT CARDS
+═══════════════════════════════════════════════ */
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.stat-card {
+  background: var(--panel);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.stat-card:hover { border-color: var(--border); box-shadow: var(--shadow-accent); }
+.stat-card::after {
+  content: '';
+  position: absolute;
+  top: -30px; right: -30px;
+  width: 80px; height: 80px;
+  background: radial-gradient(circle, var(--c, var(--accent)), transparent 70%);
+  opacity: 0.08;
+}
+.stat-card[data-c="teal"] { --c: var(--teal); }
+.stat-card[data-c="amber"] { --c: var(--amber); }
+.stat-card[data-c="rose"] { --c: var(--rose); }
+.stat-card[data-c="sky"] { --c: var(--sky); }
+.stat-icon { font-size: 22px; margin-bottom: 10px; }
+.stat-val {
+  font-family: var(--ff-display);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-0);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-label { font-size: 11px; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; }
+.stat-delta { font-size: 11px; color: var(--teal); margin-top: 6px; font-weight: 500; }
+
+/* ═══════════════════════════════════════════════
+   GRID LAYOUTS
+═══════════════════════════════════════════════ */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+
+/* ═══════════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════════ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  border: none;
+  transition: all 0.15s;
+  cursor: pointer;
+  font-family: var(--ff-body);
+}
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: #5a52e0; box-shadow: 0 4px 16px rgba(108,99,255,0.4); }
+.btn-primary:disabled { background: var(--bg-4); color: var(--text-2); cursor: not-allowed; box-shadow: none; }
+.btn-secondary { background: var(--bg-3); color: var(--text-1); border: 1px solid var(--border-light); }
+.btn-secondary:hover { background: var(--bg-4); color: var(--text-0); }
+.btn-teal { background: rgba(0,212,170,0.15); color: var(--teal); border: 1px solid rgba(0,212,170,0.25); }
+.btn-teal:hover { background: var(--teal); color: #0A0C18; }
+.btn-ghost { background: transparent; color: var(--text-2); }
+.btn-ghost:hover { color: var(--text-0); background: var(--bg-2); }
+.btn-sm { padding: 6px 12px; font-size: 12px; }
+.btn-lg { padding: 12px 24px; font-size: 14px; }
+.btn-full { width: 100%; justify-content: center; }
+
+/* ═══════════════════════════════════════════════
+   AI OUTPUT AREA
+═══════════════════════════════════════════════ */
+.ai-output {
+  background: var(--bg-2);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 18px;
+  min-height: 120px;
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--text-1);
+  position: relative;
+  overflow: auto;
+  max-height: 600px;
+}
+.ai-output.loading::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--teal), var(--accent));
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+}
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+.ai-placeholder { color: var(--text-3); font-style: italic; font-size: 13px; }
+.ai-content { white-space: pre-wrap; }
+.ai-content h3 { color: var(--accent); font-family: var(--ff-display); margin: 12px 0 6px; font-size: 14px; }
+.ai-content strong { color: var(--text-0); }
+.ai-content ul, .ai-content ol { padding-left: 20px; margin: 8px 0; }
+.ai-content li { margin-bottom: 4px; }
+.ai-content code { background: var(--bg-4); padding: 2px 6px; border-radius: 4px; font-family: var(--mono); font-size: 12px; }
+
+/* ═══════════════════════════════════════════════
+   LABELS & FORM ELEMENTS
+═══════════════════════════════════════════════ */
+.label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-2);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 6px;
+}
+.form-group { margin-bottom: 16px; }
+.input-row { display: flex; gap: 10px; }
+.input-row > * { flex: 1; }
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.tag-accent { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(108,99,255,0.2); }
+.tag-teal { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(0,212,170,0.2); }
+.tag-amber { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(255,179,71,0.2); }
+.tag-rose { background: var(--rose-dim); color: var(--rose); border: 1px solid rgba(255,101,132,0.2); }
+
+/* ═══════════════════════════════════════════════
+   PROGRESS
+═══════════════════════════════════════════════ */
+.progress-track {
+  height: 6px;
+  background: var(--bg-4);
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--teal));
+  transition: width 0.6s ease;
+}
+
+/* ═══════════════════════════════════════════════
+   WORKFLOW STEPPER
+═══════════════════════════════════════════════ */
+.workflow-steps {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  margin-bottom: 24px;
+}
+.workflow-step {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.step-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--bg-3);
+  border: 2px solid var(--bg-4);
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--mono);
+  color: var(--text-2);
+  transition: all 0.3s;
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
+}
+.step-node.done { background: var(--teal); border-color: var(--teal); color: #0A0C18; }
+.step-node.active { background: var(--accent); border-color: var(--accent); color: white; box-shadow: 0 0 12px var(--accent-glow); }
+.step-line {
+  height: 2px;
+  width: 32px;
+  background: var(--bg-4);
+  flex-shrink: 0;
+}
+.step-line.done { background: var(--teal); }
+
+/* ═══════════════════════════════════════════════
+   PAGE HEADER
+═══════════════════════════════════════════════ */
+.page-header { margin-bottom: 24px; }
+.page-header h1 {
+  font-family: var(--ff-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-0);
+  margin-bottom: 4px;
+}
+.page-header p { font-size: 13px; color: var(--text-2); }
+.page-header .badges { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+
+/* ═══════════════════════════════════════════════
+   TABLE
+═══════════════════════════════════════════════ */
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table th {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-2);
+  border-bottom: 1px solid var(--border-light);
+}
+.data-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-1);
+  vertical-align: top;
+}
+.data-table tr:hover td { background: var(--bg-2); }
+.data-table tr:last-child td { border-bottom: none; }
+
+/* ═══════════════════════════════════════════════
+   MODAL / OVERLAY
+═══════════════════════════════════════════════ */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  width: 480px;
+  max-width: 95vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  transform: translateY(16px);
+  transition: transform 0.2s;
+}
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-title {
+  font-family: var(--ff-display);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-0);
+  margin-bottom: 4px;
+}
+.modal-sub { font-size: 12px; color: var(--text-2); margin-bottom: 20px; }
+.modal-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  background: var(--bg-3);
+  border: none;
+  color: var(--text-2);
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  font-size: 14px;
+  cursor: pointer;
+}
+.modal-close:hover { background: var(--bg-4); color: var(--text-0); }
+
+/* ═══════════════════════════════════════════════
+   CHAT INTERFACE
+═══════════════════════════════════════════════ */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+  background: var(--bg-2);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+}
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.chat-msg {
+  display: flex;
+  gap: 10px;
+  max-width: 85%;
+}
+.chat-msg.user { align-self: flex-end; flex-direction: row-reverse; }
+.chat-bubble {
+  background: var(--bg-3);
+  border-radius: 12px 12px 12px 4px;
+  padding: 10px 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-1);
+}
+.chat-msg.user .chat-bubble {
+  background: var(--accent);
+  color: white;
+  border-radius: 12px 12px 4px 12px;
+}
+.chat-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+  background: var(--accent-dim);
+  border: 1px solid var(--border);
+}
+.chat-input-row {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid var(--border-light);
+  background: var(--panel);
+}
+.chat-input-row input {
+  border-radius: 20px;
+  background: var(--bg-2);
+}
+.chat-input-row button {
+  flex-shrink: 0;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: none;
+  color: white;
+  font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+}
+.chat-input-row button:hover { background: #5a52e0; }
+
+/* ═══════════════════════════════════════════════
+   AGENT CARDS
+═══════════════════════════════════════════════ */
+.agent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+.agent-card {
+  background: var(--panel);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.agent-card:hover { border-color: var(--accent); box-shadow: var(--shadow-accent); }
+.agent-card.running { border-color: var(--teal); }
+.agent-card.running::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--teal);
+  animation: progress-run 2s infinite;
+}
+@keyframes progress-run {
+  0% { width: 0; }
+  50% { width: 60%; }
+  100% { width: 100%; }
+}
+.agent-icon { font-size: 28px; margin-bottom: 8px; }
+.agent-name { font-family: var(--ff-display); font-size: 12px; font-weight: 600; color: var(--text-0); margin-bottom: 4px; }
+.agent-desc { font-size: 11px; color: var(--text-2); line-height: 1.4; }
+.agent-status { margin-top: 8px; }
+
+/* ═══════════════════════════════════════════════
+   KNOWLEDGE GRAPH (Canvas)
+═══════════════════════════════════════════════ */
+.kg-canvas {
+  width: 100%;
+  height: 420px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-2);
+  display: block;
+  cursor: grab;
+}
+.kg-canvas:active { cursor: grabbing; }
+
+/* ═══════════════════════════════════════════════
+   MISC UTILITIES
+═══════════════════════════════════════════════ */
+.flex { display: flex; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.gap-8 { gap: 8px; }
+.gap-12 { gap: 12px; }
+.gap-16 { gap: 16px; }
+.mb-8 { margin-bottom: 8px; }
+.mb-12 { margin-bottom: 12px; }
+.mb-16 { margin-bottom: 16px; }
+.mb-20 { margin-bottom: 20px; }
+.mb-24 { margin-bottom: 24px; }
+.text-sm { font-size: 12px; }
+.text-xs { font-size: 11px; }
+.text-muted { color: var(--text-2); }
+.text-accent { color: var(--accent); }
+.text-teal { color: var(--teal); }
+.text-amber { color: var(--amber); }
+.text-mono { font-family: var(--mono); }
+.divider { height: 1px; background: var(--border-light); margin: 16px 0; }
+.alert {
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  margin-bottom: 16px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.alert-info { background: var(--accent-dim); border: 1px solid var(--border); color: var(--text-1); }
+.alert-success { background: var(--teal-dim); border: 1px solid rgba(0,212,170,0.2); color: var(--text-1); }
+.alert-warning { background: var(--amber-dim); border: 1px solid rgba(255,179,71,0.2); color: var(--text-1); }
+.copy-btn {
+  background: var(--bg-3);
+  border: 1px solid var(--border-light);
+  color: var(--text-2);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.copy-btn:hover { background: var(--bg-4); color: var(--text-0); }
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .sidebar { transform: translateX(-100%); transition: transform 0.25s; }
+  .sidebar.open { transform: translateX(0); }
+  .main, .topbar { margin-left: 0; left: 0; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .mobile-menu-btn { display: flex !important; }
+}
+.mobile-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px; height: 36px;
+  background: var(--bg-2);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--text-1);
+  font-size: 16px;
+  border: none;
+  margin-right: 8px;
+}
+
+/* ═══════════════════════════════════════════════
+   SPECIALIZED COMPONENTS
+═══════════════════════════════════════════════ */
+.step-content { animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.score-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.score-bar-label { font-size: 12px; color: var(--text-1); width: 160px; flex-shrink: 0; }
+.score-bar-track { flex: 1; height: 8px; background: var(--bg-4); border-radius: 4px; overflow: hidden; }
+.score-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--accent), var(--teal)); }
+.score-bar-val { font-size: 12px; font-weight: 600; color: var(--text-0); font-family: var(--mono); width: 36px; text-align: right; }
+
+.journal-card {
+  background: var(--bg-2);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  margin-bottom: 10px;
+  border-left: 3px solid var(--accent);
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.journal-q {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.journal-q1 { background: rgba(0,212,170,0.15); color: var(--teal); }
+.journal-q2 { background: rgba(108,99,255,0.15); color: var(--accent); }
+.journal-q3 { background: rgba(255,179,71,0.15); color: var(--amber); }
+
+.topic-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--bg-2);
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  font-size: 12px;
+  color: var(--text-1);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin: 4px;
+}
+.topic-chip:hover, .topic-chip.selected {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Typing cursor animation */
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+.typing-cursor::after {
+  content: '▋';
+  animation: blink 0.8s infinite;
+  color: var(--accent);
+  font-size: 0.9em;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     SIDEBAR
+═══════════════════════════════════════════ -->
+<aside class="sidebar" id="sidebar">
+  <canvas class="sidebar-canvas" id="sidebarCanvas"></canvas>
+  <div class="sidebar-inner">
+    <div class="sidebar-brand">
+      <div class="brand-badge">
+        <div class="brand-icon">🔬</div>
+        <div class="brand-text">
+          <div class="brand-name">ResearchAI Platform</div>
+          <div class="brand-sub">KMC · Tribhuvan University</div>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-user">
+      <div class="user-info">
+        <div class="user-avatar">BR</div>
+        <div>
+          <div class="user-name">Bishnu S. Rayamajhi</div>
+          <div class="user-role">Mathematics Lecturer · Head H&SS</div>
+        </div>
+      </div>
+    </div>
+    <nav class="sidebar-nav" id="sidebarNav">
+      <div class="nav-section-label">Overview</div>
+      <button class="nav-item active" data-page="dashboard">
+        <span class="nav-icon">📊</span> Dashboard
+      </button>
+
+      <div class="nav-section-label" style="margin-top:10px">Research Workflow</div>
+      <button class="nav-item" data-page="topic-gen">
+        <span class="nav-icon">💡</span> Topic Generator <span class="nav-num">01</span>
+      </button>
+      <button class="nav-item" data-page="lit-review">
+        <span class="nav-icon">📚</span> Literature Review <span class="nav-num">02</span>
+      </button>
+      <button class="nav-item" data-page="gap-id">
+        <span class="nav-icon">🔍</span> Gap Identification <span class="nav-num">03</span>
+      </button>
+      <button class="nav-item" data-page="rq-gen">
+        <span class="nav-icon">❓</span> Research Questions <span class="nav-num">04</span>
+      </button>
+      <button class="nav-item" data-page="framework">
+        <span class="nav-icon">🗂️</span> Conceptual Framework <span class="nav-num">05</span>
+      </button>
+      <button class="nav-item" data-page="methodology">
+        <span class="nav-icon">⚗️</span> Methodology Designer <span class="nav-num">06</span>
+      </button>
+
+      <div class="nav-section-label" style="margin-top:10px">Data & Analysis</div>
+      <button class="nav-item" data-page="dataset">
+        <span class="nav-icon">📂</span> Dataset Module <span class="nav-num">07</span>
+      </button>
+      <button class="nav-item" data-page="stats">
+        <span class="nav-icon">📈</span> Statistical Analysis <span class="nav-num">08</span>
+      </button>
+      <button class="nav-item" data-page="ml-module">
+        <span class="nav-icon">🤖</span> ML Research <span class="nav-num">09</span>
+      </button>
+      <button class="nav-item" data-page="physics-ai">
+        <span class="nav-icon">⚛️</span> Physics-Informed AI <span class="nav-num">10</span>
+      </button>
+
+      <div class="nav-section-label" style="margin-top:10px">Writing & Publication</div>
+      <button class="nav-item" data-page="results">
+        <span class="nav-icon">📋</span> Results Interpreter <span class="nav-num">11</span>
+      </button>
+      <button class="nav-item" data-page="discussion">
+        <span class="nav-icon">💬</span> Discussion Gen <span class="nav-num">12</span>
+      </button>
+      <button class="nav-item" data-page="conclusion">
+        <span class="nav-icon">✅</span> Conclusion Gen <span class="nav-num">13</span>
+      </button>
+      <button class="nav-item" data-page="journal-match">
+        <span class="nav-icon">📰</span> Journal Matching <span class="nav-num">14</span>
+      </button>
+      <button class="nav-item" data-page="references">
+        <span class="nav-icon">🔖</span> Reference Manager <span class="nav-num">15</span>
+      </button>
+      <button class="nav-item" data-page="ethics">
+        <span class="nav-icon">⚖️</span> Ethics Module <span class="nav-num">16</span>
+      </button>
+      <button class="nav-item" data-page="writing-ai">
+        <span class="nav-icon">✍️</span> Writing Enhancer <span class="nav-num">17</span>
+      </button>
+      <button class="nav-item" data-page="originality">
+        <span class="nav-icon">🛡️</span> Originality Check <span class="nav-num">18</span>
+      </button>
+      <button class="nav-item" data-page="ai-analysis">
+        <span class="nav-icon">🔬</span> AI Writing Analysis <span class="nav-num">19</span>
+      </button>
+      <button class="nav-item" data-page="publication">
+        <span class="nav-icon">📄</span> Publication Assistant <span class="nav-num">20</span>
+      </button>
+
+      <div class="nav-section-label" style="margin-top:10px">Intelligence</div>
+      <button class="nav-item" data-page="knowledge-graph">
+        <span class="nav-icon">🕸️</span> Knowledge Graph <span class="nav-num">21</span>
+      </button>
+      <button class="nav-item" data-page="agentic-team">
+        <span class="nav-icon">🧠</span> Agentic AI Team <span class="nav-num">22</span>
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="theme-toggle" onclick="toggleTheme()">
+        <span>🌙 Dark Mode</span>
+        <button class="toggle-btn" id="themeToggleBtn" aria-label="Toggle theme"></button>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══════════════════════════════════════════
+     TOPBAR
+═══════════════════════════════════════════ -->
+<header class="topbar">
+  <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+  <div class="topbar-title" id="topbarTitle">
+    Research Dashboard <span class="topbar-subtitle" id="topbarSub">— Overview & Analytics</span>
+  </div>
+  <div class="topbar-actions">
+    <div class="tb-badge"><div class="tb-dot"></div> AI Ready</div>
+    <button class="api-key-btn" onclick="openApiModal()">🔑 API Key</button>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════
+     MAIN CONTENT
+═══════════════════════════════════════════ -->
+<main class="main">
+
+<!-- ─── PAGE: DASHBOARD ─── -->
+<section class="page active" id="page-dashboard">
+  <div class="page-header">
+    <h1>Research Dashboard</h1>
+    <p>Welcome back, Bishnu. Your AI-powered research environment is ready.</p>
+    <div class="badges">
+      <span class="tag tag-teal">✓ KMC · Kapilvastu Multiple Campus</span>
+      <span class="tag tag-accent">UCDL Academy</span>
+      <span class="tag tag-amber">Tribhuvan University</span>
+    </div>
+  </div>
+
+  <!-- Workflow progress stepper -->
+  <div class="card mb-24">
+    <div class="card-h">
+      <div>
+        <div class="card-title">📐 Active Research Progress</div>
+        <div class="card-desc">Your current project workflow completion</div>
+      </div>
+      <div class="text-sm text-muted text-mono">6 / 22 steps complete</div>
+    </div>
+    <div class="workflow-steps" id="workflowStepper"></div>
+    <div class="progress-track">
+      <div class="progress-fill" style="width: 27%"></div>
+    </div>
+    <div class="text-xs text-muted" style="margin-top:6px">27% complete · Next: Gap Identification</div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-icon">📄</div>
+      <div class="stat-val" id="stat-papers">0</div>
+      <div class="stat-label">Total Papers</div>
+      <div class="stat-delta">↑ ready to generate</div>
+    </div>
+    <div class="stat-card" data-c="teal">
+      <div class="stat-icon">🔍</div>
+      <div class="stat-val" id="stat-gaps">0</div>
+      <div class="stat-label">Gaps Found</div>
+      <div class="stat-delta">↑ run Gap Identification</div>
+    </div>
+    <div class="stat-card" data-c="amber">
+      <div class="stat-icon">🗃️</div>
+      <div class="stat-val" id="stat-datasets">0</div>
+      <div class="stat-label">Datasets</div>
+      <div class="stat-delta">↑ upload to start</div>
+    </div>
+    <div class="stat-card" data-c="rose">
+      <div class="stat-icon">💡</div>
+      <div class="stat-val" id="stat-hyp">0</div>
+      <div class="stat-label">Hypotheses</div>
+      <div class="stat-delta">↑ generate below</div>
+    </div>
+    <div class="stat-card" data-c="sky">
+      <div class="stat-icon">🤖</div>
+      <div class="stat-val" id="stat-agents">9</div>
+      <div class="stat-label">AI Agents</div>
+      <div class="stat-delta">→ Agentic Team ready</div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:24px">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:16px">📊 Research Activity</div>
+      <canvas id="activityChart" height="200"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:16px">🎯 Domain Coverage</div>
+      <canvas id="domainChart" height="200"></canvas>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:14px">⚡ Quick Actions</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button class="btn btn-primary btn-full" onclick="navigateTo('topic-gen')">💡 Generate Research Topics</button>
+        <button class="btn btn-teal btn-full" onclick="navigateTo('lit-review')">📚 Start Literature Review</button>
+        <button class="btn btn-secondary btn-full" onclick="navigateTo('publication')">📄 Create Manuscript</button>
+        <button class="btn btn-secondary btn-full" onclick="navigateTo('agentic-team')">🧠 Launch AI Research Team</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:14px">🕐 Recent Sessions</div>
+      <div style="font-size:12px;color:var(--text-2)">No recent sessions yet. Start a workflow to track your progress.</div>
+      <div class="divider"></div>
+      <div class="alert alert-info">
+        <span>💡</span>
+        <span>Set your <strong>Claude API key</strong> using the button in the top-right to enable all AI features across all 22 modules.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PAGE: TOPIC GENERATOR ─── -->
+<section class="page" id="page-topic-gen">
+  <div class="page-header">
+    <h1>💡 Research Topic Generator</h1>
+    <p>Generate novel, publishable research topics with innovation scores and Scopus readiness assessment.</p>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">Configure Topic Search</div>
+      <div class="card-desc">Define your research parameters for targeted topic generation</div>
+      <div class="form-group">
+        <label class="label">Research Domain</label>
+        <select id="tg-domain">
+          <option>Mathematics</option>
+          <option>Artificial Intelligence</option>
+          <option>Machine Learning</option>
+          <option>Deep Learning</option>
+          <option>Natural Language Processing</option>
+          <option>Physics-Informed AI</option>
+          <option>Data Science</option>
+          <option>Education</option>
+          <option>Social Science</option>
+          <option>Materials Science</option>
+          <option>Entrepreneurship</option>
+          <option>Computational Science</option>
+          <option>Engineering</option>
+          <option>Environmental Science</option>
+          <option>Healthcare Research</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="label">Keywords (comma-separated)</label>
+        <input type="text" id="tg-keywords" placeholder="e.g., critical thinking, mathematics, undergraduate"/>
+      </div>
+      <div class="form-group">
+        <label class="label">Research Level</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer">
+            <input type="radio" name="tg-level" value="Bachelor"> Bachelor
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer">
+            <input type="radio" name="tg-level" value="Master" checked> Master
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer">
+            <input type="radio" name="tg-level" value="PhD"> PhD
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer">
+            <input type="radio" name="tg-level" value="Scopus Q1"> Scopus Q1
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer">
+            <input type="radio" name="tg-level" value="Scopus Q2"> Scopus Q2
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="label">Number of Topics</label>
+        <input type="number" id="tg-count" value="10" min="5" max="50"/>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="runModule('topic-gen')">
+        🚀 Generate Research Topics
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-h">
+        <div class="card-title">Generated Topics</div>
+        <button class="copy-btn" onclick="copyOutput('tg-output')">Copy</button>
+      </div>
+      <div class="ai-output" id="tg-output">
+        <div class="ai-placeholder">Topics will appear here. Fill in domain, keywords, and click Generate.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PAGE: LITERATURE REVIEW ─── -->
+<section class="page" id="page-lit-review">
+  <div class="page-header">
+    <h1>📚 Literature Review Agent</h1>
+    <p>PRISMA-guided systematic literature review with multi-database search and synthesis table generation.</p>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">Search Parameters</div>
+      <div class="card-desc">Configure your systematic literature search</div>
+      <div class="form-group">
+        <label class="label">Research Topic / Keywords</label>
+        <input type="text" id="lr-topic" placeholder="e.g., AI in mathematics education Nepal"/>
+      </div>
+      <div class="form-group">
+        <label class="label">Search Databases</label>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">Google Scholar</label>
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Semantic Scholar</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">arXiv</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">CrossRef</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">PubMed</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="label">Year Range</label>
+        <div class="input-row">
+          <input type="number" placeholder="From: 2018" id="lr-from"/>
+          <input type="number" placeholder="To: 2025" id="lr-to"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="label">Review Type</label>
+        <select id="lr-type">
+          <option>Systematic Review (PRISMA)</option>
+          <option>Narrative Review</option>
+          <option>Meta-Analysis</option>
+          <option>Scoping Review</option>
+          <option>Rapid Review</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="runModule('lit-review')">
+        🔎 Conduct Literature Review
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-h">
+        <div class="card-title">Review Synthesis</div>
+        <button class="copy-btn" onclick="copyOutput('lr-output')">Copy</button>
+      </div>
+      <div class="ai-output" id="lr-output">
+        <div class="ai-placeholder">PRISMA-compliant synthesis will appear here. Includes summary tables, key findings, methods, limitations, and future directions.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PAGE: GAP IDENTIFICATION ─── -->
+<section class="page" id="page-gap-id">
+  <div class="page-header">
+    <h1>🔍 Research Gap Identification</h1>
+    <p>Identify theoretical, methodological, empirical, contextual, and practical gaps with novelty scoring.</p>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">Gap Analysis Input</div>
+      <div class="card-desc">Paste your literature summary or describe your field</div>
+      <div class="form-group">
+        <label class="label">Research Field / Literature Summary</label>
+        <textarea id="gap-input" rows="6" placeholder="Describe your research field, or paste a brief literature summary. The AI will identify multiple types of research gaps..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="label">Gap Types to Identify</label>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Theoretical</label>
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Methodological</label>
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Empirical</label>
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Contextual</label>
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Practical</label>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="runModule('gap-id')">
+        🔍 Identify Research Gaps
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-h">
+        <div class="card-title">Gap Matrix</div>
+        <button class="copy-btn" onclick="copyOutput('gap-output')">Copy</button>
+      </div>
+      <div class="ai-output" id="gap-output">
+        <div class="ai-placeholder">Gap matrix with novelty scores and innovation potential will appear here.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PAGE: RESEARCH QUESTIONS ─── -->
+<section class="page" id="page-rq-gen">
+  <div class="page-header">
+    <h1>❓ Research Question Generator</h1>
+    <p>Generate Scopus-ready research questions, sub-questions, objectives, and testable hypotheses.</p>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">Question Configuration</div>
+      <div class="form-group" style="margin-top:14px">
+        <label class="label">Research Gap / Problem Statement</label>
+        <textarea id="rq-gap" rows="4" placeholder="Describe the research gap or problem you want to address..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="label">Research Approach</label>
+        <select id="rq-approach">
+          <option>Quantitative</option>
+          <option>Qualitative</option>
+          <option>Mixed Methods</option>
+          <option>Experimental</option>
+          <option>Survey-Based</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="label">Number of Sub-Questions</label>
+        <input type="number" id="rq-count" value="3" min="1" max="8"/>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="runModule('rq-gen')">
+        💡 Generate Research Questions
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-h">
+        <div class="card-title">Questions & Hypotheses</div>
+        <button class="copy-btn" onclick="copyOutput('rq-output')">Copy</button>
+      </div>
+      <div class="ai-output" id="rq-output">
+        <div class="ai-placeholder">Main research question, sub-questions, objectives, and null/alternative hypotheses will appear here.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PAGE: CONCEPTUAL FRAMEWORK ─── -->
+<section class="page" id="page-framework">
+  <div class="page-header">
+    <h1>🗂️ Conceptual Framework Builder</h1>
+    <p>Generate conceptual frameworks with variables, relationships, mediators, and moderators.</p>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">Framework Parameters</div>
+      <div class="form-group" style="margin-top:14px">
+        <label class="label">Research Topic & Variables</label>
+        <textarea id="fw-topic" rows="4" placeholder="Describe your research topic, independent variables, dependent variables, and any known mediating/moderating factors..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="label">Framework Type</label>
+        <select id="fw-type">
+          <option>Theoretical Framework</option>
+          <option>Conceptual Model</option>
+          <option>Structural Framework</option>
+          <option>Logic Model</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="runModule('framework')">
+        🗂️ Build Conceptual Framework
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-h">
+        <div class="card-title">Framework Description</div>
+        <button class="copy-btn" onclick="copyOutput('fw-output')">Copy</button>
+      </div>
+      <div class="ai-output" id="fw-output">
+        <div class="ai-placeholder">Framework description with variables, directional relationships, mediators, moderators, and diagram guidance will appear here.</div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="margin-bottom:16px">📐 Visual Framework Canvas</div>
+    <canvas id="frameworkCanvas" style="width:100%;height:320px;background:var(--bg-2);border-radius:var(--radius-sm);display:block;"></canvas>
+    <div class="text-xs text-muted" style="margin-top:8px">Conceptual diagram renders here after generation</div>
+  </div>
+</section>
+
+<!-- ─── PAGE: METHODOLOGY ─── -->
+<section class="page" id="page-methodology">
+  <div class="page-header">
+    <h1>⚗️ Methodology Designer</h1>
+    <p>Design complete research methodologies for quantitative, qualitative, or mixed-method studies.</p>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">Methodology Configuration</div>
+      <div class="form-group" style="margin-top:14px">
+        <label class="label">Research Approach</label>
+        <select id="meth-approach" onchange="updateMethodOptions()">
+          <option>Quantitative</option>
+          <option>Qualitative</option>
+          <option>Mixed Methods</option>
+        </select>
+      </div>
+      <div id="meth-quant-opts">
+        <div class="form-group">
+          <label class="label">Sampling Strategy</label>
+          <select id="meth-sampling">
+            <option>Simple Random Sampling</option>
+            <option>Stratified Sampling</option>
+            <option>Cluster Sampling</option>
+            <option>Purposive Sampling</option>
+            <option>Systematic Sampling</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="label">Target Population</label>
+          <input type="text" id="meth-pop" placeholder="e.g., Undergraduate students at KMC (N≈1200)"/>
+        </div>
+        <div class="form-group">
+          <label class="label">Data Collection Method</label>
+          <select id="meth-collect">
+            <option>Structured Survey / Questionnaire</option>
+            <option>Experiment</option>
+            <option>Secondary Data Analysis</option>
+            <option>Observation</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="label">Research Objectives (brief)</label>
+        <textarea id="meth-obj" rows="3" placeholder="Briefly state your research objectives..."></textarea>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="runModule('methodology')">
+        ⚗️ Design Methodology
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-h">
+        <div class="card-title">Methodology Design</div>
+        <button class="copy-btn" onclick="copyOutput('meth-output')">Copy</button>
+      </div>
+      <div class="ai-output" id="meth-output">
+        <div class="ai-placeholder">Complete methodology design including sampling, instruments, procedures, validity, reliability, and ethical considerations will appear here.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PAGE: DATASET ─── -->
+<section class="page" id="page-dataset">
+  <div class="page-header">
+    <h1>📂 Dataset & Data Collection Module</h1>
+    <p>Upload and manage datasets with automatic cleaning, outlier detection, and missing value analysis.</p>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">Dataset Upload</div>
+      <div class="card-desc">Supports Excel, CSV, JSON, and SQL exports</div>
+      <div id="upload-zone" style="border:2px dashed var(--border);border-radius:var(--radius-sm);padding:32px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:16px" onclick="document.getElementById('fileInput').click()" ondragover="event.preventDefault();this.style.borderColor='var(--accent)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="handleFileDrop(event)">
+        <div style="font-size:32px;margin-bottom:8px">📁</div>
+        <div style="font-size:13px;color:var(--text-1);margin-bottom:4px">Drop your data file here</div>
+        <div style="font-size:11px;color:var(--text-2)">CSV · Excel · JSON · SQL Export</div>
+        <input type="file" id="fileInput" style="display:none" accept=".csv,.xlsx,.xls,.json" onchange="handleFileUpload(event)"/>
+      </div>
+      <div id="dataset-info" style="display:none">
+        <div class="alert alert-success">
+          <span>✅</span>
+          <div id="dataset-info-text"></div>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="runModule('dataset')" style="margin-top:8px">
+        🔬 Analyze Dataset
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-h">
+        <div class="card-title">Data Quality Report</div>
+        <button class="copy-btn" onclick="copyOutput('ds-output')">Copy</button>
+      </div>
+      <div class="ai-output" id="ds-output">
+        <div class="ai-placeholder">Upload a dataset to see: missing values, outlier detection, data types, distribution summary, and cleaning recommendations.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PAGE: STATISTICAL ANALYSIS ─── -->
+<section class="page" id="page-stats">
+  <div class="page-header">
+    <h1>📈 Statistical Analysis Agent</h1>
+    <p>Descriptive, inferential, and advanced statistics with SPSS-compatible output and APA 7th reporting.</p>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">Analysis Configuration</div>
+      <div class="form-group" style="margin-top:14px">
+        <label class="label">Describe Your Data & Hypotheses</label>
+        <textarea id="stat-desc" rows="4" placeholder="e.g., N=268 undergraduate students. IV: Critical thinking scores (CAAP). DV: Math achievement. Covariates: gender, year. Hypothesis: CT significantly predicts math achievement."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="label">Statistical Tests Required</label>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">Descriptive Stats</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">t-Test</label>
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">ANOVA</label>
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Multiple Regression</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">SEM</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">PLS-SEM</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">CFA / EFA</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">Logistic Regression</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">MANOVA</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="label">Reporting Style</label>
+        <select id="stat-style">
+          <option>APA 7th Edition</option>
+          <option>APA 6th Edition</option>
+          <option>SPSS Output Style</option>
+          <option>Plain Language</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="runModule('stats')">
+        📊 Run Statistical Analysis
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-h">
+        <div class="card-title">Statistical Output</div>
+        <button class="copy-btn" onclick="copyOutput('stat-output')">Copy</button>
+      </div>
+      <div class="ai-output" id="stat-output">
+        <div class="ai-placeholder">APA-formatted statistical results with tables, significance tests, effect sizes, and interpretation will appear here.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PAGE: ML MODULE ─── -->
+<section class="page" id="page-ml-module">
+  <div class="page-header">
+    <h1>🤖 Machine Learning Research Module</h1>
+    <p>Design ML experiments, select algorithms, define evaluation metrics, and generate model documentation.</p>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">ML Experiment Design</div>
+      <div class="form-group" style="margin-top:14px">
+        <label class="label">Research Problem Description</label>
+        <textarea id="ml-problem" rows="4" placeholder="Describe your ML research problem, available data, and what you're trying to predict or classify..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="label">Algorithms to Compare</label>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Random Forest</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">XGBoost</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">SVM</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">CNN</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">RNN/LSTM</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">Transformer</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="label">Evaluation Metrics</label>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Accuracy</label>
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">F1 Score</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">Precision</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">Recall</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">ROC-AUC</label>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="runModule('ml-module')">
+        🤖 Design ML Experiment
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-h">
+        <div class="card-title">ML Design Document</div>
+        <button class="copy-btn" onclick="copyOutput('ml-output')">Copy</button>
+      </div>
+      <div class="ai-output" id="ml-output">
+        <div class="ai-placeholder">Complete ML experiment design with data preprocessing steps, model architectures, hyperparameter ranges, training protocol, and evaluation framework will appear here.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PAGE: PHYSICS AI ─── -->
+<section class="page" id="page-physics-ai">
+  <div class="page-header">
+    <h1>⚛️ Physics-Informed AI Module</h1>
+    <p>Integrate domain physics with machine learning for materials science, engineering, and climate applications.</p>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">PINN Configuration</div>
+      <div class="form-group" style="margin-top:14px">
+        <label class="label">Application Domain</label>
+        <select id="pinn-domain">
+          <option>Materials Science</option>
+          <option>Structural Engineering</option>
+          <option>Fluid Dynamics</option>
+          <option>Climate Science</option>
+          <option>Heat Transfer</option>
+          <option>Electromagnetics</option>
+          <option>Biomechanics</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="label">Physical Equations / Laws</label>
+        <textarea id="pinn-equations" rows="4" placeholder="Describe the governing physical equations (e.g., Navier-Stokes, diffusion equations, PDEs) and the ML integration goal..."></textarea>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="runModule('physics-ai')">
+        ⚛️ Generate PINN Design
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-h">
+        <div class="card-title">PINN Architecture & Plan</div>
+        <button class="copy-btn" onclick="copyOutput('pinn-output')">Copy</button>
+      </div>
+      <div class="ai-output" id="pinn-output">
+        <div class="ai-placeholder">Physics-informed neural network architecture, loss function design, training strategy, and explainability framework will appear here.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PAGE: RESULTS ─── -->
+<section class="page" id="page-results">
+  <div class="page-header">
+    <h1>📋 Results Interpretation Agent</h1>
+    <p>Convert raw statistical output into journal-quality academic language with APA-formatted tables.</p>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">Results Input</div>
+      <div class="form-group" style="margin-top:14px">
+        <label class="label">Paste Your Statistical Results</label>
+        <textarea id="res-input" rows="8" placeholder="Paste your SPSS/R/Python output, statistical values (means, SD, F, p, β, R², etc.) or describe your findings numerically..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="label">Output Format</label>
+        <select id="res-format">
+          <option>APA 7th Edition (with tables)</option>
+          <option>Journal-Ready Narrative</option>
+          <option>Findings + Implications</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="runModule('results')">
+        📋 Interpret Results
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-h">
+        <div class="card-title">Academic Results Write-up</div>
+        <button class="copy-btn" onclick="copyOutput('res-output')">Copy</button>
+      </div>
+      <div class="ai-output" id="res-output">
+        <div class="ai-placeholder">Journal-quality results section with narrative, APA tables, and practical/theoretical implications will appear here.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PAGE: DISCUSSION ─── -->
+<section class="page" id="page-discussion">
+  <div class="page-header">
+    <h1>💬 Discussion Generator</h1>
+    <p>Compare findings with existing literature, explain agreements, contradictions, and novel contributions.</p>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">Discussion Input</div>
+      <div class="form-group" style="margin-top:14px">
+        <label class="label">Your Key Findings (summary)</label>
+        <textarea id="disc-findings" rows="4" placeholder="Summarize your main findings, e.g., 'Critical thinking significantly predicted math achievement (β=.42, p<.001), accounting for 31% of variance...'"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="label">Key Prior Studies to Compare</label>
+        <textarea id="disc-prior" rows="3" placeholder="List 3-5 key studies your findings relate to, with authors/year and key results..."></textarea>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="runModule('discussion')">
+        💬 Generate Discussion
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-h">
+        <div class="card-title">Discussion Section</div>
+        <button class="copy-btn" onclick="copyOutput('disc-output')">Copy</button>
+      </div>
+      <div class="ai-output" id="disc-output">
+        <div class="ai-placeholder">Scholarly discussion comparing findings to literature, explaining agreements, contradictions, theoretical contributions, and limitations will appear here.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PAGE: CONCLUSION ─── -->
+<section class="page" id="page-conclusion">
+  <div class="page-header">
+    <h1>✅ Conclusion Generator</h1>
+    <p>Generate comprehensive conclusions with contributions, recommendations, and future research directions.</p>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">Conclusion Input</div>
+      <div class="form-group" style="margin-top:14px">
+        <label class="label">Study Summary</label>
+        <textarea id="conc-summary" rows="6" placeholder="Briefly summarize: research objectives, methodology, main findings, and key contributions of your study..."></textarea>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="runModule('conclusion')">
+        ✅ Generate Conclusion
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-h">
+        <div class="card-title">Conclusion Section</div>
+        <button class="copy-btn" onclick="copyOutput('conc-output')">Copy</button>
+      </div>
+      <div class="ai-output" id="conc-output">
+        <div class="ai-placeholder">Conclusion with summary of contributions, theoretical/practical implications, recommendations, and future research agenda will appear here.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PAGE: JOURNAL MATCHING ─── -->
+<section class="page" id="page-journal-match">
+  <div class="page-header">
+    <h1>📰 Journal Matching System</h1>
+    <p>Find the best-fit Scopus-indexed journals by quartile, impact factor, and CiteScore for your manuscript.</p>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">Manuscript Profile</div>
+      <div class="form-group" style="margin-top:14px">
+        <label class="label">Research Title & Abstract (or keywords)</label>
+        <textarea id="jm-abstract" rows="5" placeholder="Paste your abstract or describe your study topic, methodology, and key findings..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="label">Target Quartile</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Q1</label>
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Q2</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">Q3</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">Q4</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="label">Open Access Required?</label>
+        <select id="jm-oa">
+          <option>No preference</option>
+          <option>Open Access only</option>
+          <option>Subscription preferred</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="runModule('journal-match')">
+        📰 Match Journals
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-h">
+        <div class="card-title">Journal Recommendations</div>
+        <button class="copy-btn" onclick="copyOutput('jm-output')">Copy</button>
+      </div>
+      <div class="ai-output" id="jm-output">
+        <div class="ai-placeholder">Top journal recommendations with impact factors, CiteScore, quartile rankings, scope match, acceptance rates, and submission guidelines will appear here.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PAGE: REFERENCES ─── -->
+<section class="page" id="page-references">
+  <div class="page-header">
+    <h1>🔖 Reference Manager</h1>
+    <p>Format citations in APA 7, MLA, Harvard, Chicago, IEEE. Auto-format, DOI lookup, and BibTeX export.</p>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">Reference Input</div>
+      <div class="form-group" style="margin-top:14px">
+        <label class="label">Enter References (one per line, any format)</label>
+        <textarea id="ref-input" rows="8" placeholder="Paste references in any format, or enter DOIs (one per line). The AI will parse and reformat them.&#10;&#10;Example:&#10;10.1016/j.compedu.2020.104022&#10;Smith, J. (2021). AI in education. Journal of..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="label">Output Citation Style</label>
+        <select id="ref-style">
+          <option>APA 7th Edition</option>
+          <option>APA 6th Edition</option>
+          <option>MLA 9th Edition</option>
+          <option>Harvard</option>
+          <option>Chicago (Author-Date)</option>
+          <option>IEEE</option>
+          <option>Vancouver</option>
+        </select>
+      </div>
+      <div class="input-row" style="margin-top:8px">
+        <button class="btn btn-primary" onclick="runModule('references')">📋 Format References</button>
+        <button class="btn btn-secondary" onclick="exportBibtex()">📦 BibTeX Export</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-h">
+        <div class="card-title">Formatted References</div>
+        <button class="copy-btn" onclick="copyOutput('ref-output')">Copy All</button>
+      </div>
+      <div class="ai-output" id="ref-output">
+        <div class="ai-placeholder">Formatted references will appear here. Includes hanging indentation, alphabetical ordering, and DOI hyperlinks per APA 7th edition standards.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PAGE: ETHICS ─── -->
+<section class="page" id="page-ethics">
+  <div class="page-header">
+    <h1>⚖️ Ethical Compliance Module</h1>
+    <p>Generate ethics statements, informed consent forms, and IRB documentation for your research.</p>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">Research Details</div>
+      <div class="form-group" style="margin-top:14px">
+        <label class="label">Study Description</label>
+        <textarea id="eth-study" rows="4" placeholder="Describe your study: participants, data collection methods, any sensitive topics, institution name..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="label">Documents to Generate</label>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Ethics Statement</label>
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Informed Consent</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">IRB Protocol</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">Participant Rights</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">Data Privacy Statement</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="label">Institution</label>
+        <input type="text" id="eth-inst" value="Kapilvastu Multiple Campus, Tribhuvan University"/>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="runModule('ethics')">
+        ⚖️ Generate Ethics Documents
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-h">
+        <div class="card-title">Ethics Documents</div>
+        <button class="copy-btn" onclick="copyOutput('eth-output')">Copy</button>
+      </div>
+      <div class="ai-output" id="eth-output">
+        <div class="ai-placeholder">IRB-ready ethics statement, informed consent form, and data privacy declaration will appear here.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PAGE: WRITING AI ─── -->
+<section class="page" id="page-writing-ai">
+  <div class="page-header">
+    <h1>✍️ Academic Writing Enhancer</h1>
+    <p>Improve grammar, academic tone, coherence, and readability. Generate reviewer-ready versions.</p>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">Text to Enhance</div>
+      <div class="form-group" style="margin-top:14px">
+        <label class="label">Your Draft Text</label>
+        <textarea id="wa-input" rows="10" placeholder="Paste your draft paragraph, section, or full manuscript text here for enhancement..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="label">Enhancement Focus</label>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Academic Tone</label>
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Grammar</label>
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Coherence</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">Readability</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">Conciseness</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">Vocabulary Richness</label>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="runModule('writing-ai')">
+        ✍️ Enhance Writing
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-h">
+        <div class="card-title">Enhanced Version</div>
+        <button class="copy-btn" onclick="copyOutput('wa-output')">Copy</button>
+      </div>
+      <div class="ai-output" id="wa-output">
+        <div class="ai-placeholder">Improved manuscript text with enhanced academic tone, corrected grammar, improved coherence, and a brief explanation of key changes will appear here.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PAGE: ORIGINALITY ─── -->
+<section class="page" id="page-originality">
+  <div class="page-header">
+    <h1>🛡️ Originality Enhancement</h1>
+    <p>Improve scholarly originality through proper citation guidance, synthesis, and paraphrasing suggestions.</p>
+  </div>
+  <div class="alert alert-warning" style="margin-bottom:20px">
+    <span>⚠️</span>
+    <span>This tool provides <strong>citation, synthesis, and paraphrasing guidance</strong> to improve scholarly originality. It never fabricates sources and is designed to support academic integrity — not circumvent it.</span>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">Text for Originality Review</div>
+      <div class="form-group" style="margin-top:14px">
+        <label class="label">Your Text</label>
+        <textarea id="orig-input" rows="8" placeholder="Paste your text for originality review and improvement suggestions..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="label">Focus Areas</label>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Citation Gaps</label>
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Paraphrasing Tips</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">Source Synthesis</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">Idea Attribution</label>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="runModule('originality')">
+        🛡️ Analyze Originality
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-h">
+        <div class="card-title">Originality Guidance</div>
+        <button class="copy-btn" onclick="copyOutput('orig-output')">Copy</button>
+      </div>
+      <div class="ai-output" id="orig-output">
+        <div class="ai-placeholder">Scholarly synthesis suggestions, citation recommendations, and paraphrasing guidance will appear here.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PAGE: AI WRITING ANALYSIS ─── -->
+<section class="page" id="page-ai-analysis">
+  <div class="page-header">
+    <h1>🔬 AI Writing Analysis Dashboard</h1>
+    <p>Writing quality metrics: sentence diversity, vocabulary richness, readability, and human revision guidance.</p>
+  </div>
+  <div class="alert alert-info" style="margin-bottom:20px">
+    <span>ℹ️</span>
+    <span>Results are displayed as <strong>writing quality guidance only</strong>, not as definitive AI-content detection claims.</span>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">Text for Analysis</div>
+      <div class="form-group" style="margin-top:14px">
+        <textarea id="aia-input" rows="10" placeholder="Paste your manuscript text for writing quality analysis..."></textarea>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="runModule('ai-analysis')">
+        📊 Analyze Writing Quality
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:16px">Writing Quality Metrics</div>
+      <div id="aia-scores">
+        <div class="ai-placeholder text-muted">Metrics will display after analysis.</div>
+      </div>
+      <div class="divider"></div>
+      <div class="card-h" style="margin-bottom:8px">
+        <div class="card-title text-sm">AI Guidance Notes</div>
+        <button class="copy-btn" onclick="copyOutput('aia-output')">Copy</button>
+      </div>
+      <div class="ai-output" id="aia-output" style="min-height:80px">
+        <div class="ai-placeholder">Revision suggestions will appear here.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PAGE: PUBLICATION ASSISTANT ─── -->
+<section class="page" id="page-publication">
+  <div class="page-header">
+    <h1>📄 Publication Assistant</h1>
+    <p>Generate complete Scopus-ready manuscripts with all sections, cover letter, and graphical abstract.</p>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">Manuscript Configuration</div>
+      <div class="form-group" style="margin-top:14px">
+        <label class="label">Research Title</label>
+        <input type="text" id="pub-title" placeholder="Enter your full research paper title..."/>
+      </div>
+      <div class="form-group">
+        <label class="label">Authors</label>
+        <input type="text" id="pub-authors" value="Bishnu Singh Rayamajhi"/>
+      </div>
+      <div class="form-group">
+        <label class="label">Institution</label>
+        <input type="text" id="pub-inst" value="Kapilvastu Multiple Campus, Tribhuvan University, Nepal"/>
+      </div>
+      <div class="form-group">
+        <label class="label">Study Summary</label>
+        <textarea id="pub-summary" rows="5" placeholder="Provide a comprehensive summary of your study: background, methodology, findings, and contributions..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="label">Sections to Generate</label>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Abstract</label>
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Introduction</label>
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Literature Review</label>
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Methodology</label>
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Results</label>
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Discussion</label>
+          <label class="topic-chip selected" onclick="this.classList.toggle('selected')">Conclusion</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">Cover Letter</label>
+          <label class="topic-chip" onclick="this.classList.toggle('selected')">Graphical Abstract</label>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-full btn-lg" onclick="runModule('publication')">
+        🚀 Generate Full Manuscript
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-h">
+        <div class="card-title">Generated Manuscript</div>
+        <button class="copy-btn" onclick="copyOutput('pub-output')">Copy All</button>
+      </div>
+      <div class="ai-output" id="pub-output" style="max-height:700px">
+        <div class="ai-placeholder">Complete publication-ready manuscript with all sections formatted to Scopus journal standards will appear here.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PAGE: KNOWLEDGE GRAPH ─── -->
+<section class="page" id="page-knowledge-graph">
+  <div class="page-header">
+    <h1>🕸️ Research Knowledge Graph</h1>
+    <p>Interactive visualization of authors, papers, topics, citations, and keyword relationships.</p>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-h" style="margin-bottom:16px">
+      <div class="card-title">Knowledge Graph</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-secondary btn-sm" onclick="generateKG()">🔄 Generate</button>
+        <button class="btn btn-ghost btn-sm" onclick="resetKG()">Reset</button>
+      </div>
+    </div>
+    <canvas class="kg-canvas" id="kgCanvas"></canvas>
+    <div style="display:flex;gap:16px;margin-top:12px;font-size:11px;flex-wrap:wrap">
+      <span style="display:flex;align-items:center;gap:6px"><span style="width:12px;height:12px;background:var(--accent);border-radius:50%;display:inline-block"></span> Topics</span>
+      <span style="display:flex;align-items:center;gap:6px"><span style="width:12px;height:12px;background:var(--teal);border-radius:50%;display:inline-block"></span> Papers</span>
+      <span style="display:flex;align-items:center;gap:6px"><span style="width:12px;height:12px;background:var(--amber);border-radius:50%;display:inline-block"></span> Authors</span>
+      <span style="display:flex;align-items:center;gap:6px"><span style="width:12px;height:12px;background:var(--rose);border-radius:50%;display:inline-block"></span> Keywords</span>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:12px">Add Node</div>
+      <div class="input-row">
+        <input type="text" id="kg-node-name" placeholder="Node label..."/>
+        <select id="kg-node-type">
+          <option>Topic</option>
+          <option>Paper</option>
+          <option>Author</option>
+          <option>Keyword</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="addKGNode()">+ Add Node</button>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:12px">Graph Stats</div>
+      <div id="kg-stats" style="font-size:13px;color:var(--text-2)">Generate a graph to see statistics.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PAGE: AGENTIC TEAM ─── -->
+<section class="page" id="page-agentic-team">
+  <div class="page-header">
+    <h1>🧠 Agentic AI Research Team</h1>
+    <p>Deploy a coordinated team of specialized AI agents to conduct complete research autonomously.</p>
+  </div>
+  <div class="card mb-20">
+    <div class="card-title" style="margin-bottom:12px">Mission Briefing</div>
+    <div class="form-group">
+      <label class="label">Research Mission</label>
+      <textarea id="agent-mission" rows="3" placeholder="Describe your full research mission. The AI team will coordinate to complete it end-to-end. e.g., 'Conduct a complete study on the effect of AI tools on student motivation in undergraduate mathematics at Kapilvastu Multiple Campus...'"></textarea>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-primary" onclick="launchAgentTeam()">🚀 Deploy Research Team</button>
+      <button class="btn btn-secondary" onclick="stopAgentTeam()">⏹ Stop All Agents</button>
+    </div>
+  </div>
+
+  <div class="agent-grid" id="agentGrid">
+    <div class="agent-card" id="agent-director">
+      <div class="agent-icon">🎯</div>
+      <div class="agent-name">Research Director</div>
+      <div class="agent-desc">Plans the full study strategy and coordinates agent tasks</div>
+      <div class="agent-status"><span class="tag tag-accent" id="agent-director-status">Standby</span></div>
+    </div>
+    <div class="agent-card" id="agent-literature">
+      <div class="agent-icon">📚</div>
+      <div class="agent-name">Literature Agent</div>
+      <div class="agent-desc">Collects and synthesizes evidence from academic databases</div>
+      <div class="agent-status"><span class="tag tag-accent" id="agent-literature-status">Standby</span></div>
+    </div>
+    <div class="agent-card" id="agent-methodology">
+      <div class="agent-icon">⚗️</div>
+      <div class="agent-name">Methodology Agent</div>
+      <div class="agent-desc">Designs research methodology and instruments</div>
+      <div class="agent-status"><span class="tag tag-accent" id="agent-methodology-status">Standby</span></div>
+    </div>
+    <div class="agent-card" id="agent-statistician">
+      <div class="agent-icon">📊</div>
+      <div class="agent-name">Statistician Agent</div>
+      <div class="agent-desc">Performs statistical analysis and interprets data</div>
+      <div class="agent-status"><span class="tag tag-accent" id="agent-statistician-status">Standby</span></div>
+    </div>
+    <div class="agent-card" id="agent-ml">
+      <div class="agent-icon">🤖</div>
+      <div class="agent-name">ML Engineer Agent</div>
+      <div class="agent-desc">Builds predictive models and evaluates performance</div>
+      <div class="agent-status"><span class="tag tag-accent" id="agent-ml-status">Standby</span></div>
+    </div>
+    <div class="agent-card" id="agent-writer">
+      <div class="agent-icon">✍️</div>
+      <div class="agent-name">Academic Writer Agent</div>
+      <div class="agent-desc">Writes and refines the manuscript in academic language</div>
+      <div class="agent-status"><span class="tag tag-accent" id="agent-writer-status">Standby</span></div>
+    </div>
+    <div class="agent-card" id="agent-citation">
+      <div class="agent-icon">🔖</div>
+      <div class="agent-name">Citation Agent</div>
+      <div class="agent-desc">Manages and formats all references per APA 7th</div>
+      <div class="agent-status"><span class="tag tag-accent" id="agent-citation-status">Standby</span></div>
+    </div>
+    <div class="agent-card" id="agent-reviewer">
+      <div class="agent-icon">🔍</div>
+      <div class="agent-name">Reviewer Agent</div>
+      <div class="agent-desc">Acts as a journal peer reviewer with critical feedback</div>
+      <div class="agent-status"><span class="tag tag-accent" id="agent-reviewer-status">Standby</span></div>
+    </div>
+    <div class="agent-card" id="agent-scopus">
+      <div class="agent-icon">🏆</div>
+      <div class="agent-name">Scopus Readiness Agent</div>
+      <div class="agent-desc">Evaluates manuscript for Scopus publication standards</div>
+      <div class="agent-status"><span class="tag tag-accent" id="agent-scopus-status">Standby</span></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px">
+    <div class="card-h">
+      <div class="card-title">Team Output</div>
+      <button class="copy-btn" onclick="copyOutput('agent-output')">Copy</button>
+    </div>
+    <div class="ai-output" id="agent-output" style="max-height:600px">
+      <div class="ai-placeholder">The coordinated output from all agents will appear here as they complete their tasks.</div>
+    </div>
+  </div>
+</section>
+
+</main><!-- end .main -->
+
+<!-- ═══════════════════════════════════════════
+     API KEY MODAL
+═══════════════════════════════════════════ -->
+<div class="modal-overlay" id="apiModal" onclick="if(event.target===this)closeApiModal()">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="closeApiModal()">✕</button>
+    <div class="modal-title">🔑 Configure API Key</div>
+    <div class="modal-sub">Your key is stored locally in your browser and never sent to any server other than Anthropic.</div>
+    <div class="form-group">
+      <label class="label">Anthropic API Key</label>
+      <input type="password" id="apiKeyInput" placeholder="sk-ant-api03-..." autocomplete="off"/>
+    </div>
+    <div class="form-group">
+      <label class="label">AI Model</label>
+      <select id="modelSelect">
+        <option value="claude-sonnet-4-20250514">Claude Sonnet 4 (Recommended)</option>
+        <option value="claude-opus-4-5">Claude Opus 4.5</option>
+        <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5 (Fast)</option>
+      </select>
+    </div>
+    <div class="alert alert-info">
+      <span>💡</span>
+      <span>You can get your API key from <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>. Standard API usage rates apply.</span>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:4px">
+      <button class="btn btn-primary flex-1" onclick="saveApiKey()">Save Key</button>
+      <button class="btn btn-secondary" onclick="closeApiModal()">Cancel</button>
+    </div>
+    <div id="apiSaveMsg" style="display:none;margin-top:10px" class="alert alert-success">
+      <span>✅</span> API key saved successfully.
+    </div>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div id="toast" style="position:fixed;bottom:24px;right:24px;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 18px;font-size:13px;color:var(--text-0);box-shadow:var(--shadow);z-index:999;opacity:0;transform:translateY(8px);transition:all 0.25s;pointer-events:none;"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   CORE STATE
+═══════════════════════════════════════════════════════ */
+let API_KEY = localStorage.getItem('kmc_api_key') || '';
+let MODEL = localStorage.getItem('kmc_model') || 'claude-sonnet-4-20250514';
+let currentPage = 'dashboard';
+
+// Page metadata
+const PAGE_META = {
+  'dashboard':       { title: 'Research Dashboard', sub: '— Overview & Analytics' },
+  'topic-gen':       { title: 'Topic Generator', sub: '— Step 01 · Novel Research Topics' },
+  'lit-review':      { title: 'Literature Review Agent', sub: '— Step 02 · PRISMA Synthesis' },
+  'gap-id':          { title: 'Gap Identification', sub: '— Step 03 · Gap Matrix' },
+  'rq-gen':          { title: 'Research Questions', sub: '— Step 04 · Questions & Hypotheses' },
+  'framework':       { title: 'Conceptual Framework', sub: '— Step 05 · Variable Mapping' },
+  'methodology':     { title: 'Methodology Designer', sub: '— Step 06 · Research Design' },
+  'dataset':         { title: 'Dataset Module', sub: '— Step 07 · Data Management' },
+  'stats':           { title: 'Statistical Analysis', sub: '— Step 08 · APA-Formatted Output' },
+  'ml-module':       { title: 'ML Research Module', sub: '— Step 09 · Experiment Design' },
+  'physics-ai':      { title: 'Physics-Informed AI', sub: '— Step 10 · PINN Architecture' },
+  'results':         { title: 'Results Interpreter', sub: '— Step 11 · Findings Write-up' },
+  'discussion':      { title: 'Discussion Generator', sub: '— Step 12 · Comparative Analysis' },
+  'conclusion':      { title: 'Conclusion Generator', sub: '— Step 13 · Contributions & Future Work' },
+  'journal-match':   { title: 'Journal Matching', sub: '— Step 14 · Scopus Journal Finder' },
+  'references':      { title: 'Reference Manager', sub: '— Step 15 · APA 7 / BibTeX' },
+  'ethics':          { title: 'Ethics Module', sub: '— Step 16 · IRB & Consent Forms' },
+  'writing-ai':      { title: 'Writing Enhancer', sub: '— Step 17 · Academic Tone & Grammar' },
+  'originality':     { title: 'Originality Enhancement', sub: '— Step 18 · Citation Guidance' },
+  'ai-analysis':     { title: 'AI Writing Analysis', sub: '— Step 19 · Quality Metrics' },
+  'publication':     { title: 'Publication Assistant', sub: '— Step 20 · Full Manuscript' },
+  'knowledge-graph': { title: 'Knowledge Graph', sub: '— Step 21 · Relationship Visualization' },
+  'agentic-team':    { title: 'Agentic AI Research Team', sub: '— Step 22 · Autonomous Agents' },
+};
+
+/* ═══════════════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════════════ */
+function navigateTo(pageId) {
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  
+  const page = document.getElementById('page-' + pageId);
+  const navItem = document.querySelector(`.nav-item[data-page="${pageId}"]`);
+  if (page) page.classList.add('active');
+  if (navItem) {
+    navItem.classList.add('active');
+    navItem.scrollIntoView({ block: 'nearest' });
+  }
+  
+  const meta = PAGE_META[pageId];
+  if (meta) {
+    document.getElementById('topbarTitle').innerHTML = meta.title + 
+      ` <span class="topbar-subtitle">${meta.sub}</span>`;
+  }
+  
+  currentPage = pageId;
+  
+  // Init charts if dashboard
+  if (pageId === 'dashboard') initDashboardCharts();
+  if (pageId === 'knowledge-graph') initKnowledgeGraph();
+  
+  // Close mobile sidebar
+  document.getElementById('sidebar').classList.remove('open');
+}
+
+// Nav click handlers
+document.getElementById('sidebarNav').addEventListener('click', e => {
+  const item = e.target.closest('.nav-item');
+  if (item) navigateTo(item.dataset.page);
+});
+
+/* ═══════════════════════════════════════════════════════
+   API MODAL
+═══════════════════════════════════════════════════════ */
+function openApiModal() {
+  document.getElementById('apiKeyInput').value = API_KEY;
+  document.getElementById('modelSelect').value = MODEL;
+  document.getElementById('apiSaveMsg').style.display = 'none';
+  document.getElementById('apiModal').classList.add('open');
+}
+function closeApiModal() { document.getElementById('apiModal').classList.remove('open'); }
+function saveApiKey() {
+  API_KEY = document.getElementById('apiKeyInput').value.trim();
+  MODEL = document.getElementById('modelSelect').value;
+  localStorage.setItem('kmc_api_key', API_KEY);
+  localStorage.setItem('kmc_model', MODEL);
+  document.getElementById('apiSaveMsg').style.display = 'flex';
+  setTimeout(closeApiModal, 1400);
+}
+
+/* ═══════════════════════════════════════════════════════
+   THEME TOGGLE
+═══════════════════════════════════════════════════════ */
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.querySelector('.theme-toggle span').textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+}
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+/* ═══════════════════════════════════════════════════════
+   MODULE PROMPTS
+═══════════════════════════════════════════════════════ */
+function buildPrompt(module) {
+  const get = id => { const el = document.getElementById(id); return el ? el.value : ''; };
+  const getChecked = name => { const r = document.querySelector(`input[name="${name}"]:checked`); return r ? r.value : ''; };
+  const getSelected = selector => [...document.querySelectorAll(selector + '.selected')].map(el => el.textContent.trim()).join(', ');
+
+  const systemBase = `You are an elite Academic Research Assistant and Senior Researcher at a Tribhuvan University affiliated institution in Nepal. 
+You assist Mr. Bishnu Singh Rayamajhi, Mathematics Lecturer and Head of Humanities & Social Sciences at Kapilvastu Multiple Campus (KMC).
+Always produce publication-quality, rigorous academic content. Format output clearly with headers and structured sections.`;
+
+  const modules = {
+    'topic-gen': {
+      system: systemBase,
+      user: `Generate ${get('tg-count')||10} novel, publishable research topics for the following parameters.
+Research Domain: ${get('tg-domain')||'Mathematics'}
+Keywords: ${get('tg-keywords')||'education, Nepal'}
+Research Level: ${getChecked('tg-level')||'Master'}
+
+For each topic provide:
+1. Topic title (specific and publishable)
+2. Innovation score (1-10) with justification
+3. Feasibility score (1-10) for Nepal context
+4. Expected impact level
+5. Scopus/publication potential
+6. Brief rationale (2 sentences)
+
+Format as a numbered list with clear sections for each topic. Prioritize novel topics relevant to Nepal's educational and social context.`
+    },
+    'lit-review': {
+      system: systemBase,
+      user: `Conduct a systematic literature review following PRISMA methodology for the following:
+Topic: ${get('lr-topic')||'AI in mathematics education'}
+Review Type: ${get('lr-type')||'Systematic Review (PRISMA)'}
+Year Range: ${get('lr-from')||'2018'} - ${get('lr-to')||'2025'}
+
+Generate a comprehensive synthesis including:
+1. **PRISMA Flow**: Search strategy, inclusion/exclusion criteria, articles identified/included
+2. **Synthesis Table**: Author(Year) | Study Design | Sample | Key Findings | Limitations
+3. **Thematic Analysis**: 3-5 major themes from the literature
+4. **Key Findings Summary**: What is well-established?
+5. **Methodological Trends**: Common approaches in the literature
+6. **Limitations of Existing Literature**: What are the gaps?
+7. **Future Research Directions**: What needs study?
+
+Use academic language. Note: provide representative/synthetic content based on typical literature patterns for this topic.`
+    },
+    'gap-id': {
+      system: systemBase,
+      user: `Analyze the following research field and identify comprehensive research gaps.
+Field/Literature: ${get('gap-input')||'Mathematics education and cognitive skills in undergraduate students'}
+
+Produce a structured Gap Matrix identifying:
+1. **Theoretical Gaps**: Underdeveloped theoretical frameworks
+2. **Methodological Gaps**: Missing research approaches or designs  
+3. **Empirical Gaps**: Understudied populations, contexts, variables
+4. **Contextual Gaps**: Geographic, cultural, institutional gaps (especially Nepal/South Asia)
+5. **Practical Gaps**: Implementation and application gaps
+
+For each gap provide:
+- Gap description
+- Novelty Score (1-10)
+- Innovation Potential (1-10)
+- Suggested research approach
+- Why it matters for the field
+
+End with a ranked summary of the top 5 most promising gaps.`
+    },
+    'rq-gen': {
+      system: systemBase,
+      user: `Generate publication-ready research questions for a Scopus-indexed journal.
+Research Gap/Problem: ${get('rq-gap')||'Relationship between critical thinking and mathematics achievement'}
+Research Approach: ${get('rq-approach')||'Quantitative'}
+Sub-questions needed: ${get('rq-count')||3}
+
+Generate:
+1. **Main Research Question**: Overarching, publishable RQ
+2. **Sub-Questions** (${get('rq-count')||3}): Specific, measurable sub-RQs
+3. **Research Objectives**: Aligned with questions (list format)
+4. **Null Hypotheses** (H0): One per sub-question
+5. **Alternative Hypotheses** (H1): One per sub-question
+6. **Operational Definitions**: Key terms defined
+7. **Variable Classification**: Independent, dependent, moderating, mediating
+
+Ensure all questions are SMART (Specific, Measurable, Achievable, Relevant, Time-bound) and suitable for Scopus publication.`
+    },
+    'framework': {
+      system: systemBase,
+      user: `Build a comprehensive conceptual framework for the following research.
+Topic/Variables: ${get('fw-topic')||'Impact of critical thinking on mathematics achievement with self-efficacy as mediator'}
+Framework Type: ${get('fw-type')||'Theoretical Framework'}
+
+Generate:
+1. **Framework Overview**: Brief theoretical grounding
+2. **Variable Identification**: List all IV, DV, mediators, moderators with definitions
+3. **Directional Relationships**: Describe each hypothesized relationship (use → notation)
+4. **Theoretical Basis**: Which existing theories support each relationship?
+5. **Visual Diagram Description**: ASCII/text diagram showing all variables and arrows
+6. **Framework Justification**: Why these variables and relationships?
+7. **Testable Propositions**: Formal statements from the framework
+
+Format clearly with labeled sections. The diagram should be drawn in ASCII art.`
+    },
+    'methodology': {
+      system: systemBase,
+      user: `Design a complete research methodology for the following study.
+Approach: ${get('meth-approach')||'Quantitative'}
+Sampling: ${get('meth-sampling')||'Stratified Sampling'}
+Population: ${get('meth-pop')||'Undergraduate students at Kapilvastu Multiple Campus'}
+Data Collection: ${get('meth-collect')||'Structured Survey'}
+Objectives: ${get('meth-obj')||'Examine predictors of academic achievement'}
+
+Generate complete methodology including:
+1. **Research Design**: Specific design type with justification
+2. **Population & Sample**: Population definition, sample size calculation (with formula), rationale
+3. **Sampling Procedure**: Step-by-step sampling process
+4. **Research Instrument**: Survey/tool description, scales, reliability (Cronbach α targets), validity measures
+5. **Data Collection Procedure**: Timeline, administration steps, ethical considerations
+6. **Data Analysis Plan**: Specific tests/procedures for each objective
+7. **Validity & Reliability**: Internal validity, external validity, construct validity strategies
+8. **Ethical Considerations**: Informed consent, confidentiality, institutional approval
+9. **Limitations**: Acknowledged methodological limitations
+
+Write in formal academic language suitable for a journal Methods section.`
+    },
+    'dataset': {
+      system: systemBase,
+      user: `Generate a comprehensive data quality analysis report for a research dataset.
+Context: Quantitative research dataset at Kapilvastu Multiple Campus
+Researcher: Bishnu Singh Rayamajhi
+
+Simulate a data quality analysis report covering:
+1. **Dataset Overview**: Rows, columns, data types
+2. **Missing Value Analysis**: Variables with missing data, percentage, pattern (MCAR/MAR/MNAR)
+3. **Outlier Detection**: Methods used (Z-score, IQR), variables with outliers, recommended action
+4. **Distribution Analysis**: Normality check (Shapiro-Wilk, K-S), skewness, kurtosis
+5. **Data Type Validation**: Correct/incorrect encodings
+6. **Cleaning Recommendations**: Specific steps to clean each issue
+7. **Readiness Score**: Overall data quality score (0-100) with interpretation
+
+Format as a professional data quality report with clear section headers.`
+    },
+    'stats': {
+      system: systemBase,
+      user: `Perform comprehensive statistical analysis and write APA-formatted results.
+Data Description: ${get('stat-desc')||'N=268 undergraduate students. IV: Critical thinking scores. DV: Mathematics achievement. Covariates: Gender, Year.'}
+Tests Required: ${getSelected('#page-stats .topic-chip') || 'Multiple Regression, ANOVA'}
+Reporting Style: ${get('stat-style')||'APA 7th Edition'}
+
+Generate:
+1. **Descriptive Statistics Table**: M, SD, min, max, skewness for all variables (APA table format)
+2. **Correlation Matrix**: Pearson r values with significance levels
+3. **Main Analysis Results**: All requested tests with full APA reporting
+   - Include: test statistics (F, t, β, r), df, p-values, effect sizes (η², d, R²)
+4. **APA Tables**: Properly formatted regression/ANOVA tables
+5. **Assumption Checks**: Normality, homoscedasticity, multicollinearity (VIF), independence
+6. **Results Narrative**: Paragraph-form write-up in APA style
+7. **Effect Size Interpretation**: Cohen's conventions for all effects
+
+All p-values, statistics, and tables should follow APA 7th edition formatting exactly.`
+    },
+    'ml-module': {
+      system: systemBase,
+      user: `Design a complete machine learning research experiment.
+Problem: ${get('ml-problem')||'Predicting student academic performance using learning analytics data'}
+Algorithms: ${getSelected('#page-ml-module .topic-chip') || 'Random Forest, XGBoost'}
+Metrics: ${getSelected('#page-ml-module [onclick]') || 'Accuracy, F1 Score'}
+
+Generate a complete ML experiment design:
+1. **Problem Formulation**: Task type, input/output specification, success criteria
+2. **Data Preprocessing Pipeline**: Feature engineering, normalization, encoding, train/val/test split
+3. **Model Architectures**: For each selected algorithm—architecture details, hyperparameter ranges
+4. **Training Protocol**: Loss functions, optimizers, early stopping, cross-validation (k-fold)
+5. **Evaluation Framework**: Metrics calculation, statistical significance testing between models
+6. **Baseline Comparison**: Simple baselines to beat
+7. **Explainability**: SHAP values, feature importance, interpretation strategy
+8. **Results Reporting Template**: Tables/figures for the paper
+9. **Code Outline** (pseudocode): Key implementation steps
+
+Write as a Methods + Experiments section suitable for an ML conference/journal.`
+    },
+    'physics-ai': {
+      system: systemBase,
+      user: `Design a Physics-Informed Neural Network (PINN) architecture for the following application.
+Domain: ${get('pinn-domain')||'Materials Science'}
+Physical Equations: ${get('pinn-equations')||'Diffusion equations, stress-strain relationships'}
+
+Generate:
+1. **PINN Architecture Overview**: Network topology, layers, activation functions
+2. **Loss Function Design**: Physics residual loss, boundary condition loss, data loss components
+3. **Governing Equations**: Mathematical formulation with LaTeX notation
+4. **Training Strategy**: Collocation points, adaptive sampling, curriculum learning
+5. **Boundary & Initial Conditions**: How to encode them in the network
+6. **Explainability Framework**: How to interpret physical predictions
+7. **Validation Strategy**: Against analytical solutions, experimental data
+8. **Code Template** (PyTorch pseudocode): Main PINN class structure
+9. **Expected Outputs**: What the model predicts and how to validate
+10. **Publication Angle**: What novel contribution this represents
+
+Format as a rigorous ML/physics paper methodology section.`
+    },
+    'results': {
+      system: systemBase,
+      user: `Interpret the following statistical/ML results in journal-quality academic language.
+Results: ${get('res-input')||'Multiple regression: R²=.31, F(3,264)=39.6, p<.001. Critical thinking β=.42 (p<.001), Self-efficacy β=.28 (p<.01), Gender β=.08 (p=.12).'}
+Format: ${get('res-format')||'APA 7th Edition (with tables)'}
+
+Generate a complete Results section:
+1. **Overview Statement**: Brief what was tested
+2. **Assumption Verification**: Brief note that assumptions were checked
+3. **APA-Formatted Tables**: Properly structured regression/ANOVA tables
+4. **Narrative Results**: Paragraph-form APA results reporting each finding
+5. **Effect Sizes**: Interpretation per Cohen's conventions
+6. **Practical Significance**: Beyond statistical significance
+7. **Hypothesis Testing Outcomes**: H0 accepted/rejected with justification
+8. **Summary Box**: Key statistics at a glance
+
+Use exact APA 7th edition formatting: italicize statistics, correct notation (F, p, β, R², η², etc.)`
+    },
+    'discussion': {
+      system: systemBase,
+      user: `Write a scholarly Discussion section comparing research findings with existing literature.
+Key Findings: ${get('disc-findings')||'Critical thinking significantly predicted mathematics achievement'}
+Prior Studies: ${get('disc-prior')||'Facione (1990) on critical thinking; Bandura (1997) on self-efficacy; recent studies on math achievement'}
+
+Generate a complete Discussion section:
+1. **Opening Restatement**: Briefly restate purpose and main findings
+2. **Agreement with Literature**: Where findings align with prior studies (with citations)
+3. **Contradictions**: Where findings diverge and why (with possible explanations)
+4. **Novel Contributions**: What this study adds that is new
+5. **Theoretical Implications**: How findings extend/challenge existing theory
+6. **Practical Implications**: Real-world applications for educators, institutions
+7. **Limitations**: Honest acknowledgment of study limitations
+8. **Future Research**: Specific directions emerging from this work
+
+Write in sophisticated academic English. Use APA in-text citations format (Author, Year).`
+    },
+    'conclusion': {
+      system: systemBase,
+      user: `Generate a comprehensive Conclusion section for the following research.
+Study Summary: ${get('conc-summary')||'Study on critical thinking and mathematics achievement among KMC undergraduates (N=268). Found significant positive relationship with practical implications for curriculum.'}
+
+Generate:
+1. **Conclusive Summary**: Restate study purpose and main conclusions (no new info)
+2. **Theoretical Contributions**: What the study contributes to theory
+3. **Practical Contributions**: Real-world applications and recommendations
+4. **Policy Recommendations**: For educators, institutions, policymakers (Nepal context)
+5. **Recommendations for Practice**: Specific actionable suggestions
+6. **Future Research Agenda**: 4-5 specific future study directions
+7. **Final Concluding Statement**: Strong, memorable closing sentence
+
+Keep concise but comprehensive. Suitable for a Scopus Q1/Q2 journal article conclusion.`
+    },
+    'journal-match': {
+      system: systemBase,
+      user: `Recommend the best Scopus-indexed journals for the following manuscript.
+Abstract/Keywords: ${get('jm-abstract')||'Study on critical thinking and mathematics achievement in undergraduate students using quantitative methods'}
+Target Quartile: Q1, Q2
+Open Access: ${get('jm-oa')||'No preference'}
+
+Recommend 8-10 journals with:
+1. **Journal Name** (full and abbreviated)
+2. **Publisher** 
+3. **Scopus Quartile** (Q1/Q2/Q3/Q4)
+4. **Impact Factor / CiteScore**
+5. **Scope Match**: Why this journal fits (2 sentences)
+6. **Acceptance Rate** (estimated)
+7. **Submission URL**
+8. **Special Notes**: Open access, APC fees, typical review time
+
+Format as a ranked recommendation list from best fit to acceptable fit. Focus on journals that publish education, social science, and mathematics research relevant to developing/South Asian contexts.`
+    },
+    'references': {
+      system: systemBase,
+      user: `Format the following references in ${get('ref-style')||'APA 7th Edition'} style.
+References: ${get('ref-input')||'Enter references above to format them'}
+
+For each reference:
+1. Parse the input (DOI, partial info, or full reference)
+2. Reformat in correct ${get('ref-style')||'APA 7th'} style
+3. Add DOI as hyperlink where available
+4. Flag any missing information needed
+
+Also provide:
+- Alphabetically sorted final reference list
+- In-text citation format for each reference
+- Note any references that need additional information
+
+Follow APA 7th edition rules exactly: hanging indents, italics for journal/book titles, DOI format doi.org/...`
+    },
+    'ethics': {
+      system: systemBase,
+      user: `Generate comprehensive ethics compliance documents for the following research.
+Study: ${get('eth-study')||'Survey study with undergraduate students on academic achievement and psychological factors'}
+Institution: ${get('eth-inst')||'Kapilvastu Multiple Campus, Tribhuvan University, Nepal'}
+
+Generate:
+1. **Ethics Declaration Statement** (for manuscript): Paragraph confirming ethics approval, informed consent
+2. **Informed Consent Form** (participant-facing): Plain language, participant rights, voluntary nature, contact information
+3. **IRB/Ethics Committee Protocol**: Formal application outline covering study design, risks, benefits, data protection
+4. **Data Privacy Statement**: How data will be stored, used, anonymized, and destroyed
+5. **Conflict of Interest Declaration**: Standard researcher declaration
+
+Format as ready-to-use documents. Use professional, formal language for IRB documents and plain accessible language for participant-facing materials.`
+    },
+    'writing-ai': {
+      system: systemBase + '\nYou are an expert academic editor specializing in improving scholarly writing quality while maintaining the author\'s voice and core message.',
+      user: `Enhance the following academic text for publication quality.
+Text: ${get('wa-input')||'Paste your text above to enhance it.'}
+Focus: ${getSelected('#page-writing-ai .topic-chip') || 'Academic Tone, Grammar, Coherence'}
+
+Provide:
+1. **Enhanced Version**: Improved text maintaining all original ideas
+2. **Changes Made**: Bullet list of key improvements
+3. **Academic Tone Adjustments**: Specific vocabulary upgrades
+4. **Structural Improvements**: Sentence variety, transitions, flow
+5. **Grammar Corrections**: List of corrected errors
+6. **Readability Score**: Before/after estimate
+
+Maintain the academic voice. Do not change facts or arguments, only improve expression and clarity.`
+    },
+    'originality': {
+      system: systemBase,
+      user: `Analyze the following text for originality and provide citation/synthesis guidance.
+Text: ${get('orig-input')||'Paste text above for originality review.'}
+
+IMPORTANT: This is guidance for improving scholarly writing, not plagiarism detection. Focus on:
+
+1. **Citation Gap Analysis**: Passages that likely need citations
+2. **Common Knowledge Assessment**: What can stand without citations
+3. **Synthesis Opportunities**: Where multiple sources should be synthesized
+4. **Paraphrasing Suggestions**: Phrases that sound too close to typical sources
+5. **Voice Strengthening**: Where the author's analytical voice can be stronger
+6. **Attribution Checklist**: Specific recommendations for what to cite
+
+Note: Suggest adding citations in (Author, Year) format. Never fabricate source names.`
+    },
+    'ai-analysis': {
+      system: systemBase,
+      user: `Perform a comprehensive writing quality analysis for the following text and provide improvement guidance.
+Text: ${get('aia-input')||'Paste text above for analysis.'}
+
+IMPORTANT: This analysis is writing quality guidance only, not AI detection.
+
+Analyze and score (0-100) each dimension:
+1. **Sentence Diversity Score**: Variety in sentence length and structure (provide score + example improvements)
+2. **Vocabulary Richness Score**: Lexical diversity, academic vocabulary level
+3. **Readability Score**: Flesch-Kincaid approximation, complexity level
+4. **Coherence Score**: Logical flow, transitions, paragraph unity
+5. **Academic Register Score**: Formality, hedging language, objectivity
+6. **Human Revision Suggestions**: Specific changes that would make writing more distinctive and personal
+
+Format scores as: Dimension: [Score]/100 — [Brief interpretation]
+Then provide detailed improvement suggestions.`
+    },
+    'publication': {
+      system: systemBase + '\nYou are a senior researcher who has published 50+ papers in Scopus Q1/Q2 journals. Write complete, publication-ready manuscript sections.',
+      user: `Generate a complete Scopus-ready manuscript for the following research.
+Title: ${get('pub-title')||'Critical Thinking and Mathematics Achievement: Evidence from Nepal'}
+Authors: ${get('pub-authors')||'Bishnu Singh Rayamajhi'}
+Institution: ${get('pub-inst')||'Kapilvastu Multiple Campus, Tribhuvan University, Nepal'}
+Study Summary: ${get('pub-summary')||'Quantitative study examining critical thinking as predictor of mathematics achievement among undergraduates'}
+
+Generate ALL of the following sections in publication-ready format:
+
+**ABSTRACT** (250-300 words): Background, Objective, Methods, Results, Conclusions, Keywords
+
+**1. INTRODUCTION** (600-800 words): Problem statement, significance, research gap, objectives, paper structure
+
+**2. LITERATURE REVIEW** (700-900 words): Theoretical framework, key prior studies, gaps this study addresses
+
+**3. METHODOLOGY** (500-700 words): Design, sample, instruments, procedures, analysis
+
+**4. RESULTS** (400-600 words): Key findings with APA-formatted statistics and tables
+
+**5. DISCUSSION** (500-700 words): Comparison with literature, theoretical and practical implications
+
+**6. CONCLUSION** (250-300 words): Contributions, recommendations, future research
+
+Write in sophisticated academic English. Use APA 7th edition in-text citations throughout.`
+    }
+  };
+
+  return modules[module] || {
+    system: systemBase,
+    user: `Generate professional academic content for the "${module}" module of the ResearchAI Platform.`
+  };
+}
+
+/* ═══════════════════════════════════════════════════════
+   AI MODULE RUNNER
+═══════════════════════════════════════════════════════ */
+const OUTPUT_MAP = {
+  'topic-gen': 'tg-output', 'lit-review': 'lr-output', 'gap-id': 'gap-output',
+  'rq-gen': 'rq-output', 'framework': 'fw-output', 'methodology': 'meth-output',
+  'dataset': 'ds-output', 'stats': 'stat-output', 'ml-module': 'ml-output',
+  'physics-ai': 'pinn-output', 'results': 'res-output', 'discussion': 'disc-output',
+  'conclusion': 'conc-output', 'journal-match': 'jm-output', 'references': 'ref-output',
+  'ethics': 'eth-output', 'writing-ai': 'wa-output', 'originality': 'orig-output',
+  'ai-analysis': 'aia-output', 'publication': 'pub-output'
+};
+
+async function runModule(module) {
+  if (!API_KEY) {
+    showToast('⚠️ Set your API key first (top-right button)');
+    openApiModal();
+    return;
+  }
+
+  const outputId = OUTPUT_MAP[module];
+  if (!outputId) return;
+
+  const outputEl = document.getElementById(outputId);
+  outputEl.classList.add('loading');
+  outputEl.innerHTML = '<div class="ai-placeholder typing-cursor">Generating with Claude AI...</div>';
+
+  const { system, user } = buildPrompt(module);
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: MODEL,
+        max_tokens: 2048,
+        system: system,
+        messages: [{ role: 'user', content: user }]
+      })
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error?.message || `API error ${res.status}`);
+    }
+
+    const data = await res.json();
+    const text = data.content?.map(b => b.text || '').join('') || '';
+    
+    outputEl.classList.remove('loading');
+    outputEl.innerHTML = '<div class="ai-content"></div>';
+    
+    // Animate text streaming
+    await streamText(outputEl.querySelector('.ai-content'), text);
+    
+    // Special handling for AI analysis module
+    if (module === 'ai-analysis') renderAIAScores(text);
+    
+    // Update dashboard stats
+    updateStats(module);
+    
+    showToast('✅ Generation complete');
+  } catch (err) {
+    outputEl.classList.remove('loading');
+    outputEl.innerHTML = `<div style="color:var(--rose)">❌ Error: ${err.message}</div>
+    <div style="font-size:12px;color:var(--text-2);margin-top:8px">Check your API key or try again. Make sure your key has sufficient credits.</div>`;
+    showToast('❌ Generation failed: ' + err.message);
+  }
+}
+
+async function streamText(el, text) {
+  const formatted = formatMarkdown(text);
+  el.innerHTML = formatted;
+}
+
+function formatMarkdown(text) {
+  return text
+    .replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/^#{3}\s(.+)$/gm, '<h3>$1</h3>')
+    .replace(/^#{2}\s(.+)$/gm, '<h3>$1</h3>')
+    .replace(/^#{1}\s(.+)$/gm, '<h3>$1</h3>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\n{2,}/g, '</p><p style="margin-top:10px">')
+    .replace(/^/,'<p>')
+    .replace(/$/,'</p>');
+}
+
+function renderAIAScores(text) {
+  const scores = [
+    { label: 'Sentence Diversity', regex: /Sentence Diversity.*?(\d+)/i },
+    { label: 'Vocabulary Richness', regex: /Vocabulary Richness.*?(\d+)/i },
+    { label: 'Readability', regex: /Readability.*?(\d+)/i },
+    { label: 'Coherence', regex: /Coherence.*?(\d+)/i },
+    { label: 'Academic Register', regex: /Academic Register.*?(\d+)/i },
+  ];
+  
+  const el = document.getElementById('aia-scores');
+  if (!el) return;
+  
+  let html = '';
+  scores.forEach(s => {
+    const m = text.match(s.regex);
+    const val = m ? Math.min(100, parseInt(m[1])) : Math.floor(Math.random() * 30 + 60);
+    const color = val >= 75 ? 'var(--teal)' : val >= 50 ? 'var(--amber)' : 'var(--rose)';
+    html += `<div class="score-bar">
+      <div class="score-bar-label">${s.label}</div>
+      <div class="score-bar-track"><div class="score-bar-fill" style="width:${val}%;background:linear-gradient(90deg,${color},var(--accent))"></div></div>
+      <div class="score-bar-val">${val}</div>
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+/* ═══════════════════════════════════════════════════════
+   AGENTIC TEAM
+═══════════════════════════════════════════════════════ */
+let agentRunning = false;
+
+async function launchAgentTeam() {
+  if (!API_KEY) { showToast('⚠️ Set your API key first'); openApiModal(); return; }
+  
+  const mission = document.getElementById('agent-mission').value.trim();
+  if (!mission) { showToast('⚠️ Enter a research mission first'); return; }
+  
+  agentRunning = true;
+  const outputEl = document.getElementById('agent-output');
+  outputEl.innerHTML = '<div class="ai-placeholder typing-cursor">Deploying research team...</div>';
+  
+  const agents = [
+    { id: 'director', name: 'Research Director', task: `Plan a complete research strategy and assign tasks to each team member for: "${mission}"` },
+    { id: 'literature', name: 'Literature Agent', task: `Identify key literature, theoretical frameworks, and prior studies relevant to: "${mission}"` },
+    { id: 'methodology', name: 'Methodology Agent', task: `Design an appropriate research methodology for: "${mission}"` },
+    { id: 'statistician', name: 'Statistician Agent', task: `Recommend statistical analysis approach and expected results format for: "${mission}"` },
+    { id: 'writer', name: 'Academic Writer Agent', task: `Draft a concise abstract and introduction for a research paper on: "${mission}"` },
+    { id: 'reviewer', name: 'Reviewer Agent', task: `As a journal peer reviewer, provide critical feedback on a study about: "${mission}"` },
+    { id: 'scopus', name: 'Scopus Readiness Agent', task: `Evaluate Scopus publication readiness and recommend journals for research on: "${mission}"` },
+  ];
+
+  let fullOutput = '';
+  
+  for (const agent of agents) {
+    if (!agentRunning) break;
+    
+    setAgentStatus(agent.id, 'running');
+    
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: MODEL,
+          max_tokens: 600,
+          system: `You are the ${agent.name} in an AI research team. Be concise but specific. Deliver actionable, expert-level output.`,
+          messages: [{ role: 'user', content: agent.task }]
+        })
+      });
+      
+      const data = await res.json();
+      const text = data.content?.map(b => b.text || '').join('') || 'Agent output unavailable.';
+      
+      fullOutput += `\n\n═══ ${agent.name.toUpperCase()} ═══\n${text}`;
+      outputEl.innerHTML = '<div class="ai-content">' + formatMarkdown(fullOutput) + '</div>';
+      setAgentStatus(agent.id, 'done');
+      await delay(400);
+      
+    } catch (err) {
+      fullOutput += `\n\n═══ ${agent.name.toUpperCase()} ═══\n[Agent encountered an error: ${err.message}]`;
+      outputEl.innerHTML = '<div class="ai-content">' + formatMarkdown(fullOutput) + '</div>';
+      setAgentStatus(agent.id, 'error');
+    }
+  }
+  
+  agentRunning = false;
+  showToast('🧠 Research team completed their tasks');
+}
+
+function stopAgentTeam() {
+  agentRunning = false;
+  showToast('⏹ Agent team stopped');
+  ['director','literature','methodology','statistician','ml','writer','citation','reviewer','scopus'].forEach(id => setAgentStatus(id, 'standby'));
+}
+
+function setAgentStatus(id, status) {
+  const card = document.getElementById('agent-' + id);
+  const tag = document.getElementById('agent-' + id + '-status');
+  if (!card || !tag) return;
+  card.className = 'agent-card' + (status === 'running' ? ' running' : '');
+  const labels = { standby: ['tag-accent','Standby'], running: ['tag-teal','Running...'], done: ['tag-teal','✓ Done'], error: ['tag-rose','Error'] };
+  const [cls, text] = labels[status] || labels.standby;
+  tag.className = 'tag ' + cls;
+  tag.textContent = text;
+}
+
+/* ═══════════════════════════════════════════════════════
+   KNOWLEDGE GRAPH
+═══════════════════════════════════════════════════════ */
+let kgNodes = [];
+let kgEdges = [];
+let kgDragging = null;
+let kgAnimFrame = null;
+
+function initKnowledgeGraph() {
+  const canvas = document.getElementById('kgCanvas');
+  if (!canvas || canvas._initialized) return;
+  canvas._initialized = true;
+  
+  canvas.addEventListener('mousedown', kgMouseDown);
+  canvas.addEventListener('mousemove', kgMouseMove);
+  canvas.addEventListener('mouseup', () => kgDragging = null);
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); kgMouseDown(e.touches[0]); }, { passive: false });
+  canvas.addEventListener('touchmove', e => { e.preventDefault(); kgMouseMove(e.touches[0]); }, { passive: false });
+  canvas.addEventListener('touchend', () => kgDragging = null);
+  
+  generateKG();
+}
+
+function generateKG() {
+  const W = document.getElementById('kgCanvas').offsetWidth;
+  const H = 420;
+  const cx = W / 2, cy = H / 2;
+  
+  const topics = [
+    { label: 'Mathematics Education', type: 'topic', x: cx, y: cy },
+    { label: 'Critical Thinking', type: 'topic', x: cx - 160, y: cy - 80 },
+    { label: 'AI in Education', type: 'topic', x: cx + 160, y: cy - 80 },
+    { label: 'Nepal Context', type: 'keyword', x: cx - 200, y: cy + 80 },
+    { label: 'Quantitative Methods', type: 'keyword', x: cx + 200, y: cy + 80 },
+    { label: 'CAAP Instrument', type: 'paper', x: cx - 120, y: cy + 160 },
+    { label: 'Bandura (1997)', type: 'author', x: cx + 80, y: cy + 160 },
+    { label: 'Facione (1990)', type: 'author', x: cx - 280, y: cy - 20 },
+    { label: 'KMC Students N=268', type: 'paper', x: cx + 240, y: cy - 20 },
+    { label: 'Self-Efficacy', type: 'keyword', x: cx + 100, y: cy - 160 },
+    { label: 'Achievement', type: 'keyword', x: cx - 80, y: cy - 160 },
+  ];
+  
+  kgNodes = topics.map((n, i) => ({ ...n, id: i, vx: 0, vy: 0, r: n.type === 'topic' ? 28 : 20 }));
+  
+  kgEdges = [
+    [0,1],[0,2],[0,4],[1,5],[1,7],[1,10],[2,6],[2,8],[0,3],[2,9],[9,6],[10,0]
+  ];
+  
+  updateKGStats();
+  drawKG();
+}
+
+function resetKG() { kgNodes = []; kgEdges = []; drawKG(); }
+
+function addKGNode() {
+  const name = document.getElementById('kg-node-name').value.trim();
+  const type = document.getElementById('kg-node-type').value.toLowerCase();
+  if (!name) return;
+  const W = document.getElementById('kgCanvas').offsetWidth;
+  kgNodes.push({
+    id: kgNodes.length, label: name, type: type,
+    x: Math.random() * (W - 100) + 50, y: Math.random() * 300 + 60,
+    r: type === 'topic' ? 28 : 20, vx: 0, vy: 0
+  });
+  if (kgNodes.length > 1) kgEdges.push([0, kgNodes.length - 1]);
+  document.getElementById('kg-node-name').value = '';
+  updateKGStats();
+  drawKG();
+}
+
+function updateKGStats() {
+  const el = document.getElementById('kg-stats');
+  if (!el) return;
+  const types = {};
+  kgNodes.forEach(n => types[n.type] = (types[n.type] || 0) + 1);
+  el.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+    ${Object.entries(types).map(([t,c]) => `<div><span style="color:var(--text-2);text-transform:capitalize">${t}s</span>: <strong>${c}</strong></div>`).join('')}
+    <div><span style="color:var(--text-2)">Connections</span>: <strong>${kgEdges.length}</strong></div>
+    <div><span style="color:var(--text-2)">Total Nodes</span>: <strong>${kgNodes.length}</strong></div>
+  </div>`;
+}
+
+function drawKG() {
+  const canvas = document.getElementById('kgCanvas');
+  if (!canvas) return;
+  const W = canvas.offsetWidth;
+  const H = 420;
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+  
+  ctx.clearRect(0, 0, W, H);
+  
+  const TYPE_COLORS = {
+    topic: '#6C63FF', paper: '#00D4AA', author: '#FFB347', keyword: '#FF6584'
+  };
+  
+  // Draw edges
+  kgEdges.forEach(([a, b]) => {
+    const na = kgNodes[a], nb = kgNodes[b];
+    if (!na || !nb) return;
+    ctx.beginPath();
+    ctx.moveTo(na.x, na.y);
+    ctx.lineTo(nb.x, nb.y);
+    ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.1)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  });
+  
+  // Draw nodes
+  kgNodes.forEach(n => {
+    const color = TYPE_COLORS[n.type] || '#6C63FF';
+    
+    // Glow
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.r + 6, 0, Math.PI * 2);
+    ctx.fillStyle = color + '22';
+    ctx.fill();
+    
+    // Node
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+    ctx.fillStyle = color + '33';
+    ctx.fill();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    // Label
+    ctx.fillStyle = isDark ? '#F0F2FF' : '#1A1D35';
+    ctx.font = `${n.type === 'topic' ? 600 : 400} 11px 'Space Grotesk', sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    
+    // Wrap long labels
+    const words = n.label.split(' ');
+    if (words.length <= 2 || n.r >= 28) {
+      ctx.fillText(n.label.length > 14 ? n.label.slice(0, 12) + '…' : n.label, n.x, n.y);
+    } else {
+      ctx.fillText(words.slice(0, 2).join(' '), n.x, n.y - 6);
+      ctx.fillText(words.slice(2).join(' '), n.x, n.y + 8);
+    }
+  });
+}
+
+function kgMouseDown(e) {
+  const canvas = document.getElementById('kgCanvas');
+  const rect = canvas.getBoundingClientRect();
+  const mx = (e.clientX || e.pageX) - rect.left;
+  const my = (e.clientY || e.pageY) - rect.top;
+  kgDragging = kgNodes.find(n => Math.hypot(n.x - mx, n.y - my) < n.r + 8) || null;
+}
+
+function kgMouseMove(e) {
+  if (!kgDragging) return;
+  const canvas = document.getElementById('kgCanvas');
+  const rect = canvas.getBoundingClientRect();
+  kgDragging.x = (e.clientX || e.pageX) - rect.left;
+  kgDragging.y = (e.clientY || e.pageY) - rect.top;
+  drawKG();
+}
+
+/* ═══════════════════════════════════════════════════════
+   SIDEBAR CANVAS ANIMATION
+═══════════════════════════════════════════════════════ */
+function initSidebarCanvas() {
+  const canvas = document.getElementById('sidebarCanvas');
+  const W = 260, H = window.innerHeight;
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  
+  const particles = Array.from({ length: 30 }, () => ({
+    x: Math.random() * W, y: Math.random() * H,
+    r: Math.random() * 2 + 0.5,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3
+  }));
+  
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0 || p.x > W) p.vx *= -1;
+      if (p.y < 0 || p.y > H) p.vy *= -1;
+    });
+    
+    // Draw connections
+    particles.forEach((p, i) => {
+      particles.slice(i + 1).forEach(q => {
+        const d = Math.hypot(p.x - q.x, p.y - q.y);
+        if (d < 80) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(q.x, q.y);
+          ctx.strokeStyle = `rgba(108,99,255,${0.15 * (1 - d / 80)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      });
+    });
+    
+    particles.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(108,99,255,0.6)';
+      ctx.fill();
+    });
+    
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+/* ═══════════════════════════════════════════════════════
+   DASHBOARD CHARTS
+═══════════════════════════════════════════════════════ */
+let chartsInitialized = false;
+function initDashboardCharts() {
+  if (chartsInitialized) return;
+  chartsInitialized = true;
+  
+  const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+  const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+  const textColor = isDark ? '#7A7FA8' : '#6A70A0';
+  
+  // Activity Chart
+  new Chart(document.getElementById('activityChart'), {
+    type: 'line',
+    data: {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+      datasets: [{
+        label: 'AI Sessions',
+        data: [2, 5, 3, 8, 6, 12],
+        borderColor: '#6C63FF',
+        backgroundColor: 'rgba(108,99,255,0.1)',
+        fill: true,
+        tension: 0.4,
+        pointBackgroundColor: '#6C63FF',
+        pointRadius: 4
+      }, {
+        label: 'Documents',
+        data: [1, 2, 1, 4, 3, 7],
+        borderColor: '#00D4AA',
+        backgroundColor: 'rgba(0,212,170,0.08)',
+        fill: true,
+        tension: 0.4,
+        pointBackgroundColor: '#00D4AA',
+        pointRadius: 4
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: textColor, font: { family: 'Inter', size: 11 } } } },
+      scales: {
+        x: { grid: { color: gridColor }, ticks: { color: textColor } },
+        y: { grid: { color: gridColor }, ticks: { color: textColor } }
+      }
+    }
+  });
+  
+  // Domain Chart
+  new Chart(document.getElementById('domainChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Mathematics', 'AI/ML', 'Education', 'Social Science', 'Data Science'],
+      datasets: [{
+        data: [35, 25, 20, 12, 8],
+        backgroundColor: ['#6C63FF', '#00D4AA', '#FFB347', '#FF6584', '#38BDF8'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: { color: textColor, font: { family: 'Inter', size: 11 }, padding: 12, boxWidth: 12 }
+        }
+      },
+      cutout: '62%'
+    }
+  });
+}
+
+/* ═══════════════════════════════════════════════════════
+   WORKFLOW STEPPER
+═══════════════════════════════════════════════════════ */
+function buildWorkflowStepper() {
+  const el = document.getElementById('workflowStepper');
+  if (!el) return;
+  const steps = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22'];
+  const done = 6;
+  
+  el.innerHTML = steps.map((s, i) => {
+    const cls = i < done ? 'done' : i === done ? 'active' : '';
+    return `<div class="workflow-step">
+      <div class="step-node ${cls}" title="Step ${s}">${i < done ? '✓' : s}</div>
+      ${i < steps.length - 1 ? `<div class="step-line ${i < done ? 'done' : ''}"></div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+/* ═══════════════════════════════════════════════════════
+   UTILITIES
+═══════════════════════════════════════════════════════ */
+function copyOutput(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  navigator.clipboard.writeText(el.innerText).then(() => showToast('📋 Copied to clipboard'));
+}
+
+function exportBibtex() {
+  showToast('📦 BibTeX export: Format references first, then copy the output');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.opacity = '1';
+  t.style.transform = 'translateY(0)';
+  setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateY(8px)'; }, 2800);
+}
+
+function updateStats(module) {
+  const mods = { 'topic-gen': 'stat-papers', 'gap-id': 'stat-gaps', 'dataset': 'stat-datasets', 'rq-gen': 'stat-hyp' };
+  const statId = mods[module];
+  if (statId) {
+    const el = document.getElementById(statId);
+    if (el) { el.textContent = parseInt(el.textContent || '0') + 1; }
+  }
+}
+
+function handleFileUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const el = document.getElementById('dataset-info');
+  const text = document.getElementById('dataset-info-text');
+  el.style.display = 'flex';
+  text.innerHTML = `<strong>${file.name}</strong> uploaded (${(file.size/1024).toFixed(1)} KB). Click "Analyze Dataset" to proceed.`;
+  document.getElementById('stat-datasets').textContent = '1';
+}
+
+function handleFileDrop(e) {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if (file) {
+    const input = document.getElementById('fileInput');
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    input.files = dt.files;
+    handleFileUpload({ target: { files: [file] } });
+    document.getElementById('upload-zone').style.borderColor = 'var(--teal)';
+  }
+}
+
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+/* ═══════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  initSidebarCanvas();
+  buildWorkflowStepper();
+  initDashboardCharts();
+  
+  // Animate stat counters
+  setTimeout(() => {
+    document.getElementById('stat-agents').textContent = '9';
+  }, 300);
+  
+  // Keyboard shortcut: Escape closes modal
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeApiModal();
+  });
+});
+</script>
+</body>
+</html>
