@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Free AI Tools Directory</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    .section:has(.section-icon[style*="255,160,50"]) .card:hover { border-color: rgba(255,160,50,.5); }
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #21262d;
+      --gold:      #d4a840;
+      --gold-soft: #e8c96a;
+      --cream:     #f0e6ce;
+      --muted:     #8b949e;
+      --text:      #e6edf3;
+      --text-card: #c9d1d9;
+
+      --text-blue: #4a9eff;
+      --img-green: #3fb68b;
+      --audio-purple: #a882dd;
+      --video-red:    #e0615a;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 60%, #0d1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 56px 24px 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(212,168,64,.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .header-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+    header h1 span { color: var(--gold-soft); }
+    header p.sub {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 28px;
+    }
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid;
+    }
+    .badge-text   { color: var(--text-blue);   border-color: rgba(74,158,255,.35);   background: rgba(74,158,255,.08); }
+    .badge-image  { color: var(--img-green);   border-color: rgba(63,182,139,.35);   background: rgba(63,182,139,.08); }
+    .badge-audio  { color: var(--audio-purple); border-color: rgba(168,130,221,.35); background: rgba(168,130,221,.08); }
+    .badge-video  { color: var(--video-red);    border-color: rgba(224,97,90,.35);   background: rgba(224,97,90,.08); }
+
+    /* ── LAYOUT ── */
+    main {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+
+    /* ── SECTION ── */
+    .section { margin-bottom: 72px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-icon {
+      width: 42px; height: 42px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .icon-text   { background: rgba(74,158,255,.15);  }
+    .icon-image  { background: rgba(63,182,139,.15);  }
+    .icon-audio  { background: rgba(168,130,221,.15); }
+    .icon-video  { background: rgba(224,97,90,.15);   }
+
+    .section-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--cream); }
+    .section-count { font-size: 12px; color: var(--muted); font-weight: 500; margin-left: auto; }
+
+    /* ── GRID ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 22px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      border-radius: 12px 12px 0 0;
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,.4); }
+    .card:hover::before { opacity: 1; }
+
+    .text-card:hover  { border-color: rgba(74,158,255,.5);  }
+    .text-card::before  { background: var(--text-blue); }
+    .image-card:hover { border-color: rgba(63,182,139,.5);  }
+    .image-card::before { background: var(--img-green); }
+    .audio-card:hover { border-color: rgba(168,130,221,.5); }
+    .audio-card::before { background: var(--audio-purple); }
+    .video-card:hover { border-color: rgba(224,97,90,.5);   }
+    .video-card::before { background: var(--video-red); }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .card-name {
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--cream);
+    }
+    .card-tag {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 99px;
+      border: 1px solid;
+    }
+    .tag-free { color: #3fb68b; border-color: rgba(63,182,139,.4); background: rgba(63,182,139,.1); }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .card-url {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .card-url svg { opacity: .5; }
+
+    /* ── FOOTER / INFO ── */
+    .info-strip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 36px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .info-avatar {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold) 0%, #b8860b 100%);
+      display: grid;
+      place-items: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #1a1208;
+      flex-shrink: 0;
+    }
+    .info-body { flex: 1; min-width: 200px; }
+    .info-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .info-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: var(--cream);
+      margin-bottom: 4px;
+    }
+    .info-role {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    footer {
+      text-align: center;
+      padding: 28px 24px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 600px) {
+      .grid { grid-template-columns: 1fr; }
+      .info-strip { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════ HEADER ════════════════════════════════════ -->
+<header>
+  <p class="header-eyebrow">UCDL Academy · Resource Library</p>
+  <h1>Free <span>AI Tools</span> Directory</h1>
+  <p class="sub">Curated, 100% free AI platforms for Text, Image, Audio, and Video — handpicked for students, educators &amp; researchers.</p>
+  <div class="badge-row">
+    <span class="badge badge-text">✦ Text AI</span>
+    <span class="badge badge-image">✦ Image AI</span>
+    <span class="badge badge-audio">✦ Audio AI</span>
+    <span class="badge badge-video">✦ Video AI</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- ════════════ TEXT AI ════════════ -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-icon icon-text">✍️</div>
+      <h2 class="section-title">Text AI</h2>
+      <span class="section-count">7 Tools</span>
+    </div>
+    <div class="grid">
+
+      <a href="https://claude.ai" target="_blank" class="card text-card">
+        <div class="card-top">
+          <span class="card-name">Claude (Anthropic)</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Advanced AI assistant for writing, research, coding, and analysis. Excellent for academic tasks.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          claude.ai
+        </span>
+      </a>
+      <a href="https://grok.com" target="_blank" class="card text-card">
+        <div class="card-top">
+          <span class="card-name">Grok</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Multi-modal assistant that can process text, voice, images, and videos.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          grok.com
+        </span>
+      </a>
+
+
+      <a href="https://arena.ai" target="_blank" class="card text-card">
+        <div class="card-top">
+          <span class="card-name">Arena AI</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">An AI tool that has collection for all AI</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          arena.ai
+        </span>
+      </a>
+
+      <a href="https://chat.openai.com" target="_blank" class="card text-card">
+        <div class="card-top">
+          <span class="card-name">ChatGPT</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Widely-used AI chatbot for essays, summaries, Q&amp;A, and brainstorming. Free tier available.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          chat.openai.com
+        </span>
+      </a>
+
+      <a href="https://gemini.google.com" target="_blank" class="card text-card">
+        <div class="card-top">
+          <span class="card-name">Google Gemini</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Google's multimodal AI for text, research, translation, and document understanding.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          gemini.google.com
+        </span>
+      </a>
+
+      <a href="https://copilot.microsoft.com" target="_blank" class="card text-card">
+        <div class="card-top">
+          <span class="card-name">Microsoft Copilot</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Microsoft's AI powered by GPT-4 — great for drafting, web search, and productivity tasks.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          copilot.microsoft.com
+        </span>
+      </a>
+
+      <a href="https://groq.com" target="_blank" class="card text-card">
+        <div class="card-top">
+          <span class="card-name">Groq (Llama / Mixtral)</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Blazing-fast inference for open-source LLMs (Llama 3, Mixtral). Ideal for research and coding.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          groq.com
+        </span>
+      </a>
+
+      <a href="https://www.perplexity.ai" target="_blank" class="card text-card">
+        <div class="card-top">
+          <span class="card-name">Perplexity AI</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">AI-powered search engine with cited answers. Perfect for academic research and fact-checking.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          perplexity.ai
+        </span>
+      </a>
+
+      <a href="https://huggingface.co/chat" target="_blank" class="card text-card">
+        <div class="card-top">
+          <span class="card-name">HuggingChat</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Open-source AI chatbot by Hugging Face. Supports multiple open models — no subscription needed.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          huggingface.co/chat
+        </span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ════════════ IMAGE AI ════════════ -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-icon icon-image">🎨</div>
+      <h2 class="section-title">Image AI</h2>
+      <span class="section-count">6 Tools</span>
+    </div>
+    <div class="grid">
+
+      <a href="https://www.bing.com/images/create" target="_blank" class="card image-card">
+        <div class="card-top">
+          <span class="card-name">Bing Image Creator</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">DALL·E 3 powered image generation by Microsoft. Free with a Microsoft account — high quality results.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          bing.com/images/create
+        </span>
+      </a>
+
+      <a href="https://www.canva.com/ai-image-generator" target="_blank" class="card image-card">
+        <div class="card-top">
+          <span class="card-name">Canva AI Image Generator</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Generate images inside Canva's design editor. Free plan includes limited AI image credits monthly.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          canva.com
+        </span>
+      </a>
+
+      <a href="https://ideogram.ai" target="_blank" class="card image-card">
+        <div class="card-top">
+          <span class="card-name">Ideogram AI</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Great for text-in-image generation. Free tier available — excellent for posters and banners.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          ideogram.ai
+        </span>
+      </a>
+
+      <a href="https://www.adobe.com/products/firefly.html" target="_blank" class="card image-card">
+        <div class="card-top">
+          <span class="card-name">Adobe Firefly</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Adobe's AI image generator with a free tier. Commercially safe, supports generative fill and recolor.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          adobe.com/firefly
+        </span>
+      </a>
+
+      <a href="https://leonardo.ai" target="_blank" class="card image-card">
+        <div class="card-top">
+          <span class="card-name">Leonardo AI</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Powerful image generation with fine-tuned models. Free tier gives 150 tokens/day for high-res images.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          leonardo.ai
+        </span>
+      </a>
+
+      <a href="https://huggingface.co/spaces/stabilityai/stable-diffusion" target="_blank" class="card image-card">
+        <div class="card-top">
+          <span class="card-name">Stable Diffusion (HF)</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Open-source image generation via Hugging Face Spaces. No login required for basic use.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          huggingface.co
+        </span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ════════════ AUDIO AI ════════════ -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-icon icon-audio">🎧</div>
+      <h2 class="section-title">Audio AI</h2>
+      <span class="section-count">6 Tools</span>
+    </div>
+    <div class="grid">
+
+      <a href="https://elevenlabs.io" target="_blank" class="card audio-card">
+        <div class="card-top">
+          <span class="card-name">ElevenLabs</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Ultra-realistic AI voice generation and text-to-speech. Free tier includes 10,000 characters/month.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          elevenlabs.io
+        </span>
+      </a>
+
+      <a href="https://suno.com" target="_blank" class="card audio-card">
+        <div class="card-top">
+          <span class="card-name">Suno AI</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Generate full songs with lyrics and music from a text prompt. Free plan gives 50 credits/day.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          suno.com
+        </span>
+      </a>
+
+      <a href="https://udio.com" target="_blank" class="card audio-card">
+        <div class="card-top">
+          <span class="card-name">Udio</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">High-quality AI music generation across all genres. Free tier available with monthly credits.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          udio.com
+        </span>
+      </a>
+
+      <a href="https://mubert.com" target="_blank" class="card audio-card">
+        <div class="card-top">
+          <span class="card-name">Mubert</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">AI-generated royalty-free background music for videos, podcasts, and presentations. Free plan available.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          mubert.com
+        </span>
+      </a>
+
+      <a href="https://speechify.com" target="_blank" class="card audio-card">
+        <div class="card-top">
+          <span class="card-name">Speechify</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Convert text, PDFs, and documents to natural speech. Very useful for students and accessibility.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          speechify.com
+        </span>
+      </a>
+
+      <a href="https://www.naturalreaders.com" target="_blank" class="card audio-card">
+        <div class="card-top">
+          <span class="card-name">Natural Reader</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Free text-to-speech tool for reading documents, webpages, and ebooks aloud in natural voices.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          naturalreaders.com
+        </span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ════════════ VIDEO AI ════════════ -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-icon icon-video">🎬</div>
+      <h2 class="section-title">Video AI</h2>
+      <span class="section-count">6 Tools</span>
+    </div>
+    <div class="grid">
+
+      <a href="https://www.capcut.com" target="_blank" class="card video-card">
+        <div class="card-top">
+          <span class="card-name">CapCut</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Popular AI video editor with auto-subtitles, background removal, and smart templates. Fully free.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          capcut.com
+        </span>
+      </a>
+
+      <a href="https://www.kling.ai" target="_blank" class="card video-card">
+        <div class="card-top">
+          <span class="card-name">Kling</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Generating and editing highly realistic videos from text descriptions, images, or reference videos.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          kling.ai
+        </span>
+      </a>
+
+      <a href="https://www.higgsfield.ai" target="_blank" class="card video-card">
+        <div class="card-top">
+          <span class="card-name">Higgsfield</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Generate and edit cinematic-quality videos, images, and marketing content.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          higgsfield.ai
+        </span>
+      </a>
+
+
+      <a href="https://www.flow.ai" target="_blank" class="card video-card">
+        <div class="card-top">
+          <span class="card-name">Flow AI</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Popular AI video editor with auto-subtitles, background removal, and smart templates. Fully free.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          flow.ai
+        </span>
+      </a>
+
+
+
+      <a href="https://app.clipchamp.com" target="_blank" class="card video-card">
+        <div class="card-top">
+          <span class="card-name">Microsoft Clipchamp</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Browser-based AI video editor with auto-captions, text-to-speech, and templates. Free with Microsoft account.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          clipchamp.com
+        </span>
+      </a>
+
+      <a href="https://invideo.io" target="_blank" class="card video-card">
+        <div class="card-top">
+          <span class="card-name">InVideo AI</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Turn text prompts into full videos with voiceover, stock footage, and subtitles. Free tier available.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          invideo.io
+        </span>
+      </a>
+
+      <a href="https://www.synthesia.io" target="_blank" class="card video-card">
+        <div class="card-top">
+          <span class="card-name">Synthesia</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Create AI avatar presenter videos from text. Free plan available with limited monthly video minutes.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          synthesia.io
+        </span>
+      </a>
+
+      <a href="https://runwayml.com" target="_blank" class="card video-card">
+        <div class="card-top">
+          <span class="card-name">Runway ML</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Professional AI video generation and editing tools. Free tier includes limited generation credits.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          runwayml.com
+        </span>
+      </a>
+
+      <a href="https://pictory.ai" target="_blank" class="card video-card">
+        <div class="card-top">
+          <span class="card-name">Pictory AI</span>
+          <span class="card-tag tag-free">Free</span>
+        </div>
+        <p class="card-desc">Convert blog posts, scripts, or articles into short videos automatically. Free trial available.</p>
+        <span class="card-url">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+          pictory.ai
+        </span>
+      </a>
+
+    </div>
+  </section>
+
+<!-- ════════════ WEBSITE MAKER AI ════════════ -->
+<section class="section">
+  <div class="section-header">
+    <div class="section-icon" style="background: rgba(255,160,50,.15);">🌐</div>
+    <h2 class="section-title">Website Maker AI</h2>
+    <span class="section-count">6 Tools</span>
+  </div>
+  <div class="grid">
+
+    <a href="https://framer.com" target="_blank" class="card" style="--accent: #ff7043;">
+      <div class="card-top">
+        <span class="card-name">Framer AI</span>
+        <span class="card-tag tag-free">Free</span>
+      </div>
+      <p class="card-desc">Generate a full website from a text prompt in seconds. Free tier includes hosting and publishing.</p>
+      <span class="card-url">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+        framer.com
+      </span>
+    </a>
+
+    <a href="https://lovable.ai" target="_blank" class="card" style="--accent: #ff7043;">
+      <div class="card-top">
+        <span class="card-name">Lovable AI</span>
+        <span class="card-tag tag-free">Free</span>
+      </div>
+      <p class="card-desc">Generate a full website from a text prompt in seconds. Free tier includes hosting and publishing.</p>
+      <span class="card-url">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+        lovable.ai
+      </span>
+    </a>
+
+
+
+
+
+    <a href="https://gamma.app" target="_blank" class="card" style="--accent: #ff7043;">
+      <div class="card-top">
+        <span class="card-name">Gamma</span>
+        <span class="card-tag tag-free">Free</span>
+      </div>
+      <p class="card-desc">Build beautiful web pages, presentations, and docs from prompts. Free plan with unlimited AI creation.</p>
+      <span class="card-url">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+        gamma.app
+      </span>
+    </a>
+
+    <a href="https://site123.com" target="_blank" class="card" style="--accent: #ff7043;">
+      <div class="card-top">
+        <span class="card-name">SITE123</span>
+        <span class="card-tag tag-free">Free</span>
+      </div>
+      <p class="card-desc">AI-assisted website builder with ready-made templates. Free plan includes hosting on their subdomain.</p>
+      <span class="card-url">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+        site123.com
+      </span>
+    </a>
+
+    <a href="https://wegic.ai" target="_blank" class="card" style="--accent: #ff7043;">
+      <div class="card-top">
+        <span class="card-name">Wegic</span>
+        <span class="card-tag tag-free">Free</span>
+      </div>
+      <p class="card-desc">Chat with an AI to design and launch a website. No coding needed — free tier with published pages.</p>
+      <span class="card-url">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+        wegic.ai
+      </span>
+    </a>
+
+    <a href="https://www.wix.com/ai-website-builder" target="_blank" class="card" style="--accent: #ff7043;">
+      <div class="card-top">
+        <span class="card-name">Wix AI Builder</span>
+        <span class="card-tag tag-free">Free</span>
+      </div>
+      <p class="card-desc">Wix's AI generates a personalized website layout from a short description. Free plan with Wix subdomain.</p>
+      <span class="card-url">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+        wix.com
+      </span>
+    </a>
+
+    <a href="https://durable.co" target="_blank" class="card" style="--accent: #ff7043;">
+      <div class="card-top">
+        <span class="card-name">Durable AI</span>
+        <span class="card-tag tag-free">Free</span>
+      </div>
+      <p class="card-desc">Build a full business website in 30 seconds with AI. Free plan lets you generate and preview instantly.</p>
+      <span class="card-url">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+        durable.co
+      </span>
+    </a>
+
+  </div>
+</section>
+
+  <!-- ════════════ PREPARED BY ════════════ -->
+  <div class="info-strip">
+    <div class="info-avatar">B</div>
+    <div class="info-body">
+      <p class="info-label">Prepared By</p>
+      <p class="info-name">Mr. Bishnu Singh Rayamajhi</p>
+      <p class="info-role">
+        Mathematics Lecturer &amp; Head of Humanities and Social Science<br>
+        Kapilvastu Multiple Campus (KMC) · Tribhuvan University, Taulihawa, Nepal
+      </p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  © 2025 UCDL Academy &nbsp;·&nbsp; Free AI Tools Directory &nbsp;·&nbsp; Kapilvastu Multiple Campus (KMC)
+</footer>
+
+</body>
+</html>
