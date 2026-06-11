@@ -3,24 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Free AI Tools Directory</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <title>Free AI Tools Directory — UCDL Academy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
-    .section:has(.section-icon[style*="255,160,50"]) .card:hover { border-color: rgba(255,160,50,.5); }
     :root {
-      --bg:        #0d1117;
-      --surface:   #161b22;
-      --border:    #21262d;
-      --gold:      #d4a840;
-      --gold-soft: #e8c96a;
-      --cream:     #f0e6ce;
-      --muted:     #8b949e;
-      --text:      #e6edf3;
-      --text-card: #c9d1d9;
-      --text-blue: #4a9eff;
-      --img-green: #3fb68b;
-      --audio-purple: #a882dd;
-      --video-red:    #e0615a;
+      --bg:          #0c0f14;
+      --surface:     #131820;
+      --surface-2:   #171d27;
+      --border:      #1e2535;
+      --border-soft: #252d3d;
+      --gold:        #c9953a;
+      --gold-soft:   #ddb46a;
+      --cream:       #ede4d3;
+      --cream-dim:   #c8bfaf;
+      --muted:       #6e7a8a;
+      --muted-2:     #4a5568;
+      --text:        #dde4ed;
+      /* category accents */
+      --c-text:    #5b9bd5;
+      --c-image:   #4aad84;
+      --c-audio:   #9b78cc;
+      --c-video:   #cc5f58;
+      --c-qual:    #2ab5ac;
+      --c-quant:   #d4933a;
+      --c-web:     #e07a35;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -28,1189 +34,997 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-size: 15px;
-      line-height: 1.6;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 13.5px;
+      line-height: 1.55;
     }
 
     /* ── HEADER ── */
     header {
-      background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 60%, #0d1117 100%);
-      border-bottom: 1px solid var(--border);
-      padding: 56px 24px 48px;
-      text-align: center;
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      padding: 36px 32px 28px;
       position: relative;
       overflow: hidden;
     }
-    header::before {
+    header::after {
       content: '';
       position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(212,168,64,.12) 0%, transparent 70%);
-      pointer-events: none;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: linear-gradient(180deg, var(--gold) 0%, var(--gold-soft) 100%);
+    }
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px 32px;
+      align-items: start;
     }
     .header-eyebrow {
-      font-size: 11px;
-      font-weight: 600;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
       letter-spacing: .18em;
       text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: 14px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .header-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 18px; height: 1px;
+      background: var(--gold);
+      flex-shrink: 0;
     }
     header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-family: 'Libre Baskerville', serif;
+      font-size: clamp(1.5rem, 3vw, 2.1rem);
       font-weight: 700;
       color: var(--cream);
-      line-height: 1.15;
-      margin-bottom: 14px;
+      line-height: 1.2;
+      margin-bottom: 8px;
     }
-    header h1 span { color: var(--gold-soft); }
+    header h1 em {
+      font-style: italic;
+      color: var(--gold-soft);
+    }
     header p.sub {
-      font-size: 15px;
+      font-size: 12.5px;
       color: var(--muted);
-      max-width: 520px;
-      margin: 0 auto 28px;
+      max-width: 560px;
+      line-height: 1.6;
     }
-    .badge-row {
+    .header-meta {
+      text-align: right;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--muted-2);
+      line-height: 1.8;
+    }
+    .header-meta strong { color: var(--muted); display: block; }
+
+    /* category legend */
+    .legend {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 10px 0 0;
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
+      gap: 6px 14px;
+      border-top: 1px solid var(--border);
+      margin-top: 16px;
     }
-    .badge {
-      display: inline-flex;
+    .legend-item {
+      display: flex;
       align-items: center;
-      gap: 6px;
-      padding: 5px 14px;
-      border-radius: 99px;
-      font-size: 12px;
+      gap: 5px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9.5px;
       font-weight: 500;
-      border: 1px solid;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
     }
-    .badge-text   { color: var(--text-blue);   border-color: rgba(74,158,255,.35);   background: rgba(74,158,255,.08); }
-    .badge-image  { color: var(--img-green);   border-color: rgba(63,182,139,.35);   background: rgba(63,182,139,.08); }
-    .badge-audio  { color: var(--audio-purple); border-color: rgba(168,130,221,.35); background: rgba(168,130,221,.08); }
-    .badge-video  { color: var(--video-red);    border-color: rgba(224,97,90,.35);   background: rgba(224,97,90,.08); }
+    .legend-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
 
     /* ── LAYOUT ── */
     main {
-      max-width: 1140px;
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 60px 24px 80px;
+      padding: 0 24px 48px;
     }
 
     /* ── SECTION ── */
-    .section { margin-bottom: 72px; }
+    .section {
+      border-bottom: 1px solid var(--border);
+      padding: 24px 0 20px;
+    }
+    .section:last-of-type { border-bottom: none; }
+
     .section-header {
       display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 28px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--border);
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 14px;
     }
-    .section-icon {
-      width: 42px; height: 42px;
-      border-radius: 10px;
-      display: grid;
-      place-items: center;
-      font-size: 20px;
+    .section-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--muted-2);
+      letter-spacing: .12em;
+      flex-shrink: 0;
+      padding-top: 3px;
+    }
+    .section-title {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--cream);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
       flex-shrink: 0;
     }
-    .icon-text   { background: rgba(74,158,255,.15);  }
-    .icon-image  { background: rgba(63,182,139,.15);  }
-    .icon-audio  { background: rgba(168,130,221,.15); }
-    .icon-video  { background: rgba(224,97,90,.15);   }
-
-    .section-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--cream); }
-    .section-count { font-size: 12px; color: var(--muted); font-weight: 500; margin-left: auto; }
+    .section-count {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9.5px;
+      color: var(--muted-2);
+      font-weight: 500;
+      margin-left: auto;
+      border: 1px solid var(--border-soft);
+      padding: 2px 8px;
+      border-radius: 3px;
+    }
 
     /* ── GRID ── */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 10px;
     }
 
     /* ── CARD ── */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px 22px;
+      border-left: 3px solid transparent;
+      border-radius: 4px;
+      padding: 12px 14px 10px;
       text-decoration: none;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      transition: border-color .2s, transform .2s, box-shadow .2s;
-      position: relative;
-      overflow: hidden;
+      gap: 5px;
+      transition: border-color .18s, background .18s;
     }
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      border-radius: 12px 12px 0 0;
-      opacity: 0;
-      transition: opacity .2s;
-    }
-    .card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,.4); }
-    .card:hover::before { opacity: 1; }
+    .card:hover { background: var(--surface-2); }
 
-    .text-card:hover  { border-color: rgba(74,158,255,.5);  }
-    .text-card::before  { background: var(--text-blue); }
-    .image-card:hover { border-color: rgba(63,182,139,.5);  }
-    .image-card::before { background: var(--img-green); }
-    .audio-card:hover { border-color: rgba(168,130,221,.5); }
-    .audio-card::before { background: var(--audio-purple); }
-    .video-card:hover { border-color: rgba(224,97,90,.5);   }
-    .video-card::before { background: var(--video-red); }
+    .card[data-cat="text"]  { border-left-color: var(--c-text); }
+    .card[data-cat="image"] { border-left-color: var(--c-image); }
+    .card[data-cat="audio"] { border-left-color: var(--c-audio); }
+    .card[data-cat="video"] { border-left-color: var(--c-video); }
+    .card[data-cat="qual"]  { border-left-color: var(--c-qual); }
+    .card[data-cat="quant"] { border-left-color: var(--c-quant); }
+    .card[data-cat="web"]   { border-left-color: var(--c-web); }
 
     .card-top {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
+      gap: 8px;
     }
     .card-name {
+      font-family: 'IBM Plex Sans', sans-serif;
       font-weight: 600;
-      font-size: 15px;
-      color: var(--cream);
+      font-size: 13px;
+      color: var(--cream-dim);
+      line-height: 1.3;
     }
     .card-tag {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: .08em;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8.5px;
+      font-weight: 500;
+      letter-spacing: .06em;
       text-transform: uppercase;
-      padding: 3px 9px;
-      border-radius: 99px;
-      border: 1px solid;
+      padding: 2px 6px;
+      border-radius: 2px;
+      background: rgba(74,173,132,.1);
+      color: var(--c-image);
+      border: 1px solid rgba(74,173,132,.25);
+      white-space: nowrap;
+      flex-shrink: 0;
     }
-    .tag-free { color: #3fb68b; border-color: rgba(63,182,139,.4); background: rgba(63,182,139,.1); }
-
+    .card-tag.trial {
+      background: rgba(201,149,58,.08);
+      color: var(--gold);
+      border-color: rgba(201,149,58,.25);
+    }
     .card-desc {
-      font-size: 13px;
+      font-size: 11.5px;
       color: var(--muted);
       line-height: 1.5;
     }
     .card-url {
-      font-size: 11.5px;
-      color: var(--muted);
-      margin-top: auto;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--muted-2);
+      margin-top: 2px;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
     }
-    .card-url svg { opacity: .5; }
+    .card-url svg { opacity: .45; }
 
-    /* ══════════════════════════════════════
-       FLOWCHART STYLES
-    ══════════════════════════════════════ */
-    .flowchart-wrapper {
-      margin: 32px 0 40px;
-      background: #0d1117;
+    /* ── SUB-SECTION (Qual / Quant inside Research) ── */
+    .sub-section { margin-top: 18px; }
+    .sub-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed var(--border-soft);
+    }
+    .sub-bar {
+      width: 3px; height: 22px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .sub-title {
+      font-family: 'Libre Baskerville', serif;
+      font-size: .9rem;
+      font-weight: 700;
+      font-style: italic;
+      color: var(--cream-dim);
+    }
+    .sub-count {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--muted-2);
+      margin-left: auto;
+    }
+
+    /* ── FLOWCHART ── */
+    .flowchart {
+      margin-top: 16px;
+      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 36px 28px 32px;
-      position: relative;
+      border-radius: 4px;
       overflow: hidden;
     }
-    .flowchart-wrapper::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      border-radius: 16px 16px 0 0;
-    }
-    .flowchart-wrapper.qual::before { background: linear-gradient(90deg, #20b2aa, #3fb68b); }
-    .flowchart-wrapper.quant::before { background: linear-gradient(90deg, #f4a636, #e8c96a); }
-
-    .flowchart-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.05rem;
-      color: var(--cream);
-      margin-bottom: 28px;
+    .fc-head {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       gap: 10px;
     }
-    .flowchart-title .fc-badge {
-      font-family: 'Inter', sans-serif;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: .1em;
+    .fc-head-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: .12em;
       text-transform: uppercase;
-      padding: 3px 10px;
-      border-radius: 99px;
     }
-    .qual .fc-badge { background: rgba(32,178,170,.15); color: #20b2aa; border: 1px solid rgba(32,178,170,.3); }
-    .quant .fc-badge { background: rgba(244,166,54,.15); color: #f4a636; border: 1px solid rgba(244,166,54,.3); }
+    .fc-head-title {
+      font-family: 'Libre Baskerville', serif;
+      font-size: .82rem;
+      font-style: italic;
+      color: var(--cream-dim);
+    }
+    .fc-head-badge {
+      margin-left: auto;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8.5px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 2px;
+      border: 1px solid;
+    }
 
-    .fc-steps {
+    .fc-body {
+      padding: 12px 14px;
       display: flex;
       flex-direction: column;
-      align-items: center;
       gap: 0;
     }
 
-    .fc-step {
-      width: 100%;
-      max-width: 720px;
-      position: relative;
+    .fc-row {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 0 10px;
+      align-items: stretch;
     }
 
-    .fc-node {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 18px;
+    /* left gutter: number + connector line */
+    .fc-gutter {
       display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      transition: border-color .2s, box-shadow .2s;
+      flex-direction: column;
+      align-items: center;
     }
-    .fc-node:hover {
-      box-shadow: 0 4px 20px rgba(0,0,0,.3);
-    }
-    .qual .fc-node:hover { border-color: rgba(32,178,170,.4); }
-    .quant .fc-node:hover { border-color: rgba(244,166,54,.4); }
-
     .fc-num {
-      flex-shrink: 0;
-      width: 28px;
-      height: 28px;
+      width: 24px; height: 24px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 11px;
-      font-weight: 700;
-      margin-top: 1px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9.5px;
+      font-weight: 500;
+      flex-shrink: 0;
     }
-    .qual .fc-num { background: rgba(32,178,170,.2); color: #20b2aa; }
-    .quant .fc-num { background: rgba(244,166,54,.2); color: #f4a636; }
+    .fc-line {
+      flex: 1;
+      width: 1px;
+      background: var(--border-soft);
+      margin: 2px auto;
+    }
+    .fc-row:last-child .fc-line { display: none; }
 
-    .fc-content { flex: 1; }
-
+    /* node content */
+    .fc-node {
+      padding: 8px 0 10px;
+    }
     .fc-label {
-      font-size: 13.5px;
+      font-size: 12.5px;
       font-weight: 600;
-      color: var(--cream);
-      margin-bottom: 3px;
+      color: var(--cream-dim);
+      line-height: 1.3;
     }
     .fc-sub {
-      font-size: 11.5px;
+      font-size: 10.5px;
       color: var(--muted);
-      margin-bottom: 8px;
       font-style: italic;
+      margin: 2px 0 6px;
+      line-height: 1.4;
     }
     .fc-tools {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 4px;
     }
     .fc-tool {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      padding: 3px 10px;
-      border-radius: 99px;
-      font-size: 10.5px;
+      gap: 3px;
+      padding: 2px 7px;
+      border-radius: 2px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9.5px;
       font-weight: 500;
       text-decoration: none;
       border: 1px solid;
-      transition: opacity .15s, transform .15s;
+      transition: opacity .15s;
     }
-    .fc-tool:hover { opacity: .8; transform: translateY(-1px); }
-    .qual .fc-tool { color: #20b2aa; border-color: rgba(32,178,170,.3); background: rgba(32,178,170,.08); }
-    .quant .fc-tool { color: #f4a636; border-color: rgba(244,166,54,.3); background: rgba(244,166,54,.08); }
+    .fc-tool:hover { opacity: .7; }
 
-    .fc-arrow {
+    .fc-iter-note {
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 3px;
+      font-size: 11px;
+      color: var(--muted);
       display: flex;
-      justify-content: center;
-      padding: 4px 0;
-    }
-    .qual .fc-arrow svg { stroke: #20b2aa; opacity: .5; }
-    .quant .fc-arrow svg { stroke: #f4a636; opacity: .5; }
-
-    .fc-loop-note {
-      margin-top: 20px;
-      width: 100%;
-      max-width: 720px;
-      border: 1px dashed rgba(32,178,170,.3);
-      border-radius: 10px;
-      padding: 10px 16px;
-      font-size: 11.5px;
-      color: #20b2aa;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(32,178,170,.05);
+      align-items: flex-start;
+      gap: 7px;
+      line-height: 1.5;
+      border: 1px dashed;
     }
 
-    /* ── FOOTER / INFO ── */
+    /* ── QUAL colors ── */
+    .qual .fc-num         { background: rgba(42,181,172,.15); color: var(--c-qual); }
+    .qual .fc-head-label  { color: var(--c-qual); }
+    .qual .fc-head-badge  { color: var(--c-qual); border-color: rgba(42,181,172,.3); background: rgba(42,181,172,.08); }
+    .qual .fc-tool        { color: var(--c-qual); border-color: rgba(42,181,172,.28); background: rgba(42,181,172,.06); }
+    .qual .fc-iter-note   { border-color: rgba(42,181,172,.2); background: rgba(42,181,172,.04); }
+
+    /* ── QUANT colors ── */
+    .quant .fc-num        { background: rgba(212,147,58,.15); color: var(--c-quant); }
+    .quant .fc-head-label { color: var(--c-quant); }
+    .quant .fc-head-badge { color: var(--c-quant); border-color: rgba(212,147,58,.3); background: rgba(212,147,58,.08); }
+    .quant .fc-tool       { color: var(--c-quant); border-color: rgba(212,147,58,.28); background: rgba(212,147,58,.06); }
+    .quant .fc-iter-note  { border-color: rgba(212,147,58,.2); background: rgba(212,147,58,.04); }
+
+    /* divider between qual/quant */
+    .sub-divider {
+      border: none;
+      border-top: 1px dashed var(--border-soft);
+      margin: 20px 0 0;
+    }
+
+    /* ── FOOTER STRIP ── */
     .info-strip {
+      margin-top: 24px;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px 36px;
+      border-left: 4px solid var(--gold);
+      border-radius: 4px;
+      padding: 16px 20px;
       display: flex;
       align-items: center;
-      gap: 24px;
-      flex-wrap: wrap;
-      margin-top: 20px;
+      gap: 16px;
     }
     .info-avatar {
-      width: 60px; height: 60px;
+      width: 44px; height: 44px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--gold) 0%, #b8860b 100%);
+      background: linear-gradient(135deg, var(--gold) 0%, #8b5e1a 100%);
       display: grid;
       place-items: center;
-      font-family: 'Playfair Display', serif;
-      font-size: 24px;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 18px;
       font-weight: 700;
       color: #1a1208;
       flex-shrink: 0;
     }
-    .info-body { flex: 1; min-width: 200px; }
     .info-label {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: .15em;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: .14em;
       text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
     .info-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.15rem;
+      font-family: 'Libre Baskerville', serif;
+      font-size: .95rem;
       color: var(--cream);
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
     .info-role {
-      font-size: 13px;
+      font-size: 11.5px;
       color: var(--muted);
-      line-height: 1.55;
+      line-height: 1.6;
     }
 
     footer {
       text-align: center;
-      padding: 28px 24px;
+      padding: 16px 24px;
       border-top: 1px solid var(--border);
-      font-size: 12px;
-      color: var(--muted);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--muted-2);
+      letter-spacing: .04em;
     }
 
     @media (max-width: 600px) {
       .grid { grid-template-columns: 1fr; }
-      .info-strip { padding: 24px 20px; }
-      .flowchart-wrapper { padding: 24px 16px; }
+      .header-inner { grid-template-columns: 1fr; }
+      .header-meta { text-align: left; }
     }
   </style>
 </head>
 <body>
 
-<!-- ════════════════════════════════════ HEADER ════════════════════════════════════ -->
+<!-- ═══════════ HEADER ═══════════ -->
 <header>
-  <p class="header-eyebrow">UCDL Academy · Resource Library</p>
-  <h1>Free <span>RayamajhiAI Tools</span> Directory</h1>
-  <p class="sub">Curated, 100% free AI platforms for Text, Image, Audio, and Video — handpicked for students, educators &amp; researchers.</p>
-  <div class="badge-row">
-    <span class="badge badge-text">✦ Text AI</span>
-    <span class="badge badge-image">✦ Image AI</span>
-    <span class="badge badge-audio">✦ Audio AI</span>
-    <span class="badge badge-video">✦ Video AI</span>
-    <span class="badge badge-qualitative">✦ Qualitative Research AI</span>
-    <span class="badge badge-quantitative">✦ Quantitative Research AI</span>
-    <span class="badge badge-ucdl">✦ Prepared By: Mr. Bishnu Singh Rayamajhi, Math Lecturer and Head of HSS, Founder: UCDL Academy</span>
+  <div class="header-inner">
+    <div>
+      <p class="header-eyebrow">UCDL Academy · Resource Library</p>
+      <h1>Free <em>RayamajhiAI</em> Tools Directory</h1>
+      <p class="sub">A curated academic reference of 100% free AI platforms across Text, Image, Audio, Video, Research, and Web — compiled for students, educators, and researchers at KMC.</p>
+    </div>
+    <div class="header-meta">
+      <strong>Kapilvastu Multiple Campus</strong>
+      Tribhuvan University<br>
+      Taulihawa, Nepal<br>
+      UCDL Academy
+    </div>
+  </div>
+  <div class="legend">
+    <span class="legend-item"><span class="legend-dot" style="background:var(--c-text)"></span>Text AI</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--c-image)"></span>Image AI</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--c-audio)"></span>Audio AI</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--c-video)"></span>Video AI</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--c-qual)"></span>Qualitative Research</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--c-quant)"></span>Quantitative Research</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--c-web)"></span>Website Maker</span>
   </div>
 </header>
 
 <main>
 
-  <!-- ════════════ TEXT AI ════════════ -->
+  <!-- §1 TEXT AI -->
   <section class="section">
     <div class="section-header">
-      <div class="section-icon icon-text">✍️</div>
-      <h2 class="section-title">Text AI</h2>
-      <span class="section-count">7 Tools</span>
+      <span class="section-num">§ 1</span>
+      <h2 class="section-title">
+        <span class="dot" style="background:var(--c-text)"></span>
+        Text AI
+      </h2>
+      <span class="section-count">9 tools</span>
     </div>
     <div class="grid">
-      <a href="https://claude.ai" target="_blank" class="card text-card">
-        <div class="card-top"><span class="card-name">Claude (Anthropic)</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://claude.ai" target="_blank" class="card" data-cat="text">
+        <div class="card-top"><span class="card-name">Claude (Anthropic)</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Advanced AI assistant for writing, research, coding, and analysis. Excellent for academic tasks.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>claude.ai</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>claude.ai</span>
       </a>
-      <a href="https://grok.com" target="_blank" class="card text-card">
-        <div class="card-top"><span class="card-name">Grok</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://grok.com" target="_blank" class="card" data-cat="text">
+        <div class="card-top"><span class="card-name">Grok</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Multi-modal assistant that can process text, voice, images, and videos.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>grok.com</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>grok.com</span>
       </a>
-      <a href="https://arena.ai" target="_blank" class="card text-card">
-        <div class="card-top"><span class="card-name">Arena AI</span><span class="card-tag tag-free">Free</span></div>
-        <p class="card-desc">An AI tool that has collection for all AI</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>arena.ai</span>
+      <a href="https://arena.ai" target="_blank" class="card" data-cat="text">
+        <div class="card-top"><span class="card-name">Arena AI</span><span class="card-tag">Free</span></div>
+        <p class="card-desc">A hub aggregating multiple AI models in one interface for comparison and selection.</p>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>arena.ai</span>
       </a>
-      <a href="https://chat.openai.com" target="_blank" class="card text-card">
-        <div class="card-top"><span class="card-name">ChatGPT</span><span class="card-tag tag-free">Free</span></div>
-        <p class="card-desc">Widely-used AI chatbot for essays, summaries, Q&amp;A, and brainstorming. Free tier available.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>chat.openai.com</span>
+      <a href="https://chat.openai.com" target="_blank" class="card" data-cat="text">
+        <div class="card-top"><span class="card-name">ChatGPT</span><span class="card-tag">Free</span></div>
+        <p class="card-desc">Widely-used AI chatbot for essays, summaries, Q&A, and brainstorming. Free tier available.</p>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>chat.openai.com</span>
       </a>
-      <a href="https://gemini.google.com" target="_blank" class="card text-card">
-        <div class="card-top"><span class="card-name">Google Gemini</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://gemini.google.com" target="_blank" class="card" data-cat="text">
+        <div class="card-top"><span class="card-name">Google Gemini</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Google's multimodal AI for text, research, translation, and document understanding.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>gemini.google.com</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>gemini.google.com</span>
       </a>
-      <a href="https://copilot.microsoft.com" target="_blank" class="card text-card">
-        <div class="card-top"><span class="card-name">Microsoft Copilot</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://copilot.microsoft.com" target="_blank" class="card" data-cat="text">
+        <div class="card-top"><span class="card-name">Microsoft Copilot</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Microsoft's AI powered by GPT-4 — great for drafting, web search, and productivity tasks.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>copilot.microsoft.com</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>copilot.microsoft.com</span>
       </a>
-      <a href="https://groq.com" target="_blank" class="card text-card">
-        <div class="card-top"><span class="card-name">Groq (Llama / Mixtral)</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://groq.com" target="_blank" class="card" data-cat="text">
+        <div class="card-top"><span class="card-name">Groq (Llama / Mixtral)</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Blazing-fast inference for open-source LLMs (Llama 3, Mixtral). Ideal for research and coding.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>groq.com</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>groq.com</span>
       </a>
-      <a href="https://www.perplexity.ai" target="_blank" class="card text-card">
-        <div class="card-top"><span class="card-name">Perplexity AI</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://www.perplexity.ai" target="_blank" class="card" data-cat="text">
+        <div class="card-top"><span class="card-name">Perplexity AI</span><span class="card-tag">Free</span></div>
         <p class="card-desc">AI-powered search engine with cited answers. Perfect for academic research and fact-checking.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>perplexity.ai</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>perplexity.ai</span>
       </a>
-      <a href="https://huggingface.co/chat" target="_blank" class="card text-card">
-        <div class="card-top"><span class="card-name">HuggingChat</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://huggingface.co/chat" target="_blank" class="card" data-cat="text">
+        <div class="card-top"><span class="card-name">HuggingChat</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Open-source AI chatbot by Hugging Face. Supports multiple open models — no subscription needed.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>huggingface.co/chat</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>huggingface.co/chat</span>
       </a>
     </div>
   </section>
 
-  <!-- ════════════ IMAGE AI ════════════ -->
+  <!-- §2 IMAGE AI -->
   <section class="section">
     <div class="section-header">
-      <div class="section-icon icon-image">🎨</div>
-      <h2 class="section-title">Image AI</h2>
-      <span class="section-count">6 Tools</span>
+      <span class="section-num">§ 2</span>
+      <h2 class="section-title">
+        <span class="dot" style="background:var(--c-image)"></span>
+        Image AI
+      </h2>
+      <span class="section-count">6 tools</span>
     </div>
     <div class="grid">
-      <a href="https://www.bing.com/images/create" target="_blank" class="card image-card">
-        <div class="card-top"><span class="card-name">Bing Image Creator</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://www.bing.com/images/create" target="_blank" class="card" data-cat="image">
+        <div class="card-top"><span class="card-name">Bing Image Creator</span><span class="card-tag">Free</span></div>
         <p class="card-desc">DALL·E 3 powered image generation by Microsoft. Free with a Microsoft account — high quality results.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>bing.com/images/create</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>bing.com/images/create</span>
       </a>
-      <a href="https://www.canva.com/ai-image-generator" target="_blank" class="card image-card">
-        <div class="card-top"><span class="card-name">Canva AI Image Generator</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://www.canva.com/ai-image-generator" target="_blank" class="card" data-cat="image">
+        <div class="card-top"><span class="card-name">Canva AI Image Generator</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Generate images inside Canva's design editor. Free plan includes limited AI image credits monthly.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>canva.com</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>canva.com</span>
       </a>
-      <a href="https://ideogram.ai" target="_blank" class="card image-card">
-        <div class="card-top"><span class="card-name">Ideogram AI</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://ideogram.ai" target="_blank" class="card" data-cat="image">
+        <div class="card-top"><span class="card-name">Ideogram AI</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Great for text-in-image generation. Free tier available — excellent for posters and banners.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>ideogram.ai</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>ideogram.ai</span>
       </a>
-      <a href="https://www.adobe.com/products/firefly.html" target="_blank" class="card image-card">
-        <div class="card-top"><span class="card-name">Adobe Firefly</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://www.adobe.com/products/firefly.html" target="_blank" class="card" data-cat="image">
+        <div class="card-top"><span class="card-name">Adobe Firefly</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Adobe's AI image generator with a free tier. Commercially safe, supports generative fill and recolor.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>adobe.com/firefly</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>adobe.com/firefly</span>
       </a>
-      <a href="https://leonardo.ai" target="_blank" class="card image-card">
-        <div class="card-top"><span class="card-name">Leonardo AI</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://leonardo.ai" target="_blank" class="card" data-cat="image">
+        <div class="card-top"><span class="card-name">Leonardo AI</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Powerful image generation with fine-tuned models. Free tier gives 150 tokens/day for high-res images.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>leonardo.ai</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>leonardo.ai</span>
       </a>
-      <a href="https://huggingface.co/spaces/stabilityai/stable-diffusion" target="_blank" class="card image-card">
-        <div class="card-top"><span class="card-name">Stable Diffusion (HF)</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://huggingface.co/spaces/stabilityai/stable-diffusion" target="_blank" class="card" data-cat="image">
+        <div class="card-top"><span class="card-name">Stable Diffusion (HF)</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Open-source image generation via Hugging Face Spaces. No login required for basic use.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>huggingface.co</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>huggingface.co</span>
       </a>
     </div>
   </section>
 
-  <!-- ════════════ AUDIO AI ════════════ -->
+  <!-- §3 AUDIO AI -->
   <section class="section">
     <div class="section-header">
-      <div class="section-icon icon-audio">🎧</div>
-      <h2 class="section-title">Audio AI</h2>
-      <span class="section-count">6 Tools</span>
+      <span class="section-num">§ 3</span>
+      <h2 class="section-title">
+        <span class="dot" style="background:var(--c-audio)"></span>
+        Audio AI
+      </h2>
+      <span class="section-count">6 tools</span>
     </div>
     <div class="grid">
-      <a href="https://elevenlabs.io" target="_blank" class="card audio-card">
-        <div class="card-top"><span class="card-name">ElevenLabs</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://elevenlabs.io" target="_blank" class="card" data-cat="audio">
+        <div class="card-top"><span class="card-name">ElevenLabs</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Ultra-realistic AI voice generation and text-to-speech. Free tier includes 10,000 characters/month.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>elevenlabs.io</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>elevenlabs.io</span>
       </a>
-      <a href="https://suno.com" target="_blank" class="card audio-card">
-        <div class="card-top"><span class="card-name">Suno AI</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://suno.com" target="_blank" class="card" data-cat="audio">
+        <div class="card-top"><span class="card-name">Suno AI</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Generate full songs with lyrics and music from a text prompt. Free plan gives 50 credits/day.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>suno.com</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>suno.com</span>
       </a>
-      <a href="https://udio.com" target="_blank" class="card audio-card">
-        <div class="card-top"><span class="card-name">Udio</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://udio.com" target="_blank" class="card" data-cat="audio">
+        <div class="card-top"><span class="card-name">Udio</span><span class="card-tag">Free</span></div>
         <p class="card-desc">High-quality AI music generation across all genres. Free tier available with monthly credits.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>udio.com</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>udio.com</span>
       </a>
-      <a href="https://mubert.com" target="_blank" class="card audio-card">
-        <div class="card-top"><span class="card-name">Mubert</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://mubert.com" target="_blank" class="card" data-cat="audio">
+        <div class="card-top"><span class="card-name">Mubert</span><span class="card-tag">Free</span></div>
         <p class="card-desc">AI-generated royalty-free background music for videos, podcasts, and presentations. Free plan available.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>mubert.com</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>mubert.com</span>
       </a>
-      <a href="https://speechify.com" target="_blank" class="card audio-card">
-        <div class="card-top"><span class="card-name">Speechify</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://speechify.com" target="_blank" class="card" data-cat="audio">
+        <div class="card-top"><span class="card-name">Speechify</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Convert text, PDFs, and documents to natural speech. Very useful for students and accessibility.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>speechify.com</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>speechify.com</span>
       </a>
-      <a href="https://www.naturalreaders.com" target="_blank" class="card audio-card">
-        <div class="card-top"><span class="card-name">Natural Reader</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://www.naturalreaders.com" target="_blank" class="card" data-cat="audio">
+        <div class="card-top"><span class="card-name">Natural Reader</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Free text-to-speech tool for reading documents, webpages, and ebooks aloud in natural voices.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>naturalreaders.com</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>naturalreaders.com</span>
       </a>
     </div>
   </section>
 
-  <!-- ════════════ VIDEO AI ════════════ -->
+  <!-- §4 VIDEO AI -->
   <section class="section">
     <div class="section-header">
-      <div class="section-icon icon-video">🎬</div>
-      <h2 class="section-title">Video AI</h2>
-      <span class="section-count">6 Tools</span>
+      <span class="section-num">§ 4</span>
+      <h2 class="section-title">
+        <span class="dot" style="background:var(--c-video)"></span>
+        Video AI
+      </h2>
+      <span class="section-count">8 tools</span>
     </div>
     <div class="grid">
-      <a href="https://www.capcut.com" target="_blank" class="card video-card">
-        <div class="card-top"><span class="card-name">CapCut</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://www.capcut.com" target="_blank" class="card" data-cat="video">
+        <div class="card-top"><span class="card-name">CapCut</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Popular AI video editor with auto-subtitles, background removal, and smart templates. Fully free.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>capcut.com</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>capcut.com</span>
       </a>
-      <a href="https://www.kling.ai" target="_blank" class="card video-card">
-        <div class="card-top"><span class="card-name">Kling</span><span class="card-tag tag-free">Free</span></div>
-        <p class="card-desc">Generating and editing highly realistic videos from text descriptions, images, or reference videos.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>kling.ai</span>
+      <a href="https://www.kling.ai" target="_blank" class="card" data-cat="video">
+        <div class="card-top"><span class="card-name">Kling</span><span class="card-tag">Free</span></div>
+        <p class="card-desc">Generate and edit highly realistic videos from text descriptions, images, or reference videos.</p>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>kling.ai</span>
       </a>
-      <a href="https://www.higgsfield.ai" target="_blank" class="card video-card">
-        <div class="card-top"><span class="card-name">Higgsfield</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://www.higgsfield.ai" target="_blank" class="card" data-cat="video">
+        <div class="card-top"><span class="card-name">Higgsfield</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Generate and edit cinematic-quality videos, images, and marketing content.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>higgsfield.ai</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>higgsfield.ai</span>
       </a>
-      <a href="https://app.clipchamp.com" target="_blank" class="card video-card">
-        <div class="card-top"><span class="card-name">Microsoft Clipchamp</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://app.clipchamp.com" target="_blank" class="card" data-cat="video">
+        <div class="card-top"><span class="card-name">Microsoft Clipchamp</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Browser-based AI video editor with auto-captions, text-to-speech, and templates. Free with Microsoft account.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>clipchamp.com</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>clipchamp.com</span>
       </a>
-      <a href="https://invideo.io" target="_blank" class="card video-card">
-        <div class="card-top"><span class="card-name">InVideo AI</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://invideo.io" target="_blank" class="card" data-cat="video">
+        <div class="card-top"><span class="card-name">InVideo AI</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Turn text prompts into full videos with voiceover, stock footage, and subtitles. Free tier available.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>invideo.io</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>invideo.io</span>
       </a>
-      <a href="https://www.synthesia.io" target="_blank" class="card video-card">
-        <div class="card-top"><span class="card-name">Synthesia</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://www.synthesia.io" target="_blank" class="card" data-cat="video">
+        <div class="card-top"><span class="card-name">Synthesia</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Create AI avatar presenter videos from text. Free plan available with limited monthly video minutes.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>synthesia.io</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>synthesia.io</span>
       </a>
-      <a href="https://runwayml.com" target="_blank" class="card video-card">
-        <div class="card-top"><span class="card-name">Runway ML</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://runwayml.com" target="_blank" class="card" data-cat="video">
+        <div class="card-top"><span class="card-name">Runway ML</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Professional AI video generation and editing tools. Free tier includes limited generation credits.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>runwayml.com</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>runwayml.com</span>
       </a>
-      <a href="https://pictory.ai" target="_blank" class="card video-card">
-        <div class="card-top"><span class="card-name">Pictory AI</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://pictory.ai" target="_blank" class="card" data-cat="video">
+        <div class="card-top"><span class="card-name">Pictory AI</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Convert blog posts, scripts, or articles into short videos automatically. Free trial available.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>pictory.ai</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>pictory.ai</span>
       </a>
     </div>
   </section>
 
-  <!-- ════════════ RESEARCH AI ════════════ -->
+  <!-- §5 RESEARCH AI -->
   <section class="section">
     <div class="section-header">
-      <div class="section-icon" style="background: rgba(32,178,170,.15);">🔬</div>
-      <h2 class="section-title">Research AI</h2>
+      <span class="section-num">§ 5</span>
+      <h2 class="section-title">
+        <span class="dot" style="background:var(--c-qual)"></span>
+        Research AI
+      </h2>
     </div>
 
-    <!-- ── Qualitative AI ── -->
-    <div style="margin-bottom: 12px;">
-      <div style="display:flex; align-items:center; gap:10px; margin-bottom:18px;">
-        <div style="width:6px; height:28px; background:#20b2aa; border-radius:3px;"></div>
-        <h3 style="font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--cream);">Qualitative AI</h3>
-        <span style="font-size:11px; color:var(--muted); font-weight:500; margin-left:auto;">6 Tools</span>
+    <!-- 5A QUALITATIVE -->
+    <div class="sub-section">
+      <div class="sub-header">
+        <div class="sub-bar" style="background:var(--c-qual)"></div>
+        <h3 class="sub-title">Qualitative AI Tools</h3>
+        <span class="sub-count">6 tools</span>
       </div>
-      <div class="grid" style="margin-bottom:40px;">
-        <a href="https://www.atlas.ti.com" target="_blank" class="card">
-          <div class="card-top"><span class="card-name">ATLAS.ti</span><span class="card-tag tag-free">Free Trial</span></div>
-          <p class="card-desc">Leading qualitative data analysis software with AI-assisted coding, theme detection, and visualizations.</p>
-          <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>atlas.ti.com</span>
+      <div class="grid">
+        <a href="https://www.atlas.ti.com" target="_blank" class="card" data-cat="qual">
+          <div class="card-top"><span class="card-name">ATLAS.ti</span><span class="card-tag trial">Trial</span></div>
+          <p class="card-desc">Leading QDA software with AI-assisted coding, theme detection, and visualizations.</p>
+          <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>atlas.ti.com</span>
         </a>
-        <a href="https://www.maxqda.com" target="_blank" class="card">
-          <div class="card-top"><span class="card-name">MAXQDA</span><span class="card-tag tag-free">Free Trial</span></div>
-          <p class="card-desc">AI-powered qualitative and mixed-methods research tool for coding interviews, surveys, and documents.</p>
-          <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>maxqda.com</span>
+        <a href="https://www.maxqda.com" target="_blank" class="card" data-cat="qual">
+          <div class="card-top"><span class="card-name">MAXQDA</span><span class="card-tag trial">Trial</span></div>
+          <p class="card-desc">AI-powered qualitative and mixed-methods tool for coding interviews, surveys, and documents.</p>
+          <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>maxqda.com</span>
         </a>
-        <a href="https://notebooklm.google.com" target="_blank" class="card">
-          <div class="card-top"><span class="card-name">Google NotebookLM</span><span class="card-tag tag-free">Free</span></div>
-          <p class="card-desc">Upload research papers, interviews, and notes — AI summarizes, finds themes, and answers questions from your sources.</p>
-          <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>notebooklm.google.com</span>
+        <a href="https://notebooklm.google.com" target="_blank" class="card" data-cat="qual">
+          <div class="card-top"><span class="card-name">Google NotebookLM</span><span class="card-tag">Free</span></div>
+          <p class="card-desc">Upload papers and notes — AI summarizes, finds themes, and answers questions from your sources.</p>
+          <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>notebooklm.google.com</span>
         </a>
-        <a href="https://www.perplexity.ai" target="_blank" class="card">
-          <div class="card-top"><span class="card-name">Perplexity AI</span><span class="card-tag tag-free">Free</span></div>
-          <p class="card-desc">AI research assistant with cited sources. Ideal for literature reviews, conceptual exploration, and qualitative inquiry.</p>
-          <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>perplexity.ai</span>
+        <a href="https://www.perplexity.ai" target="_blank" class="card" data-cat="qual">
+          <div class="card-top"><span class="card-name">Perplexity AI</span><span class="card-tag">Free</span></div>
+          <p class="card-desc">AI research assistant with cited sources. Ideal for literature reviews and conceptual exploration.</p>
+          <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>perplexity.ai</span>
         </a>
-        <a href="https://elicit.com" target="_blank" class="card">
-          <div class="card-top"><span class="card-name">Elicit</span><span class="card-tag tag-free">Free</span></div>
-          <p class="card-desc">AI research assistant that finds, summarizes, and extracts key findings from academic papers automatically.</p>
-          <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>elicit.com</span>
+        <a href="https://elicit.com" target="_blank" class="card" data-cat="qual">
+          <div class="card-top"><span class="card-name">Elicit</span><span class="card-tag">Free</span></div>
+          <p class="card-desc">AI research assistant that finds, summarizes, and extracts key findings from academic papers.</p>
+          <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>elicit.com</span>
         </a>
-        <a href="https://www.connectedpapers.com" target="_blank" class="card">
-          <div class="card-top"><span class="card-name">Connected Papers</span><span class="card-tag tag-free">Free</span></div>
-          <p class="card-desc">Visualize the relationship between research papers. Great for mapping literature and finding key sources.</p>
-          <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>connectedpapers.com</span>
+        <a href="https://www.connectedpapers.com" target="_blank" class="card" data-cat="qual">
+          <div class="card-top"><span class="card-name">Connected Papers</span><span class="card-tag">Free</span></div>
+          <p class="card-desc">Visualize the relationship between research papers — great for mapping literature and finding key sources.</p>
+          <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>connectedpapers.com</span>
         </a>
       </div>
 
-      <!-- ══ QUALITATIVE FLOWCHART ══ -->
-      <div class="flowchart-wrapper qual">
-        <div class="flowchart-title">
-          <span>Qualitative Research Process</span>
-          <span class="fc-badge">Step-by-Step with Free AI Tools</span>
+      <!-- QUAL FLOWCHART -->
+      <div class="flowchart qual" style="margin-top:14px;">
+        <div class="fc-head">
+          <span class="fc-head-label">Workflow</span>
+          <span class="fc-head-title">Qualitative Research Process — Step-by-Step</span>
+          <span class="fc-head-badge">11 Steps</span>
         </div>
-        <div class="fc-steps">
+        <div class="fc-body">
 
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">1</div>
-              <div class="fc-content">
-                <div class="fc-label">Research Problem / Topic Identification</div>
-                <div class="fc-sub">Define the phenomenon, context, and significance</div>
-                <div class="fc-tools">
-                  <a href="https://claude.ai" target="_blank" class="fc-tool">✦ Claude</a>
-                  <a href="https://chat.openai.com" target="_blank" class="fc-tool">✦ ChatGPT</a>
-                  <a href="https://www.perplexity.ai" target="_blank" class="fc-tool">✦ Perplexity AI</a>
-                </div>
-              </div>
-            </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">1</div><div class="fc-line"></div></div>
+            <div class="fc-node"><div class="fc-label">Research Problem / Topic Identification</div><div class="fc-sub">Define the phenomenon, context, and significance</div><div class="fc-tools"><a href="https://claude.ai" target="_blank" class="fc-tool">Claude</a><a href="https://chat.openai.com" target="_blank" class="fc-tool">ChatGPT</a><a href="https://www.perplexity.ai" target="_blank" class="fc-tool">Perplexity AI</a></div></div>
+          </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">2</div><div class="fc-line"></div></div>
+            <div class="fc-node"><div class="fc-label">Literature Review &amp; Theoretical Framing</div><div class="fc-sub">Survey existing studies; establish conceptual framework</div><div class="fc-tools"><a href="https://elicit.com" target="_blank" class="fc-tool">Elicit</a><a href="https://www.connectedpapers.com" target="_blank" class="fc-tool">Connected Papers</a><a href="https://notebooklm.google.com" target="_blank" class="fc-tool">NotebookLM</a><a href="https://www.perplexity.ai" target="_blank" class="fc-tool">Perplexity AI</a></div></div>
+          </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">3</div><div class="fc-line"></div></div>
+            <div class="fc-node"><div class="fc-label">Research Questions Formulation</div><div class="fc-sub">Craft open-ended, exploratory questions aligned with the paradigm</div><div class="fc-tools"><a href="https://claude.ai" target="_blank" class="fc-tool">Claude</a><a href="https://chat.openai.com" target="_blank" class="fc-tool">ChatGPT</a><a href="https://gemini.google.com" target="_blank" class="fc-tool">Google Gemini</a></div></div>
+          </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">4</div><div class="fc-line"></div></div>
+            <div class="fc-node"><div class="fc-label">Research Design Selection</div><div class="fc-sub">Case Study · Ethnography · Phenomenology · Grounded Theory</div><div class="fc-tools"><a href="https://claude.ai" target="_blank" class="fc-tool">Claude</a><a href="https://copilot.microsoft.com" target="_blank" class="fc-tool">MS Copilot</a><a href="https://chat.openai.com" target="_blank" class="fc-tool">ChatGPT</a></div></div>
+          </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">5</div><div class="fc-line"></div></div>
+            <div class="fc-node"><div class="fc-label">Sampling Strategy</div><div class="fc-sub">Purposive · Snowball · Theoretical Sampling</div><div class="fc-tools"><a href="https://claude.ai" target="_blank" class="fc-tool">Claude</a><a href="https://chat.openai.com" target="_blank" class="fc-tool">ChatGPT</a><a href="https://gemini.google.com" target="_blank" class="fc-tool">Google Gemini</a></div></div>
+          </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">6</div><div class="fc-line"></div></div>
+            <div class="fc-node"><div class="fc-label">Data Collection</div><div class="fc-sub">Interviews · Focus Groups · Observation · Documents</div><div class="fc-tools"><a href="https://otter.ai" target="_blank" class="fc-tool">Otter.ai</a><a href="https://notebooklm.google.com" target="_blank" class="fc-tool">NotebookLM</a><a href="https://claude.ai" target="_blank" class="fc-tool">Claude</a></div></div>
+          </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">7</div><div class="fc-line"></div></div>
+            <div class="fc-node"><div class="fc-label">Data Organization &amp; Transcription</div><div class="fc-sub">Convert audio/video recordings to structured text</div><div class="fc-tools"><a href="https://otter.ai" target="_blank" class="fc-tool">Otter.ai</a><a href="https://notebooklm.google.com" target="_blank" class="fc-tool">NotebookLM</a></div></div>
+          </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">8</div><div class="fc-line"></div></div>
+            <div class="fc-node"><div class="fc-label">Data Analysis</div><div class="fc-sub">Coding → Categorization → Theme Development</div><div class="fc-tools"><a href="https://www.atlas.ti.com" target="_blank" class="fc-tool">ATLAS.ti</a><a href="https://www.maxqda.com" target="_blank" class="fc-tool">MAXQDA</a><a href="https://claude.ai" target="_blank" class="fc-tool">Claude</a><a href="https://notebooklm.google.com" target="_blank" class="fc-tool">NotebookLM</a></div></div>
+          </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">9</div><div class="fc-line"></div></div>
+            <div class="fc-node"><div class="fc-label">Interpretation of Findings</div><div class="fc-sub">Relate themes to theory, context, and participants' meanings</div><div class="fc-tools"><a href="https://claude.ai" target="_blank" class="fc-tool">Claude</a><a href="https://chat.openai.com" target="_blank" class="fc-tool">ChatGPT</a><a href="https://notebooklm.google.com" target="_blank" class="fc-tool">NotebookLM</a></div></div>
+          </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">10</div><div class="fc-line"></div></div>
+            <div class="fc-node"><div class="fc-label">Validation / Trustworthiness</div><div class="fc-sub">Credibility · Transferability · Dependability · Confirmability</div><div class="fc-tools"><a href="https://claude.ai" target="_blank" class="fc-tool">Claude</a><a href="https://www.maxqda.com" target="_blank" class="fc-tool">MAXQDA</a><a href="https://www.atlas.ti.com" target="_blank" class="fc-tool">ATLAS.ti</a></div></div>
+          </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">11</div></div>
+            <div class="fc-node"><div class="fc-label">Conclusion &amp; Report Writing</div><div class="fc-sub">Synthesize findings; discuss implications and limitations</div><div class="fc-tools"><a href="https://claude.ai" target="_blank" class="fc-tool">Claude</a><a href="https://chat.openai.com" target="_blank" class="fc-tool">ChatGPT</a><a href="https://copilot.microsoft.com" target="_blank" class="fc-tool">MS Copilot</a><a href="https://gemini.google.com" target="_blank" class="fc-tool">Google Gemini</a></div></div>
           </div>
 
-          <div class="fc-arrow"><svg width="16" height="28" viewBox="0 0 16 28" fill="none" stroke-width="1.5"><line x1="8" y1="0" x2="8" y2="20"/><polyline points="3,15 8,22 13,15"/></svg></div>
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">2</div>
-              <div class="fc-content">
-                <div class="fc-label">Literature Review &amp; Theoretical Framing</div>
-                <div class="fc-sub">Survey existing studies; establish conceptual framework</div>
-                <div class="fc-tools">
-                  <a href="https://elicit.com" target="_blank" class="fc-tool">✦ Elicit</a>
-                  <a href="https://www.connectedpapers.com" target="_blank" class="fc-tool">✦ Connected Papers</a>
-                  <a href="https://notebooklm.google.com" target="_blank" class="fc-tool">✦ NotebookLM</a>
-                  <a href="https://www.perplexity.ai" target="_blank" class="fc-tool">✦ Perplexity AI</a>
-                </div>
-              </div>
-            </div>
+          <div class="fc-iter-note">
+            <span>↻</span>
+            <span><strong>Iterative note:</strong> Qualitative research is inherently cyclical — findings at any stage may prompt revisiting earlier steps such as refining research questions, expanding sampling, or collecting additional data.</span>
           </div>
-
-          <div class="fc-arrow"><svg width="16" height="28" viewBox="0 0 16 28" fill="none" stroke-width="1.5"><line x1="8" y1="0" x2="8" y2="20"/><polyline points="3,15 8,22 13,15"/></svg></div>
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">3</div>
-              <div class="fc-content">
-                <div class="fc-label">Research Questions Formulation</div>
-                <div class="fc-sub">Craft open-ended, exploratory questions aligned with the paradigm</div>
-                <div class="fc-tools">
-                  <a href="https://claude.ai" target="_blank" class="fc-tool">✦ Claude</a>
-                  <a href="https://chat.openai.com" target="_blank" class="fc-tool">✦ ChatGPT</a>
-                  <a href="https://gemini.google.com" target="_blank" class="fc-tool">✦ Google Gemini</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="fc-arrow"><svg width="16" height="28" viewBox="0 0 16 28" fill="none" stroke-width="1.5"><line x1="8" y1="0" x2="8" y2="20"/><polyline points="3,15 8,22 13,15"/></svg></div>
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">4</div>
-              <div class="fc-content">
-                <div class="fc-label">Research Design Selection</div>
-                <div class="fc-sub">Case Study · Ethnography · Phenomenology · Grounded Theory</div>
-                <div class="fc-tools">
-                  <a href="https://claude.ai" target="_blank" class="fc-tool">✦ Claude</a>
-                  <a href="https://copilot.microsoft.com" target="_blank" class="fc-tool">✦ MS Copilot</a>
-                  <a href="https://chat.openai.com" target="_blank" class="fc-tool">✦ ChatGPT</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="fc-arrow"><svg width="16" height="28" viewBox="0 0 16 28" fill="none" stroke-width="1.5"><line x1="8" y1="0" x2="8" y2="20"/><polyline points="3,15 8,22 13,15"/></svg></div>
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">5</div>
-              <div class="fc-content">
-                <div class="fc-label">Sampling Strategy</div>
-                <div class="fc-sub">Purposive · Snowball · Theoretical Sampling</div>
-                <div class="fc-tools">
-                  <a href="https://claude.ai" target="_blank" class="fc-tool">✦ Claude</a>
-                  <a href="https://chat.openai.com" target="_blank" class="fc-tool">✦ ChatGPT</a>
-                  <a href="https://gemini.google.com" target="_blank" class="fc-tool">✦ Google Gemini</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="fc-arrow"><svg width="16" height="28" viewBox="0 0 16 28" fill="none" stroke-width="1.5"><line x1="8" y1="0" x2="8" y2="20"/><polyline points="3,15 8,22 13,15"/></svg></div>
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">6</div>
-              <div class="fc-content">
-                <div class="fc-label">Data Collection</div>
-                <div class="fc-sub">Interviews · Focus Groups · Observation · Documents</div>
-                <div class="fc-tools">
-                  <a href="https://otter.ai" target="_blank" class="fc-tool">✦ Otter.ai</a>
-                  <a href="https://trint.com" target="_blank" class="fc-tool">✦ Trint</a>
-                  <a href="https://notebooklm.google.com" target="_blank" class="fc-tool">✦ NotebookLM</a>
-                  <a href="https://claude.ai" target="_blank" class="fc-tool">✦ Claude</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="fc-arrow"><svg width="16" height="28" viewBox="0 0 16 28" fill="none" stroke-width="1.5"><line x1="8" y1="0" x2="8" y2="20"/><polyline points="3,15 8,22 13,15"/></svg></div>
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">7</div>
-              <div class="fc-content">
-                <div class="fc-label">Data Organization &amp; Transcription</div>
-                <div class="fc-sub">Convert audio/video recordings to structured text</div>
-                <div class="fc-tools">
-                  <a href="https://otter.ai" target="_blank" class="fc-tool">✦ Otter.ai (Free)</a>
-                  <a href="https://whisper.openai.com" target="_blank" class="fc-tool">✦ Whisper (OpenAI)</a>
-                  <a href="https://notebooklm.google.com" target="_blank" class="fc-tool">✦ NotebookLM</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="fc-arrow"><svg width="16" height="28" viewBox="0 0 16 28" fill="none" stroke-width="1.5"><line x1="8" y1="0" x2="8" y2="20"/><polyline points="3,15 8,22 13,15"/></svg></div>
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">8</div>
-              <div class="fc-content">
-                <div class="fc-label">Data Analysis</div>
-                <div class="fc-sub">Coding → Categorization → Theme Development</div>
-                <div class="fc-tools">
-                  <a href="https://www.atlas.ti.com" target="_blank" class="fc-tool">✦ ATLAS.ti</a>
-                  <a href="https://www.maxqda.com" target="_blank" class="fc-tool">✦ MAXQDA</a>
-                  <a href="https://claude.ai" target="_blank" class="fc-tool">✦ Claude</a>
-                  <a href="https://notebooklm.google.com" target="_blank" class="fc-tool">✦ NotebookLM</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="fc-arrow"><svg width="16" height="28" viewBox="0 0 16 28" fill="none" stroke-width="1.5"><line x1="8" y1="0" x2="8" y2="20"/><polyline points="3,15 8,22 13,15"/></svg></div>
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">9</div>
-              <div class="fc-content">
-                <div class="fc-label">Interpretation of Findings</div>
-                <div class="fc-sub">Relate themes to theory, context, and participants' meanings</div>
-                <div class="fc-tools">
-                  <a href="https://claude.ai" target="_blank" class="fc-tool">✦ Claude</a>
-                  <a href="https://chat.openai.com" target="_blank" class="fc-tool">✦ ChatGPT</a>
-                  <a href="https://notebooklm.google.com" target="_blank" class="fc-tool">✦ NotebookLM</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="fc-arrow"><svg width="16" height="28" viewBox="0 0 16 28" fill="none" stroke-width="1.5"><line x1="8" y1="0" x2="8" y2="20"/><polyline points="3,15 8,22 13,15"/></svg></div>
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">10</div>
-              <div class="fc-content">
-                <div class="fc-label">Validation / Trustworthiness</div>
-                <div class="fc-sub">Credibility · Transferability · Dependability · Confirmability</div>
-                <div class="fc-tools">
-                  <a href="https://claude.ai" target="_blank" class="fc-tool">✦ Claude</a>
-                  <a href="https://www.maxqda.com" target="_blank" class="fc-tool">✦ MAXQDA</a>
-                  <a href="https://www.atlas.ti.com" target="_blank" class="fc-tool">✦ ATLAS.ti</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="fc-arrow"><svg width="16" height="28" viewBox="0 0 16 28" fill="none" stroke-width="1.5"><line x1="8" y1="0" x2="8" y2="20"/><polyline points="3,15 8,22 13,15"/></svg></div>
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">11</div>
-              <div class="fc-content">
-                <div class="fc-label">Conclusion &amp; Report Writing</div>
-                <div class="fc-sub">Synthesize findings; discuss implications and limitations</div>
-                <div class="fc-tools">
-                  <a href="https://claude.ai" target="_blank" class="fc-tool">✦ Claude</a>
-                  <a href="https://chat.openai.com" target="_blank" class="fc-tool">✦ ChatGPT</a>
-                  <a href="https://copilot.microsoft.com" target="_blank" class="fc-tool">✦ MS Copilot</a>
-                  <a href="https://gemini.google.com" target="_blank" class="fc-tool">✦ Google Gemini</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="fc-loop-note">
-            <span style="font-size:16px;">🔄</span>
-            <span><strong>Optional Iteration:</strong> Qualitative research is inherently iterative — findings at any stage may prompt you to revisit earlier steps such as refining research questions, expanding sampling, or collecting additional data.</span>
-          </div>
-
         </div>
       </div>
     </div>
 
-    <!-- ── Divider ── -->
-    <div style="border-top: 1px dashed var(--border); margin-bottom: 32px;"></div>
+    <hr class="sub-divider">
 
-    <!-- ── Quantitative AI ── -->
-    <div>
-      <div style="display:flex; align-items:center; gap:10px; margin-bottom:18px;">
-        <div style="width:6px; height:28px; background:#f4a636; border-radius:3px;"></div>
-        <h3 style="font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--cream);">Quantitative AI</h3>
-        <span style="font-size:11px; color:var(--muted); font-weight:500; margin-left:auto;">6 Tools</span>
+    <!-- 5B QUANTITATIVE -->
+    <div class="sub-section">
+      <div class="sub-header">
+        <div class="sub-bar" style="background:var(--c-quant)"></div>
+        <h3 class="sub-title">Quantitative AI Tools</h3>
+        <span class="sub-count">6 tools</span>
       </div>
-      <div class="grid" style="margin-bottom: 40px;">
-        <a href="https://julius.ai" target="_blank" class="card">
-          <div class="card-top"><span class="card-name">Julius AI</span><span class="card-tag tag-free">Free</span></div>
-          <p class="card-desc">Upload your dataset and chat with it — AI performs statistical analysis, regression, and generates charts instantly.</p>
-          <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>julius.ai</span>
+      <div class="grid">
+        <a href="https://julius.ai" target="_blank" class="card" data-cat="quant">
+          <div class="card-top"><span class="card-name">Julius AI</span><span class="card-tag">Free</span></div>
+          <p class="card-desc">Upload your dataset and chat with it — AI performs statistical analysis, regression, and generates charts.</p>
+          <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>julius.ai</span>
         </a>
-        <a href="https://www.akkio.com" target="_blank" class="card">
-          <div class="card-top"><span class="card-name">Akkio</span><span class="card-tag tag-free">Free Trial</span></div>
-          <p class="card-desc">No-code AI platform for predictive analytics and data modeling — ideal for survey and structured data analysis.</p>
-          <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>akkio.com</span>
+        <a href="https://www.akkio.com" target="_blank" class="card" data-cat="quant">
+          <div class="card-top"><span class="card-name">Akkio</span><span class="card-tag trial">Trial</span></div>
+          <p class="card-desc">No-code AI platform for predictive analytics and data modeling — ideal for survey and structured data.</p>
+          <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>akkio.com</span>
         </a>
-        <a href="https://www.obviously.ai" target="_blank" class="card">
-          <div class="card-top"><span class="card-name">Obviously AI</span><span class="card-tag tag-free">Free Trial</span></div>
-          <p class="card-desc">Run predictive models and statistical analysis on CSV data with plain English — no coding or SPSS required.</p>
-          <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>obviously.ai</span>
+        <a href="https://www.obviously.ai" target="_blank" class="card" data-cat="quant">
+          <div class="card-top"><span class="card-name">Obviously AI</span><span class="card-tag trial">Trial</span></div>
+          <p class="card-desc">Predictive models and statistical analysis on CSV data with plain English — no coding or SPSS required.</p>
+          <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>obviously.ai</span>
         </a>
-        <a href="https://colab.research.google.com" target="_blank" class="card">
-          <div class="card-top"><span class="card-name">Google Colab + AI</span><span class="card-tag tag-free">Free</span></div>
+        <a href="https://colab.research.google.com" target="_blank" class="card" data-cat="quant">
+          <div class="card-top"><span class="card-name">Google Colab + AI</span><span class="card-tag">Free</span></div>
           <p class="card-desc">Free cloud notebook for Python-based statistical computing, data visualization, and ML model building.</p>
-          <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>colab.research.google.com</span>
+          <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>colab.research.google.com</span>
         </a>
-        <a href="https://www.statology.org/statology-study" target="_blank" class="card">
-          <div class="card-top"><span class="card-name">Statology Study</span><span class="card-tag tag-free">Free</span></div>
-          <p class="card-desc">AI-guided statistics learning and problem solving — covers hypothesis testing, regression, ANOVA, and more.</p>
-          <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>statology.org</span>
+        <a href="https://www.statology.org/statology-study" target="_blank" class="card" data-cat="quant">
+          <div class="card-top"><span class="card-name">Statology Study</span><span class="card-tag">Free</span></div>
+          <p class="card-desc">AI-guided statistics learning — covers hypothesis testing, regression, ANOVA, and more.</p>
+          <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>statology.org</span>
         </a>
-        <a href="https://datatab.net" target="_blank" class="card">
-          <div class="card-top"><span class="card-name">DATAtab</span><span class="card-tag tag-free">Free</span></div>
-          <p class="card-desc">Free online statistics tool — runs t-tests, correlation, regression, and chi-square with plain-language result explanations.</p>
-          <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>datatab.net</span>
+        <a href="https://datatab.net" target="_blank" class="card" data-cat="quant">
+          <div class="card-top"><span class="card-name">DATAtab</span><span class="card-tag">Free</span></div>
+          <p class="card-desc">Free online statistics — runs t-tests, correlation, regression, chi-square with plain-language explanations.</p>
+          <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>datatab.net</span>
         </a>
       </div>
 
-      <!-- ══ QUANTITATIVE FLOWCHART ══ -->
-      <div class="flowchart-wrapper quant">
-        <div class="flowchart-title">
-          <span>Quantitative Research Process</span>
-          <span class="fc-badge">Step-by-Step with Free AI Tools</span>
+      <!-- QUANT FLOWCHART -->
+      <div class="flowchart quant" style="margin-top:14px;">
+        <div class="fc-head">
+          <span class="fc-head-label">Workflow</span>
+          <span class="fc-head-title">Quantitative Research Process — Step-by-Step</span>
+          <span class="fc-head-badge">13 Steps</span>
         </div>
-        <div class="fc-steps">
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">1</div>
-              <div class="fc-content">
-                <div class="fc-label">Research Problem Identification</div>
-                <div class="fc-sub">Define a measurable, testable problem within a specific domain</div>
-                <div class="fc-tools">
-                  <a href="https://claude.ai" target="_blank" class="fc-tool">✦ Claude</a>
-                  <a href="https://chat.openai.com" target="_blank" class="fc-tool">✦ ChatGPT</a>
-                  <a href="https://www.perplexity.ai" target="_blank" class="fc-tool">✦ Perplexity AI</a>
-                </div>
-              </div>
-            </div>
+        <div class="fc-body">
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">1</div><div class="fc-line"></div></div>
+            <div class="fc-node"><div class="fc-label">Research Problem Identification</div><div class="fc-sub">Define a measurable, testable problem within a specific domain</div><div class="fc-tools"><a href="https://claude.ai" target="_blank" class="fc-tool">Claude</a><a href="https://chat.openai.com" target="_blank" class="fc-tool">ChatGPT</a><a href="https://www.perplexity.ai" target="_blank" class="fc-tool">Perplexity AI</a></div></div>
           </div>
-
-          <div class="fc-arrow"><svg width="16" height="28" viewBox="0 0 16 28" fill="none" stroke-width="1.5"><line x1="8" y1="0" x2="8" y2="20"/><polyline points="3,15 8,22 13,15"/></svg></div>
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">2</div>
-              <div class="fc-content">
-                <div class="fc-label">Literature Review</div>
-                <div class="fc-sub">Identify gaps; review empirical studies and prior findings</div>
-                <div class="fc-tools">
-                  <a href="https://elicit.com" target="_blank" class="fc-tool">✦ Elicit</a>
-                  <a href="https://www.connectedpapers.com" target="_blank" class="fc-tool">✦ Connected Papers</a>
-                  <a href="https://notebooklm.google.com" target="_blank" class="fc-tool">✦ NotebookLM</a>
-                  <a href="https://www.perplexity.ai" target="_blank" class="fc-tool">✦ Perplexity AI</a>
-                </div>
-              </div>
-            </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">2</div><div class="fc-line"></div></div>
+            <div class="fc-node"><div class="fc-label">Literature Review</div><div class="fc-sub">Identify gaps; review empirical studies and prior findings</div><div class="fc-tools"><a href="https://elicit.com" target="_blank" class="fc-tool">Elicit</a><a href="https://www.connectedpapers.com" target="_blank" class="fc-tool">Connected Papers</a><a href="https://notebooklm.google.com" target="_blank" class="fc-tool">NotebookLM</a><a href="https://www.perplexity.ai" target="_blank" class="fc-tool">Perplexity AI</a></div></div>
           </div>
-
-          <div class="fc-arrow"><svg width="16" height="28" viewBox="0 0 16 28" fill="none" stroke-width="1.5"><line x1="8" y1="0" x2="8" y2="20"/><polyline points="3,15 8,22 13,15"/></svg></div>
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">3</div>
-              <div class="fc-content">
-                <div class="fc-label">Theoretical Framework</div>
-                <div class="fc-sub">Select theories that explain the relationships between variables</div>
-                <div class="fc-tools">
-                  <a href="https://claude.ai" target="_blank" class="fc-tool">✦ Claude</a>
-                  <a href="https://chat.openai.com" target="_blank" class="fc-tool">✦ ChatGPT</a>
-                  <a href="https://notebooklm.google.com" target="_blank" class="fc-tool">✦ NotebookLM</a>
-                </div>
-              </div>
-            </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">3</div><div class="fc-line"></div></div>
+            <div class="fc-node"><div class="fc-label">Theoretical Framework</div><div class="fc-sub">Select theories that explain the relationships between variables</div><div class="fc-tools"><a href="https://claude.ai" target="_blank" class="fc-tool">Claude</a><a href="https://chat.openai.com" target="_blank" class="fc-tool">ChatGPT</a><a href="https://notebooklm.google.com" target="_blank" class="fc-tool">NotebookLM</a></div></div>
           </div>
-
-          <div class="fc-arrow"><svg width="16" height="28" viewBox="0 0 16 28" fill="none" stroke-width="1.5"><line x1="8" y1="0" x2="8" y2="20"/><polyline points="3,15 8,22 13,15"/></svg></div>
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">4</div>
-              <div class="fc-content">
-                <div class="fc-label">Formulation of Hypothesis / Research Questions</div>
-                <div class="fc-sub">State directional or null hypotheses; specify variables</div>
-                <div class="fc-tools">
-                  <a href="https://claude.ai" target="_blank" class="fc-tool">✦ Claude</a>
-                  <a href="https://chat.openai.com" target="_blank" class="fc-tool">✦ ChatGPT</a>
-                  <a href="https://gemini.google.com" target="_blank" class="fc-tool">✦ Google Gemini</a>
-                </div>
-              </div>
-            </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">4</div><div class="fc-line"></div></div>
+            <div class="fc-node"><div class="fc-label">Formulation of Hypotheses / Research Questions</div><div class="fc-sub">State directional or null hypotheses; specify variables</div><div class="fc-tools"><a href="https://claude.ai" target="_blank" class="fc-tool">Claude</a><a href="https://chat.openai.com" target="_blank" class="fc-tool">ChatGPT</a><a href="https://gemini.google.com" target="_blank" class="fc-tool">Google Gemini</a></div></div>
           </div>
-
-          <div class="fc-arrow"><svg width="16" height="28" viewBox="0 0 16 28" fill="none" stroke-width="1.5"><line x1="8" y1="0" x2="8" y2="20"/><polyline points="3,15 8,22 13,15"/></svg></div>
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">5</div>
-              <div class="fc-content">
-                <div class="fc-label">Research Design Selection</div>
-                <div class="fc-sub">Experimental · Survey · Correlational · Causal-Comparative</div>
-                <div class="fc-tools">
-                  <a href="https://claude.ai" target="_blank" class="fc-tool">✦ Claude</a>
-                  <a href="https://copilot.microsoft.com" target="_blank" class="fc-tool">✦ MS Copilot</a>
-                  <a href="https://chat.openai.com" target="_blank" class="fc-tool">✦ ChatGPT</a>
-                </div>
-              </div>
-            </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">5</div><div class="fc-line"></div></div>
+            <div class="fc-node"><div class="fc-label">Research Design Selection</div><div class="fc-sub">Experimental · Survey · Correlational · Causal-Comparative</div><div class="fc-tools"><a href="https://claude.ai" target="_blank" class="fc-tool">Claude</a><a href="https://copilot.microsoft.com" target="_blank" class="fc-tool">MS Copilot</a><a href="https://chat.openai.com" target="_blank" class="fc-tool">ChatGPT</a></div></div>
           </div>
-
-          <div class="fc-arrow"><svg width="16" height="28" viewBox="0 0 16 28" fill="none" stroke-width="1.5"><line x1="8" y1="0" x2="8" y2="20"/><polyline points="3,15 8,22 13,15"/></svg></div>
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">6</div>
-              <div class="fc-content">
-                <div class="fc-label">Operationalization of Variables</div>
-                <div class="fc-sub">Define independent, dependent, and control variables with measurable indicators</div>
-                <div class="fc-tools">
-                  <a href="https://claude.ai" target="_blank" class="fc-tool">✦ Claude</a>
-                  <a href="https://chat.openai.com" target="_blank" class="fc-tool">✦ ChatGPT</a>
-                  <a href="https://datatab.net" target="_blank" class="fc-tool">✦ DATAtab</a>
-                </div>
-              </div>
-            </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">6</div><div class="fc-line"></div></div>
+            <div class="fc-node"><div class="fc-label">Operationalization of Variables</div><div class="fc-sub">Define independent, dependent, and control variables with measurable indicators</div><div class="fc-tools"><a href="https://claude.ai" target="_blank" class="fc-tool">Claude</a><a href="https://chat.openai.com" target="_blank" class="fc-tool">ChatGPT</a><a href="https://datatab.net" target="_blank" class="fc-tool">DATAtab</a></div></div>
           </div>
-
-          <div class="fc-arrow"><svg width="16" height="28" viewBox="0 0 16 28" fill="none" stroke-width="1.5"><line x1="8" y1="0" x2="8" y2="20"/><polyline points="3,15 8,22 13,15"/></svg></div>
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">7</div>
-              <div class="fc-content">
-                <div class="fc-label">Sampling Design</div>
-                <div class="fc-sub">Probability Sampling: random, stratified, cluster, systematic</div>
-                <div class="fc-tools">
-                  <a href="https://claude.ai" target="_blank" class="fc-tool">✦ Claude</a>
-                  <a href="https://chat.openai.com" target="_blank" class="fc-tool">✦ ChatGPT</a>
-                  <a href="https://datatab.net" target="_blank" class="fc-tool">✦ DATAtab</a>
-                </div>
-              </div>
-            </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">7</div><div class="fc-line"></div></div>
+            <div class="fc-node"><div class="fc-label">Sampling Design</div><div class="fc-sub">Probability Sampling: random, stratified, cluster, systematic</div><div class="fc-tools"><a href="https://claude.ai" target="_blank" class="fc-tool">Claude</a><a href="https://chat.openai.com" target="_blank" class="fc-tool">ChatGPT</a><a href="https://datatab.net" target="_blank" class="fc-tool">DATAtab</a></div></div>
           </div>
-
-          <div class="fc-arrow"><svg width="16" height="28" viewBox="0 0 16 28" fill="none" stroke-width="1.5"><line x1="8" y1="0" x2="8" y2="20"/><polyline points="3,15 8,22 13,15"/></svg></div>
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">8</div>
-              <div class="fc-content">
-                <div class="fc-label">Data Collection</div>
-                <div class="fc-sub">Questionnaires · Standardized Tests · Instruments · Sensors</div>
-                <div class="fc-tools">
-                  <a href="https://claude.ai" target="_blank" class="fc-tool">✦ Claude (design survey)</a>
-                  <a href="https://gemini.google.com" target="_blank" class="fc-tool">✦ Google Gemini</a>
-                  <a href="https://copilot.microsoft.com" target="_blank" class="fc-tool">✦ MS Copilot</a>
-                </div>
-              </div>
-            </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">8</div><div class="fc-line"></div></div>
+            <div class="fc-node"><div class="fc-label">Data Collection</div><div class="fc-sub">Questionnaires · Standardized Tests · Instruments · Sensors</div><div class="fc-tools"><a href="https://claude.ai" target="_blank" class="fc-tool">Claude (design survey)</a><a href="https://gemini.google.com" target="_blank" class="fc-tool">Google Gemini</a><a href="https://copilot.microsoft.com" target="_blank" class="fc-tool">MS Copilot</a></div></div>
           </div>
-
-          <div class="fc-arrow"><svg width="16" height="28" viewBox="0 0 16 28" fill="none" stroke-width="1.5"><line x1="8" y1="0" x2="8" y2="20"/><polyline points="3,15 8,22 13,15"/></svg></div>
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">9</div>
-              <div class="fc-content">
-                <div class="fc-label">Data Processing &amp; Cleaning</div>
-                <div class="fc-sub">Handle missing values, outliers, coding errors, normalization</div>
-                <div class="fc-tools">
-                  <a href="https://julius.ai" target="_blank" class="fc-tool">✦ Julius AI</a>
-                  <a href="https://colab.research.google.com" target="_blank" class="fc-tool">✦ Google Colab</a>
-                  <a href="https://chat.openai.com" target="_blank" class="fc-tool">✦ ChatGPT (code)</a>
-                  <a href="https://claude.ai" target="_blank" class="fc-tool">✦ Claude (code)</a>
-                </div>
-              </div>
-            </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">9</div><div class="fc-line"></div></div>
+            <div class="fc-node"><div class="fc-label">Data Processing &amp; Cleaning</div><div class="fc-sub">Handle missing values, outliers, coding errors, normalization</div><div class="fc-tools"><a href="https://julius.ai" target="_blank" class="fc-tool">Julius AI</a><a href="https://colab.research.google.com" target="_blank" class="fc-tool">Google Colab</a><a href="https://claude.ai" target="_blank" class="fc-tool">Claude (code)</a></div></div>
           </div>
-
-          <div class="fc-arrow"><svg width="16" height="28" viewBox="0 0 16 28" fill="none" stroke-width="1.5"><line x1="8" y1="0" x2="8" y2="20"/><polyline points="3,15 8,22 13,15"/></svg></div>
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">10</div>
-              <div class="fc-content">
-                <div class="fc-label">Statistical Analysis</div>
-                <div class="fc-sub">Descriptive → Inferential Statistics (t-test, ANOVA, regression, chi-square)</div>
-                <div class="fc-tools">
-                  <a href="https://datatab.net" target="_blank" class="fc-tool">✦ DATAtab</a>
-                  <a href="https://julius.ai" target="_blank" class="fc-tool">✦ Julius AI</a>
-                  <a href="https://www.obviously.ai" target="_blank" class="fc-tool">✦ Obviously AI</a>
-                  <a href="https://colab.research.google.com" target="_blank" class="fc-tool">✦ Google Colab</a>
-                </div>
-              </div>
-            </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">10</div><div class="fc-line"></div></div>
+            <div class="fc-node"><div class="fc-label">Statistical Analysis</div><div class="fc-sub">Descriptive → Inferential: t-test, ANOVA, regression, chi-square</div><div class="fc-tools"><a href="https://datatab.net" target="_blank" class="fc-tool">DATAtab</a><a href="https://julius.ai" target="_blank" class="fc-tool">Julius AI</a><a href="https://www.obviously.ai" target="_blank" class="fc-tool">Obviously AI</a><a href="https://colab.research.google.com" target="_blank" class="fc-tool">Google Colab</a></div></div>
           </div>
-
-          <div class="fc-arrow"><svg width="16" height="28" viewBox="0 0 16 28" fill="none" stroke-width="1.5"><line x1="8" y1="0" x2="8" y2="20"/><polyline points="3,15 8,22 13,15"/></svg></div>
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">11</div>
-              <div class="fc-content">
-                <div class="fc-label">Results Interpretation</div>
-                <div class="fc-sub">Accept/reject hypotheses; explain statistical significance and effect sizes</div>
-                <div class="fc-tools">
-                  <a href="https://datatab.net" target="_blank" class="fc-tool">✦ DATAtab</a>
-                  <a href="https://julius.ai" target="_blank" class="fc-tool">✦ Julius AI</a>
-                  <a href="https://claude.ai" target="_blank" class="fc-tool">✦ Claude</a>
-                  <a href="https://www.statology.org/statology-study" target="_blank" class="fc-tool">✦ Statology</a>
-                </div>
-              </div>
-            </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">11</div><div class="fc-line"></div></div>
+            <div class="fc-node"><div class="fc-label">Results Interpretation</div><div class="fc-sub">Accept/reject hypotheses; explain statistical significance and effect sizes</div><div class="fc-tools"><a href="https://datatab.net" target="_blank" class="fc-tool">DATAtab</a><a href="https://julius.ai" target="_blank" class="fc-tool">Julius AI</a><a href="https://claude.ai" target="_blank" class="fc-tool">Claude</a><a href="https://www.statology.org/statology-study" target="_blank" class="fc-tool">Statology</a></div></div>
           </div>
-
-          <div class="fc-arrow"><svg width="16" height="28" viewBox="0 0 16 28" fill="none" stroke-width="1.5"><line x1="8" y1="0" x2="8" y2="20"/><polyline points="3,15 8,22 13,15"/></svg></div>
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">12</div>
-              <div class="fc-content">
-                <div class="fc-label">Conclusion &amp; Generalization</div>
-                <div class="fc-sub">Draw inferences; assess external validity and generalizability</div>
-                <div class="fc-tools">
-                  <a href="https://claude.ai" target="_blank" class="fc-tool">✦ Claude</a>
-                  <a href="https://chat.openai.com" target="_blank" class="fc-tool">✦ ChatGPT</a>
-                  <a href="https://gemini.google.com" target="_blank" class="fc-tool">✦ Google Gemini</a>
-                </div>
-              </div>
-            </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">12</div><div class="fc-line"></div></div>
+            <div class="fc-node"><div class="fc-label">Conclusion &amp; Generalization</div><div class="fc-sub">Draw inferences; assess external validity and generalizability</div><div class="fc-tools"><a href="https://claude.ai" target="_blank" class="fc-tool">Claude</a><a href="https://chat.openai.com" target="_blank" class="fc-tool">ChatGPT</a><a href="https://gemini.google.com" target="_blank" class="fc-tool">Google Gemini</a></div></div>
           </div>
-         <div class="fc-arrow"><svg width="16" height="28" viewBox="0 0 16 28" fill="none" stroke-width="1.5"><line x1="8" y1="0" x2="8" y2="20"/><polyline points="3,15 8,22 13,15"/></svg></div>
-
-          <div class="fc-step">
-            <div class="fc-node">
-              <div class="fc-num">13</div>
-              <div class="fc-content">
-                <div class="fc-label">Report Writing &amp; Publication</div>
-                <div class="fc-sub">APA/MLA formatted manuscript; journal submission or thesis writing</div>
-                <div class="fc-tools">
-                  <a href="https://claude.ai" target="_blank" class="fc-tool">✦ Claude</a>
-                  <a href="https://chat.openai.com" target="_blank" class="fc-tool">✦ ChatGPT</a>
-                  <a href="https://copilot.microsoft.com" target="_blank" class="fc-tool">✦ MS Copilot</a>
-                  <a href="https://gamma.app" target="_blank" class="fc-tool">✦ Gamma</a>
-                </div>
-              </div>
-            </div>
+          <div class="fc-row">
+            <div class="fc-gutter"><div class="fc-num">13</div></div>
+            <div class="fc-node"><div class="fc-label">Report Writing &amp; Publication</div><div class="fc-sub">APA/MLA formatted manuscript; journal submission or thesis writing</div><div class="fc-tools"><a href="https://claude.ai" target="_blank" class="fc-tool">Claude</a><a href="https://chat.openai.com" target="_blank" class="fc-tool">ChatGPT</a><a href="https://copilot.microsoft.com" target="_blank" class="fc-tool">MS Copilot</a><a href="https://gamma.app" target="_blank" class="fc-tool">Gamma</a></div></div>
           </div>
-
         </div>
       </div>
     </div>
   </section>
-  <!-- ════════════ WEBSITE MAKER AI ════════════ -->
+
+  <!-- §6 WEBSITE MAKER AI -->
   <section class="section">
     <div class="section-header">
-      <div class="section-icon" style="background: rgba(255,160,50,.15);">🌐</div>
-      <h2 class="section-title">Website Maker AI</h2>
-      <span class="section-count">7 Tools</span>
+      <span class="section-num">§ 6</span>
+      <h2 class="section-title">
+        <span class="dot" style="background:var(--c-web)"></span>
+        Website Maker AI
+      </h2>
+      <span class="section-count">7 tools</span>
     </div>
     <div class="grid">
-      <a href="https://framer.com" target="_blank" class="card">
-        <div class="card-top"><span class="card-name">Framer AI</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://framer.com" target="_blank" class="card" data-cat="web">
+        <div class="card-top"><span class="card-name">Framer AI</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Generate a full website from a text prompt in seconds. Free tier includes hosting and publishing.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>framer.com</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>framer.com</span>
       </a>
-      <a href="https://lovable.ai" target="_blank" class="card">
-        <div class="card-top"><span class="card-name">Lovable AI</span><span class="card-tag tag-free">Free</span></div>
-        <p class="card-desc">Generate a full website from a text prompt in seconds. Free tier includes hosting and publishing.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>lovable.ai</span>
+      <a href="https://lovable.ai" target="_blank" class="card" data-cat="web">
+        <div class="card-top"><span class="card-name">Lovable AI</span><span class="card-tag">Free</span></div>
+        <p class="card-desc">AI-driven full-stack web app builder. Generate, iterate, and publish from a single prompt.</p>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>lovable.ai</span>
       </a>
-      <a href="https://gamma.app" target="_blank" class="card">
-        <div class="card-top"><span class="card-name">Gamma</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://gamma.app" target="_blank" class="card" data-cat="web">
+        <div class="card-top"><span class="card-name">Gamma</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Build beautiful web pages, presentations, and docs from prompts. Free plan with unlimited AI creation.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>gamma.app</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>gamma.app</span>
       </a>
-      <a href="https://site123.com" target="_blank" class="card">
-        <div class="card-top"><span class="card-name">SITE123</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://site123.com" target="_blank" class="card" data-cat="web">
+        <div class="card-top"><span class="card-name">SITE123</span><span class="card-tag">Free</span></div>
         <p class="card-desc">AI-assisted website builder with ready-made templates. Free plan includes hosting on their subdomain.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>site123.com</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>site123.com</span>
       </a>
-      <a href="https://wegic.ai" target="_blank" class="card">
-        <div class="card-top"><span class="card-name">Wegic</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://wegic.ai" target="_blank" class="card" data-cat="web">
+        <div class="card-top"><span class="card-name">Wegic</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Chat with an AI to design and launch a website. No coding needed — free tier with published pages.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>wegic.ai</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>wegic.ai</span>
       </a>
-      <a href="https://www.wix.com/ai-website-builder" target="_blank" class="card">
-        <div class="card-top"><span class="card-name">Wix AI Builder</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://www.wix.com/ai-website-builder" target="_blank" class="card" data-cat="web">
+        <div class="card-top"><span class="card-name">Wix AI Builder</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Wix's AI generates a personalized website layout from a short description. Free plan with Wix subdomain.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>wix.com</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>wix.com</span>
       </a>
-      <a href="https://durable.co" target="_blank" class="card">
-        <div class="card-top"><span class="card-name">Durable AI</span><span class="card-tag tag-free">Free</span></div>
+      <a href="https://durable.co" target="_blank" class="card" data-cat="web">
+        <div class="card-top"><span class="card-name">Durable AI</span><span class="card-tag">Free</span></div>
         <p class="card-desc">Build a full business website in 30 seconds with AI. Free plan lets you generate and preview instantly.</p>
-        <span class="card-url"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>durable.co</span>
+        <span class="card-url"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>durable.co</span>
       </a>
     </div>
   </section>
 
-  <!-- ════════════ PREPARED BY ════════════ -->
+  <!-- PREPARED BY -->
   <div class="info-strip">
-    <img src="KMC_LOGO.jpeg" alt="KMC Logo" class="info-avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
-    <div class="info-avatar" style="display:none;">B</div>
-    <div class="info-body">
-      <p class="info-label">Prepared By</p>
+    <div class="info-avatar">B</div>
+    <div>
+      <p class="info-label">Compiled &amp; Prepared By</p>
       <p class="info-name">Mr. Bishnu Singh Rayamajhi</p>
       <p class="info-role">
-        Mathematics Lecturer &amp; Head of Humanities and Social Science<br>
-        Kapilvastu Multiple Campus (KMC) · Tribhuvan University, Taulihawa, Nepal
+        Mathematics Lecturer &amp; Head of Humanities and Social Sciences · Kapilvastu Multiple Campus (KMC), Tribhuvan University, Taulihawa, Nepal<br>
+        Founder, UCDL Academy
       </p>
     </div>
   </div>
+
 </main>
+
 <footer>
-  © 2025 UCDL Academy &nbsp;·&nbsp; Free RayamajhiAI Tools Directory &nbsp;·&nbsp; Kapilvastu Multiple Campus (KMC)
+  © 2025 UCDL Academy &nbsp;·&nbsp; Free RayamajhiAI Tools Directory &nbsp;·&nbsp; Kapilvastu Multiple Campus (KMC) · Tribhuvan University
 </footer>
+
 </body>
 </html>
