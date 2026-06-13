@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KMC Humanities & Social Sciences | Taulihawa, Kapilvastu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════
+   DESIGN TOKENS
+   Palette: Deep Himalayan Blue + Saffron Gold + Crimson
+   Signature: Diagonal bilingual wordmark band in hero
+═══════════════════════════════════════════════════ */
+:root {
+  --blue-deep:  #0B1F3A;
+  --blue-mid:   #163A5F;
+  --blue-light: #1E5080;
+  --saffron:    #D4821A;
+  --gold:       #F0A83C;
+  --gold-pale:  #FDF0D5;
+  --crimson:    #C0392B;
+  --sage:       #2E6B4F;
+  --white:      #FFFFFF;
+  --off-white:  #F7F5F2;
+  --ink:        #1A1A2A;
+  --muted:      #5A6272;
+  --border:     #DDD9D0;
+  --card-bg:    #FDFCFA;
+
+  --font-serif: 'DM Serif Display', Georgia, serif;
+  --font-sans:  'DM Sans', system-ui, sans-serif;
+  --font-mono:  'Space Mono', monospace;
+
+  --radius:     10px;
+  --radius-lg:  18px;
+  --shadow-sm:  0 2px 12px rgba(11,31,58,0.08);
+  --shadow-md:  0 6px 28px rgba(11,31,58,0.13);
+  --shadow-lg:  0 16px 56px rgba(11,31,58,0.20);
+  --transition: 0.28s cubic-bezier(0.4,0,0.2,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body { font-family: var(--font-sans); background: var(--off-white); color: var(--ink); line-height: 1.7; overflow-x: hidden; }
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+
+/* ─── SCROLLBAR ─────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--blue-deep); }
+::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+/* ═══════════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════════ */
+#nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: rgba(11,31,58,0.96);
+  backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid rgba(240,168,60,0.18);
+  transition: box-shadow var(--transition);
+}
+#nav.scrolled { box-shadow: 0 4px 32px rgba(0,0,0,0.35); }
+.nav-wrap {
+  max-width: 1280px; margin: 0 auto; padding: 0 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 70px;
+}
+.nav-logo { display: flex; align-items: center; gap: 0.85rem; }
+.nav-crest {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: conic-gradient(from 0deg, var(--gold) 0%, var(--saffron) 50%, var(--gold) 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-serif); font-size: 1rem; color: var(--blue-deep);
+  font-weight: 700; letter-spacing: -0.5px; flex-shrink: 0;
+  box-shadow: 0 0 0 3px rgba(240,168,60,0.25);
+}
+.nav-title { line-height: 1.25; }
+.nav-title .t1 { font-family: var(--font-serif); font-size: 1rem; color: var(--white); display: block; }
+.nav-title .t2 { font-size: 0.7rem; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase; display: block; }
+.nav-menu { display: flex; align-items: center; gap: 0.15rem; list-style: none; }
+.nav-menu a {
+  padding: 0.4rem 0.9rem; border-radius: var(--radius);
+  font-size: 0.83rem; font-weight: 500; color: rgba(255,255,255,0.72);
+  transition: color var(--transition), background var(--transition);
+}
+.nav-menu a:hover { color: var(--white); background: rgba(240,168,60,0.14); }
+.nav-menu .nav-highlight a {
+  background: var(--saffron); color: var(--white);
+  border-radius: 24px; padding: 0.42rem 1.15rem;
+  font-weight: 600;
+}
+.nav-menu .nav-highlight a:hover { background: var(--gold); }
+.nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+.nav-hamburger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: var(--transition); }
+
+/* ═══════════════════════════════════════════════════
+   HERO  — signature: tilted Nepali/English band
+═══════════════════════════════════════════════════ */
+.hero {
+  min-height: 100vh; position: relative; overflow: hidden;
+  background: var(--blue-deep);
+  display: flex; align-items: center;
+}
+
+/* Abstract geometric backdrop */
+.hero-backdrop {
+  position: absolute; inset: 0; pointer-events: none;
+}
+.hero-backdrop svg { width: 100%; height: 100%; opacity: 0.06; }
+
+/* Signature diagonal band */
+.hero-band {
+  position: absolute; left: -4%; right: -4%; top: 50%;
+  transform: translateY(-50%) rotate(-4deg);
+  background: linear-gradient(90deg, rgba(212,130,26,0.08), rgba(240,168,60,0.05), rgba(212,130,26,0.08));
+  border-top: 1px solid rgba(240,168,60,0.15);
+  border-bottom: 1px solid rgba(240,168,60,0.15);
+  padding: 0.6rem 0;
+  white-space: nowrap; overflow: hidden;
+  font-family: var(--font-mono); font-size: 0.75rem;
+  color: rgba(240,168,60,0.3); letter-spacing: 0.15em;
+  pointer-events: none;
+}
+.hero-band-inner { display: inline-block; animation: marquee 32s linear infinite; }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.hero-inner {
+  position: relative; z-index: 2;
+  max-width: 1280px; margin: 0 auto;
+  padding: 8rem 2rem 5rem;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+}
+.hero-left {}
+.hero-kicker {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  font-family: var(--font-mono); font-size: 0.72rem;
+  color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase;
+  margin-bottom: 1.4rem;
+}
+.hero-kicker::before { content: ''; width: 32px; height: 1.5px; background: var(--gold); display: block; }
+.hero h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(2.6rem, 4.5vw, 4rem);
+  line-height: 1.1; color: var(--white);
+  margin-bottom: 1.5rem;
+}
+.hero h1 span { color: var(--gold); font-style: italic; }
+.hero-desc {
+  font-size: 1.05rem; color: rgba(255,255,255,0.62);
+  max-width: 490px; line-height: 1.8; margin-bottom: 2.5rem;
+}
+.hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.82rem 1.9rem; border-radius: 32px;
+  font-weight: 600; font-size: 0.9rem; border: none; cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-gold { background: var(--gold); color: var(--blue-deep); box-shadow: 0 4px 20px rgba(240,168,60,0.40); }
+.btn-gold:hover { box-shadow: 0 8px 32px rgba(240,168,60,0.55); }
+.btn-ghost { background: transparent; color: var(--white); border: 1.5px solid rgba(255,255,255,0.28); }
+.btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+/* Hero right — floating info cards */
+.hero-right { display: flex; flex-direction: column; gap: 1.1rem; }
+.hero-card {
+  background: rgba(255,255,255,0.045);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 1.2rem 1.4rem;
+  display: flex; align-items: flex-start; gap: 1rem;
+  transition: background var(--transition), border-color var(--transition);
+}
+.hero-card:hover { background: rgba(240,168,60,0.06); border-color: rgba(240,168,60,0.4); }
+.hero-card.red-accent { border-left-color: var(--crimson); }
+.hero-card.sage-accent { border-left-color: var(--sage); }
+.hc-icon { font-size: 1.6rem; flex-shrink: 0; line-height: 1; }
+.hc-body h4 { font-size: 0.92rem; font-weight: 600; color: var(--white); margin-bottom: 0.25rem; }
+.hc-body p { font-size: 0.8rem; color: rgba(255,255,255,0.5); line-height: 1.55; }
+
+/* scroll indicator */
+.hero-scroll {
+  position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+  color: rgba(255,255,255,0.3); font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
+}
+.hero-scroll-line {
+  width: 1px; height: 36px; background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+  animation: scrollLine 1.8s ease-in-out infinite;
+}
+@keyframes scrollLine { 0%,100%{opacity:0.3; transform:scaleY(1)} 50%{opacity:0.8; transform:scaleY(1.15)} }
+
+/* ═══════════════════════════════════════════════════
+   GLOBAL SECTION HELPERS
+═══════════════════════════════════════════════════ */
+.sec { padding: 6rem 0; }
+.sec-dark { background: var(--blue-deep); }
+.sec-mid  { background: var(--blue-mid); }
+.sec-light { background: var(--off-white); }
+.sec-white { background: var(--white); }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 2rem; }
+
+.sec-tag {
+  font-family: var(--font-mono); font-size: 0.72rem;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--saffron);
+  margin-bottom: 0.65rem; display: block;
+}
+.sec-tag.light { color: var(--gold); }
+.sec-h {
+  font-family: var(--font-serif); font-size: clamp(1.9rem, 3vw, 2.7rem);
+  font-weight: 400; line-height: 1.2; color: var(--ink); margin-bottom: 0.85rem;
+}
+.sec-h.on-dark { color: var(--white); }
+.sec-lead { font-size: 1rem; color: var(--muted); max-width: 580px; line-height: 1.8; margin-bottom: 0; }
+.sec-lead.on-dark { color: rgba(255,255,255,0.58); }
+.rule {
+  width: 52px; height: 3px; margin: 1.2rem 0 2.8rem;
+  background: linear-gradient(90deg, var(--gold), var(--saffron));
+  border-radius: 2px;
+}
+.rule.centered { margin-left: auto; margin-right: auto; }
+
+/* grid helpers */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.75rem; }
+.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.5rem; }
+.grid-auto { display: grid; grid-template-columns: repeat(auto-fill,minmax(280px,1fr)); gap: 1.5rem; }
+
+/* ═══════════════════════════════════════════════════
+   ABOUT / INTRODUCTION
+═══════════════════════════════════════════════════ */
+.about-layout { display: grid; grid-template-columns: 5fr 6fr; gap: 5rem; align-items: start; }
+.about-visual { position: relative; }
+.campus-card {
+  background: linear-gradient(135deg, var(--blue-mid), var(--blue-deep));
+  border-radius: var(--radius-lg); overflow: hidden;
+  aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center;
+  position: relative;
+  box-shadow: var(--shadow-lg);
+}
+.campus-card-bg {
+  position: absolute; inset: 0; opacity: 0.06;
+  background-image: repeating-linear-gradient(45deg, var(--gold) 0, var(--gold) 1px, transparent 0, transparent 50%);
+  background-size: 16px 16px;
+}
+.campus-card-inner { text-align: center; position: relative; z-index: 1; padding: 2rem; }
+.campus-card-inner .icon { font-size: 4rem; margin-bottom: 0.85rem; }
+.campus-card-inner h3 { font-family: var(--font-serif); font-size: 1.5rem; color: var(--gold); margin-bottom: 0.4rem; }
+.campus-card-inner p { font-size: 0.85rem; color: rgba(255,255,255,0.55); line-height: 1.55; }
+.about-float {
+  position: absolute; bottom: -1.4rem; right: 1.5rem;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1rem 1.25rem;
+  box-shadow: var(--shadow-md); display: flex; align-items: center; gap: 0.85rem;
+}
+.af-icon { width: 40px; height: 40px; background: linear-gradient(135deg,var(--gold),var(--saffron)); border-radius: 8px; display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0; }
+.af-text strong { display: block; font-size: 0.88rem; color: var(--ink); font-weight: 600; }
+.af-text span { font-size: 0.76rem; color: var(--muted); }
+
+.about-text { padding-top: 0.5rem; }
+.about-text p { color: var(--muted); margin-bottom: 1.15rem; font-size: 0.97rem; line-height: 1.85; }
+.about-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 2rem; }
+.pill {
+  padding: 0.38rem 0.9rem; border-radius: 20px; font-size: 0.78rem; font-weight: 500;
+  background: rgba(46,107,79,0.1); color: var(--sage);
+  border: 1px solid rgba(46,107,79,0.2);
+}
+
+/* ═══════════════════════════════════════════════════
+   VISION / MISSION / GOAL TRIPTYCH
+═══════════════════════════════════════════════════ */
+.vmg-section {
+  background: linear-gradient(135deg, var(--blue-mid) 0%, var(--blue-deep) 100%);
+  padding: 5.5rem 0; position: relative; overflow: hidden;
+}
+.vmg-section::before {
+  content: '';
+  position: absolute; top: -60px; right: -60px;
+  width: 360px; height: 360px;
+  background: radial-gradient(circle, rgba(240,168,60,0.08), transparent 70%);
+  pointer-events: none;
+}
+.vmg-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; }
+.vmg-card {
+  padding: 2.5rem 2.5rem;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  transition: background var(--transition);
+}
+.vmg-card:last-child { border-right: none; }
+.vmg-card:hover { background: rgba(255,255,255,0.03); }
+.vmg-tag {
+  font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 0.85rem; display: block;
+}
+.vmg-card h3 {
+  font-family: var(--font-serif); font-size: 1.35rem; font-style: italic;
+  color: var(--white); margin-bottom: 0.85rem;
+}
+.vmg-card p { font-size: 0.88rem; color: rgba(255,255,255,0.56); line-height: 1.78; }
+
+/* ═══════════════════════════════════════════════════
+   PROGRAMS
+═══════════════════════════════════════════════════ */
+.prog-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(260px,1fr)); gap: 1.25rem; margin-top: 3rem; }
+.prog-card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 1.75rem;
+  position: relative; overflow: hidden;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.prog-card::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--saffron));
+  transform: scaleX(0); transform-origin: left; transition: transform 0.35s;
+}
+.prog-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+.prog-card:hover::after { transform: scaleX(1); }
+.prog-icon { font-size: 2.1rem; margin-bottom: 1rem; }
+.prog-card h3 { font-family: var(--font-serif); font-size: 1.05rem; color: var(--ink); margin-bottom: 0.55rem; }
+.prog-card p { font-size: 0.84rem; color: var(--muted); line-height: 1.65; }
+.prog-badge {
+  display: inline-block; margin-top: 1.1rem;
+  padding: 0.22rem 0.7rem; border-radius: 12px;
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em;
+  text-transform: uppercase; background: var(--gold-pale); color: var(--saffron);
+}
+
+/* ═══════════════════════════════════════════════════
+   ACADEMIC PILLARS — TAB + ACCORDION HYBRID
+═══════════════════════════════════════════════════ */
+.pillars-layout { display: grid; grid-template-columns: 260px 1fr; gap: 2.5rem; margin-top: 3rem; align-items: start; }
+.pillars-sidebar { position: sticky; top: 88px; }
+.pillar-tab {
+  display: flex; align-items: center; gap: 0.85rem;
+  padding: 0.9rem 1rem; border-radius: var(--radius);
+  cursor: pointer; transition: background var(--transition), color var(--transition);
+  border: 1px solid transparent; margin-bottom: 0.4rem;
+}
+.pillar-tab:hover { background: rgba(212,130,26,0.06); }
+.pillar-tab.active { background: var(--gold-pale); border-color: rgba(212,130,26,0.25); }
+.pt-num { font-family: var(--font-mono); font-size: 0.65rem; color: var(--gold); font-weight: 700; width: 20px; flex-shrink: 0; }
+.pt-icon { font-size: 1.1rem; flex-shrink: 0; }
+.pt-label { font-size: 0.83rem; font-weight: 500; color: var(--ink); line-height: 1.35; }
+.pillar-tab.active .pt-label { color: var(--saffron); font-weight: 600; }
+
+.pillar-content { display: none; }
+.pillar-content.active { display: block; animation: fadeSlide 0.3s ease; }
+@keyframes fadeSlide { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+.pc-header {
+  display: flex; align-items: center; gap: 1rem;
+  background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: 1.75rem 2rem;
+}
+.pc-header .big-icon { font-size: 2.5rem; }
+.pc-header h3 { font-family: var(--font-serif); font-size: 1.4rem; color: var(--white); margin-bottom: 0.25rem; }
+.pc-header p { font-size: 0.83rem; color: rgba(255,255,255,0.55); }
+.pc-body {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-top: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  padding: 2rem;
+}
+.pc-intro { font-size: 0.93rem; color: var(--muted); line-height: 1.82; margin-bottom: 1.75rem; }
+.pc-points { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+.pc-point {
+  display: flex; align-items: flex-start; gap: 0.6rem;
+  font-size: 0.85rem; color: var(--ink); line-height: 1.5;
+}
+.pc-point-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--gold); flex-shrink: 0; margin-top: 0.44rem;
+}
+
+/* ═══════════════════════════════════════════════════
+   RESEARCH
+═══════════════════════════════════════════════════ */
+.research-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-top: 3rem; }
+.res-cards { display: flex; flex-direction: column; gap: 1.1rem; }
+.res-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09);
+  border-radius: var(--radius); padding: 1.35rem 1.5rem;
+  transition: background var(--transition), border-color var(--transition);
+}
+.res-card:hover { background: rgba(240,168,60,0.07); border-color: rgba(240,168,60,0.28); }
+.res-card h4 { font-size: 0.93rem; font-weight: 600; color: var(--gold); margin-bottom: 0.45rem; display:flex;align-items:center;gap:0.55rem; }
+.res-card p { font-size: 0.84rem; color: rgba(255,255,255,0.52); line-height: 1.68; }
+
+.research-areas { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+.ra-tile {
+  background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius); padding: 1.25rem; text-align: center;
+  transition: all var(--transition); cursor: default;
+}
+.ra-tile:hover { background: rgba(240,168,60,0.09); border-color: rgba(240,168,60,0.28); transform: translateY(-2px); }
+.ra-tile .rt-icon { font-size: 1.85rem; margin-bottom: 0.55rem; }
+.ra-tile h5 { font-size: 0.83rem; font-weight: 600; color: var(--white); margin-bottom: 0.25rem; }
+.ra-tile p { font-size: 0.74rem; color: rgba(255,255,255,0.42); }
+
+/* ═══════════════════════════════════════════════════
+   COMMUNITY ENGAGEMENT
+═══════════════════════════════════════════════════ */
+.comm-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-top: 3rem; }
+.comm-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 2rem 1.75rem;
+  text-align: center; transition: all var(--transition);
+}
+.comm-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-5px); }
+.comm-card .cc-icon { font-size: 2.4rem; margin-bottom: 1rem; }
+.comm-card h3 { font-family: var(--font-serif); font-size: 1.05rem; color: var(--ink); margin-bottom: 0.7rem; }
+.comm-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.72; }
+
+/* ═══════════════════════════════════════════════════
+   DIGITAL HUB / AI TOOLS
+═══════════════════════════════════════════════════ */
+.dh-section { background: var(--blue-deep); position: relative; overflow: hidden; }
+.dh-section::after {
+  content: '';
+  position: absolute; bottom: -80px; left: 50%; transform: translateX(-50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(192,57,43,0.08), transparent 70%);
+  pointer-events: none;
+}
+.tools-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(230px,1fr)); gap: 1.2rem; margin-top: 3rem; }
+.tool-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius-lg); padding: 1.65rem;
+  position: relative; overflow: hidden;
+  transition: all var(--transition); cursor: pointer;
+}
+.tool-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(240,168,60,0.06), transparent 70%);
+  opacity: 0; transition: opacity var(--transition);
+}
+.tool-card:hover { transform: translateY(-3px); border-color: rgba(240,168,60,0.3); }
+.tool-card:hover::before { opacity: 1; }
+.tc-icon { font-size: 2rem; margin-bottom: 0.9rem; }
+.tool-card h4 { font-size: 0.92rem; font-weight: 600; color: var(--white); margin-bottom: 0.45rem; }
+.tool-card p { font-size: 0.8rem; color: rgba(255,255,255,0.44); line-height: 1.65; }
+.tool-tag {
+  display: inline-block; margin-top: 0.9rem;
+  padding: 0.22rem 0.65rem; border-radius: 12px;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
+}
+.tt-ai      { background: rgba(192,57,43,0.18); color: #E88; }
+.tt-res     { background: rgba(240,168,60,0.15); color: var(--gold); }
+.tt-learn   { background: rgba(46,107,79,0.18);  color: #7BC; }
+
+/* ═══════════════════════════════════════════════════
+   NOTICES / MINUTES
+═══════════════════════════════════════════════════ */
+.notices-layout { display: grid; grid-template-columns: 1.4fr 1fr; gap: 3.5rem; margin-top: 3rem; }
+.notice-row {
+  display: flex; align-items: flex-start; gap: 1rem;
+  padding: 1.05rem 0; border-bottom: 1px solid var(--border);
+}
+.notice-row:first-child { padding-top: 0; }
+.notice-row:last-child { border-bottom: none; }
+.nr-bullet {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--gold); margin-top: 0.5rem; flex-shrink: 0;
+}
+.nr-text h4 { font-size: 0.88rem; font-weight: 600; color: var(--ink); margin-bottom: 0.22rem; line-height: 1.4; }
+.nr-text span { font-size: 0.76rem; color: var(--muted); }
+
+.quicklinks-box {
+  background: var(--blue-deep); border-radius: var(--radius-lg); padding: 2rem;
+}
+.ql-head { font-family: var(--font-serif); font-size: 1.15rem; color: var(--white); margin-bottom: 1.4rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.09); }
+.ql-btn {
+  display: flex; align-items: center; gap: 0.8rem;
+  padding: 0.75rem 1rem; border-radius: var(--radius);
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.75); font-size: 0.85rem; font-weight: 500;
+  margin-bottom: 0.5rem; cursor: pointer;
+  transition: all var(--transition);
+}
+.ql-btn:last-child { margin-bottom: 0; }
+.ql-btn:hover { background: rgba(240,168,60,0.12); border-color: rgba(240,168,60,0.3); color: var(--gold); }
+.ql-btn .qi { font-size: 1rem; }
+
+/* ═══════════════════════════════════════════════════
+   QUALIFICATIONS / SKILLS
+═══════════════════════════════════════════════════ */
+.qual-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 3rem; }
+.qual-group h3 {
+  font-family: var(--font-serif); font-size: 1.2rem; color: var(--ink);
+  margin-bottom: 1.4rem; padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--gold);
+}
+.qual-item { display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem 0; border-bottom: 1px solid var(--border); }
+.qual-item:last-child { border-bottom: none; }
+.qi-dot { width: 34px; height: 34px; border-radius: 8px; background: var(--gold-pale); display:flex;align-items:center;justify-content:center;font-size:0.95rem;flex-shrink:0; }
+.qual-item span { font-size: 0.87rem; color: var(--ink); font-weight: 500; line-height: 1.4; }
+
+/* ═══════════════════════════════════════════════════
+   CREATOR / PREPARED BY  ← NEW
+═══════════════════════════════════════════════════ */
+.creator-section {
+  background: linear-gradient(135deg, var(--blue-deep) 0%, #0A1628 100%);
+  padding: 5rem 0; position: relative; overflow: hidden;
+}
+.creator-section::before {
+  content: '';
+  position: absolute; top: -100px; left: -100px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(240,168,60,0.06), transparent 65%);
+}
+.creator-inner {
+  display: grid; grid-template-columns: 1fr 1.6fr; gap: 5rem; align-items: center;
+  position: relative;
+}
+.creator-portrait {
+  text-align: center;
+}
+.portrait-ring {
+  width: 180px; height: 180px; border-radius: 50%; margin: 0 auto 1.5rem;
+  background: conic-gradient(from 0deg, var(--gold), var(--saffron), var(--crimson), var(--blue-light), var(--gold));
+  padding: 4px; box-shadow: 0 0 40px rgba(240,168,60,0.25);
+}
+.portrait-inner {
+  width: 100%; height: 100%; border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue-mid), var(--blue-deep));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 4.5rem;
+}
+.creator-portrait h3 {
+  font-family: var(--font-serif); font-size: 1.45rem; color: var(--white); margin-bottom: 0.4rem;
+}
+.creator-portrait .c-role { font-size: 0.83rem; color: var(--gold); font-weight: 500; line-height: 1.6; }
+.creator-bio {}
+.creator-bio .bio-tag { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; display: block; }
+.creator-bio h2 { font-family: var(--font-serif); font-size: 2rem; font-style: italic; color: var(--white); margin-bottom: 1rem; line-height: 1.2; }
+.creator-bio p { font-size: 0.93rem; color: rgba(255,255,255,0.58); line-height: 1.85; margin-bottom: 1rem; }
+.creator-chips { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: 1.5rem; }
+.c-chip {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.42rem 0.95rem; border-radius: 20px; font-size: 0.78rem; font-weight: 500;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.75);
+}
+.c-chip.gold { background: rgba(240,168,60,0.12); border-color: rgba(240,168,60,0.3); color: var(--gold); }
+.creator-platforms { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+.cp-btn {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  padding: 0.72rem 1.4rem; border-radius: 28px; font-size: 0.84rem; font-weight: 600;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: var(--white);
+  transition: all var(--transition); cursor: pointer;
+}
+.cp-btn:hover { background: rgba(240,168,60,0.15); border-color: var(--gold); color: var(--gold); }
+.cp-btn.primary { background: var(--saffron); border-color: var(--saffron); color: var(--white); }
+.cp-btn.primary:hover { background: var(--gold); border-color: var(--gold); }
+
+/* ═══════════════════════════════════════════════════
+   STATS STRIP
+═══════════════════════════════════════════════════ */
+.stats-strip { background: var(--saffron); padding: 3.5rem 0; }
+.stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; }
+.stat-item { text-align: center; padding: 1rem; border-right: 1px solid rgba(255,255,255,0.25); }
+.stat-item:last-child { border-right: none; }
+.stat-num { font-family: var(--font-serif); font-size: 2.8rem; color: var(--white); line-height: 1; margin-bottom: 0.35rem; }
+.stat-lbl { font-size: 0.82rem; color: rgba(255,255,255,0.78); font-weight: 500; letter-spacing: 0.04em; }
+
+/* ═══════════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════ */
+footer {
+  background: #060E1A; padding: 4.5rem 0 2rem;
+  color: rgba(255,255,255,0.55);
+}
+.footer-top { display: grid; grid-template-columns: 1.7fr 1fr 1fr 1fr; gap: 3rem; padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.fb-logo { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+.fb-logo .crest { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg,var(--gold),var(--saffron)); display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:0.8rem;color:var(--blue-deep);font-weight:700; }
+.fb-logo span { font-family: var(--font-serif); font-size: 0.95rem; color: var(--white); }
+.fb-brand p { font-size: 0.83rem; line-height: 1.75; max-width: 240px; }
+.fb-credit {
+  margin-top: 1.4rem; padding: 0.9rem 1rem;
+  background: rgba(240,168,60,0.08); border: 1px solid rgba(240,168,60,0.2);
+  border-radius: var(--radius);
+}
+.fb-credit p { font-size: 0.76rem; color: rgba(255,255,255,0.55); line-height: 1.6; }
+.fb-credit strong { color: var(--gold); }
+.footer-col h4 { font-size: 0.85rem; font-weight: 600; color: var(--white); margin-bottom: 1.2rem; letter-spacing: 0.04em; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+.footer-col ul li a { font-size: 0.82rem; color: rgba(255,255,255,0.48); transition: color var(--transition); }
+.footer-col ul li a:hover { color: var(--gold); }
+.footer-bottom {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 2rem; font-size: 0.78rem;
+}
+.footer-bottom .tu { display: flex; align-items: center; gap: 0.5rem; color: var(--gold); font-weight: 500; }
+
+/* ═══════════════════════════════════════════════════
+   SCROLL ANIMATIONS
+═══════════════════════════════════════════════════ */
+[data-anim] { opacity: 0; transform: translateY(22px); transition: opacity 0.6s ease, transform 0.6s ease; }
+[data-anim].visible { opacity: 1; transform: translateY(0); }
+
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════════ */
+@media(max-width:1024px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 0; }
+  .hero-right { display: none; }
+  .pillars-layout { grid-template-columns: 1fr; }
+  .pillars-sidebar { position: static; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .pillar-tab { flex: 0 0 auto; }
+  .about-layout { grid-template-columns: 1fr; }
+  .research-layout { grid-template-columns: 1fr; }
+  .creator-inner { grid-template-columns: 1fr; gap: 2.5rem; text-align: center; }
+  .creator-portrait .portrait-ring { margin: 0 auto 1.5rem; }
+  .creator-platforms { justify-content: center; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .stat-item:nth-child(2) { border-right: none; }
+}
+@media(max-width:768px) {
+  .nav-menu { display: none; }
+  .nav-hamburger { display: flex; }
+  .hero-inner { padding: 7rem 1.5rem 4rem; }
+  .vmg-grid { grid-template-columns: 1fr; }
+  .vmg-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .grid-3, .comm-grid, .prog-grid { grid-template-columns: 1fr 1fr; }
+  .qual-layout, .notices-layout { grid-template-columns: 1fr; }
+  .pc-points { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+  .footer-bottom { flex-direction: column; gap: 0.75rem; text-align: center; }
+  .hero h1 { font-size: 2.3rem; }
+}
+@media(max-width:500px) {
+  .grid-3, .comm-grid, .prog-grid, .research-areas, .stats-grid { grid-template-columns: 1fr; }
+  .sec { padding: 4rem 0; }
+}
+
+/* Mobile nav open state */
+.nav-open .nav-menu {
+  display: flex; flex-direction: column; align-items: flex-start;
+  position: fixed; top: 70px; left: 0; right: 0;
+  background: rgba(11,31,58,0.98); padding: 1.5rem 2rem;
+  border-bottom: 1px solid rgba(240,168,60,0.2);
+  gap: 0.25rem; z-index: 199;
+}
+.nav-open .nav-menu a { display: block; width: 100%; }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────── -->
+<nav id="nav">
+  <div class="nav-wrap">
+    <div class="nav-logo">
+      <div class="nav-crest">KMC</div>
+      <div class="nav-title">
+        <span class="t1">Humanities &amp; Social Sciences</span>
+        <span class="t2">Kapilvastu Multiple Campus · Tribhuvan University</span>
+      </div>
+    </div>
+    <ul class="nav-menu" id="navMenu">
+      <li><a href="#about">About</a></li>
+      <li><a href="#programs">Programs</a></li>
+      <li><a href="#pillars">Academics</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#community">Community</a></li>
+      <li><a href="#notices">Notices</a></li>
+      <li><a href="#creator">Leadership</a></li>
+      <li class="nav-highlight"><a href="#digital">Digital Hub</a></li>
+    </ul>
+    <div class="nav-hamburger" id="hamburger" onclick="toggleNav()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────── -->
+<section class="hero" id="home">
+  <div class="hero-backdrop">
+    <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#F0A83C">
+      <circle cx="600" cy="350" r="320" stroke-width="0.8"/>
+      <circle cx="600" cy="350" r="250" stroke-width="0.8"/>
+      <circle cx="600" cy="350" r="160" stroke-width="0.8"/>
+      <circle cx="600" cy="350" r="80"  stroke-width="0.8"/>
+      <line x1="600" y1="10" x2="600" y2="690" stroke-width="0.6"/>
+      <line x1="10"  y1="350" x2="1190" y2="350" stroke-width="0.6"/>
+      <line x1="140" y1="90" x2="1060" y2="610" stroke-width="0.5"/>
+      <line x1="1060" y1="90" x2="140" y2="610" stroke-width="0.5"/>
+      <polygon points="600,60 1040,600 160,600" stroke-width="0.7"/>
+      <polygon points="600,640 160,100 1040,100" stroke-width="0.7"/>
+    </svg>
+  </div>
+
+  <!-- signature diagonal band -->
+  <div class="hero-band">
+    <div class="hero-band-inner">
+      KNOWLEDGE · RESEARCH · INNOVATION · मानविकी तथा सामाजिक विज्ञान · KAPILVASTU · TRIBHUVAN UNIVERSITY · TAULIHAWA · QUALITY EDUCATION · DIGITAL LEARNING · ज्ञान र अनुसन्धान · COMMUNITY · NEPAL · KNOWLEDGE · RESEARCH · INNOVATION · मानविकी तथा सामाजिक विज्ञान · KAPILVASTU · TRIBHUVAN UNIVERSITY · TAULIHAWA · QUALITY EDUCATION · DIGITAL LEARNING · ज्ञान र अनुसन्धान · COMMUNITY · NEPAL ·&nbsp;
+    </div>
+  </div>
+
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-kicker">Tribhuvan University · Est. 2019 · Taulihawa, Kapilvastu</div>
+      <h1>A <span>Digital Hub</span> for Learning, Research &amp; Society</h1>
+      <p class="hero-desc">
+        KMC Humanities &amp; Social Sciences is a modern academic learning &amp; research ecosystem connecting students, teachers, and society through knowledge, research, and innovation in Kapilvastu, Nepal.
+      </p>
+      <div class="hero-btns">
+        <a href="#programs" class="btn btn-gold">Explore Programs ↓</a>
+        <a href="#digital"  class="btn btn-ghost">Digital Hub</a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="hero-card">
+        <div class="hc-icon">🎓</div>
+        <div class="hc-body">
+          <h4>Bachelor of Arts (B.A.) — 4-Year Program</h4>
+          <p>8 disciplines covering English, Nepali, Sociology, Economics, Political Science, Rural Development, Philosophy, and Mathematics.</p>
+        </div>
+      </div>
+      <div class="hero-card red-accent">
+        <div class="hc-icon">🔬</div>
+        <div class="hc-body">
+          <h4>Research &amp; Scholarship Culture</h4>
+          <p>Qualitative &amp; quantitative research addressing Nepal's local challenges — from cultural heritage to social justice and policy.</p>
+        </div>
+      </div>
+      <div class="hero-card sage-accent">
+        <div class="hc-icon">🤖</div>
+        <div class="hc-body">
+          <h4>AI-Powered Digital Learning</h4>
+          <p>SPSS toolkits, AI research assistants, and UCDL Academy YouTube channel — bringing 21st-century tools to Kapilvastu students.</p>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hc-icon">🏘️</div>
+        <div class="hc-body">
+          <h4>Community-Engaged Education</h4>
+          <p>Field research, NGO partnerships, and community programmes directly serving the people of Taulihawa and Kapilvastu.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll"><div class="hero-scroll-line"></div><span>Scroll</span></div>
+</section>
+
+<!-- ── STATS STRIP ───────────────────────────────────── -->
+<div class="stats-strip">
+  <div class="wrap">
+    <div class="stats-grid">
+      <div class="stat-item" data-anim>
+        <div class="stat-num">8</div>
+        <div class="stat-lbl">B.A. Disciplines</div>
+      </div>
+      <div class="stat-item" data-anim>
+        <div class="stat-num">7</div>
+        <div class="stat-lbl">Academic Pillars</div>
+      </div>
+      <div class="stat-item" data-anim>
+        <div class="stat-num">2019</div>
+        <div class="stat-lbl">Year Established</div>
+      </div>
+      <div class="stat-item" data-anim>
+        <div class="stat-num">TU</div>
+        <div class="stat-lbl">Tribhuvan University Affiliated</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ABOUT ─────────────────────────────────────────── -->
+<section class="sec sec-white" id="about">
+  <div class="wrap">
+    <div class="about-layout">
+      <div class="about-visual" data-anim>
+        <div class="campus-card">
+          <div class="campus-card-bg"></div>
+          <div class="campus-card-inner">
+            <div class="icon">🏛️</div>
+            <h3>Kapilvastu Multiple Campus</h3>
+            <p>Faculty of Humanities &amp; Social Sciences</p>
+            <p style="margin-top:0.4rem;font-size:0.78rem;color:rgba(255,255,255,0.35)">Taulihawa, Kapilvastu, Lumbini Province, Nepal</p>
+          </div>
+        </div>
+        <div class="about-float">
+          <div class="af-icon">🎓</div>
+          <div class="af-text">
+            <strong>Tribhuvan University</strong>
+            <span>Affiliated Constituent Campus</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-text" data-anim>
+        <span class="sec-tag">About FOHSS</span>
+        <h2 class="sec-h">Educating Informed Citizens of Nepal</h2>
+        <div class="rule"></div>
+        <p>Established alongside Kapilvastu Multiple Campus in 2019, the Faculty of Humanities and Social Sciences (FOHSS) is one of the leading departments in Nepal's Lumbini Province — in terms of student enrollment, range of programs, and community impact.</p>
+        <p>FOHSS has prepared a strategic plan to revitalize humanities and social sciences education, moving ahead with a clear vision, mission, and goals — and identifying key areas of intervention to serve Kapilvastu and beyond.</p>
+        <p>Our mission is educating students and developing them into informed citizenry, while producing quality human resources required for Nepal's national development — through relevant courses, research, and a learning-centered environment.</p>
+        <div class="about-pills">
+          <span class="pill">📚 Quality Teaching</span>
+          <span class="pill">🔬 Active Research</span>
+          <span class="pill">🤝 Community Engagement</span>
+          <span class="pill">💡 Digital Integration</span>
+          <span class="pill">🌏 Global Perspective</span>
+          <span class="pill">⚖️ Social Justice</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── VISION / MISSION / GOAL ──────────────────────── -->
+<div class="vmg-section">
+  <div class="wrap">
+    <div class="vmg-grid">
+      <div class="vmg-card" data-anim>
+        <span class="vmg-tag">Our Vision</span>
+        <h3>Globally Recognized Excellence</h3>
+        <p>FOHSS aims to be a widely recognized leading academic institution throughout the world — imparting quality education and offering relevant courses with integration of modern technology in teaching, learning, and research.</p>
+      </div>
+      <div class="vmg-card" data-anim>
+        <span class="vmg-tag">Our Mission</span>
+        <h3>Informed &amp; Capable Citizens</h3>
+        <p>Educating students and developing them into informed citizenry, and producing quality human resources required for the nation — through relevant academic courses, new curricula, and a conducive environment for learning and scholarship.</p>
+      </div>
+      <div class="vmg-card" data-anim>
+        <span class="vmg-tag">Our Goal</span>
+        <h3>Upgraded HSS Education</h3>
+        <p>Upgrading humanities and social sciences education through quality teaching, learning, and research activities — including regular updates of courses aligned to national development priorities and global best practices.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── PROGRAMS ───────────────────────────────────────── -->
+<section class="sec sec-light" id="programs">
+  <div class="wrap">
+    <span class="sec-tag" data-anim>Academic Programs</span>
+    <h2 class="sec-h" data-anim>Bachelor of Arts (B.A.) Disciplines</h2>
+    <div class="rule" data-anim></div>
+    <p class="sec-lead" data-anim>Eight disciplines forming a comprehensive liberal arts education grounded in Nepal's social, cultural, and intellectual heritage — preparing students for national development and global citizenship.</p>
+
+    <div class="prog-grid">
+      <div class="prog-card" data-anim>
+        <div class="prog-icon">📖</div>
+        <h3>English</h3>
+        <p>Literature, language, and communication — developing critical reading, writing, and analytical skills for academic and professional life in Nepal and beyond.</p>
+        <span class="prog-badge">Language &amp; Lit</span>
+      </div>
+      <div class="prog-card" data-anim>
+        <div class="prog-icon">🪔</div>
+        <h3>Nepali</h3>
+        <p>Nepali language and literature — preserving cultural heritage and fostering scholarly engagement with Nepal's rich literary and linguistic traditions.</p>
+        <span class="prog-badge">Language &amp; Culture</span>
+      </div>
+      <div class="prog-card" data-anim>
+        <div class="prog-icon">🏘️</div>
+        <h3>Sociology</h3>
+        <p>Social structures, institutions, and change — with special focus on Nepal's multicultural communities, development challenges, and social transformation.</p>
+        <span class="prog-badge">Social Science</span>
+      </div>
+      <div class="prog-card" data-anim>
+        <div class="prog-icon">🌾</div>
+        <h3>Rural Development</h3>
+        <p>Poverty, rural infrastructure, agriculture, and sustainable livelihoods — with field-based research rooted in Kapilvastu's communities and Terai context.</p>
+        <span class="prog-badge">Development</span>
+      </div>
+      <div class="prog-card" data-anim>
+        <div class="prog-icon">📊</div>
+        <h3>Economics</h3>
+        <p>Macro and microeconomic theory, development economics, and policy analysis in the context of Nepal's growing and transitioning economy.</p>
+        <span class="prog-badge">Economics</span>
+      </div>
+      <div class="prog-card" data-anim>
+        <div class="prog-icon">🏛️</div>
+        <h3>Political Science</h3>
+        <p>Democratic governance, federalism, international relations, and civic engagement — preparing future policy makers and public servants for Nepal's federal system.</p>
+        <span class="prog-badge">Governance</span>
+      </div>
+      <div class="prog-card" data-anim>
+        <div class="prog-icon">💭</div>
+        <h3>Philosophy</h3>
+        <p>Ethics, logic, epistemology, and Eastern &amp; Western philosophical traditions — cultivating deep reasoning, moral awareness, and intellectual discipline.</p>
+        <span class="prog-badge">Philosophy</span>
+      </div>
+      <div class="prog-card" data-anim>
+        <div class="prog-icon">📐</div>
+        <h3>Statistics &amp; Mathematics</h3>
+        <p>Quantitative methods, data analysis, and mathematical reasoning — foundational tools supporting rigorous research across all social science disciplines.</p>
+        <span class="prog-badge">Quantitative</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACADEMIC PILLARS ───────────────────────────────── -->
+<section class="sec sec-white" id="pillars">
+  <div class="wrap">
+    <span class="sec-tag" data-anim>Academic Framework</span>
+    <h2 class="sec-h" data-anim>Seven Pillars of Academic Development</h2>
+    <div class="rule" data-anim></div>
+    <p class="sec-lead" data-anim>FOHSS is organized around seven interconnected sections that together ensure academic quality, relevance, and lasting impact at every level of the department.</p>
+
+    <div class="pillars-layout">
+      <div class="pillars-sidebar">
+        <div class="pillar-tab active" onclick="showPillar(0)" data-tab="0">
+          <span class="pt-num">01</span>
+          <span class="pt-icon">📋</span>
+          <span class="pt-label">Curriculum Development &amp; Review</span>
+        </div>
+        <div class="pillar-tab" onclick="showPillar(1)" data-tab="1">
+          <span class="pt-num">02</span>
+          <span class="pt-icon">🎤</span>
+          <span class="pt-label">Course Delivery &amp; Instruction</span>
+        </div>
+        <div class="pillar-tab" onclick="showPillar(2)" data-tab="2">
+          <span class="pt-num">03</span>
+          <span class="pt-icon">🤗</span>
+          <span class="pt-label">Student Support &amp; Advising</span>
+        </div>
+        <div class="pillar-tab" onclick="showPillar(3)" data-tab="3">
+          <span class="pt-num">04</span>
+          <span class="pt-icon">🔬</span>
+          <span class="pt-label">Research &amp; Scholarship</span>
+        </div>
+        <div class="pillar-tab" onclick="showPillar(4)" data-tab="4">
+          <span class="pt-num">05</span>
+          <span class="pt-icon">🏅</span>
+          <span class="pt-label">Quality Assurance &amp; Accreditation</span>
+        </div>
+        <div class="pillar-tab" onclick="showPillar(5)" data-tab="5">
+          <span class="pt-num">06</span>
+          <span class="pt-icon">🌳</span>
+          <span class="pt-label">Community Engagement &amp; Collaboration</span>
+        </div>
+        <div class="pillar-tab" onclick="showPillar(6)" data-tab="6">
+          <span class="pt-num">07</span>
+          <span class="pt-icon">💼</span>
+          <span class="pt-label">Qualification &amp; Skills Development</span>
+        </div>
+      </div>
+
+      <div class="pillars-content">
+        <!-- Pillar 0 -->
+        <div class="pillar-content active" id="pillar-0">
+          <div class="pc-header">
+            <span class="big-icon">📋</span>
+            <div>
+              <h3>Curriculum Development &amp; Review</h3>
+              <p>Section 1 — Academic Foundation</p>
+            </div>
+          </div>
+          <div class="pc-body">
+            <p class="pc-intro">Our curriculum is continuously developed and reviewed to meet Nepal's evolving social needs, national priorities, and global academic standards. Each revision integrates local context, interdisciplinary approaches, ethical considerations, and technology for the digital age.</p>
+            <div class="pc-points">
+              <div class="pc-point"><div class="pc-point-dot"></div>Relevance to local Nepali and Kapilvastu context</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Aligned with national development priorities</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Interdisciplinary approaches integrated</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Critical thinking emphasis throughout</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Technology and digital literacy integration</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Inclusive perspectives and diverse voices</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Local case studies and real examples</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Career readiness and employability focus</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Global challenge awareness (climate, rights)</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Continuous quality improvement cycle</div>
+            </div>
+          </div>
+        </div>
+        <!-- Pillar 1 -->
+        <div class="pillar-content" id="pillar-1">
+          <div class="pc-header">
+            <span class="big-icon">🎤</span>
+            <div>
+              <h3>Course Delivery &amp; Instruction</h3>
+              <p>Section 2 — Teaching Excellence</p>
+            </div>
+          </div>
+          <div class="pc-body">
+            <p class="pc-intro">Effective, engaging instruction is the heart of FOHSS. Faculty employ interactive methods — group discussions, case studies, role-playing, multimedia presentations — that develop critical thinkers and informed citizens equipped for Nepal's challenges.</p>
+            <div class="pc-points">
+              <div class="pc-point"><div class="pc-point-dot"></div>Engaging, student-centred teaching methods</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Real-world Nepali and local case studies</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Technology-enhanced learning platforms</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Inclusive and respectful learning environment</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Research opportunities embedded in courses</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Experiential learning and field visits</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Indigenous knowledge incorporated</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Faculty professional development supported</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Regular feedback and assessment cycles</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Ethical scholarship practices promoted</div>
+            </div>
+          </div>
+        </div>
+        <!-- Pillar 2 -->
+        <div class="pillar-content" id="pillar-2">
+          <div class="pc-header">
+            <span class="big-icon">🤗</span>
+            <div>
+              <h3>Student Support &amp; Advising</h3>
+              <p>Section 3 — Student Wellbeing</p>
+            </div>
+          </div>
+          <div class="pc-body">
+            <p class="pc-intro">FOHSS provides holistic support to every student — from academic guidance and career counselling to mental health resources and community building — ensuring no student is left behind on their academic journey.</p>
+            <div class="pc-points">
+              <div class="pc-point"><div class="pc-point-dot"></div>Academic guidance and course planning</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Career counselling and career mapping</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Personalized academic plans for each student</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Research and internship facilitation</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Academic progress monitoring</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Mental health and wellbeing resources</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Extracurricular and club engagement</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Study abroad program guidance</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Graduation requirement monitoring</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Student advocacy and conflict resolution</div>
+            </div>
+          </div>
+        </div>
+        <!-- Pillar 3 -->
+        <div class="pillar-content" id="pillar-3">
+          <div class="pc-header">
+            <span class="big-icon">🔬</span>
+            <div>
+              <h3>Research &amp; Scholarship</h3>
+              <p>Section 4 — Knowledge Creation</p>
+            </div>
+          </div>
+          <div class="pc-body">
+            <p class="pc-intro">Research is a core pillar of FOHSS. Faculty and students engage in scholarship that addresses Nepal's real challenges — from cultural heritage preservation to social justice and policy — using both qualitative and quantitative methods.</p>
+            <div class="pc-points">
+              <div class="pc-point"><div class="pc-point-dot"></div>Advancement of knowledge in HSS disciplines</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Local issue-focused community research</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Interdisciplinary collaboration encouraged</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Community-engaged scholarship model</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Cultural heritage preservation studies</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Policy research and evidence recommendations</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>International research collaboration</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Student involvement in research projects</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Publication in academic journals &amp; conferences</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Research funding and grant support</div>
+            </div>
+          </div>
+        </div>
+        <!-- Pillar 4 -->
+        <div class="pillar-content" id="pillar-4">
+          <div class="pc-header">
+            <span class="big-icon">🏅</span>
+            <div>
+              <h3>Quality Assurance &amp; Accreditation</h3>
+              <p>Section 5 — Academic Standards</p>
+            </div>
+          </div>
+          <div class="pc-body">
+            <p class="pc-intro">FOHSS upholds rigorous quality assurance aligned with TU standards and global accreditation benchmarks — promoting transparency, accountability, and a continuous improvement culture in everything we do.</p>
+            <div class="pc-points">
+              <div class="pc-point"><div class="pc-point-dot"></div>Compliance with TU and national standards</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>IQAC and QAA processes active at KMC</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Regular curriculum relevance reviews</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Faculty qualification assessments</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Student learning outcome evaluation</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Research productivity monitoring</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Ethical standards in all academic work</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>International accreditation alignment</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Stakeholder confidence and transparency</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Best practice recognition and adoption</div>
+            </div>
+          </div>
+        </div>
+        <!-- Pillar 5 -->
+        <div class="pillar-content" id="pillar-5">
+          <div class="pc-header">
+            <span class="big-icon">🌳</span>
+            <div>
+              <h3>Community Engagement &amp; Collaboration</h3>
+              <p>Section 6 — Social Impact</p>
+            </div>
+          </div>
+          <div class="pc-body">
+            <p class="pc-intro">FOHSS believes the campus must serve its community. Through fieldwork, NGO partnerships, community-based learning, and public awareness campaigns, we connect academic knowledge to the daily lives of Kapilvastu's people.</p>
+            <div class="pc-points">
+              <div class="pc-point"><div class="pc-point-dot"></div>Community-based experiential learning</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>NGO and local authority partnerships</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Collaborative community research projects</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Cultural exchange and mutual learning</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Social advocacy and public awareness</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Capacity-building in local communities</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Networking with employers and mentors</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Community-informed teaching methods</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Public dissemination of research findings</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Social responsibility as institutional value</div>
+            </div>
+          </div>
+        </div>
+        <!-- Pillar 6 -->
+        <div class="pillar-content" id="pillar-6">
+          <div class="pc-header">
+            <span class="big-icon">💼</span>
+            <div>
+              <h3>Qualification &amp; Skills Development</h3>
+              <p>Section 7 — Excellence in People</p>
+            </div>
+          </div>
+          <div class="pc-body">
+            <p class="pc-intro">Both faculty and students continuously develop qualifications and skills. FOHSS fosters critical thinking, digital literacy, cultural competency, and leadership — the competencies Nepal's knowledge economy demands in the 21st century.</p>
+            <div class="pc-points">
+              <div class="pc-point"><div class="pc-point-dot"></div>Critical thinking and analytical reasoning</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Effective communication (written &amp; oral)</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Research methodology proficiency</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Digital literacy and AI tool fluency</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Cultural competency for diverse Nepal</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Ethical awareness in all scholarship</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Leadership, collaboration, and teamwork</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Problem-solving and innovation mindset</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Empathy and social responsibility</div>
+              <div class="pc-point"><div class="pc-point-dot"></div>Lifelong learning commitment</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── RESEARCH ────────────────────────────────────────── -->
+<section class="sec sec-dark" id="research">
+  <div class="wrap">
+    <span class="sec-tag light" data-anim>Research &amp; Scholarship</span>
+    <h2 class="sec-h on-dark" data-anim>Knowledge That Serves Nepal</h2>
+    <div class="rule" data-anim></div>
+    <p class="sec-lead on-dark" data-anim>FOHSS research addresses real challenges in Kapilvastu and Nepal — from cultural heritage to sustainable development, social justice, and evidence-based policy.</p>
+
+    <div class="research-layout">
+      <div class="res-cards">
+        <div class="res-card" data-anim>
+          <h4>📜 Cultural Heritage Preservation</h4>
+          <p>Documenting Nepal's languages, literature, arts, and traditions — with focus on Kapilvastu's unique historical and Buddhist heritage for future generations.</p>
+        </div>
+        <div class="res-card" data-anim>
+          <h4>⚖️ Social Justice &amp; Equity Research</h4>
+          <p>Gender equality, poverty, marginalization, and inclusive development — producing rigorous evidence for policy change at local and national levels in Nepal.</p>
+        </div>
+        <div class="res-card" data-anim>
+          <h4>🌱 Sustainable Rural Development</h4>
+          <p>Climate change, environmental sustainability, and rural livelihoods in the Terai — connecting academic knowledge to community resilience in Kapilvastu.</p>
+        </div>
+        <div class="res-card" data-anim>
+          <h4>📊 Policy &amp; Governance Analysis</h4>
+          <p>Examining the impact of federalism, local governance, and public policy on communities in Lumbini Province through qualitative and quantitative methods.</p>
+        </div>
+        <div class="res-card" data-anim>
+          <h4>🔢 Quantitative &amp; Mixed Methods</h4>
+          <p>SPSS-based statistical analysis, survey research, and mixed-methods design — with dedicated support through the KMC Research Toolkit and AI-powered tools.</p>
+        </div>
+      </div>
+      <div class="research-areas" data-anim>
+        <div class="ra-tile"><div class="rt-icon">🗺️</div><h5>Nepal Studies</h5><p>History, society &amp; identity</p></div>
+        <div class="ra-tile"><div class="rt-icon">👩‍👩‍👧</div><h5>Gender &amp; Society</h5><p>Women's rights &amp; equality</p></div>
+        <div class="ra-tile"><div class="rt-icon">🏗️</div><h5>Rural Development</h5><p>Infrastructure &amp; livelihoods</p></div>
+        <div class="ra-tile"><div class="rt-icon">📚</div><h5>Education Research</h5><p>Learning outcomes &amp; policy</p></div>
+        <div class="ra-tile"><div class="rt-icon">💰</div><h5>Development Economics</h5><p>Poverty &amp; local markets</p></div>
+        <div class="ra-tile"><div class="rt-icon">🕌</div><h5>Cultural Heritage</h5><p>Language, art &amp; tradition</p></div>
+        <div class="ra-tile"><div class="rt-icon">🌐</div><h5>Political Analysis</h5><p>Governance &amp; democracy</p></div>
+        <div class="ra-tile"><div class="rt-icon">🧮</div><h5>Applied Statistics</h5><p>Quantitative social research</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── COMMUNITY ───────────────────────────────────────── -->
+<section class="sec sec-light" id="community">
+  <div class="wrap">
+    <span class="sec-tag" data-anim>Community Engagement</span>
+    <h2 class="sec-h" data-anim>Connected to Kapilvastu &amp; Beyond</h2>
+    <div class="rule" data-anim></div>
+    <p class="sec-lead" data-anim>FOHSS is not just a campus — it is an active partner in the social, cultural, and intellectual development of Taulihawa and Kapilvastu's communities.</p>
+    <div class="comm-grid">
+      <div class="comm-card" data-anim><div class="cc-icon">🏘️</div><h3>Field Research &amp; Fieldwork</h3><p>Students conduct hands-on research in local communities — applying classroom theories to the socio-economic challenges facing rural Kapilvastu and the wider Terai region.</p></div>
+      <div class="comm-card" data-anim><div class="cc-icon">🤝</div><h3>NGO &amp; Institutional Partnerships</h3><p>Collaborations with NGOs, local government, and community organizations create meaningful internships, joint research, and collaborative service projects.</p></div>
+      <div class="comm-card" data-anim><div class="cc-icon">📢</div><h3>Guest Lectures &amp; Interaction Programs</h3><p>Regular guest lectures and interaction programs with academic peers and employers broaden students' perspectives and build professional networks in Nepal.</p></div>
+      <div class="comm-card" data-anim><div class="cc-icon">🎭</div><h3>Cultural Events &amp; Annual Sports</h3><p>Annual sports weeks, cultural events, and extracurricular programmes build campus community and contribute to the holistic development of every student.</p></div>
+      <div class="comm-card" data-anim><div class="cc-icon">📣</div><h3>Social Advocacy</h3><p>Faculty and students advocate for marginalized communities — raising awareness about gender, poverty, and environmental challenges through research-driven campaigns.</p></div>
+      <div class="comm-card" data-anim><div class="cc-icon">🌐</div><h3>Digital Knowledge Dissemination</h3><p>Research findings are shared via publications, seminars, and digital platforms — making academic knowledge accessible to students and communities across Nepal.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DIGITAL HUB ─────────────────────────────────────── -->
+<section class="sec dh-section" id="digital">
+  <div class="wrap">
+    <span class="sec-tag light" data-anim>Digital Learning Hub</span>
+    <h2 class="sec-h on-dark" data-anim>AI-Powered Academic Ecosystem</h2>
+    <div class="rule" data-anim></div>
+    <p class="sec-lead on-dark" data-anim>FOHSS integrates cutting-edge digital tools — developed by our own department head — to support students and researchers at every stage of their academic journey.</p>
+
+    <div class="tools-grid">
+      <div class="tool-card" data-anim>
+        <div class="tc-icon">🤖</div>
+        <h4>AI Research Assistant</h4>
+        <p>Gemini &amp; Claude API-powered tool — helps students formulate research questions, review literature, and analyze findings.</p>
+        <span class="tool-tag tt-ai">AI Powered</span>
+      </div>
+      <div class="tool-card" data-anim>
+        <div class="tc-icon">📊</div>
+        <h4>KMC Research Toolkit (SPSS)</h4>
+        <p>18-step quantitative research workflow for HSS students — from hypothesis to final APA report, step by step.</p>
+        <span class="tool-tag tt-res">Research</span>
+      </div>
+      <div class="tool-card" data-anim>
+        <div class="tc-icon">📝</div>
+        <h4>APA 7th Edition Manuscript Guide</h4>
+        <p>Interactive citation and manuscript formatting guide ensuring every student's work meets international academic standards.</p>
+        <span class="tool-tag tt-learn">Learning</span>
+      </div>
+      <div class="tool-card" data-anim>
+        <div class="tc-icon">🧮</div>
+        <h4>AI Mathematics Problem Solver</h4>
+        <p>AI-powered mathematics &amp; statistics problem solver — embedded in the KMC Class 11–12 instructional website.</p>
+        <span class="tool-tag tt-ai">AI Powered</span>
+      </div>
+      <div class="tool-card" data-anim>
+        <div class="tc-icon">📚</div>
+        <h4>MBS Semester Academic Guide</h4>
+        <p>Complete MBS 2nd Semester interactive guide with modals, navigation, and course resources on the SDROK platform.</p>
+        <span class="tool-tag tt-learn">Learning</span>
+      </div>
+      <div class="tool-card" data-anim>
+        <div class="tc-icon">📹</div>
+        <h4>UCDL Academy — YouTube</h4>
+        <p>Video lectures and tutorials in Nepali &amp; English — serving students across Taulihawa and the Kapilvastu region.</p>
+        <span class="tool-tag tt-learn">Learning</span>
+      </div>
+      <div class="tool-card" data-anim>
+        <div class="tc-icon">🔍</div>
+        <h4>AI Tools Directory</h4>
+        <p>Curated directory of AI and digital tools for educators and researchers in Nepal — regularly updated for the fast-changing landscape.</p>
+        <span class="tool-tag tt-ai">AI Powered</span>
+      </div>
+      <div class="tool-card" data-anim>
+        <div class="tc-icon">🌐</div>
+        <h4>SDROK Research Platform</h4>
+        <p>Social Development &amp; Research Information platform — GitHub Pages &amp; WordPress connecting KMC scholarship to Nepal's broader research community.</p>
+        <span class="tool-tag tt-res">Research</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── NOTICES ─────────────────────────────────────────── -->
+<section class="sec sec-white" id="notices">
+  <div class="wrap">
+    <span class="sec-tag" data-anim>Departmental Updates</span>
+    <h2 class="sec-h" data-anim>Meeting Minutes &amp; Notices</h2>
+    <div class="rule" data-anim></div>
+    <p class="sec-lead" data-anim>Stay updated with the latest departmental activities, decisions, and institutional news from FOHSS at Kapilvastu Multiple Campus.</p>
+
+    <div class="notices-layout">
+      <div data-anim>
+        <div class="notice-row"><div class="nr-bullet"></div><div class="nr-text"><h4>Departmental Meeting: Skills Development Courses</h4><span>Academic Committee · Departmental Record</span></div></div>
+        <div class="notice-row"><div class="nr-bullet"></div><div class="nr-text"><h4>Meeting Minutes: Remedial Classes Programme</h4><span>Student Support Unit · Departmental Record</span></div></div>
+        <div class="notice-row"><div class="nr-bullet"></div><div class="nr-text"><h4>Events Review Meeting — Annual Activities</h4><span>Events Committee · Departmental Record</span></div></div>
+        <div class="notice-row"><div class="nr-bullet"></div><div class="nr-text"><h4>Course Revision Meeting Minutes</h4><span>Curriculum Committee · Departmental Record</span></div></div>
+        <div class="notice-row"><div class="nr-bullet"></div><div class="nr-text"><h4>Interaction Program: Academic Peers &amp; Employers</h4><span>Community Engagement Unit · Departmental Record</span></div></div>
+        <div class="notice-row"><div class="nr-bullet"></div><div class="nr-text"><h4>Evaluation Scheme Minutes</h4><span>Examination Board · Departmental Record</span></div></div>
+        <div class="notice-row"><div class="nr-bullet"></div><div class="nr-text"><h4>Research Supervisor Assignment Meeting</h4><span>Research Committee · Departmental Record</span></div></div>
+        <div class="notice-row"><div class="nr-bullet"></div><div class="nr-text"><h4>Teaching Plan / Lesson Plan — EMIS Impact Study</h4><span>Academic Departments · Departmental Record</span></div></div>
+        <div class="notice-row"><div class="nr-bullet"></div><div class="nr-text"><h4>IQAC, QAA &amp; Research Report Discussion</h4><span>Quality Assurance Committee · Departmental Record</span></div></div>
+        <div class="notice-row"><div class="nr-bullet"></div><div class="nr-text"><h4>Annual Sports Week — Student Welfare Unit</h4><span>Student Affairs · Departmental Record</span></div></div>
+        <div class="notice-row"><div class="nr-bullet"></div><div class="nr-text"><h4>Guest Lecture Classes — Department Notice</h4><span>Academic Department · Departmental Record</span></div></div>
+        <div class="notice-row"><div class="nr-bullet"></div><div class="nr-text"><h4>Admission Campaign Planning Meeting</h4><span>Admissions Office · Departmental Record</span></div></div>
+      </div>
+
+      <div data-anim>
+        <div class="quicklinks-box">
+          <div class="ql-head">Quick Links</div>
+          <div class="ql-btn"><span class="qi">🎓</span> Admission Information</div>
+          <div class="ql-btn"><span class="qi">📋</span> Examination Schedule</div>
+          <div class="ql-btn"><span class="qi">📚</span> B.A. Course Syllabus</div>
+          <div class="ql-btn"><span class="qi">🔬</span> Research Guidelines</div>
+          <div class="ql-btn"><span class="qi">📝</span> Assignment Submission</div>
+          <div class="ql-btn"><span class="qi">👨‍🏫</span> Faculty Directory</div>
+          <div class="ql-btn"><span class="qi">📊</span> SPSS Research Toolkit</div>
+          <div class="ql-btn"><span class="qi">🤖</span> AI Learning Tools</div>
+          <div class="ql-btn"><span class="qi">🌐</span> SDROK Platform</div>
+          <div class="ql-btn"><span class="qi">📺</span> UCDL Academy YouTube</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── QUALIFICATIONS ──────────────────────────────────── -->
+<section class="sec sec-light" id="qualifications">
+  <div class="wrap">
+    <span class="sec-tag" data-anim>Standards of Excellence</span>
+    <h2 class="sec-h" data-anim>Faculty Qualifications &amp; Student Skills</h2>
+    <div class="rule" data-anim></div>
+    <p class="sec-lead" data-anim>FOHSS maintains high standards for both faculty qualifications and student skill development — building the human capital Nepal's knowledge economy needs.</p>
+
+    <div class="qual-layout">
+      <div class="qual-group" data-anim>
+        <h3>Faculty Qualifications</h3>
+        <div class="qual-item"><div class="qi-dot">🎓</div><span>Advanced degree (Master's or Ph.D.) in discipline area</span></div>
+        <div class="qual-item"><div class="qi-dot">🔍</div><span>Specialized expertise and active research publications</span></div>
+        <div class="qual-item"><div class="qi-dot">📖</div><span>Teaching experience and innovative pedagogy</span></div>
+        <div class="qual-item"><div class="qi-dot">🌐</div><span>Interdisciplinary exposure and cross-department collaboration</span></div>
+        <div class="qual-item"><div class="qi-dot">📈</div><span>Continuous professional development (workshops, conferences)</span></div>
+        <div class="qual-item"><div class="qi-dot">🤝</div><span>Community engagement and applied research experience</span></div>
+      </div>
+      <div class="qual-group" data-anim>
+        <h3>Student Core Competencies</h3>
+        <div class="qual-item"><div class="qi-dot">💡</div><span>Critical thinking and complex problem analysis</span></div>
+        <div class="qual-item"><div class="qi-dot">🗣️</div><span>Effective communication — written, oral, and digital</span></div>
+        <div class="qual-item"><div class="qi-dot">📊</div><span>Research skills: qualitative and quantitative methods</span></div>
+        <div class="qual-item"><div class="qi-dot">💻</div><span>Digital literacy and AI tool proficiency</span></div>
+        <div class="qual-item"><div class="qi-dot">🌍</div><span>Cultural competency, empathy, and social awareness</span></div>
+        <div class="qual-item"><div class="qi-dot">🏆</div><span>Leadership, adaptability, and lifelong learning</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CREATOR / LEADERSHIP ───────────────────────────── -->
+<section class="creator-section" id="creator">
+  <div class="wrap">
+    <div class="creator-inner">
+      <div class="creator-portrait" data-anim>
+        <div class="portrait-ring">
+          <div class="portrait-inner">👨‍🏫</div>
+        </div>
+        <h3>Mr. Bishnu Singh Rayamajhi</h3>
+        <div class="c-role">
+          Mathematics Lecturer &amp; Head of HSS<br>
+          Kapilvastu Multiple Campus, Taulihawa<br>
+          Founder, UCDL Academy
+        </div>
+      </div>
+
+      <div class="creator-bio" data-anim>
+        <span class="bio-tag">Prepared &amp; Presented By</span>
+        <h2>Building Nepal's Digital Academic Future from Kapilvastu</h2>
+        <p>Mr. Bishnu Singh Rayamajhi is a Mathematics Lecturer and the Head of the Humanities &amp; Social Sciences Department at Kapilvastu Multiple Campus, Taulihawa — a constituent campus of Tribhuvan University in Lumbini Province, Nepal.</p>
+        <p>As the Founder of UCDL Academy, he creates bilingual (Nepali &amp; English) educational content for students across the Taulihawa and Kapilvastu region — spanning AI, mathematics, data science, and research methodology — delivered through YouTube and the SDROK digital platform.</p>
+        <p>His work stands at the intersection of mathematics education, academic research methodology, and educational technology — and he has been instrumental in building a suite of AI-powered academic tools: from the 22-module ResearchAI Platform and KMC SPSS Research Toolkit to complete APA 7th edition manuscript guides and this departmental digital hub.</p>
+        <div class="creator-chips">
+          <span class="c-chip gold">📐 Mathematics Lecturer</span>
+          <span class="c-chip gold">🏛️ Head of HSS — KMC</span>
+          <span class="c-chip">🎓 Tribhuvan University</span>
+          <span class="c-chip">📺 UCDL Academy Founder</span>
+          <span class="c-chip">🌐 SDROK Platform Creator</span>
+          <span class="c-chip">🤖 AI in Education Pioneer</span>
+          <span class="c-chip">📊 Research Methodology</span>
+          <span class="c-chip">🇳🇵 Taulihawa, Kapilvastu</span>
+        </div>
+        <div class="creator-platforms">
+          <div class="cp-btn primary">📺 UCDL Academy (YouTube)</div>
+          <div class="cp-btn">🌐 SDROK Platform</div>
+          <div class="cp-btn">🔬 ResearchAI Platform</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ──────────────────────────────────────────── -->
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="fb-brand">
+        <div class="fb-logo">
+          <div class="crest">KMC</div>
+          <span>Humanities &amp; Social Sciences</span>
+        </div>
+        <p>A Digital Learning &amp; Research Hub connecting students, teachers, and society through knowledge, research, and innovation — serving Taulihawa, Kapilvastu, and Lumbini Province, Nepal.</p>
+        <div class="fb-credit">
+          <p>Website prepared by <strong>Mr. Bishnu Singh Rayamajhi</strong><br>
+          Mathematics Lecturer &amp; Head of HSS, KMC Taulihawa<br>
+          Founder: <strong>UCDL Academy</strong> · SDROK Platform</p>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>B.A. Programs</h4>
+        <ul>
+          <li><a href="#">English</a></li>
+          <li><a href="#">Nepali</a></li>
+          <li><a href="#">Sociology</a></li>
+          <li><a href="#">Rural Development</a></li>
+          <li><a href="#">Economics</a></li>
+          <li><a href="#">Political Science</a></li>
+          <li><a href="#">Philosophy</a></li>
+          <li><a href="#">Statistics &amp; Mathematics</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Academic Pillars</h4>
+        <ul>
+          <li><a href="#">Curriculum Review</a></li>
+          <li><a href="#">Course Delivery</a></li>
+          <li><a href="#">Student Advising</a></li>
+          <li><a href="#">Research</a></li>
+          <li><a href="#">Quality Assurance</a></li>
+          <li><a href="#">Community Engagement</a></li>
+          <li><a href="#">Skills Development</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Digital Resources</h4>
+        <ul>
+          <li><a href="#">UCDL Academy — YouTube</a></li>
+          <li><a href="#">SDROK Research Platform</a></li>
+          <li><a href="#">ResearchAI Platform</a></li>
+          <li><a href="#">SPSS Research Toolkit</a></li>
+          <li><a href="#">APA 7th Edition Guide</a></li>
+          <li><a href="#">AI Tools Directory</a></li>
+          <li><a href="#">Contact FOHSS</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2025 KMC Humanities &amp; Social Sciences, Taulihawa, Kapilvastu · All rights reserved</span>
+      <div class="tu">🎓 <span>Tribhuvan University Affiliated Campus, Nepal</span></div>
+    </div>
+  </div>
+</footer>
+
+<!-- ── SCRIPTS ─────────────────────────────────────────── -->
+<script>
+// NAV scroll state
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// Mobile nav toggle
+function toggleNav() {
+  document.body.classList.toggle('nav-open');
+}
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('#nav')) document.body.classList.remove('nav-open');
+});
+
+// Pillar tabs
+function showPillar(index) {
+  document.querySelectorAll('.pillar-tab').forEach((t,i) => {
+    t.classList.toggle('active', i === index);
+  });
+  document.querySelectorAll('.pillar-content').forEach((c,i) => {
+    c.classList.toggle('active', i === index);
+  });
+}
+
+// Scroll reveal
+const animObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      animObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+
+document.querySelectorAll('[data-anim]').forEach((el, i) => {
+  el.style.transitionDelay = (i % 4) * 0.08 + 's';
+  animObserver.observe(el);
+});
+
+// Nav active link highlight on scroll
+const sections = document.querySelectorAll('section[id]');
+const navAnchors = document.querySelectorAll('.nav-menu a');
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navAnchors.forEach(a => {
+        a.style.color = '';
+        if (a.getAttribute('href') === '#' + e.target.id) {
+          a.style.color = 'var(--gold)';
+        }
+      });
+    }
+  });
+}, { threshold: 0.45 });
+sections.forEach(s => sectionObserver.observe(s));
+</script>
+</body>
+</html>
