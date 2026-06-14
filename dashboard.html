@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KMC-UCDL Content Agent - Interactive Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #7c3aed;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --dark-bg: #0f172a;
+            --dark-surface: #1e293b;
+            --text-primary: #ffffff;
+            --text-secondary: #cbd5e1;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1a0f2e 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-surface);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(15, 23, 42, 0.95);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .header-flex {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .logo h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .logo p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .status-badge {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 0.75rem 1.5rem;
+            border-radius: 999px;
+            font-size: 0.9rem;
+        }
+
+        .status-badge.generating {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.4);
+            color: #60a5fa;
+        }
+
+        .status-badge.complete {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.4);
+            color: #10b981;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Control Panel */
+        .control-section {
+            margin-bottom: 3rem;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 900px) {
+            .control-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .control-panel {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            height: fit-content;
+        }
+
+        button {
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+            width: 100%;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-primary.loading {
+            opacity: 0.8;
+        }
+
+        /* Stats */
+        .stats {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Workflow Steps */
+        .workflow-section {
+            background: rgba(139, 92, 246, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .workflow-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 8px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step.completed {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .step.active {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+        }
+
+        .step.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        .step-icon {
+            font-size: 1.5rem;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .step-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            flex: 1;
+        }
+
+        .step-status {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.2rem;
+        }
+
+        .step.completed .step-status {
+            color: var(--success);
+        }
+
+        .step.active .step-status {
+            color: #60a5fa;
+        }
+
+        /* Generated Post Display - MAIN FOCUS */
+        .post-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .post-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: stretch;
+        }
+
+        @media (max-width: 1000px) {
+            .post-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .post-image-wrapper {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--dark-surface);
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+        }
+
+        .post-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-placeholder {
+            text-align: center;
+            opacity: 0.5;
+        }
+
+        .image-placeholder p {
+            margin: 0.5rem 0;
+        }
+
+        .image-label {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+
+        .post-image-wrapper.loaded .image-label {
+            display: block;
+        }
+
+        .post-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .post-content-wrapper.loaded {
+            opacity: 1;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .post-emoji {
+            font-size: 3rem;
+        }
+
+        .post-meta h3 {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .post-meta h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .post-text-wrapper {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            flex: 1;
+            overflow-y: auto;
+            max-height: 400px;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: var(--text-secondary);
+        }
+
+        .hashtags-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .hashtag {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2));
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .hashtag:hover {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(236, 72, 153, 0.3));
+            transform: translateY(-2px);
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-secondary {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--primary);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            flex: 1;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(139, 92, 246, 0.3);
+        }
+
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            text-align: center;
+            padding: 2rem;
+            background: rgba(139, 92, 246, 0.05);
+            border: 2px dashed rgba(139, 92, 246, 0.2);
+            border-radius: 12px;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state-text {
+            color: var(--text-secondary);
+            max-width: 300px;
+        }
+
+        /* Quality Metrics */
+        .metrics-section {
+            margin-bottom: 3rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .metric-card {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .metric-card:hover {
+            background: rgba(139, 92, 246, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .metric-card.success {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .metric-card.success .metric-value {
+            color: var(--success);
+        }
+
+        /* Loading spinner */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid rgba(139, 92, 246, 0.2);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-flex">
+            <div class="logo">
+                <div class="logo-icon">⚡</div>
+                <div>
+                    <h1>KMC-UCDL Content Agent</h1>
+                    <p>AI-Powered Educational Content Automation</p>
+                </div>
+            </div>
+            <div class="status-badge" id="statusBadge">
+                Status: <strong id="statusText">IDLE</strong>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Control Section -->
+        <div class="control-section">
+            <!-- Control Panel -->
+            <div class="control-panel">
+                <button class="btn-primary" id="generateBtn" onclick="generateContent()">
+                    <span id="btnIcon">▶️</span>
+                    <span id="btnText">Generate Daily Content</span>
+                </button>
+
+                <!-- Stats -->
+                <div class="stats">
+                    <div class="stat-row">
+                        <span class="stat-label">Today's Topic</span>
+                        <span class="stat-value" id="topicEmoji">—</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Status</span>
+                        <span class="stat-value" id="quickStatus" style="color: #94a3b8;">○ Idle</span>
+                    </div>
+                    <div class="stat-row" id="wordCountRow" style="display: none;">
+                        <span class="stat-label">Word Count</span>
+                        <span class="stat-value" id="wordCount">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workflow Steps -->
+            <div class="workflow-section">
+                <div class="workflow-title">📊 Generation Pipeline</div>
+                <div class="steps-container" id="stepsContainer">
+                    <!-- Steps generated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Generated Post Section -->
+        <section class="post-section">
+            <h2 class="section-title">📋 Generated Post</h2>
+            
+            <div class="post-container">
+                <!-- Post Image -->
+                <div class="post-image-wrapper" id="postImageWrapper">
+                    <div class="image-placeholder">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">📸</div>
+                        <p>AI-generated infographic will appear here</p>
+                        <p style="font-size: 0.85rem; margin-top: 1rem;">Click "Generate Daily Content" to start</p>
+                    </div>
+                </div>
+
+                <!-- Post Content -->
+                <div class="post-content-wrapper" id="postContentWrapper">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">✨</div>
+                        <div class="empty-state-text">
+                            Click "Generate Daily Content" to create an AI-powered educational post with beautiful graphics, engaging content, and optimized hashtags
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quality Metrics -->
+        <section class="metrics-section" id="metricsSection" style="display: none;">
+            <h2 class="section-title">📊 Quality Metrics</h2>
+            <div class="metrics-grid" id="metricsContainer">
+                <!-- Metrics generated by JS -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>KMC-UCDL Daily Content Agent</strong></p>
+        <p style="margin-top: 0.5rem;">Empowering Education, Research & Innovation through AI</p>
+    </footer>
+
+    <script>
+        // Configuration
+        const STEPS = [
+            { icon: '📍', name: 'Topic Discovery' },
+            { icon: '🔬', name: 'Research Content' },
+            { icon: '✍️', name: 'Write Post' },
+            { icon: '🔍', name: 'Fact Check' },
+            { icon: '🎨', name: 'Generate Image' },
+            { icon: '🏷️', name: 'Optimize Tags' },
+            { icon: '📤', name: 'Prepare Post' },
+            { icon: '📊', name: 'Track Analytics' }
+        ];
+
+        const TOPICS = [
+            { emoji: '🧮', category: 'Advanced Mathematics' },
+            { emoji: '🤖', category: 'Artificial Intelligence' },
+            { emoji: '🔬', category: 'Research Methodology' },
+            { emoji: '🧠', category: 'Deep Learning' },
+            { emoji: '💼', category: 'Entrepreneurship' },
+            { emoji: '💡', category: 'Innovation' },
+            { emoji: '✨', category: 'Motivational Learning' }
+        ];
+
+        let currentStep = -1;
+        let isGenerating = false;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', initializeSteps);
+
+        function initializeSteps() {
+            const container = document.getElementById('stepsContainer');
+            container.innerHTML = STEPS.map((step, index) => `
+                <div class="step" id="step-${index}">
+                    <div class="step-icon">${step.icon}</div>
+                    <div>
+                        <div class="step-name">${step.name}</div>
+                        <div class="step-status">○ Pending</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function setStatus(status) {
+            const badge = document.getElementById('statusBadge');
+            const statusText = document.getElementById('statusText');
+            const quickStatus = document.getElementById('quickStatus');
+
+            statusText.textContent = status.toUpperCase();
+            badge.classList.remove('generating', 'complete');
+
+            if (status === 'generating') {
+                badge.classList.add('generating');
+                quickStatus.textContent = '⟳ Processing';
+                quickStatus.style.color = '#60a5fa';
+            } else if (status === 'complete') {
+                badge.classList.add('complete');
+                quickStatus.textContent = '✓ Complete';
+                quickStatus.style.color = '#10b981';
+            } else {
+                quickStatus.textContent = '○ Idle';
+                quickStatus.style.color = '#94a3b8';
+            }
+        }
+
+        function updateStep(stepIndex, newStatus) {
+            const stepEl = document.getElementById(`step-${stepIndex}`);
+            if (!stepEl) return;
+
+            stepEl.classList.remove('pending', 'active', 'completed');
+            const statusEl = stepEl.querySelector('.step-status');
+
+            if (newStatus === 'completed') {
+                stepEl.classList.add('completed');
+                statusEl.textContent = '✓ Completed';
+            } else if (newStatus === 'active') {
+                stepEl.classList.add('active');
+                statusEl.textContent = '⟳ Processing...';
+            }
+        }
+
+        async function generateContent() {
+            if (isGenerating) return;
+
+            isGenerating = true;
+            currentStep = 0;
+
+            const btn = document.getElementById('generateBtn');
+            btn.disabled = true;
+
+            setStatus('generating');
+
+            // Get today's topic
+            const dayIndex = new Date().getDay();
+            const topic = TOPICS[dayIndex === 0 ? 6 : dayIndex - 1];
+            document.getElementById('topicEmoji').textContent = topic.emoji;
+
+            // Reset steps
+            STEPS.forEach((_, i) => {
+                const el = document.getElementById(`step-${i}`);
+                el.classList.remove('pending', 'active', 'completed');
+                el.querySelector('.step-status').textContent = '○ Pending';
+            });
+
+            // Process each step
+            for (let i = 0; i < STEPS.length; i++) {
+                currentStep = i;
+                updateStep(i, 'active');
+                await delay(1200);
+                updateStep(i, 'completed');
+            }
+
+            // Generate and display content
+            const post = generateMockPost(topic);
+            displayPost(post);
+
+            setStatus('complete');
+            btn.disabled = false;
+        }
+
+        function generateMockPost(topic) {
+            const posts = {
+                '🧮': {
+                    category: 'Advanced Mathematics',
+                    content: `Did you know? Mathematics is the language of the universe! 🌌
+
+🎯 Today's Insight:
+Advanced mathematics helps us understand patterns, solve complex problems, and make predictions about the world around us. From calculus to linear algebra, these tools are essential for engineering, physics, computer science, and even economics.
+
+💡 Real-World Application:
+Machine learning algorithms use matrix mathematics to learn from data. Architects use calculus to design beautiful buildings. Engineers use differential equations to build bridges and create new technologies.
+
+🔑 Key Takeaway:
+Mathematical thinking develops logical problem-solving skills that apply far beyond numbers - they shape how we analyze everything.
+
+🌟 Why It Matters:
+Mathematics isn't just for mathematicians. Every field of study benefits from mathematical insight. From medicine to music production, mathematics creates order and understanding.
+
+❓ What's your favorite mathematical concept? Share in the comments!`,
+                    hashtags: ['#Mathematics', '#STEM', '#AdvancedMath', '#Learning', '#KMC', '#UCDLAcademy', '#Education', '#MathematicalThinking', '#ProblemSolving', '#Innovation']
+                },
+                '🤖': {
+                    category: 'Artificial Intelligence',
+                    content: `Did you know? Artificial Intelligence is transforming every industry! 🚀
+
+🎯 Today's Insight:
+AI systems can now recognize faces, understand language, create images, and even write code. These technologies are powered by machine learning algorithms that learn from data to make intelligent decisions.
+
+💡 Real-World Application:
+Netflix recommends shows you'll love. ChatGPT helps students learn. Hospitals use AI to diagnose diseases early. Agriculture uses AI to optimize crop yields. Teachers use AI to personalize learning.
+
+🔑 Key Takeaway:
+Understanding AI isn't optional anymore - it's essential literacy for the 21st century.
+
+🌟 Why It Matters:
+AI is reshaping education, healthcare, business, and society. Those who understand AI will lead tomorrow's innovations.
+
+❓ How do you think AI will change your field? Join the conversation!`,
+                    hashtags: ['#AI', '#ArtificialIntelligence', '#MachineLearning', '#Tech', '#KMC', '#UCDLAcademy', '#FutureOfWork', '#Innovation', '#EducationTech', '#NepalTech']
+                },
+                '🔬': {
+                    category: 'Research Methodology',
+                    content: `Did you know? Good research methodology is the foundation of reliable knowledge! 📚
+
+🎯 Today's Insight:
+Research methodology includes how we ask questions, design studies, collect data, and draw conclusions. Without proper methodology, even the most interesting observations can lead to wrong conclusions.
+
+💡 Real-World Application:
+Medical researchers use double-blind studies to test medicines. Psychologists use controlled experiments to understand behavior. Sociologists use surveys and interviews to understand communities.
+
+🔑 Key Takeaway:
+The method matters as much as the findings. Rigorous methodology ensures our knowledge is trustworthy.
+
+🌟 Why It Matters:
+Whether you're a scientist, journalist, or just evaluating claims online, understanding research methodology helps you distinguish truth from misinformation.
+
+❓ What research questions interest you? Start exploring!`,
+                    hashtags: ['#ResearchMethodology', '#Science', '#AcademicResearch', '#CriticalThinking', '#KMC', '#UCDLAcademy', '#Research', '#Knowledge', '#Education', '#Excellence']
+                },
+                '🧠': {
+                    category: 'Deep Learning',
+                    content: `Did you know? Deep Learning is behind most AI breakthroughs today! 🧠
+
+🎯 Today's Insight:
+Deep learning uses artificial neural networks inspired by the human brain to learn from massive amounts of data. These systems power image recognition, natural language processing, and many other AI applications.
+
+💡 Real-World Application:
+Self-driving cars use deep learning to see the road. ChatGPT uses deep learning to generate human-like text. Medical imaging uses deep learning to detect tumors. Virtual assistants use it to understand voice commands.
+
+🔑 Key Takeaway:
+Deep learning is not magic - it's a sophisticated tool that learns patterns from data.
+
+🌟 Why It Matters:
+Deep learning is transforming technology faster than any previous innovation. Understanding its capabilities and limitations is crucial for responsible AI development.
+
+❓ What deep learning application fascinates you most?`,
+                    hashtags: ['#DeepLearning', '#NeuralNetworks', '#AI', '#MachineLearning', '#KMC', '#UCDLAcademy', '#DataScience', '#TechEducation', '#Innovation', '#FutureTech']
+                },
+                '💼': {
+                    category: 'Entrepreneurship',
+                    content: `Did you know? Entrepreneurship is about solving problems, not just making money! 💡
+
+🎯 Today's Insight:
+Great entrepreneurs identify problems that matter to people, create innovative solutions, and build sustainable businesses. The best ideas often come from personal experience with real problems.
+
+💡 Real-World Application:
+Elon Musk saw the need for clean energy and electric vehicles. Payal Kadakia created ClassPass because she couldn't find a yoga class easily. Your best business idea might solve a problem you experience daily.
+
+🔑 Key Takeaway:
+Entrepreneurship is a skill that can be learned. It requires creativity, persistence, and willingness to learn from failure.
+
+🌟 Why It Matters:
+Entrepreneurs create jobs, solve problems, and drive innovation. Whether you want to start a business or improve your career, entrepreneurial thinking is invaluable.
+
+❓ What problem in your community could you solve?`,
+                    hashtags: ['#Entrepreneurship', '#Startup', '#SmallBusiness', '#Innovation', '#KMC', '#UCDLAcademy', '#BusinessIdeas', '#Leadership', '#ProblemSolving', '#Nepal']
+                },
+                '💡': {
+                    category: 'Innovation',
+                    content: `Did you know? Innovation isn't just for tech companies! 🚀
+
+🎯 Today's Insight:
+Innovation is about finding better ways to do things. It can be a small improvement to an existing process or a completely new invention. Every field - healthcare, education, agriculture, business - benefits from innovative thinking.
+
+💡 Real-World Application:
+A farmer using drones to monitor crops is innovating. A teacher using AI to personalize student learning is innovating. A restaurant using a new payment system is innovating. Innovation happens everywhere.
+
+🔑 Key Takeaway:
+You don't need to be a genius to innovate. You need curiosity, observation skills, and willingness to try new approaches.
+
+🌟 Why It Matters:
+Innovation drives progress. The future belongs to those who can think creatively and adapt to change.
+
+❓ What inefficiency do you see that could be improved?`,
+                    hashtags: ['#Innovation', '#Creativity', '#Problem-Solving', '#NewIdeas', '#KMC', '#UCDLAcademy', '#Entrepreneurship', '#FutureFocus', '#Leadership', '#Growth']
+                },
+                '✨': {
+                    category: 'Motivational Learning',
+                    content: `Did you know? Every expert was once a beginner! 🌟
+
+🎯 Today's Insight:
+Learning is a journey, not a destination. The most successful people aren't born with knowledge - they develop it through curiosity, practice, and perseverance. Every failure is a step toward success.
+
+💡 Real-World Application:
+Bill Gates taught himself programming as a child. Oprah overcame poverty through education. Malala fought for her right to learn. Your education story has the power to change the world.
+
+🔑 Key Takeaway:
+You have unlimited potential. Your effort and attitude matter more than your current circumstances.
+
+🌟 Why It Matters:
+Believing in yourself and your ability to learn opens doors you never thought possible. Your next achievement starts with one small step today.
+
+❓ What do you want to learn? Take that first step today!`,
+                    hashtags: ['#Motivation', '#Learning', '#Growth', '#SelfImprovement', '#KMC', '#UCDLAcademy', '#YouCanDoIt', '#BelieveInYourself', '#EducationMatters', '#Inspiration']
+                }
+            };
+
+            return posts[topic.emoji] || posts['🤖'];
+        }
+
+        function displayPost(post) {
+            const imageWrapper = document.getElementById('postImageWrapper');
+            const contentWrapper = document.getElementById('postContentWrapper');
+            const metricsSection = document.getElementById('metricsSection');
+
+            // Clear previous content
+            imageWrapper.innerHTML = '';
+            contentWrapper.innerHTML = '';
+
+            // Get topic emoji
+            const dayIndex = new Date().getDay();
+            const topic = TOPICS[dayIndex === 0 ? 6 : dayIndex - 1];
+
+            // Display image
+            const img = document.createElement('img');
+            img.src = `https://image.pollinations.ai/prompt/beautiful%20professional%20educational%20infographic%20about%20${encodeURIComponent(post.category)}%20with%20modern%20design%2C%20KMC%20branding%2C%20purple%20and%20orange%20colors%2C%20academic%20style?width=1200&height=1200&nologo=true`;
+            img.alt = post.category;
+            img.onerror = function() {
+                this.src = 'https://via.placeholder.com/1200x1200?text=' + encodeURIComponent(post.category);
+            };
+            imageWrapper.appendChild(img);
+            imageWrapper.classList.add('loaded');
+
+            const imageLabel = document.createElement('div');
+            imageLabel.className = 'image-label';
+            imageLabel.textContent = `${topic.emoji} AI Generated`;
+            imageWrapper.appendChild(imageLabel);
+
+            // Display content
+            const headerDiv = document.createElement('div');
+            headerDiv.className = 'post-header';
+            headerDiv.innerHTML = `
+                <div class="post-emoji">${topic.emoji}</div>
+                <div class="post-meta">
+                    <h3>Today's Topic</h3>
+                    <h2>${post.category}</h2>
+                </div>
+            `;
+            contentWrapper.appendChild(headerDiv);
+
+            const textDiv = document.createElement('div');
+            textDiv.className = 'post-text-wrapper';
+            textDiv.textContent = post.content;
+            contentWrapper.appendChild(textDiv);
+
+            const hashtagsDiv = document.createElement('div');
+            hashtagsDiv.innerHTML = '<p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.75rem;">Optimized Hashtags:</p>';
+            const tagsContainer = document.createElement('div');
+            tagsContainer.className = 'hashtags-wrapper';
+            post.hashtags.forEach(tag => {
+                const tagEl = document.createElement('span');
+                tagEl.className = 'hashtag';
+                tagEl.textContent = tag;
+                tagsContainer.appendChild(tagEl);
+            });
+            hashtagsDiv.appendChild(tagsContainer);
+            contentWrapper.appendChild(hashtagsDiv);
+
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'post-actions';
+            actionsDiv.innerHTML = `
+                <button class="btn-primary" onclick="copyPost()">
+                    📋 Copy Full Post
+                </button>
+                <button class="btn-secondary">
+                    ✓ Publish to Facebook
+                </button>
+            `;
+            contentWrapper.appendChild(actionsDiv);
+
+            contentWrapper.classList.add('loaded');
+
+            // Display metrics
+            displayMetrics();
+            metricsSection.style.display = 'block';
+
+            // Update word count
+            document.getElementById('wordCount').textContent = post.content.split(' ').length;
+            document.getElementById('wordCountRow').style.display = 'flex';
+        }
+
+        function displayMetrics() {
+            const metricsContainer = document.getElementById('metricsContainer');
+            metricsContainer.innerHTML = `
+                <div class="metric-card">
+                    <div class="metric-label">Clarity</div>
+                    <div class="metric-value">9/10</div>
+                </div>
+                <div class="metric-card success">
+                    <div class="metric-label">Accuracy</div>
+                    <div class="metric-value">✓</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Engagement</div>
+                    <div class="metric-value">8/10</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Education</div>
+                    <div class="metric-value">9/10</div>
+                </div>
+                <div class="metric-card success">
+                    <div class="metric-label">SEO Ready</div>
+                    <div class="metric-value">✓</div>
+                </div>
+            `;
+        }
+
+        function copyPost() {
+            const textEl = document.querySelector('.post-text-wrapper');
+            const hashtags = Array.from(document.querySelectorAll('.hashtag'))
+                .map(tag => tag.textContent)
+                .join(' ');
+
+            const fullText = textEl.textContent + '\n\n' + hashtags;
+
+            navigator.clipboard.writeText(fullText).then(() => {
+                const btn = event.target;
+                const original = btn.innerHTML;
+                btn.innerHTML = '✓ Copied!';
+                btn.style.background = 'rgba(16, 185, 129, 0.3)';
+
+                setTimeout(() => {
+                    btn.innerHTML = original;
+                    btn.style.background = '';
+                }, 2000);
+            });
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+    </script>
+</body>
+</html>
