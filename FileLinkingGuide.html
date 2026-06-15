@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KMC-UCDL File Linking Guide - How to Use All Files</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --border: #e2e8f0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        p { opacity: 0.95; }
+        
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        section {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+        
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 0.5rem;
+        }
+        
+        h3 {
+            color: var(--secondary);
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .file-card {
+            background: linear-gradient(135deg, #f0f7ff 0%, #f0fdf4 100%);
+            border-left: 5px solid var(--primary);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+        
+        .file-name {
+            font-family: 'Courier New', monospace;
+            background: var(--dark);
+            color: #4ade80;
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .file-description {
+            color: #666;
+            margin: 0.75rem 0;
+            line-height: 1.6;
+        }
+        
+        .file-size {
+            color: #999;
+            font-size: 0.9rem;
+        }
+        
+        .link-example {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+        
+        .diagram {
+            background: white;
+            border: 2px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        
+        .diagram pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .step-box {
+            background: var(--light);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 6px;
+        }
+        
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            float: left;
+            margin-right: 1rem;
+        }
+        
+        .step-content {
+            overflow: hidden;
+        }
+        
+        .step-content h4 {
+            margin: 0 0 0.5rem 0;
+            color: var(--primary);
+        }
+        
+        .step-content p {
+            margin: 0.25rem 0;
+        }
+        
+        .highlight {
+            background: #fef3c7;
+            padding: 1.5rem;
+            border-radius: 6px;
+            border-left: 4px solid #facc15;
+            margin: 1rem 0;
+        }
+        
+        .highlight h4 {
+            color: #b45309;
+            margin-bottom: 0.5rem;
+        }
+        
+        .success-box {
+            background: #f0fdf4;
+            border: 2px solid var(--success);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
+        .success-box h3 {
+            color: var(--success);
+            margin-top: 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        table thead {
+            background: var(--primary);
+            color: white;
+        }
+        
+        table th, table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        table tbody tr:nth-child(even) {
+            background: var(--light);
+        }
+        
+        .button {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .button:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .button.secondary {
+            background: var(--success);
+        }
+        
+        .button.secondary:hover {
+            background: #15803d;
+        }
+        
+        ul {
+            padding-left: 2rem;
+        }
+        
+        li {
+            margin: 0.5rem 0;
+        }
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .file-structure {
+            background: var(--dark);
+            color: #4ade80;
+            padding: 1.5rem;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            margin: 1rem 0;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            section { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🔗 Complete File Linking Guide</h1>
+        <p>How to Use All KMC-UCDL Files Together</p>
+    </header>
+
+    <div class="container">
+        <!-- SECTION 1: Overview -->
+        <section>
+            <h2>📁 File Structure & Linking Overview</h2>
+            
+            <div class="highlight">
+                <h4>⚠️ IMPORTANT: File Organization</h4>
+                <p>All HTML files must be in the <strong>same folder</strong> for links to work properly. If they are separated, the links will not find the other files.</p>
+            </div>
+
+            <h3>Your Complete Package Contains:</h3>
+            
+            <div class="file-card">
+                <div class="file-name">📄 INDEX.html</div>
+                <h4 style="margin: 0.5rem 0 0 0;">Landing Page / Home</h4>
+                <p class="file-description">
+                    Beautiful introduction page with full attribution. This is your starting point.
+                    Contains two prominent buttons that link to both main guides.
+                </p>
+                <p class="file-size">Size: ~15 KB | Type: HTML | Interactive: Yes</p>
+            </div>
+
+            <div class="file-card">
+                <div class="file-name">📖 KMC-UCDL_Complete_Guide.html</div>
+                <h4 style="margin: 0.5rem 0 0 0;">Setup & Configuration Guide</h4>
+                <p class="file-description">
+                    Complete step-by-step setup instructions. Includes 8 interactive sections covering everything from API setup to troubleshooting.
+                    Has navigation bar to return to INDEX or go to HOW_IT_RUNS.
+                </p>
+                <p class="file-size">Size: ~250 KB | Type: HTML | Interactive: Yes</p>
+            </div>
+
+            <div class="file-card">
+                <div class="file-name">🔄 HOW_IT_RUNS.html</div>
+                <h4 style="margin: 0.5rem 0 0 0;">Execution Flow Guide</h4>
+                <p class="file-description">
+                    Detailed explanation of how the system executes. Includes timing diagrams, node-by-node breakdown, real examples, and performance metrics.
+                    Has navigation bar to return to INDEX or go to Setup Guide.
+                </p>
+                <p class="file-size">Size: ~180 KB | Type: HTML | Interactive: Yes</p>
+            </div>
+
+            <div class="file-card">
+                <div class="file-name">⚙️ KMC-UCDL_n8n_Workflow.json</div>
+                <h4 style="margin: 0.5rem 0 0 0;">n8n Workflow</h4>
+                <p class="file-description">
+                    Ready-to-import workflow configuration. Copy and paste into n8n Cloud dashboard. Not an HTML file - referenced in setup guide.
+                </p>
+                <p class="file-size">Size: ~8 KB | Type: JSON | Interactive: No</p>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Linking Structure -->
+        <section>
+            <h2>🔗 Complete Linking Structure</h2>
+
+            <h3>Visual Navigation Flow:</h3>
+            
+            <div class="diagram">
+                <pre>
+┌─────────────────────────────────────────────────┐
+│            INDEX.html (Landing Page)             │
+│                    ↓ ↓                           │
+│   ┌─ "Start Setup Guide" Button                 │
+│   │   ↓                                          │
+│   └─→ KMC-UCDL_Complete_Guide.html              │
+│       │                                         │
+│       ├─ "← Home" Button → Back to INDEX        │
+│       ├─ "How It Runs →" → Opens HOW_IT_RUNS   │
+│       └─ 8 Section Buttons → Jump within page   │
+│                                                 │
+│   ┌─ "Learn How It Works" Button                │
+│   │   ↓                                          │
+│   └─→ HOW_IT_RUNS.html                          │
+│       │                                         │
+│       ├─ "← Home" Button → Back to INDEX        │
+│       ├─ "📖 Setup Guide" → Opens Complete     │
+│       └─ Other content sections                 │
+│                                                 │
+└─────────────────────────────────────────────────┘
+                </pre>
+            </div>
+
+            <h3>Link Details Table:</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>From File</th>
+                        <th>Link Text</th>
+                        <th>Points To</th>
+                        <th>How It Works</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>INDEX.html</td>
+                        <td>🚀 Start Setup Guide</td>
+                        <td>KMC-UCDL_Complete_Guide.html</td>
+                        <td>href="./KMC-UCDL_Complete_Guide.html"</td>
+                    </tr>
+                    <tr>
+                        <td>INDEX.html</td>
+                        <td>📚 Learn How It Works</td>
+                        <td>HOW_IT_RUNS.html</td>
+                        <td>href="./HOW_IT_RUNS.html"</td>
+                    </tr>
+                    <tr>
+                        <td>INDEX.html</td>
+                        <td>📖 Setup Guide (Card)</td>
+                        <td>KMC-UCDL_Complete_Guide.html</td>
+                        <td>href="./KMC-UCDL_Complete_Guide.html"</td>
+                    </tr>
+                    <tr>
+                        <td>INDEX.html</td>
+                        <td>🔄 How It Runs (Card)</td>
+                        <td>HOW_IT_RUNS.html</td>
+                        <td>href="./HOW_IT_RUNS.html"</td>
+                    </tr>
+                    <tr>
+                        <td>KMC-UCDL_Complete_Guide.html</td>
+                        <td>← Home</td>
+                        <td>INDEX.html</td>
+                        <td>href="./INDEX.html"</td>
+                    </tr>
+                    <tr>
+                        <td>KMC-UCDL_Complete_Guide.html</td>
+                        <td>How It Runs →</td>
+                        <td>HOW_IT_RUNS.html</td>
+                        <td>href="./HOW_IT_RUNS.html"</td>
+                    </tr>
+                    <tr>
+                        <td>HOW_IT_RUNS.html</td>
+                        <td>← Home</td>
+                        <td>INDEX.html</td>
+                        <td>href="./INDEX.html"</td>
+                    </tr>
+                    <tr>
+                        <td>HOW_IT_RUNS.html</td>
+                        <td>📖 Setup Guide</td>
+                        <td>KMC-UCDL_Complete_Guide.html</td>
+                        <td>href="./KMC-UCDL_Complete_Guide.html"</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- SECTION 3: How to Set Up -->
+        <section>
+            <h2>⚙️ How to Set Up Your Files</h2>
+
+            <h3>Step 1: Download All Files</h3>
+            <div class="step-box">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Download from outputs folder:</h4>
+                    <ul>
+                        <li>INDEX.html</li>
+                        <li>KMC-UCDL_Complete_Guide.html</li>
+                        <li>HOW_IT_RUNS.html</li>
+                        <li>KMC-UCDL_n8n_Workflow.json</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Step 2: Create a Folder</h3>
+            <div class="step-box">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Put all files in the same folder:</h4>
+                    <div class="file-structure">
+MyDocuments/KMC-UCDL/<br>
+├── INDEX.html<br>
+├── KMC-UCDL_Complete_Guide.html<br>
+├── HOW_IT_RUNS.html<br>
+└── KMC-UCDL_n8n_Workflow.json<br>
+                    </div>
+                    <p style="margin-top: 1rem;"><strong>⚠️ All files MUST be in the same directory!</strong></p>
+                </div>
+            </div>
+
+            <h3>Step 3: Open INDEX.html</h3>
+            <div class="step-box">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Start with the landing page:</h4>
+                    <ul>
+                        <li>Double-click INDEX.html</li>
+                        <li>Or right-click → "Open with" → Browser</li>
+                        <li>Or drag into browser window</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Step 4: Use Navigation Buttons</h3>
+            <div class="step-box">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>Click buttons to navigate:</h4>
+                    <ul>
+                        <li><strong>From INDEX:</strong> Click "Start Setup Guide" or "Learn How It Works"</li>
+                        <li><strong>From Setup Guide:</strong> Click "← Home" or "How It Runs →"</li>
+                        <li><strong>From How It Runs:</strong> Click "← Home" or "📖 Setup Guide"</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: Testing Links -->
+        <section>
+            <h2>✅ Testing the Links</h2>
+
+            <h3>Test Each Link:</h3>
+
+            <div style="background: var(--light); padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                <h4 style="color: var(--primary); margin-bottom: 1rem;">🔗 INDEX.html Links</h4>
+                <ul style="padding-left: 2rem;">
+                    <li><strong>Test 1:</strong> Open INDEX.html → Click "🚀 Start Setup Guide" button → Should open Complete Guide</li>
+                    <li><strong>Test 2:</strong> Open INDEX.html → Click "📚 Learn How It Works" button → Should open How It Runs</li>
+                    <li><strong>Test 3:</strong> Open INDEX.html → Click "📖 Setup Guide" card → Should open Complete Guide</li>
+                    <li><strong>Test 4:</strong> Open INDEX.html → Click "🔄 How It Runs" card → Should open How It Runs</li>
+                </ul>
+            </div>
+
+            <div style="background: var(--light); padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                <h4 style="color: var(--primary); margin-bottom: 1rem;">🔗 Complete Guide Links</h4>
+                <ul style="padding-left: 2rem;">
+                    <li><strong>Test 1:</strong> Open Complete Guide → Click "← Home" → Should return to INDEX</li>
+                    <li><strong>Test 2:</strong> Open Complete Guide → Click "How It Runs →" → Should open How It Runs</li>
+                    <li><strong>Test 3:</strong> Complete Guide has internal section buttons → Should scroll to sections</li>
+                </ul>
+            </div>
+
+            <div style="background: var(--light); padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                <h4 style="color: var(--primary); margin-bottom: 1rem;">🔗 How It Runs Links</h4>
+                <ul style="padding-left: 2rem;">
+                    <li><strong>Test 1:</strong> Open How It Runs → Click "← Home" → Should return to INDEX</li>
+                    <li><strong>Test 2:</strong> Open How It Runs → Click "📖 Setup Guide" → Should open Complete Guide</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h4>❌ If Links Don't Work:</h4>
+                <p>
+                    <strong>Problem:</strong> Most likely files are in different folders<br>
+                    <strong>Solution:</strong> Move all HTML files to the same folder<br>
+                    <strong>Verify:</strong> All 4 files should be visible in the same directory
+                </p>
+            </div>
+        </section>
+
+        <!-- SECTION 5: Quick Access -->
+        <section>
+            <h2>🚀 Quick Access Buttons</h2>
+
+            <div style="text-align: center; padding: 2rem; background: var(--light); border-radius: 8px;">
+                <p style="margin-bottom: 1rem;"><strong>If you have these files open in a folder:</strong></p>
+                <a href="./INDEX.html" class="button">→ Open INDEX.html</a>
+                <a href="./KMC-UCDL_Complete_Guide.html" class="button secondary">→ Open Setup Guide</a>
+                <a href="./HOW_IT_RUNS.html" class="button secondary">→ Open How It Runs</a>
+            </div>
+
+            <div class="success-box">
+                <h3>✅ Linking Complete!</h3>
+                <p>All files are now properly linked and ready to use. Simply open INDEX.html to start, then use the buttons to navigate between pages.</p>
+                <p style="margin-top: 1rem;"><strong>Remember:</strong> Keep all files in the same folder for links to work!</p>
+            </div>
+        </section>
+
+        <!-- SECTION 6: Summary -->
+        <section>
+            <h2>📊 Summary: What's Connected</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>File</th>
+                        <th>Type</th>
+                        <th>Links To</th>
+                        <th>Can Return From</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>INDEX.html</strong></td>
+                        <td>Landing Page</td>
+                        <td>• Complete Guide<br>• How It Runs</td>
+                        <td>Both guides (Home button)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Complete Guide</strong></td>
+                        <td>Setup Guide</td>
+                        <td>• INDEX (Home)<br>• How It Runs</td>
+                        <td>INDEX & How It Runs</td>
+                    </tr>
+                    <tr>
+                        <td><strong>How It Runs</strong></td>
+                        <td>Execution Guide</td>
+                        <td>• INDEX (Home)<br>• Complete Guide</td>
+                        <td>INDEX & Complete Guide</td>
+                    </tr>
+                    <tr>
+                        <td><strong>n8n Workflow</strong></td>
+                        <td>JSON Config</td>
+                        <td>Referenced in guides</td>
+                        <td>N/A (copy to n8n)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <footer>
+        <p><strong>KMC-UCDL File Linking Guide</strong></p>
+        <p>Complete documentation package with full cross-linking</p>
+        <p style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 1rem;">
+            Research Dissemination Prepared by:<br>
+            Mr. Bishnu Singh Rayamajhi<br>
+            Mathematics Lecturer and Head of Humanities & Social Science<br>
+            Kapilvastu Multiple Campus (KMC), Taulihawa, Tribhuvan University<br>
+            <strong>Founder:</strong> UCDL Academy
+        </p>
+        <p style="margin-top: 1rem; opacity: 0.7;">© 2026 | Complete Automation System</p>
+    </footer>
+</body>
+</html>
