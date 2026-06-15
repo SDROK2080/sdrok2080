@@ -1,0 +1,2107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KMC-UCDL Daily Facebook Content Agent - Complete Setup Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #ea580c;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1rem;
+            opacity: 0.95;
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            border-bottom: 2px solid var(--border);
+            position: sticky;
+            top: 100px;
+            z-index: 99;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+
+        nav button {
+            background: white;
+            border: 2px solid var(--border);
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        nav button:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        nav button.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Sections */
+        section {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            display: none;
+        }
+
+        section.active {
+            display: block;
+        }
+
+        section h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 0.5rem;
+        }
+
+        section h3 {
+            color: var(--secondary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.3rem;
+        }
+
+        section h4 {
+            color: var(--dark);
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--light);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .card.success {
+            border-left-color: var(--success);
+            background: #f0fdf4;
+        }
+
+        .card.warning {
+            border-left-color: var(--warning);
+            background: #fef3c7;
+        }
+
+        .card.danger {
+            border-left-color: var(--danger);
+            background: #fef2f2;
+        }
+
+        /* Code Blocks */
+        pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        pre button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        pre button:hover {
+            background: var(--secondary);
+        }
+
+        code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        table thead {
+            background: var(--primary);
+            color: white;
+        }
+
+        table th, table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        table tbody tr:nth-child(even) {
+            background: var(--light);
+        }
+
+        table tbody tr:hover {
+            background: #f0f7ff;
+        }
+
+        /* Checklist */
+        .checklist {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .checklist li {
+            padding: 0.5rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .checklist li:before {
+            content: "☐";
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .checklist li.done:before {
+            content: "☑";
+            color: var(--success);
+        }
+
+        /* Boxes */
+        .box-info {
+            background: #eff6ff;
+            border: 2px solid var(--primary);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .box-success {
+            background: #f0fdf4;
+            border: 2px solid var(--success);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .box-warning {
+            background: #fefce8;
+            border: 2px solid #facc15;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        /* Emoji Indicators */
+        .emoji {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+
+        /* Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .grid-item {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
+        .grid-item h4 {
+            margin-top: 0;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 1rem 0;
+        }
+
+        .timeline-item {
+            padding: 1.5rem;
+            padding-left: 3rem;
+            position: relative;
+            border-left: 3px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-item:last-child {
+            border-left: 3px solid transparent;
+        }
+
+        .timeline-item:before {
+            content: "";
+            position: absolute;
+            left: -9px;
+            top: 1.5rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--primary);
+        }
+
+        .timeline-item.success:before {
+            background: var(--success);
+            box-shadow: 0 0 0 3px var(--success);
+        }
+
+        .timeline-item time {
+            color: var(--primary);
+            font-weight: bold;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Expandable Sections */
+        .collapsible {
+            background: var(--light);
+            border: 1px solid var(--border);
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .collapsible:hover {
+            background: #f1f5f9;
+        }
+
+        .collapsible.active {
+            background: #eff6ff;
+            border-color: var(--primary);
+        }
+
+        .collapsible-content {
+            display: none;
+            padding: 1rem;
+            background: white;
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+        }
+
+        .collapsible-content.active {
+            display: block;
+        }
+
+        .chevron {
+            transition: transform 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .collapsible.active .chevron {
+            transform: rotate(180deg);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin: 0.25rem;
+        }
+
+        .badge-primary {
+            background: #dbeafe;
+            color: var(--primary);
+        }
+
+        .badge-success {
+            background: #dcfce7;
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: #ca8a04;
+        }
+
+        .badge-danger {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        /* Buttons */
+        button, .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        button:hover, .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-success {
+            background: var(--success);
+        }
+
+        .btn-success:hover {
+            background: #15803d;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+        }
+
+        .btn-warning:hover {
+            background: #c2410c;
+        }
+
+        /* Step Numbers */
+        .step {
+            display: flex;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content h4 {
+            margin-top: 0;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            nav {
+                margin-bottom: 1rem;
+            }
+
+            nav button {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+                margin: 0.2rem;
+            }
+
+            section {
+                padding: 1.5rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            table th, table td {
+                padding: 0.75rem;
+            }
+
+            pre {
+                padding: 1rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            nav, footer {
+                display: none;
+            }
+
+            section {
+                page-break-inside: avoid;
+                border: none;
+                box-shadow: none;
+                margin-bottom: 2rem;
+            }
+
+            pre {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Success Message */
+        .success-message {
+            position: fixed;
+            top: 120px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .success-message.show {
+            opacity: 1;
+        }
+
+        /* Diagram */
+        .diagram {
+            background: white;
+            border: 2px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 6px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .diagram pre {
+            background: transparent;
+            color: var(--dark);
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>🚀 KMC-UCDL Daily Facebook Content Agent</h1>
+        <p>Complete n8n + OpenAI + Facebook Graph API Automation System</p>
+        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px solid rgba(255,255,255,0.3); font-size: 0.95rem;">
+            <p style="margin: 0.5rem 0;"><strong>Research Dissemination Prepared by:</strong></p>
+            <p style="margin: 0.25rem 0;">Mr. Bishnu Singh Rayamajhi</p>
+            <p style="margin: 0.25rem 0;">Mathematics Lecturer and Head of Humanities & Social Science</p>
+            <p style="margin: 0.25rem 0;">Kapilvastu Multiple Campus (KMC), Taulihawa, Tribhuvan University</p>
+            <p style="margin: 0.5rem 0;"><strong>Founder:</strong> UCDL Academy</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav style="background: linear-gradient(to right, var(--dark), var(--secondary)); padding: 1rem; position: sticky; top: 100px; z-index: 99; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; align-items: center;">
+            <a href="./INDEX.html" style="color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 4px; background: rgba(0,0,0,0.3); transition: all 0.3s ease; font-weight: bold;" onmouseover="this.style.background='rgba(0,0,0,0.5)'" onmouseout="this.style.background='rgba(0,0,0,0.3)'">← Home</a>
+            <div style="border-right: 2px solid rgba(255,255,255,0.3); height: 30px; margin: 0 0.5rem;"></div>
+            <button class="nav-btn active" onclick="showSection('overview')" style="background: white; color: var(--primary); border: none;">📋 Overview</button>
+            <button class="nav-btn" onclick="showSection('quickstart')" style="background: rgba(255,255,255,0.2); color: white; border: none;">⚡ Quick Start</button>
+            <button class="nav-btn" onclick="showSection('setup')" style="background: rgba(255,255,255,0.2); color: white; border: none;">🔧 Setup</button>
+            <button class="nav-btn" onclick="showSection('workflow')" style="background: rgba(255,255,255,0.2); color: white; border: none;">⚙️ Workflow</button>
+            <button class="nav-btn" onclick="showSection('content')" style="background: rgba(255,255,255,0.2); color: white; border: none;">✍️ Content</button>
+            <button class="nav-btn" onclick="showSection('architecture')" style="background: rgba(255,255,255,0.2); color: white; border: none;">🏗️ Architecture</button>
+            <button class="nav-btn" onclick="showSection('reference')" style="background: rgba(255,255,255,0.2); color: white; border: none;">🎯 Reference</button>
+            <button class="nav-btn" onclick="showSection('troubleshoot')" style="background: rgba(255,255,255,0.2); color: white; border: none;">🐛 Troubleshoot</button>
+            <div style="border-right: 2px solid rgba(255,255,255,0.3); height: 30px; margin: 0 0.5rem;"></div>
+            <a href="./HOW_IT_RUNS.html" style="color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 4px; background: var(--success); transition: all 0.3s ease; font-weight: bold;" onmouseover="this.style.background='#15803d'" onmouseout="this.style.background='var(--success)'">How It Runs →</a>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- OVERVIEW SECTION -->
+        <section id="overview" class="active">
+            <h2>📋 KMC-UCDL Daily Facebook Content Agent</h2>
+
+            <div class="box-info">
+                <h3>✨ What You Get</h3>
+                <p>A fully automated system that generates and posts educational content to your Facebook page every single day.</p>
+            </div>
+
+            <h3>🎯 Key Features</h3>
+            <div class="grid">
+                <div class="grid-item">
+                    <h4>🤖 AI-Powered</h4>
+                    <p>GPT-4 generates unique, engaging posts daily</p>
+                </div>
+                <div class="grid-item">
+                    <h4>📱 Automatic</h4>
+                    <p>Posts at 7 AM NST every day - zero manual work</p>
+                </div>
+                <div class="grid-item">
+                    <h4>💰 Super Cheap</h4>
+                    <p>Just $0.30/month to run</p>
+                </div>
+                <div class="grid-item">
+                    <h4>📊 Tracked</h4>
+                    <p>Every post logged to Google Sheets</p>
+                </div>
+                <div class="grid-item">
+                    <h4>🎨 Customizable</h4>
+                    <p>8 content types, adjust anytime</p>
+                </div>
+                <div class="grid-item">
+                    <h4>📈 Scalable</h4>
+                    <p>Expand to Instagram, LinkedIn later</p>
+                </div>
+            </div>
+
+            <h3>📊 By The Numbers</h3>
+            <table>
+                <tr>
+                    <td><strong>Setup Time</strong></td>
+                    <td>90 minutes</td>
+                </tr>
+                <tr>
+                    <td><strong>Maintenance/Week</strong></td>
+                    <td>5 minutes</td>
+                </tr>
+                <tr>
+                    <td><strong>Cost/Month</strong></td>
+                    <td>~$0.30 (mostly free!)</td>
+                </tr>
+                <tr>
+                    <td><strong>Posts/Month</strong></td>
+                    <td>30-31 posts</td>
+                </tr>
+                <tr>
+                    <td><strong>Content Types</strong></td>
+                    <td>8 different types</td>
+                </tr>
+                <tr>
+                    <td><strong>Uptime</strong></td>
+                    <td>99.99%</td>
+                </tr>
+            </table>
+
+            <h3>🔄 How It Works (Simple)</h3>
+            <div class="diagram">
+                <pre>Every day at 7 AM NST:
+
+1. Trigger 🔔
+2. Get date/time context 📅
+3. Pick random content type 🎲
+4. Call OpenAI → Generate post ✍️
+5. Post to Facebook 📱
+6. Log to Google Sheets 📊
+
+Result: Post appears on your page instantly! ✅
+All automatic, no manual work! 🎉</pre>
+            </div>
+
+            <h3>📈 Content Types (Rotating Daily)</h3>
+            <ul style="padding-left: 2rem;">
+                <li><strong>Good Morning</strong> - Daily greeting + motivational tip</li>
+                <li><strong>Study Tips</strong> - Academic skills & techniques</li>
+                <li><strong>Success Stories</strong> - Student achievements & wins</li>
+                <li><strong>Motivation</strong> - Mindset & resilience boost</li>
+                <li><strong>Announcements</strong> - Important updates & deadlines</li>
+                <li><strong>Weekly Wrap</strong> - Week reflection & lessons</li>
+                <li><strong>Q&A Session</strong> - Community engagement questions</li>
+                <li><strong>Memes/Humor</strong> - Educational humor & relatable jokes</li>
+            </ul>
+
+            <div class="box-success">
+                <h3>✅ When It's Working Perfectly</h3>
+                <ul class="checklist">
+                    <li>Daily post appears on Facebook automatically</li>
+                    <li>Google Sheet logs every post</li>
+                    <li>No manual intervention needed</li>
+                    <li>You spend 5 min/week checking status</li>
+                    <li>Students engaging with content</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- QUICK START SECTION -->
+        <section id="quickstart">
+            <h2>⚡ Quick Start (5 Minutes)</h2>
+
+            <div class="box-warning">
+                <strong>⏱️ Only 5 minutes?</strong> Follow this. Full setup available in Setup Guide section.
+            </div>
+
+            <h3>Step 1: Create 3 Free Accounts (5 min)</h3>
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Facebook Developers</h4>
+                    <p>Go to: <code>https://developers.facebook.com</code></p>
+                    <p>Sign up → Create app → Get App ID & Secret</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>OpenAI Platform</h4>
+                    <p>Go to: <code>https://platform.openai.com</code></p>
+                    <p>Sign up → Add payment method → Create API Key</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>n8n Cloud</h4>
+                    <p>Go to: <code>https://n8n.cloud</code></p>
+                    <p>Sign up → Create workspace</p>
+                </div>
+            </div>
+
+            <h3>Step 2: Get 3 Keys</h3>
+            <pre>FACEBOOK_PAGE_ID = Your page number (from facebook.com/yourpage > About)
+FACEBOOK_TOKEN = From Graph API Explorer (long token starting with EA...)
+OPENAI_API_KEY = From platform.openai.com/api/keys (sk-proj-...)</pre>
+
+            <h3>Step 3: Import Workflow</h3>
+            <ol style="padding-left: 2rem;">
+                <li>n8n.cloud → New Workflow → Load from JSON</li>
+                <li>Copy content from <code>KMC-UCDL_n8n_Workflow.json</code></li>
+                <li>Paste into n8n</li>
+                <li>Click Load</li>
+            </ol>
+
+            <h3>Step 4: Add Credentials</h3>
+            <pre>n8n Sidebar > Credentials > New:
+
+1. OpenAI API
+   - API Key: sk-proj-...
+
+2. Google Sheets OAuth2
+   - Connect your Google account
+
+3. Environment Variables
+   - FACEBOOK_PAGE_ID=123456789
+   - FACEBOOK_ACCESS_TOKEN=EABC...</pre>
+
+            <h3>Step 5: Test & Activate</h3>
+            <ol style="padding-left: 2rem;">
+                <li>Click "Execute Workflow" button (test)</li>
+                <li>Check Facebook page → Post appeared?</li>
+                <li>Check Google Sheet → Entry created?</li>
+                <li>Click "Activate" toggle (top right)</li>
+            </ol>
+
+            <div class="box-success">
+                <h3>🎉 Done!</h3>
+                <p>Your workflow is now active. First automated post will appear tomorrow at 7 AM NST.</p>
+            </div>
+
+            <div class="box-info">
+                <strong>Need more details?</strong> Go to "Setup Guide" section for step-by-step walkthrough.
+            </div>
+        </section>
+
+        <!-- SETUP GUIDE SECTION -->
+        <section id="setup">
+            <h2>🔧 Complete Setup Guide</h2>
+
+            <div class="box-info">
+                <strong>Estimated Time:</strong> 90 minutes (first time)
+            </div>
+
+            <h3>Phase 1: Facebook Setup (15 minutes)</h3>
+
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Step 1: Create Facebook Developer Account</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <ol style="padding-left: 2rem; margin: 1rem 0;">
+                    <li>Go to <code>https://developers.facebook.com</code></li>
+                    <li>Sign in with your personal Facebook account</li>
+                    <li>Click "Get Started"</li>
+                    <li>Answer setup questions</li>
+                    <li>Accept terms</li>
+                </ol>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Step 2: Create Your App</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <pre>Developers → My Apps → Create App
+
+App Name: KMC-UCDL Content Agent
+App Type: Business
+App Purpose: Business
+App Permissions: pages_manage_posts, pages_read_engagement</pre>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Step 3: Get Credentials</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <pre>Settings > Basic
+
+Copy and SAVE these:
+- App ID: [Your App ID]
+- App Secret: [Keep Secret!]
+
+Tools > Graph API Explorer:
+- Select your app
+- Select your page
+- Generate Access Token
+- Copy the long token (EABC...)</pre>
+            </div>
+
+            <h3>Phase 2: OpenAI Setup (10 minutes)</h3>
+
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Step 1: Create OpenAI Account</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <ol style="padding-left: 2rem; margin: 1rem 0;">
+                    <li>Go to <code>https://platform.openai.com</code></li>
+                    <li>Sign up (email or Google)</li>
+                    <li>Verify email</li>
+                    <li>Set up phone number (2FA)</li>
+                </ol>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Step 2: Add Payment Method</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <pre>Left sidebar > Billing > Overview
+
+1. Click "Add payment method"
+2. Add credit/debit card
+3. Set monthly limit: $10-20 (safe)</pre>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Step 3: Create API Key</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <pre>Left sidebar > API Keys
+
+1. Click "+ Create new secret key"
+2. Name: "KMC-UCDL Facebook Agent"
+3. Copy key (starts with sk-proj-)
+4. SAVE IT - you can't see it again!
+
+Cost: ~$0.01 per post × 30 days = $0.30/month</pre>
+            </div>
+
+            <h3>Phase 3: n8n Setup (10 minutes)</h3>
+
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Step 1: Create n8n Cloud Account</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <ol style="padding-left: 2rem; margin: 1rem 0;">
+                    <li>Go to <code>https://n8n.cloud</code></li>
+                    <li>Sign up (email or Google)</li>
+                    <li>Verify email</li>
+                    <li>Create workspace (name: "KMC-UCDL")</li>
+                </ol>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Step 2: Create Credentials</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <pre>n8n Sidebar > Credentials > New
+
+Create 3 credentials:
+
+A) OpenAI API
+   - Type: OpenAI
+   - API Key: sk-proj-...
+   - Name: "OpenAI API - UCDL"
+
+B) Google Sheets OAuth2
+   - Type: Google Sheets
+   - Connect your Google account
+   - Name: "Google - UCDL"
+
+C) Environment (in Settings)
+   - FACEBOOK_PAGE_ID=123456789
+   - FACEBOOK_ACCESS_TOKEN=EABC...</pre>
+            </div>
+
+            <h3>Phase 4: Import Workflow (10 minutes)</h3>
+
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Step 1: Import Workflow JSON</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <pre>n8n Dashboard > "+ New Workflow"
+
+1. Click "Load from file" or "Import from JSON"
+2. Copy content from KMC-UCDL_n8n_Workflow.json
+3. Paste into n8n
+4. Click "Load"
+5. Workflow appears in canvas
+6. Click "Save"</pre>
+            </div>
+
+            <h3>Phase 5: Configuration (30 minutes)</h3>
+
+            <div class="box-warning">
+                <strong>Configure each node:</strong> Follow instructions in Workflow Config section
+            </div>
+
+            <div class="box-info">
+                <strong>Node Configuration Checklist:</strong>
+                <ul class="checklist">
+                    <li>Node 1: Schedule Trigger (set cron & timezone)</li>
+                    <li>Node 2: Get NST Context (no config needed)</li>
+                    <li>Node 3: Select Category (no config needed)</li>
+                    <li>Node 4: OpenAI (add credentials, set model)</li>
+                    <li>Node 5: Parse Response (no config needed)</li>
+                    <li>Node 6: Facebook POST (set endpoint & credentials)</li>
+                    <li>Node 7: Prepare Log Data (no config needed)</li>
+                    <li>Node 8: Google Sheets (set sheet ID & range)</li>
+                    <li>Node 9: Complete (no config needed)</li>
+                </ul>
+            </div>
+
+            <h3>Phase 6: Testing (15 minutes)</h3>
+
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Test Each Node</h4>
+                    <p>Right-click each node → Execute Node → Check output</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Test Full Workflow</h4>
+                    <p>Click "Execute Workflow" → Watch all nodes turn green</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Verify Facebook Post</h4>
+                    <p>Go to Facebook page → New post should appear</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>Verify Google Sheet</h4>
+                    <p>Google Sheets → UCDL_Daily_Posts → New row added</p>
+                </div>
+            </div>
+
+            <h3>Phase 7: Activation (2 minutes)</h3>
+
+            <ol style="padding-left: 2rem;">
+                <li>Click "Activate" toggle (top right of workflow)</li>
+                <li>Status changes to "Active"</li>
+                <li>Workflow will run automatically tomorrow at 7 AM NST</li>
+            </ol>
+
+            <div class="box-success">
+                <h3>🎉 Setup Complete!</h3>
+                <p>Your workflow is ready. First automated post will appear tomorrow.</p>
+            </div>
+        </section>
+
+        <!-- WORKFLOW CONFIG SECTION -->
+        <section id="workflow">
+            <h2>⚙️ Detailed Node Configuration</h2>
+
+            <div class="box-info">
+                <strong>This section explains each of the 9 workflow nodes in detail.</strong>
+            </div>
+
+            <h3>Node 1: Schedule Trigger</h3>
+            <div class="card">
+                <strong>Purpose:</strong> Trigger workflow every day at scheduled time<br>
+                <strong>Configuration:</strong>
+                <pre>Trigger Type: Cron
+Cron Expression: "15 1 * * *" (7 AM NST)
+Timezone: Asia/Kathmandu</pre>
+                <strong>Common Times (NST → Cron):</strong>
+                <pre>7:00 AM NST  → "15 1 * * *"
+8:00 AM NST  → "15 2 * * *"
+12:00 PM NST → "15 6 * * *"
+5:00 PM NST  → "15 11 * * *"</pre>
+                <strong>Help:</strong> Visit <code>https://crontab.guru</code> to verify cron expressions
+            </div>
+
+            <h3>Node 2: Get NST Context</h3>
+            <div class="card">
+                <strong>Purpose:</strong> Get current date/time in Nepal timezone<br>
+                <strong>Type:</strong> Function (Code)<br>
+                <strong>Configuration:</strong> Code is built-in, no changes needed<br>
+                <strong>Output:</strong>
+                <pre>{
+  dayName: "Monday",
+  dateEng: "14/06/2026",
+  nepaliMonth: "Baishakh",
+  dayOfWeek: 1,
+  isWeekend: false
+}</pre>
+            </div>
+
+            <h3>Node 3: Select Content Category</h3>
+            <div class="card">
+                <strong>Purpose:</strong> Randomly select content type with daily weights<br>
+                <strong>Type:</strong> Function (Code)<br>
+                <strong>Configuration:</strong> Code is built-in, no changes needed<br>
+                <strong>Categories Selected:</strong>
+                <pre>Monday:    Study Tips (40%), Good Morning (60%)
+Tuesday:   Good Morning, Success Story
+Wednesday: Announcement, Good Morning
+Thursday:  Good Morning, Motivation
+Friday:    Weekly Wrap, Motivation
+Saturday:  Meme, Q&A Session
+Sunday:    Good Morning, Motivation</pre>
+            </div>
+
+            <h3>Node 4: OpenAI Content Generation 🔑 IMPORTANT</h3>
+            <div class="card danger">
+                <strong>⚠️ This is the most important node!</strong><br><br>
+                <strong>Type:</strong> OpenAI (Chat)<br>
+                <strong>Must Configure:</strong>
+                <pre>Authentication:
+  - Credential: OpenAI API (with your sk-proj-... key)
+
+Model:
+  - Select: gpt-4-turbo (or gpt-4o for cheaper)
+
+Temperature: 0.8 (creative but consistent)
+Max Tokens: 300
+Top P: 0.95
+
+System Message:
+  Copy from Content_Generation_Prompt_Library.md</pre>
+                <strong>What It Does:</strong> Generates unique post text based on day/category<br>
+                <strong>Cost:</strong> ~$0.01 per post<br>
+                <strong>Example Output:</strong>
+                <pre>{
+  "choices": [{
+    "message": {
+      "content": "{\"text\": \"Good Morning Warriors!...\"}"
+    }
+  }]
+}</pre>
+            </div>
+
+            <h3>Node 5: Parse AI Response</h3>
+            <div class="card">
+                <strong>Purpose:</strong> Extract text from OpenAI JSON response<br>
+                <strong>Type:</strong> Function (Code)<br>
+                <strong>Configuration:</strong> Code is built-in, no changes needed<br>
+                <strong>Output:</strong>
+                <pre>{
+  postText: "Good Morning Warriors!...",
+  hashtags: "#KMC #UCDL #Success",
+  finalPost: "[Combined text + hashtags]",
+  characterCount: 215
+}</pre>
+            </div>
+
+            <h3>Node 6: Post to Facebook 🔑 CRITICAL</h3>
+            <div class="card danger">
+                <strong>⚠️ This posts to your Facebook page!</strong><br><br>
+                <strong>Type:</strong> HTTP Request<br>
+                <strong>Must Configure:</strong>
+                <pre>Method: POST
+URL: https://graph.facebook.com/v18.0/[PAGE_ID]/feed
+  (Replace [PAGE_ID] with your page number)
+
+Headers:
+  Content-Type: application/json
+
+Body (JSON):
+{
+  "message": "{{$node['Parse AI Response'].json.finalPost}}",
+  "access_token": "{{$env.FACEBOOK_ACCESS_TOKEN}}",
+  "published": true
+}</pre>
+                <strong>Important:</strong>
+                <ul style="padding-left: 2rem;">
+                    <li>Use environment variable for token (secure)</li>
+                    <li>published: true = posts immediately</li>
+                    <li>published: false = creates draft (for review)</li>
+                </ul>
+                <strong>Success Response:</strong>
+                <pre>{
+  "id": "123456789_987654321",
+  "created_time": "2026-06-14T07:15:00+0000"
+}</pre>
+            </div>
+
+            <h3>Node 7: Prepare Log Data</h3>
+            <div class="card">
+                <strong>Purpose:</strong> Format data for logging to Google Sheets<br>
+                <strong>Type:</strong> Function (Code)<br>
+                <strong>Configuration:</strong> Code is built-in, no changes needed<br>
+                <strong>Output:</strong>
+                <pre>{
+  date: "14/06/2026",
+  dayName: "Monday",
+  category: "study_tips",
+  postId: "123456_987654",
+  status: "SUCCESS"
+}</pre>
+            </div>
+
+            <h3>Node 8: Log to Google Sheets</h3>
+            <div class="card">
+                <strong>Purpose:</strong> Save post data to Google Sheets for tracking<br>
+                <strong>Type:</strong> Google Sheets<br>
+                <strong>Must Configure:</strong>
+                <pre>Authentication:
+  - Create new credential: Google Sheets OAuth2
+  - Connect your Google account
+
+Spreadsheet:
+  - ID: From google.com/sheets URL
+  - Example: docs.google.com/spreadsheets/d/[ID]/
+  
+Range: "UCDL_Daily_Posts!A:H"
+  (Adjust sheet name if different)</pre>
+                <strong>Headers Required (Row 1):</strong>
+                <pre>A: Date
+B: Day
+C: Category
+D: Content
+E: Post_ID
+F: Character_Count
+G: Timestamp
+H: Status</pre>
+            </div>
+
+            <h3>Node 9: Execution Complete</h3>
+            <div class="card">
+                <strong>Purpose:</strong> Mark workflow completion<br>
+                <strong>Type:</strong> No Operation<br>
+                <strong>Configuration:</strong> None needed<br>
+            </div>
+
+            <div class="box-success">
+                <h3>✅ Workflow Configuration Complete!</h3>
+                <p>All nodes configured → Ready to test → Ready to activate</p>
+            </div>
+        </section>
+
+        <!-- CONTENT PROMPTS SECTION -->
+        <section id="content">
+            <h2>✍️ Content Generation Prompts</h2>
+
+            <div class="box-info">
+                <strong>8 Content Types with Customizable Prompts</strong><br>
+                Each type uses a different prompt to generate relevant content.
+            </div>
+
+            <h3>1️⃣ Good Morning / Greeting</h3>
+            <div class="card">
+                <strong>Frequency:</strong> Daily option (3-4x per week)<br>
+                <strong>Best Time:</strong> 7-8 AM<br>
+                <strong>Purpose:</strong> Daily engagement, set positive tone
+                <pre>Generate a "Good Morning" post for {{dayName}}.
+
+Content:
+- Open with warm greeting
+- Include 1 motivational quote
+- Add 1 actionable tip
+- Include 2 emojis
+- Add hashtags: #GoodMorning #KMC #UCDL
+
+Length: 180-220 characters
+Tone: Encouraging, relatable, authentic</pre>
+                <strong>Example Output:</strong>
+                <pre>Good Morning, KMC Warriors! 🌅 
+Every new day is a chance to rewrite your story. 
+Today, spend 30 mins on something that scares you.
+Let's grow! 💪 #GoodMorning #KMC #UCDL</pre>
+            </div>
+
+            <h3>2️⃣ Study Tips / Academic Skills</h3>
+            <div class="card">
+                <strong>Frequency:</strong> 2-3x per week (especially Mondays)<br>
+                <strong>Best Time:</strong> 8-9 AM (before class)<br>
+                <strong>Purpose:</strong> Provide practical value, build authority
+                <pre>Generate a "Study Tips" post about academic techniques.
+
+Content:
+- Choose 1 technique (Cornell notes, active recall, etc.)
+- Explain in 2-3 sentences
+- Give 1 specific action step
+- Include relevant example
+- Include 2 emojis
+- Add hashtags: #StudyTips #KMC #Learning
+
+Length: 180-230 characters
+Tone: Educational, practical, encouraging</pre>
+                <strong>Example Output:</strong>
+                <pre>📚 STUDY TIP: Active Recall saves time & improves memory!
+Instead of re-reading notes, test yourself.
+Try 5 questions from yesterday's class today.
+Your brain will thank you! 🧠 #StudyTips #KMC</pre>
+            </div>
+
+            <h3>3️⃣ Success Stories / Student Highlights</h3>
+            <div class="card">
+                <strong>Frequency:</strong> 1-2x per week<br>
+                <strong>Best Time:</strong> 12 PM (peak engagement)<br>
+                <strong>Purpose:</strong> Build community pride, inspire peers
+                <pre>Generate an inspiring "Success Story" post.
+
+Structure: Challenge → Strategy → Result → Lesson
+
+Content:
+- Use anonymous descriptors ("A 2nd-year student...")
+- Describe specific challenge
+- Explain how they overcame it
+- Share concrete result
+- Include inspirational quote
+- Ask: "What's your success story?"
+- Include 2 emojis
+- Add hashtags: #StudentWin #KMC #Inspiration
+
+Length: 200-250 characters
+Tone: Inspirational, genuine, relatable</pre>
+                <strong>Example Output:</strong>
+                <pre>✨ FROM F TO A: One student's turnaround tale
+Challenge: Failed accounting midterm
+Strategy: Found study buddy + Khan Academy
+Result: 75% on finals!
+"Right strategy + consistency = transformation" 🌟
+What's your success story? #StudentWin #KMC</pre>
+            </div>
+
+            <h3>4️⃣ Motivation / Mindset</h3>
+            <div class="card">
+                <strong>Frequency:</strong> 2-3x per week (Fri & Thu)<br>
+                <strong>Best Time:</strong> 5-6 PM (evening boost)<br>
+                <strong>Purpose:</strong> Combat procrastination, boost confidence
+                <pre>Generate a "Motivation" post about mindset.
+
+Themes:
+- Persistence & grit
+- Self-doubt (you're capable!)
+- Comparison trap (your journey is unique)
+- Failure = learning
+- Work-life balance
+- Fear & action
+
+Content:
+- Start with relatable struggle
+- Pivot to reframe/perspective
+- End with empowering statement
+- Include 2 emojis
+- Add hashtags: #MindsetMatters #KMC #Growth
+
+Length: 180-230 characters
+Tone: Empowering, supportive, realistic</pre>
+                <strong>Example Output:</strong>
+                <pre>That voice saying "You can't do this"? 🚀
+Listen closer. It's your growth edge.
+Every expert was once a beginner doubting themselves.
+Do ONE thing that scares you today. 💫
+#MindsetMatters #KMC #GrowthMindset</pre>
+            </div>
+
+            <h3>5️⃣ Announcements / News</h3>
+            <div class="card">
+                <strong>Frequency:</strong> 2-3x per week (as needed)<br>
+                <strong>Best Time:</strong> 10 AM (business hours)<br>
+                <strong>Purpose:</strong> Share important updates & deadlines
+                <pre>Generate an "Announcement" post.
+
+Structure: WHAT → WHEN → WHERE → ACTION
+
+Content:
+- Be clear and direct
+- Include all relevant details
+- Use action verb (Register, Apply, Submit, etc.)
+- Include urgency if deadline-related
+- Include 1-2 relevant emojis
+- Add hashtags: #KMCNews #Important
+
+Length: 200-250 characters
+Tone: Professional but friendly, clear</pre>
+                <strong>Example Output:</strong>
+                <pre>📢 EXAM SCHEDULE OUT! 🎯
+Exams begin June 25th
+Download from KMC Portal (link in bio)
+Submit conflict requests by June 18th 📅
+Questions? Office hours: Mon-Fri 2-4 PM
+#KMCNews #Important</pre>
+            </div>
+
+            <h3>6️⃣ Weekly Wrap-Up</h3>
+            <div class="card">
+                <strong>Frequency:</strong> 1x per week (Friday evening)<br>
+                <strong>Best Time:</strong> 5-6 PM (Friday)<br>
+                <strong>Purpose:</strong> Reflect on learning, celebrate week
+                <pre>Generate a "Weekly Wrap-Up" post for Friday.
+
+Structure:
+1. Celebrate the week (no matter what happened)
+2. Top 3 Lessons (academic, life, practical)
+3. Gratitude element
+4. Week ahead preview
+
+Content:
+- Use numbered list (1️⃣ 2️⃣ 3️⃣)
+- Include emoji per lesson
+- Include appreciation
+- Practical and genuine
+- Add hashtags: #WeeklyWrap #KMC #Learning
+
+Length: 240-300 characters
+Tone: Reflective, positive, inclusive</pre>
+                <strong>Example Output:</strong>
+                <pre>🎯 THIS WEEK'S LESSONS:
+1️⃣ Active recall > passive reading
+2️⃣ Asking help is strength, not weakness
+3️⃣ Study groups multiply learning (if focused)
+
+Grateful for: Peers, patience, progress
+
+Next: Exam prep sprint! You got this! 💪
+#WeeklyWrap #Reflection #KMC</pre>
+            </div>
+
+            <h3>7️⃣ Q&A / Engagement Questions</h3>
+            <div class="card">
+                <strong>Frequency:</strong> 1-2x per week<br>
+                <strong>Best Time:</strong> 12-1 PM (lunch scroll)<br>
+                <strong>Purpose:</strong> Build community, boost interaction
+                <pre>Generate a "Q&A / Engagement" post.
+
+Question Types:
+- Study techniques
+- Challenges faced
+- Best resources
+- Experience sharing
+- Advice seeking
+- Creative solutions
+
+Content:
+- Ask 1 open-ended question
+- Make it relevant to academic calendar
+- Include relatable context
+- Share your own example first
+- Add CTA: "Drop your answer in comments!"
+- Include 1-2 emojis
+- Add hashtags: #CommunityLove #AskKMC
+
+Length: 150-200 characters
+Tone: Casual, friendly, genuine interest</pre>
+                <strong>Example Output:</strong>
+                <pre>❓ Let's talk study tools!
+What's your absolute must-have app?
+(Mine: Anki for flashcards - game changer)
+Share below! 👇 Let's build a toolkit together.
+#CommunityLove #AskKMC #UCDL</pre>
+            </div>
+
+            <h3>8️⃣ Memes / Light-Hearted Humor</h3>
+            <div class="card">
+                <strong>Frequency:</strong> 1x per week (Saturday)<br>
+                <strong>Best Time:</strong> 10 AM (weekend mood)<br>
+                <strong>Purpose:</strong> Make learning fun, build rapport
+                <pre>Generate a "Meme/Humor" post.
+
+Humor Types:
+- Exam night panic
+- Assignment procrastination
+- Teacher vs student observations
+- Group project realities
+- Morning class struggles
+- Internship hunt journey
+- Lab work chaos
+- Note-taking fails
+- AI learning curve
+- Semester survival
+
+Content:
+- Use relatable observation
+- Include self-deprecating element
+- End with smile/laugh (not frustration)
+- Use cultural context (Nepal-specific okay)
+- Include 1-2 funny emojis
+- Keep it clean & inclusive
+- Add hashtags: #StudentLife #KMC #Relatable
+
+Length: 150-220 characters
+Tone: Self-aware, funny, uplifting</pre>
+                <strong>Example Output:</strong>
+                <pre>Me planning study schedule: "I'll wake at 6!" 😴
+Actually: Hit snooze 5 times
+Noon: "Still have all day!"
+11 PM: "Why didn't I start?!" 🤦
+Sound familiar? You're not alone! 😂
+#StudentLife #KMC #Relatable</pre>
+            </div>
+
+            <div class="box-success">
+                <h3>✅ Content Prompts Summary</h3>
+                <p>8 content types × rotating schedule = Fresh, engaging content every single day!</p>
+            </div>
+        </section>
+
+        <!-- ARCHITECTURE SECTION -->
+        <section id="architecture">
+            <h2>🏗️ System Architecture</h2>
+
+            <h3>Complete System Flow</h3>
+            <div class="diagram">
+                <pre>DAILY AUTOMATION FLOW
+═════════════════════
+
+7:00 AM NST
+    ↓
+[TRIGGER] Schedule fires up
+    ↓
+[CONTEXT] Get date/time (Monday? June 14?)
+    ↓
+[CATEGORY] Pick random type (Study Tips, etc)
+    ↓
+[OPENAI] Generate unique post (2 seconds)
+    ↓
+[PARSE] Extract text + hashtags
+    ↓
+[FACEBOOK] Post to page (1 second)
+    ↓
+[LOG] Save to Google Sheets
+    ↓
+7:03 AM NST
+✅ DONE! Post is LIVE on Facebook page</pre>
+            </div>
+
+            <h3>Technology Stack</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>Purpose</th>
+                        <th>Cost</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>n8n Cloud</strong></td>
+                        <td>Workflow automation (your brain)</td>
+                        <td>$0 (free tier)</td>
+                        <td>Always on</td>
+                    </tr>
+                    <tr>
+                        <td><strong>OpenAI API</strong></td>
+                        <td>Content generation (AI writer)</td>
+                        <td>~$0.01/post</td>
+                        <td>Always available</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Facebook Graph API</strong></td>
+                        <td>Native posting (official channel)</td>
+                        <td>$0</td>
+                        <td>99.9%+ uptime</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Google Sheets</strong></td>
+                        <td>Logging & analytics (your notebook)</td>
+                        <td>$0</td>
+                        <td>Always available</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Data Flow Diagram</h3>
+            <div class="diagram">
+                <pre>YOUR SYSTEM
+═════════════════════════════════════════
+
+┌──────────────┐
+│   You        │ ← Check status (5 min/week)
+│ (Human)      │ ← Adjust settings
+│              │ ← Customize content
+└──────┬───────┘
+       │
+       ▼
+┌──────────────────────────────────────┐
+│  n8n Cloud                           │
+│  ┌─────────────────────────────────┐ │
+│  │ 9 Nodes:                        │ │
+│  │ 1. Schedule Trigger             │ │
+│  │ 2. Get NST Context              │ │
+│  │ 3. Select Category              │ │
+│  │ 4. OpenAI (Generate)            │ │
+│  │ 5. Parse Response               │ │
+│  │ 6. Facebook POST                │ │
+│  │ 7. Prepare Log                  │ │
+│  │ 8. Google Sheets                │ │
+│  │ 9. Complete                     │ │
+│  └────┬────────────────────────────┘ │
+└───────┼─────────────────────────────────┘
+        │
+  ┌─────┴──────┬──────────┬──────────┐
+  │            │          │          │
+  ▼            ▼          ▼          ▼
+[OpenAI]  [Facebook]  [Google]  [Results]
+Generate  Post to     Sheets    ✅ Done
+Content   Page        Logging
+
+Final Output:
+✓ Facebook Post (live)
+✓ Google Sheet (logged)
+✓ No manual work needed</pre>
+            </div>
+
+            <h3>Daily Timeline</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <time>6:00 AM NST</time>
+                    <p>KMC students wake up, check phones 📱</p>
+                </div>
+                <div class="timeline-item">
+                    <time>7:00 AM NST</time>
+                    <p>🔔 <strong>TRIGGER!</strong> Workflow fires up</p>
+                </div>
+                <div class="timeline-item">
+                    <time>7:00-7:03 AM</time>
+                    <p>⚙️ Behind-the-scenes: Generate, format, post</p>
+                </div>
+                <div class="timeline-item success">
+                    <time>7:03 AM NST</time>
+                    <p>✅ <strong>POST PUBLISHED!</strong> Live on Facebook</p>
+                </div>
+                <div class="timeline-item">
+                    <time>7:03-7:15 AM</time>
+                    <p>👍 Initial engagement: Students like & comment</p>
+                </div>
+                <div class="timeline-item">
+                    <time>Throughout day</time>
+                    <p>📊 Continued engagement, analytics tracked</p>
+                </div>
+                <div class="timeline-item">
+                    <time>Next day, 7 AM</time>
+                    <p>🔄 Process repeats...</p>
+                </div>
+            </div>
+
+            <h3>Monthly Cost Breakdown</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>Cost Per Post</th>
+                        <th>30 Posts/Month</th>
+                        <th>Annual</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>OpenAI (gpt-4-turbo)</strong></td>
+                        <td>$0.01</td>
+                        <td>$0.30</td>
+                        <td>$3.60</td>
+                    </tr>
+                    <tr>
+                        <td><strong>OpenAI (gpt-4o - cheaper)</strong></td>
+                        <td>$0.005</td>
+                        <td>$0.15</td>
+                        <td>$1.80</td>
+                    </tr>
+                    <tr>
+                        <td><strong>n8n Cloud</strong></td>
+                        <td>$0</td>
+                        <td>$0</td>
+                        <td>$0</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Facebook API</strong></td>
+                        <td>$0</td>
+                        <td>$0</td>
+                        <td>$0</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Google Sheets</strong></td>
+                        <td>$0</td>
+                        <td>$0</td>
+                        <td>$0</td>
+                    </tr>
+                    <tr style="font-weight: bold; background: #f0fdf4;">
+                        <td colspan="3"><strong>TOTAL</strong></td>
+                        <td>~$0.30/mo</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="box-success">
+                <h3>💰 Essentially FREE!</h3>
+                <p>~$0.30/month to completely automate your daily Facebook posts for a whole organization!</p>
+            </div>
+        </section>
+
+        <!-- QUICK REFERENCE SECTION -->
+        <section id="reference">
+            <h2>🎯 Quick Reference Card</h2>
+
+            <h3>🔗 Bookmarked URLs</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>URL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Facebook Developers</strong></td>
+                        <td><code>https://developers.facebook.com</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>OpenAI Platform</strong></td>
+                        <td><code>https://platform.openai.com</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>n8n Cloud</strong></td>
+                        <td><code>https://n8n.cloud</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cron Syntax Help</strong></td>
+                        <td><code>https://crontab.guru</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Google Sheets</strong></td>
+                        <td><code>https://sheets.google.com</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>📋 Cron Expressions Cheat Sheet</h3>
+            <pre>Time (NST)       Cron Expression      UTC Time (for reference)
+─────────────────────────────────────────────────────────────
+7:00 AM NST      "15 1 * * *"         1:15 AM UTC
+8:00 AM NST      "15 2 * * *"         2:15 AM UTC
+12:00 PM NST     "15 6 * * *"         6:15 AM UTC
+3:00 PM NST      "15 9 * * *"         9:15 AM UTC
+5:00 PM NST      "15 11 * * *"        11:15 AM UTC
+
+Cron Format: "Min Hour Day Month DayOfWeek"
+Example: "15 1 * * *" = 1:15 AM every day</pre>
+
+            <h3>🔐 Credentials Checklist</h3>
+            <ul class="checklist">
+                <li>Facebook App ID: ________________</li>
+                <li>Facebook App Secret: ________________</li>
+                <li>Facebook Page ID: ________________</li>
+                <li>Facebook Access Token: EABC...________________</li>
+                <li>OpenAI API Key: sk-proj-...________________</li>
+                <li>Google Sheet ID: ________________</li>
+                <li>Google Sheet Name: ________________</li>
+            </ul>
+
+            <h3>🔧 OpenAI Settings</h3>
+            <pre>Model:          gpt-4-turbo (or gpt-4o for cheaper)
+Temperature:    0.8 (balanced creative)
+Max Tokens:     300 (for ~200-250 char posts)
+Top P:          0.95
+Cost:           ~$0.01 per post</pre>
+
+            <h3>📊 Google Sheets Headers</h3>
+            <pre>Column A: Date         (6/14/2026)
+Column B: Day          (Monday)
+Column C: Category     (study_tips)
+Column D: Content      (Post text preview)
+Column E: Post_ID      (123_456)
+Column F: Char_Count   (215)
+Column G: Timestamp    (1:47 AM NST)
+Column H: Status       (SUCCESS/FAILED)</pre>
+
+            <h3>📱 Testing Checklist</h3>
+            <ul class="checklist">
+                <li>Node 1: Schedule Trigger → Executes</li>
+                <li>Node 2: Get NST Context → Shows date/time</li>
+                <li>Node 3: Select Category → Picks a category</li>
+                <li>Node 4: OpenAI → Generates post text</li>
+                <li>Node 5: Parse → Extracts JSON</li>
+                <li>Node 6: Facebook → Post appears on page</li>
+                <li>Node 7: Prepare Log → Formats data</li>
+                <li>Node 8: Google Sheets → Row added</li>
+                <li>Full Workflow → All nodes green ✓</li>
+                <li>Activate → Toggle ON</li>
+            </ul>
+
+            <h3>⚡ Quick Commands (Copy-Paste Ready)</h3>
+            <pre>Get Cron Expression:
+Visit https://crontab.guru and enter your desired time
+
+Get Facebook Page ID:
+Go to facebook.com/yourpage > About > Look for ID
+
+Get Google Sheet ID:
+Open sheet > URL: /spreadsheets/d/[THIS IS YOUR ID]/
+
+Check OpenAI Usage:
+platform.openai.com/account/usage</pre>
+
+            <h3>🆘 Common Error Messages</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Error</th>
+                        <th>Solution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>"Invalid API Key"</td>
+                        <td>Generate new key at platform.openai.com/api/keys</td>
+                    </tr>
+                    <tr>
+                        <td>"Token Expired"</td>
+                        <td>Generate new Facebook token via Graph API Explorer</td>
+                    </tr>
+                    <tr>
+                        <td>"Page Not Found"</td>
+                        <td>Check PAGE_ID is correct (numbers only)</td>
+                    </tr>
+                    <tr>
+                        <td>"Insufficient Permissions"</td>
+                        <td>Token needs page_manage_posts permission</td>
+                    </tr>
+                    <tr>
+                        <td>"Cron Not Triggering"</td>
+                        <td>Check: Is workflow ACTIVE? Correct cron syntax? Correct timezone?</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="box-info">
+                <strong>💡 Pro Tip:</strong> Bookmark this page and keep it open during setup for quick reference!
+            </div>
+        </section>
+
+        <!-- TROUBLESHOOTING SECTION -->
+        <section id="troubleshoot">
+            <h2>🐛 Troubleshooting Guide</h2>
+
+            <div class="box-warning">
+                <strong>Something wrong?</strong> Follow this systematic troubleshooting guide.
+            </div>
+
+            <h3>Workflow Won't Trigger</h3>
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Symptom: Post not appearing at scheduled time</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <ol style="padding-left: 2rem; margin: 1rem 0;">
+                    <li><strong>Check Activation:</strong> Is toggle "Active"? (top right)</li>
+                    <li><strong>Check Timezone:</strong> n8n Settings > Timezone = "Asia/Kathmandu"</li>
+                    <li><strong>Check Cron:</strong> Verify at https://crontab.guru</li>
+                    <li><strong>Check Executions:</strong> Left sidebar > Executions > Any recent runs?</li>
+                    <li><strong>Manual Test:</strong>
+                        <ul style="padding-left: 2rem; margin: 0.5rem 0;">
+                            <li>Disable schedule (click lightning icon)</li>
+                            <li>Click "Inject" on Node 1</li>
+                            <li>Does workflow run? If yes, schedule issue. If no, node issue.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <h3>OpenAI API Error</h3>
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Symptom: Node 4 shows red error</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <div class="box-danger">
+                    <strong>Error: "Invalid API Key"</strong>
+                    <ol style="padding-left: 2rem; margin: 0.5rem 0;">
+                        <li>Copy-paste error? Go to platform.openai.com/api/keys</li>
+                        <li>Create new key (can't reuse)</li>
+                        <li>Update in n8n credentials</li>
+                        <li>Test Node 4 again</li>
+                    </ol>
+                </div>
+                <div class="box-danger">
+                    <strong>Error: "Quota Exceeded"</strong>
+                    <ol style="padding-left: 2rem; margin: 0.5rem 0;">
+                        <li>Out of budget</li>
+                        <li>Go to openai.com/billing</li>
+                        <li>Add more credits or increase limit</li>
+                        <li>Try again in 1 minute</li>
+                    </ol>
+                </div>
+                <div class="box-danger">
+                    <strong>Error: "Rate Limited"</strong>
+                    <ol style="padding-left: 2rem; margin: 0.5rem 0;">
+                        <li>Too many requests too fast</li>
+                        <li>Normal - will resolve in 1 minute</li>
+                        <li>n8n auto-retries</li>
+                    </ol>
+                </div>
+            </div>
+
+            <h3>Facebook Post Fails</h3>
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Symptom: Node 6 shows error, post doesn't appear</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <div class="box-danger">
+                    <strong>Error: "Invalid Token"</strong>
+                    <ol style="padding-left: 2rem; margin: 0.5rem 0;">
+                        <li>Token expired (happens after 60 days)</li>
+                        <li>Go to developers.facebook.com</li>
+                        <li>Regenerate new token via Graph API Explorer</li>
+                        <li>Update in n8n environment variables</li>
+                        <li>Test Node 6 again</li>
+                    </ol>
+                </div>
+                <div class="box-danger">
+                    <strong>Error: "Page Not Found"</strong>
+                    <ol style="padding-left: 2rem; margin: 0.5rem 0;">
+                        <li>Wrong PAGE_ID</li>
+                        <li>Go to facebook.com/yourpage</li>
+                        <li>Click About > Find Page ID (numbers only)</li>
+                        <li>Update in n8n FACEBOOK_PAGE_ID</li>
+                        <li>Test Node 6</li>
+                    </ol>
+                </div>
+                <div class="box-danger">
+                    <strong>Error: "Insufficient Permissions"</strong>
+                    <ol style="padding-left: 2rem; margin: 0.5rem 0;">
+                        <li>Token missing page_manage_posts permission</li>
+                        <li>Create new System User token (more permanent)</li>
+                        <li>Verify permissions: page_manage_posts ✓</li>
+                        <li>Use that token in n8n</li>
+                    </ol>
+                </div>
+            </div>
+
+            <h3>Google Sheet Not Getting Data</h3>
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Symptom: Workflow succeeds but no data in sheet</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <ol style="padding-left: 2rem; margin: 1rem 0;">
+                    <li><strong>Check Sheet Exists:</strong>
+                        <ul style="padding-left: 2rem;">
+                            <li>Is it created?</li>
+                            <li>Sheet name = "UCDL_Daily_Posts"?</li>
+                            <li>Headers in Row 1?</li>
+                        </ul>
+                    </li>
+                    <li><strong>Check Sheet ID:</strong>
+                        <ul style="padding-left: 2rem;">
+                            <li>Google Sheet URL: docs.google.com/spreadsheets/d/[ID]/</li>
+                            <li>Copy that ID</li>
+                            <li>Paste in Node 8 spreadsheetId field</li>
+                        </ul>
+                    </li>
+                    <li><strong>Check Range:</strong>
+                        <ul style="padding-left: 2rem;">
+                            <li>Node 8: range = "UCDL_Daily_Posts!A:H"</li>
+                            <li>(Adjust sheet name if different)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Check Credentials:</strong>
+                        <ul style="padding-left: 2rem;">
+                            <li>Node 8 > Authentication</li>
+                            <li>Should show: "Google Sheets OAuth2"</li>
+                            <li>With your Google account connected</li>
+                        </ul>
+                    </li>
+                    <li><strong>Test Fix:</strong>
+                        <ul style="padding-left: 2rem;">
+                            <li>Reload page (F5)</li>
+                            <li>Click Node 8 > Execute Node</li>
+                            <li>Google Sheet updates?</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <h3>Posts Look Wrong / Formatting Issues</h3>
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Symptom: Emojis missing, text cut off, duplicate hashtags</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <div class="box-warning">
+                    <strong>Issue: Emojis not showing</strong>
+                    <ul style="padding-left: 2rem; margin: 0.5rem 0;">
+                        <li>Check Facebook post directly</li>
+                        <li>Usually appear fine on Facebook</li>
+                        <li>If not, may be device font issue</li>
+                        <li>Try refreshing page</li>
+                    </ul>
+                </div>
+                <div class="box-warning">
+                    <strong>Issue: Text cut off</strong>
+                    <ul style="padding-left: 2rem; margin: 0.5rem 0;">
+                        <li>Character limit exceeded</li>
+                        <li>Check Google Sheet character count column</li>
+                        <li>If >250, text being truncated</li>
+                        <li>Adjust OpenAI temperature down (0.7)</li>
+                    </ul>
+                </div>
+                <div class="box-warning">
+                    <strong>Issue: Duplicate hashtags</strong>
+                    <ul style="padding-left: 2rem; margin: 0.5rem 0;">
+                        <li>OpenAI generating hashtags</li>
+                        <li>Also added from prompt</li>
+                        <li>Solution: Remove hashtags from system prompt</li>
+                        <li>Let OpenAI generate them only</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Same Post Every Day</h3>
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Symptom: Content repetitive or looks copied</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <ol style="padding-left: 2rem; margin: 1rem 0;">
+                    <li><strong>Check Temperature:</strong>
+                        <ul style="padding-left: 2rem;">
+                            <li>Node 4 > Temperature</li>
+                            <li>Current: 0.8 (good for creativity)</li>
+                            <li>Increase to 0.9 for more variety</li>
+                            <li>Or use: 0.6 = boring, 1.0 = wild</li>
+                        </ul>
+                    </li>
+                    <li><strong>Check Category Variety:</strong>
+                        <ul style="padding-left: 2rem;">
+                            <li>Look at Google Sheet</li>
+                            <li>Category column - all "good_morning"?</li>
+                            <li>Adjust Node 3 category weights</li>
+                        </ul>
+                    </li>
+                    <li><strong>Update Prompts:</strong>
+                        <ul style="padding-left: 2rem;">
+                            <li>Node 4 > System Message</li>
+                            <li>Add more specific examples</li>
+                            <li>Add more context about KMC</li>
+                            <li>Include current date context</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="box-success">
+                <h3>✅ Still Stuck?</h3>
+                <p>Check the error message in n8n execution logs. Most issues have a clear solution.</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>KMC-UCDL Daily Facebook Content Agent</strong></p>
+        <p>Complete automation system with n8n, OpenAI, and Facebook Graph API</p>
+        <p style="margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 1.5rem;">
+            <strong>Research Dissemination Prepared by:</strong><br>
+            Mr. Bishnu Singh Rayamajhi<br>
+            Mathematics Lecturer and Head of Humanities & Social Science<br>
+            Kapilvastu Multiple Campus (KMC), Taulihawa, Tribhuvan University<br>
+            <strong>Founder:</strong> UCDL Academy
+        </p>
+        <p style="margin-top: 1rem; opacity: 0.8;">Educational Excellence. Automated. Scaled. 🚀</p>
+        <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.7;">© 2026 | Last Updated: June 2026</p>
+    </footer>
+
+    <!-- Success Message -->
+    <div id="successMessage" class="success-message">✓ Copied to clipboard!</div>
+
+    <!-- Scripts -->
+    <script>
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => section.classList.remove('active'));
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Collapsible sections
+        function toggleCollapsible(element) {
+            element.classList.toggle('active');
+            const content = element.nextElementSibling;
+            if (content) {
+                content.classList.toggle('active');
+            }
+        }
+
+        // Copy code blocks
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add copy buttons to pre elements
+            const preElements = document.querySelectorAll('pre');
+            preElements.forEach(pre => {
+                const button = document.createElement('button');
+                button.textContent = 'Copy';
+                button.onclick = function(e) {
+                    e.preventDefault();
+                    const code = pre.textContent;
+                    navigator.clipboard.writeText(code).then(() => {
+                        showSuccessMessage();
+                        button.textContent = '✓ Copied!';
+                        setTimeout(() => {
+                            button.textContent = 'Copy';
+                        }, 2000);
+                    });
+                };
+                pre.appendChild(button);
+            });
+
+            // Make first section active
+            document.getElementById('overview').classList.add('active');
+        });
+
+        // Success message
+        function showSuccessMessage() {
+            const msg = document.getElementById('successMessage');
+            msg.classList.add('show');
+            setTimeout(() => {
+                msg.classList.remove('show');
+            }, 2000);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                // Could add escape functionality here
+            }
+        });
+
+        // Print friendly
+        function printPage() {
+            window.print();
+        }
+
+        // Mobile menu toggle
+        function toggleMobileNav() {
+            const nav = document.querySelector('nav');
+            nav.style.maxHeight = nav.style.maxHeight ? null : nav.scrollHeight + 'px';
+        }
+    </script>
+</body>
+</html>

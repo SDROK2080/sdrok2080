@@ -3,1041 +3,1459 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KMC-UCDL Content Agent - Interactive Dashboard</title>
+    <title>How KMC-UCDL System Runs - Complete Execution Guide</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         :root {
-            --primary: #7c3aed;
-            --secondary: #ec4899;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --dark-bg: #0f172a;
-            --dark-surface: #1e293b;
-            --text-primary: #ffffff;
-            --text-secondary: #cbd5e1;
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #ea580c;
+            --light: #f8fafc;
+            --dark: #1e293b;
         }
-
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, var(--dark-bg) 0%, #1a0f2e 100%);
-            color: var(--text-primary);
-            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
         }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--dark-surface);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 4px;
-        }
-
-        /* Header */
+        
         header {
-            background: rgba(15, 23, 42, 0.95);
-            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
             padding: 2rem;
-            backdrop-filter: blur(10px);
             position: sticky;
             top: 0;
-            z-index: 50;
+            z-index: 100;
         }
-
-        .header-flex {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 2rem;
-            flex-wrap: wrap;
+        
+        header h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+        header p { opacity: 0.95; }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
         }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .logo-icon {
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-        }
-
-        .logo h1 {
-            font-size: 1.75rem;
-            font-weight: 700;
-        }
-
-        .logo p {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .status-badge {
-            background: rgba(139, 92, 246, 0.1);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            padding: 0.75rem 1.5rem;
-            border-radius: 999px;
-            font-size: 0.9rem;
-        }
-
-        .status-badge.generating {
-            background: rgba(59, 130, 246, 0.15);
-            border-color: rgba(59, 130, 246, 0.4);
-            color: #60a5fa;
-        }
-
-        .status-badge.complete {
-            background: rgba(16, 185, 129, 0.15);
-            border-color: rgba(16, 185, 129, 0.4);
-            color: #10b981;
-        }
-
-        /* Main Content */
-        main {
-            max-width: 1400px;
-            margin: 0 auto;
+        
+        section {
+            background: white;
+            border-radius: 8px;
             padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #e2e8f0;
         }
-
-        /* Control Panel */
-        .control-section {
-            margin-bottom: 3rem;
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 2rem;
-            align-items: start;
-        }
-
-        @media (max-width: 900px) {
-            .control-section {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .control-panel {
-            background: rgba(139, 92, 246, 0.1);
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            border-radius: 12px;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            height: fit-content;
-        }
-
-        button {
-            padding: 1rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            font-family: inherit;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
-            width: 100%;
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .btn-primary.loading {
-            opacity: 0.8;
-        }
-
-        /* Stats */
-        .stats {
-            background: rgba(139, 92, 246, 0.1);
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            border-radius: 8px;
-            padding: 1rem;
-        }
-
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid rgba(139, 92, 246, 0.1);
-        }
-
-        .stat-row:last-child {
-            border-bottom: none;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .stat-value {
-            font-weight: 600;
+        
+        h2 {
             color: var(--primary);
-        }
-
-        /* Workflow Steps */
-        .workflow-section {
-            background: rgba(139, 92, 246, 0.05);
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            border-radius: 12px;
-            padding: 1.5rem;
-        }
-
-        .workflow-title {
-            font-size: 1.1rem;
-            font-weight: 700;
             margin-bottom: 1rem;
+            font-size: 1.8rem;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 0.5rem;
         }
-
-        .steps-container {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
+        
+        h3 {
+            color: var(--secondary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
         }
-
+        
+        .card {
+            background: var(--light);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        
+        pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        code {
+            font-family: 'Courier New', monospace;
+            background: #f1f5f9;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            color: var(--danger);
+        }
+        
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: #e2e8f0;
+        }
+        
+        .box-info {
+            background: #eff6ff;
+            border: 2px solid var(--primary);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .box-success {
+            background: #f0fdf4;
+            border: 2px solid var(--success);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .diagram {
+            background: white;
+            border: 2px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 6px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 1rem 0;
+            margin: 1.5rem 0;
+        }
+        
+        .timeline-item {
+            padding: 1.5rem;
+            padding-left: 3rem;
+            position: relative;
+            border-left: 3px solid #e2e8f0;
+            margin-bottom: 1.5rem;
+        }
+        
+        .timeline-item:before {
+            content: "";
+            position: absolute;
+            left: -9px;
+            top: 1.5rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--primary);
+        }
+        
+        .timeline-item.success:before {
+            background: var(--success);
+            box-shadow: 0 0 0 3px var(--success);
+        }
+        
+        .timeline-item time {
+            color: var(--primary);
+            font-weight: bold;
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 0.95rem;
+        }
+        
         .step {
             display: flex;
-            align-items: center;
             gap: 1rem;
-            padding: 0.75rem;
-            background: rgba(139, 92, 246, 0.1);
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            border-radius: 8px;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .step.completed {
-            background: rgba(16, 185, 129, 0.1);
-            border-color: rgba(16, 185, 129, 0.3);
-        }
-
-        .step.active {
-            background: rgba(59, 130, 246, 0.1);
-            border-color: rgba(59, 130, 246, 0.3);
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
-        }
-
-        .step.active::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0; }
-            50% { opacity: 1; }
-        }
-
-        .step-icon {
-            font-size: 1.5rem;
-            min-width: 40px;
-            text-align: center;
-        }
-
-        .step-name {
-            font-weight: 600;
-            font-size: 0.95rem;
-            flex: 1;
-        }
-
-        .step-status {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-top: 0.2rem;
-        }
-
-        .step.completed .step-status {
-            color: var(--success);
-        }
-
-        .step.active .step-status {
-            color: #60a5fa;
-        }
-
-        /* Generated Post Display - MAIN FOCUS */
-        .post-section {
-            margin-bottom: 3rem;
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .post-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            align-items: stretch;
-        }
-
-        @media (max-width: 1000px) {
-            .post-container {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .post-image-wrapper {
-            position: relative;
-            border-radius: 16px;
-            overflow: hidden;
-            background: var(--dark-surface);
-            border: 2px solid rgba(139, 92, 246, 0.3);
-            aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 300px;
-        }
-
-        .post-image-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .image-placeholder {
-            text-align: center;
-            opacity: 0.5;
-        }
-
-        .image-placeholder p {
-            margin: 0.5rem 0;
-        }
-
-        .image-label {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            backdrop-filter: blur(10px);
-            display: none;
-        }
-
-        .post-image-wrapper.loaded .image-label {
-            display: block;
-        }
-
-        .post-content-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .post-content-wrapper.loaded {
-            opacity: 1;
-        }
-
-        .post-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .post-emoji {
-            font-size: 3rem;
-        }
-
-        .post-meta h3 {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.25rem;
-        }
-
-        .post-meta h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .post-text-wrapper {
-            background: rgba(139, 92, 246, 0.1);
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            border-radius: 12px;
+            margin: 1.5rem 0;
             padding: 1.5rem;
-            flex: 1;
-            overflow-y: auto;
-            max-height: 400px;
-            font-size: 0.95rem;
-            line-height: 1.8;
-            white-space: pre-wrap;
-            word-break: break-word;
-            color: var(--text-secondary);
+            background: var(--light);
+            border-radius: 6px;
+            border-left: 4px solid var(--primary);
         }
-
-        .hashtags-wrapper {
+        
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-        }
-
-        .hashtag {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2));
-            color: var(--primary);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .hashtag:hover {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(236, 72, 153, 0.3));
-            transform: translateY(-2px);
-        }
-
-        .post-actions {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .btn-secondary {
-            background: rgba(139, 92, 246, 0.2);
-            color: var(--primary);
-            border: 1px solid rgba(139, 92, 246, 0.4);
-            flex: 1;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(139, 92, 246, 0.3);
-        }
-
-        /* Empty State */
-        .empty-state {
-            display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 300px;
-            text-align: center;
-            padding: 2rem;
-            background: rgba(139, 92, 246, 0.05);
-            border: 2px dashed rgba(139, 92, 246, 0.2);
-            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            flex-shrink: 0;
         }
-
-        .empty-state-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
+        
+        .step-content h4 {
+            margin: 0 0 0.5rem 0;
         }
-
-        .empty-state-text {
-            color: var(--text-secondary);
-            max-width: 300px;
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
         }
-
-        /* Quality Metrics */
-        .metrics-section {
-            margin-bottom: 3rem;
+        
+        table thead {
+            background: var(--primary);
+            color: white;
         }
-
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-        }
-
-        .metric-card {
-            background: rgba(139, 92, 246, 0.1);
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            border-radius: 12px;
+        
+        table th, table td {
             padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        table tbody tr:nth-child(even) {
+            background: var(--light);
+        }
+        
+        table tbody tr:hover {
+            background: #f0f7ff;
+        }
+        
+        .flow-diagram {
+            background: white;
+            border: 2px solid var(--primary);
+            padding: 2rem;
+            border-radius: 6px;
+            margin: 1.5rem 0;
             text-align: center;
-            transition: all 0.3s;
         }
-
-        .metric-card:hover {
-            background: rgba(139, 92, 246, 0.15);
-            transform: translateY(-2px);
+        
+        .flow-box {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            margin: 0.5rem;
+            font-weight: bold;
+            min-width: 150px;
         }
-
-        .metric-card.success {
-            background: rgba(16, 185, 129, 0.1);
-            border-color: rgba(16, 185, 129, 0.3);
+        
+        .flow-arrow {
+            display: inline-block;
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin: 0 0.5rem;
         }
-
-        .metric-label {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+        
+        .node-box {
+            background: #f0f7ff;
+            border: 2px solid var(--primary);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .node-box h4 {
+            color: var(--primary);
             margin-bottom: 0.5rem;
         }
-
-        .metric-value {
-            font-size: 2rem;
-            font-weight: 700;
+        
+        .node-box .input {
+            background: #fef3c7;
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+        
+        .node-box .output {
+            background: #dcfce7;
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin: 0.25rem;
+        }
+        
+        .badge-primary {
+            background: #dbeafe;
             color: var(--primary);
         }
-
-        .metric-card.success .metric-value {
+        
+        .badge-success {
+            background: #dcfce7;
             color: var(--success);
         }
-
-        /* Loading spinner */
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        
+        .badge-warning {
+            background: #fef3c7;
+            color: #ca8a04;
         }
-
-        .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
         }
-
-        /* Footer */
+        
+        .comparison-item {
+            padding: 1.5rem;
+            border-radius: 6px;
+            border-left: 4px solid;
+        }
+        
+        .comparison-item.before {
+            background: #fef2f2;
+            border-left-color: var(--danger);
+        }
+        
+        .comparison-item.after {
+            background: #f0fdf4;
+            border-left-color: var(--success);
+        }
+        
+        .comparison-item h4 {
+            margin-top: 0;
+        }
+        
         footer {
-            border-top: 1px solid rgba(139, 92, 246, 0.2);
-            padding: 2rem;
+            background: var(--dark);
+            color: white;
             text-align: center;
-            color: var(--text-secondary);
+            padding: 2rem;
             margin-top: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.5rem; }
+            .comparison { grid-template-columns: 1fr; }
+            .step { flex-direction: column; }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
-        <div class="header-flex">
-            <div class="logo">
-                <div class="logo-icon">⚡</div>
-                <div>
-                    <h1>KMC-UCDL Content Agent</h1>
-                    <p>AI-Powered Educational Content Automation</p>
-                </div>
-            </div>
-            <div class="status-badge" id="statusBadge">
-                Status: <strong id="statusText">IDLE</strong>
-            </div>
+        <h1>🔄 How KMC-UCDL System Runs</h1>
+        <p>Complete Execution Flow, Timing & Real Examples</p>
+        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px solid rgba(255,255,255,0.3); font-size: 0.95rem;">
+            <p style="margin: 0.5rem 0;"><strong>Research Dissemination Prepared by:</strong></p>
+            <p style="margin: 0.25rem 0;">Mr. Bishnu Singh Rayamajhi</p>
+            <p style="margin: 0.25rem 0;">Mathematics Lecturer and Head of Humanities & Social Science</p>
+            <p style="margin: 0.25rem 0;">Kapilvastu Multiple Campus (KMC), Taulihawa, Tribhuvan University</p>
+            <p style="margin: 0.5rem 0;"><strong>Founder:</strong> UCDL Academy</p>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main>
-        <!-- Control Section -->
-        <div class="control-section">
-            <!-- Control Panel -->
-            <div class="control-panel">
-                <button class="btn-primary" id="generateBtn" onclick="generateContent()">
-                    <span id="btnIcon">▶️</span>
-                    <span id="btnText">Generate Daily Content</span>
-                </button>
-
-                <!-- Stats -->
-                <div class="stats">
-                    <div class="stat-row">
-                        <span class="stat-label">Today's Topic</span>
-                        <span class="stat-value" id="topicEmoji">—</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-label">Status</span>
-                        <span class="stat-value" id="quickStatus" style="color: #94a3b8;">○ Idle</span>
-                    </div>
-                    <div class="stat-row" id="wordCountRow" style="display: none;">
-                        <span class="stat-label">Word Count</span>
-                        <span class="stat-value" id="wordCount">0</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Workflow Steps -->
-            <div class="workflow-section">
-                <div class="workflow-title">📊 Generation Pipeline</div>
-                <div class="steps-container" id="stepsContainer">
-                    <!-- Steps generated by JS -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Generated Post Section -->
-        <section class="post-section">
-            <h2 class="section-title">📋 Generated Post</h2>
+    <div class="container">
+        <!-- SECTION 1: Overview -->
+        <section>
+            <h2>🎬 How It Actually Executes</h2>
             
-            <div class="post-container">
-                <!-- Post Image -->
-                <div class="post-image-wrapper" id="postImageWrapper">
-                    <div class="image-placeholder">
-                        <div style="font-size: 3rem; margin-bottom: 1rem;">📸</div>
-                        <p>AI-generated infographic will appear here</p>
-                        <p style="font-size: 0.85rem; margin-top: 1rem;">Click "Generate Daily Content" to start</p>
-                    </div>
+            <div class="box-info">
+                <h3>The Simple Version</h3>
+                <p>Every day at 7 AM NST, n8n automatically runs your workflow. It:</p>
+                <ol style="padding-left: 2rem; margin: 1rem 0;">
+                    <li>Wakes up at exact time (7:00:00 AM)</li>
+                    <li>Runs through 9 nodes sequentially</li>
+                    <li>Each node processes data & passes to next</li>
+                    <li>OpenAI generates unique post (2 seconds)</li>
+                    <li>Posts to Facebook (1 second)</li>
+                    <li>Logs to Google Sheets</li>
+                    <li>Workflow finishes (total: ~3 seconds)</li>
+                    <li>Post appears on your page ✅</li>
+                </ol>
+            </div>
+
+            <h3>Visual Flow</h3>
+            <div class="flow-diagram">
+                <div class="flow-box">Trigger</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box">Context</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box">Category</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box">OpenAI</div>
+                <br style="margin: 1rem 0;">
+                <div class="flow-box">Parse</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box">Facebook</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box">Log</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box">Complete</div>
+            </div>
+
+            <h3>Key Facts</h3>
+            <table>
+                <tr>
+                    <td><strong>Trigger Time</strong></td>
+                    <td>Every day at 7:00 AM NST (±1 second)</td>
+                </tr>
+                <tr>
+                    <td><strong>Total Execution Time</strong></td>
+                    <td>~3 seconds (from start to finish)</td>
+                </tr>
+                <tr>
+                    <td><strong>Post Appears</strong></td>
+                    <td>7:00:03 AM (instantly to users)</td>
+                </tr>
+                <tr>
+                    <td><strong>Node Count</strong></td>
+                    <td>9 nodes (sequential execution)</td>
+                </tr>
+                <tr>
+                    <td><strong>Parallelization</strong></td>
+                    <td>None (sequential, one after another)</td>
+                </tr>
+                <tr>
+                    <td><strong>Human Intervention</strong></td>
+                    <td>Zero (completely automatic)</td>
+                </tr>
+                <tr>
+                    <td><strong>Frequency</strong></td>
+                    <td>Once per day (24 hours apart)</td>
+                </tr>
+                <tr>
+                    <td><strong>Reliability</strong></td>
+                    <td>99.99% uptime (auto-retries on failure)</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- SECTION 2: Timeline -->
+        <section>
+            <h2>⏰ Minute-by-Minute Timeline</h2>
+            
+            <h3>What Happens in Your Workflow</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <time>6:59:50 AM NST</time>
+                    <p><strong>System Ready</strong> - n8n is waiting, checking time</p>
                 </div>
 
-                <!-- Post Content -->
-                <div class="post-content-wrapper" id="postContentWrapper">
-                    <div class="empty-state">
-                        <div class="empty-state-icon">✨</div>
-                        <div class="empty-state-text">
-                            Click "Generate Daily Content" to create an AI-powered educational post with beautiful graphics, engaging content, and optimized hashtags
-                        </div>
-                    </div>
+                <div class="timeline-item">
+                    <time>6:59:59 AM NST</time>
+                    <p><strong>1 Second Before</strong> - Last second check</p>
+                </div>
+
+                <div class="timeline-item">
+                    <time>7:00:00 AM NST</time>
+                    <p><strong>🔔 TRIGGER FIRES!</strong> Cron schedule matches</p>
+                </div>
+
+                <div class="timeline-item">
+                    <time>7:00:00.100 AM</time>
+                    <p><strong>Node 1 Starts</strong> - Schedule Trigger sends initial data</p>
+                </div>
+
+                <div class="timeline-item">
+                    <time>7:00:00.200 AM</time>
+                    <p><strong>Node 2 Executes</strong> - Get NST Context (10ms)</p>
+                </div>
+
+                <div class="timeline-item">
+                    <time>7:00:00.300 AM</time>
+                    <p><strong>Node 3 Executes</strong> - Select Category (10ms)</p>
+                </div>
+
+                <div class="timeline-item">
+                    <time>7:00:00.310 AM</time>
+                    <p><strong>Node 4 Starts</strong> - Call OpenAI API...</p>
+                </div>
+
+                <div class="timeline-item">
+                    <time>7:00:02.210 AM</time>
+                    <p><strong>Node 4 Complete</strong> - OpenAI responds (1.9 seconds waiting)</p>
+                </div>
+
+                <div class="timeline-item">
+                    <time>7:00:02.220 AM</time>
+                    <p><strong>Node 5 Executes</strong> - Parse response (10ms)</p>
+                </div>
+
+                <div class="timeline-item">
+                    <time>7:00:02.230 AM</time>
+                    <p><strong>Node 6 Starts</strong> - Call Facebook API...</p>
+                </div>
+
+                <div class="timeline-item">
+                    <time>7:00:03.130 AM</time>
+                    <p><strong>Node 6 Complete</strong> - Facebook returns post ID (900ms)</p>
+                </div>
+
+                <div class="timeline-item">
+                    <time>7:00:03.140 AM</time>
+                    <p><strong>Node 7 Executes</strong> - Prepare log data (10ms)</p>
+                </div>
+
+                <div class="timeline-item">
+                    <time>7:00:03.250 AM</time>
+                    <p><strong>Node 8 Executes</strong> - Write to Google Sheets (110ms)</p>
+                </div>
+
+                <div class="timeline-item success">
+                    <time>7:00:03.260 AM</time>
+                    <p><strong>✅ Complete!</strong> Workflow finished successfully</p>
+                </div>
+
+                <div class="timeline-item success">
+                    <time>7:00:03.260 AM +</time>
+                    <p><strong>📱 Post Live</strong> - Already on your Facebook page</p>
+                </div>
+            </div>
+
+            <div class="box-success">
+                <h3>⚡ Total Time: ~3.26 seconds</h3>
+                <p>From trigger to completion, less than 4 seconds. Post is instantly live on Facebook!</p>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Node Execution -->
+        <section>
+            <h2>🔧 Node-by-Node Execution</h2>
+
+            <h3>Node 1: Schedule Trigger</h3>
+            <div class="node-box">
+                <h4>⏱️ Schedule Trigger (Cron)</h4>
+                <p><strong>When:</strong> Every day at 7:00 AM NST</p>
+                <p><strong>Cron:</strong> <code>15 1 * * *</code> (7 AM NST = 1:15 AM UTC)</p>
+                <div class="output">
+                    <strong>Output:</strong><br>
+                    Signals next node to start<br>
+                    Passes: { timestamp, executionId }
+                </div>
+            </div>
+
+            <h3>Node 2: Get NST Context</h3>
+            <div class="node-box">
+                <h4>📅 Get NST Context (Function)</h4>
+                <p><strong>What it does:</strong> Gets current date/time in Nepal timezone</p>
+                <div class="input">
+                    <strong>Input:</strong> Timestamp from Node 1
+                </div>
+                <div class="output">
+                    <strong>Output:</strong><br>
+                    {<br>
+                    &nbsp;&nbsp;timestamp: "2026-06-14T01:15:00Z",<br>
+                    &nbsp;&nbsp;dayName: "Monday",<br>
+                    &nbsp;&nbsp;dateEng: "14/06/2026",<br>
+                    &nbsp;&nbsp;nepaliMonth: "Baishakh",<br>
+                    &nbsp;&nbsp;dayOfWeek: 1,<br>
+                    &nbsp;&nbsp;hour: 7,<br>
+                    &nbsp;&nbsp;isWeekend: false<br>
+                    }
+                </div>
+                <p><strong>Time Taken:</strong> 10ms</p>
+            </div>
+
+            <h3>Node 3: Select Content Category</h3>
+            <div class="node-box">
+                <h4>🎲 Select Content Category (Function)</h4>
+                <p><strong>What it does:</strong> Randomly picks content type based on day of week</p>
+                <div class="input">
+                    <strong>Input:</strong> dayOfWeek from Node 2
+                </div>
+                <p><strong>Logic:</strong></p>
+                <pre>if Monday {
+  Pick from: Study Tips (40%), Good Morning (60%)
+}
+if Wednesday {
+  Pick from: Announcement (60%), Good Morning (40%)
+}
+if Friday {
+  Pick from: Weekly Wrap (40%), Motivation (60%)
+}
+// ... etc for other days</pre>
+                <div class="output">
+                    <strong>Output:</strong><br>
+                    {<br>
+                    &nbsp;&nbsp;category: "study_tips",<br>
+                    &nbsp;&nbsp;dayOfWeek: 1<br>
+                    }
+                </div>
+                <p><strong>Time Taken:</strong> 10ms</p>
+            </div>
+
+            <h3>Node 4: OpenAI Content Generation ⚡ MAIN NODE</h3>
+            <div class="node-box">
+                <h4>🤖 OpenAI API (Chat Completion)</h4>
+                <p><strong>What it does:</strong> Calls OpenAI to generate unique post content</p>
+                <div class="input">
+                    <strong>Input:</strong><br>
+                    - dayName: "Monday"<br>
+                    - category: "study_tips"<br>
+                    - Plus system prompt (detailed instructions)
+                </div>
+                <p><strong>API Call:</strong></p>
+                <pre>POST https://api.openai.com/v1/messages
+
+{
+  "model": "gpt-4-turbo",
+  "temperature": 0.8,
+  "max_tokens": 300,
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a content creator for KMC..."
+    },
+    {
+      "role": "user",
+      "content": "Generate study tips post for Monday..."
+    }
+  ]
+}</pre>
+                <div class="output">
+                    <strong>Output (Example):</strong><br>
+                    {<br>
+                    &nbsp;&nbsp;"text": "📚 STUDY TIP: Active Recall...",<br>
+                    &nbsp;&nbsp;"hashtags": "#StudyTips #KMC #UCDL",<br>
+                    &nbsp;&nbsp;"category": "study_tips"<br>
+                    }
+                </div>
+                <p><strong>Time Taken:</strong> 1.9 seconds (API latency)</p>
+                <p style="color: var(--danger); font-weight: bold;">⚠️ This is the slowest node (waiting for OpenAI)</p>
+            </div>
+
+            <h3>Node 5: Parse AI Response</h3>
+            <div class="node-box">
+                <h4>📝 Parse Response (Function)</h4>
+                <p><strong>What it does:</strong> Extracts text from OpenAI's JSON response</p>
+                <div class="input">
+                    <strong>Input:</strong> Raw OpenAI response (JSON)
+                </div>
+                <p><strong>Processing:</strong></p>
+                <pre>1. Extract text field
+2. Extract hashtags field
+3. Combine into finalPost
+4. Count characters
+5. Validate length (must be 180-250)</pre>
+                <div class="output">
+                    <strong>Output:</strong><br>
+                    {<br>
+                    &nbsp;&nbsp;postText: "📚 STUDY TIP: Active Recall...",<br>
+                    &nbsp;&nbsp;hashtags: "#StudyTips #KMC #UCDL",<br>
+                    &nbsp;&nbsp;finalPost: "[Combined text + hashtags]",<br>
+                    &nbsp;&nbsp;characterCount: 215<br>
+                    }
+                </div>
+                <p><strong>Time Taken:</strong> 10ms</p>
+            </div>
+
+            <h3>Node 6: Post to Facebook ⚡ CRITICAL NODE</h3>
+            <div class="node-box">
+                <h4>📱 Facebook Graph API (HTTP POST)</h4>
+                <p><strong>What it does:</strong> Posts content to your Facebook page</p>
+                <div class="input">
+                    <strong>Input:</strong><br>
+                    - finalPost (text + emojis + hashtags)<br>
+                    - Access Token<br>
+                    - Page ID
+                </div>
+                <p><strong>API Call:</strong></p>
+                <pre>POST https://graph.facebook.com/v18.0/123456789/feed
+
+{
+  "message": "📚 STUDY TIP: Active Recall helps memory!...",
+  "access_token": "EABC...",
+  "published": true
+}</pre>
+                <div class="output">
+                    <strong>Output (Success):</strong><br>
+                    {<br>
+                    &nbsp;&nbsp;id: "123456789_987654321",<br>
+                    &nbsp;&nbsp;created_time: "2026-06-14T01:15:03+0000"<br>
+                    }
+                </div>
+                <p><strong>Time Taken:</strong> 900ms (API latency)</p>
+                <p style="color: var(--success); font-weight: bold;">✅ Post is NOW LIVE on Facebook page!</p>
+            </div>
+
+            <h3>Node 7: Prepare Log Data</h3>
+            <div class="node-box">
+                <h4>📋 Prepare Log Data (Function)</h4>
+                <p><strong>What it does:</strong> Formats all data for Google Sheets logging</p>
+                <div class="input">
+                    <strong>Input:</strong> All data from previous nodes
+                </div>
+                <p><strong>Processing:</strong> Collect and format for sheet insertion</p>
+                <div class="output">
+                    <strong>Output (Row for Google Sheets):</strong><br>
+                    {<br>
+                    &nbsp;&nbsp;date: "14/06/2026",<br>
+                    &nbsp;&nbsp;dayName: "Monday",<br>
+                    &nbsp;&nbsp;category: "study_tips",<br>
+                    &nbsp;&nbsp;postText: "📚 STUDY TIP...",<br>
+                    &nbsp;&nbsp;postId: "123456_987654",<br>
+                    &nbsp;&nbsp;characterCount: 215,<br>
+                    &nbsp;&nbsp;timestamp: "01:15:03 NST",<br>
+                    &nbsp;&nbsp;status: "SUCCESS"<br>
+                    }
+                </div>
+                <p><strong>Time Taken:</strong> 10ms</p>
+            </div>
+
+            <h3>Node 8: Log to Google Sheets</h3>
+            <div class="node-box">
+                <h4>📊 Google Sheets API (Append Row)</h4>
+                <p><strong>What it does:</strong> Saves log data to Google Sheets for tracking</p>
+                <div class="input">
+                    <strong>Input:</strong> Formatted log data from Node 7
+                </div>
+                <p><strong>API Call:</strong></p>
+                <pre>POST sheets.googleapis.com/v4/spreadsheets/[ID]/values/append
+
+{
+  "values": [
+    ["14/06/2026", "Monday", "study_tips", "📚 STUDY...", 
+     "123456_987654", 215, "01:15:03", "SUCCESS"]
+  ]
+}</pre>
+                <div class="output">
+                    <strong>Output:</strong><br>
+                    {<br>
+                    &nbsp;&nbsp;spreadsheetId: "abc123xyz",<br>
+                    &nbsp;&nbsp;updatedCells: 8,<br>
+                    &nbsp;&nbsp;updatedRows: 1<br>
+                    }
+                </div>
+                <p><strong>Time Taken:</strong> 110ms</p>
+                <p>✅ Data now saved in Google Sheet for your tracking!</p>
+            </div>
+
+            <h3>Node 9: Complete</h3>
+            <div class="node-box">
+                <h4>✅ Execution Complete (No Operation)</h4>
+                <p><strong>What it does:</strong> Marks workflow as successfully finished</p>
+                <div class="output">
+                    <strong>Final Status:</strong> SUCCESS ✅
                 </div>
             </div>
         </section>
 
-        <!-- Quality Metrics -->
-        <section class="metrics-section" id="metricsSection" style="display: none;">
-            <h2 class="section-title">📊 Quality Metrics</h2>
-            <div class="metrics-grid" id="metricsContainer">
-                <!-- Metrics generated by JS -->
+        <!-- SECTION 4: Real Example -->
+        <section>
+            <h2>📖 Real-World Example (Step-by-Step)</h2>
+
+            <h3>Scenario: Monday, June 14, 2026, 7:00 AM NST</h3>
+
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>⏱️ Time: 7:00:00 AM NST</h4>
+                    <p><strong>Cron triggers.</strong> n8n sees time matches "15 1 * * *"</p>
+                    <p><strong>Action:</strong> Start workflow execution</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>📅 Time: 7:00:00.2 AM NST</h4>
+                    <p><strong>Get Context.</strong> Function calculates:</p>
+                    <pre>Today is Monday (dayOfWeek = 1)
+Date: 14/06/2026
+Month: Baishakh (Nepali)
+Weekend: No</pre>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>🎲 Time: 7:00:00.3 AM NST</h4>
+                    <p><strong>Select Category.</strong> Monday logic applies:</p>
+                    <pre>Random number: 0.35
+
+Monday options:
+- Study Tips (40%) = 0-0.4
+- Good Morning (60%) = 0.4-1.0
+
+Result: Study Tips (0.35 falls in first range)</pre>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>🤖 Time: 7:00:00.31 AM NST</h4>
+                    <p><strong>Call OpenAI.</strong> Send prompt:</p>
+                    <pre>You are a content creator for KMC-UCDL.
+Day: Monday
+Category: study_tips
+Generate a Facebook post about study techniques.
+180-250 chars, 2-3 emojis, 3-4 hashtags.</pre>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h4>⏳ Time: 7:00:01.5 AM NST</h4>
+                    <p><strong>Waiting...</strong> OpenAI is processing your request (taking ~1.2 seconds)</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">6</div>
+                <div class="step-content">
+                    <h4>✍️ Time: 7:00:02.21 AM NST</h4>
+                    <p><strong>OpenAI responds with generated content:</strong></p>
+                    <pre>"📚 STUDY TIP: Active Recall helps memory!
+Instead of re-reading notes, test yourself.
+Try 5 questions from yesterday's class.
+Your brain will thank you! 🧠
+#StudyTips #KMC #UCDL #Learning"
+
+Character count: 215
+Emojis: 2 ✓
+Hashtags: 4 ✓</pre>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">7</div>
+                <div class="step-content">
+                    <h4>📝 Time: 7:00:02.22 AM NST</h4>
+                    <p><strong>Parse response.</strong> Extract and validate:</p>
+                    <pre>✓ Text length OK (215 chars)
+✓ Emoji count OK (2)
+✓ Hashtag count OK (4)
+✓ No external links
+✓ Ready to post!</pre>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">8</div>
+                <div class="step-content">
+                    <h4>📱 Time: 7:00:02.23 AM NST</h4>
+                    <p><strong>Post to Facebook API:</strong></p>
+                    <pre>POST /v18.0/123456789/feed
+message: "[full post text]"
+access_token: "EABC..."
+published: true</pre>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">9</div>
+                <div class="step-content">
+                    <h4>✅ Time: 7:00:03.13 AM NST</h4>
+                    <p><strong>Facebook responds:</strong></p>
+                    <pre>{
+  "id": "123456789_987654321",
+  "created_time": "2026-06-14T01:15:03+0000"
+}
+
+Post ID created! Now live on Facebook!</pre>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">10</div>
+                <div class="step-content">
+                    <h4>📋 Time: 7:00:03.14 AM NST</h4>
+                    <p><strong>Prepare log data for Google Sheets:</strong></p>
+                    <pre>[
+  "14/06/2026",          // Date
+  "Monday",              // Day
+  "study_tips",          // Category
+  "📚 STUDY TIP: A...",  // Content preview
+  "123456_987654",       // Facebook Post ID
+  "215",                 // Character count
+  "01:15:03",            // Timestamp NST
+  "SUCCESS"              // Status
+]</pre>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">11</div>
+                <div class="step-content">
+                    <h4>📊 Time: 7:00:03.25 AM NST</h4>
+                    <p><strong>Write to Google Sheets:</strong></p>
+                    <pre>API Call: Append row to UCDL_Daily_Posts sheet
+Result: Row #42 created with all data</pre>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">✅</div>
+                <div class="step-content">
+                    <h4>🎉 Time: 7:00:03.26 AM NST</h4>
+                    <p><strong>WORKFLOW COMPLETE!</strong></p>
+                    <pre>✅ Post published on Facebook (LIVE)
+✅ Logged to Google Sheets
+✅ Total time: 3.26 seconds
+✅ Status: SUCCESS
+✅ Next run: Tomorrow 7 AM</pre>
+                </div>
             </div>
         </section>
-    </main>
 
-    <!-- Footer -->
+        <!-- SECTION 5: Data Flow -->
+        <section>
+            <h2>🔄 Complete Data Flow</h2>
+
+            <h3>How Data Passes Through Nodes</h3>
+            <div class="diagram">
+                <pre>NODE 1: Schedule Trigger
+├─ Output: { timestamp, executionId }
+│
+├→ NODE 2: Get NST Context
+│  ├─ Input: timestamp from Node 1
+│  └─ Output: { dayName, dateEng, dayOfWeek, ... }
+│
+│  ├→ NODE 3: Select Category
+│     ├─ Input: dayOfWeek from Node 2
+│     └─ Output: { category, dayOfWeek }
+│
+│     ├→ NODE 4: OpenAI (API)
+│        ├─ Input: dayName + category
+│        ├─ API Call: POST to api.openai.com
+│        └─ Output: { text, hashtags, category, tone }
+│
+│        ├→ NODE 5: Parse Response
+│           ├─ Input: JSON from Node 4
+│           └─ Output: { postText, hashtags, finalPost, characterCount }
+│
+│           ├→ NODE 6: Facebook POST (API)
+│              ├─ Input: finalPost text
+│              ├─ API Call: POST to graph.facebook.com
+│              └─ Output: { id, created_time }
+│
+│              ├→ NODE 7: Prepare Log
+│                 ├─ Input: All data from all nodes
+│                 └─ Output: [formatted row for sheets]
+│
+│                 ├→ NODE 8: Google Sheets (API)
+│                    ├─ Input: Formatted row
+│                    ├─ API Call: Append to Google Sheets
+│                    └─ Output: { updatedRows, updatedCells }
+│
+│                    ├→ NODE 9: Complete
+│                       └─ Output: SUCCESS ✅</pre>
+            </div>
+
+            <h3>Example Data Transformation</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Node</th>
+                        <th>Input</th>
+                        <th>Processing</th>
+                        <th>Output</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1: Schedule</td>
+                        <td>Time matches cron</td>
+                        <td>Trigger fires</td>
+                        <td>{ timestamp }</td>
+                    </tr>
+                    <tr>
+                        <td>2: Context</td>
+                        <td>{ timestamp }</td>
+                        <td>Parse timezone</td>
+                        <td>{ dayName: "Mon" }</td>
+                    </tr>
+                    <tr>
+                        <td>3: Category</td>
+                        <td>{ dayOfWeek: 1 }</td>
+                        <td>Random selection</td>
+                        <td>{ category: "tips" }</td>
+                    </tr>
+                    <tr>
+                        <td>4: OpenAI</td>
+                        <td>{ category }</td>
+                        <td>API call</td>
+                        <td>{ text: "📚..." }</td>
+                    </tr>
+                    <tr>
+                        <td>5: Parse</td>
+                        <td>JSON response</td>
+                        <td>Extract fields</td>
+                        <td>{ finalPost }</td>
+                    </tr>
+                    <tr>
+                        <td>6: Facebook</td>
+                        <td>{ finalPost }</td>
+                        <td>API call</td>
+                        <td>{ id: "123_456" }</td>
+                    </tr>
+                    <tr>
+                        <td>7: Log Prep</td>
+                        <td>All data</td>
+                        <td>Format for sheet</td>
+                        <td>[ row array ]</td>
+                    </tr>
+                    <tr>
+                        <td>8: Sheets</td>
+                        <td>[ row array ]</td>
+                        <td>API call</td>
+                        <td>{ updated }</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- SECTION 6: Error Handling -->
+        <section>
+            <h2>⚠️ What Happens If Something Goes Wrong</h3>
+
+            <h3>Node 4 (OpenAI) Fails</h3>
+            <div class="comparison">
+                <div class="comparison-item before">
+                    <h4>❌ Without Error Handling</h4>
+                    <p>OpenAI API times out</p>
+                    <p>↓</p>
+                    <p>Entire workflow fails</p>
+                    <p>↓</p>
+                    <p>No post published</p>
+                    <p>↓</p>
+                    <p>You don't know why</p>
+                    <p>Result: Silent failure</p>
+                </div>
+                <div class="comparison-item after">
+                    <h4>✅ With Error Handling</h4>
+                    <p>OpenAI API times out (1st try)</p>
+                    <p>↓</p>
+                    <p>n8n auto-retries (2nd try)</p>
+                    <p>↓</p>
+                    <p>If still fails → Email alert</p>
+                    <p>↓</p>
+                    <p>Google Sheet logs: FAILED</p>
+                    <p>↓</p>
+                    <p>You get notification</p>
+                    <p>Result: You know & can fix</p>
+                </div>
+            </div>
+
+            <h3>Node 6 (Facebook) Fails</h3>
+            <div class="box-info">
+                <strong>Scenario:</strong> Facebook token expired<br><br>
+                <strong>What happens:</strong>
+                <ol style="padding-left: 2rem;">
+                    <li>n8n tries to POST to Facebook</li>
+                    <li>Gets 401 error (Unauthorized)</li>
+                    <li>Auto-retry triggers (tries again)</li>
+                    <li>Still fails</li>
+                    <li>Stops execution at Node 6</li>
+                    <li>Google Sheets gets: status = "FAILED"</li>
+                    <li>Email alert sent to you</li>
+                    <li>Message: "Facebook token invalid"</li>
+                </ol>
+                <strong>You then:</strong> Generate new token, update in n8n, next day posts successfully
+            </div>
+
+            <h3>Node 8 (Google Sheets) Fails</h3>
+            <div class="box-info">
+                <strong>Scenario:</strong> Google Sheets API rate limit hit<br><br>
+                <strong>What happens:</strong>
+                <ol style="padding-left: 2rem;">
+                    <li>Sheets API returns rate limit error</li>
+                    <li>Node 8 fails</li>
+                    <li>But workflow is set to "continue on error"</li>
+                    <li>Post already published on Facebook ✓</li>
+                    <li>Sheets logging just skipped</li>
+                    <li>Workflow completes: status = "PARTIAL_SUCCESS"</li>
+                </ol>
+                <strong>Impact:</strong> Post is live, but not logged. Minor issue, easily recoverable.
+            </div>
+
+            <h3>Multiple Failures</h3>
+            <div class="card">
+                <p><strong>Rare case:</strong> Both OpenAI AND Facebook fail</p>
+                <pre>7:00:00 - Trigger fires
+7:00:00.2 - Get context ✓
+7:00:00.3 - Select category ✓
+7:00:00.31 - Call OpenAI... ERROR! ❌
+          - Auto-retry... ERROR! ❌
+          - Workflow stops
+
+Result:
+- No post published
+- Email alert sent
+- Status: FAILED
+- Google Sheet: No entry (workflow didn't reach Node 7)
+
+Recovery:
+- Check OpenAI API status
+- Check OpenAI credits
+- Fix issue
+- Workflow runs again tomorrow</pre>
+            </div>
+        </section>
+
+        <!-- SECTION 7: Monitoring -->
+        <section>
+            <h2>📊 How You Monitor It Running</h2>
+
+            <h3>In n8n Dashboard</h3>
+            <div class="box-info">
+                <strong>Left Sidebar > Executions</strong>
+                <pre>Shows every time workflow ran:
+
+Jun 14, 7:00 AM - ✅ SUCCESS (3.26 sec)
+Jun 13, 7:00 AM - ✅ SUCCESS (3.15 sec)
+Jun 12, 7:00 AM - ✅ SUCCESS (3.32 sec)
+Jun 11, 7:00 AM - ❌ FAILED (OpenAI timeout)
+Jun 10, 7:00 AM - ✅ SUCCESS (3.22 sec)
+
+Each one shows:
+- Status (SUCCESS/FAILED)
+- Duration
+- Error message (if failed)
+- Execution ID
+- Full logs (click to see details)</pre>
+            </div>
+
+            <h3>In Google Sheets</h3>
+            <div class="box-info">
+                <p>Your tracking sheet updates automatically:</p>
+                <pre>Date      │ Day │ Category    │ Content...     │ PostID  │ Status
+────────────────────────────────────────────────────────────────
+6/14/2026 │ Mon │ study_tips  │ "📚 STUDY..." │ 123_456 │ SUCCESS
+6/13/2026 │ Sun │ motivation  │ "You're..." │ 122_345 │ SUCCESS
+6/12/2026 │ Sat │ qa_session  │ "What's..." │ 121_234 │ SUCCESS
+6/11/2026 │ Fri │ weekly_wrap │ "🎯 THIS..." │ FAILED  │ FAILED
+6/10/2026 │ Thu │ motivation  │ "That voice" │ 120_123 │ SUCCESS</pre>
+            </div>
+
+            <h3>On Your Facebook Page</h3>
+            <div class="box-info">
+                <p>Just check your page at 7:05 AM to see post:</p>
+                <pre>UCDL Academy / KMC
+
+Posted 5 minutes ago
+────────────────────
+📚 STUDY TIP: Active Recall helps memory!
+Instead of re-reading notes, test yourself.
+Try 5 questions from yesterday's class.
+Your brain will thank you! 🧠
+#StudyTips #KMC #UCDL #Learning
+
+👍 24 likes  💬 3 comments  🔗 5 shares
+
+(Already live, no manual intervention!)</pre>
+            </div>
+
+            <h3>Your Weekly Check (5 minutes)</h3>
+            <pre>Every Friday evening:
+
+1. Open Google Sheet (UCDL_Daily_Posts)
+2. Count this week's posts (should be 7)
+3. Check Status column (should all be SUCCESS)
+4. Look for FAILED posts (any issues?)
+5. Check engagement (Facebook likes/comments)
+6. Note: Which content types performed best?
+
+That's it! Rest is automatic.</pre>
+        </section>
+
+        <!-- SECTION 8: Performance -->
+        <section>
+            <h2>⚡ Performance Metrics</h2>
+
+            <h3>Execution Time Breakdown</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Time</th>
+                        <th>% of Total</th>
+                        <th>What's Happening</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Nodes 1-3 (Setup)</td>
+                        <td>30ms</td>
+                        <td>1%</td>
+                        <td>Context & category selection</td>
+                    </tr>
+                    <tr>
+                        <td>Node 4 (OpenAI)</td>
+                        <td>1900ms</td>
+                        <td>58%</td>
+                        <td>Waiting for AI to generate content</td>
+                    </tr>
+                    <tr>
+                        <td>Node 5 (Parse)</td>
+                        <td>10ms</td>
+                        <td>&lt;1%</td>
+                        <td>JSON extraction</td>
+                    </tr>
+                    <tr>
+                        <td>Node 6 (Facebook)</td>
+                        <td>900ms</td>
+                        <td>27%</td>
+                        <td>Posting to Facebook API</td>
+                    </tr>
+                    <tr>
+                        <td>Node 7 (Log Prep)</td>
+                        <td>10ms</td>
+                        <td>&lt;1%</td>
+                        <td>Formatting data</td>
+                    </tr>
+                    <tr>
+                        <td>Node 8 (Sheets)</td>
+                        <td>110ms</td>
+                        <td>3%</td>
+                        <td>Writing to Google Sheets</td>
+                    </tr>
+                    <tr>
+                        <td>Node 9 (Complete)</td>
+                        <td>&lt;1ms</td>
+                        <td>&lt;1%</td>
+                        <td>Marking complete</td>
+                    </tr>
+                    <tr style="font-weight: bold; background: #f0fdf4;">
+                        <td colspan="2">TOTAL: ~3.26 seconds</td>
+                        <td>100%</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Bottleneck Analysis</h3>
+            <div class="box-info">
+                <p><strong>⏱️ The Slowest Part:</strong> Waiting for OpenAI API (1.9 seconds)</p>
+                <p>This is why:</p>
+                <ul style="padding-left: 2rem; margin: 0.5rem 0;">
+                    <li>OpenAI's servers receive millions of requests</li>
+                    <li>GPT-4 takes time to generate quality content</li>
+                    <li>Network latency (request travels to US servers)</li>
+                </ul>
+                <p><strong>Can we make it faster?</strong></p>
+                <ul style="padding-left: 2rem; margin: 0.5rem 0;">
+                    <li>Use GPT-4o instead of GPT-4-turbo (slightly faster)</li>
+                    <li>Reduce max_tokens (trades quality for speed)</li>
+                    <li>Use a faster model (GPT-3.5, but lower quality)</li>
+                </ul>
+                <p><strong>Is 3.26 seconds acceptable?</strong></p>
+                <p style="color: var(--success); font-weight: bold;">✅ YES! Post is live before users even know it ran!</p>
+            </div>
+
+            <h3>Reliability Metrics</h3>
+            <table>
+                <tr>
+                    <td><strong>Uptime</strong></td>
+                    <td>99.99% (n8n Cloud SLA)</td>
+                </tr>
+                <tr>
+                    <td><strong>Success Rate Target</strong></td>
+                    <td>99%+ (should succeed almost always)</td>
+                </tr>
+                <tr>
+                    <td><strong>Execution Frequency</strong></td>
+                    <td>Once per day (never misses)</td>
+                </tr>
+                <tr>
+                    <td><strong>Auto-Retries</strong></td>
+                    <td>Yes (2 retries on failure)</td>
+                </tr>
+                <tr>
+                    <td><strong>Max Concurrent Executions</strong></td>
+                    <td>1 (sequential, no conflicts)</td>
+                </tr>
+                <tr>
+                    <td><strong>Data Loss Risk</strong></td>
+                    <td>Very low (multiple backups)</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- SECTION 9: Real-Time Monitoring -->
+        <section>
+            <h2>🔍 Real-Time Execution Watching</h2>
+
+            <h3>If You're Watching at 7:00 AM</h3>
+            <div class="card">
+                <p><strong>In n8n:</strong> You can click "Execute Workflow" and watch it run live</p>
+                <pre>Workflow: KMC-UCDL Daily Facebook Agent
+
+Running...
+
+Step 1: Schedule Trigger ⏱️ → ✅
+Step 2: Get NST Context 📅 → ✅ (10ms)
+Step 3: Select Category 🎲 → ✅ (10ms)
+Step 4: OpenAI Generate 🤖 → ⏳ Running...
+  ├─ Sending to OpenAI
+  ├─ Waiting for response... (1900ms so far)
+  └─ Should complete in ~2 seconds
+
+Status: In Progress
+Elapsed: 1.9 seconds
+Estimated Total: 3.2 seconds</pre>
+            </div>
+
+            <h3>Live Node Execution Visualization</h3>
+            <div class="diagram">
+                <pre>7:00:00.0  │██│ Node 1: Schedule Trigger
+           │  │
+7:00:00.1  │  ├─ ██ │ Node 2: Get Context
+           │  │
+7:00:00.2  │  ├──── ██ │ Node 3: Category
+           │  │
+7:00:00.3  │  ├────────────────────── ████ │ Node 4: OpenAI
+7:00:01.5  │  │                        ████ │ (WAITING...)
+7:00:02.0  │  │                        ████ │ (WAITING...)
+7:00:02.2  │  │                        ████ │ ✅ (Received)
+           │  │
+7:00:02.3  │  ├────────────────────────── ██ │ Node 5: Parse
+           │  │
+7:00:02.4  │  ├──────────────────────────── ████ │ Node 6: Facebook
+7:00:03.1  │  │                           ████ │ ✅ (Posted)
+           │  │
+7:00:03.2  │  ├──────────────────────────────── ██ │ Node 7: Prep
+           │  │
+7:00:03.2  │  ├──────────────────────────────── ████ │ Node 8: Sheets
+7:00:03.3  │  │                                ████ │ ✅ (Logged)
+           │  │
+7:00:03.3  │  └──────────────────────────────────── ✅ │ Node 9: Complete
+
+Total Time: 3.3 seconds │ Status: SUCCESS ✅</pre>
+            </div>
+
+            <h3>What Each Color Means</h3>
+            <table>
+                <tr>
+                    <td><span style="background: #fbbf24; padding: 0.25rem 0.75rem; border-radius: 3px;">YELLOW</span></td>
+                    <td>Node is running, waiting for response</td>
+                </tr>
+                <tr>
+                    <td><span style="background: #4ade80; padding: 0.25rem 0.75rem; border-radius: 3px;">GREEN</span></td>
+                    <td>Node completed successfully</td>
+                </tr>
+                <tr>
+                    <td><span style="background: #ef4444; padding: 0.25rem 0.75rem; border-radius: 3px;">RED</span></td>
+                    <td>Node failed with error</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- SECTION 10: Daily Routine -->
+        <section>
+            <h2>🎯 Daily Routine (What You Do vs. System Does)</h2>
+
+            <h3>What The System Does</h3>
+            <div class="comparison">
+                <div class="comparison-item after">
+                    <h4>✅ Every Day (Automatic)</h4>
+                    <ul style="padding-left: 2rem; margin-top: 0;">
+                        <li>7:00 AM NST - Trigger fires</li>
+                        <li>Generate unique content (2 sec)</li>
+                        <li>Post to Facebook (1 sec)</li>
+                        <li>Log to Google Sheets</li>
+                        <li>Send email if error</li>
+                        <li>Notify you of completion</li>
+                    </ul>
+                    <p style="margin-top: 1rem; font-weight: bold;">Zero manual work!</p>
+                </div>
+                <div class="comparison-item before">
+                    <h4>❌ What You Don't Need to Do</h4>
+                    <ul style="padding-left: 2rem; margin-top: 0;">
+                        <li>❌ Write posts</li>
+                        <li>❌ Create images</li>
+                        <li>❌ Add hashtags</li>
+                        <li>❌ Check character count</li>
+                        <li>❌ Click "post" button</li>
+                        <li>❌ Copy to spreadsheet</li>
+                        <li>❌ Set reminders</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>What You Do (Maintenance)</h3>
+            <div class="step">
+                <div class="step-number">Daily</div>
+                <div class="step-content">
+                    <h4>Nothing!</h4>
+                    <p>System runs automatically. Just check your Facebook page to see the post.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">Weekly</div>
+                <div class="step-content">
+                    <h4>5 Minutes (Every Friday)</h4>
+                    <p>Open Google Sheet and check:</p>
+                    <ul style="padding-left: 2rem;">
+                        <li>7 posts published this week? ✓</li>
+                        <li>All showing SUCCESS status? ✓</li>
+                        <li>Any errors to fix? ✓</li>
+                        <li>Engagement metrics (likes/comments)? ✓</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">Monthly</div>
+                <div class="step-content">
+                    <h4>15 Minutes (End of Month)</h4>
+                    <p>Review analytics and adjust if needed:</p>
+                    <ul style="padding-left: 2rem;">
+                        <li>Which content types got most engagement?</li>
+                        <li>Best posting time?</li>
+                        <li>Any failing patterns?</li>
+                        <li>Adjust for next month</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">If Error</div>
+                <div class="step-content">
+                    <h4>5-15 Minutes (As Needed)</h4>
+                    <p>Only if you get an error email:</p>
+                    <ul style="padding-left: 2rem;">
+                        <li>Check error message</li>
+                        <li>Follow troubleshooting guide</li>
+                        <li>Fix issue</li>
+                        <li>Next day post works again</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="box-success">
+                <h3>📊 Total Work Per Month</h3>
+                <pre>Daily:   0 minutes
+Weekly:  5 minutes (4 times) = 20 minutes
+Monthly: 15 minutes = 15 minutes
+Errors:  ~0-5 minutes (rare)
+
+TOTAL: ~40 minutes per month to manage 30 posts!
+
+Manual alternative:
+- Write post: 10 minutes
+- Design/edit: 10 minutes  
+- Post to Facebook: 2 minutes
+- Log to sheet: 2 minutes
+- TOTAL per post: 24 minutes × 30 = 720 minutes (12 hours/month!)
+
+Your savings: ~680 minutes/month! ⏰</pre>
+            </div>
+        </section>
+    </div>
+
     <footer>
-        <p><strong>KMC-UCDL Daily Content Agent</strong></p>
-        <p style="margin-top: 0.5rem;">Empowering Education, Research & Innovation through AI</p>
+        <p><strong>KMC-UCDL System Execution Guide</strong></p>
+        <p>How n8n + OpenAI + Facebook Graph API work together to automate your daily posts</p>
+        <p style="margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 1.5rem;">
+            <strong>Research Dissemination Prepared by:</strong><br>
+            Mr. Bishnu Singh Rayamajhi<br>
+            Mathematics Lecturer and Head of Humanities & Social Science<br>
+            Kapilvastu Multiple Campus (KMC), Taulihawa, Tribhuvan University<br>
+            <strong>Founder:</strong> UCDL Academy
+        </p>
+        <p style="margin-top: 1rem; opacity: 0.8;">Educational Excellence. Automated. Scaled. 🚀</p>
+        <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.7;">© 2026 | Complete Automation System</p>
     </footer>
-
-    <script>
-        // Configuration
-        const STEPS = [
-            { icon: '📍', name: 'Topic Discovery' },
-            { icon: '🔬', name: 'Research Content' },
-            { icon: '✍️', name: 'Write Post' },
-            { icon: '🔍', name: 'Fact Check' },
-            { icon: '🎨', name: 'Generate Image' },
-            { icon: '🏷️', name: 'Optimize Tags' },
-            { icon: '📤', name: 'Prepare Post' },
-            { icon: '📊', name: 'Track Analytics' }
-        ];
-
-        const TOPICS = [
-            { emoji: '🧮', category: 'Advanced Mathematics' },
-            { emoji: '🤖', category: 'Artificial Intelligence' },
-            { emoji: '🔬', category: 'Research Methodology' },
-            { emoji: '🧠', category: 'Deep Learning' },
-            { emoji: '💼', category: 'Entrepreneurship' },
-            { emoji: '💡', category: 'Innovation' },
-            { emoji: '✨', category: 'Motivational Learning' }
-        ];
-
-        let currentStep = -1;
-        let isGenerating = false;
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', initializeSteps);
-
-        function initializeSteps() {
-            const container = document.getElementById('stepsContainer');
-            container.innerHTML = STEPS.map((step, index) => `
-                <div class="step" id="step-${index}">
-                    <div class="step-icon">${step.icon}</div>
-                    <div>
-                        <div class="step-name">${step.name}</div>
-                        <div class="step-status">○ Pending</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function setStatus(status) {
-            const badge = document.getElementById('statusBadge');
-            const statusText = document.getElementById('statusText');
-            const quickStatus = document.getElementById('quickStatus');
-
-            statusText.textContent = status.toUpperCase();
-            badge.classList.remove('generating', 'complete');
-
-            if (status === 'generating') {
-                badge.classList.add('generating');
-                quickStatus.textContent = '⟳ Processing';
-                quickStatus.style.color = '#60a5fa';
-            } else if (status === 'complete') {
-                badge.classList.add('complete');
-                quickStatus.textContent = '✓ Complete';
-                quickStatus.style.color = '#10b981';
-            } else {
-                quickStatus.textContent = '○ Idle';
-                quickStatus.style.color = '#94a3b8';
-            }
-        }
-
-        function updateStep(stepIndex, newStatus) {
-            const stepEl = document.getElementById(`step-${stepIndex}`);
-            if (!stepEl) return;
-
-            stepEl.classList.remove('pending', 'active', 'completed');
-            const statusEl = stepEl.querySelector('.step-status');
-
-            if (newStatus === 'completed') {
-                stepEl.classList.add('completed');
-                statusEl.textContent = '✓ Completed';
-            } else if (newStatus === 'active') {
-                stepEl.classList.add('active');
-                statusEl.textContent = '⟳ Processing...';
-            }
-        }
-
-        async function generateContent() {
-            if (isGenerating) return;
-
-            isGenerating = true;
-            currentStep = 0;
-
-            const btn = document.getElementById('generateBtn');
-            btn.disabled = true;
-
-            setStatus('generating');
-
-            // Get today's topic
-            const dayIndex = new Date().getDay();
-            const topic = TOPICS[dayIndex === 0 ? 6 : dayIndex - 1];
-            document.getElementById('topicEmoji').textContent = topic.emoji;
-
-            // Reset steps
-            STEPS.forEach((_, i) => {
-                const el = document.getElementById(`step-${i}`);
-                el.classList.remove('pending', 'active', 'completed');
-                el.querySelector('.step-status').textContent = '○ Pending';
-            });
-
-            // Process each step
-            for (let i = 0; i < STEPS.length; i++) {
-                currentStep = i;
-                updateStep(i, 'active');
-                await delay(1200);
-                updateStep(i, 'completed');
-            }
-
-            // Generate and display content
-            const post = generateMockPost(topic);
-            displayPost(post);
-
-            setStatus('complete');
-            btn.disabled = false;
-        }
-
-        function generateMockPost(topic) {
-            const posts = {
-                '🧮': {
-                    category: 'Advanced Mathematics',
-                    content: `Did you know? Mathematics is the language of the universe! 🌌
-
-🎯 Today's Insight:
-Advanced mathematics helps us understand patterns, solve complex problems, and make predictions about the world around us. From calculus to linear algebra, these tools are essential for engineering, physics, computer science, and even economics.
-
-💡 Real-World Application:
-Machine learning algorithms use matrix mathematics to learn from data. Architects use calculus to design beautiful buildings. Engineers use differential equations to build bridges and create new technologies.
-
-🔑 Key Takeaway:
-Mathematical thinking develops logical problem-solving skills that apply far beyond numbers - they shape how we analyze everything.
-
-🌟 Why It Matters:
-Mathematics isn't just for mathematicians. Every field of study benefits from mathematical insight. From medicine to music production, mathematics creates order and understanding.
-
-❓ What's your favorite mathematical concept? Share in the comments!`,
-                    hashtags: ['#Mathematics', '#STEM', '#AdvancedMath', '#Learning', '#KMC', '#UCDLAcademy', '#Education', '#MathematicalThinking', '#ProblemSolving', '#Innovation']
-                },
-                '🤖': {
-                    category: 'Artificial Intelligence',
-                    content: `Did you know? Artificial Intelligence is transforming every industry! 🚀
-
-🎯 Today's Insight:
-AI systems can now recognize faces, understand language, create images, and even write code. These technologies are powered by machine learning algorithms that learn from data to make intelligent decisions.
-
-💡 Real-World Application:
-Netflix recommends shows you'll love. ChatGPT helps students learn. Hospitals use AI to diagnose diseases early. Agriculture uses AI to optimize crop yields. Teachers use AI to personalize learning.
-
-🔑 Key Takeaway:
-Understanding AI isn't optional anymore - it's essential literacy for the 21st century.
-
-🌟 Why It Matters:
-AI is reshaping education, healthcare, business, and society. Those who understand AI will lead tomorrow's innovations.
-
-❓ How do you think AI will change your field? Join the conversation!`,
-                    hashtags: ['#AI', '#ArtificialIntelligence', '#MachineLearning', '#Tech', '#KMC', '#UCDLAcademy', '#FutureOfWork', '#Innovation', '#EducationTech', '#NepalTech']
-                },
-                '🔬': {
-                    category: 'Research Methodology',
-                    content: `Did you know? Good research methodology is the foundation of reliable knowledge! 📚
-
-🎯 Today's Insight:
-Research methodology includes how we ask questions, design studies, collect data, and draw conclusions. Without proper methodology, even the most interesting observations can lead to wrong conclusions.
-
-💡 Real-World Application:
-Medical researchers use double-blind studies to test medicines. Psychologists use controlled experiments to understand behavior. Sociologists use surveys and interviews to understand communities.
-
-🔑 Key Takeaway:
-The method matters as much as the findings. Rigorous methodology ensures our knowledge is trustworthy.
-
-🌟 Why It Matters:
-Whether you're a scientist, journalist, or just evaluating claims online, understanding research methodology helps you distinguish truth from misinformation.
-
-❓ What research questions interest you? Start exploring!`,
-                    hashtags: ['#ResearchMethodology', '#Science', '#AcademicResearch', '#CriticalThinking', '#KMC', '#UCDLAcademy', '#Research', '#Knowledge', '#Education', '#Excellence']
-                },
-                '🧠': {
-                    category: 'Deep Learning',
-                    content: `Did you know? Deep Learning is behind most AI breakthroughs today! 🧠
-
-🎯 Today's Insight:
-Deep learning uses artificial neural networks inspired by the human brain to learn from massive amounts of data. These systems power image recognition, natural language processing, and many other AI applications.
-
-💡 Real-World Application:
-Self-driving cars use deep learning to see the road. ChatGPT uses deep learning to generate human-like text. Medical imaging uses deep learning to detect tumors. Virtual assistants use it to understand voice commands.
-
-🔑 Key Takeaway:
-Deep learning is not magic - it's a sophisticated tool that learns patterns from data.
-
-🌟 Why It Matters:
-Deep learning is transforming technology faster than any previous innovation. Understanding its capabilities and limitations is crucial for responsible AI development.
-
-❓ What deep learning application fascinates you most?`,
-                    hashtags: ['#DeepLearning', '#NeuralNetworks', '#AI', '#MachineLearning', '#KMC', '#UCDLAcademy', '#DataScience', '#TechEducation', '#Innovation', '#FutureTech']
-                },
-                '💼': {
-                    category: 'Entrepreneurship',
-                    content: `Did you know? Entrepreneurship is about solving problems, not just making money! 💡
-
-🎯 Today's Insight:
-Great entrepreneurs identify problems that matter to people, create innovative solutions, and build sustainable businesses. The best ideas often come from personal experience with real problems.
-
-💡 Real-World Application:
-Elon Musk saw the need for clean energy and electric vehicles. Payal Kadakia created ClassPass because she couldn't find a yoga class easily. Your best business idea might solve a problem you experience daily.
-
-🔑 Key Takeaway:
-Entrepreneurship is a skill that can be learned. It requires creativity, persistence, and willingness to learn from failure.
-
-🌟 Why It Matters:
-Entrepreneurs create jobs, solve problems, and drive innovation. Whether you want to start a business or improve your career, entrepreneurial thinking is invaluable.
-
-❓ What problem in your community could you solve?`,
-                    hashtags: ['#Entrepreneurship', '#Startup', '#SmallBusiness', '#Innovation', '#KMC', '#UCDLAcademy', '#BusinessIdeas', '#Leadership', '#ProblemSolving', '#Nepal']
-                },
-                '💡': {
-                    category: 'Innovation',
-                    content: `Did you know? Innovation isn't just for tech companies! 🚀
-
-🎯 Today's Insight:
-Innovation is about finding better ways to do things. It can be a small improvement to an existing process or a completely new invention. Every field - healthcare, education, agriculture, business - benefits from innovative thinking.
-
-💡 Real-World Application:
-A farmer using drones to monitor crops is innovating. A teacher using AI to personalize student learning is innovating. A restaurant using a new payment system is innovating. Innovation happens everywhere.
-
-🔑 Key Takeaway:
-You don't need to be a genius to innovate. You need curiosity, observation skills, and willingness to try new approaches.
-
-🌟 Why It Matters:
-Innovation drives progress. The future belongs to those who can think creatively and adapt to change.
-
-❓ What inefficiency do you see that could be improved?`,
-                    hashtags: ['#Innovation', '#Creativity', '#Problem-Solving', '#NewIdeas', '#KMC', '#UCDLAcademy', '#Entrepreneurship', '#FutureFocus', '#Leadership', '#Growth']
-                },
-                '✨': {
-                    category: 'Motivational Learning',
-                    content: `Did you know? Every expert was once a beginner! 🌟
-
-🎯 Today's Insight:
-Learning is a journey, not a destination. The most successful people aren't born with knowledge - they develop it through curiosity, practice, and perseverance. Every failure is a step toward success.
-
-💡 Real-World Application:
-Bill Gates taught himself programming as a child. Oprah overcame poverty through education. Malala fought for her right to learn. Your education story has the power to change the world.
-
-🔑 Key Takeaway:
-You have unlimited potential. Your effort and attitude matter more than your current circumstances.
-
-🌟 Why It Matters:
-Believing in yourself and your ability to learn opens doors you never thought possible. Your next achievement starts with one small step today.
-
-❓ What do you want to learn? Take that first step today!`,
-                    hashtags: ['#Motivation', '#Learning', '#Growth', '#SelfImprovement', '#KMC', '#UCDLAcademy', '#YouCanDoIt', '#BelieveInYourself', '#EducationMatters', '#Inspiration']
-                }
-            };
-
-            return posts[topic.emoji] || posts['🤖'];
-        }
-
-        function displayPost(post) {
-            const imageWrapper = document.getElementById('postImageWrapper');
-            const contentWrapper = document.getElementById('postContentWrapper');
-            const metricsSection = document.getElementById('metricsSection');
-
-            // Clear previous content
-            imageWrapper.innerHTML = '';
-            contentWrapper.innerHTML = '';
-
-            // Get topic emoji
-            const dayIndex = new Date().getDay();
-            const topic = TOPICS[dayIndex === 0 ? 6 : dayIndex - 1];
-
-            // Display image
-            const img = document.createElement('img');
-            img.src = `https://image.pollinations.ai/prompt/beautiful%20professional%20educational%20infographic%20about%20${encodeURIComponent(post.category)}%20with%20modern%20design%2C%20KMC%20branding%2C%20purple%20and%20orange%20colors%2C%20academic%20style?width=1200&height=1200&nologo=true`;
-            img.alt = post.category;
-            img.onerror = function() {
-                this.src = 'https://via.placeholder.com/1200x1200?text=' + encodeURIComponent(post.category);
-            };
-            imageWrapper.appendChild(img);
-            imageWrapper.classList.add('loaded');
-
-            const imageLabel = document.createElement('div');
-            imageLabel.className = 'image-label';
-            imageLabel.textContent = `${topic.emoji} AI Generated`;
-            imageWrapper.appendChild(imageLabel);
-
-            // Display content
-            const headerDiv = document.createElement('div');
-            headerDiv.className = 'post-header';
-            headerDiv.innerHTML = `
-                <div class="post-emoji">${topic.emoji}</div>
-                <div class="post-meta">
-                    <h3>Today's Topic</h3>
-                    <h2>${post.category}</h2>
-                </div>
-            `;
-            contentWrapper.appendChild(headerDiv);
-
-            const textDiv = document.createElement('div');
-            textDiv.className = 'post-text-wrapper';
-            textDiv.textContent = post.content;
-            contentWrapper.appendChild(textDiv);
-
-            const hashtagsDiv = document.createElement('div');
-            hashtagsDiv.innerHTML = '<p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.75rem;">Optimized Hashtags:</p>';
-            const tagsContainer = document.createElement('div');
-            tagsContainer.className = 'hashtags-wrapper';
-            post.hashtags.forEach(tag => {
-                const tagEl = document.createElement('span');
-                tagEl.className = 'hashtag';
-                tagEl.textContent = tag;
-                tagsContainer.appendChild(tagEl);
-            });
-            hashtagsDiv.appendChild(tagsContainer);
-            contentWrapper.appendChild(hashtagsDiv);
-
-            const actionsDiv = document.createElement('div');
-            actionsDiv.className = 'post-actions';
-            actionsDiv.innerHTML = `
-                <button class="btn-primary" onclick="copyPost()">
-                    📋 Copy Full Post
-                </button>
-                <button class="btn-secondary">
-                    ✓ Publish to Facebook
-                </button>
-            `;
-            contentWrapper.appendChild(actionsDiv);
-
-            contentWrapper.classList.add('loaded');
-
-            // Display metrics
-            displayMetrics();
-            metricsSection.style.display = 'block';
-
-            // Update word count
-            document.getElementById('wordCount').textContent = post.content.split(' ').length;
-            document.getElementById('wordCountRow').style.display = 'flex';
-        }
-
-        function displayMetrics() {
-            const metricsContainer = document.getElementById('metricsContainer');
-            metricsContainer.innerHTML = `
-                <div class="metric-card">
-                    <div class="metric-label">Clarity</div>
-                    <div class="metric-value">9/10</div>
-                </div>
-                <div class="metric-card success">
-                    <div class="metric-label">Accuracy</div>
-                    <div class="metric-value">✓</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-label">Engagement</div>
-                    <div class="metric-value">8/10</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-label">Education</div>
-                    <div class="metric-value">9/10</div>
-                </div>
-                <div class="metric-card success">
-                    <div class="metric-label">SEO Ready</div>
-                    <div class="metric-value">✓</div>
-                </div>
-            `;
-        }
-
-        function copyPost() {
-            const textEl = document.querySelector('.post-text-wrapper');
-            const hashtags = Array.from(document.querySelectorAll('.hashtag'))
-                .map(tag => tag.textContent)
-                .join(' ');
-
-            const fullText = textEl.textContent + '\n\n' + hashtags;
-
-            navigator.clipboard.writeText(fullText).then(() => {
-                const btn = event.target;
-                const original = btn.innerHTML;
-                btn.innerHTML = '✓ Copied!';
-                btn.style.background = 'rgba(16, 185, 129, 0.3)';
-
-                setTimeout(() => {
-                    btn.innerHTML = original;
-                    btn.style.background = '';
-                }, 2000);
-            });
-        }
-
-        function delay(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-    </script>
 </body>
 </html>
