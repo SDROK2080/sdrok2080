@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Content Generation & Publishing Agent — Technical Guidance Request</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #dbeafe;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f5f3ff 100%);
+            min-height: 100vh;
+            color: var(--gray-800);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--dark) 0%, #312e81 50%, var(--secondary) 100%);
+            color: white;
+            padding: 3rem 1rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%; right: -10%;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%; left: -5%;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(6,182,212,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .badge-dot {
+            width: 8px; height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: -2rem auto 3rem;
+            padding: 0 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+        }
+
+        .form-header {
+            background: linear-gradient(90deg, var(--primary-light), #e0e7ff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .form-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .form-header-icon {
+            width: 40px; height: 40px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+        }
+
+        .form-body { padding: 2rem; }
+
+        .progress-container { margin-bottom: 2rem; }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 15px; left: 0; right: 0;
+            height: 3px;
+            background: var(--gray-200);
+            z-index: 0;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 15px; left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.5s ease;
+            z-index: 1;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            z-index: 2;
+            cursor: pointer;
+        }
+
+        .step-circle {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid var(--gray-300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-circle {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 0 0 4px var(--primary-light);
+        }
+
+        .step.completed .step-circle {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--gray-500);
+            text-align: center;
+        }
+
+        .step.active .step-label {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .form-section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .form-section.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group { margin-bottom: 1.5rem; }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 640px) {
+            .form-row { grid-template-columns: 1fr; }
+            .header h1 { font-size: 1.875rem; }
+            .form-body { padding: 1.5rem; }
+            .checkbox-group, .radio-group { grid-template-columns: 1fr; }
+            .btn-group { flex-direction: column; }
+            .btn-group .btn { width: 100%; }
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+        }
+
+        label .required { color: var(--danger); margin-left: 2px; }
+
+        .input-wrapper { position: relative; }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            font-size: 1rem;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="url"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 0.75rem;
+            font-size: 0.9375rem;
+            font-family: inherit;
+            color: var(--gray-800);
+            background: var(--gray-50);
+            transition: all 0.2s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        input.has-icon { padding-left: 2.75rem; }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 2.5rem;
+        }
+
+        .hint {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            margin-top: 0.375rem;
+        }
+
+        .checkbox-group, .radio-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-card, .radio-card {
+            position: relative;
+            padding: 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: var(--gray-50);
+        }
+
+        .checkbox-card:hover, .radio-card:hover {
+            border-color: var(--primary);
+            background: white;
+        }
+
+        .checkbox-card input, .radio-card input {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .checkbox-card.selected, .radio-card.selected {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            box-shadow: 0 0 0 1px var(--primary);
+        }
+
+        .checkbox-card .check-icon, .radio-card .check-icon {
+            position: absolute;
+            top: 0.75rem; right: 0.75rem;
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+
+        .checkbox-card.selected .check-icon, .radio-card.selected .check-icon { display: flex; }
+
+        .card-title {
+            font-weight: 600;
+            font-size: 0.9375rem;
+            color: var(--gray-800);
+            margin-bottom: 0.25rem;
+        }
+
+        .card-desc {
+            font-size: 0.8125rem;
+            color: var(--gray-500);
+        }
+
+        .tag-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 0.75rem;
+            background: var(--gray-50);
+            min-height: 48px;
+            align-items: center;
+        }
+
+        .tag-input:focus-within {
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.375rem 0.75rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 9999px;
+            font-size: 0.8125rem;
+            font-weight: 500;
+        }
+
+        .tag-remove {
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .tag-remove:hover { opacity: 1; }
+
+        .tag-input input {
+            border: none;
+            background: transparent;
+            outline: none;
+            flex: 1;
+            min-width: 120px;
+            padding: 0.375rem;
+            font-size: 0.9375rem;
+        }
+
+        .range-container { margin-top: 0.5rem; }
+
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--gray-200);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+            transition: transform 0.2s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.1); }
+
+        .range-value {
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary);
+            margin-top: 0.5rem;
+            font-size: 0.9375rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.75rem;
+            border-radius: 0.75rem;
+            font-size: 0.9375rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-primary:active { transform: translateY(0); }
+
+        .btn-secondary {
+            background: white;
+            color: var(--gray-700);
+            border: 2px solid var(--gray-200);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--gray-300);
+            background: var(--gray-50);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #eff6ff, #eef2ff);
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.25rem;
+            border-radius: 0 0.75rem 0.75rem 0;
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+        }
+
+        .info-box-icon { font-size: 1.25rem; flex-shrink: 0; }
+
+        .info-box-content {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+        }
+
+        .info-box-content strong { color: var(--primary-dark); }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: var(--shadow-xl);
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-icon {
+            width: 80px; height: 80px;
+            background: linear-gradient(135deg, var(--success), #059669);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .modal h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin-bottom: 0.75rem;
+        }
+
+        .modal p {
+            color: var(--gray-600);
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-ref {
+            background: var(--gray-100);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-family: monospace;
+            font-size: 1.125rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .footer a:hover { text-decoration: underline; }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 0.8125rem;
+            margin-top: 0.375rem;
+            display: none;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .error-message.visible { display: flex; }
+
+        input.error, select.error, textarea.error {
+            border-color: var(--danger);
+            background: #fef2f2;
+        }
+
+        input.error:focus, select.error:focus, textarea.error:focus {
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px; height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .email-notice {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 1px solid #f59e0b;
+            border-radius: 0.75rem;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            color: #92400e;
+        }
+
+        .email-notice-icon { font-size: 1.25rem; }
+    </style>
+<base target="_blank">
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-content">
+            <div class="badge">
+                <span class="badge-dot"></span>
+                Open for Collaboration
+            </div>
+            <h1>AI Content Generation & Publishing Agent</h1>
+            <p>Technical Guidance Request Portal — Seeking expert recommendations from researchers, AI/ML professionals, and software developers for building an advanced automated content ecosystem.</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="form-card">
+            <div class="form-header">
+                <h2>
+                    <div class="form-header-icon">📋</div>
+                    Technical Guidance Request Form
+                </h2>
+            </div>
+
+            <div class="form-body">
+                <div class="email-notice">
+                    <span class="email-notice-icon">📧</span>
+                    <div>
+                        <strong>Direct to Gmail:</strong> All submissions are sent directly to <strong>bbsrm4591@gmail.com</strong>. You will receive an email notification for each response.
+                    </div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-steps">
+                        <div class="progress-line" id="progressLine" style="width: 0%"></div>
+                        <div class="step active" data-step="1" onclick="goToStep(1)">
+                            <div class="step-circle">1</div>
+                            <div class="step-label">Your Profile</div>
+                        </div>
+                        <div class="step" data-step="2" onclick="goToStep(2)">
+                            <div class="step-circle">2</div>
+                            <div class="step-label">Expertise Area</div>
+                        </div>
+                        <div class="step" data-step="3" onclick="goToStep(3)">
+                            <div class="step-circle">3</div>
+                            <div class="step-label">Technical Focus</div>
+                        </div>
+                        <div class="step" data-step="4" onclick="goToStep(4)">
+                            <div class="step-circle">4</div>
+                            <div class="step-label">Contributions</div>
+                        </div>
+                        <div class="step" data-step="5" onclick="goToStep(5)">
+                            <div class="step-circle">5</div>
+                            <div class="step-label">Review & Send</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formspree form — submits directly to bbsrm4591@gmail.com -->
+                <form id="guidanceForm" action="https://formspree.io/f/bbsrm4591@gmail.com" method="POST">
+
+                    <div class="form-section active" id="step1">
+                        <div class="info-box">
+                            <div class="info-box-icon">👤</div>
+                            <div class="info-box-content">
+                                <strong>Project Lead:</strong> Mr. Bishnu Singh Rayamajhi, Mathematics Lecturer & Head of Humanities and Social Sciences at Kapilvastu Multiple Campus (KMC), Nepal. Founder of UCDL Academy.
+                            </div>
+                        </div>
+
+                        <h3 class="section-title">👤 Your Profile</h3>
+                        <p class="section-subtitle">Tell us about yourself and your professional background</p>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fullName">Full Name <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon">👤</span>
+                                    <input type="text" id="fullName" name="fullName" class="has-icon" placeholder="Dr. Jane Smith" required>
+                                </div>
+                                <div class="error-message" id="fullNameError">⚠ Please enter your full name</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon">✉️</span>
+                                    <input type="email" id="email" name="email" class="has-icon" placeholder="jane.smith@university.edu" required>
+                                </div>
+                                <div class="error-message" id="emailError">⚠ Please enter a valid email</div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="institution">Institution / Organization <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon">🏛️</span>
+                                    <input type="text" id="institution" name="institution" class="has-icon" placeholder="University or Company Name" required>
+                                </div>
+                                <div class="error-message" id="institutionError">⚠ Please enter your institution</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="designation">Designation / Role <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon">💼</span>
+                                    <input type="text" id="designation" name="designation" class="has-icon" placeholder="e.g., Senior AI Researcher" required>
+                                </div>
+                                <div class="error-message" id="designationError">⚠ Please enter your designation</div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="country">Country <span class="required">*</span></label>
+                                <select id="country" name="country" required>
+                                    <option value="">Select your country</option>
+                                    <option value="NP">🇳🇵 Nepal</option>
+                                    <option value="IN">🇮🇳 India</option>
+                                    <option value="US">🇺🇸 United States</option>
+                                    <option value="UK">🇬🇧 United Kingdom</option>
+                                    <option value="CA">🇨🇦 Canada</option>
+                                    <option value="AU">🇦🇺 Australia</option>
+                                    <option value="DE">🇩🇪 Germany</option>
+                                    <option value="FR">🇫🇷 France</option>
+                                    <option value="JP">🇯🇵 Japan</option>
+                                    <option value="SG">🇸🇬 Singapore</option>
+                                    <option value="other">🌍 Other</option>
+                                </select>
+                                <div class="error-message" id="countryError">⚠ Please select your country</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="linkedin">LinkedIn / Portfolio URL</label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon">🔗</span>
+                                    <input type="url" id="linkedin" name="linkedin" class="has-icon" placeholder="https://linkedin.com/in/yourprofile">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary" onclick="nextStep()">Next Step →</button>
+                        </div>
+                    </div>
+
+                    <div class="form-section" id="step2">
+                        <h3 class="section-title">🎯 Your Expertise Area</h3>
+                        <p class="section-subtitle">Select the primary domain where you can provide guidance</p>
+
+                        <div class="form-group">
+                            <label>Primary Expertise <span class="required">*</span></label>
+                            <div class="radio-group" id="expertiseArea">
+                                <div class="radio-card" onclick="selectRadio(this, 'expertise')">
+                                    <input type="radio" name="expertise" value="AI/ML Research" required>
+                                    <div class="check-icon">✓</div>
+                                    <div class="card-title">🧠 AI/ML Research</div>
+                                    <div class="card-desc">LLMs, NLP, agent architectures, model fine-tuning</div>
+                                </div>
+                                <div class="radio-card" onclick="selectRadio(this, 'expertise')">
+                                    <input type="radio" name="expertise" value="Software Engineering">
+                                    <div class="check-icon">✓</div>
+                                    <div class="card-title">💻 Software Engineering</div>
+                                    <div class="card-desc">System architecture, microservices, APIs, backend dev</div>
+                                </div>
+                                <div class="radio-card" onclick="selectRadio(this, 'expertise')">
+                                    <input type="radio" name="expertise" value="DevOps & Cloud">
+                                    <div class="check-icon">✓</div>
+                                    <div class="card-title">☁️ DevOps & Cloud</div>
+                                    <div class="card-desc">Docker, Kubernetes, AWS/Azure/GCP deployment</div>
+                                </div>
+                                <div class="radio-card" onclick="selectRadio(this, 'expertise')">
+                                    <input type="radio" name="expertise" value="Data Engineering">
+                                    <div class="check-icon">✓</div>
+                                    <div class="card-title">📊 Data Engineering</div>
+                                    <div class="card-desc">Data pipelines, vector DBs, ETL, analytics</div>
+                                </div>
+                                <div class="radio-card" onclick="selectRadio(this, 'expertise')">
+                                    <input type="radio" name="expertise" value="Content Strategy">
+                                    <div class="check-icon">✓</div>
+                                    <div class="card-title">📝 Content Strategy</div>
+                                    <div class="card-desc">Digital marketing, SEO, social media automation</div>
+                                </div>
+                                <div class="radio-card" onclick="selectRadio(this, 'expertise')">
+                                    <input type="radio" name="expertise" value="Academic Research">
+                                    <div class="check-icon">✓</div>
+                                    <div class="card-title">🎓 Academic Research</div>
+                                    <div class="card-desc">Educational technology, research methodology, pedagogy</div>
+                                </div>
+                            </div>
+                            <div class="error-message" id="expertiseError">⚠ Please select your primary expertise</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Years of Experience <span class="required">*</span></label>
+                            <div class="range-container">
+                                <div class="range-labels">
+                                    <span>0 years</span>
+                                    <span>5 years</span>
+                                    <span>10 years</span>
+                                    <span>15+ years</span>
+                                </div>
+                                <input type="range" id="experience" name="experience" min="0" max="15" value="5" oninput="updateRangeValue(this)">
+                                <div class="range-value" id="experienceValue">5 years</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="skills">Specific Specialization / Skills</label>
+                            <div class="tag-input" id="skillsInput" onclick="document.getElementById('skillInput').focus()">
+                                <input type="text" id="skillInput" placeholder="Type a skill and press Enter..." onkeydown="handleTagInput(event, 'skillsInput', 'skillInput')">
+                            </div>
+                            <input type="hidden" id="skillsHidden" name="skills">
+                            <div class="hint">e.g., LangGraph, FastAPI, AWS, Facebook API, Content Moderation</div>
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-secondary" onclick="prevStep()">← Previous</button>
+                            <button type="button" class="btn btn-primary" onclick="nextStep()">Next Step →</button>
+                        </div>
+                    </div>
+
+                    <div class="form-section" id="step3">
+                        <h3 class="section-title">🔧 Technical Focus Areas</h3>
+                        <p class="section-subtitle">Select the specific areas where you can provide guidance (choose all that apply)</p>
+
+                        <div class="form-group">
+                            <label>Areas of Guidance <span class="required">*</span></label>
+                            <div class="checkbox-group" id="techAreas">
+                                <div class="checkbox-card" onclick="toggleCheckbox(this)">
+                                    <input type="checkbox" name="techAreas" value="System Architecture">
+                                    <div class="check-icon">✓</div>
+                                    <div class="card-title">🏗️ System Architecture</div>
+                                    <div class="card-desc">Multi-agent design, microservices, scalable patterns</div>
+                                </div>
+                                <div class="checkbox-card" onclick="toggleCheckbox(this)">
+                                    <input type="checkbox" name="techAreas" value="LLM Selection & Integration">
+                                    <div class="check-icon">✓</div>
+                                    <div class="card-title">🤖 LLM Selection & Integration</div>
+                                    <div class="card-desc">GPT-4, Gemini, Llama, Mistral, model evaluation</div>
+                                </div>
+                                <div class="checkbox-card" onclick="toggleCheckbox(this)">
+                                    <input type="checkbox" name="techAreas" value="Agent Frameworks">
+                                    <div class="check-icon">✓</div>
+                                    <div class="card-title">🔗 Agent Frameworks</div>
+                                    <div class="card-desc">LangGraph, CrewAI, AutoGen, n8n, workflow design</div>
+                                </div>
+                                <div class="checkbox-card" onclick="toggleCheckbox(this)">
+                                    <input type="checkbox" name="techAreas" value="Backend Development">
+                                    <div class="check-icon">✓</div>
+                                    <div class="card-title">⚙️ Backend Development</div>
+                                    <div class="card-desc">Python, Node.js, FastAPI, API design, databases</div>
+                                </div>
+                                <div class="checkbox-card" onclick="toggleCheckbox(this)">
+                                    <input type="checkbox" name="techAreas" value="Social Media APIs">
+                                    <div class="check-icon">✓</div>
+                                    <div class="card-title">📱 Social Media APIs</div>
+                                    <div class="card-desc">Facebook Graph API, scheduling, automation, compliance</div>
+                                </div>
+                                <div class="checkbox-card" onclick="toggleCheckbox(this)">
+                                    <input type="checkbox" name="techAreas" value="Content Quality & Safety">
+                                    <div class="check-icon">✓</div>
+                                    <div class="card-title">✅ Content Quality & Safety</div>
+                                    <div class="card-desc">Fact-checking, plagiarism detection, moderation</div>
+                                </div>
+                                <div class="checkbox-card" onclick="toggleCheckbox(this)">
+                                    <input type="checkbox" name="techAreas" value="Deployment & Infrastructure">
+                                    <div class="check-icon">✓</div>
+                                    <div class="card-title">🚀 Deployment & Infrastructure</div>
+                                    <div class="card-desc">Docker, Kubernetes, AWS/Azure/GCP, CI/CD</div>
+                                </div>
+                                <div class="checkbox-card" onclick="toggleCheckbox(this)">
+                                    <input type="checkbox" name="techAreas" value="Monitoring & Analytics">
+                                    <div class="check-icon">✓</div>
+                                    <div class="card-title">📈 Monitoring & Analytics</div>
+                                    <div class="card-desc">Performance tracking, engagement analytics, logging</div>
+                                </div>
+                                <div class="checkbox-card" onclick="toggleCheckbox(this)">
+                                    <input type="checkbox" name="techAreas" value="Security & Compliance">
+                                    <div class="check-icon">✓</div>
+                                    <div class="card-title">🔒 Security & Compliance</div>
+                                    <div class="card-desc">Data privacy, API security, platform policy compliance</div>
+                                </div>
+                                <div class="checkbox-card" onclick="toggleCheckbox(this)">
+                                    <input type="checkbox" name="techAreas" value="Content Strategy">
+                                    <div class="check-icon">✓</div>
+                                    <div class="card-title">🎯 Content Strategy</div>
+                                    <div class="card-desc">Audience targeting, SEO, editorial workflows</div>
+                                </div>
+                            </div>
+                            <div class="error-message" id="techAreasError">⚠ Please select at least one area</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="techStack">Preferred Technology Stack (if applicable)</label>
+                            <div class="tag-input" id="stackInput" onclick="document.getElementById('stackSkill').focus()">
+                                <input type="text" id="stackSkill" placeholder="Add technologies..." onkeydown="handleTagInput(event, 'stackInput', 'stackSkill')">
+                            </div>
+                            <input type="hidden" id="stackHidden" name="techStack">
+                            <div class="hint">Technologies you recommend or have expertise in</div>
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-secondary" onclick="prevStep()">← Previous</button>
+                            <button type="button" class="btn btn-primary" onclick="nextStep()">Next Step →</button>
+                        </div>
+                    </div>
+
+                    <div class="form-section" id="step4">
+                        <h3 class="section-title">💡 Your Contribution</h3>
+                        <p class="section-subtitle">Tell us how you'd like to contribute and share your insights</p>
+
+                        <div class="form-group">
+                            <label for="contributionType">Type of Contribution <span class="required">*</span></label>
+                            <select id="contributionType" name="contributionType" required>
+                                <option value="">Select contribution type</option>
+                                <option value="Architecture Review & Recommendations">🏗️ Architecture Review & Recommendations</option>
+                                <option value="Code Review & Implementation Guidance">💻 Code Review & Implementation Guidance</option>
+                                <option value="Technical Documentation & Best Practices">📚 Technical Documentation & Best Practices</option>
+                                <option value="Mentorship & Advisory Role">👨‍🏫 Mentorship & Advisory Role</option>
+                                <option value="Research Paper / Case Study Collaboration">📄 Research Paper / Case Study Collaboration</option>
+                                <option value="Workshop / Training Session">🎤 Workshop / Training Session</option>
+                                <option value="Other">🤝 Other (please specify)</option>
+                            </select>
+                            <div class="error-message" id="contributionTypeError">⚠ Please select a contribution type</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="guidanceDetails">Detailed Guidance / Recommendations <span class="required">*</span></label>
+                            <textarea id="guidanceDetails" name="guidanceDetails" placeholder="Please share your technical recommendations, architecture suggestions, framework comparisons, implementation strategies, or any insights you believe would be valuable for this project. Be as detailed as possible." required></textarea>
+                            <div class="hint">Minimum 100 characters recommended for meaningful feedback</div>
+                            <div class="error-message" id="guidanceDetailsError">⚠ Please provide your guidance details</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="resources">References & Resources</label>
+                            <textarea id="resources" name="resources" placeholder="Share any research papers, GitHub repositories, documentation links, case studies, or other resources that could support your recommendations."></textarea>
+                            <div class="hint">URLs, paper titles, or resource names</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="availability">Availability for Follow-up <span class="required">*</span></label>
+                            <select id="availability" name="availability" required>
+                                <option value="">Select availability</option>
+                                <option value="Email exchanges only">📧 Email exchanges only</option>
+                                <option value="One video call (30-60 min)">🎥 One video call (30-60 min)</option>
+                                <option value="Ongoing collaboration">🔄 Ongoing collaboration</option>
+                                <option value="Advisory board role">🎯 Advisory board role</option>
+                            </select>
+                            <div class="error-message" id="availabilityError">⚠ Please select your availability</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="additional">Additional Comments</label>
+                            <textarea id="additional" name="additional" placeholder="Any other information, questions, or suggestions you'd like to share..."></textarea>
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-secondary" onclick="prevStep()">← Previous</button>
+                            <button type="button" class="btn btn-primary" onclick="nextStep()">Review & Send →</button>
+                        </div>
+                    </div>
+
+                    <div class="form-section" id="step5">
+                        <h3 class="section-title">✅ Review & Send to Gmail</h3>
+                        <p class="section-subtitle">Please review your information before sending to <strong>bbsrm4591@gmail.com</strong></p>
+
+                        <div id="reviewContent" style="background: var(--gray-50); border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1.5rem;">
+                            <!-- Populated by JS -->
+                        </div>
+
+                        <div class="form-group">
+                            <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; padding: 1rem; background: var(--primary-light); border-radius: 0.75rem;">
+                                <input type="checkbox" id="consent" style="margin-top: 0.25rem; width: 18px; height: 18px; accent-color: var(--primary);">
+                                <span style="font-size: 0.875rem; color: var(--gray-700);">
+                                    I confirm that the information provided is accurate and I consent to being contacted regarding this AI Content Generation Agent project. I understand my contributions may be acknowledged in project documentation.
+                                </span>
+                            </label>
+                            <div class="error-message" id="consentError">⚠ Please confirm your consent to proceed</div>
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-secondary" onclick="prevStep()">← Previous</button>
+                            <button type="submit" class="btn btn-success" id="submitBtn" onclick="return prepareAndSubmit()">
+                                <span class="loading-spinner" id="submitSpinner"></span>
+                                <span id="submitText">🚀 Send to bbsrm4591@gmail.com</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>Kapilvastu Multiple Campus (KMC)</strong> · Taulihawa, Nepal</p>
+            <p style="margin-top: 0.5rem;">Project Lead: <a href="mailto:bbsrm4591@gmail.com">Mr. Bishnu Singh Rayamajhi</a> · Founder, UCDL Academy</p>
+            <p style="margin-top: 0.5rem; font-size: 0.8125rem; color: var(--gray-400);">
+                This form collects technical guidance for an educational AI research initiative. All contributions are voluntary and will be properly acknowledged.
+            </p>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal">
+            <div class="modal-icon">🎉</div>
+            <h3>Thank You for Your Contribution!</h3>
+            <p>Your technical guidance has been successfully sent to <strong>bbsrm4591@gmail.com</strong>. Mr. Bishnu Singh Rayamajhi will review your recommendations and reach out to you soon.</p>
+            <div class="modal-ref" id="refNumber">REF-2024-001</div>
+            <p style="font-size: 0.875rem; color: var(--gray-500);">Please save this reference number for future correspondence.</p>
+            <button class="btn btn-primary" onclick="closeModal()" style="margin-top: 1rem;">Close</button>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 5;
+
+        function updateProgress() {
+            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            document.getElementById('progressLine').style.width = progress + '%';
+
+            document.querySelectorAll('.step').forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index + 1 < currentStep) {
+                    step.classList.add('completed');
+                    step.querySelector('.step-circle').textContent = '✓';
+                } else if (index + 1 === currentStep) {
+                    step.classList.add('active');
+                    step.querySelector('.step-circle').textContent = index + 1;
+                } else {
+                    step.querySelector('.step-circle').textContent = index + 1;
+                }
+            });
+        }
+
+        function showStep(step) {
+            document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+            document.getElementById('step' + step).classList.add('active');
+            currentStep = step;
+            updateProgress();
+            if (step === 5) populateReview();
+        }
+
+        function goToStep(step) {
+            if (step < currentStep || validateCurrentStep()) {
+                showStep(step);
+            }
+        }
+
+        function nextStep() {
+            if (validateCurrentStep() && currentStep < totalSteps) {
+                showStep(currentStep + 1);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                showStep(currentStep - 1);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function validateCurrentStep() {
+            let isValid = true;
+
+            if (currentStep === 1) {
+                const fields = ['fullName', 'email', 'institution', 'designation', 'country'];
+                fields.forEach(field => {
+                    const el = document.getElementById(field);
+                    const error = document.getElementById(field + 'Error');
+                    if (!el.value.trim()) {
+                        el.classList.add('error');
+                        error.classList.add('visible');
+                        isValid = false;
+                    } else {
+                        el.classList.remove('error');
+                        error.classList.remove('visible');
+                    }
+                });
+
+                const email = document.getElementById('email');
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (email.value && !emailRegex.test(email.value)) {
+                    email.classList.add('error');
+                    document.getElementById('emailError').textContent = '⚠ Please enter a valid email address';
+                    document.getElementById('emailError').classList.add('visible');
+                    isValid = false;
+                }
+            }
+
+            if (currentStep === 2) {
+                const expertise = document.querySelector('input[name="expertise"]:checked');
+                if (!expertise) {
+                    document.getElementById('expertiseError').classList.add('visible');
+                    isValid = false;
+                } else {
+                    document.getElementById('expertiseError').classList.remove('visible');
+                }
+            }
+
+            if (currentStep === 3) {
+                const checked = document.querySelectorAll('input[name="techAreas"]:checked');
+                if (checked.length === 0) {
+                    document.getElementById('techAreasError').classList.add('visible');
+                    isValid = false;
+                } else {
+                    document.getElementById('techAreasError').classList.remove('visible');
+                }
+            }
+
+            if (currentStep === 4) {
+                const fields = ['contributionType', 'guidanceDetails', 'availability'];
+                fields.forEach(field => {
+                    const el = document.getElementById(field);
+                    const error = document.getElementById(field + 'Error');
+                    if (!el.value.trim()) {
+                        el.classList.add('error');
+                        error.classList.add('visible');
+                        isValid = false;
+                    } else {
+                        el.classList.remove('error');
+                        error.classList.remove('visible');
+                    }
+                });
+            }
+
+            if (currentStep === 5) {
+                const consent = document.getElementById('consent');
+                if (!consent.checked) {
+                    document.getElementById('consentError').classList.add('visible');
+                    isValid = false;
+                } else {
+                    document.getElementById('consentError').classList.remove('visible');
+                }
+            }
+
+            return isValid;
+        }
+
+        function selectRadio(card, name) {
+            document.querySelectorAll(`input[name="${name}"]`).forEach(radio => {
+                radio.closest('.radio-card').classList.remove('selected');
+            });
+            card.classList.add('selected');
+            card.querySelector('input').checked = true;
+            document.getElementById('expertiseError').classList.remove('visible');
+        }
+
+        function toggleCheckbox(card) {
+            const checkbox = card.querySelector('input');
+            checkbox.checked = !checkbox.checked;
+            card.classList.toggle('selected', checkbox.checked);
+            document.getElementById('techAreasError').classList.remove('visible');
+        }
+
+        function updateRangeValue(input) {
+            const val = input.value;
+            document.getElementById('experienceValue').textContent = val >= 15 ? '15+ years' : val + ' years';
+        }
+
+        function handleTagInput(event, containerId, inputId) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const input = document.getElementById(inputId);
+                const value = input.value.trim();
+                if (value) {
+                    const container = document.getElementById(containerId);
+                    const tag = document.createElement('span');
+                    tag.className = 'tag';
+                    tag.innerHTML = `${value} <span class="tag-remove" onclick="this.parentElement.remove(); updateHiddenTags();">×</span>`;
+                    container.insertBefore(tag, input);
+                    input.value = '';
+                    updateHiddenTags();
+                }
+            }
+        }
+
+        function updateHiddenTags() {
+            document.getElementById('skillsHidden').value = getTags('skillsInput').join(', ');
+            document.getElementById('stackHidden').value = getTags('stackInput').join(', ');
+        }
+
+        function getTags(containerId) {
+            return Array.from(document.querySelectorAll(`#${containerId} .tag`)).map(t => t.textContent.replace('×', '').trim());
+        }
+
+        function populateReview() {
+            const expertise = document.querySelector('input[name="expertise"]:checked')?.value || '';
+            const techAreas = Array.from(document.querySelectorAll('input[name="techAreas"]:checked')).map(cb => cb.value);
+
+            const reviewHTML = `
+                <div style="margin-bottom: 1rem;">
+                    <strong style="color: var(--primary); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em;">Personal Information</strong>
+                    <div style="margin-top: 0.5rem; padding-left: 1rem; border-left: 2px solid var(--primary-light);">
+                        <p><strong>Name:</strong> ${document.getElementById('fullName').value}</p>
+                        <p><strong>Email:</strong> ${document.getElementById('email').value}</p>
+                        <p><strong>Institution:</strong> ${document.getElementById('institution').value}</p>
+                        <p><strong>Role:</strong> ${document.getElementById('designation').value}</p>
+                    </div>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <strong style="color: var(--primary); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em;">Expertise</strong>
+                    <div style="margin-top: 0.5rem; padding-left: 1rem; border-left: 2px solid var(--primary-light);">
+                        <p><strong>Primary:</strong> ${expertise}</p>
+                        <p><strong>Experience:</strong> ${document.getElementById('experience').value >= 15 ? '15+ years' : document.getElementById('experience').value + ' years'}</p>
+                        <p><strong>Skills:</strong> ${getTags('skillsInput').join(', ') || 'None specified'}</p>
+                    </div>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <strong style="color: var(--primary); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em;">Technical Focus</strong>
+                    <div style="margin-top: 0.5rem; padding-left: 1rem; border-left: 2px solid var(--primary-light);">
+                        <p><strong>Areas:</strong> ${techAreas.join(', ')}</p>
+                        <p><strong>Tech Stack:</strong> ${getTags('stackInput').join(', ') || 'None specified'}</p>
+                    </div>
+                </div>
+                <div>
+                    <strong style="color: var(--primary); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em;">Contribution</strong>
+                    <div style="margin-top: 0.5rem; padding-left: 1rem; border-left: 2px solid var(--primary-light);">
+                        <p><strong>Type:</strong> ${document.getElementById('contributionType').value}</p>
+                        <p><strong>Availability:</strong> ${document.getElementById('availability').value}</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('reviewContent').innerHTML = reviewHTML;
+        }
+
+        function prepareAndSubmit() {
+            if (!validateCurrentStep()) return false;
+
+            // Update hidden fields with tags before submission
+            updateHiddenTags();
+
+            // Show loading state
+            document.getElementById('submitSpinner').style.display = 'inline-block';
+            document.getElementById('submitText').textContent = 'Sending to bbsrm4591@gmail.com...';
+            document.getElementById('submitBtn').disabled = true;
+
+            // Generate reference number
+            const refNum = 'REF-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 1000)).padStart(3, '0');
+            document.getElementById('refNumber').textContent = refNum;
+
+            // Add reference as hidden field
+            const refInput = document.createElement('input');
+            refInput.type = 'hidden';
+            refInput.name = 'referenceNumber';
+            refInput.value = refNum;
+            document.getElementById('guidanceForm').appendChild(refInput);
+
+            // Allow form to submit naturally to Formspree
+            return true;
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('active');
+            document.getElementById('guidanceForm').reset();
+            document.querySelectorAll('.tag').forEach(t => t.remove());
+            document.querySelectorAll('.radio-card, .checkbox-card').forEach(c => c.classList.remove('selected'));
+            document.getElementById('submitSpinner').style.display = 'none';
+            document.getElementById('submitText').textContent = '🚀 Send to bbsrm4591@gmail.com';
+            document.getElementById('submitBtn').disabled = false;
+            showStep(1);
+        }
+
+        // Handle Formspree redirect/success
+        window.addEventListener('load', function() {
+            // Check if redirected back from Formspree with success
+            if (window.location.search.includes('submitted=true') || window.location.hash === '#success') {
+                document.getElementById('successModal').classList.add('active');
+            }
+        });
+
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        document.querySelectorAll('input, select, textarea').forEach(el => {
+            el.addEventListener('input', function() {
+                this.classList.remove('error');
+                const errorEl = document.getElementById(this.id + 'Error');
+                if (errorEl) errorEl.classList.remove('visible');
+            });
+        });
+    </script>
+</body>
+</html>
