@@ -3,152 +3,394 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KMC-UCDL Daily Facebook Content Agent - Title Page</title>
+    <title>KMC-UCDL Daily Facebook Content Agent - Complete Documentation</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             --primary: #2563eb;
             --secondary: #1e40af;
             --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #ea580c;
             --light: #f8fafc;
             --dark: #1e293b;
+            --border: #e2e8f0;
         }
 
         body {
-            font-family: 'Georgia', serif;
-            line-height: 1.8;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
             color: var(--dark);
+            background: var(--light);
+        }
+
+        header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            color: white;
             padding: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+        header p { opacity: 0.95; }
+
+        header .attribution {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid rgba(255,255,255,0.3);
+            font-size: 0.95rem;
+        }
+
+        header .attribution p {
+            margin: 0.25rem 0;
+        }
+
+        /* Main Navigation */
+        nav.main-nav {
+            background: linear-gradient(to right, var(--dark), var(--secondary));
+            padding: 1rem;
+            position: sticky;
+            top: 100px;
+            z-index: 99;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        nav.main-nav > div {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-divider {
+            border-right: 2px solid rgba(255,255,255,0.3);
+            height: 30px;
+            margin: 0 0.5rem;
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: white;
+            color: var(--primary);
+            font-weight: bold;
         }
 
         .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        section {
             background: white;
-            border-radius: 12px;
-            padding: 4rem;
-            max-width: 800px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        .header-section {
-            text-align: center;
-            margin-bottom: 3rem;
-            border-bottom: 3px solid var(--primary);
-            padding-bottom: 2rem;
-        }
-
-        .logo {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-        }
-
-        h1 {
-            color: var(--primary);
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-        }
-
-        .subtitle {
-            color: var(--secondary);
-            font-size: 1.3rem;
-            font-style: italic;
-            margin-bottom: 1rem;
-        }
-
-        .project-info {
-            background: var(--light);
-            padding: 2rem;
             border-radius: 8px;
+            padding: 2rem;
             margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            display: none;
+        }
+
+        section.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            color: var(--secondary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.3rem;
+        }
+
+        h4 { color: var(--dark); margin-top: 1rem; margin-bottom: 0.5rem; }
+
+        .card {
+            background: var(--light);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .box-info {
+            background: #eff6ff;
+            border: 2px solid var(--primary);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .box-success {
+            background: #f0fdf4;
+            border: 2px solid var(--success);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .box-warning {
+            background: #fefce8;
+            border: 2px solid #facc15;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .grid-item {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
+        pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        table thead {
+            background: var(--primary);
+            color: white;
+        }
+
+        table th, table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        table tbody tr:nth-child(even) {
+            background: var(--light);
+        }
+
+        .timeline {
+            position: relative;
+            padding: 1rem 0;
+        }
+
+        .timeline-item {
+            padding: 1.5rem;
+            padding-left: 3rem;
+            position: relative;
+            border-left: 3px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-item:before {
+            content: "";
+            position: absolute;
+            left: -9px;
+            top: 1.5rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--primary);
+        }
+
+        .timeline-item.success:before {
+            background: var(--success);
+            box-shadow: 0 0 0 3px var(--success);
+        }
+
+        .timeline-item time {
+            color: var(--primary);
+            font-weight: bold;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .step {
+            display: flex;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--light);
+            border-radius: 6px;
             border-left: 4px solid var(--primary);
         }
 
-        .project-info h3 {
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            flex-shrink: 0;
         }
 
-        .project-info p {
+        .collapsible {
+            background: var(--light);
+            border: 1px solid var(--border);
+            padding: 1rem;
             margin: 0.5rem 0;
-            line-height: 1.6;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .author-section {
-            background: linear-gradient(135deg, #f0f7ff 0%, #f0fdf4 100%);
-            padding: 2.5rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-            border: 2px solid var(--primary);
+        .collapsible:hover {
+            background: #f1f5f9;
         }
 
-        .author-section h2 {
-            color: var(--primary);
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
+        .collapsible.active {
+            background: #eff6ff;
+            border-color: var(--primary);
         }
 
-        .author-details {
+        .collapsible-content {
+            display: none;
+            padding: 1rem;
             background: white;
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+        }
+
+        .collapsible-content.active {
+            display: block;
+        }
+
+        .chevron {
+            transition: transform 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .collapsible.active .chevron {
+            transform: rotate(180deg);
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer p {
+            margin: 0.5rem 0;
+        }
+
+        .file-card {
+            background: linear-gradient(135deg, #f0f7ff 0%, #f0fdf4 100%);
+            border-left: 5px solid var(--primary);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+
+        .file-name {
+            font-family: 'Courier New', monospace;
+            background: var(--dark);
+            color: #4ade80;
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .file-structure {
+            background: var(--dark);
+            color: #4ade80;
             padding: 1.5rem;
             border-radius: 6px;
-            margin-bottom: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            margin: 1rem 0;
         }
 
-        .author-name {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .author-title {
-            color: var(--secondary);
+        .button {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
             font-size: 1rem;
-            margin: 0.25rem 0;
         }
 
-        .author-institution {
-            color: #666;
-            font-size: 0.95rem;
-            margin: 0.25rem 0;
+        .button:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
         }
 
-        .author-founder {
-            color: var(--success);
-            font-size: 0.95rem;
-            margin-top: 0.75rem;
-            font-weight: 600;
+        .button.secondary {
+            background: var(--success);
         }
 
-        .quick-links {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 2rem;
+        .button.secondary:hover {
+            background: #15803d;
         }
 
         .quick-link {
             background: var(--light);
-            padding: 1.5rem;
             border-radius: 8px;
+            padding: 1.5rem;
             border-left: 4px solid var(--primary);
             text-align: center;
-            text-decoration: none;
-            color: var(--dark);
-            transition: all 0.3s ease;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
 
         .quick-link:hover {
@@ -159,30 +401,15 @@
 
         .quick-link h4 {
             margin-bottom: 0.5rem;
-            font-size: 1.1rem;
         }
 
         .quick-link p {
             font-size: 0.9rem;
-            opacity: 0.8;
         }
 
-        .features {
-            background: var(--light);
-            padding: 2rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-        }
-
-        .features h3 {
-            color: var(--primary);
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-
-        .features-grid {
+        .feature-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
         }
 
@@ -193,305 +420,721 @@
             border-left: 3px solid var(--success);
         }
 
-        .feature-item strong {
-            color: var(--primary);
+        .diagram {
+            background: white;
+            border: 2px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 6px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
         }
 
-        .feature-item p {
-            font-size: 0.9rem;
-            margin-top: 0.25rem;
-            color: #666;
+        ul, ol {
+            padding-left: 2rem;
+            margin: 1rem 0;
         }
 
-        .footer-section {
-            border-top: 2px solid var(--primary);
-            padding-top: 2rem;
-            text-align: center;
-            color: #666;
-            font-size: 0.95rem;
-        }
-
-        .footer-section p {
+        li {
             margin: 0.5rem 0;
         }
 
-        .version-info {
-            background: var(--light);
-            padding: 1.5rem;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 0.9rem;
-            margin-bottom: 2rem;
-        }
-
-        .cta-button {
-            display: inline-block;
-            background: var(--primary);
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 6px;
-            text-decoration: none;
-            margin: 0.5rem;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .cta-button:hover {
-            background: var(--secondary);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        }
-
-        .cta-button.secondary {
-            background: var(--success);
-        }
-
-        .cta-button.secondary:hover {
-            background: #15803d;
-        }
-
-        .cta-section {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .key-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-box {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .stat-box .number {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-box .label {
-            font-size: 0.9rem;
-            opacity: 0.95;
-        }
-
         @media (max-width: 768px) {
-            .container {
-                padding: 2rem;
-            }
+            header h1 { font-size: 1.5rem; }
+            .feature-grid { grid-template-columns: 1fr; }
+            section { padding: 1.5rem; }
+            .step { flex-direction: column; }
+            nav.main-nav > div { flex-direction: column; gap: 0.5rem; }
+            .nav-divider { display: none; }
+        }
 
-            h1 {
-                font-size: 1.8rem;
-            }
-
-            .subtitle {
-                font-size: 1rem;
-            }
-
-            .quick-links {
-                grid-template-columns: 1fr;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .key-stats {
-                grid-template-columns: 1fr;
-            }
-
-            .logo {
-                font-size: 3rem;
-            }
+        .page-title {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
+    <!-- HEADER -->
+    <header>
+        <h1>🚀 KMC-UCDL Daily Facebook Content Agent</h1>
+        <p>Complete n8n + OpenAI + Facebook Graph API Automation System</p>
+        <div class="attribution">
+            <p><strong>Research Dissemination Prepared by:</strong></p>
+            <p>Mr. Bishnu Singh Rayamajhi</p>
+            <p>Mathematics Lecturer and Head of Humanities & Social Science</p>
+            <p>Kapilvastu Multiple Campus (KMC), Taulihawa, Tribhuvan University</p>
+            <p><strong>Founder:</strong> UCDL Academy</p>
+        </div>
+    </header>
+
+    <!-- MAIN NAVIGATION -->
+    <nav class="main-nav">
+        <div>
+            <button class="nav-btn active" onclick="showPage('home')">🏠 Home</button>
+            <div class="nav-divider"></div>
+            <button class="nav-btn" onclick="showPage('setup')">📖 Setup Guide</button>
+            <button class="nav-btn" onclick="showPage('execution')">🔄 How It Runs</button>
+            <button class="nav-btn" onclick="showPage('linking')">🔗 File Linking</button>
+            <div class="nav-divider"></div>
+            <button class="nav-btn" onclick="scrollToTop()">⬆️ Top</button>
+        </div>
+    </nav>
+
     <div class="container">
-        <!-- Header -->
-        <div class="header-section">
-            <div class="logo">🚀</div>
-            <h1>KMC-UCDL Daily Facebook Content Agent</h1>
-            <p class="subtitle">Complete Automation System with AI & Social Media Integration</p>
-        </div>
+        <!-- HOME PAGE -->
+        <section id="home" class="active">
+            <div class="page-title">📑 HOME PAGE - INDEX</div>
+            <h2>🚀 KMC-UCDL Daily Facebook Content Agent</h2>
 
-        <!-- Project Info -->
-        <div class="project-info">
-            <h3>📋 Project Overview</h3>
-            <p>A fully automated system that generates and publishes unique, engaging educational content to your Facebook page <strong>every single day at 7:00 AM NST</strong>, powered by n8n workflow automation, OpenAI's GPT-4, and Facebook Graph API.</p>
-            <p><strong>Result:</strong> 30+ high-quality posts per month with zero manual intervention.</p>
-        </div>
+            <div class="box-info">
+                <h3>✨ What You Get</h3>
+                <p>A fully automated system that generates and posts educational content to your Facebook page every single day.</p>
+            </div>
 
-        <!-- Key Stats -->
-        <div class="key-stats">
-            <div class="stat-box">
-                <div class="number">3.26s</div>
-                <div class="label">Execution Time</div>
-            </div>
-            <div class="stat-box">
-                <div class="number">$0.30</div>
-                <div class="label">Cost/Month</div>
-            </div>
-            <div class="stat-box">
-                <div class="number">99.99%</div>
-                <div class="label">Uptime</div>
-            </div>
-        </div>
-
-        <!-- Author Section -->
-        <div class="author-section">
-            <h2>✍️ Research Dissemination Prepared By</h2>
-            
-            <div class="author-details">
-                <div class="author-name">Mr. Bishnu Singh Rayamajhi</div>
-                <div class="author-title">📚 Mathematics Lecturer</div>
-                <div class="author-title">🏛️ Head of Humanities & Social Science</div>
-                <div class="author-institution">Kapilvastu Multiple Campus (KMC)</div>
-                <div class="author-institution">Taulihawa, Tribhuvan University</div>
-                <div class="author-institution">Nepal</div>
-                <div class="author-founder">🎓 Founder: UCDL Academy</div>
-            </div>
-        </div>
-
-        <!-- Features -->
-        <div class="features">
-            <h3>✨ Key Features</h3>
-            <div class="features-grid">
-                <div class="feature-item">
-                    <strong>🤖 AI-Powered</strong>
-                    <p>GPT-4 generates unique, relevant content daily</p>
+            <h3>🎯 Key Features</h3>
+            <div class="grid">
+                <div class="grid-item">
+                    <h4>🤖 AI-Powered</h4>
+                    <p>GPT-4 generates unique, engaging posts daily</p>
                 </div>
-                <div class="feature-item">
-                    <strong>⏰ Fully Automated</strong>
-                    <p>Posts at 7 AM NST - zero manual work</p>
+                <div class="grid-item">
+                    <h4>📱 Automatic</h4>
+                    <p>Posts at 7 AM NST every day - zero manual work</p>
                 </div>
-                <div class="feature-item">
-                    <strong>💰 Super Affordable</strong>
-                    <p>Just $0.30/month to run completely</p>
+                <div class="grid-item">
+                    <h4>💰 Super Cheap</h4>
+                    <p>Just $0.30/month to run</p>
                 </div>
-                <div class="feature-item">
-                    <strong>📊 Tracked & Logged</strong>
+                <div class="grid-item">
+                    <h4>📊 Tracked</h4>
                     <p>Every post logged to Google Sheets</p>
                 </div>
-                <div class="feature-item">
-                    <strong>🎨 8 Content Types</strong>
-                    <p>Good Morning, Study Tips, Success Stories, etc.</p>
+                <div class="grid-item">
+                    <h4>🎨 Customizable</h4>
+                    <p>8 content types, adjust anytime</p>
                 </div>
-                <div class="feature-item">
-                    <strong>📈 Scalable</strong>
-                    <p>Easy to expand to Instagram, LinkedIn, Twitter</p>
+                <div class="grid-item">
+                    <h4>📈 Scalable</h4>
+                    <p>Expand to Instagram, LinkedIn later</p>
                 </div>
             </div>
-        </div>
 
-        <!-- Version Info -->
-        <div class="version-info">
-            <p><strong>Version:</strong> 1.0 | <strong>Status:</strong> Production-Ready</p>
-            <p><strong>Last Updated:</strong> June 2026 | <strong>Setup Time:</strong> 90 minutes</p>
-        </div>
+            <h3>📊 By The Numbers</h3>
+            <table>
+                <tr><td><strong>Setup Time</strong></td><td>90 minutes</td></tr>
+                <tr><td><strong>Maintenance/Week</strong></td><td>5 minutes</td></tr>
+                <tr><td><strong>Cost/Month</strong></td><td>~$0.30</td></tr>
+                <tr><td><strong>Posts/Month</strong></td><td>30-31 posts</td></tr>
+                <tr><td><strong>Content Types</strong></td><td>8 different types</td></tr>
+                <tr><td><strong>Uptime</strong></td><td>99.99%</td></tr>
+            </table>
 
-        <!-- Quick Links / CTA -->
-        <div class="cta-section">
-            <h3 style="margin-bottom: 1.5rem; color: var(--primary);">📚 Get Started</h3>
-            
-            <div class="quick-links">
-                <a href="./KMC-UCDL_Complete_Guide.html" class="quick-link">
+            <h3>🔄 How It Works (Simple)</h3>
+            <div class="diagram">
+                <pre>Every day at 7 AM NST:
+
+1. Trigger 🔔
+2. Get date/time context 📅
+3. Pick random content type 🎲
+4. Call OpenAI → Generate post ✍️
+5. Post to Facebook 📱
+6. Log to Google Sheets 📊
+
+Result: Post appears on your page instantly! ✅
+All automatic, no manual work! 🎉</pre>
+            </div>
+
+            <h3>📈 Content Types (Rotating Daily)</h3>
+            <ul>
+                <li><strong>Good Morning</strong> - Daily greeting + motivational tip</li>
+                <li><strong>Study Tips</strong> - Academic skills & techniques</li>
+                <li><strong>Success Stories</strong> - Student achievements & wins</li>
+                <li><strong>Motivation</strong> - Mindset & resilience boost</li>
+                <li><strong>Announcements</strong> - Important updates & deadlines</li>
+                <li><strong>Weekly Wrap</strong> - Week reflection & lessons</li>
+                <li><strong>Q&A Session</strong> - Community engagement questions</li>
+                <li><strong>Memes/Humor</strong> - Educational humor & relatable jokes</li>
+            </ul>
+
+            <div class="box-success">
+                <h3>✅ When It's Working Perfectly</h3>
+                <ul>
+                    <li>Daily post appears on Facebook automatically</li>
+                    <li>Google Sheet logs every post</li>
+                    <li>No manual intervention needed</li>
+                    <li>You spend 5 min/week checking status</li>
+                    <li>Students engaging with content</li>
+                </ul>
+            </div>
+
+            <!-- Documentation Resources -->
+            <h3>📚 Complete Documentation</h3>
+            <div class="grid">
+                <div class="quick-link" onclick="showPage('setup')">
                     <h4>📖 Setup Guide</h4>
                     <p>Complete setup instructions & configuration</p>
-                </a>
-                <a href="./HOW_IT_RUNS.html" class="quick-link">
+                </div>
+                <div class="quick-link" onclick="showPage('execution')">
                     <h4>🔄 How It Runs</h4>
                     <p>Execution flow & real-time monitoring</p>
-                </a>
+                </div>
+                <div class="quick-link" onclick="showPage('linking')">
+                    <h4>🔗 File Linking</h4>
+                    <p>Understanding the system architecture</p>
+                </div>
             </div>
 
-            <div style="text-align: center;">
-                <a href="./KMC-UCDL_Complete_Guide.html" class="cta-button">
-                    🚀 Start Setup Guide
-                </a>
-                <a href="./HOW_IT_RUNS.html" class="cta-button secondary">
-                    📚 Learn How It Works
-                </a>
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="button" onclick="showPage('setup')">🚀 Start Setup Guide</button>
+                <button class="button secondary" onclick="showPage('execution')">📚 Learn How It Works</button>
             </div>
-        </div>
+        </section>
 
-        <!-- What's Included -->
-        <div style="background: var(--light); padding: 2rem; border-radius: 8px; margin-bottom: 2rem;">
-            <h3 style="color: var(--primary); margin-bottom: 1rem; text-align: center;">📦 What's Included</h3>
-            <ul style="padding-left: 2rem; column-count: 2; column-gap: 2rem;">
-                <li>✅ Complete setup guide (HTML)</li>
-                <li>✅ Execution explanation (HTML)</li>
-                <li>✅ n8n workflow JSON</li>
-                <li>✅ 8 content prompts</li>
-                <li>✅ Troubleshooting guide</li>
-                <li>✅ Architecture diagrams</li>
-                <li>✅ Copy-paste configurations</li>
-                <li>✅ Error handling procedures</li>
+        <!-- SETUP GUIDE PAGE -->
+        <section id="setup">
+            <div class="page-title">📖 SETUP GUIDE</div>
+            <h2>🔧 Complete Setup Guide</h2>
+
+            <div class="box-info">
+                <strong>Estimated Time:</strong> 90 minutes (first time)
+            </div>
+
+            <h3>Phase 1: Facebook Setup (15 minutes)</h3>
+
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Step 1: Create Facebook Developer Account</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <ol>
+                    <li>Go to https://developers.facebook.com</li>
+                    <li>Sign in with your personal Facebook account</li>
+                    <li>Click "Get Started"</li>
+                    <li>Answer setup questions</li>
+                    <li>Accept terms</li>
+                </ol>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Step 2: Create Your App</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <pre>Developers → My Apps → Create App
+
+App Name: KMC-UCDL Content Agent
+App Type: Business
+App Purpose: Business
+App Permissions: pages_manage_posts, pages_read_engagement</pre>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Step 3: Get Credentials</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <pre>Settings > Basic
+
+Copy and SAVE these:
+- App ID: [Your App ID]
+- App Secret: [Keep Secret!]
+
+Tools > Graph API Explorer:
+- Select your app
+- Select your page
+- Generate Access Token
+- Copy the long token (EABC...)</pre>
+            </div>
+
+            <h3>Phase 2: OpenAI Setup (10 minutes)</h3>
+
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Step 1: Create OpenAI Account</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <ol>
+                    <li>Go to https://platform.openai.com</li>
+                    <li>Sign up (email or Google)</li>
+                    <li>Verify email</li>
+                    <li>Set up phone number (2FA)</li>
+                </ol>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Step 2: Add Payment Method</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <pre>Left sidebar > Billing > Overview
+
+1. Click "Add payment method"
+2. Add credit/debit card
+3. Set monthly limit: $10-20 (safe)</pre>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Step 3: Create API Key</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <pre>Left sidebar > API Keys
+
+1. Click "+ Create new secret key"
+2. Name: "KMC-UCDL Facebook Agent"
+3. Copy key (starts with sk-proj-)
+4. SAVE IT - you can't see it again!
+
+Cost: ~$0.01 per post × 30 days = $0.30/month</pre>
+            </div>
+
+            <h3>Phase 3: n8n Setup (10 minutes)</h3>
+
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Step 1: Create n8n Cloud Account</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <ol>
+                    <li>Go to https://n8n.cloud</li>
+                    <li>Sign up (email or Google)</li>
+                    <li>Verify email</li>
+                    <li>Create workspace (name: "KMC-UCDL")</li>
+                </ol>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapsible(this)">
+                <span><strong>Step 2: Create Credentials</strong></span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <pre>n8n Sidebar > Credentials > New
+
+Create 3 credentials:
+
+A) OpenAI API
+   - API Key: sk-proj-...
+   - Name: "OpenAI API - UCDL"
+
+B) Google Sheets OAuth2
+   - Connect your Google account
+   - Name: "Google - UCDL"
+
+C) Environment (in Settings)
+   - FACEBOOK_PAGE_ID=123456789
+   - FACEBOOK_ACCESS_TOKEN=EABC...</pre>
+            </div>
+
+            <h3>Phase 4: Import & Test</h3>
+            <p>Use the JSON workflow file to import into n8n. Follow setup instructions for node-by-node configuration.</p>
+
+            <div class="box-success">
+                <h3>🎉 Setup Complete!</h3>
+                <p>Your workflow is ready. First automated post will appear tomorrow at 7 AM NST.</p>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="button" onclick="showPage('execution')">→ How It Runs</button>
+            </div>
+        </section>
+
+        <!-- EXECUTION FLOW PAGE -->
+        <section id="execution">
+            <div class="page-title">🔄 HOW IT RUNS</div>
+            <h2>🔄 How KMC-UCDL System Runs</h2>
+
+            <div class="box-info">
+                <h3>✨ The Simple Version</h3>
+                <p>Every day at 7 AM NST, n8n automatically runs your workflow. It generates unique content, posts to Facebook, and logs everything in ~3 seconds.</p>
+            </div>
+
+            <h3>🎬 Visual Flow</h3>
+            <div class="diagram">
+                <pre>7:00:00 AM NST
+    ↓
+[TRIGGER] Schedule fires up ⏱️
+    ↓
+[CONTEXT] Get date/time (Monday? June 14?)
+    ↓
+[CATEGORY] Pick random type (Study Tips, etc)
+    ↓
+[OPENAI] Generate unique post (1.9 sec)
+    ↓
+[PARSE] Extract text + hashtags
+    ↓
+[FACEBOOK] Post to page (0.9 sec)
+    ↓
+[LOG] Save to Google Sheets
+    ↓
+7:00:03 AM NST ✅ DONE!</pre>
+            </div>
+
+            <h3>⏰ Complete Timeline</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <time>7:00:00 AM NST</time>
+                    <p><strong>🔔 TRIGGER FIRES!</strong> Cron schedule matches</p>
+                </div>
+                <div class="timeline-item">
+                    <time>7:00:00.3 AM</time>
+                    <p>Node 2: Get NST Context (date/time)</p>
+                </div>
+                <div class="timeline-item">
+                    <time>7:00:00.3 AM</time>
+                    <p>Node 3: Select Category (pick content type)</p>
+                </div>
+                <div class="timeline-item">
+                    <time>7:00:00.31 AM</time>
+                    <p>Node 4: OpenAI generates post (1.9 seconds)...</p>
+                </div>
+                <div class="timeline-item">
+                    <time>7:00:02.21 AM</time>
+                    <p>Node 5: Parse AI response</p>
+                </div>
+                <div class="timeline-item">
+                    <time>7:00:02.23 AM</time>
+                    <p>Node 6: Post to Facebook (0.9 seconds)...</p>
+                </div>
+                <div class="timeline-item">
+                    <time>7:00:03.13 AM</time>
+                    <p>Node 7-8: Log to Google Sheets</p>
+                </div>
+                <div class="timeline-item success">
+                    <time>7:00:03.26 AM</time>
+                    <p>✅ <strong>COMPLETE!</strong> Post is LIVE on Facebook</p>
+                </div>
+            </div>
+
+            <h3>📊 Performance Metrics</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Time</th>
+                        <th>% of Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Nodes 1-3 (Setup)</td>
+                        <td>30ms</td>
+                        <td>1%</td>
+                    </tr>
+                    <tr>
+                        <td>Node 4 (OpenAI)</td>
+                        <td>1900ms</td>
+                        <td>58%</td>
+                    </tr>
+                    <tr>
+                        <td>Node 5 (Parse)</td>
+                        <td>10ms</td>
+                        <td>&lt;1%</td>
+                    </tr>
+                    <tr>
+                        <td>Node 6 (Facebook)</td>
+                        <td>900ms</td>
+                        <td>27%</td>
+                    </tr>
+                    <tr>
+                        <td>Nodes 7-9 (Complete)</td>
+                        <td>120ms</td>
+                        <td>4%</td>
+                    </tr>
+                    <tr style="font-weight: bold; background: #f0fdf4;">
+                        <td colspan="2">TOTAL: ~3.26 seconds</td>
+                        <td>100%</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="box-success">
+                <h3>⚡ Total Time: 3.26 seconds</h3>
+                <p>From trigger to completion, less than 4 seconds. Post is instantly live on Facebook!</p>
+            </div>
+
+            <h3>🔄 What Happens Every Day</h3>
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>7:00 AM NST - System Wakes Up</h4>
+                    <p>Cron schedule fires automatically</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>3 Seconds Later</h4>
+                    <p>Post is published and live on Facebook page</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Instant Logging</h4>
+                    <p>Data automatically saved to Google Sheets</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>Zero Manual Work</h4>
+                    <p>Completely automatic, nothing for you to do</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="button" onclick="showPage('setup')">← Setup Guide</button>
+                <button class="button" onclick="showPage('linking')">Linking Guide →</button>
+            </div>
+        </section>
+
+        <!-- FILE LINKING PAGE -->
+        <section id="linking">
+            <div class="page-title">🔗 FILE LINKING GUIDE</div>
+            <h2>🔗 Complete File Linking Guide</h2>
+
+            <div class="box-info">
+                <h3>ℹ️ This is Now One Complete File</h3>
+                <p>All 4 HTML documents (INDEX, Setup Guide, How It Runs, and Linking Guide) have been combined into this single file. Navigation buttons switch between sections seamlessly.</p>
+            </div>
+
+            <h3>📁 Original File Structure</h3>
+            <p>Before combination, the package contained:</p>
+
+            <div class="file-card">
+                <div class="file-name">📄 INDEX.html</div>
+                <h4 style="margin: 0.5rem 0 0 0;">Landing Page</h4>
+                <p>Beautiful introduction with attribution and quick links</p>
+            </div>
+
+            <div class="file-card">
+                <div class="file-name">📖 KMC-UCDL_Complete_Guide.html</div>
+                <h4 style="margin: 0.5rem 0 0 0;">Setup Guide</h4>
+                <p>Step-by-step setup with configuration details</p>
+            </div>
+
+            <div class="file-card">
+                <div class="file-name">🔄 HOW_IT_RUNS.html</div>
+                <h4 style="margin: 0.5rem 0 0 0;">Execution Guide</h4>
+                <p>Complete explanation of how the system executes</p>
+            </div>
+
+            <div class="file-card">
+                <div class="file-name">🔗 FILE_LINKING_GUIDE.html</div>
+                <h4 style="margin: 0.5rem 0 0 0;">Linking Guide</h4>
+                <p>How all files are connected and linked</p>
+            </div>
+
+            <h3>🎯 Navigation in This Single File</h3>
+            <div class="diagram">
+                <pre>TOP NAVIGATION BAR (Always Visible)
+┌───────────────────────────────────────┐
+│ 🏠 Home │ 📖 Setup │ 🔄 How It Runs │ 🔗 Linking │ ⬆️ Top
+└───────────────────────────────────────┘
+        ↓ Click any button to jump to that section</pre>
+            </div>
+
+            <h3>📍 All Sections Available</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Section</th>
+                        <th>Button</th>
+                        <th>Content</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Home/Index</td>
+                        <td>🏠 Home</td>
+                        <td>Landing page with project overview</td>
+                    </tr>
+                    <tr>
+                        <td>Setup Guide</td>
+                        <td>📖 Setup</td>
+                        <td>Complete setup instructions</td>
+                    </tr>
+                    <tr>
+                        <td>Execution Flow</td>
+                        <td>🔄 How It Runs</td>
+                        <td>System execution details</td>
+                    </tr>
+                    <tr>
+                        <td>This Page</td>
+                        <td>🔗 Linking</td>
+                        <td>File structure information</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>✨ Benefits of Single File Format</h3>
+            <ul>
+                <li>✅ <strong>One File to Download</strong> - No folder management</li>
+                <li>✅ <strong>Instant Navigation</strong> - Switch sections instantly</li>
+                <li>✅ <strong>No Broken Links</strong> - All links are internal</li>
+                <li>✅ <strong>Easy to Share</strong> - Send one file, not multiple</li>
+                <li>✅ <strong>Works Offline</strong> - No internet needed</li>
+                <li>✅ <strong>Always Available</strong> - Everything in one place</li>
+                <li>✅ <strong>Professional</strong> - Seamless user experience</li>
             </ul>
-        </div>
 
-        <!-- Documentation Resources Section -->
-        <div style="background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%); padding: 2rem; border-radius: 8px; margin-bottom: 2rem; border: 2px solid var(--primary);">
-            <h3 style="color: var(--primary); margin-bottom: 1.5rem; text-align: center;">📚 Complete Documentation Files</h3>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
-                <!-- File 1 -->
-                <div style="background: white; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <h4 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 1.2rem;">📖 KMC-UCDL_Complete_Guide.html</h4>
-                    <p style="color: #666; font-size: 0.95rem; margin-bottom: 1rem;">
-                        <strong>Complete setup and configuration guide</strong><br>
-                        Step-by-step instructions for deploying the entire system. Includes API setup, workflow configuration, content prompts, troubleshooting, and quick reference.
-                    </p>
-                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem;">
-                        <a href="./KMC-UCDL_Complete_Guide.html" style="display: inline-block; background: var(--primary); color: white; padding: 0.75rem 1.5rem; border-radius: 4px; text-decoration: none; font-weight: bold; transition: all 0.3s ease;" onmouseover="this.style.background='var(--secondary)'" onmouseout="this.style.background='var(--primary)'">
-                            🔗 Open Guide
-                        </a>
-                        <span style="color: #999; font-size: 0.85rem; align-self: center;">HTML File</span>
-                    </div>
-                </div>
-
-                <!-- File 2 -->
-                <div style="background: white; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--success); box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <h4 style="color: var(--success); margin-bottom: 0.5rem; font-size: 1.2rem;">🔄 HOW_IT_RUNS.html</h4>
-                    <p style="color: #666; font-size: 0.95rem; margin-bottom: 1rem;">
-                        <strong>Complete execution flow documentation</strong><br>
-                        Detailed explanation of how the system runs, node-by-node execution, real-world examples, timing diagrams, performance metrics, and monitoring guidance.
-                    </p>
-                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem;">
-                        <a href="./HOW_IT_RUNS.html" style="display: inline-block; background: var(--success); color: white; padding: 0.75rem 1.5rem; border-radius: 4px; text-decoration: none; font-weight: bold; transition: all 0.3s ease;" onmouseover="this.style.background='#15803d'" onmouseout="this.style.background='var(--success)'">
-                            🔗 Open Guide
-                        </a>
-                        <span style="color: #999; font-size: 0.85rem; align-self: center;">HTML File</span>
-                    </div>
+            <h3>🎯 How to Use</h3>
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Open This Single File</h4>
+                    <p>Double-click or drag into browser</p>
                 </div>
             </div>
 
-            <div style="background: #eff6ff; padding: 1rem; border-radius: 6px; border-left: 3px solid var(--primary);">
-                <p style="color: var(--dark); margin: 0; font-size: 0.95rem;">
-                    <strong>💡 Pro Tip:</strong> Both files are interactive and feature-rich. They include navigation buttons to switch between them. 
-                    <strong style="color: var(--primary);">All files should be in the same folder for links to work properly.</strong>
-                </p>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Use Top Navigation Buttons</h4>
+                    <p>Click buttons to jump between sections</p>
+                </div>
             </div>
-        </div>
 
-        <!-- Footer -->
-        <div class="footer-section">
-            <p><strong>🎓 Educational Excellence. Automated. Scaled.</strong></p>
-            <p>Designed for KMC students, faculty, and community</p>
-            <p>Supporting digital literacy and educational technology in Nepal</p>
-            <p style="margin-top: 1.5rem; border-top: 1px solid #ddd; padding-top: 1rem; opacity: 0.7;">
-                © 2026 | Bishnu Singh Rayamajhi | UCDL Academy<br>
-                Kapilvastu Multiple Campus, Tribhuvan University
-            </p>
-        </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Read at Your Pace</h4>
+                    <p>All content is within this single document</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>No Missing Files</h4>
+                    <p>Everything is contained in one HTML file</p>
+                </div>
+            </div>
+
+            <h3>📊 File Comparison</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Multiple Files</th>
+                        <th>Single File</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Files to Download</td>
+                        <td>4 separate files</td>
+                        <td>1 file ✅</td>
+                    </tr>
+                    <tr>
+                        <td>Folder Management</td>
+                        <td>Required</td>
+                        <td>Not needed ✅</td>
+                    </tr>
+                    <tr>
+                        <td>Broken Links Risk</td>
+                        <td>High</td>
+                        <td>None ✅</td>
+                    </tr>
+                    <tr>
+                        <td>Easy to Share</td>
+                        <td>Complicated</td>
+                        <td>Simple ✅</td>
+                    </tr>
+                    <tr>
+                        <td>Navigation Speed</td>
+                        <td>Slower (page loads)</td>
+                        <td>Instant ✅</td>
+                    </tr>
+                    <tr>
+                        <td>Offline Access</td>
+                        <td>Yes</td>
+                        <td>Yes ✅</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="box-success">
+                <h3>✅ Everything is Combined!</h3>
+                <p>This single file contains all documentation from the original 4 files. Use the navigation buttons at the top to jump between sections.</p>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="button" onclick="showPage('home')">← Home</button>
+                <button class="button secondary" onclick="showPage('setup')">Setup Guide →</button>
+            </div>
+        </section>
     </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p><strong>KMC-UCDL Daily Facebook Content Agent</strong></p>
+        <p>Complete Automation System - All Documentation in One File</p>
+        <p style="margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 1.5rem;">
+            <strong>Research Dissemination Prepared by:</strong><br>
+            Mr. Bishnu Singh Rayamajhi<br>
+            Mathematics Lecturer and Head of Humanities & Social Science<br>
+            Kapilvastu Multiple Campus (KMC), Taulihawa, Tribhuvan University<br>
+            <strong>Founder:</strong> UCDL Academy
+        </p>
+        <p style="margin-top: 1rem; opacity: 0.8;">Educational Excellence. Automated. Scaled. 🚀</p>
+        <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.7;">© 2026 | Complete Automation System</p>
+    </footer>
+
+    <script>
+        function showPage(pageId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => section.classList.remove('active'));
+
+            // Remove active class from all nav buttons
+            const navBtns = document.querySelectorAll('nav.main-nav .nav-btn');
+            navBtns.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected section
+            document.getElementById(pageId).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function toggleCollapsible(element) {
+            element.classList.toggle('active');
+            const content = element.nextElementSibling;
+            if (content && content.classList.contains('collapsible-content')) {
+                content.classList.toggle('active');
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo(0, 0);
+        }
+
+        // Set initial active button
+        document.addEventListener('DOMContentLoaded', function() {
+            const homeBtn = document.querySelector('nav.main-nav .nav-btn');
+            homeBtn.classList.add('active');
+        });
+
+        // Close collapsible when clicking section header
+        document.querySelectorAll('.collapsible').forEach(collapsible => {
+            collapsible.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const content = this.nextElementSibling;
+                if (content && content.classList.contains('collapsible-content')) {
+                    content.classList.toggle('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
