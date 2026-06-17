@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KMC-UCDL Personal Branding AI Agent v2.0 | Bishnu Singh Rayamajhi</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a73e8;
+            --secondary: #34a853;
+            --accent: #fbbc04;
+            --danger: #ea4335;
+            --dark: #1a1a2e;
+            --darker: #0f0f1a;
+            --card-bg: rgba(255,255,255,0.05);
+            --border: rgba(255,255,255,0.1);
+            --text: #e0e0e0;
+            --text-muted: #888;
+            --glass: rgba(255,255,255,0.03);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 80%, rgba(26,115,232,0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(52,168,83,0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(251,188,4,0.05) 0%, transparent 70%);
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--dark) 0%, rgba(26,115,232,0.1) 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            border: 3px solid rgba(255,255,255,0.2);
+            box-shadow: 0 0 20px rgba(26,115,232,0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(26,115,232,0.3); }
+            50% { box-shadow: 0 0 40px rgba(26,115,232,0.5); }
+        }
+
+        .title-block h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+
+        .title-block p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .status-bar {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--secondary);
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .live-badge {
+            background: linear-gradient(90deg, var(--danger), #ff6b6b);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 30px 40px;
+        }
+
+        /* Section Headers */
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 30px 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fff;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .kpi-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 40px rgba(26,115,232,0.15);
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .kpi-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .kpi-icon.views { background: rgba(26,115,232,0.15); }
+        .kpi-icon.engagement { background: rgba(52,168,83,0.15); }
+        .kpi-icon.followers { background: rgba(251,188,4,0.15); }
+        .kpi-icon.earnings { background: rgba(234,67,53,0.15); }
+        .kpi-icon.reach { background: rgba(155,89,182,0.15); }
+        .kpi-icon.shares { background: rgba(26,188,156,0.15); }
+
+        .kpi-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .kpi-trend {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .trend-up { color: var(--secondary); }
+        .trend-down { color: var(--danger); }
+
+        .trend-arrow {
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        /* Charts Section */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .chart-badge {
+            padding: 4px 12px;
+            background: rgba(52,168,83,0.15);
+            color: var(--secondary);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        /* Automation Flow */
+        .flow-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .flow-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            position: relative;
+        }
+
+        .flow-timeline::before {
+            content: '';
+            position: absolute;
+            left: 24px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 16px 0;
+            position: relative;
+        }
+
+        .flow-step.active .flow-number {
+            background: var(--secondary);
+            box-shadow: 0 0 20px rgba(52,168,83,0.4);
+        }
+
+        .flow-step.active .flow-content {
+            background: rgba(52,168,83,0.05);
+            border-color: var(--secondary);
+        }
+
+        .flow-number {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--dark);
+            border: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #fff;
+            z-index: 1;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .flow-content {
+            flex: 1;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .flow-content h4 {
+            font-size: 1rem;
+            margin-bottom: 6px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .flow-content p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .flow-time {
+            font-size: 0.75rem;
+            color: var(--accent);
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        /* Content Calendar */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .calendar-day {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .calendar-day:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+        }
+
+        .calendar-day.today {
+            border-color: var(--accent);
+            background: rgba(251,188,4,0.05);
+        }
+
+        .day-name {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .day-content {
+            font-size: 0.85rem;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .day-emoji {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        /* Post Preview */
+        .post-preview {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .post-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .post-meta h4 {
+            font-size: 1rem;
+            color: #fff;
+        }
+
+        .post-meta span {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .post-body {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text);
+            margin-bottom: 16px;
+            padding: 16px;
+            background: var(--glass);
+            border-radius: 12px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .post-hashtags {
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .post-stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .post-stat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* System Architecture */
+        .architecture-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .arch-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .arch-layer {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .arch-box {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 24px;
+            text-align: center;
+            min-width: 140px;
+            transition: all 0.3s ease;
+        }
+
+        .arch-box:hover {
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .arch-box.primary {
+            background: rgba(26,115,232,0.1);
+            border-color: var(--primary);
+        }
+
+        .arch-box.secondary {
+            background: rgba(52,168,83,0.1);
+            border-color: var(--secondary);
+        }
+
+        .arch-box.accent {
+            background: rgba(251,188,4,0.1);
+            border-color: var(--accent);
+        }
+
+        .arch-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .arch-value {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .arch-arrow {
+            font-size: 1.5rem;
+            color: var(--primary);
+            animation: bounce 2s infinite;
+        }
+
+        /* Data Table */
+        .table-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            overflow-x: auto;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px 16px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        tr:hover td {
+            background: var(--glass);
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(52,168,83,0.15);
+            color: var(--secondary);
+        }
+
+        .badge-pending {
+            background: rgba(251,188,4,0.15);
+            color: var(--accent);
+        }
+
+        /* Earnings Section */
+        .earnings-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .earning-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .earning-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--danger));
+        }
+
+        .earning-period {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .earning-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .earning-note {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            border-top: 1px solid var(--border);
+            padding: 30px 40px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .footer p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer .name {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            .calendar-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .earnings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px 20px;
+            }
+            .container {
+                padding: 20px;
+            }
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .calendar-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .status-bar {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--darker);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* Loading animation for live data */
+        .live-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--danger);
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: live-pulse 1.5s infinite;
+        }
+
+        @keyframes live-pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Notification Toast */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .toast {
+            background: var(--dark);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 24px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .toast-icon {
+            font-size: 1.5rem;
+        }
+
+        .toast-content h4 {
+            font-size: 0.9rem;
+            color: #fff;
+            margin-bottom: 2px;
+        }
+
+        .toast-content p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo-section">
+            <div class="profile-avatar">BSR</div>
+            <div class="title-block">
+                <h1>KMC-UCDL Personal Branding AI Agent v2.0</h1>
+                <p>Bishnu Singh Rayamajhi | Math Lecturer, KMC | Founder, UCDL Academy</p>
+            </div>
+        </div>
+        <div class="status-bar">
+            <div class="status-item">
+                <span class="status-dot"></span>
+                <span>System Online</span>
+            </div>
+            <div class="status-item">
+                <span>🕐</span>
+                <span id="current-time">--:-- NST</span>
+            </div>
+            <div class="live-badge">
+                <span class="live-indicator"></span>
+                LIVE
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- KPI Dashboard -->
+        <div class="section-title">📊 Facebook Growth Dashboard</div>
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-icon views">👁️</div>
+                <div class="kpi-label">Profile Views</div>
+                <div class="kpi-value" id="views-count">2,847</div>
+                <div class="kpi-trend trend-up">
+                    <span class="trend-arrow">↑</span>
+                    <span>+15% today</span>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon engagement">💬</div>
+                <div class="kpi-label">Engagement Rate</div>
+                <div class="kpi-value" id="engagement-rate">12.5%</div>
+                <div class="kpi-trend trend-up">
+                    <span class="trend-arrow">↑</span>
+                    <span>+18% today</span>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon followers">👥</div>
+                <div class="kpi-label">Net Followers</div>
+                <div class="kpi-value" id="followers-count">+9</div>
+                <div class="kpi-trend trend-up">
+                    <span class="trend-arrow">↑</span>
+                    <span>+270 this month</span>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon reach">📡</div>
+                <div class="kpi-label">Reach</div>
+                <div class="kpi-value" id="reach-count">48.5K</div>
+                <div class="kpi-trend trend-up">
+                    <span class="trend-arrow">↑</span>
+                    <span>+12% today</span>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon shares">🔄</div>
+                <div class="kpi-label">Shares</div>
+                <div class="kpi-value" id="shares-count">156</div>
+                <div class="kpi-trend trend-up">
+                    <span class="trend-arrow">↑</span>
+                    <span>+8% today</span>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon earnings">💰</div>
+                <div class="kpi-label">Est. Earnings</div>
+                <div class="kpi-value" id="earnings">$2.50</div>
+                <div class="kpi-trend trend-up">
+                    <span class="trend-arrow">↑</span>
+                    <span>+5% today</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="section-title">📈 Analytics Overview</div>
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <span class="chart-title">30-Day Growth Trend</span>
+                    <span class="chart-badge">📈 Increasing</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="growthChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <span class="chart-title">Content Performance</span>
+                    <span class="chart-badge">🎯 Optimized</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="contentChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Automation Flow -->
+        <div class="section-title">⚡ Daily Automation Flow (7:00 AM NST)</div>
+        <div class="flow-section">
+            <div class="flow-timeline" id="automation-flow">
+                <div class="flow-step active" data-step="1">
+                    <div class="flow-number">1</div>
+                    <div class="flow-content">
+                        <h4>🔔 Trigger</h4>
+                        <p>Cron schedule fires at 7:00 AM NST ("15 1 * * *")</p>
+                        <div class="flow-time">7:00:00 AM NST</div>
+                    </div>
+                </div>
+                <div class="flow-step" data-step="2">
+                    <div class="flow-number">2</div>
+                    <div class="flow-content">
+                        <h4>📅 Get Date/Time Context</h4>
+                        <p>Determine day name, Nepali month, weekend status</p>
+                        <div class="flow-time">7:00:01 AM NST</div>
+                    </div>
+                </div>
+                <div class="flow-step" data-step="3">
+                    <div class="flow-number">3</div>
+                    <div class="flow-content">
+                        <h4>📊 Analyze Facebook Metrics</h4>
+                        <p>Fetch views, engagement, followers, reach data</p>
+                        <div class="flow-time">7:00:02 AM NST</div>
+                    </div>
+                </div>
+                <div class="flow-step" data-step="4">
+                    <div class="flow-number">4</div>
+                    <div class="flow-content">
+                        <h4>📈 Analyze Previous Post Performance</h4>
+                        <p>Review likes, comments, shares, best performing content</p>
+                        <div class="flow-time">7:00:03 AM NST</div>
+                    </div>
+                </div>
+                <div class="flow-step" data-step="5">
+                    <div class="flow-number">5</div>
+                    <div class="flow-content">
+                        <h4>🎯 Select Best Content Category</h4>
+                        <p>AI selects optimal content type based on performance data</p>
+                        <div class="flow-time">7:00:04 AM NST</div>
+                    </div>
+                </div>
+                <div class="flow-step" data-step="6">
+                    <div class="flow-number">6</div>
+                    <div class="flow-content">
+                        <h4>✍️ OpenAI Generates Optimized Content</h4>
+                        <p>GPT-4 Turbo creates post with temperature 0.8, max 300 tokens</p>
+                        <div class="flow-time">7:00:06 AM NST</div>
+                    </div>
+                </div>
+                <div class="flow-step" data-step="7">
+                    <div class="flow-number">7</div>
+                    <div class="flow-content">
+                        <h4>📱 Post to Facebook Page & Profile</h4>
+                        <p>Graph API v18.0 publishes content with access token</p>
+                        <div class="flow-time">7:00:08 AM NST</div>
+                    </div>
+                </div>
+                <div class="flow-step" data-step="8">
+                    <div class="flow-number">8</div>
+                    <div class="flow-content">
+                        <h4>📋 Record Metrics in Google Sheets</h4>
+                        <p>Log date, content, post ID, character count, status</p>
+                        <div class="flow-time">7:00:10 AM NST</div>
+                    </div>
+                </div>
+                <div class="flow-step" data-step="9">
+                    <div class="flow-number">9</div>
+                    <div class="flow-content">
+                        <h4>📊 Generate Daily Growth Report</h4>
+                        <p>Compile views, reach, engagement, follower growth</p>
+                        <div class="flow-time">7:00:12 AM NST</div>
+                    </div>
+                </div>
+                <div class="flow-step" data-step="10">
+                    <div class="flow-number">10</div>
+                    <div class="flow-content">
+                        <h4>📩 Send Telegram Notification</h4>
+                        <p>Alert sent with post summary and growth metrics</p>
+                        <div class="flow-time">7:00:15 AM NST</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Calendar -->
+        <div class="section-title">📅 Weekly Content Calendar</div>
+        <div class="calendar-grid">
+            <div class="calendar-day">
+                <div class="day-emoji">📚</div>
+                <div class="day-name">Monday</div>
+                <div class="day-content">Study Tips (40%)<br>Good Morning (60%)</div>
+            </div>
+            <div class="calendar-day">
+                <div class="day-emoji">🌅</div>
+                <div class="day-name">Tuesday</div>
+                <div class="day-content">Good Morning<br>Success Story</div>
+            </div>
+            <div class="calendar-day">
+                <div class="day-emoji">📢</div>
+                <div class="day-name">Wednesday</div>
+                <div class="day-content">Announcement<br>Good Morning</div>
+            </div>
+            <div class="calendar-day">
+                <div class="day-emoji">🚀</div>
+                <div class="day-name">Thursday</div>
+                <div class="day-content">Good Morning<br>Motivation</div>
+            </div>
+            <div class="calendar-day">
+                <div class="day-emoji">🎯</div>
+                <div class="day-name">Friday</div>
+                <div class="day-content">Weekly Wrap<br>Motivation</div>
+            </div>
+            <div class="calendar-day">
+                <div class="day-emoji">😂</div>
+                <div class="day-name">Saturday</div>
+                <div class="day-content">Meme<br>Q&A Session</div>
+            </div>
+            <div class="calendar-day today">
+                <div class="day-emoji">💫</div>
+                <div class="day-name">Sunday</div>
+                <div class="day-content">Good Morning<br>Motivation</div>
+            </div>
+        </div>
+
+        <!-- Post Preview -->
+        <div class="section-title">✍️ Today's Generated Post Preview</div>
+        <div class="post-preview">
+            <div class="post-header">
+                <div class="post-avatar">BSR</div>
+                <div class="post-meta">
+                    <h4>Bishnu Singh Rayamajhi</h4>
+                    <span>Math Lecturer at KMC | Founder, UCDL Academy • Just now</span>
+                </div>
+            </div>
+            <div class="post-body" id="post-preview-text">
+                Good Morning, KMC Warriors! 🌅<br><br>
+                Every new day is a chance to rewrite your story.<br>
+                Today, spend 30 mins on something that scares you.<br>
+                Let's grow! 💪
+            </div>
+            <div class="post-hashtags">#GoodMorning #KMC #UCDL #Education #Nepal</div>
+            <div class="post-stats">
+                <div class="post-stat">❤️ 124 Likes</div>
+                <div class="post-stat">💬 18 Comments</div>
+                <div class="post-stat">🔄 32 Shares</div>
+                <div class="post-stat">👁️ 1,240 Views</div>
+            </div>
+        </div>
+
+        <!-- System Architecture -->
+        <div class="section-title">🏗️ System Architecture</div>
+        <div class="architecture-section">
+            <div class="arch-diagram">
+                <div class="arch-layer">
+                    <div class="arch-box primary">
+                        <div class="arch-label">You (Human)</div>
+                        <div class="arch-value">5 min/week</div>
+                    </div>
+                </div>
+                <div class="arch-arrow">⬇️</div>
+                <div class="arch-layer">
+                    <div class="arch-box primary">
+                        <div class="arch-label">n8n Cloud</div>
+                        <div class="arch-value">9 Nodes</div>
+                    </div>
+                </div>
+                <div class="arch-arrow">⬇️</div>
+                <div class="arch-layer">
+                    <div class="arch-box secondary">
+                        <div class="arch-label">OpenAI</div>
+                        <div class="arch-value">GPT-4 Turbo</div>
+                    </div>
+                    <div class="arch-box secondary">
+                        <div class="arch-label">Facebook</div>
+                        <div class="arch-value">Graph API v18</div>
+                    </div>
+                    <div class="arch-box secondary">
+                        <div class="arch-label">Google Sheets</div>
+                        <div class="arch-value">OAuth2</div>
+                    </div>
+                    <div class="arch-box secondary">
+                        <div class="arch-label">Telegram</div>
+                        <div class="arch-value">Bot API</div>
+                    </div>
+                </div>
+                <div class="arch-arrow">⬇️</div>
+                <div class="arch-layer">
+                    <div class="arch-box accent">
+                        <div class="arch-label">Output</div>
+                        <div class="arch-value">✅ Published</div>
+                    </div>
+                    <div class="arch-box accent">
+                        <div class="arch-label">Log</div>
+                        <div class="arch-value">📊 Tracked</div>
+                    </div>
+                    <div class="arch-box accent">
+                        <div class="arch-label">Alert</div>
+                        <div class="arch-value">📩 Sent</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Google Sheets Schema -->
+        <div class="section-title">📋 Google Sheets Analytics Database</div>
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Content Type</th>
+                        <th>Post ID</th>
+                        <th>Reach</th>
+                        <th>Views</th>
+                        <th>Likes</th>
+                        <th>Comments</th>
+                        <th>Shares</th>
+                        <th>New Followers</th>
+                        <th>Est. Earnings</th>
+                        <th>Growth Rate</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="sheets-data">
+                    <tr>
+                        <td>17/06/2026</td>
+                        <td>Motivation</td>
+                        <td>123_456789</td>
+                        <td>2,847</td>
+                        <td>1,240</td>
+                        <td>124</td>
+                        <td>18</td>
+                        <td>32</td>
+                        <td>+9</td>
+                        <td>$2.50</td>
+                        <td>+15%</td>
+                        <td><span class="badge badge-success">SUCCESS</span></td>
+                    </tr>
+                    <tr>
+                        <td>16/06/2026</td>
+                        <td>Study Tips</td>
+                        <td>123_456788</td>
+                        <td>2,456</td>
+                        <td>1,080</td>
+                        <td>98</td>
+                        <td>15</td>
+                        <td>28</td>
+                        <td>+7</td>
+                        <td>$2.15</td>
+                        <td>+12%</td>
+                        <td><span class="badge badge-success">SUCCESS</span></td>
+                    </tr>
+                    <tr>
+                        <td>15/06/2026</td>
+                        <td>Good Morning</td>
+                        <td>123_456787</td>
+                        <td>2,680</td>
+                        <td>1,150</td>
+                        <td>112</td>
+                        <td>22</td>
+                        <td>35</td>
+                        <td>+11</td>
+                        <td>$2.35</td>
+                        <td>+14%</td>
+                        <td><span class="badge badge-success">SUCCESS</span></td>
+                    </tr>
+                    <tr>
+                        <td>14/06/2026</td>
+                        <td>Study Tips</td>
+                        <td>123_456786</td>
+                        <td>2,120</td>
+                        <td>920</td>
+                        <td>87</td>
+                        <td>12</td>
+                        <td>21</td>
+                        <td>+5</td>
+                        <td>$1.85</td>
+                        <td>+9%</td>
+                        <td><span class="badge badge-success">SUCCESS</span></td>
+                    </tr>
+                    <tr>
+                        <td>13/06/2026</td>
+                        <td>Weekly Wrap</td>
+                        <td>123_456785</td>
+                        <td>3,120</td>
+                        <td>1,450</td>
+                        <td>156</td>
+                        <td>34</td>
+                        <td>48</td>
+                        <td>+15</td>
+                        <td>$2.80</td>
+                        <td>+18%</td>
+                        <td><span class="badge badge-success">SUCCESS</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Earnings Tracker -->
+        <div class="section-title">💰 Estimated Earnings Tracker</div>
+        <div class="earnings-grid">
+            <div class="earning-card">
+                <div class="earning-period">Daily</div>
+                <div class="earning-amount" id="daily-earning">$2.50</div>
+                <div class="earning-note">Based on current engagement</div>
+            </div>
+            <div class="earning-card">
+                <div class="earning-period">Monthly</div>
+                <div class="earning-amount" id="monthly-earning">$75.00</div>
+                <div class="earning-note">Projected: $75/month</div>
+            </div>
+            <div class="earning-card">
+                <div class="earning-period">Yearly</div>
+                <div class="earning-amount" id="yearly-earning">$900.00</div>
+                <div class="earning-note">Projected: $900/year</div>
+            </div>
+        </div>
+
+        <!-- Monthly Summary -->
+        <div class="section-title">📊 Monthly Summary</div>
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-icon views">📈</div>
+                <div class="kpi-label">Total Followers Gained</div>
+                <div class="kpi-value">+270</div>
+                <div class="kpi-trend trend-up">
+                    <span class="trend-arrow">↑</span>
+                    <span>This Month</span>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon engagement">📡</div>
+                <div class="kpi-label">Total Reach</div>
+                <div class="kpi-value">48.5K</div>
+                <div class="kpi-trend trend-up">
+                    <span class="trend-arrow">↑</span>
+                    <span>This Month</span>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon followers">💬</div>
+                <div class="kpi-label">Total Engagement</div>
+                <div class="kpi-value">6,200</div>
+                <div class="kpi-trend trend-up">
+                    <span class="trend-arrow">↑</span>
+                    <span>This Month</span>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon earnings">🎯</div>
+                <div class="kpi-label">Best Category</div>
+                <div class="kpi-value">Motivation</div>
+                <div class="kpi-trend trend-up">
+                    <span class="trend-arrow">↑</span>
+                    <span>12.5% avg engagement</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Objectives -->
+        <div class="section-title">🎯 System Objectives</div>
+        <div class="flow-section">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+                <div class="flow-content" style="border-left: 3px solid var(--primary);">
+                    <h4>✅ Increase Profile Views</h4>
+                    <p>Target: +15% daily growth through optimized content timing</p>
+                </div>
+                <div class="flow-content" style="border-left: 3px solid var(--secondary);">
+                    <h4>✅ Increase Post Engagement</h4>
+                    <p>Target: 12.5% engagement rate via AI-optimized hashtags</p>
+                </div>
+                <div class="flow-content" style="border-left: 3px solid var(--accent);">
+                    <h4>✅ Increase Followers</h4>
+                    <p>Target: +270/month through consistent daily posting</p>
+                </div>
+                <div class="flow-content" style="border-left: 3px solid #9b59b6;">
+                    <h4>✅ Promote KMC & UCDL</h4>
+                    <p>Brand awareness through educational content</p>
+                </div>
+                <div class="flow-content" style="border-left: 3px solid #1abc9c;">
+                    <h4>✅ Share AI, Math, Research Content</h4>
+                    <p>Position as thought leader in education technology</p>
+                </div>
+                <div class="flow-content" style="border-left: 3px solid var(--danger);">
+                    <h4>✅ Generate Daily Reports & Alerts</h4>
+                    <p>Automated Telegram notifications with growth metrics</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Prepared by <span class="name">Mr. Bishnu Singh Rayamajhi</span></p>
+        <p style="margin-top: 8px;">Math Lecturer, Kapilvastu Multiple Campus (KMC), Taulihawa | Head of Humanity & Social Science | Founder, UCDL Academy</p>
+        <p style="margin-top: 8px; font-size: 0.8rem;">KMC-UCDL Personal Branding AI Agent v2.0 | Automated Facebook Growth System</p>
+    </footer>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script>
+        // Create particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            const options = { 
+                timeZone: 'Asia/Kathmandu', 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit',
+                hour12: true 
+            };
+            document.getElementById('current-time').textContent = 
+                now.toLocaleTimeString('en-US', options) + ' NST';
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // Simulate live data updates
+        function simulateLiveData() {
+            const metrics = {
+                'views-count': { base: 2847, variance: 50 },
+                'engagement-rate': { base: 12.5, variance: 0.5, suffix: '%' },
+                'followers-count': { base: 9, variance: 1, prefix: '+' },
+                'reach-count': { base: 48500, variance: 200, suffix: 'K', divide: 1000 },
+                'shares-count': { base: 156, variance: 5 },
+                'earnings': { base: 2.50, variance: 0.10, prefix: '$' }
+            };
+
+            Object.keys(metrics).forEach(id => {
+                const metric = metrics[id];
+                const change = (Math.random() - 0.5) * metric.variance;
+                let value = metric.base + change;
+                if (metric.divide) value = value / metric.divide;
+
+                let display = value.toFixed(metric.base < 100 ? 1 : 0);
+                if (metric.prefix) display = metric.prefix + display;
+                if (metric.suffix) display = display + metric.suffix;
+
+                document.getElementById(id).textContent = display;
+            });
+        }
+        setInterval(simulateLiveData, 5000);
+
+        // Automation flow animation
+        let currentStep = 1;
+        const totalSteps = 10;
+
+        function animateFlow() {
+            document.querySelectorAll('.flow-step').forEach(step => {
+                step.classList.remove('active');
+            });
+
+            const activeStep = document.querySelector(`[data-step="${currentStep}"]`);
+            if (activeStep) {
+                activeStep.classList.add('active');
+                activeStep.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            currentStep = currentStep >= totalSteps ? 1 : currentStep + 1;
+        }
+
+        // Start flow animation
+        setInterval(animateFlow, 3000);
+        animateFlow();
+
+        // Charts
+        const growthCtx = document.getElementById('growthChart').getContext('2d');
+        const growthChart = new Chart(growthCtx, {
+            type: 'line',
+            data: {
+                labels: ['Day 1', 'Day 5', 'Day 10', 'Day 15', 'Day 20', 'Day 25', 'Day 30'],
+                datasets: [{
+                    label: 'Views',
+                    data: [1200, 1450, 1680, 1920, 2150, 2480, 2847],
+                    borderColor: '#1a73e8',
+                    backgroundColor: 'rgba(26,115,232,0.1)',
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'Followers',
+                    data: [50, 78, 120, 165, 210, 245, 270],
+                    borderColor: '#34a853',
+                    backgroundColor: 'rgba(52,168,83,0.1)',
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'Engagement',
+                    data: [800, 950, 1100, 1350, 1580, 1820, 2100],
+                    borderColor: '#fbbc04',
+                    backgroundColor: 'rgba(251,188,4,0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: '#e0e0e0' }
+                    }
+                },
+                scales: {
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#888' }
+                    },
+                    x: {
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#888' }
+                    }
+                }
+            }
+        });
+
+        const contentCtx = document.getElementById('contentChart').getContext('2d');
+        const contentChart = new Chart(contentCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Motivation', 'Study Tips', 'Good Morning', 'Weekly Wrap', 'Success Story', 'Meme/Q&A'],
+                datasets: [{
+                    data: [35, 25, 20, 10, 7, 3],
+                    backgroundColor: [
+                        '#1a73e8',
+                        '#34a853',
+                        '#fbbc04',
+                        '#ea4335',
+                        '#9b59b6',
+                        '#1abc9c'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { 
+                            color: '#e0e0e0',
+                            padding: 20,
+                            font: { size: 12 }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Toast notifications
+        function showToast(title, message, icon) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `
+                <div class="toast-icon">${icon}</div>
+                <div class="toast-content">
+                    <h4>${title}</h4>
+                    <p>${message}</p>
+                </div>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 5000);
+        }
+
+        // Simulate notifications
+        const notifications = [
+            { title: 'Post Published', message: 'Good Morning post live on Facebook', icon: '📱' },
+            { title: 'Growth Alert', message: 'Views increased by 15% in last hour', icon: '📈' },
+            { title: 'New Follower', message: '+3 new followers from latest post', icon: '👥' },
+            { title: 'High Engagement', message: 'Motivation post reached 500 views', icon: '🔥' }
+        ];
+
+        let notifIndex = 0;
+        setInterval(() => {
+            const notif = notifications[notifIndex % notifications.length];
+            showToast(notif.title, notif.message, notif.icon);
+            notifIndex++;
+        }, 15000);
+
+        // Post rotation for preview
+        const posts = [
+            `Good Morning, KMC Warriors! 🌅<br><br>
+            Every new day is a chance to rewrite your story.<br>
+            Today, spend 30 mins on something that scares you.<br>
+            Let's grow! 💪`,
+
+            `📚 STUDY TIP: Active Recall saves time & improves memory!<br><br>
+            Instead of re-reading notes, test yourself.<br>
+            Try 5 questions from yesterday's class today.<br>
+            Your brain will thank you! 🧠`,
+
+            `That voice saying "You can't do this"? 🚀<br><br>
+            Listen closer. It's your growth edge.<br>
+            Every expert was once a beginner doubting themselves.<br>
+            Do ONE thing that scares you today. 💫`,
+
+            `🎯 THIS WEEK'S LESSONS:<br><br>
+            1️⃣ Active recall > passive reading<br>
+            2️⃣ Asking help is strength, not weakness<br>
+            3️⃣ Study groups multiply learning (if focused)<br>
+            Grateful for: Peers, patience, progress 💪`
+        ];
+
+        let postIndex = 0;
+        setInterval(() => {
+            postIndex = (postIndex + 1) % posts.length;
+            document.getElementById('post-preview-text').innerHTML = posts[postIndex];
+        }, 10000);
+
+        // Add new row to sheets table periodically
+        setInterval(() => {
+            const tbody = document.getElementById('sheets-data');
+            const rows = tbody.querySelectorAll('tr');
+            if (rows.length > 10) {
+                tbody.removeChild(rows[rows.length - 1]);
+            }
+
+            const newRow = document.createElement('tr');
+            const date = new Date();
+            const dateStr = date.toLocaleDateString('en-GB');
+            const types = ['Motivation', 'Study Tips', 'Good Morning', 'Announcement'];
+            const type = types[Math.floor(Math.random() * types.length)];
+
+            newRow.innerHTML = `
+                <td>${dateStr}</td>
+                <td>${type}</td>
+                <td>123_${456789 + Math.floor(Math.random() * 1000)}</td>
+                <td>${Math.floor(2000 + Math.random() * 1000)}</td>
+                <td>${Math.floor(800 + Math.random() * 500)}</td>
+                <td>${Math.floor(80 + Math.random() * 50)}</td>
+                <td>${Math.floor(10 + Math.random() * 20)}</td>
+                <td>${Math.floor(20 + Math.random() * 30)}</td>
+                <td>+${Math.floor(5 + Math.random() * 10)}</td>
+                <td>$${(1.5 + Math.random() * 1.5).toFixed(2)}</td>
+                <td>+${Math.floor(8 + Math.random() * 10)}%</td>
+                <td><span class="badge badge-success">SUCCESS</span></td>
+            `;
+            tbody.insertBefore(newRow, tbody.firstChild);
+        }, 30000);
+    </script>
+</body>
+</html>
