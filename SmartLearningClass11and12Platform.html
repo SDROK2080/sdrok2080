@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMART Learning Platform - Class 11 & 12 NEB | UCDL Academy</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #0ea5e9;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .logo-main {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-sub {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .exam-countdown {
+            background: rgba(255,255,255,0.15);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .countdown-label {
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .countdown-value {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin: 8px 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255,255,255,0.25);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .nav-icon {
+            font-size: 18px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--light);
+            overflow: hidden;
+        }
+
+        .header {
+            background: white;
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .header h1 {
+            font-size: 26px;
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .header-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        .module {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .module.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        /* Dashboard Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-top: 4px solid var(--primary);
+        }
+
+        .stat-card.success { border-top-color: var(--success); }
+        .stat-card.warning { border-top-color: var(--warning); }
+        .stat-card.danger { border-top-color: var(--danger); }
+        .stat-card.info { border-top-color: var(--info); }
+
+        .stat-label {
+            font-size: 12px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .stat-change {
+            font-size: 12px;
+            color: var(--success);
+        }
+
+        /* Subject Grid */
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .subject-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+
+        .subject-header {
+            padding: 20px;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .subject-content {
+            padding: 20px;
+        }
+
+        .subject-content p {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 15px;
+        }
+
+        .subject-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .subject-stat {
+            text-align: center;
+        }
+
+        .subject-stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .subject-stat-label {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--light);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.6);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        /* Tables */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--light);
+            border-bottom: 2px solid var(--border);
+        }
+
+        th {
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 13px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 13px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-primary {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            border-left: 4px solid var(--success);
+            color: #065f46;
+        }
+
+        .alert-info {
+            background: #cffafe;
+            border-left: 4px solid var(--info);
+            color: #0c4a6e;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            border-left: 4px solid var(--warning);
+            color: #92400e;
+        }
+
+        /* Charts Container */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: relative;
+            min-height: 300px;
+        }
+
+        .chart-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-header h2 {
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #94a3b8;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: var(--dark);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .tab {
+            padding: 12px 20px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: #64748b;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            margin-bottom: -2px;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab:hover {
+            color: var(--dark);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Study Card */
+        .study-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .study-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+        }
+
+        .study-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .study-meta {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                max-height: 70px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                overflow-x: auto;
+                padding: 10px 15px;
+            }
+
+            .logo {
+                display: none;
+            }
+
+            .exam-countdown {
+                display: none;
+            }
+
+            .nav-menu {
+                display: flex;
+                gap: 5px;
+                margin: 0;
+            }
+
+            .nav-item {
+                margin: 0;
+                white-space: nowrap;
+            }
+
+            .nav-link {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .subject-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            th, td {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 11px;
+            color: #64748b;
+            border-top: 1px solid var(--border);
+            background: white;
+        }
+
+        .attribution {
+            color: var(--primary);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-main">📚 SMART Learn</div>
+                <div class="logo-sub">Class 11 & 12 NEB</div>
+            </div>
+            <div class="exam-countdown">
+                <div class="countdown-label">📅 Board Exam</div>
+                <div class="countdown-value">245 Days</div>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a class="nav-link active" data-module="dashboard">
+                        <span class="nav-icon">📊</span> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-module="subjects">
+                        <span class="nav-icon">📖</span> Subjects
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-module="mock-exams">
+                        <span class="nav-icon">✍️</span> Mock Exams
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-module="study-notes">
+                        <span class="nav-icon">📝</span> Study Notes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-module="resources">
+                        <span class="nav-icon">🎓</span> Resources
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-module="schedule">
+                        <span class="nav-icon">⏰</span> Schedule
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-module="analytics">
+                        <span class="nav-icon">📈</span> Analytics
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-module="forum">
+                        <span class="nav-icon">💬</span> Forum
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div>
+                    <h1 id="page-title">📊 Dashboard</h1>
+                </div>
+                <div class="header-info">
+                    <span id="current-date"></span>
+                    <div class="header-info">
+                        <div class="user-avatar">ST</div>
+                        <span>Student Account</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content">
+                <!-- Dashboard Module -->
+                <div id="dashboard" class="module active">
+                    <div class="alert alert-success">
+                        <span>✓</span> Welcome to SMART Learning Platform - Your guide to NEB success! 🎓
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">📚 Subjects Enrolled</div>
+                            <div class="stat-value">8</div>
+                            <div class="stat-change">All NEB subjects</div>
+                        </div>
+                        <div class="stat-card success">
+                            <div class="stat-label">✓ Topics Completed</div>
+                            <div class="stat-value">42</div>
+                            <div class="stat-change">Out of 156 total</div>
+                        </div>
+                        <div class="stat-card warning">
+                            <div class="stat-label">✍️ Mock Tests Taken</div>
+                            <div class="stat-value">12</div>
+                            <div class="stat-change">Avg Score: 75%</div>
+                        </div>
+                        <div class="stat-card info">
+                            <div class="stat-label">📖 Study Hours</div>
+                            <div class="stat-value">145</div>
+                            <div class="stat-change">This month: 45 hrs</div>
+                        </div>
+                    </div>
+
+                    <h2 style="margin: 30px 0 20px; font-size: 18px; color: var(--dark);">📖 NEB Subjects Overview</h2>
+                    <div class="subject-grid">
+                        <div class="subject-card" onclick="switchModule('subjects')">
+                            <div class="subject-header" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">📐 Mathematics</div>
+                            <div class="subject-content">
+                                <p>Algebra, Trigonometry, Calculus, Geometry</p>
+                                <div class="subject-stats">
+                                    <div class="subject-stat">
+                                        <div class="subject-stat-value">8/12</div>
+                                        <div class="subject-stat-label">Chapters</div>
+                                    </div>
+                                    <div class="subject-stat">
+                                        <div class="subject-stat-value">75%</div>
+                                        <div class="subject-stat-label">Progress</div>
+                                    </div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 75%;"></div>
+                                </div>
+                                <button class="btn btn-primary btn-sm btn-block">View Topics →</button>
+                            </div>
+                        </div>
+
+                        <div class="subject-card" onclick="switchModule('subjects')">
+                            <div class="subject-header" style="background: linear-gradient(135deg, #0ea5e9, #06b6d4);">🔬 Physics</div>
+                            <div class="subject-content">
+                                <p>Mechanics, Electricity, Optics, Modern Physics</p>
+                                <div class="subject-stats">
+                                    <div class="subject-stat">
+                                        <div class="subject-stat-value">10/13</div>
+                                        <div class="subject-stat-label">Chapters</div>
+                                    </div>
+                                    <div class="subject-stat">
+                                        <div class="subject-stat-value">82%</div>
+                                        <div class="subject-stat-label">Progress</div>
+                                    </div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 82%;"></div>
+                                </div>
+                                <button class="btn btn-primary btn-sm btn-block">View Topics →</button>
+                            </div>
+                        </div>
+
+                        <div class="subject-card" onclick="switchModule('subjects')">
+                            <div class="subject-header" style="background: linear-gradient(135deg, #10b981, #059669);">🧪 Chemistry</div>
+                            <div class="subject-content">
+                                <p>Organic, Inorganic, Physical Chemistry</p>
+                                <div class="subject-stats">
+                                    <div class="subject-stat">
+                                        <div class="subject-stat-value">9/16</div>
+                                        <div class="subject-stat-label">Chapters</div>
+                                    </div>
+                                    <div class="subject-stat">
+                                        <div class="subject-stat-value">70%</div>
+                                        <div class="subject-stat-label">Progress</div>
+                                    </div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 70%;"></div>
+                                </div>
+                                <button class="btn btn-primary btn-sm btn-block">View Topics →</button>
+                            </div>
+                        </div>
+
+                        <div class="subject-card" onclick="switchModule('subjects')">
+                            <div class="subject-header" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">📚 English</div>
+                            <div class="subject-content">
+                                <p>Literature, Grammar, Composition, Reading</p>
+                                <div class="subject-stats">
+                                    <div class="subject-stat">
+                                        <div class="subject-stat-value">6/8</div>
+                                        <div class="subject-stat-label">Units</div>
+                                    </div>
+                                    <div class="subject-stat">
+                                        <div class="subject-stat-value">88%</div>
+                                        <div class="subject-stat-label">Progress</div>
+                                    </div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 88%;"></div>
+                                </div>
+                                <button class="btn btn-primary btn-sm btn-block">View Topics →</button>
+                            </div>
+                        </div>
+
+                        <div class="subject-card" onclick="switchModule('subjects')">
+                            <div class="subject-header" style="background: linear-gradient(135deg, #f59e0b, #d97706);">🌍 Nepali</div>
+                            <div class="subject-content">
+                                <p>Grammar, Literature, Essays, Prose</p>
+                                <div class="subject-stats">
+                                    <div class="subject-stat">
+                                        <div class="subject-stat-value">7/12</div>
+                                        <div class="subject-stat-label">Topics</div>
+                                    </div>
+                                    <div class="subject-stat">
+                                        <div class="subject-stat-value">72%</div>
+                                        <div class="subject-stat-label">Progress</div>
+                                    </div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 72%;"></div>
+                                </div>
+                                <button class="btn btn-primary btn-sm btn-block">View Topics →</button>
+                            </div>
+                        </div>
+
+                        <div class="subject-card" onclick="switchModule('subjects')">
+                            <div class="subject-header" style="background: linear-gradient(135deg, #ef4444, #dc2626);">📊 Statistics</div>
+                            <div class="subject-content">
+                                <p>Probability, Distribution, Correlation</p>
+                                <div class="subject-stats">
+                                    <div class="subject-stat">
+                                        <div class="subject-stat-value">5/10</div>
+                                        <div class="subject-stat-label">Chapters</div>
+                                    </div>
+                                    <div class="subject-stat">
+                                        <div class="subject-stat-value">68%</div>
+                                        <div class="subject-stat-label">Progress</div>
+                                    </div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 68%;"></div>
+                                </div>
+                                <button class="btn btn-primary btn-sm btn-block">View Topics →</button>
+                            </div>
+                        </div>
+
+                        <div class="subject-card" onclick="switchModule('subjects')">
+                            <div class="subject-header" style="background: linear-gradient(135deg, #14b8a6, #0d9488);">🌱 Biology</div>
+                            <div class="subject-content">
+                                <p>Cell, Genetics, Evolution, Ecology</p>
+                                <div class="subject-stats">
+                                    <div class="subject-stat">
+                                        <div class="subject-stat-value">9/14</div>
+                                        <div class="subject-stat-label">Chapters</div>
+                                    </div>
+                                    <div class="subject-stat">
+                                        <div class="subject-stat-value">80%</div>
+                                        <div class="subject-stat-label">Progress</div>
+                                    </div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 80%;"></div>
+                                </div>
+                                <button class="btn btn-primary btn-sm btn-block">View Topics →</button>
+                            </div>
+                        </div>
+
+                        <div class="subject-card" onclick="switchModule('subjects')">
+                            <div class="subject-header" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">💼 Accountancy</div>
+                            <div class="subject-content">
+                                <p>Fundamentals, Ledger, Trial Balance, Journal</p>
+                                <div class="subject-stats">
+                                    <div class="subject-stat">
+                                        <div class="subject-stat-value">8/11</div>
+                                        <div class="subject-stat-label">Chapters</div>
+                                    </div>
+                                    <div class="subject-stat">
+                                        <div class="subject-stat-value">76%</div>
+                                        <div class="subject-stat-label">Progress</div>
+                                    </div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 76%;"></div>
+                                </div>
+                                <button class="btn btn-primary btn-sm btn-block">View Topics →</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="charts-grid" style="margin-top: 30px;">
+                        <div class="chart-container">
+                            <div class="chart-title">📊 Weekly Study Progress</div>
+                            <canvas id="progressChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <div class="chart-title">📈 Subject Performance</div>
+                            <canvas id="performanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subjects Module -->
+                <div id="subjects" class="module">
+                    <div class="alert alert-info">
+                        <span>ℹ️</span> Complete NEB Class 11 & 12 curriculum with detailed explanations
+                    </div>
+
+                    <div class="form-row" style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                        <div class="form-group">
+                            <label>Filter by Subject</label>
+                            <select onchange="filterSubjects(this.value)">
+                                <option value="">All Subjects</option>
+                                <option value="mathematics">Mathematics</option>
+                                <option value="physics">Physics</option>
+                                <option value="chemistry">Chemistry</option>
+                                <option value="english">English</option>
+                                <option value="nepali">Nepali</option>
+                                <option value="statistics">Statistics</option>
+                                <option value="biology">Biology</option>
+                                <option value="accountancy">Accountancy</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Class</label>
+                            <select onchange="filterClass(this.value)">
+                                <option value="">All Classes</option>
+                                <option selected value="class11">Class 11</option>
+                                <option value="class12">Class 12</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="subjects-list"></div>
+                </div>
+
+                <!-- Mock Exams Module -->
+                <div id="mock-exams" class="module">
+                    <div class="alert alert-warning">
+                        <span>📝</span> Practice with realistic mock exams to prepare for NEB boards
+                    </div>
+
+                    <div class="btn-group" style="display: flex; gap: 10px; margin-bottom: 20px;">
+                        <button class="btn btn-primary" onclick="startMockExam()">
+                            ✍️ Start New Mock Exam
+                        </button>
+                        <button class="btn btn-outline" onclick="viewMockResults()">
+                            📊 View Results
+                        </button>
+                    </div>
+
+                    <div id="mock-exams-list"></div>
+                </div>
+
+                <!-- Study Notes Module -->
+                <div id="study-notes" class="module">
+                    <div class="btn-group" style="display: flex; gap: 10px; margin-bottom: 20px;">
+                        <button class="btn btn-primary" onclick="createNote()">
+                            ➕ Create New Note
+                        </button>
+                    </div>
+
+                    <div class="tabs" id="class-tabs">
+                        <button class="tab active" onclick="filterNotesByClass('11')">Class 11 Notes</button>
+                        <button class="tab" onclick="filterNotesByClass('12')">Class 12 Notes</button>
+                    </div>
+
+                    <div id="notes-list"></div>
+                </div>
+
+                <!-- Resources Module -->
+                <div id="resources" class="module">
+                    <div class="alert alert-success">
+                        <span>✓</span> Access curated study materials, past papers, and reference books
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">📚 E-Books</div>
+                            <div class="stat-value">45</div>
+                        </div>
+                        <div class="stat-card success">
+                            <div class="stat-label">📄 Past Papers</div>
+                            <div class="stat-value">60</div>
+                        </div>
+                        <div class="stat-card warning">
+                            <div class="stat-label">📹 Video Lectures</div>
+                            <div class="stat-value">128</div>
+                        </div>
+                        <div class="stat-card info">
+                            <div class="stat-label">🔗 Useful Links</div>
+                            <div class="stat-value">85</div>
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top: 30px; margin-bottom: 15px; color: var(--dark);">📚 Featured Resources</h3>
+                    <div id="resources-list"></div>
+                </div>
+
+                <!-- Schedule Module -->
+                <div id="schedule" class="module">
+                    <div class="alert alert-info">
+                        <span>⏰</span> Plan your study schedule and track daily progress
+                    </div>
+
+                    <div class="btn-group" style="display: flex; gap: 10px; margin-bottom: 20px;">
+                        <button class="btn btn-primary" onclick="createSchedule()">
+                            ➕ Create Study Plan
+                        </button>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Monday</th>
+                                    <th>Tuesday</th>
+                                    <th>Wednesday</th>
+                                    <th>Thursday</th>
+                                    <th>Friday</th>
+                                    <th>Saturday</th>
+                                </tr>
+                            </thead>
+                            <tbody id="schedule-table">
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3 style="margin-top: 30px; margin-bottom: 15px; color: var(--dark);">📅 Upcoming Exams</h3>
+                    <div id="exam-schedule"></div>
+                </div>
+
+                <!-- Analytics Module -->
+                <div id="analytics" class="module">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">📊 Current Score</div>
+                            <div class="stat-value">75%</div>
+                            <div class="stat-change">↑ 5% from last month</div>
+                        </div>
+                        <div class="stat-card success">
+                            <div class="stat-label">⏱️ Avg Study Time/Day</div>
+                            <div class="stat-value">4.5 hrs</div>
+                            <div class="stat-change">Target: 5 hrs</div>
+                        </div>
+                        <div class="stat-card warning">
+                            <div class="stat-label">🎯 Topics Remaining</div>
+                            <div class="stat-value">114</div>
+                            <div class="stat-change">42 topics completed</div>
+                        </div>
+                        <div class="stat-card info">
+                            <div class="stat-label">🏆 Best Subject</div>
+                            <div class="stat-value">English</div>
+                            <div class="stat-change">88% average</div>
+                        </div>
+                    </div>
+
+                    <div class="charts-grid">
+                        <div class="chart-container">
+                            <div class="chart-title">📈 Performance Trend</div>
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <div class="chart-title">📚 Subject Scores</div>
+                            <canvas id="subjectScoresChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="charts-grid">
+                        <div class="chart-container">
+                            <div class="chart-title">⏰ Study Hours Distribution</div>
+                            <canvas id="hoursChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <div class="chart-title">📊 Completion Rate</div>
+                            <canvas id="completionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Forum Module -->
+                <div id="forum" class="module">
+                    <div class="btn-group" style="display: flex; gap: 10px; margin-bottom: 20px;">
+                        <button class="btn btn-primary" onclick="createForumPost()">
+                            ➕ Start Discussion
+                        </button>
+                    </div>
+
+                    <div id="forum-posts"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample Data
+        const subjectsData = [
+            { id: 1, name: 'Functions', subject: 'Mathematics', class: 'class11', chapters: 3 },
+            { id: 2, name: 'Sequences and Series', subject: 'Mathematics', class: 'class11', chapters: 2 },
+            { id: 3, name: 'Derivatives', subject: 'Mathematics', class: 'class12', chapters: 4 },
+            { id: 4, name: 'Kinematics', subject: 'Physics', class: 'class11', chapters: 3 },
+            { id: 5, name: 'Thermal Physics', subject: 'Physics', class: 'class12', chapters: 2 },
+            { id: 6, name: 'Atoms and Molecules', subject: 'Chemistry', class: 'class11', chapters: 2 },
+            { id: 7, name: 'Organic Chemistry', subject: 'Chemistry', class: 'class12', chapters: 5 },
+            { id: 8, name: 'Poetry and Prose', subject: 'English', class: 'class11', chapters: 4 },
+            { id: 9, name: 'Literary Elements', subject: 'English', class: 'class12', chapters: 3 },
+        ];
+
+        const mockExamsData = [
+            { id: 1, name: 'Full Length Mock - Mathematics', subject: 'Mathematics', questions: 50, time: 180, attempts: 3, bestScore: 85 },
+            { id: 2, name: 'Full Length Mock - Physics', subject: 'Physics', questions: 40, time: 150, attempts: 2, bestScore: 78 },
+            { id: 3, name: 'Half Yearly - Chemistry', subject: 'Chemistry', questions: 35, time: 120, attempts: 1, bestScore: 72 },
+        ];
+
+        const notesData = [
+            { id: 1, title: 'Integration Formulas', subject: 'Mathematics', class: '11', created: '2024-07-10' },
+            { id: 2, title: 'Newton Laws Summary', subject: 'Physics', class: '11', created: '2024-07-08' },
+            { id: 3, title: 'Chemical Equations', subject: 'Chemistry', class: '12', created: '2024-07-05' },
+        ];
+
+        let charts = {};
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+        });
+
+        function initializeApp() {
+            // Set current date
+            const today = new Date();
+            document.getElementById('current-date').textContent = today.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+
+            // Load modules
+            loadSubjects();
+            loadMockExams();
+            loadNotes();
+            loadResources();
+            loadSchedule();
+            loadForumPosts();
+            initCharts();
+
+            // Navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    switchModule(this.getAttribute('data-module'));
+                });
+            });
+        }
+
+        function switchModule(moduleName) {
+            document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
+            document.getElementById(moduleName).classList.add('active');
+
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.querySelector(`[data-module="${moduleName}"]`).classList.add('active');
+
+            const titles = {
+                dashboard: '📊 Dashboard',
+                subjects: '📖 Subjects & Topics',
+                'mock-exams': '✍️ Mock Exams',
+                'study-notes': '📝 Study Notes',
+                resources: '🎓 Resources',
+                schedule: '⏰ Study Schedule',
+                analytics: '📈 Analytics',
+                forum: '💬 Discussion Forum'
+            };
+            document.getElementById('page-title').textContent = titles[moduleName] || moduleName;
+
+            if(moduleName === 'analytics') {
+                setTimeout(() => {
+                    Object.keys(charts).forEach(key => {
+                        if(key.includes('trend') || key.includes('subject') || key.includes('hours') || key.includes('completion')) {
+                            if(charts[key]) charts[key].destroy();
+                        }
+                    });
+                    initAnalyticsCharts();
+                }, 100);
+            }
+        }
+
+        function loadSubjects() {
+            const container = document.getElementById('subjects-list');
+            container.innerHTML = subjectsData.map(subject => `
+                <div class="study-card">
+                    <div class="study-title">📚 ${subject.name}</div>
+                    <div class="study-meta">
+                        <span class="badge badge-primary">${subject.subject}</span>
+                        <span class="badge badge-success">${subject.class === 'class11' ? 'Class 11' : 'Class 12'}</span>
+                        <span style="color: #64748b;">• ${subject.chapters} chapters</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterSubjects(value) {
+            loadSubjects();
+            showAlert('Filter applied', 'success');
+        }
+
+        function filterClass(value) {
+            loadSubjects();
+            showAlert('Filter applied', 'success');
+        }
+
+        function loadMockExams() {
+            const container = document.getElementById('mock-exams-list');
+            container.innerHTML = mockExamsData.map(exam => `
+                <div class="study-card">
+                    <div class="study-title">✍️ ${exam.name}</div>
+                    <div class="study-meta">
+                        <span style="color: #64748b;">Questions: <strong>${exam.questions}</strong> • </span>
+                        <span style="color: #64748b;">Time: <strong>${exam.time} mins</strong> • </span>
+                        <span style="color: #64748b;">Attempts: <strong>${exam.attempts}</strong></span>
+                    </div>
+                    ${exam.bestScore > 0 ? `<div style="color: var(--success); margin-top: 10px; font-weight: 600;">Best Score: ${exam.bestScore}%</div>` : ''}
+                    <div style="margin-top: 10px;">
+                        <button class="btn btn-primary btn-sm" onclick="startExam(${exam.id})">Start Exam →</button>
+                        ${exam.attempts > 0 ? `<button class="btn btn-sm btn-outline" onclick="viewResults(${exam.id})">View Results</button>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function startMockExam() {
+            showAlert('Mock exam started! Answer all questions within the time limit.', 'success');
+        }
+
+        function startExam(id) {
+            showAlert('Starting mock exam... Good luck! 🍀', 'success');
+        }
+
+        function viewMockResults() {
+            showAlert('Average Score: 75% across all attempts', 'success');
+        }
+
+        function viewResults(id) {
+            showAlert('Detailed results for this exam', 'success');
+        }
+
+        function loadNotes() {
+            loadNotesByClass('11');
+        }
+
+        function loadNotesByClass(classNum) {
+            const container = document.getElementById('notes-list');
+            const filtered = notesData.filter(n => n.class === classNum);
+            container.innerHTML = filtered.length > 0 ? filtered.map(note => `
+                <div class="study-card">
+                    <div class="study-title">📝 ${note.title}</div>
+                    <div class="study-meta">
+                        <span class="badge badge-primary">${note.subject}</span>
+                        <span style="color: #64748b;">Created: ${note.created}</span>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <button class="btn btn-primary btn-sm" onclick="viewNote(${note.id})">View Note →</button>
+                        <button class="btn btn-sm btn-outline" onclick="editNote(${note.id})">Edit</button>
+                    </div>
+                </div>
+            `).join('') : '<p style="color: #64748b; text-align: center; padding: 20px;">No notes yet. Create your first note!</p>';
+        }
+
+        function filterNotesByClass(classNum) {
+            document.querySelectorAll('#class-tabs .tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            loadNotesByClass(classNum);
+        }
+
+        function createNote() {
+            showAlert('New note created! Start writing your study notes.', 'success');
+        }
+
+        function viewNote(id) {
+            showAlert('Opening note...', 'success');
+        }
+
+        function editNote(id) {
+            showAlert('Edit mode activated', 'success');
+        }
+
+        function loadResources() {
+            const container = document.getElementById('resources-list');
+            container.innerHTML = `
+                <div class="subject-grid">
+                    <div class="study-card">
+                        <div class="study-title">📚 NEB Mathematics Complete Guide</div>
+                        <div class="study-meta">E-Book • 320 pages • All topics covered</div>
+                        <button class="btn btn-primary btn-sm" style="margin-top: 10px;" onclick="downloadResource()">⬇️ Download PDF</button>
+                    </div>
+                    <div class="study-card">
+                        <div class="study-title">📄 Physics Past Papers 2020-2024</div>
+                        <div class="study-meta">Question Papers • Solutions included</div>
+                        <button class="btn btn-primary btn-sm" style="margin-top: 10px;" onclick="downloadResource()">⬇️ Download PDF</button>
+                    </div>
+                    <div class="study-card">
+                        <div class="study-title">📹 Chemistry Video Lectures</div>
+                        <div class="study-meta">45 videos • 15+ hours • All chapters</div>
+                        <button class="btn btn-primary btn-sm" style="margin-top: 10px;" onclick="watchVideo()">▶️ Watch Videos</button>
+                    </div>
+                    <div class="study-card">
+                        <div class="study-title">🔗 Useful Study Links</div>
+                        <div class="study-meta">50+ curated resources from top platforms</div>
+                        <button class="btn btn-primary btn-sm" style="margin-top: 10px;" onclick="viewLinks()">🔗 View Links</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function downloadResource() {
+            showAlert('Resource downloaded successfully!', 'success');
+        }
+
+        function watchVideo() {
+            showAlert('Opening video player...', 'success');
+        }
+
+        function viewLinks() {
+            showAlert('Opening curated study resources...', 'success');
+        }
+
+        function loadSchedule() {
+            const scheduleTable = document.getElementById('schedule-table');
+            const times = ['9:00-10:30', '10:30-12:00', '12:00-1:00', '1:00-2:30', '2:30-4:00', '4:00-5:30'];
+            const schedule = [
+                { time: '9:00-10:30', mon: 'Mathematics', tue: 'Physics', wed: 'Chemistry', thu: 'English', fri: 'Nepali', sat: 'Biology' },
+                { time: '10:30-12:00', mon: 'Physics', tue: 'Chemistry', wed: 'Mathematics', thu: 'Biology', fri: 'Statistics', sat: 'Accountancy' },
+                { time: '12:00-1:00', mon: 'Break', tue: 'Break', wed: 'Break', thu: 'Break', fri: 'Break', sat: 'Break' },
+                { time: '1:00-2:30', mon: 'English', tue: 'Nepali', wed: 'Biology', thu: 'Statistics', fri: 'Accountancy', sat: 'Mathematics' },
+                { time: '2:30-4:00', mon: 'Chemistry', tue: 'English', wed: 'Physics', thu: 'Accountancy', fri: 'Mathematics', sat: 'Chemistry' },
+            ];
+
+            scheduleTable.innerHTML = schedule.map(row => `
+                <tr>
+                    <td style="font-weight: 600; background: var(--light);">${row.time}</td>
+                    <td style="background: #fce7f3;">${row.mon}</td>
+                    <td style="background: #dbeafe;">${row.tue}</td>
+                    <td style="background: #fef3c7;">${row.wed}</td>
+                    <td style="background: #e0e7ff;">${row.thu}</td>
+                    <td style="background: #d1fae5;">${row.fri}</td>
+                    <td style="background: #f0fdfa;">${row.sat}</td>
+                </tr>
+            `).join('');
+
+            const examSchedule = document.getElementById('exam-schedule');
+            examSchedule.innerHTML = `
+                <div class="study-card">
+                    <div class="study-title">📅 NEB Board Exams 2025</div>
+                    <div class="study-meta">March 10 - April 2, 2025</div>
+                </div>
+                <div class="study-card">
+                    <div class="study-title">📝 Monthly Assessments</div>
+                    <div class="study-meta">Every last Sunday of the month</div>
+                </div>
+            `;
+        }
+
+        function createSchedule() {
+            showAlert('Study plan created! Follow the schedule daily.', 'success');
+        }
+
+        function loadForumPosts() {
+            const container = document.getElementById('forum-posts');
+            container.innerHTML = `
+                <div class="study-card">
+                    <div class="study-title">❓ How to solve double angle formulas?</div>
+                    <div class="study-meta">Mathematics • 5 replies • Posted 2 hours ago</div>
+                    <button class="btn btn-primary btn-sm" onclick="viewThread()">View Discussion →</button>
+                </div>
+                <div class="study-card">
+                    <div class="study-title">📌 Tips for English Essay Writing</div>
+                    <div class="study-meta">English • 12 replies • Posted 1 day ago</div>
+                    <button class="btn btn-primary btn-sm" onclick="viewThread()">View Discussion →</button>
+                </div>
+                <div class="study-card">
+                    <div class="study-title">🧪 Organic Chemistry Preparation Strategy</div>
+                    <div class="study-meta">Chemistry • 8 replies • Posted 3 days ago</div>
+                    <button class="btn btn-primary btn-sm" onclick="viewThread()">View Discussion →</button>
+                </div>
+            `;
+        }
+
+        function createForumPost() {
+            showAlert('Opening discussion creation form...', 'success');
+        }
+
+        function viewThread() {
+            showAlert('Opening discussion thread...', 'success');
+        }
+
+        function initCharts() {
+            // Progress Chart
+            const progressCtx = document.getElementById('progressChart');
+            if(progressCtx) {
+                charts.progress = new Chart(progressCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{
+                            label: 'Topics Completed',
+                            data: [2, 3, 2, 4, 3, 5, 2],
+                            borderColor: '#6366f1',
+                            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true } }
+                    }
+                });
+            }
+
+            // Performance Chart
+            const performanceCtx = document.getElementById('performanceChart');
+            if(performanceCtx) {
+                charts.performance = new Chart(performanceCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Mathematics', 'Physics', 'Chemistry', 'English', 'Nepali', 'Statistics', 'Biology', 'Accountancy'],
+                        datasets: [{
+                            label: 'Score %',
+                            data: [75, 82, 70, 88, 72, 68, 80, 76],
+                            backgroundColor: [
+                                '#ec4899', '#0ea5e9', '#10b981', '#8b5cf6',
+                                '#f59e0b', '#ef4444', '#14b8a6', '#6366f1'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        indexAxis: 'x',
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true, max: 100 } }
+                    }
+                });
+            }
+        }
+
+        function initAnalyticsCharts() {
+            // Trend Chart
+            const trendCtx = document.getElementById('trendChart');
+            if(trendCtx) {
+                charts.trend = new Chart(trendCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+                        datasets: [{
+                            label: 'Average Score',
+                            data: [65, 68, 72, 70, 75, 78],
+                            borderColor: '#6366f1',
+                            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: { y: { beginAtZero: true, max: 100 } }
+                    }
+                });
+            }
+
+            // Subject Scores
+            const subjectCtx = document.getElementById('subjectScoresChart');
+            if(subjectCtx) {
+                charts.subjectScores = new Chart(subjectCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Math', 'Physics', 'Chemistry', 'English', 'Nepali', 'Statistics', 'Biology', 'Accountancy'],
+                        datasets: [{
+                            label: 'Current Score',
+                            data: [75, 82, 70, 88, 72, 68, 80, 76],
+                            borderColor: '#6366f1',
+                            backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: { r: { beginAtZero: true, max: 100 } }
+                    }
+                });
+            }
+
+            // Study Hours
+            const hoursCtx = document.getElementById('hoursChart');
+            if(hoursCtx) {
+                charts.hours = new Chart(hoursCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Mathematics', 'Physics', 'Chemistry', 'English', 'Other'],
+                        datasets: [{
+                            data: [35, 25, 20, 15, 5],
+                            backgroundColor: ['#ec4899', '#0ea5e9', '#10b981', '#8b5cf6', '#f59e0b'],
+                            borderColor: 'white',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: { legend: { position: 'bottom' } }
+                    }
+                });
+            }
+
+            // Completion Rate
+            const completionCtx = document.getElementById('completionChart');
+            if(completionCtx) {
+                charts.completion = new Chart(completionCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Math', 'Physics', 'Chemistry', 'English', 'Nepali', 'Statistics', 'Biology', 'Accountancy'],
+                        datasets: [{
+                            label: 'Completion %',
+                            data: [75, 82, 70, 88, 72, 68, 80, 76],
+                            backgroundColor: '#6366f1'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        indexAxis: 'x',
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true, max: 100 } }
+                    }
+                });
+            }
+        }
+
+        function showAlert(message, type = 'success') {
+            const alertBox = document.createElement('div');
+            alertBox.className = `alert alert-${type}`;
+            alertBox.innerHTML = `<span>${type === 'success' ? '✓' : 'ℹ️'}</span> ${message}`;
+            
+            const content = document.querySelector('.content');
+            content.insertBefore(alertBox, content.firstChild);
+            
+            setTimeout(() => alertBox.remove(), 3000);
+        }
+
+        // Close modal on outside click
+        document.addEventListener('click', function(event) {
+            const modals = document.querySelectorAll('.modal.active');
+            modals.forEach(modal => {
+                if(event.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+    </script>
+
+    <div class="footer">
+        <div style="margin-bottom: 8px;">
+            <span class="attribution">Developed by: Mr. Bishnu Singh Rayamajhi</span><br>
+            <span style="font-size: 11px;">Mathematics Lecturer & Head of HSS | Kapilvastu Multiple Campus, Taulihawa, Nepal</span><br>
+            <span class="attribution">UCDL Academy - AI-Powered Educational Platform</span>
+        </div>
+        <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 11px;">
+            © 2024 SMART Learning Platform. All Rights Reserved. | Prepare for NEB with Confidence!
+        </div>
+    </div>
+</body>
+</html>
