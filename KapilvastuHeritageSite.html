@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>प्राचीन कपिलवस्तुको सम्पदा स्थलको संरक्षण र संवर्द्धन</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Kalimati', 'Mangal', 'Noto Sans Devanagari', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 60px;
+            position: relative;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        .slide.active { display: flex; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        h1 {
+            font-size: 2.8em;
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #ffd700, #ff8c00, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+            font-weight: bold;
+        }
+
+        h2 {
+            font-size: 2.2em;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ffd700;
+            border-bottom: 3px solid #e94560;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            color: #e94560;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            text-align: center;
+            color: #a0d2eb;
+            margin-bottom: 10px;
+        }
+
+        .trainer-info {
+            background: rgba(233, 69, 96, 0.15);
+            border: 2px solid #e94560;
+            border-radius: 15px;
+            padding: 25px 40px;
+            margin-top: 20px;
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .trainer-info p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #f0f0f0;
+        }
+
+        .trainer-name {
+            font-size: 1.4em;
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .content-box {
+            background: rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 30px 40px;
+            max-width: 1100px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .content-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .content-box li {
+            font-size: 1.25em;
+            line-height: 2;
+            padding-left: 35px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .content-box li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #e94560;
+            font-size: 1.3em;
+        }
+
+        .two-column {
+            display: flex;
+            gap: 40px;
+            width: 100%;
+            max-width: 1200px;
+            align-items: flex-start;
+        }
+
+        .column {
+            flex: 1;
+        }
+
+        .image-container {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            margin: 15px 0;
+            border: 3px solid rgba(255,215,0,0.3);
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .image-container:hover img {
+            transform: scale(1.02);
+        }
+
+        .image-caption {
+            text-align: center;
+            font-size: 0.95em;
+            color: #a0d2eb;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(233,69,96,0.2), rgba(255,215,0,0.1));
+            border-left: 5px solid #e94560;
+            padding: 20px 25px;
+            border-radius: 0 15px 15px 0;
+            margin: 15px 0;
+        }
+
+        .smart-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .smart-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid;
+        }
+
+        .smart-card.s { border-color: #ff6b6b; }
+        .smart-card.m { border-color: #4ecdc4; }
+        .smart-card.a { border-color: #45b7d1; }
+        .smart-card.r { border-color: #f9ca24; }
+        .smart-card.t { border-color: #6c5ce7; }
+
+        .smart-card h4 {
+            font-size: 1.3em;
+            margin-bottom: 8px;
+        }
+
+        .smart-card.s h4 { color: #ff6b6b; }
+        .smart-card.m h4 { color: #4ecdc4; }
+        .smart-card.a h4 { color: #45b7d1; }
+        .smart-card.r h4 { color: #f9ca24; }
+        .smart-card.t h4 { color: #a29bfe; }
+
+        .smart-card p {
+            font-size: 1em;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 1em;
+        }
+
+        th {
+            background: rgba(233,69,96,0.3);
+            color: #ffd700;
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 2px solid #e94560;
+        }
+
+        td {
+            padding: 10px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: #e0e0e0;
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .nav-buttons {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: rgba(233,69,96,0.8);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .nav-btn:hover {
+            background: #e94560;
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(233,69,96,0.4);
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 30px;
+            right: 40px;
+            font-size: 1em;
+            color: rgba(255,255,255,0.6);
+            z-index: 1000;
+        }
+
+        .quote {
+            font-size: 1.6em;
+            font-style: italic;
+            text-align: center;
+            color: #ffd700;
+            margin: 30px 0;
+            padding: 20px;
+            border-top: 2px solid rgba(255,215,0,0.3);
+            border-bottom: 2px solid rgba(255,215,0,0.3);
+        }
+
+        .icon-row {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .icon-item {
+            text-align: center;
+            padding: 15px 25px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 15px;
+            border: 2px solid rgba(255,215,0,0.3);
+        }
+
+        .icon-item .icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .icon-item p {
+            font-size: 1.1em;
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        .gallery-item {
+            text-align: center;
+        }
+
+        .gallery-item .image-container {
+            height: 220px;
+        }
+
+        .gallery-item .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @media (max-width: 900px) {
+            .two-column { flex-direction: column; }
+            .gallery { grid-template-columns: 1fr; }
+            h1 { font-size: 1.8em; }
+            h2 { font-size: 1.5em; }
+            .slide { padding: 20px; }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+
+<!-- Slide 1: Title -->
+<div class="slide active">
+    <div class="slide-number">१ / १७</div>
+    <h1>प्राचीन कपिलवस्तुको सम्पदा स्थलको संरक्षण र संवर्द्धन</h1>
+    <p class="subtitle">Preservation & Conservation of Heritage Site at Ancient Kapilvastu</p>
+    <p class="subtitle" style="margin-top: 15px; font-size: 1.1em; color: #e94560;">
+        सृजनशीलता, अनुसन्धान, नवीनता र उद्यमशीलताको दृष्टिकोणमा
+    </p>
+    <p class="subtitle" style="margin-top: 5px; font-size: 1em;">
+        In view of Creativity, Research, Innovation and Entrepreneurship
+    </p>
+    <div style="margin: 25px 0; padding: 10px 40px; border: 2px solid #ffd700; border-radius: 30px; display: inline-block;">
+        <p style="font-size: 1.3em; color: #ffd700; font-weight: bold;">🎓 तालिम कार्यशाला | Training Workshop 🎓</p>
+    </div>
+    <div class="trainer-info">
+        <p class="trainer-name">Teacher Trainer: Mr. Bishnu Singh Rayamajhi (MTOT)</p>
+        <p style="margin-top: 10px;">
+            गणित प्रवक्ता तथा मानविकी र सामाजिक विज्ञान विभाग प्रमुख<br>
+            कपिलवस्तु बहुमुखी क्याम्पस (KMC), तौलिहवा<br>
+            <span style="color: #ffd700;">संस्थापक: UCDL Academy</span>
+        </p>
+    </div>
+</div>
+
+<!-- Slide 2: Outline -->
+<div class="slide">
+    <div class="slide-number">२ / १७</div>
+    <h2>प्रस्तुति योजना | Presentation Outline</h2>
+    <div class="content-box">
+        <ul>
+            <li>प्राचीन कपिलवस्तुको ऐतिहासिक पृष्ठभूमि</li>
+            <li>सम्पदा स्थलहरूको पहिचान र महत्त्व</li>
+            <li>वर्तमान चुनौतीहरू र संरक्षणको आवश्यकता</li>
+            <li>सृजनशीलता (Creativity) मार्फत सम्पदा संरक्षण</li>
+            <li>अनुसन्धान (Research) का क्षेत्र र अवसरहरू</li>
+            <li>नवीनता (Innovation) का प्रविधि र उपायहरू</li>
+            <li>उद्यमशीलता (Entrepreneurship) र स्थानीय आर्थिक विकास</li>
+            <li>SMART उद्देश्य र कार्यान्वयन योजना</li>
+            <li>तालिम कार्यशालाको संरचना र सिकाइ नतिजाहरू</li>
+            <li>निष्कर्ष र भावी कार्ययोजना</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 3: Historical Background with Images -->
+<div class="slide">
+    <div class="slide-number">३ / १७</div>
+    <h2>प्राचीन कपिलवस्तुको ऐतिहासिक पृष्ठभूमि</h2>
+    <div class="two-column">
+        <div class="column">
+            <div class="content-box">
+                <ul>
+                    <li>गौतम बुद्धको जन्मस्थल र शाक्य गणराज्यको राजधानी</li>
+                    <li>इसापूर्व ६औं–५औं शताब्दीको समृद्ध सभ्यता</li>
+                    <li>पिपरहवा, तिलौराकोट, गणवारी, सागरहवा, अरौराकोट जस्ता प्रमुख पुरातात्विक क्षेत्र</li>
+                    <li>युनेस्को विश्व सम्पदा सूचीमा सूचीकृत क्षेत्र</li>
+                    <li>भारत, श्रीलंका, थाइल्यान्ड, जापान, म्यानमार लगायत देशबाट आउने धार्मिक पर्यटकहरूको गन्तव्य</li>
+                </ul>
+            </div>
+        </div>
+        <div class="column">
+            <div class="image-container">
+                <img src="tilaurakot.png" alt="तिलौराकोट पुरातात्विक स्थल">
+            </div>
+            <p class="image-caption">तिलौराकोट - शाक्य राजदरबार खण्डहर (Tilaurakot Archaeological Site)</p>
+            <div class="image-container" style="margin-top: 15px;">
+                <img src="buddha.png" alt="बुद्ध मूर्ति">
+            </div>
+            <p class="image-caption">कपिलवस्तुमा रहेको भव्य बुद्ध मूर्ति (Buddha Statue at Kapilvastu)</p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 4: Heritage Sites -->
+<div class="slide">
+    <div class="slide-number">४ / १७</div>
+    <h2>सम्पदा स्थलहरूको पहिचान र महत्त्व</h2>
+    <div class="two-column">
+        <div class="column">
+            <h3>🏛️ प्रमुख पुरातात्विक स्थलहरू:</h3>
+            <div class="content-box">
+                <ul>
+                    <li><strong>तिलौराकोट:</strong> शाक्य राजदरबार, खण्डहर, माटोको पर्खाल</li>
+                    <li><strong>पिपरहवा:</strong> बुद्धको अवशेष भएको स्तूप (कनक मुनीको स्तूप)</li>
+                    <li><strong>सागरहवा:</strong> बुद्धको बाल्यकालीन स्मारक</li>
+                    <li><strong>गणवारी:</strong> प्राचीन नहर प्रणाली र सभ्यताको प्रमाण</li>
+                    <li><strong>कुदान:</strong> बुद्धको पिता शुद्धोधनको राजदरबार भनिने स्थल</li>
+                </ul>
+            </div>
+            <div class="highlight-box" style="margin-top: 15px;">
+                <p style="font-size: 1.1em; color: #ffd700;"><strong>महत्त्व:</strong></p>
+                <p style="margin-top: 5px;">धार्मिक, सांस्कृतिक, पुरातात्विक र पर्यटकीय दृष्टिले अमूल्य<br>नेपालको राष्ट्रिय गौरव र अन्तर्राष्ट्रिय पहिचान</p>
+            </div>
+        </div>
+        <div class="column">
+            <div class="image-container">
+                <img src="piprahwa.png" alt="पिपरहवा स्तूप">
+            </div>
+            <p class="image-caption">पिपरहवा स्तूप - कनक मुनीको स्तूप (Piprahwa Stupa)</p>
+            <div class="image-container" style="margin-top: 15px;">
+                <img src="tilaurakot2.png" alt="तिलौराकोट खण्डहर">
+            </div>
+            <p class="image-caption">तिलौराकोट पुरातात्विक उत्खनन क्षेत्र (Tilaurakot Excavation Site)</p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 5: Challenges -->
+<div class="slide">
+    <div class="slide-number">५ / १७</div>
+    <h2>वर्तमान चुनौतीहरू र संरक्षणको आवश्यकता</h2>
+    <div class="two-column">
+        <div class="column">
+            <h3>⚠️ मुख्य समस्याहरू:</h3>
+            <div class="content-box">
+                <ul>
+                    <li>मौसमी प्रभाव (वर्षा, बाढी, हावाहुरी) बाट क्षति</li>
+                    <li>अवैध उत्खनन र सम्पदा चोरी</li>
+                    <li>अनियन्त्रित निर्माण र सहरीकरणको दबाब</li>
+                    <li>प्रदूषण र पर्यावरणीय विनाश</li>
+                    <li>सीमित बजेट, प्राविधिक जनशक्ति र जनचेतनाको अभाव</li>
+                    <li>युवापुस्ताबीच ऐतिहासिक चेतनाको ह्रास</li>
+                </ul>
+            </div>
+        </div>
+        <div class="column">
+            <div class="highlight-box">
+                <h3 style="color: #ffd700; border: none;">🎯 किन संरक्षण जरुरी छ?</h3>
+                <ul style="margin-top: 10px;">
+                    <li style="font-size: 1.1em; line-height: 1.8;">पहिचान जोगाउन, पुस्तागत हस्तान्तरण गर्न</li>
+                    <li style="font-size: 1.1em; line-height: 1.8;">धार्मिक पर्यटन र आर्थिक समृद्धिको आधार</li>
+                </ul>
+            </div>
+            <div class="image-container" style="margin-top: 20px;">
+                <img src="piprahwa2.png" alt="पिपरहवा स्तूप">
+            </div>
+            <p class="image-caption">पिपरहवाको भव्य स्तूप संरचना (Piprahwa Stupa Structure)</p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 6: Creativity -->
+<div class="slide">
+    <div class="slide-number">६ / १७</div>
+    <h2>सृजनशीलता (Creativity) मार्फत सम्पदा संरक्षण</h2>
+    <div class="content-box" style="max-width: 1000px;">
+        <ul>
+            <li><strong style="color: #ffd700;">डिजिटल म्यापिङ र 3D मोडेलिङ:</strong> प्राचीन संरचनाको भर्चुअल पुनर्निर्माण</li>
+            <li><strong style="color: #ffd700;">कला र साहित्य:</strong> स्थानीय कथाहरू, चित्रकला, मूर्तिकला मार्फत प्रचार</li>
+            <li><strong style="color: #ffd700;">सांस्कृतिक नाटक र नृत्य:</strong> बुद्धको जीवन घटना आधारित नाट्य प्रस्तुति</li>
+            <li><strong style="color: #ffd700;">फोटोग्राफी र डकुमेन्ट्री:</strong> युवाहरूलाई सहभागी गराउने सृजनात्मक माध्यम</li>
+            <li><strong style="color: #ffd700;">डिजाइन थिंकिङ:</strong> पुरातात्विक स्थलको आकर्षक ब्रान्डिङ र साइनेज डिजाइन</li>
+            <li><strong style="color: #ffd700;">सामुदायिक कला परियोजना:</strong> स्थानीय बासिन्दाको सहभागितामा भित्ते चित्र (Mural) निर्माण</li>
+        </ul>
+    </div>
+    <div class="icon-row" style="margin-top: 25px;">
+        <div class="icon-item">
+            <div class="icon">🎨</div>
+            <p>कला</p>
+        </div>
+        <div class="icon-item">
+            <div class="icon">📸</div>
+            <p>फोटोग्राफी</p>
+        </div>
+        <div class="icon-item">
+            <div class="icon">🎭</div>
+            <p>नाट्यकला</p>
+        </div>
+        <div class="icon-item">
+            <div class="icon">🖌️</div>
+            <p>भित्ते चित्र</p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 7: Research -->
+<div class="slide">
+    <div class="slide-number">७ / १७</div>
+    <h2>अनुसन्धान (Research) का क्षेत्र र अवसरहरू</h2>
+    <div class="content-box" style="max-width: 1000px;">
+        <h3 style="margin-bottom: 15px;">📚 विद्यार्थी/शिक्षकहरूका लागि अनुसन्धान विषयहरू:</h3>
+        <ul>
+            <li><strong style="color: #ffd700;">पुरातात्विक अनुसन्धान:</strong> माटोको परीक्षण, उत्खनन प्रविधि, मृदा विज्ञान</li>
+            <li><strong style="color: #ffd700;">इतिहास अनुसन्धान:</strong> शाक्य कालीन प्रशासन, समाज र संस्कृति</li>
+            <li><strong style="color: #ffd700;">पर्यावरणीय अध्ययन:</strong> जलवायु परिवर्तनको प्रभाव र न्यूनीकरण रणनीति</li>
+            <li><strong style="color: #ffd700;">सामाजिक अनुसन्धान:</strong> स्थानीय समुदायको सम्पदा प्रति दृष्टिकोण</li>
+            <li><strong style="color: #ffd700;">आर्थिक अध्ययन:</strong> सम्पदा पर्यटनको सम्भावना र लागत-लाभ विश्लेषण</li>
+            <li><strong style="color: #ffd700;">प्राविधिक अनुसन्धान:</strong> संरक्षण सामग्री (chemicals, adhesives) को प्रयोग र प्रभाव</li>
+        </ul>
+    </div>
+    <div class="highlight-box" style="max-width: 900px; margin-top: 20px;">
+        <p style="text-align: center; font-size: 1.1em;">
+            <strong style="color: #ffd700;">संस्थागत सहकार्य:</strong> KMC, UCDL Academy, Pashupati Area Development Trust, Department of Archaeology (DoA)
+        </p>
+    </div>
+</div>
+
+<!-- Slide 8: Innovation -->
+<div class="slide">
+    <div class="slide-number">८ / १७</div>
+    <h2>नवीनता (Innovation) का प्रविधि र उपायहरू</h2>
+    <div class="content-box" style="max-width: 1000px;">
+        <ul>
+            <li><strong style="color: #4ecdc4;">जियो-ट्यागिङ र QR कोड:</strong> प्रत्येक सम्पदा स्थलमा डिजिटल जानकारी प्लेट</li>
+            <li><strong style="color: #4ecdc4;">DRONE SURVEY:</strong> उडान मार्फत क्षेत्रको निगरानी र म्यापिङ</li>
+            <li><strong style="color: #4ecdc4;">GIS र REMOTE SENSING:</strong> भू-स्थानिक विश्लेषण र क्षति मूल्याङ्कन</li>
+            <li><strong style="color: #4ecdc4;">AI-आधारित IMAGE PROCESSING:</strong> क्षतिको प्रगति ट्र्याकिङ</li>
+            <li><strong style="color: #4ecdc4;">BIO-CONSERVATION:</strong> वनस्पति र जैविक विधि मार्फत संरचना संरक्षण</li>
+            <li><strong style="color: #4ecdc4;">SMART MONITORING SYSTEM:</strong> सेन्सर मार्फत आर्द्रता, तापक्रम र हलचाल निगरानी</li>
+            <li><strong style="color: #4ecdc4;">AUGMENTED REALITY (AR):</strong> भ्रमणकारीका लागि अन्तरक्रियात्मक अनुभव</li>
+        </ul>
+    </div>
+    <div class="icon-row" style="margin-top: 20px;">
+        <div class="icon-item">
+            <div class="icon">🛰️</div>
+            <p>ड्रोन</p>
+        </div>
+        <div class="icon-item">
+            <div class="icon">🗺️</div>
+            <p>GIS</p>
+        </div>
+        <div class="icon-item">
+            <div class="icon">🤖</div>
+            <p>AI/AR</p>
+        </div>
+        <div class="icon-item">
+            <div class="icon">📡</div>
+            <p>IoT सेन्सर</p>
+        </div>
+        <div class="icon-item">
+            <div class="icon">🌿</div>
+            <p>Bio-Conservation</p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 9: Entrepreneurship -->
+<div class="slide">
+    <div class="slide-number">९ / १७</div>
+    <h2>उद्यमशीलता (Entrepreneurship) र स्थानीय आर्थिक विकास</h2>
+    <div class="two-column">
+        <div class="column">
+            <h3>💼 व्यवसायिक अवसरहरू:</h3>
+            <div class="content-box">
+                <ul>
+                    <li><strong>पर्यटन गाइड सेवा:</strong> प्रशिक्षित स्थानीय युवाहरूबाट गाइडिङ</li>
+                    <li><strong>सांस्कृतिक स्मारक उद्योग:</strong> बुद्ध, स्तूप, ध्यान मुद्राका हस्तकला</li>
+                    <li><strong>स्थानीय gastronomy:</strong> लिट्टी-चोखा, ठेची, पिठो आधारित परम्परागत खाना पर्यटन</li>
+                    <li><strong>होमस्टे व्यवसाय:</strong> परम्परागत बासस्थान अनुभव</li>
+                    <li><strong>डिजिटल मार्केटिङ:</strong> सामाजिक सञ्जाल मार्फत कपिलवस्तु प्रचार</li>
+                    <li><strong>फोटोग्राफी/डकुमेन्ट्री सेवा:</strong> सामग्री निर्माण र बिक्री</li>
+                    <li><strong>शैक्षिक पर्यटन प्याकेज:</strong> विद्यालय/कलेज भ्रमण आयोजना</li>
+                </ul>
+            </div>
+        </div>
+        <div class="column">
+            <div class="highlight-box">
+                <p style="font-size: 1.3em; text-align: center; color: #ffd700;">
+                    <strong>"सम्पदा संरक्षण + आयआर्जन = सस्टेनेबल विकास"</strong>
+                </p>
+            </div>
+            <div class="image-container" style="margin-top: 20px;">
+                <img src="buddha.png" alt="बुद्ध मूर्ति">
+            </div>
+            <p class="image-caption">कपिलवस्तुको धार्मिक पर्यटन आकर्षण</p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 10: SMART Objectives -->
+<div class="slide">
+    <div class="slide-number">१० / १७</div>
+    <h2>SMART उद्देश्य र कार्यान्वयन योजना</h2>
+    <div class="smart-grid">
+        <div class="smart-card s">
+            <h4>🎯 S - Specific</h4>
+            <p>तिलौराकोट र पिपरहवाको डिजिटल डाटाबेस निर्माण</p>
+            <p style="margin-top: 8px; color: #ff6b6b; font-weight: bold;">समयसीमा: ३ महिना</p>
+        </div>
+        <div class="smart-card m">
+            <h4>📊 M - Measurable</h4>
+            <p>५०० विद्यार्थीलाई तालिम, १००० QR कोड जडान</p>
+            <p style="margin-top: 8px; color: #4ecdc4; font-weight: bold;">समयसीमा: ६ महिना</p>
+        </div>
+        <div class="smart-card a">
+            <h4>✅ A - Achievable</h4>
+            <p>स्थानीय स्रोत र KMC/UCDL को सहकार्यमा</p>
+            <p style="margin-top: 8px; color: #45b7d1; font-weight: bold;">समयसीमा: ६ महिना</p>
+        </div>
+        <div class="smart-card r">
+            <h4>🔗 R - Relevant</h4>
+            <p>युनेस्को मापदण्ड अनुसार संरक्षण</p>
+            <p style="margin-top: 8px; color: #f9ca24; font-weight: bold;">समयसीमा: निरन्तर</p>
+        </div>
+    </div>
+    <div class="smart-card t" style="max-width: 500px; margin-top: 15px; width: 100%;">
+        <h4>⏰ T - Time-bound</h4>
+        <p>१ वर्षभित्र पाइलट प्रोजेक्ट सम्पन्न</p>
+        <p style="margin-top: 8px; color: #a29bfe; font-weight: bold;">समयसीमा: १२ महिना</p>
+    </div>
+</div>
+
+<!-- Slide 11: Training Workshop -->
+<div class="slide">
+    <div class="slide-number">११ / १७</div>
+    <h2>तालिम कार्यशालाको संरचना (Training Workshop)</h2>
+    <div class="highlight-box" style="max-width: 900px; margin-bottom: 20px;">
+        <p style="text-align: center; font-size: 1.2em;">
+            <strong style="color: #ffd700;">प्रशिक्षक:</strong> श्री विष्णु सिंह रायमाझी (MTOT)
+        </p>
+    </div>
+    <div class="two-column">
+        <div class="column">
+            <h3>👥 लक्षित समूह:</h3>
+            <div class="content-box">
+                <ul>
+                    <li>KMC का विद्यार्थी</li>
+                    <li>स्थानीय युवा</li>
+                    <li>शिक्षक</li>
+                    <li>पर्यटन व्यवसायी</li>
+                </ul>
+            </div>
+            <div class="highlight-box" style="margin-top: 15px;">
+                <p style="font-size: 1.2em; color: #ffd700; text-align: center;">
+                    <strong>⏱️ अवधि: ३ दिन (१८ घण्टा)</strong>
+                </p>
+            </div>
+        </div>
+        <div class="column">
+            <h3>📋 तालिम विधिहरू:</h3>
+            <div class="content-box">
+                <ul>
+                    <li><strong>सैद्धान्तिक:</strong> सम्पदा संरक्षणको अवधारणा, कानुनी व्यवस्था, अन्तर्राष्ट्रिय अभ्यास</li>
+                    <li><strong>प्रायोगिक:</strong> उत्खनन प्रविधि, डिजिटल म्यापिङ, फोटोग्राफी, रिपोर्ट लेखन</li>
+                    <li><strong>फिल्ड भिजिट:</strong> तिलौराकोट, पिपरहवा, गणवारी अवलोकन</li>
+                    <li><strong>समूह कार्य:</strong> समस्या पहिचान र समाधान योजना निर्माण</li>
+                    <li><strong>प्रस्तुति:</strong> विद्यार्थीको सृजनात्मक प्रोजेक्ट प्रदर्शनी</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 12: Learning Outcomes -->
+<div class="slide">
+    <div class="slide-number">१२ / १७</div>
+    <h2>सिकाइ नतिजाहरू (Learning Outcomes)</h2>
+    <p style="text-align: center; margin-bottom: 20px; font-size: 1.1em; color: #a0d2eb;">
+        तालिम पश्चात सहभागीहरूले निम्न क्षमता विकास गर्नेछन्:
+    </p>
+    <div class="content-box" style="max-width: 1000px;">
+        <ul>
+            <li>प्राचीन कपिलवस्तुको ऐतिहासिक र पुरातात्विक महत्त्व बुझ्ने</li>
+            <li>सम्पदा संरक्षणका आधुनिक र परम्परागत विधिहरूको ज्ञान</li>
+            <li>डिजिटल टुल्स (GPS, QR, ड्रोन) को सीपमूलक प्रयोग</li>
+            <li>अनुसन्धान प्रबन्धन र रिपोर्ट लेखन क्षमता</li>
+            <li>सांस्कृतिक पर्यटन उद्यमशीलताको अवधारणा र व्यवहारिक योजना</li>
+            <li>सामुदायिक सहभागितामा संरक्षण अभियान सञ्चालन</li>
+        </ul>
+    </div>
+    <div class="quote">
+        "संरक्षणकर्ता + अनुसन्धानकर्ता + उद्यमी" = बहुआयामिक जनशक्ति
+    </div>
+</div>
+
+<!-- Slide 13: Action Plan -->
+<div class="slide">
+    <div class="slide-number">१३ / १७</div>
+    <h2>कार्यान्वयन कार्यतालिका (Action Plan)</h2>
+    <div class="content-box" style="max-width: 1100px; padding: 20px;">
+        <table>
+            <tr>
+                <th>चरण</th>
+                <th>क्रियाकलाप</th>
+                <th>समय</th>
+                <th>जिम्मेवार</th>
+            </tr>
+            <tr>
+                <td><strong style="color: #ff6b6b;">चरण १</strong></td>
+                <td>स्थलगत अध्ययन र डाटा संकलन</td>
+                <td>महिना १-२</td>
+                <td>KMC विद्यार्थी</td>
+            </tr>
+            <tr>
+                <td><strong style="color: #4ecdc4;">चरण २</strong></td>
+                <td>डिजिटल डाटाबेस र QR कोड जडान</td>
+                <td>महिना २-४</td>
+                <td>UCDL Academy</td>
+            </tr>
+            <tr>
+                <td><strong style="color: #45b7d1;">चरण ३</strong></td>
+                <td>तालिम कार्यशाला सञ्चालन</td>
+                <td>महिना ३-४</td>
+                <td>श्री रायमाझी</td>
+            </tr>
+            <tr>
+                <td><strong style="color: #f9ca24;">चरण ४</strong></td>
+                <td>सामुदायिक सचेतना अभियान</td>
+                <td>महिना ४-६</td>
+                <td>स्थानीय सरकार</td>
+            </tr>
+            <tr>
+                <td><strong style="color: #a29bfe;">चरण ५</strong></td>
+                <td>उद्यमशीलता प्लान प्रतिस्पर्धा</td>
+                <td>महिना ६-८</td>
+                <td>KMC</td>
+            </tr>
+            <tr>
+                <td><strong style="color: #fd79a8;">चरण ६</strong></td>
+                <td>मूल्याङ्कन र रिपोर्टिङ</td>
+                <td>महिना १०-१२</td>
+                <td>सम्पूर्ण टिम</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Slide 14: Expected Impact -->
+<div class="slide">
+    <div class="slide-number">१४ / १७</div>
+    <h2>अपेक्षित प्रभाव (Expected Impact)</h2>
+    <div class="two-column">
+        <div class="column">
+            <div class="highlight-box" style="border-color: #4ecdc4;">
+                <h3 style="color: #4ecdc4; border: none;">📅 छोटो अवधिमा</h3>
+                <ul style="margin-top: 10px;">
+                    <li>५००+ युवाहरूमा सम्पदा चेतना र सीप विकास</li>
+                    <li>३ सम्पदा स्थलमा डिजिटल जानकारी प्रणाली स्थापना</li>
+                </ul>
+            </div>
+            <div class="highlight-box" style="border-color: #f9ca24; margin-top: 15px;">
+                <h3 style="color: #f9ca24; border: none;">📆 मध्यम अवधिमा</h3>
+                <ul style="margin-top: 10px;">
+                    <li>स्थानीय रोजगारी सिर्जना (गाइड, होमस्टे, स्मारक)</li>
+                    <li>KMC लाई अनुसन्धान केन्द्रको पहिचान</li>
+                </ul>
+            </div>
+        </div>
+        <div class="column">
+            <div class="highlight-box" style="border-color: #e94560;">
+                <h3 style="color: #e94560; border: none;">🗓️ दीर्घकालीन</h3>
+                <ul style="margin-top: 10px;">
+                    <li>कपिलवस्तुको विश्व सम्पदा सूचीमा सार्थक संरक्षण</li>
+                    <li>"सम्पदा संरक्षण मोडेल" अन्य जिल्लामा प्रसारण</li>
+                    <li>सस्टेनेबल पर्यटन मार्फत आर्थिक समृद्धि</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 15: Partnership -->
+<div class="slide">
+    <div class="slide-number">१५ / १७</div>
+    <h2>सहकार्य र स्रोत (Partnership & Resources)</h2>
+    <div class="two-column">
+        <div class="column">
+            <h3>🤝 संस्थागत सहकार्य:</h3>
+            <div class="content-box">
+                <ul>
+                    <li>कपिलवस्तु बहुमुखी क्याम्पस (KMC)</li>
+                    <li>UCDL Academy</li>
+                    <li>स्थानीय तह (कपिलवस्तु नगरपालिका/गाउँपालिका)</li>
+                    <li>पुरातात्विक विभाग, लुम्बिनी प्रदेश</li>
+                    <li>युनेस्को नेपाल</li>
+                    <li>स्थानीय समुदाय, विद्यालय, क्लब</li>
+                </ul>
+            </div>
+        </div>
+        <div class="column">
+            <h3>💰 आवश्यक स्रोतहरू:</h3>
+            <div class="content-box">
+                <ul>
+                    <li>डिजिटल उपकरण (ड्रोन, GPS, क्यामेरा)</li>
+                    <li>तालिम सामग्री र प्रिन्टिङ</li>
+                    <li>फिल्ड भिजिट लजिस्टिक्स</li>
+                    <li>अनुसन्धान अनुदान/अनुदान</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 16: Conclusion -->
+<div class="slide">
+    <div class="slide-number">१६ / १७</div>
+    <h2>निष्कर्ष (Conclusion)</h2>
+    <div class="content-box" style="max-width: 900px; text-align: center;">
+        <p style="font-size: 1.3em; line-height: 2; margin-bottom: 20px;">
+            प्राचीन कपिलवस्तु नेपालको गौरवशाली विरासत हो<br>
+            संरक्षण र संवर्द्धन हामी सबैको साझा दायित्व हो
+        </p>
+    </div>
+    <div class="icon-row" style="margin: 30px 0;">
+        <div class="icon-item">
+            <div class="icon">🎨</div>
+            <p>सृजनशीलता</p>
+            <p style="font-size: 0.85em; color: #a0d2eb; margin-top: 5px;">सम्पदालाई जीवन्त बनाउँछ</p>
+        </div>
+        <div class="icon-item">
+            <div class="icon">🔬</div>
+            <p>अनुसन्धान</p>
+            <p style="font-size: 0.85em; color: #a0d2eb; margin-top: 5px;">वैज्ञानिक आधार दिन्छ</p>
+        </div>
+        <div class="icon-item">
+            <div class="icon">💡</div>
+            <p>नवीनता</p>
+            <p style="font-size: 0.85em; color: #a0d2eb; margin-top: 5px;">दिगो समाधान प्रदान गर्छ</p>
+        </div>
+        <div class="icon-item">
+            <div class="icon">🚀</div>
+            <p>उद्यमशीलता</p>
+            <p style="font-size: 0.85em; color: #a0d2eb; margin-top: 5px;">आत्मनिर्भरता र समृद्धि</p>
+        </div>
+    </div>
+    <div class="quote" style="font-size: 1.8em;">
+        "हाम्रो सम्पदा, हाम्रो पहिचान, हाम्रो जिम्मेवारी"
+    </div>
+</div>
+
+<!-- Slide 17: Thank You -->
+<div class="slide">
+    <div class="slide-number">१७ / १७</div>
+    <h1 style="font-size: 3.5em;">धन्यवाद!</h1>
+    <p style="font-size: 1.5em; color: #a0d2eb; margin-bottom: 30px;">Thank You!</p>
+
+    <div class="gallery" style="max-width: 900px; margin-bottom: 30px;">
+        <div class="gallery-item">
+            <div class="image-container" style="height: 180px;">
+                <img src="tilaurakot.png" alt="तिलौराकोट">
+            </div>
+            <p class="image-caption">तिलौराकोट</p>
+        </div>
+        <div class="gallery-item">
+            <div class="image-container" style="height: 180px;">
+                <img src="piprahwa.png" alt="पिपरहवा">
+            </div>
+            <p class="image-caption">पिपरहवा स्तूप</p>
+        </div>
+        <div class="gallery-item">
+            <div class="image-container" style="height: 180px;">
+                <img src="buddha.png" alt="बुद्ध मूर्ति">
+            </div>
+            <p class="image-caption">बुद्ध मूर्ति</p>
+        </div>
+    </div>
+
+    <div class="trainer-info" style="max-width: 700px;">
+        <p class="trainer-name">Teacher Trainer: Mr. Bishnu Singh Rayamajhi (MTOT)</p>
+        <p style="margin-top: 10px;">
+            गणित प्रवक्ता तथा मानविकी र सामाजिक विज्ञान विभाग प्रमुख<br>
+            कपिलवस्तु बहुमुखी क्याम्पस (KMC), तौलिहवा<br>
+            <span style="color: #ffd700;">संस्थापक: UCDL Academy</span>
+        </p>
+    </div>
+    <p style="margin-top: 20px; font-size: 1.2em; color: #e94560;">💬 सुझाव र प्रश्नको लागि खुला छौं!</p>
+</div>
+
+<!-- Navigation -->
+<div class="nav-buttons">
+    <button class="nav-btn" onclick="prevSlide()">⬅️ अघिल्लो</button>
+    <button class="nav-btn" onclick="nextSlide()">अर्को ➡️</button>
+</div>
+<div class="slide-counter" id="counter">१ / १७</div>
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+
+    function showSlide(n) {
+        slides.forEach(s => s.classList.remove('active'));
+        if (n >= totalSlides) currentSlide = 0;
+        if (n < 0) currentSlide = totalSlides - 1;
+        slides[currentSlide].classList.add('active');
+        document.getElementById('counter').textContent = (currentSlide + 1) + ' / ' + totalSlides;
+    }
+
+    function nextSlide() {
+        currentSlide++;
+        showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+        currentSlide--;
+        showSlide(currentSlide);
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+        if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    showSlide(0);
+</script>
+
+</body>
+</html>
