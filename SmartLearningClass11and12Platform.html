@@ -830,7 +830,7 @@
                     <div class="stats-grid">
                         <div class="stat-card">
                             <div class="stat-label">📚 Subjects Enrolled</div>
-                            <div class="stat-value">8</div>
+                            <div class="stat-value">9</div>
                             <div class="stat-change">All NEB subjects</div>
                         </div>
                         <div class="stat-card success">
@@ -1019,6 +1019,27 @@
                                 <button class="btn btn-primary btn-sm btn-block">View Topics →</button>
                             </div>
                         </div>
+
+                        <div class="subject-card" onclick="switchModule('subjects')">
+                            <div class="subject-header" style="background: linear-gradient(135deg, #64748b, #475569);">💻 Computer Science</div>
+                            <div class="subject-content">
+                                <p>DBMS, Networking, Programming, Web Tech</p>
+                                <div class="subject-stats">
+                                    <div class="subject-stat">
+                                        <div class="subject-stat-value">6/8</div>
+                                        <div class="subject-stat-label">Chapters</div>
+                                    </div>
+                                    <div class="subject-stat">
+                                        <div class="subject-stat-value">74%</div>
+                                        <div class="subject-stat-label">Progress</div>
+                                    </div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 74%;"></div>
+                                </div>
+                                <button class="btn btn-primary btn-sm btn-block">View Topics →</button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="charts-grid" style="margin-top: 30px;">
@@ -1052,6 +1073,7 @@
                                 <option value="statistics">Statistics</option>
                                 <option value="biology">Biology</option>
                                 <option value="accountancy">Accountancy</option>
+                                <option value="computer">Computer Science</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -1229,30 +1251,297 @@
     <script>
         // Sample Data
         const subjectsData = [
-            { id: 1, name: 'Functions', subject: 'Mathematics', class: 'class11', chapters: 3 },
-            { id: 2, name: 'Sequences and Series', subject: 'Mathematics', class: 'class11', chapters: 2 },
-            { id: 3, name: 'Derivatives', subject: 'Mathematics', class: 'class12', chapters: 4 },
-            { id: 4, name: 'Kinematics', subject: 'Physics', class: 'class11', chapters: 3 },
-            { id: 5, name: 'Thermal Physics', subject: 'Physics', class: 'class12', chapters: 2 },
-            { id: 6, name: 'Atoms and Molecules', subject: 'Chemistry', class: 'class11', chapters: 2 },
-            { id: 7, name: 'Organic Chemistry', subject: 'Chemistry', class: 'class12', chapters: 5 },
-            { id: 8, name: 'Poetry and Prose', subject: 'English', class: 'class11', chapters: 4 },
-            { id: 9, name: 'Literary Elements', subject: 'English', class: 'class12', chapters: 3 },
-        ];
-
-        const mockExamsData = [
-            { id: 1, name: 'Full Length Mock - Mathematics', subject: 'Mathematics', questions: 50, time: 180, attempts: 3, bestScore: 85 },
-            { id: 2, name: 'Full Length Mock - Physics', subject: 'Physics', questions: 40, time: 150, attempts: 2, bestScore: 78 },
-            { id: 3, name: 'Half Yearly - Chemistry', subject: 'Chemistry', questions: 35, time: 120, attempts: 1, bestScore: 72 },
-        ];
-
-        const notesData = [
-            { id: 1, title: 'Integration Formulas', subject: 'Mathematics', class: '11', created: '2024-07-10' },
-            { id: 2, title: 'Newton Laws Summary', subject: 'Physics', class: '11', created: '2024-07-08' },
-            { id: 3, title: 'Chemical Equations', subject: 'Chemistry', class: '12', created: '2024-07-05' },
+            { id: 101, name: '1. Logic, Sets and Real Number System', subject: 'Mathematics', class: 'class11', category: 'Algebra', pdfUrl: 'https://drive.google.com/file/u/0/d/15uIGDQogffjmJjlBrMxQSLzrWdsYdAfF/view' },
+            { id: 102, name: '2. Function', subject: 'Mathematics', class: 'class11', category: 'Algebra', pdfUrl: 'https://drive.google.com/file/d/15vMQh24jRr6-vCCd4wP9fqevSWCK1LKO/view' },
+            { id: 103, name: '3. Curve Sketching', subject: 'Mathematics', class: 'class11', category: 'Algebra', pdfUrl: 'https://drive.google.com/file/d/15w6B_nGShj9SMSb3X4njs3K7HT8Yh6Tl/view' },
+            { id: 104, name: '4. Sequence and Series', subject: 'Mathematics', class: 'class11', category: 'Algebra', pdfUrl: 'https://drive.google.com/file/u/0/d/16tUHlCnngTuvArlX_XBsVxWz58n2_OCR/view' },
+            { id: 105, name: '5. Matrix and Determinants', subject: 'Mathematics', class: 'class11', category: 'Algebra', pdfUrl: 'https://drive.google.com/file/d/16ub0US0hJgyXYbO9v9irkFHjcMJWIjC2/view' },
+            { id: 106, name: '6. Quadratic Equations', subject: 'Mathematics', class: 'class11', category: 'Algebra', pdfUrl: 'https://drive.google.com/file/d/17872acGBE3DjQbmWGPTsAmaqgqEbKMy0/view' },
+            { id: 107, name: '7. Complex Numbers', subject: 'Mathematics', class: 'class11', category: 'Algebra', pdfUrl: 'https://drive.google.com/file/d/17D5T2_bJqv9FD-rGaXk8U0YKDQZpgh2m/view' },
+            { id: 108, name: '8. Inverse Circular Function and Trigonometric Equation', subject: 'Mathematics', class: 'class11', category: 'Trigonometry', pdfUrl: 'https://drive.google.com/file/d/17JNlUC7omK7PzmDnJ2LRF6brOKI-LVt5/view' },
+            { id: 109, name: '9. Analytic Geometry', subject: 'Mathematics', class: 'class11', category: 'Analytic Geometry', pdfUrl: 'https://drive.google.com/file/d/17LrL-ONKuxcdlKoY0q46YMbxqNnP4kDv/view' },
+            { id: 110, name: '10. Pair of Straight Lines', subject: 'Mathematics', class: 'class11', category: 'Analytic Geometry', pdfUrl: 'https://drive.google.com/file/u/0/d/16GW0zL98Ih2eO-Vl37knCZyk8icMUSFY/view' },
+            { id: 111, name: '11. Coordinates in Space', subject: 'Mathematics', class: 'class11', category: 'Analytic Geometry', pdfUrl: 'https://drive.google.com/file/d/16GotC-FTwIM2zcnRYGyEpM46rODVNFzk/view' },
+            { id: 112, name: '12. Vectors', subject: 'Mathematics', class: 'class11', category: 'Vectors', pdfUrl: 'https://drive.google.com/file/d/16GotC-FTwIM2zcnRYGyEpM46rODVNFzk/view' },
+            { id: 113, name: '13. Measures of Dispersion', subject: 'Mathematics', class: 'class11', category: 'Statistics and Probability', pdfUrl: 'https://drive.google.com/file/d/16RC38OEY_I8aG3MclXBdpqTwNRnotQfb/view' },
+            { id: 114, name: '14. Probability', subject: 'Mathematics', class: 'class11', category: 'Statistics and Probability', pdfUrl: 'https://drive.google.com/file/d/16eOMgEXu0RogD5Ncc_fOPJH7i2jHxyFc/view' },
+            { id: 115, name: '15. Limits and Continuity', subject: 'Mathematics', class: 'class11', category: 'Calculus', pdfUrl: 'https://drive.google.com/file/u/0/d/17l9f5glZsxjp9yNrtPleFDF0NT9jfkv3/view' },
+            { id: 116, name: '16. The Derivatives', subject: 'Mathematics', class: 'class11', category: 'Calculus', pdfUrl: 'https://drive.google.com/file/d/17tx6kA0j7ElRh29165LWsNwRTroP9A7N/view' },
+            { id: 117, name: '17. Application of Derivatives', subject: 'Mathematics', class: 'class11', category: 'Calculus', pdfUrl: 'https://drive.google.com/file/d/17uSfnJQgpFcrIBwWNx-X_jgZiuXHX9mr/view' },
+            { id: 118, name: '18. Antiderivative', subject: 'Mathematics', class: 'class11', category: 'Calculus', pdfUrl: 'https://drive.google.com/file/d/17xxozl0C7EPHVM9Gm2IOeYPi5TV8pmPU/view' },
+            { id: 119, name: '19. Numerical Computation', subject: 'Mathematics', class: 'class11', category: 'Computational Methods', pdfUrl: 'https://drive.google.com/file/d/1F3ee_6I0VfO_fC2Z8qHrcie2lWErejFx/view' },
+            { id: 120, name: '20. Numerical Integration', subject: 'Mathematics', class: 'class11', category: 'Computational Methods', pdfUrl: 'https://drive.google.com/file/d/1FQDiw_IgwErLheuBYmUTTsTMKkAzRhSZ/view' },
+            { id: 121, name: '21. Statics', subject: 'Mathematics', class: 'class11', category: 'Mechanics', pdfUrl: 'https://catalogimages.wiley.com/images/db/pdf/9781119665045.excerpt.pdf' },
+            { id: 122, name: '22. Dynamics', subject: 'Mathematics', class: 'class11', category: 'Mechanics', pdfUrl: 'https://simplifiednote.com/class-11-dynamics-lectures-note/' },
+            { id: 201, name: '1. Permutation and Combination', subject: 'Mathematics', class: 'class12', category: 'Algebra', pdfUrl: 'https://drive.google.com/file/d/15Gap4JU7rX6GnpgseWstnu_GkegQlN8u/view' },
+            { id: 202, name: '2. Binomial Theorem', subject: 'Mathematics', class: 'class12', category: 'Algebra', pdfUrl: 'https://drive.google.com/file/u/0/d/1LOANfqNrvXuUlNC8Ormk1MvMX15ja3XB/view' },
+            { id: 203, name: '3. Complex Number', subject: 'Mathematics', class: 'class12', category: 'Algebra', pdfUrl: 'https://drive.google.com/file/d/1BLMcpDi20i1fa0OBSmkFbXSYcBS5s9Pd/view' },
+            { id: 204, name: '4. Sequence and Series', subject: 'Mathematics', class: 'class12', category: 'Algebra', pdfUrl: 'https://drive.google.com/file/u/0/d/1bgtNF7XHCJH1Y_KQR7TBZTOydaHZfh5w/view' },
+            { id: 205, name: '5. Matrix Based System of Linear Equations', subject: 'Mathematics', class: 'class12', category: 'Algebra', pdfUrl: 'https://drive.google.com/file/d/1Kzz4gRDOyZ9QojdaJpNewXYeanm7tVvc/view' },
+            { id: 206, name: '6. Properties of Triangle', subject: 'Mathematics', class: 'class12', category: 'Trigonometry', pdfUrl: 'https://drive.google.com/file/d/1zh1-cVEDJyBa2vIHIaOgzWNKVLX4IlRe/view' },
+            { id: 207, name: '7. Solution of Triangle', subject: 'Mathematics', class: 'class12', category: 'Trigonometry', pdfUrl: 'https://drive.google.com/file/u/0/d/1R2-DcwBhpRnj1F2r8Bt0ujuQZdkLzTFx/view' },
+            { id: 208, name: '8. Conic Section', subject: 'Mathematics', class: 'class12', category: 'Analytic Geometry', pdfUrl: 'https://drive.google.com/file/d/1R9Sgj-8h55Vy3TIfR-phY_Eta-e_5-zf/view' },
+            { id: 209, name: '9. Product of Vectors', subject: 'Mathematics', class: 'class12', category: 'Vectors', pdfUrl: 'https://drive.google.com/file/d/1LCyHG3CQ3eQvOVoJzeUzgr1xQk4FcF91/view' },
+            { id: 210, name: '10. Correlation and Regression', subject: 'Mathematics', class: 'class12', category: 'Statistics and Probability', pdfUrl: 'https://drive.google.com/file/d/1UasTgwie6v9lRfdupcRe9dVM8WWGgE7p/view' },
+            { id: 211, name: '11. Probability', subject: 'Mathematics', class: 'class12', category: 'Statistics and Probability', pdfUrl: 'https://drive.google.com/file/d/1k2nGd8bHEOQrum6ooBs_3WPOExoAznld/view' },
+            { id: 212, name: '12. Derivatives', subject: 'Mathematics', class: 'class12', category: 'Calculus', pdfUrl: 'https://drive.google.com/file/d/1mTJomn0NNjLg1qJo1FIIZrKZHchRO2XC/view' },
+            { id: 213, name: '13. Application of Derivatives', subject: 'Mathematics', class: 'class12', category: 'Calculus', pdfUrl: 'https://drive.google.com/file/d/1mxiRJ15fHJsFlfHNh49eBRM5SOlwxyw2/view' },
+            { id: 214, name: '14. Antiderivative', subject: 'Mathematics', class: 'class12', category: 'Calculus', pdfUrl: 'https://drive.google.com/file/d/1mxiRJ15fHJsFlfHNh49eBRM5SOlwxyw2/view' },
+            { id: 215, name: '15. Differential Equations', subject: 'Mathematics', class: 'class12', category: 'Calculus', pdfUrl: 'https://drive.google.com/file/d/1oQK7LHU5SwP_4vTuYMdMrV5aAYzybMAr/view' },
+            { id: 216, name: '16. System of Linear Equations', subject: 'Mathematics', class: 'class12', category: 'Computational Methods', pdfUrl: 'https://drive.google.com/file/u/0/d/1sj_YZ_DZLIhqzp7kRrbOgmdQ9XEyL65d/view' },
+            { id: 217, name: '17. Linear Programming', subject: 'Mathematics', class: 'class12', category: 'Computational Methods', pdfUrl: 'https://drive.google.com/file/u/0/d/1qgSTA0BOjdqYba_CMZdorYzyHMhTmcGU/view' },
+            { id: 218, name: '18. Statics', subject: 'Mathematics', class: 'class12', category: 'Mechanics', pdfUrl: 'https://drive.google.com/file/d/1rAXsYMMfCEDuA_rwJQ9YvT2QO8PUcHxH/view' },
+            { id: 219, name: '19. Dynamic: Newton\'s Law of Motion and Projectile', subject: 'Mathematics', class: 'class12', category: 'Mechanics', pdfUrl: 'https://drive.google.com/file/u/0/d/1rw7q9DjegfZO4kJO8HSe0LL6rj6YpmrR/view' },
+            { id: 1001, name: '1. Education and Humanity', subject: 'English', class: 'class11', category: 'Language Development', pdfUrl: 'https://nebplus2notes.com/class-11/english/ld/education-and-humanity' },
+            { id: 1002, name: '2. Communication', subject: 'English', class: 'class11', category: 'Language Development', pdfUrl: 'https://nebplus2notes.com/class-11/english/ld/communication' },
+            { id: 1003, name: '3. Media and Society', subject: 'English', class: 'class11', category: 'Language Development', pdfUrl: 'https://nebplus2notes.com/class-11/english/ld/media-and-society' },
+            { id: 1004, name: '4. History and Culture', subject: 'English', class: 'class11', category: 'Language Development', pdfUrl: 'https://nebplus2notes.com/class-11/english/ld/history-and-culture' },
+            { id: 1005, name: '5. Life and Love', subject: 'English', class: 'class11', category: 'Language Development', pdfUrl: 'https://nebplus2notes.com/class-11/english/ld/life-and-love' },
+            { id: 1006, name: '6. Health and Exercise', subject: 'English', class: 'class11', category: 'Language Development', pdfUrl: 'https://nebplus2notes.com/class-11/english/ld/health-and-exercise' },
+            { id: 1007, name: '7. Ecology and Development', subject: 'English', class: 'class11', category: 'Language Development', pdfUrl: 'https://nebplus2notes.com/class-11/english/ld/ecology-and-development' },
+            { id: 1008, name: '8. Humour and Satire', subject: 'English', class: 'class11', category: 'Language Development', pdfUrl: 'https://nebplus2notes.com/class-11/english/ld/humour-and-satire' },
+            { id: 1009, name: '9. Democracy and Human Rights', subject: 'English', class: 'class11', category: 'Language Development', pdfUrl: 'https://nebplus2notes.com/class-11/english/ld/democracy-and-human-rights' },
+            { id: 1010, name: '10. Home Life and Family Relationship', subject: 'English', class: 'class11', category: 'Language Development', pdfUrl: 'https://nebplus2notes.com/class-11/english/ld/home-life-and-family-relationship' },
+            { id: 1011, name: '11. Arts and Creations', subject: 'English', class: 'class11', category: 'Language Development', pdfUrl: 'https://nebplus2notes.com/class-11/english/ld/arts-and-creations' },
+            { id: 1012, name: '12. Fantasy', subject: 'English', class: 'class11', category: 'Language Development', pdfUrl: 'https://nebplus2notes.com/class-11/english/ld/fantasy' },
+            { id: 1013, name: '13. Career and Entrepreneurship', subject: 'English', class: 'class11', category: 'Language Development', pdfUrl: 'https://nebplus2notes.com/class-11/english/ld/career-and-entrepreneurship' },
+            { id: 1014, name: '14. Power and Politics', subject: 'English', class: 'class11', category: 'Language Development', pdfUrl: 'https://nebplus2notes.com/class-11/english/ld/power-and-politics' },
+            { id: 1015, name: '15. War and Peace', subject: 'English', class: 'class11', category: 'Language Development', pdfUrl: 'https://nebplus2notes.com/class-11/english/ld/war-and-peace' },
+            { id: 1016, name: '16. Critical Thinking', subject: 'English', class: 'class11', category: 'Language Development', pdfUrl: 'https://nebplus2notes.com/class-11/english/ld/critical-thinking' },
+            { id: 1017, name: '17. Globalisation and Diaspora', subject: 'English', class: 'class11', category: 'Language Development', pdfUrl: 'https://nebplus2notes.com/class-11/english/ld/globalisation-and-diaspora' },
+            { id: 1018, name: '18. Immigration and Identity', subject: 'English', class: 'class11', category: 'Language Development', pdfUrl: 'https://nebplus2notes.com/class-11/english/ld/immigration-and-identity' },
+            { id: 1019, name: '19. Travel and Tourism', subject: 'English', class: 'class11', category: 'Language Development', pdfUrl: 'https://nebplus2notes.com/class-11/english/ld/travel-and-tourism' },
+            { id: 1020, name: '20. Science and Technology', subject: 'English', class: 'class11', category: 'Language Development', pdfUrl: 'https://nebplus2notes.com/class-11/english/ld/science-and-technology' },
+            { id: 1021, name: '1. The Selfish Giant', subject: 'English', class: 'class11', category: 'Short Stories', pdfUrl: 'https://nebplus2notes.com/class-11/english/lit/ss/the-selfish-giant' },
+            { id: 1022, name: '2. The Oval Portrait', subject: 'English', class: 'class11', category: 'Short Stories', pdfUrl: 'https://nebplus2notes.com/class-11/english/lit/ss/the-oval-portrait' },
+            { id: 1023, name: '3. God Sees the Truth but Waits', subject: 'English', class: 'class11', category: 'Short Stories', pdfUrl: 'https://nebplus2notes.com/class-11/english/lit/ss/god-sees-the-truth-but-waits' },
+            { id: 1024, name: '4. The Wish', subject: 'English', class: 'class11', category: 'Short Stories', pdfUrl: 'https://nebplus2notes.com/class-11/english/lit/ss/the-wish' },
+            { id: 1025, name: '5. Civil Peace', subject: 'English', class: 'class11', category: 'Short Stories', pdfUrl: 'https://nebplus2notes.com/class-11/english/lit/ss/civil-peace' },
+            { id: 1026, name: '6. Two Little Soldiers', subject: 'English', class: 'class11', category: 'Short Stories', pdfUrl: 'https://nebplus2notes.com/class-11/english/lit/ss/two-little-soldiers' },
+            { id: 1027, name: '7. An Astrologer\'s Day', subject: 'English', class: 'class11', category: 'Short Stories', pdfUrl: 'https://nebplus2notes.com/class-11/english/lit/ss/an-astrologers-day' },
+            { id: 1028, name: '1. Corona Says', subject: 'English', class: 'class11', category: 'Poems', pdfUrl: 'https://nebplus2notes.com/class-11/english/lit/poems/corona-says' },
+            { id: 1029, name: '2. A Red, Red Rose', subject: 'English', class: 'class11', category: 'Poems', pdfUrl: 'https://nebplus2notes.com/class-11/english/lit/poems/a-red-red-rose' },
+            { id: 1030, name: '3. All the World\'s a Stage', subject: 'English', class: 'class11', category: 'Poems', pdfUrl: 'https://nebplus2notes.com/class-11/english/lit/poems/all-the-worlds-a-stage' },
+            { id: 1031, name: '4. Who are you, little i?', subject: 'English', class: 'class11', category: 'Poems', pdfUrl: 'https://nebplus2notes.com/class-11/english/lit/poems/who-are-you-little-i' },
+            { id: 1032, name: '5. The Gift in Wartime', subject: 'English', class: 'class11', category: 'Poems', pdfUrl: 'https://nebplus2notes.com/class-11/english/lit/poems/the-gift-in-wartime' },
+            { id: 1033, name: '1. Sharing Tradition', subject: 'English', class: 'class11', category: 'Essays', pdfUrl: 'https://nebplus2notes.com/class-11/english/lit/essays/sharing-tradition' },
+            { id: 1034, name: '2. How to Live Before You Die', subject: 'English', class: 'class11', category: 'Essays', pdfUrl: 'https://nebplus2notes.com/class-11/english/lit/essays/how-to-live-before-you-die' },
+            { id: 1035, name: '3. What I Require from Life', subject: 'English', class: 'class11', category: 'Essays', pdfUrl: 'https://nebplus2notes.com/class-11/english/lit/essays/what-i-require-from-life' },
+            { id: 1036, name: '4. What is Poverty?', subject: 'English', class: 'class11', category: 'Essays', pdfUrl: 'https://nebplus2notes.com/class-11/english/lit/essays/what-is-poverty' },
+            { id: 1037, name: '5. Scientific Research is a Token of Humankind\'s Survival', subject: 'English', class: 'class11', category: 'Essays', pdfUrl: 'https://nebplus2notes.com/class-11/english/lit/essays/scientific-research-is-a-token-of-humankinds-survival' },
+            { id: 1038, name: '1. Trifles', subject: 'English', class: 'class11', category: 'One Act Plays', pdfUrl: 'https://nebplus2notes.com/class-11/english/lit/oap/trifles' },
+            { id: 1039, name: '2. A Sunny Morning', subject: 'English', class: 'class11', category: 'One Act Plays', pdfUrl: 'https://nebplus2notes.com/class-11/english/lit/oap/a-sunny-morning' },
+            { id: 1040, name: '3. Refund', subject: 'English', class: 'class11', category: 'One Act Plays', pdfUrl: 'https://nebplus2notes.com/class-11/english/lit/oap/refund' },
+            { id: 1041, name: '1. वीर पुर्खा (कविता)', subject: 'Nepali', class: 'class11', category: 'पाठ', pdfUrl: 'https://nebplus2notes.com/class-11/nepali/bir-purkha' },
+            { id: 1042, name: '2. गाउँको माया (सामाजिक कथा)', subject: 'Nepali', class: 'class11', category: 'पाठ', pdfUrl: 'https://nebplus2notes.com/class-11/nepali/gauko-maya' },
+            { id: 1043, name: '3. संस्कृतिको नयाँ यात्रा (आत्मपरक निबन्ध)', subject: 'Nepali', class: 'class11', category: 'पाठ', pdfUrl: 'https://nebplus2notes.com/class-11/nepali/sanskriti-ko-naya-yatra' },
+            { id: 1044, name: '4. योगमाया (राष्ट्रिय जीवनी)', subject: 'Nepali', class: 'class11', category: 'पाठ', pdfUrl: 'https://nebplus2notes.com/class-11/nepali/yogmaya' },
+            { id: 1045, name: '5. साथीलाई चिठी (चिठी)', subject: 'Nepali', class: 'class11', category: 'पाठ', pdfUrl: 'https://nebplus2notes.com/class-11/nepali/sathilai-chithi' },
+            { id: 1046, name: '6. त्यो फेरि फर्कला ? (मनोवैज्ञानिक कथा)', subject: 'Nepali', class: 'class11', category: 'पाठ', pdfUrl: 'https://nebplus2notes.com/class-11/nepali/tyo-feri-farkala' },
+            { id: 1047, name: '7. पर्यापर्यटनका सम्भावना र आयाम (वस्तुपरक निबन्ध)', subject: 'Nepali', class: 'class11', category: 'पाठ', pdfUrl: 'https://nebplus2notes.com/class-11/nepali/paryatan-samvawana-ra-aayam' },
+            { id: 1048, name: '8. लौ आयो ताजा खबर (लघु नाटक)', subject: 'Nepali', class: 'class11', category: 'पाठ', pdfUrl: 'https://nebplus2notes.com/class-11/nepali/lau-aayo-taja-khabar' },
+            { id: 1049, name: '9. सफलताको कथा (रिपोर्ताजमूलक रचना)', subject: 'Nepali', class: 'class11', category: 'पाठ', pdfUrl: 'https://nebplus2notes.com/class-11/nepali/safalta-ko-katha' },
+            { id: 1050, name: '10. कृषिशालामा एक दिन (संवाद)', subject: 'Nepali', class: 'class11', category: 'पाठ', pdfUrl: 'https://nebplus2notes.com/class-11/nepali/krishisala-ma-yek-din' },
+            { id: 1051, name: '11. रारा भ्रमण (दैनिकी)', subject: 'Nepali', class: 'class11', category: 'पाठ', pdfUrl: 'https://nebplus2notes.com/class-11/nepali/rara-vramad' },
+            { id: 1052, name: '12. जलस्रोत र ऊर्जा (वक्तृता)', subject: 'Nepali', class: 'class11', category: 'पाठ', pdfUrl: 'https://nebplus2notes.com/class-11/nepali/jalshrot-ra-urja' },
+            { id: 1053, name: '1. Physical Quantities', subject: 'Physics', class: 'class11', category: 'Mechanics', pdfUrl: 'https://noteswift.in/class-11-physics-physical-quantities/' },
+            { id: 1054, name: '2. Vectors', subject: 'Physics', class: 'class11', category: 'Mechanics', pdfUrl: 'https://noteswift.in/class-11-physics-vectors/' },
+            { id: 1055, name: '3. Kinematics', subject: 'Physics', class: 'class11', category: 'Mechanics', pdfUrl: 'https://noteswift.in/class-11-physics-kinematics/' },
+            { id: 1056, name: '4. Dynamics', subject: 'Physics', class: 'class11', category: 'Mechanics', pdfUrl: 'https://noteswift.in/class-11-physics-dynamics/' },
+            { id: 1057, name: '5. Work, Energy and Power', subject: 'Physics', class: 'class11', category: 'Mechanics', pdfUrl: 'https://noteswift.in/class-11-physics-work-energy-and-power/' },
+            { id: 1058, name: '6. Circular Motion', subject: 'Physics', class: 'class11', category: 'Mechanics', pdfUrl: 'https://noteswift.in/class-11-physics-circular-motion/' },
+            { id: 1059, name: '7. Gravitation', subject: 'Physics', class: 'class11', category: 'Mechanics', pdfUrl: 'https://noteswift.in/class-11-physics-gravitation/' },
+            { id: 1060, name: '8. Elasticity', subject: 'Physics', class: 'class11', category: 'Mechanics', pdfUrl: 'https://noteswift.in/class-11-physics-elasticity/' },
+            { id: 1061, name: '9. Heat and Temperature', subject: 'Physics', class: 'class11', category: 'Heat and Thermodynamics', pdfUrl: 'https://noteswift.in/class-11-physics-heat-and-temperature/' },
+            { id: 1062, name: '10. Thermal Expansion', subject: 'Physics', class: 'class11', category: 'Heat and Thermodynamics', pdfUrl: 'https://noteswift.in/class-11-physics-thermal-expansion/' },
+            { id: 1063, name: '11. Quantity of Heat', subject: 'Physics', class: 'class11', category: 'Heat and Thermodynamics', pdfUrl: 'https://noteswift.in/class-11-physics-quantity-of-heat/' },
+            { id: 1064, name: '12. Rate of Heat Flow', subject: 'Physics', class: 'class11', category: 'Heat and Thermodynamics', pdfUrl: 'https://noteswift.in/class-11-physics-rate-of-heat-flow/' },
+            { id: 1065, name: '13. Ideal Gas', subject: 'Physics', class: 'class11', category: 'Heat and Thermodynamics', pdfUrl: 'https://noteswift.in/class-11-physics-ideal-gas/' },
+            { id: 1066, name: '14. Reflection at Curved Mirror', subject: 'Physics', class: 'class11', category: 'Optics', pdfUrl: 'https://noteswift.in/class-11-physics-reflection-at-curved-mirror/' },
+            { id: 1067, name: '15. Refraction at Plane Surface', subject: 'Physics', class: 'class11', category: 'Optics', pdfUrl: 'https://noteswift.in/class-11-physics-refraction-at-plane-surface/' },
+            { id: 1068, name: '16. Refraction Through Prism', subject: 'Physics', class: 'class11', category: 'Optics', pdfUrl: 'https://noteswift.in/class-11-physics-refraction-through-prism/' },
+            { id: 1069, name: '17. Lenses', subject: 'Physics', class: 'class11', category: 'Optics', pdfUrl: 'https://noteswift.in/class-11-physics-lenses/' },
+            { id: 1070, name: '18. Dispersion', subject: 'Physics', class: 'class11', category: 'Optics', pdfUrl: 'https://noteswift.in/class-11-physics-dispersion/' },
+            { id: 1071, name: '19. Electric Charge', subject: 'Physics', class: 'class11', category: 'Electricity', pdfUrl: 'https://noteswift.in/class-11-physics-electric-charge/' },
+            { id: 1072, name: '20. Electric Field', subject: 'Physics', class: 'class11', category: 'Electricity', pdfUrl: 'https://noteswift.in/class-11-physics-electric-field/' },
+            { id: 1073, name: '21. Electric Potential and Energy', subject: 'Physics', class: 'class11', category: 'Electricity', pdfUrl: 'https://noteswift.in/class-11-physics-electric-potential-and-energy/' },
+            { id: 1074, name: '22. Capacitor', subject: 'Physics', class: 'class11', category: 'Electricity', pdfUrl: 'https://noteswift.in/class-11-physics-capacitor/' },
+            { id: 1075, name: '23. DC Circuit', subject: 'Physics', class: 'class11', category: 'Electricity', pdfUrl: 'https://noteswift.in/class-11-physics-dc-circuit/' },
+            { id: 1076, name: '24. Nuclear Physics', subject: 'Physics', class: 'class11', category: 'Modern Physics', pdfUrl: 'https://noteswift.in/class-11-physics-nuclear-physics/' },
+            { id: 1077, name: '25. Solid', subject: 'Physics', class: 'class11', category: 'Modern Physics', pdfUrl: 'https://noteswift.in/class-11-physics-solid/' },
+            { id: 1078, name: '26. Recent Trends in Physics', subject: 'Physics', class: 'class11', category: 'Modern Physics', pdfUrl: 'https://noteswift.in/class-11-physics-recent-trends-in-physics/' },
+            { id: 1079, name: '1. Foundation and Fundamentals', subject: 'Chemistry', class: 'class11', category: 'General and Physical Chemistry', pdfUrl: 'https://noteswift.in/class-11-chemistry-foundation-and-fundamentals/' },
+            { id: 1080, name: '2. Stoichiometry', subject: 'Chemistry', class: 'class11', category: 'General and Physical Chemistry', pdfUrl: 'https://noteswift.in/class-11-chemistry-stoichiometry/' },
+            { id: 1081, name: '3. Atomic Structure', subject: 'Chemistry', class: 'class11', category: 'General and Physical Chemistry', pdfUrl: 'https://noteswift.in/class-11-chemistry-atomic-structure/' },
+            { id: 1082, name: '4. Periodic Table', subject: 'Chemistry', class: 'class11', category: 'General and Physical Chemistry', pdfUrl: 'https://noteswift.in/class-11-chemistry-periodic-table/' },
+            { id: 1083, name: '5. Chemical Bounding and Shape of Molecules', subject: 'Chemistry', class: 'class11', category: 'General and Physical Chemistry', pdfUrl: 'https://noteswift.in/class-11-chemistry-chemical-bounding-and-shape-of-molecules/' },
+            { id: 1084, name: '6. Oxidation and Reduction', subject: 'Chemistry', class: 'class11', category: 'General and Physical Chemistry', pdfUrl: 'https://noteswift.in/class-11-chemistry-oxidation-and-reduction/' },
+            { id: 1085, name: '7. State of Matter', subject: 'Chemistry', class: 'class11', category: 'General and Physical Chemistry', pdfUrl: 'https://noteswift.in/class-11-chemistry-state-of-matter/' },
+            { id: 1086, name: '8. Chemical Equilibrium', subject: 'Chemistry', class: 'class11', category: 'General and Physical Chemistry', pdfUrl: 'https://noteswift.in/class-11-chemistry-chemical-equilibrium/' },
+            { id: 1087, name: '9. Chemistry of Non Metals', subject: 'Chemistry', class: 'class11', category: 'Inorganic Chemistry', pdfUrl: 'https://noteswift.in/class-11-chemistry-chemistry-of-non-metals/' },
+            { id: 1088, name: '10. Chemistry of Metals', subject: 'Chemistry', class: 'class11', category: 'Inorganic Chemistry', pdfUrl: 'https://noteswift.in/class-11-chemistry-chemistry-of-metals/' },
+            { id: 1089, name: '11. Bio-Inorganic Chemistry', subject: 'Chemistry', class: 'class11', category: 'Inorganic Chemistry', pdfUrl: 'https://noteswift.in/class-11-chemistry-bio-inorganic-chemistry/' },
+            { id: 1090, name: '12. Basic Concept of Organic Chemistry', subject: 'Chemistry', class: 'class11', category: 'Inorganic Chemistry', pdfUrl: 'https://noteswift.in/class-11-chemistry-basic-concept-of-organic-chemistry/' },
+            { id: 1091, name: '13. Fundamental Principle of Organic Chemistry', subject: 'Chemistry', class: 'class11', category: 'Inorganic Chemistry', pdfUrl: 'https://noteswift.in/class-11-chemistry-fundamental-principle-of-organic-chemistry/' },
+            { id: 1092, name: '14. Hydrocarbons', subject: 'Chemistry', class: 'class11', category: 'Inorganic Chemistry', pdfUrl: 'https://noteswift.in/class-11-chemistry-hydrocarbons/' },
+            { id: 1093, name: '15. Aromatic Chemistry', subject: 'Chemistry', class: 'class11', category: 'Inorganic Chemistry', pdfUrl: 'https://noteswift.in/class-11-chemistry-aromatic-chemistry/' },
+            { id: 1094, name: '16. Fundamentals of Applied Chemistry', subject: 'Chemistry', class: 'class11', category: 'Inorganic Chemistry', pdfUrl: 'https://noteswift.in/class-11-chemistry-fundamentals-of-applied-chemistry/' },
+            { id: 1095, name: '17. Modern Chemical Manufactures', subject: 'Chemistry', class: 'class11', category: 'Inorganic Chemistry', pdfUrl: 'https://noteswift.in/class-11-chemistry-modern-chemical-manufactures/' },
+            { id: 1096, name: '1. Computer System', subject: 'Computer', class: 'class11', category: 'Computer Science', pdfUrl: 'https://noteswift.in/class-11-computer-notes/' },
+            { id: 1097, name: '2. Number System of Boolean Logic', subject: 'Computer', class: 'class11', category: 'Computer Science', pdfUrl: 'https://noteswift.in/class-11-computer-notes/' },
+            { id: 1098, name: '3. Computer Software & Operating System', subject: 'Computer', class: 'class11', category: 'Computer Science', pdfUrl: 'https://noteswift.in/class-11-computer-notes/' },
+            { id: 1099, name: '4. Application Package', subject: 'Computer', class: 'class11', category: 'Computer Science', pdfUrl: 'https://noteswift.in/class-11-computer-notes/' },
+            { id: 1100, name: '5. Programming Concepts & Logics', subject: 'Computer', class: 'class11', category: 'Computer Science', pdfUrl: 'https://noteswift.in/class-11-computer-notes/' },
+            { id: 1101, name: '6. Web Technology', subject: 'Computer', class: 'class11', category: 'Computer Science', pdfUrl: 'https://noteswift.in/class-11-computer-notes/' },
+            { id: 1102, name: '7. Multimedia', subject: 'Computer', class: 'class11', category: 'Computer Science', pdfUrl: 'https://noteswift.in/class-11-computer-notes/' },
+            { id: 1103, name: '8. Information Security and Cyber Law', subject: 'Computer', class: 'class11', category: 'Computer Science', pdfUrl: 'https://noteswift.in/class-11-computer-notes/' },
+            { id: 1104, name: '1. Biomolecules and Cell Biology', subject: 'Biology', class: 'class11', category: 'Botany', pdfUrl: 'https://noteswift.in/neb-class-11-biology-all-chapters-notes/' },
+            { id: 1105, name: '2. Floral Diversity', subject: 'Biology', class: 'class11', category: 'Botany', pdfUrl: 'https://noteswift.in/neb-class-11-biology-all-chapters-notes/' },
+            { id: 1106, name: '3. Introductory Microbiology', subject: 'Biology', class: 'class11', category: 'Botany', pdfUrl: 'https://noteswift.in/neb-class-11-biology-all-chapters-notes/' },
+            { id: 1107, name: '4. Ecology', subject: 'Biology', class: 'class11', category: 'Botany', pdfUrl: 'https://noteswift.in/neb-class-11-biology-all-chapters-notes/' },
+            { id: 1108, name: '5. Vegetation', subject: 'Biology', class: 'class11', category: 'Botany', pdfUrl: 'https://noteswift.in/neb-class-11-biology-all-chapters-notes/' },
+            { id: 1109, name: '6. Introduction to Biology', subject: 'Biology', class: 'class11', category: 'Zoology', pdfUrl: 'https://noteswift.in/neb-class-11-biology-all-chapters-notes/' },
+            { id: 1110, name: '7. Evolutionary Biology', subject: 'Biology', class: 'class11', category: 'Zoology', pdfUrl: 'https://noteswift.in/neb-class-11-biology-all-chapters-notes/' },
+            { id: 1111, name: '8. Faunal Diversity', subject: 'Biology', class: 'class11', category: 'Zoology', pdfUrl: 'https://noteswift.in/neb-class-11-biology-all-chapters-notes/' },
+            { id: 1112, name: '9. Biota and Environment', subject: 'Biology', class: 'class11', category: 'Zoology', pdfUrl: 'https://noteswift.in/neb-class-11-biology-all-chapters-notes/' },
+            { id: 1113, name: '10. Conservation Biology', subject: 'Biology', class: 'class11', category: 'Zoology', pdfUrl: 'https://noteswift.in/neb-class-11-biology-all-chapters-notes/' },
+            { id: 1114, name: '1. Unit One: Book-Keeping, Journal, Ledger, Trial Balance', subject: 'Accountancy', class: 'class11', category: 'Accountancy', pdfUrl: 'https://noteswift.in/class-11-account-notes/' },
+            { id: 1115, name: '2. Unit Two: Banking, Rectification of Errors, Fixed Assets', subject: 'Accountancy', class: 'class11', category: 'Accountancy', pdfUrl: 'https://noteswift.in/class-11-account-notes/' },
+            { id: 1116, name: '3. Unit Three: Capital & Revenue, Financial Statement, Single Entry System', subject: 'Accountancy', class: 'class11', category: 'Accountancy', pdfUrl: 'https://noteswift.in/class-11-account-notes/' },
+            { id: 1117, name: '4. Unit Four: Government Accounting, Budget Sheet', subject: 'Accountancy', class: 'class11', category: 'Accountancy', pdfUrl: 'https://noteswift.in/class-11-account-notes/' },
+            { id: 1118, name: 'Statistics - Reference Material (NCERT)', subject: 'Statistics', class: 'class11', category: 'Statistics', pdfUrl: 'https://www.ncert.nic.in/pdf/publication/exemplarproblem/classXI/mathematics/keep215.pdf' },
+            { id: 1119, name: '1. Critical Thinking', subject: 'English', class: 'class12', category: 'Language Development', pdfUrl: 'https://noteswift.in/class-12-english-critical-thinking/' },
+            { id: 1120, name: '2. Family', subject: 'English', class: 'class12', category: 'Language Development', pdfUrl: 'https://noteswift.in/class-12-english-family/' },
+            { id: 1121, name: '3. Sports', subject: 'English', class: 'class12', category: 'Language Development', pdfUrl: 'https://noteswift.in/class-12-english-sports/' },
+            { id: 1122, name: '4. Technology', subject: 'English', class: 'class12', category: 'Language Development', pdfUrl: 'https://noteswift.in/class-12-english-technology/' },
+            { id: 1123, name: '5. Education', subject: 'English', class: 'class12', category: 'Language Development', pdfUrl: 'https://noteswift.in/class-12-english-education/' },
+            { id: 1124, name: '6. Money and Economy', subject: 'English', class: 'class12', category: 'Language Development', pdfUrl: 'https://noteswift.in/class-12-english-money-and-economy/' },
+            { id: 1125, name: '7. Humor', subject: 'English', class: 'class12', category: 'Language Development', pdfUrl: 'https://noteswift.in/class-12-english-humor/' },
+            { id: 1126, name: '8. Human Culture', subject: 'English', class: 'class12', category: 'Language Development', pdfUrl: 'https://noteswift.in/class-12-english-human-culture/' },
+            { id: 1127, name: '9. Ecology and Environment', subject: 'English', class: 'class12', category: 'Language Development', pdfUrl: 'https://noteswift.in/class-12-english-ecology-and-environment/' },
+            { id: 1128, name: '10. Career Opportunities', subject: 'English', class: 'class12', category: 'Language Development', pdfUrl: 'https://noteswift.in/class-12-english-career-opportunities/' },
+            { id: 1129, name: '11. Hobbies', subject: 'English', class: 'class12', category: 'Language Development', pdfUrl: 'https://noteswift.in/class-12-english-hobbies/' },
+            { id: 1130, name: '12. Animal World', subject: 'English', class: 'class12', category: 'Language Development', pdfUrl: 'https://noteswift.in/class-12-english-animal-world/' },
+            { id: 1131, name: '13. History', subject: 'English', class: 'class12', category: 'Language Development', pdfUrl: 'https://noteswift.in/class-12-english-history/' },
+            { id: 1132, name: '14. Human Rights', subject: 'English', class: 'class12', category: 'Language Development', pdfUrl: 'https://noteswift.in/class-12-english-human-rights/' },
+            { id: 1133, name: '15. Leisure and Entertainment', subject: 'English', class: 'class12', category: 'Language Development', pdfUrl: 'https://noteswift.in/class-12-english-leisure-and-entertainment/' },
+            { id: 1134, name: '16. Fantasy', subject: 'English', class: 'class12', category: 'Language Development', pdfUrl: 'https://noteswift.in/class-12-english-fantasy/' },
+            { id: 1135, name: '17. War and Peace', subject: 'English', class: 'class12', category: 'Language Development', pdfUrl: 'https://noteswift.in/class-12-english-war-and-peace/' },
+            { id: 1136, name: '18. Music and Peace', subject: 'English', class: 'class12', category: 'Language Development', pdfUrl: 'https://noteswift.in/class-12-english-music-and-peace/' },
+            { id: 1137, name: '19. Migration and Diaspora', subject: 'English', class: 'class12', category: 'Language Development', pdfUrl: 'https://noteswift.in/class-12-english-migration-and-diaspora/' },
+            { id: 1138, name: '20. Power and Politics', subject: 'English', class: 'class12', category: 'Language Development', pdfUrl: 'https://noteswift.in/class-12-english-power-and-politics/' },
+            { id: 1139, name: '1. Neighbors', subject: 'English', class: 'class12', category: 'Short Stories', pdfUrl: 'https://noteswift.in/class-12-english-neighbors/' },
+            { id: 1140, name: '2. A respectable Women', subject: 'English', class: 'class12', category: 'Short Stories', pdfUrl: 'https://noteswift.in/class-12-english-a-respectable-women/' },
+            { id: 1141, name: '3. A Devoted Son', subject: 'English', class: 'class12', category: 'Short Stories', pdfUrl: 'https://noteswift.in/class-12-english-a-devoted-son/' },
+            { id: 1142, name: '4. The Treasure in the Forest', subject: 'English', class: 'class12', category: 'Short Stories', pdfUrl: 'https://noteswift.in/class-12-english-the-treasure-in-the-forest/' },
+            { id: 1143, name: '5. My Old Home', subject: 'English', class: 'class12', category: 'Short Stories', pdfUrl: 'https://noteswift.in/class-12-english-notes/' },
+            { id: 1144, name: '6. The Half-closed Eyes of the Buddha and the Slowly Sinking Sun', subject: 'English', class: 'class12', category: 'Short Stories', pdfUrl: 'https://noteswift.in/class-12-english-notes/' },
+            { id: 1145, name: '7. The Very Old Man with Enormous Wings', subject: 'English', class: 'class12', category: 'Short Stories', pdfUrl: 'https://noteswift.in/class-12-english-notes/' },
+            { id: 1146, name: '1. A Day', subject: 'English', class: 'class12', category: 'Poems', pdfUrl: 'https://noteswift.in/class-12-english-notes/' },
+            { id: 1147, name: '2. Every Morning I Wake', subject: 'English', class: 'class12', category: 'Poems', pdfUrl: 'https://noteswift.in/class-12-english-notes/' },
+            { id: 1148, name: '3. I Was My Own Route', subject: 'English', class: 'class12', category: 'Poems', pdfUrl: 'https://noteswift.in/class-12-english-notes/' },
+            { id: 1149, name: '4. The Awakening Age', subject: 'English', class: 'class12', category: 'Poems', pdfUrl: 'https://noteswift.in/class-12-english-notes/' },
+            { id: 1150, name: '5. Soft Storm', subject: 'English', class: 'class12', category: 'Poems', pdfUrl: 'https://noteswift.in/class-12-english-notes/' },
+            { id: 1151, name: '1. On Libraries', subject: 'English', class: 'class12', category: 'Essays', pdfUrl: 'https://noteswift.in/class-12-english-notes/' },
+            { id: 1152, name: '2. Marriage as a Social Institution', subject: 'English', class: 'class12', category: 'Essays', pdfUrl: 'https://noteswift.in/class-12-english-notes/' },
+            { id: 1153, name: '3. Knowledge and Wisdom', subject: 'English', class: 'class12', category: 'Essays', pdfUrl: 'https://noteswift.in/class-12-english-notes/' },
+            { id: 1154, name: '4. Humility', subject: 'English', class: 'class12', category: 'Essays', pdfUrl: 'https://noteswift.in/class-12-english-notes/' },
+            { id: 1155, name: '5. Human Rights and the Age of Inequality', subject: 'English', class: 'class12', category: 'Essays', pdfUrl: 'https://noteswift.in/class-12-english-notes/' },
+            { id: 1156, name: '1. A Matter of Husbands', subject: 'English', class: 'class12', category: 'One Act Plays', pdfUrl: 'https://noteswift.in/class-12-english-notes/' },
+            { id: 1157, name: '2. Facing Death', subject: 'English', class: 'class12', category: 'One Act Plays', pdfUrl: 'https://noteswift.in/class-12-english-notes/' },
+            { id: 1158, name: '3. The Bull', subject: 'English', class: 'class12', category: 'One Act Plays', pdfUrl: 'https://noteswift.in/class-12-english-notes/' },
+            { id: 1159, name: 'Class 12 Nepali - All Chapters Notes', subject: 'Nepali', class: 'class12', category: 'Nepali', pdfUrl: 'https://noteswift.in/class-12-nepali-notes/' },
+            { id: 1160, name: 'Class 12 Physics - All Chapters Notes', subject: 'Physics', class: 'class12', category: 'Physics', pdfUrl: 'https://noteswift.in/class-12-physics-notes/' },
+            { id: 1161, name: '1. Volumetric Analysis', subject: 'Chemistry', class: 'class12', category: 'General and Physical Chemistry', pdfUrl: 'https://noteswift.in/class-12-chemistry-volumetric-analysis/' },
+            { id: 1162, name: '2. Ionic Equilibrium', subject: 'Chemistry', class: 'class12', category: 'General and Physical Chemistry', pdfUrl: 'https://noteswift.in/class-12-chemistry-ionic-equilibrium/' },
+            { id: 1163, name: '3. Chemical Kinetics', subject: 'Chemistry', class: 'class12', category: 'General and Physical Chemistry', pdfUrl: 'https://noteswift.in/class-12-chemistry-chemical-kinetics/' },
+            { id: 1164, name: '4. Thermodynamics', subject: 'Chemistry', class: 'class12', category: 'General and Physical Chemistry', pdfUrl: 'https://noteswift.in/class-12-chemistry-thermodynamics/' },
+            { id: 1165, name: '5. Electrochemistry', subject: 'Chemistry', class: 'class12', category: 'General and Physical Chemistry', pdfUrl: 'https://noteswift.in/class-12-chemistry-electrochemistry/' },
+            { id: 1166, name: '6. Transition Metals', subject: 'Chemistry', class: 'class12', category: 'Inorganic Chemistry', pdfUrl: 'https://noteswift.in/class-12-chemistry-transition-metals/' },
+            { id: 1167, name: '7. Studies of Heavy Metals', subject: 'Chemistry', class: 'class12', category: 'Inorganic Chemistry', pdfUrl: 'https://noteswift.in/class-12-chemistry-studies-of-heavy-metals/' },
+            { id: 1168, name: '8. Haloalkanes', subject: 'Chemistry', class: 'class12', category: 'Organic Chemistry', pdfUrl: 'https://noteswift.in/class-12-chemistry-haloalkanes/' },
+            { id: 1169, name: '9. Haloarenes', subject: 'Chemistry', class: 'class12', category: 'Organic Chemistry', pdfUrl: 'https://noteswift.in/class-12-chemistry-haloarenes/' },
+            { id: 1170, name: '10. Alcohols', subject: 'Chemistry', class: 'class12', category: 'Organic Chemistry', pdfUrl: 'https://noteswift.in/class-12-chemistry-alcohols/' },
+            { id: 1171, name: '11. Phenols', subject: 'Chemistry', class: 'class12', category: 'Organic Chemistry', pdfUrl: 'https://noteswift.in/class-12-chemistry-phenols/' },
+            { id: 1172, name: '12. Ethers', subject: 'Chemistry', class: 'class12', category: 'Organic Chemistry', pdfUrl: 'https://noteswift.in/class-12-chemistry-ethers/' },
+            { id: 1173, name: '13. Aldehydes and Ketones', subject: 'Chemistry', class: 'class12', category: 'Organic Chemistry', pdfUrl: 'https://noteswift.in/class-12-chemistry-aldehydes-and-ketones/' },
+            { id: 1174, name: '14. Carboxylic Acid and It\'s Derivatives', subject: 'Chemistry', class: 'class12', category: 'Organic Chemistry', pdfUrl: 'https://noteswift.in/class-12-chemistry-carboxylic-acid-and-its-derivatives/' },
+            { id: 1175, name: '15. Nitro Compounds', subject: 'Chemistry', class: 'class12', category: 'Organic Chemistry', pdfUrl: 'https://noteswift.in/class-12-chemistry-nitro-compounds/' },
+            { id: 1176, name: '16. Amino Compounds', subject: 'Chemistry', class: 'class12', category: 'Organic Chemistry', pdfUrl: 'https://noteswift.in/class-12-chemistry-amino-compounds/' },
+            { id: 1177, name: '17. Organometallic Compounds', subject: 'Chemistry', class: 'class12', category: 'Organic Chemistry', pdfUrl: 'https://noteswift.in/class-12-chemistry-organometallic-compounds/' },
+            { id: 1178, name: '18. Chemistry in the Service of Mankind', subject: 'Chemistry', class: 'class12', category: 'Applied Chemistry', pdfUrl: 'https://noteswift.in/class-12-chemistry-chemistry-in-the-service-of-mankind/' },
+            { id: 1179, name: '19. Cement', subject: 'Chemistry', class: 'class12', category: 'Applied Chemistry', pdfUrl: 'https://noteswift.in/class-12-chemistry-cement/' },
+            { id: 1180, name: '20. Paper and Pulp', subject: 'Chemistry', class: 'class12', category: 'Applied Chemistry', pdfUrl: 'https://noteswift.in/class-12-chemistry-paper-and-pulp/' },
+            { id: 1181, name: '21. Nuclear Chemistry and Applications of Radioactivity', subject: 'Chemistry', class: 'class12', category: 'Applied Chemistry', pdfUrl: 'https://noteswift.in/class-12-chemistry-nuclear-chemistry-and-applications-of-radioactivity/' },
+            { id: 1182, name: '1. Plant Anatomy', subject: 'Biology', class: 'class12', category: 'Botany: Plant Anatomy', pdfUrl: 'https://noteswift.in/class-12-biology-plant-anatomy/' },
+            { id: 1183, name: '2. Water Relation', subject: 'Biology', class: 'class12', category: 'Botany: Plant Physiology', pdfUrl: 'https://noteswift.in/class-12-biology-water-relation/' },
+            { id: 1184, name: '3. Photosynthesis', subject: 'Biology', class: 'class12', category: 'Botany: Plant Physiology', pdfUrl: 'https://noteswift.in/class-12-biology-photosynthesis/' },
+            { id: 1185, name: '4. Respiration', subject: 'Biology', class: 'class12', category: 'Botany: Plant Physiology', pdfUrl: 'https://noteswift.in/class-12-biology-respiration/' },
+            { id: 1186, name: '5. Phytohormones and Plant Movement', subject: 'Biology', class: 'class12', category: 'Botany: Plant Physiology', pdfUrl: 'https://noteswift.in/class-12-biology-phytohormones-and-plant-movement/' },
+            { id: 1187, name: '6. Genetic Materials', subject: 'Biology', class: 'class12', category: 'Botany: Genetics', pdfUrl: 'https://noteswift.in/class-12-biology-genetic-materials/' },
+            { id: 1188, name: '7. Mendelian Genetics', subject: 'Biology', class: 'class12', category: 'Botany: Genetics', pdfUrl: 'https://noteswift.in/class-12-biology-mendelian-genetics/' },
+            { id: 1189, name: '8. Genetic Interaction', subject: 'Biology', class: 'class12', category: 'Botany: Genetics', pdfUrl: 'https://noteswift.in/class-12-biology-genetic-interaction/' },
+            { id: 1190, name: '9. Linkage and Crossing Over', subject: 'Biology', class: 'class12', category: 'Botany: Genetics', pdfUrl: 'https://noteswift.in/class-12-biology-linkage-and-crossing-over/' },
+            { id: 1191, name: '10. Mutation and Polyploidy', subject: 'Biology', class: 'class12', category: 'Botany: Genetics', pdfUrl: 'https://noteswift.in/class-12-biology-mutation-and-polyploidy/' },
+            { id: 1192, name: '11. Reproduction in Angiosperm', subject: 'Biology', class: 'class12', category: 'Botany: Embryology', pdfUrl: 'https://noteswift.in/class-12-biology-reproduction-in-angiosperm/' },
+            { id: 1193, name: '12. Sexual Reproduction', subject: 'Biology', class: 'class12', category: 'Botany: Embryology', pdfUrl: 'https://noteswift.in/class-12-biology-sexual-reproduction/' },
+            { id: 1194, name: '13. Pollination and It\'s Types', subject: 'Biology', class: 'class12', category: 'Botany: Embryology', pdfUrl: 'https://noteswift.in/class-12-biology-pollination-and-its-types/' },
+            { id: 1195, name: '14. Fertilization and Development of Embryos', subject: 'Biology', class: 'class12', category: 'Botany: Embryology', pdfUrl: 'https://noteswift.in/class-12-biology-fertilization-and-development-of-embryos/' },
+            { id: 1196, name: '15. Introduction to Biotechnology', subject: 'Biology', class: 'class12', category: 'Botany: Biotechnology', pdfUrl: 'https://noteswift.in/class-12-biology-introduction-to-biotechnology/' },
+            { id: 1197, name: '16. Plant Tissue Culture', subject: 'Biology', class: 'class12', category: 'Botany: Biotechnology', pdfUrl: 'https://noteswift.in/class-12-biology-plant-tissue-culture/' },
+            { id: 1198, name: '17. Concept of Plant Breeding', subject: 'Biology', class: 'class12', category: 'Botany: Biotechnology', pdfUrl: 'https://noteswift.in/class-12-biology-concept-of-plant-breeding/' },
+            { id: 1199, name: '18. Genetic Engineering', subject: 'Biology', class: 'class12', category: 'Botany: Biotechnology', pdfUrl: 'https://noteswift.in/class-12-biology-genetic-engineering/' },
+            { id: 1200, name: '19. Fertilizers of Biological Origin', subject: 'Biology', class: 'class12', category: 'Botany: Biotechnology', pdfUrl: 'https://noteswift.in/class-12-biology-fertilizers-of-biological-origin/' },
+            { id: 1201, name: '20. Antibiotic and It\'s Application', subject: 'Biology', class: 'class12', category: 'Botany: Biotechnology', pdfUrl: 'https://noteswift.in/class-12-biology-antibiotic-and-its-application/' },
+            { id: 1202, name: '21. Animal Tissues', subject: 'Biology', class: 'class12', category: 'Zoology: Animal Tissues', pdfUrl: 'https://noteswift.in/class-12-biology-animal-tissues/' },
+            { id: 1203, name: '22. Gametogenesis', subject: 'Biology', class: 'class12', category: 'Zoology: Development Biology', pdfUrl: 'https://noteswift.in/class-12-biology-gametogenesis/' },
+            { id: 1204, name: '23. Development of Frog', subject: 'Biology', class: 'class12', category: 'Zoology: Development Biology', pdfUrl: 'https://noteswift.in/class-12-biology-development-of-frog/' },
+            { id: 1205, name: '24. Digestive System', subject: 'Biology', class: 'class12', category: 'Zoology: Human Biology', pdfUrl: 'https://noteswift.in/class-12-biology-digestive-system/' },
+            { id: 1206, name: '25. Respiratory System', subject: 'Biology', class: 'class12', category: 'Zoology: Human Biology', pdfUrl: 'https://noteswift.in/class-12-biology-respiratory-system/' },
+            { id: 1207, name: '26. Circulatory System', subject: 'Biology', class: 'class12', category: 'Zoology: Human Biology', pdfUrl: 'https://noteswift.in/class-12-biology-circulatory-system/' },
+            { id: 1208, name: '27. Excretory System', subject: 'Biology', class: 'class12', category: 'Zoology: Human Biology', pdfUrl: 'https://noteswift.in/class-12-biology-excretory-system/' },
+            { id: 1209, name: '28. Nervous System', subject: 'Biology', class: 'class12', category: 'Zoology: Human Biology', pdfUrl: 'https://noteswift.in/class-12-biology-nervous-system/' },
+            { id: 1210, name: '29. Sense Organs', subject: 'Biology', class: 'class12', category: 'Zoology: Human Biology', pdfUrl: 'https://noteswift.in/class-12-biology-sense-organs/' },
+            { id: 1211, name: '30. Endocrinology', subject: 'Biology', class: 'class12', category: 'Zoology: Human Biology', pdfUrl: 'https://noteswift.in/class-12-biology-endocrinology/' },
+            { id: 1212, name: '31. Reproductive System', subject: 'Biology', class: 'class12', category: 'Zoology: Human Biology', pdfUrl: 'https://noteswift.in/class-12-biology-reproductive-system/' },
+            { id: 1213, name: '32. Human Population', subject: 'Biology', class: 'class12', category: 'Zoology: Human Population and Health Disorders', pdfUrl: 'https://noteswift.in/class-12-biology-human-population/' },
+            { id: 1214, name: '33. Health Disorders', subject: 'Biology', class: 'class12', category: 'Zoology: Human Population and Health Disorders', pdfUrl: 'https://noteswift.in/class-12-biology-health-disorders/' },
+            { id: 1215, name: '34. Application of Zoology', subject: 'Biology', class: 'class12', category: 'Zoology: Applied Biology', pdfUrl: 'https://noteswift.in/class-12-biology-application-of-zoology/' },
+            { id: 1216, name: '35. Microbial Diseases and Application of Microbiology', subject: 'Biology', class: 'class12', category: 'Zoology: Applied Biology', pdfUrl: 'https://noteswift.in/class-12-biology-microbial-diseases-and-application-of-microbiology/' },
+            { id: 1217, name: '1. Database Management System (DBMS)', subject: 'Computer', class: 'class12', category: 'Computer Science', pdfUrl: 'https://noteswift.in/class-12-computer-chapter-1-data-base-management-system/' },
+            { id: 1218, name: '2. Data Communication and Networking', subject: 'Computer', class: 'class12', category: 'Computer Science', pdfUrl: 'https://noteswift.in/class-12-computer-chapter-2-data-communication-and-networking/' },
+            { id: 1219, name: '3. Web Technology', subject: 'Computer', class: 'class12', category: 'Computer Science', pdfUrl: 'https://noteswift.in/class-12-computer-chapter-3-web-technology/' },
+            { id: 1220, name: '4. Programming Concept', subject: 'Computer', class: 'class12', category: 'Computer Science', pdfUrl: 'https://noteswift.in/class-12-computer-chapter-4-programming-concept/' },
+            { id: 1221, name: '5. Object Oriented Programming (OOP)', subject: 'Computer', class: 'class12', category: 'Computer Science', pdfUrl: 'https://noteswift.in/class-12-computer-chapter-5-object-oriented-programming-oop/' },
+            { id: 1222, name: '6. Software Process Model (SPM)', subject: 'Computer', class: 'class12', category: 'Computer Science', pdfUrl: 'https://noteswift.in/class-12-computer-6-software-process-model/' },
+            { id: 1223, name: '7. Recent Trends in Technology', subject: 'Computer', class: 'class12', category: 'Computer Science', pdfUrl: 'https://noteswift.in/class-12-computer-chapter-7-recent-trends-in-technology/' },
+            { id: 1224, name: '1. Company Formation', subject: 'Accountancy', class: 'class12', category: 'Unit One: Company Accounting', pdfUrl: 'https://noteswift.in/class-12-account-company-formation/' },
+            { id: 1225, name: '2. Issues of Share for Cash', subject: 'Accountancy', class: 'class12', category: 'Unit One: Company Accounting', pdfUrl: 'https://noteswift.in/class-12-account-issues-of-share-for-cash/' },
+            { id: 1226, name: '3. Forfeiture and Re-issue of Share', subject: 'Accountancy', class: 'class12', category: 'Unit One: Company Accounting', pdfUrl: 'https://noteswift.in/class-12-account-forfeiture-and-re-issue-of-share/' },
+            { id: 1227, name: '4. Issue of Share for other than Cash', subject: 'Accountancy', class: 'class12', category: 'Unit One: Company Accounting', pdfUrl: 'https://noteswift.in/class-12-account-issue-of-share-for-other-than-cash/' },
+            { id: 1228, name: '5. Accounting for Debenture', subject: 'Accountancy', class: 'class12', category: 'Unit One: Company Accounting', pdfUrl: 'https://noteswift.in/class-12-account-accounting-for-debenture/' },
+            { id: 1229, name: '6. Final Account of a Company (Traditional Method)', subject: 'Accountancy', class: 'class12', category: 'Unit Two: Company Financial Statements', pdfUrl: 'https://noteswift.in/class-12-account-final-account-of-a-company-traditional-method/' },
+            { id: 1230, name: '7. Financial Statement (Modern Method)', subject: 'Accountancy', class: 'class12', category: 'Unit Two: Company Financial Statements', pdfUrl: 'https://noteswift.in/class-12-account-financial-statement-modern-method/' },
+            { id: 1231, name: '8. The Work Sheet', subject: 'Accountancy', class: 'class12', category: 'Unit Two: Company Financial Statements', pdfUrl: 'https://noteswift.in/class-12-account-the-work-sheet/' },
+            { id: 1232, name: '9. Cash Flow Statement', subject: 'Accountancy', class: 'class12', category: 'Unit Two: Company Financial Statements', pdfUrl: 'https://noteswift.in/class-12-account-cash-flow-statement/' },
+            { id: 1233, name: '10. Cost Accounting', subject: 'Accountancy', class: 'class12', category: 'Unit Three: Cost Accounting', pdfUrl: 'https://noteswift.in/class-12-account-cost-accounting-introduction/' },
+            { id: 1234, name: '11. Cost Concept and Classification', subject: 'Accountancy', class: 'class12', category: 'Unit Three: Cost Accounting', pdfUrl: 'https://noteswift.in/class-12-cost-accounting-cost-concept-and-classification/' },
+            { id: 1235, name: '12. Accounting for Materials and Control', subject: 'Accountancy', class: 'class12', category: 'Unit Three: Cost Accounting', pdfUrl: 'https://noteswift.in/class-12-account-accounting-for-materials-and-control/' },
+            { id: 1236, name: '13. Inventory Management', subject: 'Accountancy', class: 'class12', category: 'Unit Three: Cost Accounting', pdfUrl: 'https://noteswift.in/class-12-account-inventory-management/' },
+            { id: 1237, name: '14. Accounting for Labor', subject: 'Accountancy', class: 'class12', category: 'Unit Three: Cost Accounting', pdfUrl: 'https://noteswift.in/class-12-account-accounting-for-labour/' },
+            { id: 1238, name: '15. Accounting for Overheads', subject: 'Accountancy', class: 'class12', category: 'Unit Three: Cost Accounting', pdfUrl: 'https://noteswift.in/class-12-account-accounting-for-overheads/' },
+            { id: 1239, name: '16. Unit or Output Costing', subject: 'Accountancy', class: 'class12', category: 'Unit Three: Cost Accounting', pdfUrl: 'https://noteswift.in/class-12-account-unit-or-output-costing/' },
+            { id: 1240, name: '17. Cost Reconciliation Statement', subject: 'Accountancy', class: 'class12', category: 'Unit Three: Cost Accounting', pdfUrl: 'https://noteswift.in/class-12-account-cost-reconciliation-statement/' },
+            { id: 1241, name: '18. Computer System in Accounting', subject: 'Accountancy', class: 'class12', category: 'Unit Four: Computer System in Accounting', pdfUrl: 'https://noteswift.in/class-12-account-computer-system-in-accounting/' },
+            { id: 1242, name: '19. Accounting Record in Excel', subject: 'Accountancy', class: 'class12', category: 'Unit Four: Computer System in Accounting', pdfUrl: 'https://noteswift.in/class-12-account-accounting-record-in-excel/' },
+            { id: 1243, name: 'Statistics - Reference Material (NCERT)', subject: 'Statistics', class: 'class12', category: 'Statistics', pdfUrl: 'https://www.ncert.nic.in/pdf/publication/exemplarproblem/classXI/mathematics/keep215.pdf' },
         ];
 
         let charts = {};
+
+        // Current filter state for the Subjects module
+        let currentSubjectFilter = '';
+        let currentClassFilter = 'class11';
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
@@ -1320,27 +1609,57 @@
 
         function loadSubjects() {
             const container = document.getElementById('subjects-list');
-            container.innerHTML = subjectsData.map(subject => `
-                <div class="study-card">
+
+            const filtered = subjectsData.filter(subject => {
+                const matchesSubject = !currentSubjectFilter ||
+                    subject.subject.toLowerCase() === currentSubjectFilter.toLowerCase();
+                const matchesClass = !currentClassFilter ||
+                    subject.class === currentClassFilter;
+                return matchesSubject && matchesClass;
+            });
+
+            container.innerHTML = filtered.length > 0 ? filtered.map(subject => {
+                const hasLink = !!subject.pdfUrl;
+                return `
+                <div class="study-card" ${hasLink ? `onclick="window.open('${subject.pdfUrl}', '_blank')" style="cursor:pointer;"` : ''}>
                     <div class="study-title">📚 ${subject.name}</div>
                     <div class="study-meta">
                         <span class="badge badge-primary">${subject.subject}</span>
                         <span class="badge badge-success">${subject.class === 'class11' ? 'Class 11' : 'Class 12'}</span>
-                        <span style="color: #64748b;">• ${subject.chapters} chapters</span>
+                        ${subject.category ? `<span style="color: #64748b;">• ${subject.category}</span>` : ''}
+                        ${subject.chapters ? `<span style="color: #64748b;">• ${subject.chapters} chapters</span>` : ''}
                     </div>
-                </div>
-            `).join('');
+                    ${hasLink ? `
+                    <div style="margin-top: 10px;">
+                        <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); window.open('${subject.pdfUrl}', '_blank')">📄 PDF Notes</button>
+                    </div>` : ''}
+                </div>`;
+            }).join('') : '<p style="color: #64748b; text-align: center; padding: 20px;">No topics found for this filter.</p>';
         }
 
         function filterSubjects(value) {
+            currentSubjectFilter = value;
             loadSubjects();
             showAlert('Filter applied', 'success');
         }
 
         function filterClass(value) {
+            currentClassFilter = value;
             loadSubjects();
             showAlert('Filter applied', 'success');
         }
+
+        const mockExamsData = [
+            { id: 1, name: 'Full Length Mock - Mathematics', subject: 'Mathematics', questions: 50, time: 180, attempts: 3, bestScore: 85 },
+            { id: 2, name: 'Full Length Mock - Physics', subject: 'Physics', questions: 40, time: 150, attempts: 2, bestScore: 78 },
+            { id: 3, name: 'Half Yearly - Chemistry', subject: 'Chemistry', questions: 35, time: 120, attempts: 1, bestScore: 72 },
+        ];
+
+        const notesData = [
+            { id: 1, title: 'Integration Formulas', subject: 'Mathematics', class: '11', created: '2024-07-10' },
+            { id: 2, title: 'Newton Laws Summary', subject: 'Physics', class: '11', created: '2024-07-08' },
+            { id: 3, title: 'Chemical Equations', subject: 'Chemistry', class: '12', created: '2024-07-05' },
+        ];
 
         function loadMockExams() {
             const container = document.getElementById('mock-exams-list');
@@ -1459,7 +1778,6 @@
 
         function loadSchedule() {
             const scheduleTable = document.getElementById('schedule-table');
-            const times = ['9:00-10:30', '10:30-12:00', '12:00-1:00', '1:00-2:30', '2:30-4:00', '4:00-5:30'];
             const schedule = [
                 { time: '9:00-10:30', mon: 'Mathematics', tue: 'Physics', wed: 'Chemistry', thu: 'English', fri: 'Nepali', sat: 'Biology' },
                 { time: '10:30-12:00', mon: 'Physics', tue: 'Chemistry', wed: 'Mathematics', thu: 'Biology', fri: 'Statistics', sat: 'Accountancy' },
@@ -1559,13 +1877,13 @@
                 charts.performance = new Chart(performanceCtx, {
                     type: 'bar',
                     data: {
-                        labels: ['Mathematics', 'Physics', 'Chemistry', 'English', 'Nepali', 'Statistics', 'Biology', 'Accountancy'],
+                        labels: ['Mathematics', 'Physics', 'Chemistry', 'English', 'Nepali', 'Statistics', 'Biology', 'Accountancy', 'Computer'],
                         datasets: [{
                             label: 'Score %',
-                            data: [75, 82, 70, 88, 72, 68, 80, 76],
+                            data: [75, 82, 70, 88, 72, 68, 80, 76, 74],
                             backgroundColor: [
                                 '#ec4899', '#0ea5e9', '#10b981', '#8b5cf6',
-                                '#f59e0b', '#ef4444', '#14b8a6', '#6366f1'
+                                '#f59e0b', '#ef4444', '#14b8a6', '#6366f1', '#64748b'
                             ]
                         }]
                     },
@@ -1612,10 +1930,10 @@
                 charts.subjectScores = new Chart(subjectCtx, {
                     type: 'radar',
                     data: {
-                        labels: ['Math', 'Physics', 'Chemistry', 'English', 'Nepali', 'Statistics', 'Biology', 'Accountancy'],
+                        labels: ['Math', 'Physics', 'Chemistry', 'English', 'Nepali', 'Statistics', 'Biology', 'Accountancy', 'Computer'],
                         datasets: [{
                             label: 'Current Score',
-                            data: [75, 82, 70, 88, 72, 68, 80, 76],
+                            data: [75, 82, 70, 88, 72, 68, 80, 76, 74],
                             borderColor: '#6366f1',
                             backgroundColor: 'rgba(99, 102, 241, 0.2)',
                             borderWidth: 2
@@ -1657,10 +1975,10 @@
                 charts.completion = new Chart(completionCtx, {
                     type: 'bar',
                     data: {
-                        labels: ['Math', 'Physics', 'Chemistry', 'English', 'Nepali', 'Statistics', 'Biology', 'Accountancy'],
+                        labels: ['Math', 'Physics', 'Chemistry', 'English', 'Nepali', 'Statistics', 'Biology', 'Accountancy', 'Computer'],
                         datasets: [{
                             label: 'Completion %',
-                            data: [75, 82, 70, 88, 72, 68, 80, 76],
+                            data: [75, 82, 70, 88, 72, 68, 80, 76, 74],
                             backgroundColor: '#6366f1'
                         }]
                     },
