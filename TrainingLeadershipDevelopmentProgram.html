@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>National Service Corps — Training Guide · Session 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1F3A5F;
+    --navy-deep:#152A47;
+    --gold:#B8862B;
+    --gold-light:#EFE3C8;
+    --ink:#1B2430;
+    --soft:#5B6472;
+    --paper:#F7F6F2;
+    --card:#FFFFFF;
+    --line:#DEE2E1;
+    --box:#F2F5F8;
+    --teal:#2F7A6F;
+    --rust:#B5502F;
+    --radius:12px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Inter',sans-serif;line-height:1.65;
+  }
+  h1,h2,h3{font-family:'Fraunces',serif;margin:0;letter-spacing:-0.01em;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;}
+  ::selection{background:var(--gold-light);}
+
+  /* ---------------- Top bar ---------------- */
+  .topbar{
+    position:sticky;top:0;z-index:60;background:var(--navy-deep);color:#fff;
+    border-bottom:3px solid var(--gold);
+  }
+  .topbar-inner{
+    max-width:1080px;margin:0 auto;padding:10px 24px;
+    display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  }
+  .topbar-title{font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.85;}
+  .timer{display:flex;align-items:center;gap:10px;}
+  .timer-display{
+    font-family:'JetBrains Mono',monospace;font-size:1.05rem;font-weight:600;
+    background:rgba(255,255,255,0.08);padding:5px 12px;border-radius:8px;min-width:88px;text-align:center;
+  }
+  .timer-display.over{color:#ffb199;}
+  .timer button{
+    font-family:'JetBrains Mono',monospace;font-size:0.72rem;text-transform:uppercase;
+    background:transparent;border:1px solid rgba(255,255,255,0.35);color:#fff;
+    padding:6px 11px;border-radius:100px;cursor:pointer;transition:background .15s;
+  }
+  .timer button:hover{background:rgba(255,255,255,0.15);}
+  .progress-track{
+    max-width:1080px;margin:0 auto;height:4px;background:rgba(255,255,255,0.15);
+  }
+  .progress-fill{height:100%;background:var(--gold);width:0%;transition:width .3s ease;}
+
+  /* ---------------- Cover ---------------- */
+  .cover{
+    max-width:1080px;margin:0 auto;padding:64px 24px 40px;text-align:center;
+  }
+  .badge{
+    display:inline-block;font-family:'JetBrains Mono',monospace;font-size:0.72rem;
+    letter-spacing:0.12em;color:var(--gold);text-transform:uppercase;margin-bottom:14px;
+  }
+  .cover h1{font-size:clamp(2rem,5vw,3.1rem);color:var(--navy);font-weight:700;}
+  .cover h2{font-size:clamp(1.1rem,2.4vw,1.5rem);color:var(--navy);font-weight:600;margin-top:10px;}
+  .cover .rule{
+    width:64px;height:3px;background:var(--gold);margin:24px auto;border-radius:2px;
+  }
+  .cover .session{font-family:'JetBrains Mono',monospace;color:var(--gold);letter-spacing:0.1em;font-size:0.8rem;text-transform:uppercase;}
+  .cover .session-title{font-size:1.3rem;color:var(--ink);margin-top:8px;font-weight:600;font-family:'Fraunces',serif;}
+  .cover .duration{color:var(--soft);font-style:italic;margin-top:6px;}
+  .cover .lede{max-width:56ch;margin:22px auto 0;color:var(--soft);}
+  .credit{margin-top:36px;color:var(--soft);font-size:0.9rem;}
+  .credit strong{display:block;color:var(--navy);font-family:'Fraunces',serif;font-size:1.05rem;font-weight:600;margin-top:4px;}
+
+  /* ---------------- How to use + quote ---------------- */
+  .callout{
+    max-width:1080px;margin:0 auto;padding:0 24px 8px;
+  }
+  .quote-box{
+    background:var(--gold-light);border:1px solid #E4CE9C;border-radius:var(--radius);
+    padding:20px 26px;text-align:center;font-family:'Fraunces',serif;font-style:italic;
+    color:var(--navy);font-size:1.1rem;font-weight:600;
+  }
+  .howto{
+    max-width:1080px;margin:0 auto;padding:36px 24px 8px;
+  }
+  .howto p{color:var(--soft);max-width:74ch;}
+
+  /* ---------------- Agenda ---------------- */
+  .agenda-wrap{max-width:1080px;margin:0 auto;padding:36px 24px;}
+  .agenda-wrap h3{color:var(--navy);font-size:1.3rem;margin-bottom:6px;}
+  .agenda-wrap>p{color:var(--soft);font-size:0.92rem;margin-top:0;margin-bottom:18px;}
+  .agenda-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);}
+  .agenda-table thead th{
+    background:var(--navy);color:#fff;text-align:left;padding:12px 16px;
+    font-family:'JetBrains Mono',monospace;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;
+  }
+  .agenda-table td{padding:11px 16px;font-size:0.92rem;border-bottom:1px solid var(--line);}
+  .agenda-table tbody tr:last-child td{border-bottom:none;}
+  .agenda-table tbody tr.done td{color:#9aa3ab;text-decoration:line-through;}
+  .agenda-table tbody tr:hover{background:var(--box);}
+  .agenda-table td.step{font-family:'JetBrains Mono',monospace;color:var(--gold);font-weight:700;width:50px;}
+  .agenda-table td.time{text-align:right;color:var(--soft);width:80px;}
+  .agenda-table td.check{width:36px;text-align:center;}
+  .agenda-table input[type=checkbox]{width:16px;height:16px;accent-color:var(--gold);cursor:pointer;}
+  .agenda-total td{background:var(--gold-light);font-weight:700;color:var(--navy);border-bottom:none;}
+
+  /* ---------------- Sections ---------------- */
+  .sections{max-width:1080px;margin:0 auto;padding:8px 24px 40px;}
+  .section{
+    border-top:1px solid var(--line);padding:34px 0;scroll-margin-top:90px;
+  }
+  .section:first-child{border-top:none;}
+  .section-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
+  .section-num{font-family:'Fraunces',serif;font-weight:700;color:var(--gold);font-size:1.6rem;}
+  .section-title{font-size:1.35rem;color:var(--navy);font-weight:600;}
+  .section-time{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--soft);font-style:italic;}
+  .role-tag{
+    font-family:'JetBrains Mono',monospace;font-size:0.68rem;text-transform:uppercase;
+    letter-spacing:0.06em;color:#fff;padding:5px 11px;border-radius:100px;display:inline-block;margin-bottom:10px;
+  }
+  .speech{
+    background:var(--box);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;
+    padding:16px 20px;margin-bottom:14px;
+  }
+  .speech p{margin:0 0 10px;font-style:italic;color:var(--ink);}
+  .speech p:last-child{margin-bottom:0;}
+  .stage-note{color:var(--soft);font-style:italic;font-size:0.9rem;margin:8px 0 0;}
+  .kicker{
+    font-family:'JetBrains Mono',monospace;font-size:0.68rem;text-transform:uppercase;
+    letter-spacing:0.05em;color:var(--soft);margin:14px 0 6px;
+  }
+  ul.script-list{margin:0 0 4px;padding-left:20px;}
+  ul.script-list li{margin-bottom:6px;color:var(--ink);}
+  ul.script-list li::marker{color:var(--gold);}
+  .takeaway{
+    font-weight:600;color:var(--navy);font-style:italic;margin-top:12px;
+  }
+  .done-toggle{
+    font-family:'JetBrains Mono',monospace;font-size:0.7rem;text-transform:uppercase;
+    color:var(--soft);display:flex;align-items:center;gap:6px;margin-left:auto;cursor:pointer;user-select:none;
+  }
+  .done-toggle input{accent-color:var(--gold);width:15px;height:15px;cursor:pointer;}
+  .section.complete{opacity:0.55;}
+  .section.complete .section-title{text-decoration:line-through;}
+
+  /* ---------------- Footer ---------------- */
+  footer{
+    max-width:1080px;margin:0 auto;padding:30px 24px 60px;
+    border-top:1px solid var(--line);color:var(--soft);font-size:0.85rem;text-align:center;
+  }
+  footer strong{color:var(--navy);}
+
+  /* ---------------- Back to top ---------------- */
+  .back-top{
+    position:fixed;bottom:22px;right:22px;z-index:60;width:44px;height:44px;border-radius:50%;
+    background:var(--navy);color:#fff;border:none;cursor:pointer;font-size:1.1rem;
+    display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,0,0,0.2);
+    opacity:0;pointer-events:none;transition:opacity .2s, transform .2s;
+  }
+  .back-top.show{opacity:1;pointer-events:auto;}
+  .back-top:hover{transform:translateY(-2px);}
+
+  @media (max-width:640px){
+    .section-head{flex-direction:column;align-items:flex-start;gap:6px;}
+    .done-toggle{margin-left:0;}
+    .topbar-inner{justify-content:center;text-align:center;}
+  }
+
+  /* ---------------- Print ---------------- */
+  @media print{
+    .topbar, .back-top, .done-toggle, .agenda-table td.check{display:none !important;}
+    body{background:#fff;}
+    .section{page-break-inside:avoid;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <span class="topbar-title">National Service Corps · Training Guide</span>
+    <div class="timer">
+      <span class="timer-display mono" id="timerDisplay">00:00</span>
+      <button id="timerToggle">Start</button>
+      <button id="timerReset">Reset</button>
+    </div>
+  </div>
+</div>
+<div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- ================= COVER ================= -->
+<div class="cover">
+  <div class="badge">Training Guide</div>
+  <h1>National Service Corps</h1>
+  <h2>Cadet Training and Leadership Development Program</h2>
+  <div class="rule"></div>
+  <div class="session">Session 1</div>
+  <div class="session-title">Opening Ceremony and Orientation</div>
+  <div class="duration">Duration: 90 Minutes</div>
+  <p class="lede">A facilitator's script for a student-friendly opening session — welcome, ceremony, orientation, and team-building. Use the timer above to keep pace, and check off each step as you go.</p>
+  <div class="credit">
+    Developed by
+    <strong>Mr. Bishnu Singh Rayamajhi</strong>
+    Math Lecturer &amp; Head of Humanities and Social Science Department · Founder, UCDL Academy
+  </div>
+</div>
+
+<div class="callout">
+  <div class="quote-box">"Leadership begins with discipline, and national service begins with responsibility."</div>
+</div>
+
+<div class="howto">
+  <h3 style="color:var(--navy);font-size:1.2rem;">How to use this guide</h3>
+  <p>Shaded boxes with a gold edge are read aloud, word for word if you like — they're written in plain, student-friendly language. The notes beside them tell you what to do. Tick off each step in the agenda table (or in each section) to track your progress against the clock at the top of the page.</p>
+</div>
+
+<!-- ================= AGENDA ================= -->
+<div class="agenda-wrap">
+  <h3>Session Agenda at a Glance</h3>
+  <p>Tick a box here or in the section below — they stay in sync.</p>
+  <table class="agenda-table">
+    <thead>
+      <tr><th class="check"></th><th class="step">Step</th><th>Activity</th><th class="time">Time</th></tr>
+    </thead>
+    <tbody id="agendaBody"></tbody>
+    <tfoot>
+      <tr class="agenda-total"><td></td><td></td><td>Total session duration</td><td class="time">90 min</td></tr>
+    </tfoot>
+  </table>
+</div>
+
+<!-- ================= SECTIONS ================= -->
+<div class="sections" id="sections"></div>
+
+<footer>
+  Developed by <strong>Mr. Bishnu Singh Rayamajhi</strong> — Math Lecturer &amp; Head of Humanities and Social Science Department, Founder of UCDL Academy.
+</footer>
+
+<button class="back-top" id="backTop" aria-label="Back to top">↑</button>
+
+<script>
+/* ---------------- Data ---------------- */
+const roleColors = {
+  "Facilitator": "#B8862B",
+  "Chief Guest / Principal": "#1F3A5F",
+  "Lead Trainer": "#2F7A6F",
+  "Trainer": "#B5502F",
+};
+
+const sectionsData = [
+  {
+    title: "Welcome and Opening", time: "5 Minutes", role: "Facilitator",
+    lines: [
+      "Good morning, respected guests, trainers, teachers, and dear cadets.",
+      "It gives us great pleasure to welcome you all to the \u2018National Service Corps Cadet Training and Leadership Development Program.\u2019 This program has been designed to foster patriotism, discipline, leadership, civic responsibility, and the spirit of national service among our young citizens.",
+      "We sincerely thank all participants for joining this important initiative. We hope that this training will provide meaningful learning experiences and inspire every cadet to become a responsible and capable citizen.",
+    ],
+  },
+  {
+    title: "National Anthem and Respect Ceremony", time: "5 Minutes", role: "Facilitator",
+    lines: [ "Now, I request everyone to stand for the National Anthem and observe the formal respect ceremony." ],
+    note: "(National Anthem and ceremonial observance)",
+  },
+  {
+    title: "Welcome Address", time: "10 Minutes", role: "Chief Guest / Principal",
+    lines: [
+      "Distinguished guests, trainers, teachers, and dear students,",
+      "I warmly welcome you all to this important training program. Our nation requires disciplined, responsible, and service-oriented citizens. This training provides an excellent opportunity for young people to develop leadership skills, strengthen patriotism, and cultivate the spirit of volunteerism and national service.",
+      "I encourage every participant to engage actively, maintain discipline, and make the best use of this valuable learning opportunity.",
+      "Thank you.",
+    ],
+  },
+  {
+    title: "Introduction of Trainers and Participants", time: "15 Minutes", role: "Facilitator",
+    lines: [ "To build a collaborative learning environment, let us introduce ourselves.", "Please mention:" ],
+    list: ["Your name", "Institution", "Grade / Class", "One personal strength", "One expectation from this training"],
+    note: "(Participant introductions)",
+  },
+  {
+    title: "Objectives of the Training Program", time: "15 Minutes", role: "Lead Trainer",
+    lines: [ "The primary objectives of this training program are:" ],
+    list: [
+      "To develop patriotism and national identity",
+      "To promote discipline and ethical behavior",
+      "To strengthen leadership and teamwork skills",
+      "To encourage civic responsibility and volunteer service",
+      "To prepare cadets for disaster preparedness and community service",
+      "To foster environmental responsibility and social awareness",
+    ],
+    takeaway: "By the end of this program, participants will become more disciplined, responsible, and capable leaders.",
+  },
+  {
+    title: "Training Structure and Modules", time: "10 Minutes", role: "Lead Trainer",
+    lines: [ "The training consists of several modules, including:" ],
+    list: [
+      "National Service and Citizenship",
+      "Leadership Development",
+      "Discipline and Personal Development",
+      "Physical Fitness and Health",
+      "Communication and Teamwork",
+      "Disaster Risk Reduction and Emergency Response",
+      "Community Service and Volunteerism",
+      "Environmental Protection and Sustainability",
+    ],
+    takeaway: "The training will include lectures, discussions, practical exercises, simulations, and community-based activities.",
+  },
+  {
+    title: "Cadet Code of Conduct", time: "10 Minutes", role: "Trainer",
+    lines: [ "Every cadet is expected to:" ],
+    list: [
+      "Maintain discipline and punctuality",
+      "Respect instructors and fellow cadets",
+      "Follow all safety instructions",
+      "Demonstrate honesty and responsibility",
+      "Participate actively in all activities",
+      "Maintain proper dress and personal conduct",
+      "Promote teamwork and mutual respect",
+    ],
+    takeaway: "Discipline is the foundation of leadership.",
+  },
+  {
+    title: "Ice-Breaking Activity", time: "15 Minutes", role: "Facilitator",
+    lines: [ "Now we will conduct a team-building activity.", "Activity: \u2018Find Your Team\u2019", "Participants will form groups. Each group will discuss:" ],
+    list: [
+      "What patriotism means to them",
+      "Why discipline is important",
+      "How young people can contribute to national development",
+    ],
+    takeaway: "Each group will present their ideas in two minutes.",
+  },
+  {
+    title: "Closing of Session", time: "5 Minutes", role: "Facilitator",
+    lines: [
+      "Thank you for your active participation. Today, we have begun a journey of learning, leadership, discipline, and service.",
+      "Remember: \u2018Leadership begins with discipline, and national service begins with responsibility.\u2019",
+      "We look forward to your enthusiastic participation throughout this training program.",
+      "Thank you.",
+    ],
+  },
+];
+
+/* ---------------- Build agenda table ---------------- */
+const agendaBody = document.getElementById('agendaBody');
+sectionsData.forEach((s, i) => {
+  const tr = document.createElement('tr');
+  tr.id = `agenda-row-${i}`;
+  tr.innerHTML = `
+    <td class="check"><input type="checkbox" data-index="${i}" class="agenda-check"></td>
+    <td class="step">${String(i+1).padStart(2,'0')}</td>
+    <td>${s.title}</td>
+    <td class="time">${s.time}</td>
+  `;
+  agendaBody.appendChild(tr);
+});
+
+/* ---------------- Build sections ---------------- */
+const sectionsWrap = document.getElementById('sections');
+sectionsData.forEach((s, i) => {
+  const sec = document.createElement('div');
+  sec.className = 'section';
+  sec.id = `section-${i}`;
+
+  const color = roleColors[s.role] || '#B8862B';
+  const linesHtml = s.lines.map(l => `<p>${l}</p>`).join('');
+  const listHtml = s.list ? `<ul class="script-list">${s.list.map(x => `<li>${x}</li>`).join('')}</ul>` : '';
+  const noteHtml = s.note ? `<p class="stage-note">${s.note}</p>` : '';
+  const takeawayHtml = s.takeaway ? `<p class="takeaway">${s.takeaway}</p>` : '';
+
+  sec.innerHTML = `
+    <div class="section-head">
+      <span class="section-num">${i+1}.</span>
+      <span class="section-title">${s.title}</span>
+      <span class="section-time">${s.time}</span>
+      <label class="done-toggle"><input type="checkbox" class="section-check" data-index="${i}"> Mark complete</label>
+    </div>
+    <span class="role-tag" style="background:${color}">${s.role}</span>
+    <div class="speech">${linesHtml}${listHtml}</div>
+    ${noteHtml}
+    ${takeawayHtml}
+  `;
+  sectionsWrap.appendChild(sec);
+});
+
+/* ---------------- Sync checkboxes + progress ---------------- */
+const total = sectionsData.length;
+function updateProgress(){
+  const done = document.querySelectorAll('.section-check:checked').length;
+  document.getElementById('progressFill').style.width = `${(done/total)*100}%`;
+}
+function setDone(index, checked){
+  document.querySelector(`.agenda-check[data-index="${index}"]`).checked = checked;
+  document.querySelector(`.section-check[data-index="${index}"]`).checked = checked;
+  document.getElementById(`agenda-row-${index}`).classList.toggle('done', checked);
+  document.getElementById(`section-${index}`).classList.toggle('complete', checked);
+  updateProgress();
+}
+document.querySelectorAll('.agenda-check').forEach(cb => {
+  cb.addEventListener('change', e => setDone(e.target.dataset.index, e.target.checked));
+});
+document.querySelectorAll('.section-check').forEach(cb => {
+  cb.addEventListener('change', e => setDone(e.target.dataset.index, e.target.checked));
+});
+
+/* ---------------- Timer ---------------- */
+let seconds = 0, running = false, tick = null;
+const display = document.getElementById('timerDisplay');
+const toggleBtn = document.getElementById('timerToggle');
+const resetBtn = document.getElementById('timerReset');
+const TARGET = 90 * 60;
+
+function render(){
+  const m = String(Math.floor(seconds/60)).padStart(2,'0');
+  const s = String(seconds%60).padStart(2,'0');
+  display.textContent = `${m}:${s}`;
+  display.classList.toggle('over', seconds > TARGET);
+}
+toggleBtn.addEventListener('click', () => {
+  running = !running;
+  toggleBtn.textContent = running ? 'Pause' : 'Start';
+  if (running){
+    tick = setInterval(() => { seconds++; render(); }, 1000);
+  } else {
+    clearInterval(tick);
+  }
+});
+resetBtn.addEventListener('click', () => {
+  seconds = 0; render();
+  running = false; toggleBtn.textContent = 'Start';
+  clearInterval(tick);
+});
+render();
+
+/* ---------------- Back to top ---------------- */
+const backTop = document.getElementById('backTop');
+window.addEventListener('scroll', () => backTop.classList.toggle('show', window.scrollY > 600));
+backTop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+</script>
+</body>
+</html>
