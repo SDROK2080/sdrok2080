@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ISCDTM–2026 | SMART Training Guide</title>
+<style>
+  :root{
+    --navy:#152A40;
+    --navy-soft:#1F3B57;
+    --teal:#1B7A6E;
+    --teal-soft:#E4F1EE;
+    --gold:#C9962C;
+    --gold-soft:#FBF3E2;
+    --paper:#FBFAF7;
+    --ink:#26313A;
+    --ink-soft:#5B6773;
+    --line:#E1E4E2;
+    --terrace-1:#0F2436;
+    --terrace-2:#164033;
+    --terrace-3:#1B7A6E;
+    --terrace-4:#4E9B7E;
+    --terrace-5:#C9962C;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Iowan Old Style','Georgia',serif;
+    background:var(--paper);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  .body-sans{font-family:'Avenir Next','Segoe UI',Helvetica,Arial,sans-serif;}
+
+  /* ---------- Layout shell ---------- */
+  .layout{
+    display:grid;
+    grid-template-columns:260px 1fr;
+    max-width:1240px;
+    margin:0 auto;
+  }
+  @media (max-width:900px){
+    .layout{grid-template-columns:1fr;}
+    nav.toc{display:none;}
+  }
+
+  /* ---------- Sidebar TOC ---------- */
+  nav.toc{
+    position:sticky;
+    top:0;
+    align-self:start;
+    height:100vh;
+    padding:38px 22px 30px 30px;
+    border-right:1px solid var(--line);
+    overflow-y:auto;
+  }
+  nav.toc .brand{
+    font-family:'Avenir Next','Segoe UI',sans-serif;
+    font-size:11px;
+    letter-spacing:2.5px;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:700;
+    margin-bottom:4px;
+  }
+  nav.toc .brand-sub{
+    font-family:'Iowan Old Style',Georgia,serif;
+    font-size:19px;
+    color:var(--paper);
+    background:var(--navy);
+    display:none;
+  }
+  nav.toc h1{
+    font-size:20px;
+    line-height:1.3;
+    margin:0 0 26px 0;
+    color:var(--navy);
+  }
+  nav.toc ol{
+    list-style:none;
+    margin:0; padding:0;
+    font-family:'Avenir Next','Segoe UI',sans-serif;
+  }
+  nav.toc li{margin-bottom:2px;}
+  nav.toc a{
+    display:flex;
+    gap:10px;
+    align-items:baseline;
+    text-decoration:none;
+    color:var(--ink-soft);
+    font-size:13.5px;
+    padding:7px 8px;
+    border-radius:6px;
+    transition:background .15s, color .15s;
+  }
+  nav.toc a:hover{background:var(--teal-soft); color:var(--teal);}
+  nav.toc a .num{
+    color:var(--gold);
+    font-weight:700;
+    font-size:11px;
+    width:16px;
+  }
+  nav.toc .toc-foot{
+    margin-top:30px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+    font-family:'Avenir Next','Segoe UI',sans-serif;
+    font-size:11.5px;
+    color:var(--ink-soft);
+    line-height:1.6;
+  }
+
+  /* ---------- Hero ---------- */
+  header.hero{
+    position:relative;
+    background:var(--navy);
+    color:#fff;
+    padding:0;
+    overflow:hidden;
+  }
+  .terraces{
+    position:absolute;
+    inset:0;
+    z-index:0;
+  }
+  .terrace{
+    position:absolute;
+    left:-10%;
+    width:120%;
+    height:60px;
+  }
+  header.hero .hero-inner{
+    position:relative;
+    z-index:2;
+    padding:70px 56px 56px 56px;
+  }
+  @media (max-width:600px){
+    header.hero .hero-inner{padding:46px 24px 40px 24px;}
+  }
+  .eyebrow{
+    font-family:'Avenir Next','Segoe UI',sans-serif;
+    font-size:12px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:700;
+    margin-bottom:18px;
+  }
+  header.hero h2{
+    font-size:44px;
+    line-height:1.14;
+    margin:0 0 6px 0;
+    font-weight:500;
+    max-width:640px;
+  }
+  header.hero .model-code{
+    font-size:22px;
+    color:var(--gold);
+    font-style:italic;
+    margin:6px 0 22px 0;
+  }
+  header.hero .tagline{
+    font-family:'Avenir Next','Segoe UI',sans-serif;
+    font-size:15.5px;
+    color:#C9D6D2;
+    max-width:560px;
+    line-height:1.6;
+    margin-bottom:34px;
+  }
+  .snapshot{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;
+    background:rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:10px;
+    overflow:hidden;
+    max-width:760px;
+  }
+  @media (max-width:700px){
+    .snapshot{grid-template-columns:repeat(2,1fr);}
+  }
+  .snapshot .cell{
+    background:rgba(255,255,255,.05);
+    padding:16px 18px;
+    font-family:'Avenir Next','Segoe UI',sans-serif;
+  }
+  .snapshot .cell .label{
+    font-size:10.5px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:6px;
+  }
+  .snapshot .cell .value{
+    font-size:14.5px;
+    color:#fff;
+    line-height:1.4;
+  }
+
+  /* ---------- Main content ---------- */
+  main{padding:56px 56px 40px 56px;}
+  @media (max-width:600px){main{padding:36px 22px;}}
+
+  section{
+    padding-top:14px;
+    margin-bottom:54px;
+    scroll-margin-top:20px;
+  }
+  .sec-eyebrow{
+    font-family:'Avenir Next','Segoe UI',sans-serif;
+    font-size:11.5px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--teal);
+    font-weight:700;
+    margin-bottom:8px;
+  }
+  h2.sec-title{
+    font-size:29px;
+    color:var(--navy);
+    margin:0 0 18px 0;
+    font-weight:500;
+    border-bottom:2px solid var(--gold);
+    padding-bottom:14px;
+  }
+  p{
+    font-size:16px;
+    line-height:1.75;
+    color:var(--ink);
+    max-width:760px;
+  }
+  .lead{
+    font-size:17px;
+    color:var(--ink-soft);
+    max-width:720px;
+  }
+
+  /* pill list for target group / duration */
+  .pill-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:16px;}
+  .pill{
+    font-family:'Avenir Next','Segoe UI',sans-serif;
+    font-size:13.5px;
+    background:var(--teal-soft);
+    color:var(--teal);
+    padding:9px 16px;
+    border-radius:30px;
+    font-weight:600;
+  }
+  .pill.gold{background:var(--gold-soft); color:#8a6414;}
+
+  /* ---------- Module cards ---------- */
+  .modules{
+    display:grid;
+    gap:14px;
+    margin-top:22px;
+  }
+  .module-card{
+    display:grid;
+    grid-template-columns:64px 1fr 1fr;
+    gap:0;
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+    background:#fff;
+  }
+  @media (max-width:760px){
+    .module-card{grid-template-columns:1fr;}
+    .module-card .m-num{display:none;}
+  }
+  .module-card .m-num{
+    background:var(--navy);
+    color:var(--gold);
+    font-family:'Avenir Next','Segoe UI',sans-serif;
+    font-weight:700;
+    font-size:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .module-card .m-body{
+    padding:18px 22px;
+    border-right:1px solid var(--line);
+  }
+  @media (max-width:760px){.module-card .m-body{border-right:none; border-bottom:1px solid var(--line);}}
+  .module-card .m-body h3{
+    margin:0 0 8px 0;
+    font-size:17px;
+    color:var(--navy);
+    font-weight:600;
+  }
+  .module-card .m-body .topics{
+    font-family:'Avenir Next','Segoe UI',sans-serif;
+    font-size:13.5px;
+    color:var(--ink-soft);
+    line-height:1.6;
+  }
+  .module-card .m-outcome{
+    padding:18px 22px;
+    background:var(--teal-soft);
+    display:flex;
+    align-items:center;
+    font-family:'Avenir Next','Segoe UI',sans-serif;
+    font-size:13.5px;
+    color:#0F4A42;
+    line-height:1.55;
+  }
+  .module-card .m-outcome::before{
+    content:"\2192";
+    color:var(--teal);
+    font-weight:700;
+    margin-right:8px;
+  }
+
+  /* ---------- Methodology tag cloud ---------- */
+  .tag-grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:10px;
+    margin-top:20px;
+    font-family:'Avenir Next','Segoe UI',sans-serif;
+  }
+  @media (max-width:760px){.tag-grid{grid-template-columns:repeat(2,1fr);}}
+  .tag-grid .tag{
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:14px 12px;
+    font-size:13.5px;
+    color:var(--navy);
+    font-weight:600;
+    text-align:center;
+    background:linear-gradient(180deg,#fff, #FAFBFA);
+  }
+
+  /* ---------- Assessment table ---------- */
+  .assess-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:22px;
+    font-family:'Avenir Next','Segoe UI',sans-serif;
+  }
+  .assess-table tr{border-bottom:1px solid var(--line);}
+  .assess-table tr:last-child{border-bottom:none;}
+  .assess-table td{
+    padding:16px 14px;
+    font-size:14px;
+    vertical-align:top;
+  }
+  .assess-table td.term{
+    width:230px;
+    font-weight:700;
+    color:var(--navy);
+  }
+  .assess-table td.desc{color:var(--ink-soft); line-height:1.6;}
+  .assess-table tr:nth-child(odd){background:var(--gold-soft);}
+
+  /* ---------- Outcomes checklist ---------- */
+  .outcomes{
+    list-style:none;
+    margin:22px 0 0 0;
+    padding:0;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px 28px;
+    font-family:'Avenir Next','Segoe UI',sans-serif;
+  }
+  @media (max-width:700px){.outcomes{grid-template-columns:1fr;}}
+  .outcomes li{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    font-size:14.5px;
+    color:var(--ink);
+    line-height:1.5;
+  }
+  .outcomes .check{
+    flex:0 0 22px;
+    height:22px;
+    border-radius:50%;
+    background:var(--teal);
+    color:#fff;
+    font-size:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+  }
+
+  /* ---------- Partners ---------- */
+  .partner-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px 22px;
+    margin-top:20px;
+    font-family:'Avenir Next','Segoe UI',sans-serif;
+  }
+  @media (max-width:600px){.partner-grid{grid-template-columns:1fr;}}
+  .partner-grid .partner{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 4px;
+    border-bottom:1px dashed var(--line);
+    font-size:14.5px;
+    color:var(--navy);
+    font-weight:600;
+  }
+  .partner-grid .dot{
+    width:8px; height:8px; border-radius:50%;
+    background:var(--gold); flex:0 0 8px;
+  }
+
+  /* ---------- Closing ---------- */
+  .closing-quote{
+    border-left:4px solid var(--teal);
+    background:var(--teal-soft);
+    padding:22px 26px;
+    border-radius:0 8px 8px 0;
+    font-style:italic;
+    color:#0F4A42;
+    font-size:16.5px;
+    line-height:1.7;
+    max-width:760px;
+    margin-top:8px;
+  }
+
+  footer{
+    background:var(--navy);
+    color:#C9D6D2;
+    padding:40px 56px;
+    font-family:'Avenir Next','Segoe UI',sans-serif;
+  }
+  @media (max-width:600px){footer{padding:30px 24px;}}
+  footer .credit-name{color:#fff; font-weight:700; font-size:16px;}
+  footer .credit-role{font-size:13px; margin-top:4px;}
+  footer .credit-org{color:var(--gold); font-weight:700; font-size:13px; margin-top:2px;}
+  footer .foot-divider{
+    height:1px; background:rgba(255,255,255,.15); margin:22px 0;
+  }
+  footer .foot-note{font-size:12px; color:#93A5A0;}
+
+  @media print{
+    nav.toc{display:none;}
+    .layout{grid-template-columns:1fr;}
+    header.hero{background:var(--navy) !important; -webkit-print-color-adjust:exact; print-color-adjust:exact;}
+    section{page-break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <nav class="toc">
+    <div class="brand">ISCDTM &ndash; 2026</div>
+    <h1>SMART Training Guide</h1>
+    <ol>
+      <li><a href="#about"><span class="num">00</span>About This Guide</a></li>
+      <li><a href="#target"><span class="num">01</span>Target Group</a></li>
+      <li><a href="#duration"><span class="num">02</span>Duration</a></li>
+      <li><a href="#modules"><span class="num">03</span>Training Modules</a></li>
+      <li><a href="#methodology"><span class="num">04</span>Methodology</a></li>
+      <li><a href="#assessment"><span class="num">05</span>Assessment</a></li>
+      <li><a href="#outcomes"><span class="num">06</span>Expected Outcomes</a></li>
+      <li><a href="#partners"><span class="num">07</span>Suggested Partners</a></li>
+      <li><a href="#closing"><span class="num">08</span>Closing Note</a></li>
+    </ol>
+    <div class="toc-foot">
+      Developed by<br>
+      <strong style="color:var(--navy)">Mr. Bishnu Singh Rayamajhi</strong><br>
+      Founder, UCDL Academy
+    </div>
+  </nav>
+
+  <div>
+    <header class="hero">
+      <svg class="terraces" viewBox="0 0 1000 320" preserveAspectRatio="none" style="position:absolute;bottom:0;left:0;width:100%;height:180px;">
+        <polygon points="0,320 0,230 1000,270 1000,320" fill="#0F2436"/>
+        <polygon points="0,320 0,255 1000,290 1000,320" fill="#164033" opacity="0.9"/>
+        <polygon points="0,320 0,280 1000,305 1000,320" fill="#1B7A6E" opacity="0.85"/>
+        <polygon points="0,320 0,300 1000,315 1000,320" fill="#4E9B7E" opacity="0.9"/>
+      </svg>
+      <div class="hero-inner">
+        <div class="eyebrow">Municipality-Wide Youth Capacity Building &middot; Nepal</div>
+        <h2>Integrated Student Capacity Development Training Model</h2>
+        <div class="model-code">( ISCDTM &ndash; 2026 )</div>
+        <div class="tagline">A SMART framework &mdash; Specific, Measurable, Achievable, Relevant, Time-bound &mdash; for building digitally fluent, civic-minded, future-ready students in Grade 6&ndash;12.</div>
+        <div class="snapshot">
+          <div class="cell">
+            <div class="label">Target Group</div>
+            <div class="value">Grade 6&ndash;12, community &amp; institutional schools</div>
+          </div>
+          <div class="cell">
+            <div class="label">Duration</div>
+            <div class="value">5&ndash;7 days (30&ndash;40 hrs)</div>
+          </div>
+          <div class="cell">
+            <div class="label">Modules</div>
+            <div class="value">10 integrated competencies</div>
+          </div>
+          <div class="cell">
+            <div class="label">Reach</div>
+            <div class="value">Municipality-wide implementation</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+
+      <section id="about">
+        <div class="sec-eyebrow">Overview</div>
+        <h2 class="sec-title">About This Guide</h2>
+        <p class="lead">The Integrated Student Capacity Development Training Model (ISCDTM&ndash;2026) is a SMART training framework designed to build well-rounded, future-ready students across community and institutional schools. It brings digital literacy, life skills, civic responsibility, and community engagement into a single, structured municipality-wide program.</p>
+        <p>This guide equips municipal education offices, school leaders, and trainers with a ready-to-implement roadmap: target groups, duration, modules, methodology, assessment tools, expected outcomes, and partnership structures.</p>
+      </section>
+
+      <section id="target">
+        <div class="sec-eyebrow">01</div>
+        <h2 class="sec-title">Target Group</h2>
+        <div class="pill-row">
+          <div class="pill">Grade 6&ndash;12 students</div>
+          <div class="pill">Community schools</div>
+          <div class="pill">Institutional schools</div>
+          <div class="pill gold">Municipality-wide implementation</div>
+        </div>
+      </section>
+
+      <section id="duration">
+        <div class="sec-eyebrow">02</div>
+        <h2 class="sec-title">Duration</h2>
+        <div class="pill-row">
+          <div class="pill">5&ndash;7 days</div>
+          <div class="pill">30&ndash;40 training hours</div>
+        </div>
+      </section>
+
+      <section id="modules">
+        <div class="sec-eyebrow">03</div>
+        <h2 class="sec-title">Training Modules</h2>
+        <p class="lead">Ten integrated modules combine cognitive, technical, civic, and life-skill competencies. Each pairs practical topics with a clearly measurable outcome.</p>
+        <div class="modules">
+
+          <div class="module-card"><div class="m-num">1</div><div class="m-body"><h3>Digital &amp; AI Literacy</h3><div class="topics">Computer basics, internet safety, AI tools, responsible AI use</div></div><div class="m-outcome">Students use digital technology safely and effectively.</div></div>
+
+          <div class="module-card"><div class="m-num">2</div><div class="m-body"><h3>Communication &amp; Leadership</h3><div class="topics">Public speaking, teamwork, leadership, presentation skills</div></div><div class="m-outcome">Improved confidence and leadership qualities.</div></div>
+
+          <div class="module-card"><div class="m-num">3</div><div class="m-body"><h3>Critical Thinking &amp; Problem Solving</h3><div class="topics">Logical reasoning, project-based learning, innovation</div></div><div class="m-outcome">Better analytical and decision-making skills.</div></div>
+
+          <div class="module-card"><div class="m-num">4</div><div class="m-body"><h3>Career Guidance</h3><div class="topics">Career planning, entrepreneurship, vocational opportunities</div></div><div class="m-outcome">Students prepare realistic career pathways.</div></div>
+
+          <div class="module-card"><div class="m-num">5</div><div class="m-body"><h3>Financial Literacy</h3><div class="topics">Budgeting, banking, saving, digital payments</div></div><div class="m-outcome">Responsible financial habits.</div></div>
+
+          <div class="module-card"><div class="m-num">6</div><div class="m-body"><h3>Environmental &amp; Climate Education</h3><div class="topics">Waste management, biodiversity, climate adaptation</div></div><div class="m-outcome">Environmentally responsible citizens.</div></div>
+
+          <div class="module-card"><div class="m-num">7</div><div class="m-body"><h3>Health &amp; Well-being</h3><div class="topics">Mental health, nutrition, reproductive health, stress management</div></div><div class="m-outcome">Improved physical and mental well-being.</div></div>
+
+          <div class="module-card"><div class="m-num">8</div><div class="m-body"><h3>Disaster Risk Reduction</h3><div class="topics">Earthquake, fire, flood preparedness, first aid</div></div><div class="m-outcome">Increased disaster preparedness.</div></div>
+
+          <div class="module-card"><div class="m-num">9</div><div class="m-body"><h3>Civic Education</h3><div class="topics">Constitution, local government, citizenship, SDGs</div></div><div class="m-outcome">Active and responsible citizenship.</div></div>
+
+          <div class="module-card"><div class="m-num">10</div><div class="m-body"><h3>Community Project</h3><div class="topics">Group projects addressing local issues</div></div><div class="m-outcome">Practical application of learning.</div></div>
+
+        </div>
+      </section>
+
+      <section id="methodology">
+        <div class="sec-eyebrow">04</div>
+        <h2 class="sec-title">Training Methodology</h2>
+        <p class="lead">A blended, learner-centered methodology keeps sessions practical, participatory, and age-appropriate:</p>
+        <div class="tag-grid">
+          <div class="tag">Interactive Lectures</div>
+          <div class="tag">Group Discussions</div>
+          <div class="tag">Practical Demonstrations</div>
+          <div class="tag">Role Plays</div>
+          <div class="tag">Educational Games</div>
+          <div class="tag">Community Surveys</div>
+          <div class="tag">Project-Based Learning</div>
+          <div class="tag">Digital Learning Activities</div>
+          <div class="tag">Field Visits</div>
+          <div class="tag">Peer Teaching</div>
+        </div>
+      </section>
+
+      <section id="assessment">
+        <div class="sec-eyebrow">05</div>
+        <h2 class="sec-title">Assessment Strategy</h2>
+        <p class="lead">Assessment is continuous and multi-format, ensuring learning is measured &mdash; the &ldquo;M&rdquo; in SMART &mdash; at every stage of the training.</p>
+        <table class="assess-table">
+          <tr><td class="term">Pre-training assessment</td><td class="desc">Establishes each student's baseline knowledge and skill level before training begins.</td></tr>
+          <tr><td class="term">Daily reflection</td><td class="desc">Short end-of-day feedback capturing learning, challenges, and confidence growth.</td></tr>
+          <tr><td class="term">Group presentations</td><td class="desc">Teams present findings or solutions to reinforce communication and teamwork skills.</td></tr>
+          <tr><td class="term">Practical assignments</td><td class="desc">Hands-on tasks that apply each module's concepts to real situations.</td></tr>
+          <tr><td class="term">Community project evaluation</td><td class="desc">Assessment of the final group project's relevance, execution, and community impact.</td></tr>
+          <tr><td class="term">Post-training assessment</td><td class="desc">Measures knowledge and skill gained against the pre-training baseline.</td></tr>
+          <tr><td class="term">Certificate of completion</td><td class="desc">Formal recognition awarded to students who meet attendance and performance criteria.</td></tr>
+        </table>
+      </section>
+
+      <section id="outcomes">
+        <div class="sec-eyebrow">06</div>
+        <h2 class="sec-title">Expected Outcomes</h2>
+        <p class="lead">After completing the training, students will:</p>
+        <ul class="outcomes">
+          <li><span class="check">&#10003;</span>Develop digital and AI literacy.</li>
+          <li><span class="check">&#10003;</span>Strengthen communication and leadership skills.</li>
+          <li><span class="check">&#10003;</span>Improve critical thinking and creativity.</li>
+          <li><span class="check">&#10003;</span>Understand career and entrepreneurship opportunities.</li>
+          <li><span class="check">&#10003;</span>Practice financial management.</li>
+          <li><span class="check">&#10003;</span>Promote environmental conservation.</li>
+          <li><span class="check">&#10003;</span>Maintain healthy lifestyles.</li>
+          <li><span class="check">&#10003;</span>Be prepared for disasters and emergencies.</li>
+          <li><span class="check">&#10003;</span>Participate actively in community development.</li>
+        </ul>
+      </section>
+
+      <section id="partners">
+        <div class="sec-eyebrow">07</div>
+        <h2 class="sec-title">Suggested Partners</h2>
+        <p class="lead">Effective delivery depends on coordinated local partnerships:</p>
+        <div class="partner-grid">
+          <div class="partner"><span class="dot"></span>Municipal Education Section</div>
+          <div class="partner"><span class="dot"></span>Local schools</div>
+          <div class="partner"><span class="dot"></span>Youth clubs</div>
+          <div class="partner"><span class="dot"></span>NGOs / INGOs</div>
+          <div class="partner"><span class="dot"></span>Health institutions</div>
+          <div class="partner"><span class="dot"></span>Local entrepreneurs</div>
+          <div class="partner"><span class="dot"></span>Police and disaster management offices</div>
+        </div>
+      </section>
+
+      <section id="closing">
+        <div class="sec-eyebrow">08</div>
+        <h2 class="sec-title">Closing Note</h2>
+        <div class="closing-quote">This model reflects current educational priorities in Nepal, including digital competence, AI awareness, competency-based learning, environmental sustainability, and life skills development.</div>
+      </section>
+
+    </main>
+
+    <footer>
+      <div class="credit-name">Developed by: Mr. Bishnu Singh Rayamajhi</div>
+      <div class="credit-role">Math Lecturer &amp; Head of Humanities and Social Science, KMC&ndash;Taulihawa</div>
+      <div class="credit-org">Founder, UCDL Academy</div>
+      <div class="foot-divider"></div>
+      <div class="foot-note">ISCDTM &ndash; 2026 &middot; Integrated Student Capacity Development Training Model &middot; SMART Training Guide</div>
+    </footer>
+  </div>
+
+</div>
+
+</body>
+</html>
