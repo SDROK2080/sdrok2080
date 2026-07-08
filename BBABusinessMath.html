@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Mathematics I &amp; II — SMART Teaching-Learning Platform | UCDL Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Work+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#152136;
+    --ink-2:#213456;
+    --ink-soft:#3c4d6b;
+    --parchment:#ECEFE4;
+    --parchment-2:#E4E8DA;
+    --paper:#FCFBF5;
+    --paper-line:#DAD4BE;
+    --gold:#B4842A;
+    --gold-dark:#8A6420;
+    --gold-tint:#F3E4C2;
+    --teal:#2E6B5B;
+    --teal-dark:#204A3F;
+    --teal-tint:#DCEAE3;
+    --text:#1C2620;
+    --muted:#5A6860;
+    --muted-2:#7A8880;
+    --rule:#D3CDB6;
+    --shadow: 0 1px 2px rgba(21,33,54,0.06), 0 6px 20px rgba(21,33,54,0.07);
+    --radius: 10px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--parchment);
+    background-image:
+      linear-gradient(var(--parchment-2) 1px, transparent 1px);
+    background-size: 100% 42px;
+    color:var(--text);
+    font-family:'Work Sans', sans-serif;
+    font-size:16px;
+    line-height:1.62;
+  }
+  h1,h2,h3,h4{
+    font-family:'Spectral', serif;
+    color:var(--ink);
+    margin:0 0 .4em 0;
+    letter-spacing:.2px;
+  }
+  a{color:var(--teal-dark);}
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 24px;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:
+      radial-gradient(1100px 480px at 85% -10%, rgba(180,132,42,0.16), transparent 60%),
+      linear-gradient(150deg, var(--ink) 0%, var(--ink-2) 62%, var(--ink-soft) 100%);
+    color:#EFEBDD;
+    padding:64px 0 46px 0;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";
+    position:absolute; inset:0;
+    background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 46px);
+    pointer-events:none;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:2.2px;
+    text-transform:uppercase;
+    color:var(--gold-tint);
+    background:rgba(180,132,42,0.18);
+    border:1px solid rgba(180,132,42,0.45);
+    display:inline-block;
+    padding:5px 12px;
+    border-radius:100px;
+    margin-bottom:22px;
+  }
+  .hero h1{
+    color:#F7F4E9;
+    font-size:clamp(32px, 4.4vw, 52px);
+    font-weight:700;
+    max-width:820px;
+    margin-bottom:14px;
+    line-height:1.12;
+  }
+  .hero h1 em{ color:var(--gold-tint); font-style:italic; font-weight:600; }
+  .hero p.lede{
+    max-width:640px;
+    font-size:17.5px;
+    color:#CBD2CE;
+    margin-bottom:30px;
+  }
+  .hero-meta{
+    display:flex; flex-wrap:wrap; gap:10px 30px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    color:#B9C4BE;
+    border-top:1px dashed rgba(233,229,213,0.28);
+    padding-top:20px;
+    margin-top:8px;
+  }
+  .hero-meta b{color:#F0EADC; font-weight:600;}
+
+  .stats-row{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:0;
+    margin-top:38px;
+    border:1px solid rgba(233,229,213,0.22);
+    border-radius:var(--radius);
+    overflow:hidden;
+    background:rgba(255,255,255,0.03);
+  }
+  .stat{
+    padding:18px 20px;
+    border-right:1px solid rgba(233,229,213,0.16);
+  }
+  .stat:last-child{border-right:none;}
+  .stat .num{
+    font-family:'Spectral', serif;
+    font-weight:700;
+    font-size:28px;
+    color:var(--gold-tint);
+    display:block;
+  }
+  .stat .lab{
+    font-size:12.5px;
+    color:#AEB8B2;
+    letter-spacing:.3px;
+  }
+
+  /* ---------- NAV LEDGER ---------- */
+  .nav-strip{
+    position:sticky; top:0; z-index:40;
+    background:rgba(252,251,245,0.94);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--rule);
+  }
+  .nav-inner{
+    display:flex; align-items:center; gap:6px;
+    overflow-x:auto;
+    padding:10px 24px;
+    max-width:1180px; margin:0 auto;
+    scrollbar-width:thin;
+  }
+  .nav-inner::-webkit-scrollbar{height:5px;}
+  .nav-inner::-webkit-scrollbar-thumb{background:var(--rule); border-radius:10px;}
+  .nav-pill{
+    flex:0 0 auto;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.2px;
+    color:var(--ink-soft);
+    text-decoration:none;
+    padding:6px 11px;
+    border-radius:100px;
+    border:1px solid transparent;
+    white-space:nowrap;
+    transition:background .15s ease, border-color .15s ease;
+  }
+  .nav-pill:hover{ background:var(--teal-tint); border-color:var(--teal); }
+  .nav-pill.paper-label{
+    color:var(--gold-dark); font-weight:600; padding-left:4px; padding-right:8px;
+  }
+  .nav-sep{ width:1px; height:18px; background:var(--rule); flex:0 0 auto; margin:0 4px;}
+
+  /* ---------- SECTION HEADERS ---------- */
+  .paper-divider{
+    max-width:1180px; margin:56px auto 26px auto; padding:0 24px;
+    display:flex; align-items:baseline; gap:16px;
+  }
+  .paper-divider .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px; letter-spacing:1.5px;
+    background:var(--teal); color:#EFF7F3;
+    padding:5px 12px; border-radius:4px;
+  }
+  .paper-divider h2{ font-size:26px; margin:0; }
+  .paper-divider .rule-line{ flex:1; border-top:1px dashed var(--rule); }
+  .paper-sub{
+    max-width:1180px; margin:-14px auto 30px auto; padding:0 24px;
+    color:var(--muted); font-size:15px; max-width:760px;
+  }
+
+  main{padding-bottom:60px;}
+
+  /* ---------- UNIT LEDGER CARD ---------- */
+  .unit-card{
+    max-width:1180px; margin:0 auto 22px auto; padding:0 24px;
+  }
+  .unit-inner{
+    background:var(--paper);
+    border:1px solid var(--paper-line);
+    border-left:4px solid var(--teal);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .unit-head{
+    display:flex; align-items:center; gap:18px;
+    padding:20px 24px;
+    cursor:pointer;
+    user-select:none;
+  }
+  .unit-stamp{
+    flex:0 0 auto;
+    width:52px; height:52px;
+    border-radius:50%;
+    border:2px solid var(--gold);
+    color:var(--gold-dark);
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600; font-size:17px;
+    display:flex; align-items:center; justify-content:center;
+    transform:rotate(-4deg);
+    background:var(--gold-tint);
+    position:relative;
+  }
+  .unit-stamp::after{
+    content:"";
+    position:absolute; inset:5px;
+    border:1px dotted var(--gold-dark);
+    border-radius:50%;
+    opacity:.6;
+  }
+  .unit-headtext{flex:1 1 auto; min-width:0;}
+  .unit-kicker{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px; color:var(--muted-2); letter-spacing:.5px;
+    text-transform:uppercase; margin-bottom:3px;
+  }
+  .unit-title{
+    font-family:'Spectral', serif; font-size:20px; font-weight:600;
+    color:var(--ink); line-height:1.3;
+  }
+  .unit-toggle{
+    flex:0 0 auto;
+    width:30px; height:30px;
+    border-radius:50%;
+    border:1px solid var(--rule);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--ink-soft);
+    font-size:16px;
+    transition:transform .2s ease, background .2s ease;
+  }
+  .unit-inner.open .unit-toggle{ transform:rotate(45deg); background:var(--teal-tint); }
+
+  .unit-body{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .35s ease;
+    border-top:1px dashed var(--rule);
+  }
+  .unit-inner.open .unit-body{ border-top:1px dashed var(--rule); }
+  .unit-body-inner{ padding:22px 24px 26px 24px; }
+
+  .hook{
+    font-family:'Spectral', serif;
+    font-style:italic;
+    font-size:16.5px;
+    color:var(--ink-soft);
+    border-left:3px solid var(--gold);
+    padding:2px 0 2px 16px;
+    margin:0 0 20px 0;
+  }
+
+  .section-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px; letter-spacing:1.2px; text-transform:uppercase;
+    color:var(--teal-dark);
+    margin:20px 0 8px 0;
+    display:flex; align-items:center; gap:8px;
+  }
+  .section-label::before{
+    content:""; width:14px; height:1px; background:var(--teal); display:inline-block;
+  }
+  .unit-body-inner ul{ margin:6px 0 0 0; padding-left:20px; }
+  .unit-body-inner li{ margin-bottom:6px; }
+  .unit-body-inner p{ margin:6px 0 0 0; }
+
+  .formula-box{
+    background:var(--ink);
+    color:#EDEAD9;
+    border-radius:8px;
+    padding:16px 18px;
+    margin-top:8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:14.5px;
+    line-height:2;
+    overflow-x:auto;
+  }
+  .formula-box .f-note{ color:#9FB0A6; font-size:12.5px; font-family:'Work Sans',sans-serif; display:block; margin-top:2px;}
+
+  .example-box{
+    background:var(--teal-tint);
+    border:1px solid #C6DED4;
+    border-radius:8px;
+    padding:16px 18px;
+    margin-top:8px;
+    font-size:14.8px;
+  }
+  .example-box .ex-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px; text-transform:uppercase; letter-spacing:1px;
+    color:var(--teal-dark); font-weight:600; display:block; margin-bottom:6px;
+  }
+
+  .resources{
+    display:flex; flex-wrap:wrap; gap:10px;
+    margin-top:20px;
+    padding-top:16px;
+    border-top:1px dashed var(--rule);
+  }
+  .chip{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.8px;
+    text-decoration:none;
+    padding:8px 14px;
+    border-radius:100px;
+    border:1px solid var(--rule);
+    color:var(--ink);
+    background:var(--paper);
+    transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+  }
+  .chip:hover{ transform:translateY(-1px); box-shadow:0 3px 10px rgba(21,33,54,0.12); border-color:var(--gold);}
+  .chip .dot{ width:8px; height:8px; border-radius:50%; flex:0 0 auto;}
+  .chip.pdf .dot{ background:var(--gold); }
+  .chip.video .dot{ background:var(--teal); }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:var(--ink);
+    color:#C7CEC9;
+    padding:44px 0 30px 0;
+    margin-top:20px;
+  }
+  footer .wrap{ display:flex; flex-wrap:wrap; gap:32px; justify-content:space-between; }
+  footer h4{ color:#F0EADC; font-size:16px; margin-bottom:8px;}
+  footer p{ font-size:13.8px; line-height:1.7; color:#AFB8B2; max-width:420px; margin:0;}
+  footer .credit{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px; color:#8C978F;
+    border-top:1px dashed rgba(233,229,213,0.2);
+    margin-top:26px; padding-top:18px;
+    max-width:1180px; margin-left:auto; margin-right:auto;
+  }
+  footer .credit .wrap{ padding-top:0; }
+
+  @media (max-width:760px){
+    .stats-row{ grid-template-columns:repeat(2,1fr); }
+    .stat{ border-right:1px solid rgba(233,229,213,0.16); }
+    .stat:nth-child(2n){ border-right:none; }
+    .unit-head{ padding:16px 16px; gap:12px;}
+    .unit-body-inner{ padding:18px 16px 22px 16px; }
+    .unit-stamp{ width:42px; height:42px; font-size:14px;}
+    .unit-title{ font-size:17.5px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">MTH 201 &amp; MTH 202 · BBA First Semester · Tribhuvan University</span>
+    <h1>Business Mathematics, <em>taught the way it's actually used.</em></h1>
+    <p class="lede">A complete SMART teaching–learning companion for both Business Mathematics papers — every unit explained in plain language, with the core formulas, a worked example, and a hand-picked PDF and video for deeper study.</p>
+    <div class="hero-meta">
+      <span><b>Developed by</b> Mr. Bishnu Singh Rayamajhi</span>
+      <span><b>Role</b> Mathematics Lecturer &amp; Head, Humanities &amp; Social Sciences Dept.</span>
+      <span><b>Institution</b> Kapilvastu Multiple Campus (KMC), Taulihawa</span>
+      <span><b>Founder</b> UCDL Academy</span>
+    </div>
+    <div class="stats-row">
+      <div class="stat"><span class="num">2</span><span class="lab">Course Papers</span></div>
+      <div class="stat"><span class="num">12</span><span class="lab">Teaching Units</span></div>
+      <div class="stat"><span class="num">96</span><span class="lab">Lecture Hours (approx.)</span></div>
+      <div class="stat"><span class="num">24</span><span class="lab">Linked PDF + Video Resources</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ STICKY UNIT NAV ============ -->
+<nav class="nav-strip">
+  <div class="nav-inner" id="navInner">
+    <span class="nav-pill paper-label">PAPER I</span>
+    <a class="nav-pill" href="#unit1">U1 · Lines &amp; Functions</a>
+    <a class="nav-pill" href="#unit2">U2 · Simultaneous Eqns</a>
+    <a class="nav-pill" href="#unit3">U3 · Quadratics</a>
+    <a class="nav-pill" href="#unit4">U4 · Non-linear &amp; Numerical</a>
+    <a class="nav-pill" href="#unit5">U5 · Financial Maths</a>
+    <a class="nav-pill" href="#unit6">U6 · Differentiation</a>
+    <span class="nav-sep"></span>
+    <span class="nav-pill paper-label">PAPER II</span>
+    <a class="nav-pill" href="#unit7">U7 · Integration</a>
+    <a class="nav-pill" href="#unit8">U8 · Linear Programming</a>
+    <a class="nav-pill" href="#unit9">U9 · Linear Algebra</a>
+    <a class="nav-pill" href="#unit10">U10 · Several Variables</a>
+    <a class="nav-pill" href="#unit11">U11 · Differential Eqns</a>
+    <a class="nav-pill" href="#unit12">U12 · Difference Eqns</a>
+  </div>
+</nav>
+
+<main>
+<div class="paper-divider">
+  <span class="tag">MTH 201</span>
+  <h2>Business Mathematics I</h2>
+  <span class="rule-line"></span>
+</div>
+<p class="paper-sub">Straight lines to differentiation — the six units that take a BBA student from plotting a demand curve to finding the output level that maximises profit.</p>
+
+<!-- UNIT 1 -->
+<div class="unit-card" id="unit1">
+  <div class="unit-inner">
+    <div class="unit-head">
+      <div class="unit-stamp">01</div>
+      <div class="unit-headtext">
+        <div class="unit-kicker">Unit 1 · Straight Lines &amp; Functions</div>
+        <div class="unit-title">Linear Functions and Their Applications in Market Analysis</div>
+      </div>
+      <div class="unit-toggle">+</div>
+    </div>
+    <div class="unit-body">
+      <div class="unit-body-inner">
+        <p class="hook">Almost every business question — "how much will we sell at this price?", "when do we break even?" — starts life as a straight line on a graph.</p>
+
+        <div class="section-label">Key ideas</div>
+        <ul>
+          <li><b>Slope-intercept form:</b> y = mx + c, where m is the slope (rate of change) and c is the vertical intercept.</li>
+          <li><b>Demand function:</b> price falls as quantity rises, so the demand line has a <i>negative</i> slope: P = a − bQ.</li>
+          <li><b>Supply function:</b> producers offer more at higher prices, so the supply line has a <i>positive</i> slope: P = c + dQ.</li>
+          <li><b>Cost, revenue and elasticity:</b> C(Q) = fixed cost + variable cost × Q; R(Q) = price × Q; elasticity measures how strongly quantity reacts to a change in price, income, or another good's price.</li>
+          <li><b>Budget &amp; cost constraints</b> are just straight lines drawn as limits rather than relationships.</li>
+          <li><b>Method of least squares:</b> when real data doesn't sit perfectly on a line, this method finds the straight line that fits the scattered points best.</li>
+        </ul>
+
+        <div class="section-label">Core formulas</div>
+        <div class="formula-box">
+          slope&nbsp; m = (y₂ − y₁) / (x₂ − x₁)<br>
+          line through a point&nbsp; y − y₁ = m(x − x₁)<br>
+          linear demand&nbsp; P = a − bQ &nbsp;·&nbsp; linear supply&nbsp; P = c + dQ<br>
+          equilibrium&nbsp; set demand = supply, solve for Q, then P
+          <span class="f-note">Lab work in this unit is done in Excel — plotting lines and solving for intersections directly from data.</span>
+        </div>
+
+        <div class="section-label">Worked example</div>
+        <div class="example-box">
+          <span class="ex-tag">Market equilibrium</span>
+          Demand: P = 100 − 2Q &nbsp;·&nbsp; Supply: P = 20 + 3Q<br>
+          Set equal: 100 − 2Q = 20 + 3Q → 80 = 5Q → <b>Q = 16 units</b><br>
+          Substitute back: P = 100 − 2(16) = <b>Rs 68</b> — the equilibrium price and quantity where the market clears.
+        </div>
+
+        <div class="resources">
+          <a class="chip pdf" href="https://www.hetwebsite.net/het/fonseca/notes/math1.pdf" target="_blank" rel="noopener"><span class="dot"></span>PDF notes — Demand &amp; supply curves</a>
+          <a class="chip video" href="https://www.youtube.com/watch?v=uPQsAEMEDCI" target="_blank" rel="noopener"><span class="dot"></span>Video — Finding equilibrium from linear equations</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UNIT 2 -->
+<div class="unit-card" id="unit2">
+  <div class="unit-inner">
+    <div class="unit-head">
+      <div class="unit-stamp">02</div>
+      <div class="unit-headtext">
+        <div class="unit-kicker">Unit 2 · Simultaneous Equations</div>
+        <div class="unit-title">Equilibrium, Break-Even and the IS-LM Model</div>
+      </div>
+      <div class="unit-toggle">+</div>
+    </div>
+    <div class="unit-body">
+      <div class="unit-body-inner">
+        <p class="hook">Two lines crossing on a graph is a market clearing; a business's cost line crossing its revenue line is the day it stops losing money.</p>
+
+        <div class="section-label">Key ideas</div>
+        <ul>
+          <li><b>Solving simultaneous linear equations</b> by substitution or elimination — the algebra behind every equilibrium diagram.</li>
+          <li><b>Equilibrium and break-even:</b> equilibrium is where quantity demanded equals quantity supplied; break-even is where total revenue equals total cost.</li>
+          <li><b>Consumer and producer surplus</b> (introduced here, developed fully with integration in Unit 7) — the extra value buyers and sellers gain from trading at the equilibrium price.</li>
+          <li><b>The IS-LM model:</b> a macroeconomic system of two simultaneous relationships — the goods market (IS) and the money market (LM) — solved together to find the interest rate and income level that balance both.</li>
+        </ul>
+
+        <div class="section-label">Core formulas</div>
+        <div class="formula-box">
+          Break-even point (units)&nbsp; = Fixed Cost ÷ (Selling Price − Variable Cost per unit)<br>
+          Break-even point (revenue)&nbsp; = Break-even units × Selling Price<br>
+          Contribution margin&nbsp; = Selling Price − Variable Cost per unit
+        </div>
+
+        <div class="section-label">Worked example</div>
+        <div class="example-box">
+          <span class="ex-tag">Break-even analysis</span>
+          Fixed cost = Rs 1,00,000 &nbsp;·&nbsp; Selling price = Rs 50/unit &nbsp;·&nbsp; Variable cost = Rs 30/unit<br>
+          Break-even units = 1,00,000 ÷ (50 − 30) = 1,00,000 ÷ 20 = <b>5,000 units</b><br>
+          Break-even revenue = 5,000 × 50 = <b>Rs 2,50,000</b> — below this, the firm makes a loss; above it, a profit.
+        </div>
+
+        <div class="resources">
+          <a class="chip pdf" href="https://uomus.edu.iq/img/lectures21/MUCLecture_2023_122115133.pdf" target="_blank" rel="noopener"><span class="dot"></span>PDF notes — Break-even analysis</a>
+          <a class="chip video" href="https://www.youtube.com/watch?v=w0VZzkdljO4" target="_blank" rel="noopener"><span class="dot"></span>Video — Break-even, explained simply</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UNIT 3 -->
+<div class="unit-card" id="unit3">
+  <div class="unit-inner">
+    <div class="unit-head">
+      <div class="unit-stamp">03</div>
+      <div class="unit-headtext">
+        <div class="unit-kicker">Unit 3 · Quadratic Equations</div>
+        <div class="unit-title">Graphs of Quadratic Functions &amp; Applications to Economics</div>
+      </div>
+      <div class="unit-toggle">+</div>
+    </div>
+    <div class="unit-body">
+      <div class="unit-body-inner">
+        <p class="hook">Profit doesn't climb forever as you sell more — a parabola shows exactly where it turns around and starts falling.</p>
+
+        <div class="section-label">Key ideas</div>
+        <ul>
+          <li><b>General quadratic:</b> y = ax² + bx + c, whose graph is a parabola — opening upward if a &gt; 0, downward if a &lt; 0.</li>
+          <li><b>Solving quadratics:</b> by factoring or by the quadratic formula.</li>
+          <li><b>Revenue as a quadratic:</b> if price falls linearly as quantity rises (P = a − bQ), then Revenue = P×Q becomes a quadratic in Q — automatically producing a "hill-shaped" revenue curve.</li>
+          <li><b>The vertex</b> of the parabola gives the maximum revenue/profit (downward-opening curve) or the minimum cost (upward-opening curve).</li>
+        </ul>
+
+        <div class="section-label">Core formulas</div>
+        <div class="formula-box">
+          Quadratic formula&nbsp; x = [ −b ± √(b² − 4ac) ] / 2a<br>
+          Vertex (turning point)&nbsp; x = −b / 2a<br>
+          Revenue as quadratic&nbsp; R(Q) = P(Q) × Q
+        </div>
+
+        <div class="section-label">Worked example</div>
+        <div class="example-box">
+          <span class="ex-tag">Revenue maximisation</span>
+          Revenue function: R(Q) = −2Q² + 400Q<br>
+          Vertex at Q = −400 / (2×−2) = <b>100 units</b><br>
+          Maximum revenue: R(100) = −2(100)² + 400(100) = <b>Rs 20,000</b>
+        </div>
+
+        <div class="resources">
+          <a class="chip pdf" href="https://www.rit.edu/academicsuccesscenter/sites/rit.edu.academicsuccesscenter/files/documents/math-handouts/O1_BuisnessApplications_BP_9_22_14.pdf" target="_blank" rel="noopener"><span class="dot"></span>PDF notes — Linear &amp; quadratic business applications</a>
+          <a class="chip video" href="https://www.youtube.com/watch?v=GPIkwYkAaWc" target="_blank" rel="noopener"><span class="dot"></span>Video — Maximum revenue word problems</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UNIT 4 -->
+<div class="unit-card" id="unit4">
+  <div class="unit-inner">
+    <div class="unit-head">
+      <div class="unit-stamp">04</div>
+      <div class="unit-headtext">
+        <div class="unit-kicker">Unit 4 · Non-Linear Functions &amp; Numerical Methods</div>
+        <div class="unit-title">Cubic, Exponential, Log &amp; Hyperbolic Curves; Bisection &amp; Newton-Raphson</div>
+      </div>
+      <div class="unit-toggle">+</div>
+    </div>
+    <div class="unit-body">
+      <div class="unit-body-inner">
+        <p class="hook">Not every business curve is a straight line or a parabola — and when the equation gets too messy to solve by hand, we let a simple, repeatable procedure close in on the answer instead.</p>
+
+        <div class="section-label">Key ideas</div>
+        <ul>
+          <li><b>Cubic and polynomial functions</b> — used where cost or output curves have more than one bend.</li>
+          <li><b>Exponential functions</b> — model unrestricted growth or decay (population, compound processes).</li>
+          <li><b>Logarithmic functions</b> — the inverse of exponentials, used to solve for "how long" or "what rate" questions.</li>
+          <li><b>Hyperbolic functions of the form a /(bx + c)</b> — common in average-cost curves that fall sharply then flatten out.</li>
+          <li><b>Bisection method:</b> bracket a root between two points of opposite sign, then repeatedly halve the interval — slow, but never fails.</li>
+          <li><b>Newton-Raphson method:</b> use the tangent line at a guess to jump straight toward the root — fast, but needs the derivative and a reasonable starting guess.</li>
+        </ul>
+
+        <div class="section-label">Core formulas</div>
+        <div class="formula-box">
+          Bisection&nbsp; midpoint c = (a + b)/2 — replace whichever endpoint has the same sign as f(c)<br>
+          Newton-Raphson&nbsp; xₙ₊₁ = xₙ − f(xₙ) / f′(xₙ)
+        </div>
+
+        <div class="section-label">Worked example</div>
+        <div class="example-box">
+          <span class="ex-tag">Root of f(x) = x² − 2 (i.e. √2)</span>
+          <b>Bisection</b> on [1, 2]: midpoint 1.5 → root in [1, 1.5]; midpoint 1.25 → root in [1.25, 1.5]; midpoint 1.375 → narrowing toward 1.414 — accurate, but needs many steps.<br>
+          <b>Newton-Raphson</b> from x₀ = 1.5: x₁ = 1.5 − (0.25/3) = 1.41667; x₂ = 1.41667 − (0.00694/2.83333) ≈ <b>1.41421</b> — matches √2 after just two steps.
+        </div>
+
+        <div class="resources">
+          <a class="chip pdf" href="https://www.dam.brown.edu/people/alcyew/handouts/bisection_Newton.pdf" target="_blank" rel="noopener"><span class="dot"></span>PDF notes — Bisection &amp; Newton-Raphson methods</a>
+          <a class="chip video" href="https://www.youtube.com/watch?v=mzQFGOvH-mk" target="_blank" rel="noopener"><span class="dot"></span>Video — Bisection method for root finding</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UNIT 5 -->
+<div class="unit-card" id="unit5">
+  <div class="unit-inner">
+    <div class="unit-head">
+      <div class="unit-stamp">05</div>
+      <div class="unit-headtext">
+        <div class="unit-kicker">Unit 5 · Financial Mathematics</div>
+        <div class="unit-title">Interest, Annuities, Depreciation, NPV/IRR &amp; Bonds</div>
+      </div>
+      <div class="unit-toggle">+</div>
+    </div>
+    <div class="unit-body">
+      <div class="unit-body-inner">
+        <p class="hook">Whether it's a fixed deposit, a business loan or a government bond, all of finance rests on one idea: a rupee today is worth more than a rupee tomorrow.</p>
+
+        <div class="section-label">Key ideas</div>
+        <ul>
+          <li><b>Sequences &amp; series</b> (arithmetic and geometric) underpin every annuity and loan-repayment formula.</li>
+          <li><b>Simple vs. compound interest</b> — simple interest grows in a straight line; compound interest grows exponentially because interest itself earns interest.</li>
+          <li><b>Nominal vs. effective (APR)</b> rates — the true annual cost once compounding frequency is accounted for.</li>
+          <li><b>Depreciation</b> — spreading an asset's fall in value over its useful life.</li>
+          <li><b>Net Present Value (NPV) and Internal Rate of Return (IRR)</b> — the two core tools for deciding whether an investment is worthwhile.</li>
+          <li><b>Annuities, debt repayment &amp; sinking funds</b> — equal periodic payments used to save toward, or pay off, a lump sum.</li>
+          <li><b>Bond prices move opposite to interest rates</b> — when rates rise, existing bond prices fall, and vice versa.</li>
+        </ul>
+
+        <div class="section-label">Core formulas</div>
+        <div class="formula-box">
+          Compound value&nbsp; FV = PV (1 + i)ⁿ &nbsp;·&nbsp; Present value&nbsp; PV = FV (1 + i)⁻ⁿ<br>
+          PV of an ordinary annuity&nbsp; PV = PMT × [ 1 − (1+i)⁻ⁿ ] / i<br>
+          NPV&nbsp; = Σ [ CFₜ / (1+r)ᵗ ] − Initial outlay &nbsp;·&nbsp; IRR&nbsp; = the rate r that makes NPV = 0
+        </div>
+
+        <div class="section-label">Worked example</div>
+        <div class="example-box">
+          <span class="ex-tag">Present value of an annuity</span>
+          Rs 10,000 received at the end of each year for 5 years, at 10% interest.<br>
+          PV = 10,000 × [1 − (1.10)⁻⁵] / 0.10 = 10,000 × 3.7908 = <b>Rs 37,908</b> — that lump sum today is equivalent to the whole 5-year stream.
+        </div>
+
+        <div class="resources">
+          <a class="chip pdf" href="https://www.georgebrown.ca/sites/default/files/uploadedfiles/tlc/_documents/formula_sheet_for_financial_mathematics.pdf" target="_blank" rel="noopener"><span class="dot"></span>PDF notes — Financial mathematics formula sheet</a>
+          <a class="chip video" href="https://www.youtube.com/watch?v=Fw5-wccViOM" target="_blank" rel="noopener"><span class="dot"></span>Video — NPV and IRR explained</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UNIT 6 -->
+<div class="unit-card" id="unit6">
+  <div class="unit-inner">
+    <div class="unit-head">
+      <div class="unit-stamp">06</div>
+      <div class="unit-headtext">
+        <div class="unit-kicker">Unit 6 · Differentiation &amp; Applications</div>
+        <div class="unit-title">Marginal Analysis, Optimisation &amp; Elasticity</div>
+      </div>
+      <div class="unit-toggle">+</div>
+    </div>
+    <div class="unit-body">
+      <div class="unit-body-inner">
+        <p class="hook">"Marginal" is just calculus in a business suit — the derivative tells you exactly what happens if you make one more unit.</p>
+
+        <div class="section-label">Key ideas</div>
+        <ul>
+          <li><b>The derivative as a slope:</b> the rate at which a function is changing at a point.</li>
+          <li><b>Rules of differentiation</b> — power, sum, product, quotient and chain rules.</li>
+          <li><b>Marginal cost, marginal revenue, marginal profit</b> — the derivatives of the cost, revenue and profit functions.</li>
+          <li><b>Optimisation:</b> a function is maximised or minimised where its derivative equals zero; the second derivative tells you which.</li>
+          <li><b>Economic optimum:</b> profit is maximised exactly where Marginal Revenue = Marginal Cost.</li>
+          <li><b>Elasticity via the derivative</b> — a precise, point-by-point version of "how responsive is demand to price".</li>
+        </ul>
+
+        <div class="section-label">Core formulas</div>
+        <div class="formula-box">
+          Marginal cost&nbsp; MC(Q) = C′(Q) &nbsp;·&nbsp; Marginal revenue&nbsp; MR(Q) = R′(Q)<br>
+          Profit maximised where&nbsp; MR(Q) = MC(Q)&nbsp; (equivalently, π′(Q) = 0)<br>
+          Point elasticity of demand&nbsp; E = (P/Q) × (dQ/dP)
+        </div>
+
+        <div class="section-label">Worked example</div>
+        <div class="example-box">
+          <span class="ex-tag">Marginal cost &amp; profit maximisation</span>
+          If C(Q) = 500 + 20Q + 0.1Q², then MC(Q) = 20 + 0.2Q. At Q = 100, MC = <b>Rs 40</b> — the 101st unit adds about Rs 40 to cost.<br><br>
+          If R(Q) = 200Q − Q² and C(Q) = 1000 + 20Q, profit is π(Q) = 180Q − Q² − 1000. Setting MR = MC: 200 − 2Q = 20 gives <b>Q = 90 units</b>, with maximum profit π(90) = <b>Rs 7,100</b>.
+        </div>
+
+        <div class="resources">
+          <a class="chip pdf" href="https://www.alamo.edu/contentassets/20691fef0c254307b473b980bb6648fb/differentiation/math1325-marginal-functions.pdf" target="_blank" rel="noopener"><span class="dot"></span>PDF notes — Marginal functions in economics</a>
+          <a class="chip video" href="https://www.khanacademy.org/math/ap-calculus-ab/ab-diff-contextual-applications-new/ab-4-3/v/derivative-and-marginal-cost" target="_blank" rel="noopener"><span class="dot"></span>Video — Marginal cost &amp; differential calculus</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="paper-divider">
+  <span class="tag">MTH 202</span>
+  <h2>Business Mathematics II</h2>
+  <span class="rule-line"></span>
+</div>
+<p class="paper-sub">From integration back through to dynamic pricing over time — the six units that equip a BBA student with linear programming, matrix algebra, multivariable optimisation and the mathematics of change.</p>
+
+<!-- UNIT 7 -->
+<div class="unit-card" id="unit7">
+  <div class="unit-inner">
+    <div class="unit-head">
+      <div class="unit-stamp">07</div>
+      <div class="unit-headtext">
+        <div class="unit-kicker">Unit 7 · Integration &amp; Applications</div>
+        <div class="unit-title">Total Functions, Consumer &amp; Producer Surplus, Area Under a Curve</div>
+      </div>
+      <div class="unit-toggle">+</div>
+    </div>
+    <div class="unit-body">
+      <div class="unit-body-inner">
+        <p class="hook">If differentiation zooms in on a rate of change, integration zooms back out — turning marginal cost into total cost, and a demand curve into the exact rupee value of a good deal for the buyer.</p>
+
+        <div class="section-label">Key ideas</div>
+        <ul>
+          <li><b>Integration as the reverse of differentiation</b> — standard forms, substitution, and integration by parts.</li>
+          <li><b>Definite integrals as area:</b> the integral of a curve between two points equals the area under it.</li>
+          <li><b>Total cost/revenue from marginal functions:</b> integrating MC(Q) recovers C(Q) (plus the fixed cost as the constant of integration); the same works for revenue.</li>
+          <li><b>Consumer surplus:</b> the area between the demand curve and the horizontal equilibrium-price line — the extra value buyers would have paid but didn't have to.</li>
+          <li><b>Producer surplus:</b> the area between the equilibrium-price line and the supply curve — the extra revenue sellers receive above their minimum acceptable price.</li>
+        </ul>
+
+        <div class="section-label">Core formulas</div>
+        <div class="formula-box">
+          Consumer surplus&nbsp; CS = ∫₀^Qe D(Q) dQ − Pe·Qe<br>
+          Producer surplus&nbsp; PS = Pe·Qe − ∫₀^Qe S(Q) dQ
+        </div>
+
+        <div class="section-label">Worked example</div>
+        <div class="example-box">
+          <span class="ex-tag">Consumer &amp; producer surplus</span>
+          Demand: P = 50 − Q &nbsp;·&nbsp; Supply: P = ⅔Q &nbsp;·&nbsp; Equilibrium at Qe = 30, Pe = 20<br>
+          CS = ∫₀³⁰(50−Q)dQ − 20(30) = 1050 − 600 = <b>Rs 450</b><br>
+          PS = 20(30) − ∫₀³⁰ ⅔Q dQ = 600 − 300 = <b>Rs 300</b> &nbsp;→&nbsp; total social gain = <b>Rs 750</b>
+        </div>
+
+        <div class="resources">
+          <a class="chip pdf" href="https://personal.math.ubc.ca/~malabika/teaching/ubc/spring11/math105/surplus.pdf" target="_blank" rel="noopener"><span class="dot"></span>PDF notes — Consumer &amp; producer surplus</a>
+          <a class="chip video" href="https://www.youtube.com/watch?v=x2BliNSu8NE" target="_blank" rel="noopener"><span class="dot"></span>Video — Consumer and producer surplus, worked example</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UNIT 8 -->
+<div class="unit-card" id="unit8">
+  <div class="unit-inner">
+    <div class="unit-head">
+      <div class="unit-stamp">08</div>
+      <div class="unit-headtext">
+        <div class="unit-kicker">Unit 8 · Linear Inequalities &amp; Linear Programming</div>
+        <div class="unit-title">Graphical Method, Simplex Method &amp; Duality</div>
+      </div>
+      <div class="unit-toggle">+</div>
+    </div>
+    <div class="unit-body">
+      <div class="unit-body-inner">
+        <p class="hook">Every manager juggling limited labour, machine time and money is — often without realising it — solving a linear programming problem.</p>
+
+        <div class="section-label">Key ideas</div>
+        <ul>
+          <li><b>Linear inequalities in two variables</b> define a feasible region on a graph — everything a firm is allowed to produce given its constraints.</li>
+          <li><b>Formulating an LP:</b> choose decision variables, write the objective function (what to maximise or minimise), list the constraints, and add non-negativity conditions.</li>
+          <li><b>Graphical method:</b> for two variables, plot the feasible region and test its corner points — the optimum always sits at a corner.</li>
+          <li><b>Simplex method:</b> for more than two variables, convert inequalities to equations using slack variables and pivot systematically through a tableau until no further improvement is possible.</li>
+          <li><b>Duality:</b> every LP has a mirror-image "dual" problem — a maximisation problem's dual is a minimisation problem, and its solution reveals the shadow price of each resource.</li>
+        </ul>
+
+        <div class="section-label">Core formulas</div>
+        <div class="formula-box">
+          Standard form&nbsp; maximise Z = c₁x₁ + c₂x₂ + …&nbsp; subject to a₁₁x₁+a₁₂x₂+…≤b₁, x≥0<br>
+          Slack variable&nbsp; convert&nbsp; ax + by ≤ c&nbsp; into&nbsp; ax + by + s = c &nbsp;(s ≥ 0)
+        </div>
+
+        <div class="section-label">Worked example</div>
+        <div class="example-box">
+          <span class="ex-tag">Graphical method — product mix</span>
+          A firm makes Product A (profit Rs 40) and Product B (profit Rs 30). A needs 3 machine-hrs + 1 labour-hr; B needs 2 machine-hrs + 1 labour-hr. Available: 60 machine-hrs, 25 labour-hrs.<br>
+          Maximise Z = 40x + 30y subject to 3x+2y≤60, x+y≤25.<br>
+          Corner points: (0,0)→0, (20,0)→800, (0,25)→750, and the intersection <b>(10, 15) → Z = Rs 850</b> — the best plan: 10 units of A and 15 units of B per day.
+        </div>
+
+        <div class="resources">
+          <a class="chip pdf" href="https://extension.oregonstate.edu/sites/extd8/files/documents/em8720.pdf" target="_blank" rel="noopener"><span class="dot"></span>PDF notes — Using the simplex method to solve LP</a>
+          <a class="chip video" href="https://www.youtube.com/watch?v=M8POtpPtQZc" target="_blank" rel="noopener"><span class="dot"></span>Video — LP using the simplex method, step by step</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UNIT 9 -->
+<div class="unit-card" id="unit9">
+  <div class="unit-inner">
+    <div class="unit-head">
+      <div class="unit-stamp">09</div>
+      <div class="unit-headtext">
+        <div class="unit-kicker">Unit 9 · Linear Algebra &amp; Applications</div>
+        <div class="unit-title">Matrices, Determinants, Cramer's Rule, Gauss Elimination &amp; Input-Output Analysis</div>
+      </div>
+      <div class="unit-toggle">+</div>
+    </div>
+    <div class="unit-body">
+      <div class="unit-body-inner">
+        <p class="hook">Behind every spreadsheet model juggling several products, ingredients, or economic sectors at once, a matrix is quietly doing the heavy lifting.</p>
+
+        <div class="section-label">Key ideas</div>
+        <ul>
+          <li><b>Types of matrices</b> — row, column, square, diagonal, identity and zero matrices.</li>
+          <li><b>Matrix operations</b> — addition, subtraction, scalar multiplication, matrix multiplication and the transpose.</li>
+          <li><b>Determinants, minors &amp; cofactors</b> — a single number that reveals whether a matrix is singular (no inverse) or non-singular (invertible).</li>
+          <li><b>Adjoint &amp; inverse matrix</b> — the tools for "dividing" by a matrix.</li>
+          <li><b>Solving systems of equations:</b> Cramer's rule (via determinants), the inverse-matrix method, and Gauss elimination / Gauss-Jordan (via row operations) — each suited to different problem sizes.</li>
+          <li><b>Input-output (Leontief) analysis:</b> a technology-coefficient matrix models how each economic sector depends on every other; the Hawkins-Simon condition checks that the whole system can actually produce enough to meet demand.</li>
+        </ul>
+
+        <div class="section-label">Core formulas</div>
+        <div class="formula-box">
+          Cramer's rule&nbsp; xᵢ = det(Aᵢ) / det(A)&nbsp; &nbsp;·&nbsp; Inverse&nbsp; A⁻¹ = adj(A) / det(A)<br>
+          Leontief model&nbsp; X = (I − A)⁻¹ D&nbsp; &nbsp;·&nbsp; viable only if every leading principal minor of (I − A) is positive
+        </div>
+
+        <div class="section-label">Worked example</div>
+        <div class="example-box">
+          <span class="ex-tag">Cramer's rule</span>
+          Solve 2x + 3y = 8 and x − 2y = −3.<br>
+          D = −7, Dx = −7, Dy = −14 &nbsp;→&nbsp; <b>x = 1, y = 2</b> (check: 2(1)+3(2)=8 ✓)<br><br>
+          <span class="ex-tag">Input-output (2 sectors)</span>
+          Technology matrix A = [[0.2, 0.3], [0.4, 0.1]], final demand D = [100, 60].<br>
+          det(I−A) = 0.6 &gt; 0 → Hawkins-Simon condition satisfied. Gross output <b>X₁ ≈ 180, X₂ ≈ 147</b>.
+        </div>
+
+        <div class="resources">
+          <a class="chip pdf" href="https://www.lboro.ac.uk/media/media/schoolanddepartments/mlsc/downloads/HELM%20Workbook%208%20Matrix%20solution%20of%20Equations.pdf" target="_blank" rel="noopener"><span class="dot"></span>PDF notes — Cramer's rule &amp; Gauss elimination</a>
+          <a class="chip video" href="https://www.youtube.com/watch?v=103Q9JwkxyQ" target="_blank" rel="noopener"><span class="dot"></span>Video — Leontief input-output model explained</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UNIT 10 -->
+<div class="unit-card" id="unit10">
+  <div class="unit-inner">
+    <div class="unit-head">
+      <div class="unit-stamp">10</div>
+      <div class="unit-headtext">
+        <div class="unit-kicker">Unit 10 · Functions of Several Variables</div>
+        <div class="unit-title">Partial Differentiation, Utility, Production &amp; Lagrange Multipliers</div>
+      </div>
+      <div class="unit-toggle">+</div>
+    </div>
+    <div class="unit-body">
+      <div class="unit-body-inner">
+        <p class="hook">Real firms rarely decide with just one variable — output depends on labour <i>and</i> capital, and utility depends on many goods bought together.</p>
+
+        <div class="section-label">Key ideas</div>
+        <ul>
+          <li><b>Functions of two or more variables:</b> z = f(x, y), such as a utility function U(x, y) or a production function Q(L, K).</li>
+          <li><b>Partial differentiation:</b> differentiate with respect to one variable while holding the others constant.</li>
+          <li><b>Applications:</b> marginal utility, marginal product, and elasticity in a multi-variable setting.</li>
+          <li><b>Unconstrained optimisation:</b> set every partial derivative to zero, then check second-order conditions.</li>
+          <li><b>Constrained optimisation with Lagrange multipliers:</b> maximise utility or output subject to a budget or resource limit by introducing a multiplier λ that measures the value of relaxing the constraint by one unit.</li>
+        </ul>
+
+        <div class="section-label">Core formulas</div>
+        <div class="formula-box">
+          Partial derivatives&nbsp; ∂z/∂x, ∂z/∂y (all other variables held fixed)<br>
+          Lagrangian&nbsp; L = f(x,y) + λ [ budget − Pₓx − Pᵧy ]<br>
+          Optimum condition&nbsp; MUₓ / Pₓ = MUᵧ / Pᵧ = λ
+        </div>
+
+        <div class="section-label">Worked example</div>
+        <div class="example-box">
+          <span class="ex-tag">Utility maximisation</span>
+          Maximise U = xy subject to 4x + 2y = 100 (budget Rs 100, prices Rs 4 and Rs 2).<br>
+          Lagrange conditions give y = 2x. Substituting: 4x + 2(2x) = 100 → <b>x* = 12.5, y* = 25</b><br>
+          Maximum utility U* = 12.5 × 25 = <b>312.5</b>, with λ = 6.25 (the marginal utility of one extra rupee of budget).
+        </div>
+
+        <div class="resources">
+          <a class="chip pdf" href="https://sites.math.northwestern.edu/~clark/285/2006-07/handouts/lagrange-econ.pdf" target="_blank" rel="noopener"><span class="dot"></span>PDF notes — Economic applications of Lagrange multipliers</a>
+          <a class="chip video" href="https://www.youtube.com/watch?v=s_lcvUP9ZEo" target="_blank" rel="noopener"><span class="dot"></span>Video — Maximising utility with Lagrange multipliers</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UNIT 11 -->
+<div class="unit-card" id="unit11">
+  <div class="unit-inner">
+    <div class="unit-head">
+      <div class="unit-stamp">11</div>
+      <div class="unit-headtext">
+        <div class="unit-kicker">Unit 11 · First-Order Differential Equations</div>
+        <div class="unit-title">Growth Models &amp; the Dynamics of Market Price</div>
+      </div>
+      <div class="unit-toggle">+</div>
+    </div>
+    <div class="unit-body">
+      <div class="unit-body-inner">
+        <p class="hook">Prices don't jump to equilibrium instantly — they drift there over time, and a differential equation is the mathematical language of that drift.</p>
+
+        <div class="section-label">Key ideas</div>
+        <ul>
+          <li><b>What a differential equation is:</b> an equation involving a rate of change, classified by order and degree.</li>
+          <li><b>Separation of variables</b> — the main technique used to solve first-order equations by hand.</li>
+          <li><b>Growth models:</b> dP/dt = kP describes unlimited exponential growth; variants describe limited growth that levels off.</li>
+          <li><b>Dynamics of market price:</b> if price adjusts in proportion to the current excess demand, dP/dt = k[Qd(P) − Qs(P)], the price path can converge smoothly to equilibrium — or diverge, depending on the sign of k.</li>
+          <li><b>Variable-coefficient, exact, and nonlinear first-order equations</b> — further categories with their own solution techniques.</li>
+        </ul>
+
+        <div class="section-label">Core formulas</div>
+        <div class="formula-box">
+          Price adjustment&nbsp; dP/dt = k [ Qd(P) − Qs(P) ]<br>
+          Linear solution form&nbsp; dP/dt + P = A&nbsp; &nbsp;→&nbsp; P(t) = A + Ce⁻ᵗ
+        </div>
+
+        <div class="section-label">Worked example</div>
+        <div class="example-box">
+          <span class="ex-tag">Price converging to equilibrium</span>
+          Qd(P) = 90 − P, Qs(P) = −10 + P. Excess demand = 100 − 2P, and price adjusts at dP/dt = 0.5(100−2P) = 50 − P.<br>
+          Equilibrium (dP/dt = 0): <b>P = 50</b>. Solving with P(0) = 20: P(t) = 50 − 30e⁻ᵗ<br>
+          As t → ∞, P(t) → <b>50</b> — the price path glides smoothly toward the equilibrium price.
+        </div>
+
+        <div class="resources">
+          <a class="chip pdf" href="https://home.csulb.edu/~woollett/Dowling16fit.pdf" target="_blank" rel="noopener"><span class="dot"></span>PDF notes — First-order differential equations in economics</a>
+          <a class="chip video" href="https://www.youtube.com/watch?v=C7nuJcJriWM" target="_blank" rel="noopener"><span class="dot"></span>Video — Separable first-order differential equations</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UNIT 12 -->
+<div class="unit-card" id="unit12">
+  <div class="unit-inner">
+    <div class="unit-head">
+      <div class="unit-stamp">12</div>
+      <div class="unit-headtext">
+        <div class="unit-kicker">Unit 12 · Dynamic Economic Analysis &amp; Difference Equations</div>
+        <div class="unit-title">The Cobweb Model, Lagged Keynesian Model &amp; Duopoly Price Adjustment</div>
+      </div>
+      <div class="unit-toggle">+</div>
+    </div>
+    <div class="unit-body">
+      <div class="unit-body-inner">
+        <p class="hook">When a farmer plans next season's crop based on <i>this</i> season's price, we've left continuous time behind — welcome to the world of difference equations.</p>
+
+        <div class="section-label">Key ideas</div>
+        <ul>
+          <li><b>Difference equations</b> relate a variable's value this period (Pₜ) to its value in a previous period (Pₜ₋₁), rather than to a continuous rate of change.</li>
+          <li><b>Solving first-order difference equations</b> — both homogeneous and non-homogeneous cases.</li>
+          <li><b>The Cobweb model:</b> demand reacts to today's price, but supply is decided using <i>last</i> period's price — producing a price path that spirals toward equilibrium, spirals away from it, or oscillates forever, depending on the relative steepness of demand and supply.</li>
+          <li><b>The lagged Keynesian macroeconomic model:</b> this period's income responds to last period's spending decisions.</li>
+          <li><b>Duopoly price adjustment:</b> two competing firms each set price/output in reaction to the other's previous move.</li>
+        </ul>
+
+        <div class="section-label">Core formulas</div>
+        <div class="formula-box">
+          Cobweb recurrence&nbsp; Pₜ = A − r·Pₜ₋₁,&nbsp; where r = (slope of supply) / (slope of demand)<br>
+          Stability rule&nbsp; |r| &lt; 1 → converges (damped oscillation) &nbsp;·&nbsp; |r| &gt; 1 → diverges
+        </div>
+
+        <div class="section-label">Worked example</div>
+        <div class="example-box">
+          <span class="ex-tag">Cobweb model — convergent case</span>
+          Qdₜ = 100 − 3Pₜ &nbsp;·&nbsp; Qsₜ = −20 + 2Pₜ₋₁<br>
+          Equilibrium: 100−3Pe = −20+2Pe → <b>Pe = 24</b>, Qe = 28. Recurrence: Pₜ = 40 − (2/3)Pₜ₋₁, so r = 2/3 &lt; 1.<br>
+          Starting at P₀ = 18: P₁=28, P₂=21.3, P₃=25.8, P₄=22.8 — the price oscillates with shrinking swings, <b>converging toward Rs 24</b>.
+        </div>
+
+        <div class="resources">
+          <a class="chip pdf" href="https://ugcmoocs.inflibnet.ac.in/assets/uploads/67/261/8296/et/M37-03%20Application%20of%20First%20Order%20Difference%20Equations%20in%20Economics200414070704044141.pdf" target="_blank" rel="noopener"><span class="dot"></span>PDF notes — Difference equations in economics</a>
+          <a class="chip video" href="https://www.youtube.com/watch?v=v9Rgqxk22OM" target="_blank" rel="noopener"><span class="dot"></span>Video — The cobweb model in 7 minutes</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <h4>UCDL Academy</h4>
+      <p>Bilingual educational content for students, teachers and researchers of Kapilvastu and beyond — mathematics, EdTech and digital-skills resources in Nepali and English.</p>
+    </div>
+    <div>
+      <h4>About this platform</h4>
+      <p>Built to cover the full MTH 201 (Business Mathematics I) and MTH 202 (Business Mathematics II) syllabus for BBA First Semester, Tribhuvan University, with a PDF reference and a video walkthrough linked to every unit.</p>
+    </div>
+    <div>
+      <h4>Course Reference</h4>
+      <p>Teresa Bradley, <i>Essential Mathematics for Economics and Business</i> · Frank S. Budnick, <i>Applied Mathematics for Business, Economics &amp; Social Sciences</i> · Alpha C. Chiang, <i>Fundamental Methods of Mathematical Economics</i> · A.B. Sthapit et al., <i>Fundamentals of Business Mathematics</i>.</p>
+    </div>
+  </div>
+  <div class="credit">
+    <div class="wrap">
+      Developed by Mr. Bishnu Singh Rayamajhi — Mathematics Lecturer &amp; Head, Humanities &amp; Social Sciences Department, Kapilvastu Multiple Campus (KMC), Taulihawa · Founder, UCDL Academy
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.unit-head').forEach(function(head){
+    head.addEventListener('click', function(){
+      var card = head.closest('.unit-inner');
+      var body = card.querySelector('.unit-body');
+      var isOpen = card.classList.contains('open');
+      if(isOpen){
+        body.style.maxHeight = null;
+        card.classList.remove('open');
+      } else {
+        card.classList.add('open');
+        body.style.maxHeight = body.scrollHeight + 40 + 'px';
+      }
+    });
+  });
+  // Open the first unit of each paper by default
+  window.addEventListener('load', function(){
+    ['unit1'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el){ el.querySelector('.unit-head').click(); }
+    });
+  });
+</script>
+</body>
+</html>
