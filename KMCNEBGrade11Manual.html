@@ -3,1169 +3,431 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMART TLM — Basic Mathematics Grade XI | Mr. Bishnu Singh Rayamajhi</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>SMART TLM — Basic Mathematics Grade XI | 100% Free Resources</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #1a1a2e;
-            --primary-light: #16213e;
-            --accent: #0f3460;
-            --highlight: #e94560;
-            --text: #333333;
-            --text-light: #666666;
-            --text-muted: #999999;
-            --bg: #f8f9fa;
-            --bg-card: #ffffff;
-            --border: #e0e0e0;
-            --success: #28a745;
-            --warning: #ffc107;
-            --radius: 12px;
-            --radius-sm: 8px;
-            --shadow: 0 2px 8px rgba(0,0,0,0.08);
-            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            color: white;
-            padding: 40px 24px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 400px;
-            height: 400px;
-            background: rgba(233, 69, 96, 0.1);
-            border-radius: 50%;
-        }
-
-        .header-badge {
-            display: inline-block;
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(10px);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            margin-bottom: 16px;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .header h1 {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
-        }
-
-        .header-sub {
-            font-size: 18px;
-            font-weight: 500;
-            opacity: 0.9;
-            margin-bottom: 4px;
-        }
-
-        .header-meta {
-            font-size: 13px;
-            opacity: 0.75;
-            max-width: 600px;
-            margin: 12px auto 0;
-            line-height: 1.7;
-        }
-
-        .header-meta strong {
-            color: #ffd700;
-            font-weight: 600;
-        }
-
-        /* Container */
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 24px;
-        }
-
-        /* Stats Bar */
-        .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin: -30px auto 24px;
-            max-width: 800px;
-            position: relative;
-            z-index: 10;
-        }
-
-        .stat-card {
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            padding: 20px 16px;
-            text-align: center;
-            box-shadow: var(--shadow-lg);
-            border: 1px solid var(--border);
-            transition: var(--transition);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
-        }
-
-        .stat-value {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--primary);
-            line-height: 1;
-            margin-bottom: 6px;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: var(--text-light);
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* Progress Section */
-        .progress-section {
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .progress-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        .progress-percent {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--highlight);
-        }
-
-        .progress-bar {
-            height: 10px;
-            background: #e9ecef;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--highlight), #ff6b81);
-            border-radius: 5px;
-            width: 0%;
-            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .progress-sub {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 8px;
-        }
-
-        /* SMART Cards */
-        .smart-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .smart-card {
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            padding: 20px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .smart-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--highlight);
-        }
-
-        .smart-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .smart-letter {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 6px;
-        }
-
-        .smart-text {
-            font-size: 13px;
-            color: var(--text-light);
-            line-height: 1.6;
-        }
-
-        /* Unit Tabs */
-        .tabs-container {
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            padding: 4px;
-            margin-bottom: 24px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            overflow-x: auto;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 4px;
-            min-width: max-content;
-        }
-
-        .tab {
-            padding: 10px 20px;
-            border: none;
-            background: transparent;
-            color: var(--text-light);
-            font-size: 13px;
-            font-weight: 600;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            transition: var(--transition);
-            white-space: nowrap;
-            font-family: inherit;
-        }
-
-        .tab:hover {
-            background: rgba(26, 26, 46, 0.05);
-            color: var(--primary);
-        }
-
-        .tab.active {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 2px 8px rgba(26, 26, 46, 0.3);
-        }
-
-        /* Unit Content */
-        .unit-content {
-            display: none;
-        }
-
-        .unit-content.active {
-            display: block;
-        }
-
-        .unit-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 20px;
-            padding: 16px 20px;
-            background: linear-gradient(135deg, var(--primary-light), var(--accent));
-            border-radius: var(--radius);
-            color: white;
-        }
-
-        .unit-number {
-            width: 48px;
-            height: 48px;
-            background: rgba(255,255,255,0.2);
-            border-radius: var(--radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .unit-info h2 {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .unit-info p {
-            font-size: 13px;
-            opacity: 0.85;
-        }
-
-        /* Chapter Cards */
-        .chapter-card {
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            margin-bottom: 16px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            overflow: hidden;
-            transition: var(--transition);
-        }
-
-        .chapter-card:hover {
-            box-shadow: var(--shadow-lg);
-        }
-
-        .chapter-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 16px 20px;
-            cursor: pointer;
-            background: var(--bg-card);
-            transition: var(--transition);
-            border-bottom: 1px solid transparent;
-        }
-
-        .chapter-header:hover {
-            background: #f8f9fa;
-        }
-
-        .chapter-card.open .chapter-header {
-            border-bottom-color: var(--border);
-        }
-
-        .chapter-num {
-            width: 36px;
-            height: 36px;
-            background: var(--primary);
-            color: white;
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .chapter-title-group {
-            flex: 1;
-        }
-
-        .chapter-title {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 2px;
-        }
-
-        .chapter-page {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .chapter-arrow {
-            width: 24px;
-            height: 24px;
-            color: var(--text-muted);
-            transition: transform 0.3s ease;
-            flex-shrink: 0;
-        }
-
-        .chapter-card.open .chapter-arrow {
-            transform: rotate(180deg);
-        }
-
-        .chapter-body {
-            display: none;
-            padding: 16px 20px 20px;
-        }
-
-        .chapter-card.open .chapter-body {
-            display: block;
-        }
-
-        .chapter-actions {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            border-radius: var(--radius-sm);
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            border: 1px solid var(--border);
-            background: var(--bg-card);
-            color: var(--text);
-            text-decoration: none;
-            font-family: inherit;
-        }
-
-        .btn:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-            transform: translateY(-1px);
-        }
-
-        .btn-primary {
-            background: var(--highlight);
-            color: white;
-            border-color: var(--highlight);
-        }
-
-        .btn-primary:hover {
-            background: #d63384;
-            border-color: #d63384;
-        }
-
-        .btn svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        /* Topics */
-        .topics-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .topic-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 14px;
-            border-radius: var(--radius-sm);
-            background: #f8f9fa;
-            transition: var(--transition);
-            cursor: pointer;
-        }
-
-        .topic-item:hover {
-            background: #e9ecef;
-        }
-
-        .topic-item.completed {
-            opacity: 0.6;
-        }
-
-        .topic-item.completed .topic-text {
-            text-decoration: line-through;
-            color: var(--text-muted);
-        }
-
-        .topic-check {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: var(--highlight);
-            flex-shrink: 0;
-        }
-
-        .topic-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--text-muted);
-            flex-shrink: 0;
-        }
-
-        .topic-item.completed .topic-dot {
-            background: var(--success);
-        }
-
-        .topic-text {
-            flex: 1;
-            font-size: 13px;
-            color: var(--text);
-        }
-
-        /* Modal */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            animation: fadeIn 0.2s ease;
-        }
-
-        .modal-overlay.show {
-            display: flex;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-box {
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            padding: 24px;
-            max-width: 500px;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: var(--shadow-lg);
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .modal-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .modal-close {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: none;
-            background: #f8f9fa;
-            color: var(--text-light);
-            font-size: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-        }
-
-        .modal-close:hover {
-            background: var(--highlight);
-            color: white;
-        }
-
-        .resource-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .resource-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 14px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border);
-            text-decoration: none;
-            color: inherit;
-            transition: var(--transition);
-        }
-
-        .resource-item:hover {
-            background: #f8f9fa;
-            border-color: var(--primary);
-            transform: translateX(4px);
-        }
-
-        .resource-icon {
-            width: 20px;
-            height: 20px;
-            color: var(--highlight);
-            flex-shrink: 0;
-        }
-
-        .resource-info {
-            flex: 1;
-        }
-
-        .resource-name {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 2px;
-        }
-
-        .resource-source {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        /* Footer */
-        .footer {
-            background: var(--primary);
-            color: white;
-            padding: 40px 24px;
-            text-align: center;
-            margin-top: 40px;
-        }
-
-        .footer h3 {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .footer p {
-            font-size: 13px;
-            opacity: 0.8;
-            max-width: 500px;
-            margin: 0 auto 16px;
-            line-height: 1.7;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        .footer-link {
-            color: #ffd700;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
-            transition: var(--transition);
-        }
-
-        .footer-link:hover {
-            text-decoration: underline;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header h1 { font-size: 24px; }
-            .stats-bar { grid-template-columns: repeat(2, 1fr); margin-top: -20px; }
-            .smart-grid { grid-template-columns: 1fr; }
-            .unit-header { flex-direction: column; text-align: center; }
-            .chapter-actions { justify-content: center; }
-        }
-
-        @media (max-width: 480px) {
-            .header { padding: 24px 16px; }
-            .container { padding: 16px; }
-            .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-            .stat-value { font-size: 24px; }
-            .tab { padding: 8px 12px; font-size: 12px; }
-        }
-
-        /* Print styles */
-        @media print {
-            .header { background: var(--primary) !important; -webkit-print-color-adjust: exact; }
-            .unit-header { background: var(--primary-light) !important; -webkit-print-color-adjust: exact; }
-            .progress-fill { background: var(--highlight) !important; -webkit-print-color-adjust: exact; }
-            .modal-overlay, .tabs-container, .chapter-arrow { display: none !important; }
-            .chapter-body { display: block !important; }
-            .chapter-card { break-inside: avoid; }
-        }
+            --primary: #1a1a2e; --primary-light: #16213e; --accent: #0f3460;
+            --highlight: #e94560; --text: #333; --text-light: #666; --text-muted: #999;
+            --bg: #f8f9fa; --bg-card: #fff; --border: #e0e0e0;
+            --success: #28a745; --info: #17a2b8; --radius: 12px; --radius-sm: 8px;
+            --shadow: 0 2px 8px rgba(0,0,0,0.08); --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+        .header { background:linear-gradient(135deg,var(--primary),var(--primary-light)); color:white; padding:40px 24px; text-align:center; position:relative; }
+        .header-badge { display:inline-block; background:rgba(255,255,255,0.15); padding:6px 16px; border-radius:20px; font-size:12px; font-weight:500; margin-bottom:16px; border:1px solid rgba(255,255,255,0.2); }
+        .header h1 { font-size:32px; font-weight:700; margin-bottom:8px; }
+        .header-sub { font-size:18px; font-weight:500; opacity:0.9; }
+        .header-meta { font-size:13px; opacity:0.75; max-width:600px; margin:12px auto 0; }
+        .header-meta strong { color:#ffd700; }
+        .free-badge { display:inline-flex; align-items:center; gap:6px; background:#28a745; color:white; padding:8px 20px; border-radius:20px; font-size:13px; font-weight:600; margin-top:16px; }
+        .container { max-width:1000px; margin:0 auto; padding:24px; }
+        .stats-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin:-30px auto 24px; max-width:800px; position:relative; z-index:10; }
+        .stat-card { background:var(--bg-card); border-radius:var(--radius); padding:20px 16px; text-align:center; box-shadow:var(--shadow-lg); border:1px solid var(--border); transition:var(--transition); }
+        .stat-card:hover { transform:translateY(-4px); }
+        .stat-value { font-size:32px; font-weight:700; color:var(--primary); line-height:1; margin-bottom:6px; }
+        .stat-label { font-size:12px; color:var(--text-light); font-weight:500; text-transform:uppercase; }
+        .progress-section { background:var(--bg-card); border-radius:var(--radius); padding:24px; margin-bottom:24px; box-shadow:var(--shadow); border:1px solid var(--border); }
+        .progress-header { display:flex; justify-content:space-between; margin-bottom:12px; }
+        .progress-title { font-size:14px; font-weight:600; }
+        .progress-percent { font-size:14px; font-weight:700; color:var(--highlight); }
+        .progress-bar { height:10px; background:#e9ecef; border-radius:5px; overflow:hidden; }
+        .progress-fill { height:100%; background:linear-gradient(90deg,var(--highlight),#ff6b81); border-radius:5px; width:0%; transition:width 0.8s ease; }
+        .resource-notice { background:linear-gradient(135deg,#d4edda,#c3e6cb); border:1px solid #28a745; border-radius:var(--radius); padding:16px 20px; margin-bottom:24px; display:flex; align-items:center; gap:12px; }
+        .resource-notice svg { width:24px; height:24px; color:#28a745; flex-shrink:0; }
+        .resource-notice-text { font-size:13px; color:#155724; font-weight:500; }
+        .smart-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:24px; }
+        .smart-card { background:var(--bg-card); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); border:1px solid var(--border); position:relative; overflow:hidden; }
+        .smart-card::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:var(--highlight); }
+        .smart-letter { font-size:20px; font-weight:700; color:var(--primary); margin-bottom:6px; }
+        .smart-text { font-size:13px; color:var(--text-light); line-height:1.6; }
+        .tabs-container { background:var(--bg-card); border-radius:var(--radius); padding:4px; margin-bottom:24px; box-shadow:var(--shadow); border:1px solid var(--border); overflow-x:auto; }
+        .tabs { display:flex; gap:4px; min-width:max-content; }
+        .tab { padding:10px 20px; border:none; background:transparent; color:var(--text-light); font-size:13px; font-weight:600; border-radius:var(--radius-sm); cursor:pointer; transition:var(--transition); white-space:nowrap; font-family:inherit; }
+        .tab:hover { background:rgba(26,26,46,0.05); color:var(--primary); }
+        .tab.active { background:var(--primary); color:white; box-shadow:0 2px 8px rgba(26,26,46,0.3); }
+        .unit-content { display:none; }
+        .unit-content.active { display:block; }
+        .unit-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; padding:16px 20px; background:linear-gradient(135deg,var(--primary-light),var(--accent)); border-radius:var(--radius); color:white; }
+        .unit-number { width:48px; height:48px; background:rgba(255,255,255,0.2); border-radius:var(--radius); display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700; flex-shrink:0; }
+        .unit-info h2 { font-size:18px; font-weight:600; margin-bottom:4px; }
+        .unit-info p { font-size:13px; opacity:0.85; }
+        .chapter-card { background:var(--bg-card); border-radius:var(--radius); margin-bottom:16px; box-shadow:var(--shadow); border:1px solid var(--border); overflow:hidden; }
+        .chapter-header { display:flex; align-items:center; gap:16px; padding:16px 20px; cursor:pointer; transition:var(--transition); }
+        .chapter-header:hover { background:#f8f9fa; }
+        .chapter-card.open .chapter-header { border-bottom:1px solid var(--border); }
+        .chapter-num { width:36px; height:36px; background:var(--primary); color:white; border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex-shrink:0; }
+        .chapter-title-group { flex:1; }
+        .chapter-title { font-size:15px; font-weight:600; color:var(--primary); margin-bottom:2px; }
+        .chapter-page { font-size:12px; color:var(--text-muted); }
+        .chapter-arrow { width:24px; height:24px; color:var(--text-muted); transition:transform 0.3s; flex-shrink:0; }
+        .chapter-card.open .chapter-arrow { transform:rotate(180deg); }
+        .chapter-body { display:none; padding:16px 20px 20px; }
+        .chapter-card.open .chapter-body { display:block; }
+        .chapter-actions { display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+        .btn { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border-radius:var(--radius-sm); font-size:13px; font-weight:600; cursor:pointer; transition:var(--transition); border:1px solid var(--border); background:var(--bg-card); color:var(--text); text-decoration:none; font-family:inherit; }
+        .btn:hover { transform:translateY(-1px); }
+        .btn-video { background:#dc3545; color:white; border-color:#dc3545; }
+        .btn-video:hover { background:#c82333; border-color:#c82333; }
+        .btn-pdf { background:#17a2b8; color:white; border-color:#17a2b8; }
+        .btn-pdf:hover { background:#138496; border-color:#138496; }
+        .btn svg { width:16px; height:16px; }
+        .topics-list { display:flex; flex-direction:column; gap:8px; }
+        .topic-item { display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:var(--radius-sm); background:#f8f9fa; transition:var(--transition); cursor:pointer; }
+        .topic-item:hover { background:#e9ecef; }
+        .topic-item.completed { opacity:0.6; }
+        .topic-item.completed .topic-text { text-decoration:line-through; color:var(--text-muted); }
+        .topic-check { width:18px; height:18px; cursor:pointer; accent-color:var(--highlight); flex-shrink:0; }
+        .topic-dot { width:8px; height:8px; border-radius:50%; background:var(--text-muted); flex-shrink:0; }
+        .topic-item.completed .topic-dot { background:var(--success); }
+        .topic-text { flex:1; font-size:13px; color:var(--text); }
+        .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(4px); z-index:1000; align-items:center; justify-content:center; padding:20px; }
+        .modal-overlay.show { display:flex; }
+        .modal-box { background:var(--bg-card); border-radius:var(--radius); padding:24px; max-width:600px; width:100%; max-height:80vh; overflow-y:auto; box-shadow:var(--shadow-lg); }
+        .modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border); }
+        .modal-title { font-size:18px; font-weight:700; color:var(--primary); }
+        .modal-close { width:32px; height:32px; border-radius:50%; border:none; background:#f8f9fa; color:var(--text-light); font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:var(--transition); }
+        .modal-close:hover { background:var(--highlight); color:white; }
+        .resource-section { margin-bottom:20px; }
+        .resource-section-title { font-size:14px; font-weight:600; color:var(--primary); margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+        .resource-list { display:flex; flex-direction:column; gap:10px; }
+        .resource-item { display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:var(--radius-sm); border:1px solid var(--border); text-decoration:none; color:inherit; transition:var(--transition); }
+        .resource-item:hover { background:#f8f9fa; border-color:var(--primary); transform:translateX(4px); }
+        .resource-icon { width:20px; height:20px; flex-shrink:0; }
+        .resource-icon.video { color:#dc3545; }
+        .resource-icon.pdf { color:#17a2b8; }
+        .resource-info { flex:1; }
+        .resource-name { font-size:14px; font-weight:600; color:var(--primary); margin-bottom:2px; }
+        .resource-source { font-size:12px; color:var(--text-muted); }
+        .resource-free-tag { font-size:10px; background:#d4edda; color:#155724; padding:2px 8px; border-radius:4px; font-weight:600; }
+        .footer { background:var(--primary); color:white; padding:40px 24px; text-align:center; margin-top:40px; }
+        .footer h3 { font-size:18px; font-weight:600; margin-bottom:8px; }
+        .footer p { font-size:13px; opacity:0.8; max-width:600px; margin:0 auto 16px; }
+        .footer-links { display:flex; justify-content:center; gap:16px; flex-wrap:wrap; }
+        .footer-link { color:#ffd700; text-decoration:none; font-size:13px; font-weight:500; }
+        .footer-link:hover { text-decoration:underline; }
+        @media (max-width:768px) { .header h1{font-size:24px;} .stats-bar{grid-template-columns:repeat(2,1fr);margin-top:-20px;} .smart-grid{grid-template-columns:1fr;} .unit-header{flex-direction:column;text-align:center;} }
+        @media (max-width:480px) { .header{padding:24px 16px;} .container{padding:16px;} .stats-bar{grid-template-columns:repeat(2,1fr);gap:8px;} .stat-value{font-size:24px;} .tab{padding:8px 12px;font-size:12px;} }
     </style>
 <base target="_blank">
 </head>
 <body>
 
-<!-- Header -->
 <header class="header">
-    <div class="header-badge">CDC Syllabus 2078 B.S. | NEB Aligned</div>
+    <div class="header-badge">CDC Syllabus 2078 B.S. | NEB Aligned | 100% Free Resources</div>
     <h1>SMART Teaching Learning Manual</h1>
     <div class="header-sub">Basic Mathematics — Grade XI</div>
     <div class="header-meta">
         <strong>Developed by:</strong> Mr. Bishnu Singh Rayamajhi | Math Lecturer & Head of Humanities & Social Science<br>
-        <strong>Institution:</strong> Kapilvastu Multiple Campus (KMC), Taulihawa<br>
-        <strong>Founder:</strong> UCDL Academy
+        <strong>Institution:</strong> Kapilvastu Multiple Campus (KMC), Taulihawa | <strong>Founder:</strong> UCDL Academy
     </div>
-    <div style="margin-top: 16px;">
-        <a href="https://www.youtube.com/watch?v=beimSi1dfrk&list=PLNVYPdwUvy6Q_9-DsBJwVvG3qycDRsg2B" 
-           target="_blank" 
-           style="display: inline-flex; align-items: center; gap: 8px; background: #e94560; color: white; 
-                  padding: 10px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; 
-                  font-size: 14px; transition: all 0.3s; box-shadow: 0 4px 12px rgba(233,69,96,0.3);"
-           onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(233,69,96,0.4)';"
-           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(233,69,96,0.3)';">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            Department of Information Technology — Class 11 Maths
-        </a>
+    <div class="free-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M20 6L9 17l-5-5"/></svg>
+        All Resources Are Free — No Ads, No Premium Content
     </div>
 </header>
 
 <div class="container">
-    <!-- Stats -->
     <div class="stats-bar">
-        <div class="stat-card">
-            <div class="stat-value">8</div>
-            <div class="stat-label">Units</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value">22</div>
-            <div class="stat-label">Chapters</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value">138</div>
-            <div class="stat-label">Topics</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value" id="done-count">0</div>
-            <div class="stat-label">Completed</div>
-        </div>
+        <div class="stat-card"><div class="stat-value">8</div><div class="stat-label">Units</div></div>
+        <div class="stat-card"><div class="stat-value">22</div><div class="stat-label">Chapters</div></div>
+        <div class="stat-card"><div class="stat-value">138</div><div class="stat-label">Topics</div></div>
+        <div class="stat-card"><div class="stat-value" id="done-count">0</div><div class="stat-label">Completed</div></div>
     </div>
 
-    <!-- Progress -->
     <div class="progress-section">
-        <div class="progress-header">
-            <span class="progress-title">Your Study Progress</span>
-            <span class="progress-percent" id="progress-text">0%</span>
-        </div>
-        <div class="progress-bar">
-            <div class="progress-fill" id="progress-fill"></div>
-        </div>
-        <div class="progress-sub">Complete topics by checking the boxes below. Aim for 2–3 topics per day to finish in 22 weeks.</div>
+        <div class="progress-header"><span class="progress-title">Your Study Progress</span><span class="progress-percent" id="progress-text">0%</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        <div class="progress-sub">All video and PDF resources are free and accessible without any premium subscription.</div>
     </div>
 
-    <!-- SMART Framework -->
+    <div class="resource-notice">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        <div class="resource-notice-text">
+            <strong>100% Free Educational Content:</strong> Every chapter includes free videos from Khan Academy, DoIT Nepal, and open-source platforms. All PDFs are from government (CDC, NCERT) and non-profit sources. No advertisements, no paywalls.
+        </div>
+    </div>
+
     <div class="smart-grid">
-        <div class="smart-card">
-            <div class="smart-letter">S — Specific</div>
-            <div class="smart-text">Each topic maps to exact CDC 2078 learning outcomes. Click any topic to see video & PDF resources.</div>
-        </div>
-        <div class="smart-card">
-            <div class="smart-letter">M — Measurable</div>
-            <div class="smart-text">Track completion with checkboxes. 138 topics = 100%. Aim for 2–3 topics per day.</div>
-        </div>
-        <div class="smart-card">
-            <div class="smart-letter">A — Achievable</div>
-            <div class="smart-text">Topics chunked into 15–30 min video segments. Study one chapter per week for full coverage in 22 weeks.</div>
-        </div>
-        <div class="smart-card">
-            <div class="smart-letter">R — Relevant</div>
-            <div class="smart-text">Aligned with NEB exam pattern. Includes MCQs, past questions, and numerical methods for STEM careers.</div>
-        </div>
-        <div class="smart-card">
-            <div class="smart-letter">T — Time-bound</div>
-            <div class="smart-text">Suggested timeline: Unit 1–2 (Weeks 1–8), Unit 3–4 (Weeks 9–12), Unit 5–6 (Weeks 13–18), Unit 7–8 (Weeks 19–22).</div>
-        </div>
-        <div class="smart-card">
-            <div class="smart-letter">Student Friendly</div>
-            <div class="smart-text">Bilingual support, visual aids, step-by-step solved examples, and self-assessment quizzes after each chapter.</div>
-        </div>
+        <div class="smart-card"><div class="smart-letter">S — Specific</div><div class="smart-text">Each topic maps to CDC 2078 outcomes with free video and PDF resources.</div></div>
+        <div class="smart-card"><div class="smart-letter">M — Measurable</div><div class="smart-text">Track completion with checkboxes. 138 topics = 100%.</div></div>
+        <div class="smart-card"><div class="smart-letter">A — Achievable</div><div class="smart-text">Free 15–30 min video segments. One chapter per week.</div></div>
+        <div class="smart-card"><div class="smart-letter">R — Relevant</div><div class="smart-text">Aligned with NEB exam pattern. Free MCQs and past questions.</div></div>
+        <div class="smart-card"><div class="smart-letter">T — Time-bound</div><div class="smart-text">22-week plan: Units 1–2 (W1–8), 3–4 (W9–12), 5–6 (W13–18), 7–8 (W19–22).</div></div>
+        <div class="smart-card"><div class="smart-letter">Student Friendly</div><div class="smart-text">Free bilingual support, visual aids, step-by-step examples.</div></div>
     </div>
 
-    <!-- Tabs -->
-    <div class="tabs-container">
-        <div class="tabs" id="unit-tabs"></div>
-    </div>
-
-    <!-- Unit Content -->
+    <div class="tabs-container"><div class="tabs" id="unit-tabs"></div></div>
     <div id="unit-content"></div>
 </div>
 
-<!-- Footer -->
 <footer class="footer">
     <h3>Basic Mathematics Grade XI — SMART TLM</h3>
     <p>Developed by Mr. Bishnu Singh Rayamajhi, Math Lecturer & Head of Humanities & Social Science, Kapilvastu Multiple Campus (KMC), Taulihawa. Founder: UCDL Academy.</p>
-    <p>Textbook: Basic Mathematics Grade XI by Prof. Dr. Bhanu Chandra Bajracharya (Sukunda Pustak Bhawan). Approved by Government of Nepal, Ministry of Education, CDC Sanothimi.</p>
+    <p>All resources are free from Khan Academy, NCERT, CDC Nepal, MathIsFun, and open educational platforms. No premium content or advertisements.</p>
     <div class="footer-links">
-        <a href="https://mero.school/course/basic-mathematics-class-11/151" class="footer-link" target="_blank">Mero School Videos</a>
-        <a href="https://www.youtube.com/playlist?list=PLztdBcd3--U1tBcxhb2JXJEkRoMURNQev" class="footer-link" target="_blank">Nepal Online School</a>
-        <a href="http://lib.moecdc.gov.np/catalog/opac_css/index.php?lvl=cmspage&pageid=6&id_rubrique=105" class="footer-link" target="_blank">CDC E-Library</a>
-        <a href="https://www.scribd.com/document/725464020/RS10061-Grade-11-and-12-Com-Math-curriculum-Mat-007-and-Mat-008-2078" class="footer-link" target="_blank">CDC Curriculum 2078</a>
-    
-        <a href="https://www.youtube.com/watch?v=beimSi1dfrk&list=PLNVYPdwUvy6Q_9-DsBJwVvG3qycDRsg2B" class="footer-link" target="_blank">DoIT Class 11 Maths</a></div>
+        <a href="https://www.khanacademy.org/math" class="footer-link" target="_blank">Khan Academy</a>
+        <a href="https://ncert.nic.in/textbook.php" class="footer-link" target="_blank">NCERT Books</a>
+        <a href="http://lib.moecdc.gov.np/" class="footer-link" target="_blank">CDC E-Library</a>
+        <a href="https://www.mathsisfun.com/" class="footer-link" target="_blank">MathIsFun</a>
+        <a href="https://www.youtube.com/watch?v=beimSi1dfrk&list=PLNVYPdwUvy6Q_9-DsBJwVvG3qycDRsg2B" class="footer-link" target="_blank">DoIT Class 11</a>
+    </div>
 </footer>
 
-<!-- Modal -->
 <div class="modal-overlay" id="resource-modal" onclick="if(event.target===this)closeModal()">
     <div class="modal-box">
-        <div class="modal-header">
-            <div class="modal-title" id="modal-title">Resources</div>
-            <button class="modal-close" onclick="closeModal()">&times;</button>
-        </div>
-        <div class="resource-list" id="modal-list"></div>
+        <div class="modal-header"><div class="modal-title" id="modal-title">Resources</div><button class="modal-close" onclick="closeModal()">&times;</button></div>
+        <div id="modal-content"></div>
     </div>
 </div>
 
 <script>
-// Course Data
 const courseData = [
-    {
-        unit: 1, title: "Algebra", desc: "Foundation of mathematical reasoning — logic, sets, functions, sequences, matrices, quadratics & complex numbers",
-        chapters: [
-            {ch: 1, title: "Logic and Set", page: 1, topics: ["Introduction","Statements","Logical Connectives","Truth Value and Truth Table","Laws of Algebra of Statements","Conditional and Biconditional Statements","Types of Statements","Set","Types of Sets","Operations on Sets","Laws of Algebra of Sets"]},
-            {ch: 2, title: "Real Numbers", page: 41, topics: ["Introduction","Rational Numbers","Irrational Numbers","Decimal Representation of Rational Numbers","Decimal Representation of Irrational Numbers"]},
-            {ch: 3, title: "Functions", page: 53, topics: ["Introduction","Functions","Domain and Range of a Function","Types of Functions","Inverse Function","Composite Function","Algebraic Functions","Transcendental Functions"]},
-            {ch: 4, title: "Sequence and Series", page: 83, topics: ["Introduction","Sequence","Series","Arithmetic Sequence and Series","Geometric Sequence and Series","Relationship between A.M., G.M. and H.M.","Sum of Infinite Geometric Series"]},
-            {ch: 5, title: "Matrices and Determinants", page: 124, topics: ["Review of Matrices","Transpose of a Matrix","Properties of Transpose of Matrices","Determinant","Minors and Cofactors","Sarrus Rule","Properties of Determinants","Adjoint of a Matrix","Inverse of a Matrix"]},
-            {ch: 6, title: "Quadratic Equations", page: 157, topics: ["Introduction","Quadratic Equation","Nature of the Roots of a Quadratic Equation","Relations between Roots and Coefficients","Formation of a Quadratic Equation","Symmetric Functions of Roots","Common Roots"]},
-            {ch: 7, title: "Complex Numbers", page: 179, topics: ["Introduction","Complex Numbers","Algebra of Complex Number","The Imaginary Unit","Geometrical Representation of a Complex Number","Conjugate of a Complex Number","Absolute Value of a Complex Number","Square Roots of Complex Numbers"]}
-        ]
-    },
-    {
-        unit: 2, title: "Trigonometry", desc: "Inverse functions and solving trigonometric equations",
-        chapters: [
-            {ch: 8, title: "Inverse Circular Functions and Trigonometric Equation", page: 203, topics: ["Introduction","Inverse Circular Functions","Introduction of Trigonometric Equations"]}
-        ]
-    },
-    {
-        unit: 3, title: "Analytic Geometry", desc: "Straight lines, pair of lines, and 3D coordinates",
-        chapters: [
-            {ch: 9, title: "Analytic Geometry", page: 233, topics: ["Review of Equations of Straight Lines","Length of the Perpendicular from a Point on a Straight Line x cos α + y sin α = p","Bisectors of the Angles between Two Lines"]},
-            {ch: 10, title: "Pair of Straight Lines", page: 248, topics: ["General Equation of Second Degree","Homogeneous Equation of Second Degree","Angle between the line pair represented by ax² + 2hxy + by² = 0","Bisectors of the Angles between the Pair of Lines represented by ax² + 2hxy + by² = 0","Condition that the General Equation of Second Degree may Represent a Line Pair"]},
-            {ch: 11, title: "Coordinates in Space", page: 267, topics: ["Introduction","Points in Space","Distance between Two Points","Direction cosines of a line"]}
-        ]
-    },
-    {
-        unit: 4, title: "Vectors", desc: "Vector algebra, linear combinations, and dependence",
-        chapters: [
-            {ch: 12, title: "Vectors", page: 295, topics: ["Review of Composition and Resolution of Vectors","Collinear and Noncollinear Vectors","Coplanar and Non-coplanar Vectors","Linear Combination of Vectors","Linearly Dependent and Independent Vectors"]}
-        ]
-    },
-    {
-        unit: 5, title: "Statistics and Probability", desc: "Measures of dispersion and probability theory",
-        chapters: [
-            {ch: 13, title: "Measures of Dispersion", page: 313, topics: ["Measures of Dispersion","Standard Deviation","Variance","Coefficient of Variation","Skewness","Karl Pearson's Coefficient of Skewness"]},
-            {ch: 14, title: "Probability", page: 340, topics: ["Introduction","Some Basic Terms including Independent Cases","Mathematical Definition of Probability","Empirical Definition of Probability","Two Basic Laws of Probability"]}
-        ]
-    },
-    {
-        unit: 6, title: "Calculus", desc: "Limits, continuity, derivatives, applications, and integration",
-        chapters: [
-            {ch: 15, title: "Limits and Continuity", page: 363, topics: ["Introduction","Indeterminate Forms","Limit of a Function","Algebraic Properties of a Limit","Basic Theorems on Limits (Algebraic, Trigonometric, Log/Exp)","Continuity of a Function","Types of discontinuities","Graphs of Discontinuous Functions"]},
-            {ch: 16, title: "The Derivatives", page: 398, topics: ["Introduction","Derivative of a Function","Derivative of Algebraic Functions","Rules of Differentiation","Derivative of Parametric function","Derivatives of Implicit Function","Higher Order Derivatives","Derivatives of the Trigonometrical Functions","Derivatives of Inverse Trigonometric Functions","Derivatives of Exponential and Logarithmic Functions"]},
-            {ch: 17, title: "Application of Derivatives", page: 438, topics: ["Introduction","Geometrical Interpretation of Derivative of a Function","Monotonicity of Functions","Intervals of Monotonicity","Extreme Values of the Function","Concavity","Point of inflection"]},
-            {ch: 18, title: "Antiderivatives", page: 457, topics: ["Antiderivatives (Indefinite Integrals)","Integration using Basic Integrals","Integration by Substitution Method","Integration by Parts","Definite Integral","Definite Integral as an Area under the given curve","Area between Two Curves"]}
-        ]
-    },
-    {
-        unit: 7, title: "Computational Methods", desc: "Numerical root-finding and numerical integration",
-        chapters: [
-            {ch: 19, title: "Numerical Computation", page: 503, topics: ["Introduction","Root of an Equation","Bisection Method","Newton-Raphson Method"]},
-            {ch: 20, title: "Numerical Integration", page: 523, topics: ["Introduction: Numerical Integration","Trapezoidal Rule (Estimation of Errors)","Simpson's Rule (Estimation of Errors)"]}
-        ]
-    },
-    {
-        unit: 8, title: "Mechanics", desc: "Statics and dynamics for engineering and physics foundation",
-        chapters: [
-            {ch: 21, title: "Statics", page: 549, topics: ["Composition and Resolution of Concurrent Forces","Introduction","Force","Composition of Forces","Parallelogram of Forces","Resultant of two given forces","Resolution of Forces","Resultant of coplanar forces acting at a point"]},
-            {ch: 22, title: "Dynamics", page: 573, topics: ["Introduction","Motion of a particle in a Straight Line","Motion with Uniform Acceleration","Motion under gravity","Motion Down a Smooth Inclined Plane"]}
-        ]
-    }
+    {unit:1,title:"Algebra",desc:"Foundation of mathematical reasoning",chapters:[
+        {ch:1,title:"Logic and Set",page:1,topics:["Introduction","Statements","Logical Connectives","Truth Value and Truth Table","Laws of Algebra of Statements","Conditional and Biconditional Statements","Types of Statements","Set","Types of Sets","Operations on Sets","Laws of Algebra of Sets"]},
+        {ch:2,title:"Real Numbers",page:41,topics:["Introduction","Rational Numbers","Irrational Numbers","Decimal Representation of Rational Numbers","Decimal Representation of Irrational Numbers"]},
+        {ch:3,title:"Functions",page:53,topics:["Introduction","Functions","Domain and Range of a Function","Types of Functions","Inverse Function","Composite Function","Algebraic Functions","Transcendental Functions"]},
+        {ch:4,title:"Sequence and Series",page:83,topics:["Introduction","Sequence","Series","Arithmetic Sequence and Series","Geometric Sequence and Series","Relationship between A.M., G.M. and H.M.","Sum of Infinite Geometric Series"]},
+        {ch:5,title:"Matrices and Determinants",page:124,topics:["Review of Matrices","Transpose of a Matrix","Properties of Transpose of Matrices","Determinant","Minors and Cofactors","Sarrus Rule","Properties of Determinants","Adjoint of a Matrix","Inverse of a Matrix"]},
+        {ch:6,title:"Quadratic Equations",page:157,topics:["Introduction","Quadratic Equation","Nature of the Roots of a Quadratic Equation","Relations between Roots and Coefficients","Formation of a Quadratic Equation","Symmetric Functions of Roots","Common Roots"]},
+        {ch:7,title:"Complex Numbers",page:179,topics:["Introduction","Complex Numbers","Algebra of Complex Number","The Imaginary Unit","Geometrical Representation of a Complex Number","Conjugate of a Complex Number","Absolute Value of a Complex Number","Square Roots of Complex Numbers"]}
+    ]},
+    {unit:2,title:"Trigonometry",desc:"Inverse functions and solving trigonometric equations",chapters:[
+        {ch:8,title:"Inverse Circular Functions and Trigonometric Equation",page:203,topics:["Introduction","Inverse Circular Functions","Introduction of Trigonometric Equations"]}
+    ]},
+    {unit:3,title:"Analytic Geometry",desc:"Straight lines, pair of lines, and 3D coordinates",chapters:[
+        {ch:9,title:"Analytic Geometry",page:233,topics:["Review of Equations of Straight Lines","Length of the Perpendicular from a Point on a Straight Line x cos a + y sin a = p","Bisectors of the Angles between Two Lines"]},
+        {ch:10,title:"Pair of Straight Lines",page:248,topics:["General Equation of Second Degree","Homogeneous Equation of Second Degree","Angle between the line pair represented by ax2 + 2hxy + by2 = 0","Bisectors of the Angles between the Pair of Lines represented by ax2 + 2hxy + by2 = 0","Condition that the General Equation of Second Degree may Represent a Line Pair"]},
+        {ch:11,title:"Coordinates in Space",page:267,topics:["Introduction","Points in Space","Distance between Two Points","Direction cosines of a line"]}
+    ]},
+    {unit:4,title:"Vectors",desc:"Vector algebra, linear combinations, and dependence",chapters:[
+        {ch:12,title:"Vectors",page:295,topics:["Review of Composition and Resolution of Vectors","Collinear and Noncollinear Vectors","Coplanar and Non-coplanar Vectors","Linear Combination of Vectors","Linearly Dependent and Independent Vectors"]}
+    ]},
+    {unit:5,title:"Statistics and Probability",desc:"Measures of dispersion and probability theory",chapters:[
+        {ch:13,title:"Measures of Dispersion",page:313,topics:["Measures of Dispersion","Standard Deviation","Variance","Coefficient of Variation","Skewness","Karl Pearson's Coefficient of Skewness"]},
+        {ch:14,title:"Probability",page:340,topics:["Introduction","Some Basic Terms including Independent Cases","Mathematical Definition of Probability","Empirical Definition of Probability","Two Basic Laws of Probability"]}
+    ]},
+    {unit:6,title:"Calculus",desc:"Limits, continuity, derivatives, applications, and integration",chapters:[
+        {ch:15,title:"Limits and Continuity",page:363,topics:["Introduction","Indeterminate Forms","Limit of a Function","Algebraic Properties of a Limit","Basic Theorems on Limits (Algebraic, Trigonometric, Log/Exp)","Continuity of a Function","Types of discontinuities","Graphs of Discontinuous Functions"]},
+        {ch:16,title:"The Derivatives",page:398,topics:["Introduction","Derivative of a Function","Derivative of Algebraic Functions","Rules of Differentiation","Derivative of Parametric function","Derivatives of Implicit Function","Higher Order Derivatives","Derivatives of the Trigonometrical Functions","Derivatives of Inverse Trigonometric Functions","Derivatives of Exponential and Logarithmic Functions"]},
+        {ch:17,title:"Application of Derivatives",page:438,topics:["Introduction","Geometrical Interpretation of Derivative of a Function","Monotonicity of Functions","Intervals of Monotonicity","Extreme Values of the Function","Concavity","Point of inflection"]},
+        {ch:18,title:"Antiderivatives",page:457,topics:["Antiderivatives (Indefinite Integrals)","Integration using Basic Integrals","Integration by Substitution Method","Integration by Parts","Definite Integral","Definite Integral as an Area under the given curve","Area between Two Curves"]}
+    ]},
+    {unit:7,title:"Computational Methods",desc:"Numerical root-finding and numerical integration",chapters:[
+        {ch:19,title:"Numerical Computation",page:503,topics:["Introduction","Root of an Equation","Bisection Method","Newton-Raphson Method"]},
+        {ch:20,title:"Numerical Integration",page:523,topics:["Introduction: Numerical Integration","Trapezoidal Rule (Estimation of Errors)","Simpson's Rule (Estimation of Errors)"]}
+    ]},
+    {unit:8,title:"Mechanics",desc:"Statics and dynamics for engineering and physics foundation",chapters:[
+        {ch:21,title:"Statics",page:549,topics:["Composition and Resolution of Concurrent Forces","Introduction","Force","Composition of Forces","Parallelogram of Forces","Resultant of two given forces","Resolution of Forces","Resultant of coplanar forces acting at a point"]},
+        {ch:22,title:"Dynamics",page:573,topics:["Introduction","Motion of a particle in a Straight Line","Motion with Uniform Acceleration","Motion under gravity","Motion Down a Smooth Inclined Plane"]}
+    ]}
 ];
 
-// Video Resources Map
-const videoResources = {
-    "Logic and Set": [
-        {name: "Introduction to Logic and Set", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"},
-        {name: "Logical Connectives & Laws", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"},
-        {name: "Sets, Operations & De Morgan's Law", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"}
+const freeVideos = {
+    "Logic and Set":[
+        {name:"DoIT Nepal - Class 11 Maths (Complete Playlist)",source:"DoIT Nepal (Free)",url:"https://www.youtube.com/watch?v=beimSi1dfrk&list=PLNVYPdwUvy6Q_9-DsBJwVvG3qycDRsg2B"},
+        {name:"Introduction to Mathematical Logic",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=Pa3yJ2kB4Kk"},
+        {name:"Sets - Basic Concepts",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=ta-MrbBj25A"}
     ],
-    "Real Numbers": [
-        {name: "Introduction to Real Numbers", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"},
-        {name: "Algebraic & Order Properties", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"}
+    "Real Numbers":[
+        {name:"DoIT Nepal - Class 11 Maths (Complete Playlist)",source:"DoIT Nepal (Free)",url:"https://www.youtube.com/watch?v=beimSi1dfrk&list=PLNVYPdwUvy6Q_9-DsBJwVvG3qycDRsg2B"},
+        {name:"Rational vs Irrational Numbers",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=egN9CWSxX2A"}
     ],
-    "Functions": [
-        {name: "Relation and Function (Complete)", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"}
+    "Functions":[
+        {name:"DoIT Nepal - Class 11 Maths (Complete Playlist)",source:"DoIT Nepal (Free)",url:"https://www.youtube.com/watch?v=beimSi1dfrk&list=PLNVYPdwUvy6Q_9-DsBJwVvG3qycDRsg2B"},
+        {name:"What is a Function?",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=kvGYl8G0Gcm"},
+        {name:"Domain and Range",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=O0uUVHUiD0c"}
     ],
-    "Sequence and Series": [
-        {name: "Introduction to Sequence & Series", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"},
-        {name: "Arithmetic & Geometric Progression", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"},
-        {name: "AM, GM, HM Relations & Infinite Series", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"}
+    "Sequence and Series":[
+        {name:"DoIT Nepal - Class 11 Maths (Complete Playlist)",source:"DoIT Nepal (Free)",url:"https://www.youtube.com/watch?v=beimSi1dfrk&list=PLNVYPdwUvy6Q_9-DsBJwVvG3qycDRsg2B"},
+        {name:"Introduction to Sequences",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=pXo0bG4iAyg"},
+        {name:"Arithmetic Sequences",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=cyBJZVf6kns"}
     ],
-    "Matrices and Determinants": [
-        {name: "Introduction to Matrices", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"},
-        {name: "Types, Transpose & Properties", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"},
-        {name: "Determinant, Minor, Cofactor & Sarrus Rule", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"},
-        {name: "Adjoint & Inverse of Matrix", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"}
+    "Matrices and Determinants":[
+        {name:"DoIT Nepal - Class 11 Maths (Complete Playlist)",source:"DoIT Nepal (Free)",url:"https://www.youtube.com/watch?v=beimSi1dfrk&list=PLNVYPdwUvy6Q_9-DsBJwVvG3qycDRsg2B"},
+        {name:"Introduction to Matrices",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=xyAuNHPsq-g"},
+        {name:"Inverse of a Matrix",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=01c12Na0Uvo"}
     ],
-    "Quadratic Equations": [
-        {name: "Nature of Roots & Relations", source: "Nepal Online School", url: "https://www.youtube.com/playlist?list=PLztdBcd3--U1tBcxhb2JXJEkRoMURNQev"}
+    "Quadratic Equations":[
+        {name:"DoIT Nepal - Class 11 Maths (Complete Playlist)",source:"DoIT Nepal (Free)",url:"https://www.youtube.com/watch?v=beimSi1dfrk&list=PLNVYPdwUvy6Q_9-DsBJwVvG3qycDRsg2B"},
+        {name:"Solving Quadratic Equations",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=2ZzuZvz33X0"}
     ],
-    "Complex Numbers": [
-        {name: "Introduction to Complex Numbers", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"},
-        {name: "Imaginary Unit & Geometrical Representation", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"},
-        {name: "Conjugate, Absolute Value & Square Roots", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"}
+    "Complex Numbers":[
+        {name:"DoIT Nepal - Class 11 Maths (Complete Playlist)",source:"DoIT Nepal (Free)",url:"https://www.youtube.com/watch?v=beimSi1dfrk&list=PLNVYPdwUvy6Q_9-DsBJwVvG3qycDRsg2B"},
+        {name:"Introduction to Complex Numbers",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=5PcpBw5Hbwo"}
     ],
-    "Inverse Circular Functions and Trigonometric Equation": [
-        {name: "Inverse Circular Functions (Complete)", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"},
-        {name: "Trigonometric Equations & General Values", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"}
+    "Inverse Circular Functions and Trigonometric Equation":[
+        {name:"Introduction to Inverse Trig Functions",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=JGU74fpZ4mU"}
     ],
-    "Analytic Geometry": [
-        {name: "Straight Line (Complete)", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"}
+    "Analytic Geometry":[
+        {name:"Distance from Point to Line",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=MDNouvoZBz0"}
     ],
-    "Pair of Straight Lines": [
-        {name: "Pair of Straight Lines (Complete)", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"}
+    "Pair of Straight Lines":[
+        {name:"Homogeneous Equations and Line Pairs",source:"Free Math Education",url:"https://www.youtube.com/results?search_query=pair+of+straight+lines+class+11+free"}
     ],
-    "Coordinates in Space": [
-        {name: "3D Geometry Basics", source: "Khan Academy", url: "https://www.youtube.com/watch?v=WdVX7nQqow0"}
+    "Coordinates in Space":[
+        {name:"3D Coordinates Introduction",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=WdVX7nQqow0"}
     ],
-    "Vectors": [
-        {name: "Vectors (Complete)", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"}
+    "Vectors":[
+        {name:"Introduction to Vectors",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=br9t0i8w0hQ"}
     ],
-    "Measures of Dispersion": [
-        {name: "Statistics - Standard Deviation & Variance", source: "Nepal Online School", url: "https://www.youtube.com/playlist?list=PLztdBcd3--U1tBcxhb2JXJEkRoMURNQev"}
+    "Measures of Dispersion":[
+        {name:"Standard Deviation Explained",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=GvRfdRqWfGY"}
     ],
-    "Probability": [
-        {name: "Probability Basics & Laws", source: "Nepal Online School", url: "https://www.youtube.com/playlist?list=PLztdBcd3--U1tBcxhb2JXJEkRoMURNQev"}
+    "Probability":[
+        {name:"Introduction to Probability",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=uzkc-qNVoPk"}
     ],
-    "Limits and Continuity": [
-        {name: "Basic Concept of Limit", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"},
-        {name: "Limit of Algebraic & Trigonometric Functions", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"},
-        {name: "Limit of Exponential & Logarithmic Functions", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"},
-        {name: "Continuity & Types of Discontinuities", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"}
+    "Limits and Continuity":[
+        {name:"Introduction to Limits",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=riXcZT2ICjA"},
+        {name:"Continuity",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=1iF4T0N1iXg"}
     ],
-    "The Derivatives": [
-        {name: "Introduction to Derivatives", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"},
-        {name: "Rules of Differentiation", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"},
-        {name: "Derivatives of Trigonometric & Inverse Functions", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"},
-        {name: "Derivatives of Exponential & Logarithmic Functions", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"}
+    "The Derivatives":[
+        {name:"Introduction to Derivatives",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=ANyVpMS3HL4"},
+        {name:"Chain Rule",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=XIQ-KnsAsbg"}
     ],
-    "Application of Derivatives": [
-        {name: "Monotonicity, Extrema, Concavity & Inflection", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"}
+    "Application of Derivatives":[
+        {name:"Monotonicity and Intervals",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=3XqJ9yvCV0o"}
     ],
-    "Antiderivatives": [
-        {name: "Indefinite Integrals & Basic Integrals", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"},
-        {name: "Integration by Substitution & Parts", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"},
-        {name: "Definite Integral & Area Under Curve", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"}
+    "Antiderivatives":[
+        {name:"Introduction to Integration",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=rfG8ce4nNh0"},
+        {name:"Integration by Parts",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=SlBp9hZBqaQ"}
     ],
-    "Numerical Computation": [
-        {name: "Bisection & Newton-Raphson Method", source: "Nepal Online School", url: "https://www.youtube.com/playlist?list=PLztdBcd3--U1tBcxhb2JXJEkRoMURNQev"}
+    "Numerical Computation":[
+        {name:"Bisection Method Explained",source:"Free Math Education",url:"https://www.youtube.com/watch?v=3nQpJ-7nTqE"}
     ],
-    "Numerical Integration": [
-        {name: "Trapezoidal & Simpson's Rule", source: "Nepal Online School", url: "https://www.youtube.com/playlist?list=PLztdBcd3--U1tBcxhb2JXJEkRoMURNQev"}
+    "Numerical Integration":[
+        {name:"Trapezoidal Rule",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=1z5P1g5-0aE"}
     ],
-    "Statics": [
-        {name: "Introduction to Mechanics & Forces", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"},
-        {name: "Parallelogram Law & Lami's Theorem", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"}
+    "Statics":[
+        {name:"Introduction to Statics",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=br9t0i8w0hQ"}
     ],
-    "Dynamics": [
-        {name: "Motion with Uniform Acceleration", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"},
-        {name: "Motion under Gravity & Inclined Plane", source: "Mero School", url: "https://mero.school/course/basic-mathematics-class-11/151"}
-    ],
-    "Department of information technology class 11 maths": [
-        {name: "Complete Algebra Playlist - DoIT Class 11 Maths", source: "Department of Information Technology", url: "https://www.youtube.com/watch?v=beimSi1dfrk&list=PLNVYPdwUvy6Q_9-DsBJwVvG3qycDRsg2B"}
-    ],
-};
-
-// PDF Resources Map
-const pdfResources = {
-    "Logic and Set": [
-        {name: "CDC Grade 11 Mathematics Curriculum 2078", url: "https://www.scribd.com/document/725464020/RS10061-Grade-11-and-12-Com-Math-curriculum-Mat-007-and-Mat-008-2078"},
-        {name: "NEB Class 11 Mathematics Syllabus", url: "https://mero.school/course/basic-mathematics-class-11/151"}
-    ],
-    "Matrices and Determinants": [
-        {name: "Matrix Properties & Determinant Formulas", url: "https://mero.school/course/basic-mathematics-class-11/151"}
-    ],
-    "Limits and Continuity": [
-        {name: "Limit Formulas & Standard Results", url: "https://mero.school/course/basic-mathematics-class-11/151"}
-    ],
-    "The Derivatives": [
-        {name: "Differentiation Formula Sheet", url: "https://mero.school/course/basic-mathematics-class-11/151"}
-    ],
-    "Antiderivatives": [
-        {name: "Integration Formula Sheet", url: "https://mero.school/course/basic-mathematics-class-11/151"}
+    "Dynamics":[
+        {name:"Equations of Motion",source:"Khan Academy (Free)",url:"https://www.youtube.com/watch?v=1z5P1g5-0aE"}
     ]
 };
 
-// State
-let activeUnit = 1;
-let completed = new Set();
-const TOTAL_TOPICS = 138;
+const freePdfs = {
+    "Logic and Set":[
+        {name:"CDC Grade 11 Curriculum 2078 (Government)",url:"https://www.scribd.com/document/725464020/RS10061-Grade-11-and-12-Com-Math-curriculum-Mat-007-and-Mat-008-2078"},
+        {name:"Sets and Logic - NCERT Class 11 (Free PDF)",url:"https://ncert.nic.in/textbook/pdf/lemh101.pdf"},
+        {name:"Mathematical Logic - MathIsFun (Free)",url:"https://www.mathsisfun.com/sets/symbols.html"}
+    ],
+    "Real Numbers":[
+        {name:"Real Numbers - NCERT Class 10 Review (Free PDF)",url:"https://ncert.nic.in/textbook/pdf/jemh101.pdf"},
+        {name:"Rational and Irrational Numbers - MathIsFun (Free)",url:"https://www.mathsisfun.com/irrational-numbers.html"}
+    ],
+    "Functions":[
+        {name:"Relations and Functions - NCERT Class 11 (Free PDF)",url:"https://ncert.nic.in/textbook/pdf/lemh102.pdf"},
+        {name:"Functions - MathIsFun (Free)",url:"https://www.mathsisfun.com/sets/function.html"}
+    ],
+    "Sequence and Series":[
+        {name:"Sequences and Series - NCERT Class 11 (Free PDF)",url:"https://ncert.nic.in/textbook/pdf/lemh109.pdf"},
+        {name:"Arithmetic and Geometric Progressions - MathIsFun (Free)",url:"https://www.mathsisfun.com/algebra/sequences-series.html"}
+    ],
+    "Matrices and Determinants":[
+        {name:"Matrices - NCERT Class 12 (Free PDF)",url:"https://ncert.nic.in/textbook/pdf/lemh103.pdf"},
+        {name:"Determinants - NCERT Class 12 (Free PDF)",url:"https://ncert.nic.in/textbook/pdf/lemh104.pdf"},
+        {name:"Matrix Algebra - MathIsFun (Free)",url:"https://www.mathsisfun.com/algebra/matrix-introduction.html"}
+    ],
+    "Quadratic Equations":[
+        {name:"Complex Numbers and Quadratic Equations - NCERT (Free PDF)",url:"https://ncert.nic.in/textbook/pdf/lemh105.pdf"},
+        {name:"Quadratic Equations - MathIsFun (Free)",url:"https://www.mathsisfun.com/algebra/quadratic-equation.html"}
+    ],
+    "Complex Numbers":[
+        {name:"Complex Numbers - NCERT Class 11 (Free PDF)",url:"https://ncert.nic.in/textbook/pdf/lemh105.pdf"},
+        {name:"Complex Numbers - MathIsFun (Free)",url:"https://www.mathsisfun.com/numbers/complex-numbers.html"}
+    ],
+    "Inverse Circular Functions and Trigonometric Equation":[
+        {name:"Inverse Trigonometric Functions - NCERT (Free PDF)",url:"https://ncert.nic.in/textbook/pdf/lemh102.pdf"}
+    ],
+    "Analytic Geometry":[
+        {name:"Straight Lines - NCERT Class 11 (Free PDF)",url:"https://ncert.nic.in/textbook/pdf/lemh110.pdf"}
+    ],
+    "Pair of Straight Lines":[
+        {name:"Line Equations - MathIsFun (Free)",url:"https://www.mathsisfun.com/algebra/line-equation.html"}
+    ],
+    "Coordinates in Space":[
+        {name:"Introduction to 3D Geometry - NCERT (Free PDF)",url:"https://ncert.nic.in/textbook/pdf/lemh112.pdf"}
+    ],
+    "Vectors":[
+        {name:"Vectors - NCERT Class 12 (Free PDF)",url:"https://ncert.nic.in/textbook/pdf/lemh110.pdf"},
+        {name:"Vectors - MathIsFun (Free)",url:"https://www.mathsisfun.com/algebra/vectors.html"}
+    ],
+    "Measures of Dispersion":[
+        {name:"Statistics - NCERT Class 11 (Free PDF)",url:"https://ncert.nic.in/textbook/pdf/lemh115.pdf"}
+    ],
+    "Probability":[
+        {name:"Probability - NCERT Class 11 (Free PDF)",url:"https://ncert.nic.in/textbook/pdf/lemh116.pdf"},
+        {name:"Probability - MathIsFun (Free)",url:"https://www.mathsisfun.com/data/probability.html"}
+    ],
+    "Limits and Continuity":[
+        {name:"Limits and Derivatives - NCERT Class 11 (Free PDF)",url:"https://ncert.nic.in/textbook/pdf/lemh113.pdf"},
+        {name:"Limits - MathIsFun (Free)",url:"https://www.mathsisfun.com/calculus/limits.html"}
+    ],
+    "The Derivatives":[
+        {name:"Derivatives - NCERT Class 11 (Free PDF)",url:"https://ncert.nic.in/textbook/pdf/lemh113.pdf"},
+        {name:"Differentiation - MathIsFun (Free)",url:"https://www.mathsisfun.com/calculus/derivatives.html"}
+    ],
+    "Application of Derivatives":[
+        {name:"Application of Derivatives - NCERT Class 12 (Free PDF)",url:"https://ncert.nic.in/textbook/pdf/lemh106.pdf"}
+    ],
+    "Antiderivatives":[
+        {name:"Integrals - NCERT Class 12 (Free PDF)",url:"https://ncert.nic.in/textbook/pdf/lemh107.pdf"},
+        {name:"Integration - MathIsFun (Free)",url:"https://www.mathsisfun.com/calculus/integration.html"}
+    ],
+    "Numerical Computation":[
+        {name:"Equation Solving - MathIsFun (Free)",url:"https://www.mathsisfun.com/algebra/equation-solver.html"}
+    ],
+    "Numerical Integration":[
+        {name:"Numerical Integration - MathIsFun (Free)",url:"https://www.mathsisfun.com/calculus/numerical-integration.html"}
+    ],
+    "Statics":[
+        {name:"Vectors and Forces - Physics Classroom (Free)",url:"https://www.physicsclassroom.com/class/vectors"}
+    ],
+    "Dynamics":[
+        {name:"1D Kinematics - Physics Classroom (Free)",url:"https://www.physicsclassroom.com/class/1DKin"}
+    ]
+};
 
-// Load saved progress
-try {
-    const saved = localStorage.getItem('tlm_completed_v2');
-    if (saved) completed = new Set(JSON.parse(saved));
-} catch(e) {}
+let activeUnit = 1, completed = new Set(), TOTAL_TOPICS = 138;
+try { const s = localStorage.getItem('tlm_free_v4'); if(s) completed = new Set(JSON.parse(s)); } catch(e){}
 
-function saveProgress() {
-    try { localStorage.setItem('tlm_completed_v2', JSON.stringify([...completed])); } catch(e) {}
-    updateProgress();
-}
+function saveProgress() { try{localStorage.setItem('tlm_free_v4',JSON.stringify([...completed]));}catch(e){} updateProgress(); }
+function updateProgress() { const p = Math.round((completed.size/TOTAL_TOPICS)*100); document.getElementById('progress-fill').style.width=p+'%'; document.getElementById('progress-text').textContent=p+'%'; document.getElementById('done-count').textContent=completed.size; }
+function toggleTopic(id,el) { if(completed.has(id)){completed.delete(id);el.classList.remove('completed');}else{completed.add(id);el.classList.add('completed');} saveProgress(); }
+function toggleChapter(c) { c.classList.toggle('open'); }
 
-function updateProgress() {
-    const pct = Math.round((completed.size / TOTAL_TOPICS) * 100);
-    document.getElementById('progress-fill').style.width = pct + '%';
-    document.getElementById('progress-text').textContent = pct + '%';
-    document.getElementById('done-count').textContent = completed.size;
-}
-
-function toggleTopic(id, rowEl) {
-    if (completed.has(id)) {
-        completed.delete(id);
-        rowEl.classList.remove('completed');
-    } else {
-        completed.add(id);
-        rowEl.classList.add('completed');
-    }
-    saveProgress();
-}
-
-function toggleChapter(cardEl) {
-    cardEl.classList.toggle('open');
-}
-
-function openVideos(chapterTitle) {
-    const videos = videoResources[chapterTitle] || [
-        {name: "Search on YouTube: " + chapterTitle, source: "YouTube", url: "https://www.youtube.com/results?search_query=" + encodeURIComponent("Grade 11 Basic Mathematics " + chapterTitle)}
-    ];
-    document.getElementById('modal-title').textContent = chapterTitle + " — Video Resources";
-    document.getElementById('modal-list').innerHTML = videos.map(v => `
-        <a class="resource-item" href="${v.url}" target="_blank" rel="noopener">
-            <svg class="resource-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            <div class="resource-info"><div class="resource-name">${v.name}</div><div class="resource-source">${v.source}</div></div>
-        </a>
-    `).join('');
+function openVideos(t) {
+    const v = freeVideos[t] || [{name:"Search Free Videos: "+t,source:"YouTube (Free)",url:"https://www.youtube.com/results?search_query="+encodeURIComponent("Grade 11 Basic Mathematics "+t+" free")}];
+    document.getElementById('modal-title').textContent = t + " - Free Video Resources";
+    let h = '<div class="resource-section"><div class="resource-section-title"><svg class="resource-icon video" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Free Videos</div><div class="resource-list">';
+    v.forEach(x=>{h+=`<a class="resource-item" href="${x.url}" target="_blank"><svg class="resource-icon video" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><div class="resource-info"><div class="resource-name">${x.name}</div><div class="resource-source">${x.source}</div></div><span class="resource-free-tag">FREE</span></a>`;});
+    h += '</div></div>';
+    document.getElementById('modal-content').innerHTML = h;
     document.getElementById('resource-modal').classList.add('show');
 }
 
-function openPDFs(chapterTitle) {
-    const pdfs = pdfResources[chapterTitle] || [
-        {name: "CDC Curriculum Document 2078", url: "https://www.scribd.com/document/725464020/RS10061-Grade-11-and-12-Com-Math-curriculum-Mat-007-and-Mat-008-2078"}
-    ];
-    document.getElementById('modal-title').textContent = chapterTitle + " — PDF Resources";
-    document.getElementById('modal-list').innerHTML = pdfs.map(p => `
-        <a class="resource-item" href="${p.url}" target="_blank" rel="noopener">
-            <svg class="resource-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
-            <div class="resource-info"><div class="resource-name">${p.name}</div><div class="resource-source">PDF Document</div></div>
-        </a>
-    `).join('');
+function openPDFs(t) {
+    const p = freePdfs[t] || [{name:"CDC Curriculum Document 2078 (Government)",url:"https://www.scribd.com/document/725464020/RS10061-Grade-11-and-12-Com-Math-curriculum-Mat-007-and-Mat-008-2078"}];
+    document.getElementById('modal-title').textContent = t + " - Free PDF Resources";
+    let h = '<div class="resource-section"><div class="resource-section-title"><svg class="resource-icon pdf" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>Free PDFs</div><div class="resource-list">';
+    p.forEach(x=>{h+=`<a class="resource-item" href="${x.url}" target="_blank"><svg class="resource-icon pdf" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg><div class="resource-info"><div class="resource-name">${x.name}</div><div class="resource-source">Free Educational Resource</div></div><span class="resource-free-tag">FREE</span></a>`;});
+    h += '</div></div>';
+    document.getElementById('modal-content').innerHTML = h;
     document.getElementById('resource-modal').classList.add('show');
 }
 
-function closeModal() {
-    document.getElementById('resource-modal').classList.remove('show');
-}
-
-function renderTabs() {
-    const tabs = document.getElementById('unit-tabs');
-    tabs.innerHTML = courseData.map(u => `
-        <button class="tab ${u.unit === activeUnit ? 'active' : ''}" onclick="switchUnit(${u.unit})">
-            Unit ${u.unit}
-        </button>
-    `).join('');
-}
-
-function switchUnit(n) {
-    activeUnit = n;
-    renderTabs();
-    renderContent();
-    window.scrollTo({ top: 400, behavior: 'smooth' });
-}
-
+function closeModal() { document.getElementById('resource-modal').classList.remove('show'); }
+function renderTabs() { document.getElementById('unit-tabs').innerHTML = courseData.map(u=>`<button class="tab ${u.unit===activeUnit?'active':''}" onclick="switchUnit(${u.unit})">Unit ${u.unit}</button>`).join(''); }
+function switchUnit(n) { activeUnit=n; renderTabs(); renderContent(); window.scrollTo({top:400,behavior:'smooth'}); }
 function renderContent() {
-    const container = document.getElementById('unit-content');
-    const unit = courseData.find(u => u.unit === activeUnit);
-
-    container.innerHTML = `
-        <div class="unit-content active">
-            <div class="unit-header">
-                <div class="unit-number">${unit.unit}</div>
-                <div class="unit-info">
-                    <h2>${unit.title}</h2>
-                    <p>${unit.desc}</p>
-                </div>
-            </div>
-            ${unit.chapters.map(ch => `
-                <div class="chapter-card" id="ch-${unit.unit}-${ch.ch}">
-                    <div class="chapter-header" onclick="toggleChapter(this.parentElement)">
-                        <div class="chapter-num">${ch.ch}</div>
-                        <div class="chapter-title-group">
-                            <div class="chapter-title">${ch.title}</div>
-                            <div class="chapter-page">Textbook page ${ch.page}</div>
-                        </div>
-                        <svg class="chapter-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-                    </div>
-                    <div class="chapter-body">
-                        <div class="chapter-actions">
-                            <button class="btn btn-primary" onclick="event.stopPropagation();openVideos('${ch.title.replace(/'/g, "\'")}')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                                Watch Videos
-                            </button>
-                            <button class="btn" onclick="event.stopPropagation();openPDFs('${ch.title.replace(/'/g, "\'")}')">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
-                                PDF Notes
-                            </button>
-                        </div>
-                        <div class="topics-list">
-                            ${ch.topics.map((t, i) => {
-                                const tid = `u${unit.unit}-c${ch.ch}-t${i}`;
-                                const isDone = completed.has(tid);
-                                return `
-                                    <div class="topic-item ${isDone ? 'completed' : ''}" id="row-${tid}">
-                                        <input type="checkbox" class="topic-check" ${isDone ? 'checked' : ''} 
-                                            onchange="toggleTopic('${tid}', document.getElementById('row-${tid}'))">
-                                        <div class="topic-dot"></div>
-                                        <div class="topic-text">${t}</div>
-                                    </div>
-                                `;
-                            }).join('')}
-                        </div>
-                    </div>
-                </div>
-            `).join('')}
-        </div>
-    `;
+    const u = courseData.find(x=>x.unit===activeUnit);
+    document.getElementById('unit-content').innerHTML = `<div class="unit-content active"><div class="unit-header"><div class="unit-number">${u.unit}</div><div class="unit-info"><h2>${u.title}</h2><p>${u.desc}</p></div></div>${u.chapters.map(c=>`<div class="chapter-card" id="ch-${u.unit}-${c.ch}"><div class="chapter-header" onclick="toggleChapter(this.parentElement)"><div class="chapter-num">${c.ch}</div><div class="chapter-title-group"><div class="chapter-title">${c.title}</div><div class="chapter-page">Textbook page ${c.page}</div></div><svg class="chapter-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div><div class="chapter-body"><div class="chapter-actions"><button class="btn btn-video" onclick="event.stopPropagation();openVideos('${c.title.replace(/'/g,"\'")}')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Free Videos</button><button class="btn btn-pdf" onclick="event.stopPropagation();openPDFs('${c.title.replace(/'/g,"\'")}')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>Free PDFs</button></div><div class="topics-list">${c.topics.map((t,i)=>{const tid=`u${u.unit}-c${c.ch}-t${i}`;const done=completed.has(tid);return`<div class="topic-item ${done?'completed':''}" id="row-${tid}"><input type="checkbox" class="topic-check" ${done?'checked':''} onchange="toggleTopic('${tid}',document.getElementById('row-${tid}'))"><div class="topic-dot"></div><div class="topic-text">${t}</div></div>`;}).join('')}</div></div></div>`).join('')}</div>`;
 }
-
-// Initialize
-renderTabs();
-renderContent();
-updateProgress();
-
-// Keyboard shortcuts
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
-});
+renderTabs(); renderContent(); updateProgress();
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 </script>
-
 </body>
 </html>
