@@ -3,651 +3,917 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ISCDTM–2026 | SMART Training Guide</title>
+<title>ISCDTM–2026 | Integrated student capacity development training model (IScdtm-2026)</title>
 <style>
+  
   :root{
-    --navy:#152A40;
-    --navy-soft:#1F3B57;
-    --teal:#1B7A6E;
-    --teal-soft:#E4F1EE;
-    --gold:#C9962C;
-    --gold-soft:#FBF3E2;
-    --paper:#FBFAF7;
-    --ink:#26313A;
-    --ink-soft:#5B6773;
-    --line:#E1E4E2;
-    --terrace-1:#0F2436;
-    --terrace-2:#164033;
-    --terrace-3:#1B7A6E;
-    --terrace-4:#4E9B7E;
-    --terrace-5:#C9962C;
+    --navy:#152A40; --teal:#1B7A6E; --teal-soft:#E4F1EE;
+    --gold:#C9962C; --gold-soft:#FBF3E2; --paper:#FBFAF7;
+    --ink:#26313A; --ink-soft:#5B6773; --line:#E1E4E2;
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
-  body{
-    margin:0;
-    font-family:'Iowan Old Style','Georgia',serif;
-    background:var(--paper);
-    color:var(--ink);
-    -webkit-font-smoothing:antialiased;
-  }
-  .body-sans{font-family:'Avenir Next','Segoe UI',Helvetica,Arial,sans-serif;}
+  body{margin:0; font-family:'Iowan Old Style','Georgia',serif; background:var(--paper); color:var(--ink); -webkit-font-smoothing:antialiased;}
+  .sans{font-family:'Avenir Next','Segoe UI',Helvetica,Arial,sans-serif;}
+  .wrap{max-width:1080px; margin:0 auto;}
 
-  /* ---------- Layout shell ---------- */
-  .layout{
-    display:grid;
-    grid-template-columns:260px 1fr;
-    max-width:1240px;
-    margin:0 auto;
-  }
-  @media (max-width:900px){
-    .layout{grid-template-columns:1fr;}
-    nav.toc{display:none;}
-  }
+  header.hero{background:var(--navy); color:#fff; padding:56px 48px 44px 48px;}
+  @media (max-width:600px){header.hero{padding:40px 22px 34px 22px;}}
+  .eyebrow{font-family:'Avenir Next','Segoe UI',sans-serif; font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); font-weight:700; margin-bottom:16px;}
+  header.hero h1{font-size:34px; line-height:1.2; margin:0 0 8px 0; font-weight:500; max-width:760px;}
+  header.hero .sub{font-family:'Avenir Next','Segoe UI',sans-serif; font-size:15px; color:#C9D6D2; max-width:660px; line-height:1.6; margin-bottom:20px;}
+  .howto{font-family:'Avenir Next','Segoe UI',sans-serif; font-size:12.5px; color:var(--gold); background:rgba(255,255,255,.08); display:inline-block; padding:8px 14px; border-radius:20px;}
 
-  /* ---------- Sidebar TOC ---------- */
-  nav.toc{
-    position:sticky;
-    top:0;
-    align-self:start;
-    height:100vh;
-    padding:38px 22px 30px 30px;
-    border-right:1px solid var(--line);
-    overflow-y:auto;
+  nav.jump{
+    display:flex; flex-wrap:wrap; gap:8px; padding:22px 48px; background:#fff; border-bottom:1px solid var(--line);
+    position:sticky; top:0; z-index:10; font-family:'Avenir Next','Segoe UI',sans-serif;
   }
-  nav.toc .brand{
-    font-family:'Avenir Next','Segoe UI',sans-serif;
-    font-size:11px;
-    letter-spacing:2.5px;
-    text-transform:uppercase;
-    color:var(--gold);
-    font-weight:700;
-    margin-bottom:4px;
+  @media (max-width:600px){nav.jump{padding:16px 20px;}}
+  nav.jump a{
+    font-size:12.5px; font-weight:600; color:var(--teal); background:var(--teal-soft);
+    padding:7px 13px; border-radius:16px; text-decoration:none;
   }
-  nav.toc .brand-sub{
-    font-family:'Iowan Old Style',Georgia,serif;
-    font-size:19px;
-    color:var(--paper);
-    background:var(--navy);
-    display:none;
-  }
-  nav.toc h1{
-    font-size:20px;
-    line-height:1.3;
-    margin:0 0 26px 0;
-    color:var(--navy);
-  }
-  nav.toc ol{
-    list-style:none;
-    margin:0; padding:0;
-    font-family:'Avenir Next','Segoe UI',sans-serif;
-  }
-  nav.toc li{margin-bottom:2px;}
-  nav.toc a{
-    display:flex;
-    gap:10px;
-    align-items:baseline;
-    text-decoration:none;
-    color:var(--ink-soft);
-    font-size:13.5px;
-    padding:7px 8px;
-    border-radius:6px;
-    transition:background .15s, color .15s;
-  }
-  nav.toc a:hover{background:var(--teal-soft); color:var(--teal);}
-  nav.toc a .num{
-    color:var(--gold);
-    font-weight:700;
-    font-size:11px;
-    width:16px;
-  }
-  nav.toc .toc-foot{
-    margin-top:30px;
-    padding-top:18px;
-    border-top:1px solid var(--line);
-    font-family:'Avenir Next','Segoe UI',sans-serif;
-    font-size:11.5px;
-    color:var(--ink-soft);
-    line-height:1.6;
-  }
+  nav.jump a:hover{background:var(--teal); color:#fff;}
 
-  /* ---------- Hero ---------- */
-  header.hero{
-    position:relative;
-    background:var(--navy);
-    color:#fff;
-    padding:0;
-    overflow:hidden;
+  main{padding:44px 48px 30px 48px;}
+  @media (max-width:600px){main{padding:30px 20px;}}
+
+  .day-block{margin-bottom:60px; scroll-margin-top:76px;}
+  .day-head{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; border-bottom:2px solid var(--gold); padding-bottom:14px; margin-bottom:20px;}
+  .day-head .day-tag{
+    font-family:'Avenir Next','Segoe UI',sans-serif; font-size:12px; font-weight:700; letter-spacing:2px;
+    text-transform:uppercase; color:#fff; background:var(--teal); padding:5px 12px; border-radius:20px;
   }
-  .terraces{
-    position:absolute;
-    inset:0;
-    z-index:0;
+  .day-head h2{font-size:24px; color:var(--navy); margin:0; font-weight:500;}
+  .day-sub{font-family:'Avenir Next','Segoe UI',sans-serif; font-size:13px; color:var(--ink-soft); margin:-10px 0 14px 0;}
+
+  .day-links{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:22px; font-family:'Avenir Next','Segoe UI',sans-serif;}
+  .day-links a{
+    display:flex; align-items:center; gap:7px; text-decoration:none;
+    font-size:12.5px; font-weight:600; color:var(--teal); background:var(--teal-soft);
+    padding:8px 14px; border-radius:20px; border:1px solid transparent; transition:background .15s, color .15s;
   }
-  .terrace{
-    position:absolute;
-    left:-10%;
-    width:120%;
-    height:60px;
+  .day-links a:hover{background:var(--teal); color:#fff;}
+  .day-links a .topic-label{color:var(--navy); font-weight:700; background:#fff; padding:2px 8px; border-radius:10px; margin-right:2px;}
+  .day-links a:hover .topic-label{color:var(--navy); background:#fff;}
+  .day-links a .arrow-out{font-size:11px;}
+
+  details.session{
+    border:1px solid var(--line); border-radius:10px; margin-bottom:12px; background:#fff; overflow:hidden;
   }
-  header.hero .hero-inner{
-    position:relative;
-    z-index:2;
-    padding:70px 56px 56px 56px;
-  }
-  @media (max-width:600px){
-    header.hero .hero-inner{padding:46px 24px 40px 24px;}
-  }
-  .eyebrow{
-    font-family:'Avenir Next','Segoe UI',sans-serif;
-    font-size:12px;
-    letter-spacing:3px;
-    text-transform:uppercase;
-    color:var(--gold);
-    font-weight:700;
-    margin-bottom:18px;
-  }
-  header.hero h2{
-    font-size:44px;
-    line-height:1.14;
-    margin:0 0 6px 0;
-    font-weight:500;
-    max-width:640px;
-  }
-  header.hero .model-code{
-    font-size:22px;
-    color:var(--gold);
-    font-style:italic;
-    margin:6px 0 22px 0;
-  }
-  header.hero .tagline{
-    font-family:'Avenir Next','Segoe UI',sans-serif;
-    font-size:15.5px;
-    color:#C9D6D2;
-    max-width:560px;
-    line-height:1.6;
-    margin-bottom:34px;
-  }
-  .snapshot{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:1px;
-    background:rgba(255,255,255,.14);
-    border:1px solid rgba(255,255,255,.14);
-    border-radius:10px;
-    overflow:hidden;
-    max-width:760px;
-  }
-  @media (max-width:700px){
-    .snapshot{grid-template-columns:repeat(2,1fr);}
-  }
-  .snapshot .cell{
-    background:rgba(255,255,255,.05);
-    padding:16px 18px;
+  details.session[open]{border-color:var(--teal);}
+  details.session summary{
+    list-style:none; cursor:pointer; padding:16px 20px; display:flex; align-items:center; gap:14px;
     font-family:'Avenir Next','Segoe UI',sans-serif;
   }
-  .snapshot .cell .label{
-    font-size:10.5px;
-    letter-spacing:1.5px;
-    text-transform:uppercase;
-    color:var(--gold);
-    margin-bottom:6px;
+  details.session summary::-webkit-details-marker{display:none;}
+  details.session summary .arrow{
+    color:var(--gold); font-size:12px; transition:transform .15s; flex:0 0 12px;
   }
-  .snapshot .cell .value{
-    font-size:14.5px;
-    color:#fff;
-    line-height:1.4;
+  details.session[open] summary .arrow{transform:rotate(90deg);}
+  details.session summary .time{
+    font-weight:700; color:var(--navy); font-size:13px; white-space:nowrap; width:105px; flex:0 0 105px;
+  }
+  details.session summary .title{font-weight:600; color:var(--navy); font-size:15px; flex:1;}
+  details.session summary .module-flag{
+    font-size:10px; font-weight:700; color:var(--teal); background:var(--teal-soft); padding:3px 9px; border-radius:10px; white-space:nowrap;
+  }
+  .session-body{padding:4px 20px 22px 20px; font-family:'Avenir Next','Segoe UI',sans-serif;}
+  .session-body .objective{
+    font-size:14px; color:#0F4A42; background:var(--teal-soft); padding:12px 16px; border-radius:8px;
+    margin-bottom:16px; border-left:3px solid var(--teal);
+  }
+  .session-body h4{
+    font-size:11.5px; text-transform:uppercase; letter-spacing:1px; color:var(--gold); margin:16px 0 8px 0; font-weight:700;
+  }
+  .session-body ul, .session-body ol{margin:0; padding-left:20px;}
+  .session-body li{font-size:13.8px; line-height:1.65; color:var(--ink); margin-bottom:5px;}
+  .materials{
+    font-size:12.5px; color:var(--ink-soft); background:var(--gold-soft); padding:10px 14px; border-radius:8px; margin-top:14px;
+  }
+  .materials strong{color:#8a6414;}
+  .tip{
+    font-size:12.5px; color:var(--ink-soft); font-style:italic; margin-top:10px;
+  }
+  .tip strong{color:var(--teal); font-style:normal;}
+  .break-row{
+    font-family:'Avenir Next','Segoe UI',sans-serif; font-size:13px; font-style:italic; color:#8a6414;
+    background:var(--gold-soft); padding:10px 20px; border-radius:8px; margin-bottom:12px;
   }
 
-  /* ---------- Main content ---------- */
-  main{padding:56px 56px 40px 56px;}
-  @media (max-width:600px){main{padding:36px 22px;}}
-
-  section{
-    padding-top:14px;
-    margin-bottom:54px;
-    scroll-margin-top:20px;
-  }
-  .sec-eyebrow{
-    font-family:'Avenir Next','Segoe UI',sans-serif;
-    font-size:11.5px;
-    letter-spacing:2px;
-    text-transform:uppercase;
-    color:var(--teal);
-    font-weight:700;
-    margin-bottom:8px;
-  }
-  h2.sec-title{
-    font-size:29px;
-    color:var(--navy);
-    margin:0 0 18px 0;
-    font-weight:500;
-    border-bottom:2px solid var(--gold);
-    padding-bottom:14px;
-  }
-  p{
-    font-size:16px;
-    line-height:1.75;
-    color:var(--ink);
-    max-width:760px;
-  }
-  .lead{
-    font-size:17px;
-    color:var(--ink-soft);
-    max-width:720px;
-  }
-
-  /* pill list for target group / duration */
-  .pill-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:16px;}
-  .pill{
-    font-family:'Avenir Next','Segoe UI',sans-serif;
-    font-size:13.5px;
-    background:var(--teal-soft);
-    color:var(--teal);
-    padding:9px 16px;
-    border-radius:30px;
-    font-weight:600;
-  }
-  .pill.gold{background:var(--gold-soft); color:#8a6414;}
-
-  /* ---------- Module cards ---------- */
-  .modules{
-    display:grid;
-    gap:14px;
-    margin-top:22px;
-  }
-  .module-card{
-    display:grid;
-    grid-template-columns:64px 1fr 1fr;
-    gap:0;
-    border:1px solid var(--line);
-    border-radius:10px;
-    overflow:hidden;
-    background:#fff;
-  }
-  @media (max-width:760px){
-    .module-card{grid-template-columns:1fr;}
-    .module-card .m-num{display:none;}
-  }
-  .module-card .m-num{
-    background:var(--navy);
-    color:var(--gold);
-    font-family:'Avenir Next','Segoe UI',sans-serif;
-    font-weight:700;
-    font-size:20px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .module-card .m-body{
-    padding:18px 22px;
-    border-right:1px solid var(--line);
-  }
-  @media (max-width:760px){.module-card .m-body{border-right:none; border-bottom:1px solid var(--line);}}
-  .module-card .m-body h3{
-    margin:0 0 8px 0;
-    font-size:17px;
-    color:var(--navy);
-    font-weight:600;
-  }
-  .module-card .m-body .topics{
-    font-family:'Avenir Next','Segoe UI',sans-serif;
-    font-size:13.5px;
-    color:var(--ink-soft);
-    line-height:1.6;
-  }
-  .module-card .m-outcome{
-    padding:18px 22px;
-    background:var(--teal-soft);
-    display:flex;
-    align-items:center;
-    font-family:'Avenir Next','Segoe UI',sans-serif;
-    font-size:13.5px;
-    color:#0F4A42;
-    line-height:1.55;
-  }
-  .module-card .m-outcome::before{
-    content:"\2192";
-    color:var(--teal);
-    font-weight:700;
-    margin-right:8px;
-  }
-
-  /* ---------- Methodology tag cloud ---------- */
-  .tag-grid{
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:10px;
-    margin-top:20px;
-    font-family:'Avenir Next','Segoe UI',sans-serif;
-  }
-  @media (max-width:760px){.tag-grid{grid-template-columns:repeat(2,1fr);}}
-  .tag-grid .tag{
-    border:1px solid var(--line);
-    border-radius:8px;
-    padding:14px 12px;
-    font-size:13.5px;
-    color:var(--navy);
-    font-weight:600;
-    text-align:center;
-    background:linear-gradient(180deg,#fff, #FAFBFA);
-  }
-
-  /* ---------- Assessment table ---------- */
-  .assess-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:22px;
-    font-family:'Avenir Next','Segoe UI',sans-serif;
-  }
-  .assess-table tr{border-bottom:1px solid var(--line);}
-  .assess-table tr:last-child{border-bottom:none;}
-  .assess-table td{
-    padding:16px 14px;
-    font-size:14px;
-    vertical-align:top;
-  }
-  .assess-table td.term{
-    width:230px;
-    font-weight:700;
-    color:var(--navy);
-  }
-  .assess-table td.desc{color:var(--ink-soft); line-height:1.6;}
-  .assess-table tr:nth-child(odd){background:var(--gold-soft);}
-
-  /* ---------- Outcomes checklist ---------- */
-  .outcomes{
-    list-style:none;
-    margin:22px 0 0 0;
-    padding:0;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px 28px;
-    font-family:'Avenir Next','Segoe UI',sans-serif;
-  }
-  @media (max-width:700px){.outcomes{grid-template-columns:1fr;}}
-  .outcomes li{
-    display:flex;
-    gap:12px;
-    align-items:flex-start;
-    font-size:14.5px;
-    color:var(--ink);
-    line-height:1.5;
-  }
-  .outcomes .check{
-    flex:0 0 22px;
-    height:22px;
-    border-radius:50%;
-    background:var(--teal);
-    color:#fff;
-    font-size:12px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:700;
-  }
-
-  /* ---------- Partners ---------- */
-  .partner-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:10px 22px;
-    margin-top:20px;
-    font-family:'Avenir Next','Segoe UI',sans-serif;
-  }
-  @media (max-width:600px){.partner-grid{grid-template-columns:1fr;}}
-  .partner-grid .partner{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:12px 4px;
-    border-bottom:1px dashed var(--line);
-    font-size:14.5px;
-    color:var(--navy);
-    font-weight:600;
-  }
-  .partner-grid .dot{
-    width:8px; height:8px; border-radius:50%;
-    background:var(--gold); flex:0 0 8px;
-  }
-
-  /* ---------- Closing ---------- */
   .closing-quote{
-    border-left:4px solid var(--teal);
-    background:var(--teal-soft);
-    padding:22px 26px;
-    border-radius:0 8px 8px 0;
-    font-style:italic;
-    color:#0F4A42;
-    font-size:16.5px;
-    line-height:1.7;
-    max-width:760px;
-    margin-top:8px;
+    border-left:4px solid var(--teal); background:var(--teal-soft); padding:20px 24px; border-radius:0 8px 8px 0;
+    font-style:italic; color:#0F4A42; font-size:15px; line-height:1.7; margin-top:20px;
   }
-
-  footer{
-    background:var(--navy);
-    color:#C9D6D2;
-    padding:40px 56px;
-    font-family:'Avenir Next','Segoe UI',sans-serif;
-  }
-  @media (max-width:600px){footer{padding:30px 24px;}}
-  footer .credit-name{color:#fff; font-weight:700; font-size:16px;}
-  footer .credit-role{font-size:13px; margin-top:4px;}
-  footer .credit-org{color:var(--gold); font-weight:700; font-size:13px; margin-top:2px;}
-  footer .foot-divider{
-    height:1px; background:rgba(255,255,255,.15); margin:22px 0;
-  }
-  footer .foot-note{font-size:12px; color:#93A5A0;}
+  footer{background:var(--navy); color:#C9D6D2; padding:36px 48px; font-family:'Avenir Next','Segoe UI',sans-serif;}
+  @media (max-width:600px){footer{padding:28px 20px;}}
+  footer .credit-name{color:#fff; font-weight:700; font-size:15.5px;}
+  footer .credit-role{font-size:12.5px; margin-top:4px;}
+  footer .credit-org{color:var(--gold); font-weight:700; font-size:12.5px; margin-top:2px;}
+  footer .foot-divider{height:1px; background:rgba(255,255,255,.15); margin:20px 0;}
+  footer .foot-note{font-size:11.5px; color:#93A5A0;}
 
   @media print{
-    nav.toc{display:none;}
-    .layout{grid-template-columns:1fr;}
-    header.hero{background:var(--navy) !important; -webkit-print-color-adjust:exact; print-color-adjust:exact;}
-    section{page-break-inside:avoid;}
+    details.session{border:1px solid var(--line) !important;}
+    details.session summary .arrow{display:none;}
+    nav.jump{display:none;}
   }
 </style>
 </head>
 <body>
+<div class="wrap">
 
-<div class="layout">
+  <header class="hero">
+    <div class="eyebrow">ISCDTM &ndash; 2026 &middot; Facilitator Companion</div>
+    <h1>Integrated student capacity development training model (IScdtm-2026)</h1>
+    <div class="sub">Every session across all 7 training days, expanded with learning objectives, key content points, step-by-step activities, materials, and facilitator tips &mdash; ready to teach from directly.</div>
+    <span class="howto">Tap any session to expand its full content</span>
+  </header>
 
-  <nav class="toc">
-    <div class="brand">ISCDTM &ndash; 2026</div>
-    <h1>SMART Training Guide</h1>
-    <ol>
-      <li><a href="#about"><span class="num">00</span>About This Guide</a></li>
-      <li><a href="#target"><span class="num">01</span>Target Group</a></li>
-      <li><a href="#duration"><span class="num">02</span>Duration</a></li>
-      <li><a href="#modules"><span class="num">03</span>Training Modules</a></li>
-      <li><a href="#methodology"><span class="num">04</span>Methodology</a></li>
-      <li><a href="#assessment"><span class="num">05</span>Assessment</a></li>
-      <li><a href="#outcomes"><span class="num">06</span>Expected Outcomes</a></li>
-      <li><a href="#partners"><span class="num">07</span>Suggested Partners</a></li>
-      <li><a href="#closing"><span class="num">08</span>Closing Note</a></li>
-    </ol>
-    <div class="toc-foot">
-      Developed by<br>
-      <strong style="color:var(--navy)">Mr. Bishnu Singh Rayamajhi</strong><br>
-      Founder, UCDL Academy
-    </div>
+  <nav class="jump">
+    <a href="#day1">Day 1</a>
+    <a href="#day2">Day 2</a>
+    <a href="#day3">Day 3</a>
+    <a href="#day4">Day 4</a>
+    <a href="#day5">Day 5</a>
+    <a href="#day6">Day 6</a>
+    <a href="#day7">Day 7</a>
   </nav>
 
-  <div>
-    <header class="hero">
-      <svg class="terraces" viewBox="0 0 1000 320" preserveAspectRatio="none" style="position:absolute;bottom:0;left:0;width:100%;height:180px;">
-        <polygon points="0,320 0,230 1000,270 1000,320" fill="#0F2436"/>
-        <polygon points="0,320 0,255 1000,290 1000,320" fill="#164033" opacity="0.9"/>
-        <polygon points="0,320 0,280 1000,305 1000,320" fill="#1B7A6E" opacity="0.85"/>
-        <polygon points="0,320 0,300 1000,315 1000,320" fill="#4E9B7E" opacity="0.9"/>
-      </svg>
-      <div class="hero-inner">
-        <div class="eyebrow">Municipality-Wide Youth Capacity Building &middot; Nepal</div>
-        <h2>Integrated Student Capacity Development Training Model</h2>
-        <div class="model-code">( ISCDTM &ndash; 2026 )</div>
-        <div class="tagline">A SMART framework &mdash; Specific, Measurable, Achievable, Relevant, Time-bound &mdash; for building digitally fluent, civic-minded, future-ready students in Grade 6&ndash;12.</div>
-        <div class="snapshot">
-          <div class="cell">
-            <div class="label">Target Group</div>
-            <div class="value">Grade 6&ndash;12, community &amp; institutional schools</div>
-          </div>
-          <div class="cell">
-            <div class="label">Duration</div>
-            <div class="value">5&ndash;7 days (30&ndash;40 hrs)</div>
-          </div>
-          <div class="cell">
-            <div class="label">Modules</div>
-            <div class="value">10 integrated competencies</div>
-          </div>
-          <div class="cell">
-            <div class="label">Reach</div>
-            <div class="value">Municipality-wide implementation</div>
-          </div>
-        </div>
+  <main>
+
+    <!-- ================= DAY 1 ================= -->
+    <div class="day-block" id="day1">
+      <div class="day-head"><span class="day-tag">Day 1</span><h2>Foundations &amp; Digital-AI Literacy</h2></div>
+      <div class="day-sub">Module 1 &ndash; Digital &amp; AI Literacy &middot; 08:45&ndash;14:30</div>
+      <div class="day-links">
+        <a href="https://schoolofdata.oknp.org/" target="_blank" rel="noopener"><span class="topic-label">Digital, Data &amp; AI Literacy</span>School of Data Nepal &ndash; free digital/AI literacy courses <span class="arrow-out">&#8599;</span></a>
       </div>
-    </header>
 
-    <main>
+      <div class="break-row">08:45&ndash;09:15 &nbsp;Opening Ceremony &mdash; welcome remarks by municipal officials and school heads, lamp lighting, introduction of facilitators and program goals.</div>
 
-      <section id="about">
-        <div class="sec-eyebrow">Overview</div>
-        <h2 class="sec-title">About This Guide</h2>
-        <p class="lead">The Integrated Student Capacity Development Training Model (ISCDTM&ndash;2026) is a SMART training framework designed to build well-rounded, future-ready students across community and institutional schools. It brings digital literacy, life skills, civic responsibility, and community engagement into a single, structured municipality-wide program.</p>
-        <p>This guide equips municipal education offices, school leaders, and trainers with a ready-to-implement roadmap: target groups, duration, modules, methodology, assessment tools, expected outcomes, and partnership structures.</p>
-      </section>
-
-      <section id="target">
-        <div class="sec-eyebrow">01</div>
-        <h2 class="sec-title">Target Group</h2>
-        <div class="pill-row">
-          <div class="pill">Grade 6&ndash;12 students</div>
-          <div class="pill">Community schools</div>
-          <div class="pill">Institutional schools</div>
-          <div class="pill gold">Municipality-wide implementation</div>
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">09:15&ndash;09:45</span><span class="title">Ice-Breaking &amp; Team Formation</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students feel comfortable with peers and facilitators, and are grouped into fixed teams they'll keep for the whole training.</div>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Name-and-gesture circle: each student says their name with an action; the group repeats it back.</li>
+            <li>"Find someone who&hellip;" mixer using cards with traits (loves football, has 3 siblings, wants to be an engineer, etc.).</li>
+            <li>Count off into 5&ndash;6 fixed teams of 5&ndash;6 students; each team picks a name and a simple chant.</li>
+            <li>Teams sit together for the rest of the training and will co-own the Day 7 community project.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Trait cards, team-name cards or markers, name tags.</div>
+          <div class="tip"><strong>Facilitator tip:</strong> Keep teams gender-balanced and mix schools/communities so students build new networks.</div>
         </div>
-      </section>
+      </details>
 
-      <section id="duration">
-        <div class="sec-eyebrow">02</div>
-        <h2 class="sec-title">Duration</h2>
-        <div class="pill-row">
-          <div class="pill">5&ndash;7 days</div>
-          <div class="pill">30&ndash;40 training hours</div>
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">09:45&ndash;10:15</span><span class="title">Pre-Training Assessment</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Capture each student's starting knowledge and attitudes across all 10 modules to measure growth later.</div>
+          <h4>Content Areas Covered</h4>
+          <ul>
+            <li>Basic digital &amp; AI awareness</li>
+            <li>Confidence in public speaking and teamwork</li>
+            <li>Self-rated problem-solving and career clarity</li>
+            <li>Financial habits and environmental awareness</li>
+            <li>Health, disaster preparedness, and civic knowledge</li>
+          </ul>
+          <h4>Format</h4>
+          <ul>
+            <li>20&ndash;25 short multiple-choice and self-rating questions (paper or simple digital form).</li>
+            <li>Anonymous student ID codes used so pre/post scores can be matched without names.</li>
+          </ul>
+          <div class="materials"><strong>Materials:</strong> Printed or digital questionnaire, pencils, ID code slips.</div>
         </div>
-      </section>
+      </details>
 
-      <section id="modules">
-        <div class="sec-eyebrow">03</div>
-        <h2 class="sec-title">Training Modules</h2>
-        <p class="lead">Ten integrated modules combine cognitive, technical, civic, and life-skill competencies. Each pairs practical topics with a clearly measurable outcome.</p>
-        <div class="modules">
+      <div class="break-row">10:15&ndash;10:30 &nbsp;Tea Break</div>
 
-          <div class="module-card"><div class="m-num">1</div><div class="m-body"><h3>Digital &amp; AI Literacy</h3><div class="topics">Computer basics, internet safety, AI tools, responsible AI use</div></div><div class="m-outcome">Students use digital technology safely and effectively.</div></div>
-
-          <div class="module-card"><div class="m-num">2</div><div class="m-body"><h3>Communication &amp; Leadership</h3><div class="topics">Public speaking, teamwork, leadership, presentation skills</div></div><div class="m-outcome">Improved confidence and leadership qualities.</div></div>
-
-          <div class="module-card"><div class="m-num">3</div><div class="m-body"><h3>Critical Thinking &amp; Problem Solving</h3><div class="topics">Logical reasoning, project-based learning, innovation</div></div><div class="m-outcome">Better analytical and decision-making skills.</div></div>
-
-          <div class="module-card"><div class="m-num">4</div><div class="m-body"><h3>Career Guidance</h3><div class="topics">Career planning, entrepreneurship, vocational opportunities</div></div><div class="m-outcome">Students prepare realistic career pathways.</div></div>
-
-          <div class="module-card"><div class="m-num">5</div><div class="m-body"><h3>Financial Literacy</h3><div class="topics">Budgeting, banking, saving, digital payments</div></div><div class="m-outcome">Responsible financial habits.</div></div>
-
-          <div class="module-card"><div class="m-num">6</div><div class="m-body"><h3>Environmental &amp; Climate Education</h3><div class="topics">Waste management, biodiversity, climate adaptation</div></div><div class="m-outcome">Environmentally responsible citizens.</div></div>
-
-          <div class="module-card"><div class="m-num">7</div><div class="m-body"><h3>Health &amp; Well-being</h3><div class="topics">Mental health, nutrition, reproductive health, stress management</div></div><div class="m-outcome">Improved physical and mental well-being.</div></div>
-
-          <div class="module-card"><div class="m-num">8</div><div class="m-body"><h3>Disaster Risk Reduction</h3><div class="topics">Earthquake, fire, flood preparedness, first aid</div></div><div class="m-outcome">Increased disaster preparedness.</div></div>
-
-          <div class="module-card"><div class="m-num">9</div><div class="m-body"><h3>Civic Education</h3><div class="topics">Constitution, local government, citizenship, SDGs</div></div><div class="m-outcome">Active and responsible citizenship.</div></div>
-
-          <div class="module-card"><div class="m-num">10</div><div class="m-body"><h3>Community Project</h3><div class="topics">Group projects addressing local issues</div></div><div class="m-outcome">Practical application of learning.</div></div>
-
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">10:30&ndash;11:30</span><span class="title">Computer Basics &amp; Safe Internet Use</span><span class="module-flag">Module 1</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students operate a computer/smartphone confidently and browse the internet safely.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>Parts of a computer/smartphone: input, output, storage, and basic troubleshooting.</li>
+            <li>File and folder management: creating, renaming, saving, and organizing files.</li>
+            <li>Using a web browser: search engines, bookmarks, and evaluating website credibility.</li>
+            <li>Creating strong passwords and enabling two-factor authentication.</li>
+            <li>Recognizing phishing links, fake pop-ups, and unsafe downloads.</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Guided walkthrough on shared/lab devices covering file management basics.</li>
+            <li>Pair exercise: students create a folder structure for "My Schoolwork."</li>
+            <li>Spot-the-phishing-email challenge using printed sample screenshots.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Computers/smartphones/tablets, sample phishing screenshots, projector.</div>
+          <div class="tip"><strong>Facilitator tip:</strong> Where device access is limited, run this as a rotating-station activity in small groups.</div>
         </div>
-      </section>
+      </details>
 
-      <section id="methodology">
-        <div class="sec-eyebrow">04</div>
-        <h2 class="sec-title">Training Methodology</h2>
-        <p class="lead">A blended, learner-centered methodology keeps sessions practical, participatory, and age-appropriate:</p>
-        <div class="tag-grid">
-          <div class="tag">Interactive Lectures</div>
-          <div class="tag">Group Discussions</div>
-          <div class="tag">Practical Demonstrations</div>
-          <div class="tag">Role Plays</div>
-          <div class="tag">Educational Games</div>
-          <div class="tag">Community Surveys</div>
-          <div class="tag">Project-Based Learning</div>
-          <div class="tag">Digital Learning Activities</div>
-          <div class="tag">Field Visits</div>
-          <div class="tag">Peer Teaching</div>
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">11:30&ndash;12:30</span><span class="title">Digital Citizenship &amp; Online Safety</span><span class="module-flag">Module 1</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students understand their digital rights and responsibilities and can respond appropriately to online harm.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>What a "digital footprint" is and why it matters for future opportunities.</li>
+            <li>Recognizing and responding to cyberbullying, both as a target and a bystander.</li>
+            <li>Privacy settings on common social apps; what should never be shared publicly.</li>
+            <li>How and where to report online harm (school counselor, cyber bureau, platform reporting tools).</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Split into small groups; assign each a scenario card (e.g., a friend is being bullied online, a stranger asks for a photo).</li>
+            <li>Groups role-play the scenario twice: once showing a poor response, once a safe response.</li>
+            <li>Whole-group debrief: list the reporting channels available locally.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Scenario cards, flip chart for reporting-channel list.</div>
         </div>
-      </section>
+      </details>
 
-      <section id="assessment">
-        <div class="sec-eyebrow">05</div>
-        <h2 class="sec-title">Assessment Strategy</h2>
-        <p class="lead">Assessment is continuous and multi-format, ensuring learning is measured &mdash; the &ldquo;M&rdquo; in SMART &mdash; at every stage of the training.</p>
-        <table class="assess-table">
-          <tr><td class="term">Pre-training assessment</td><td class="desc">Establishes each student's baseline knowledge and skill level before training begins.</td></tr>
-          <tr><td class="term">Daily reflection</td><td class="desc">Short end-of-day feedback capturing learning, challenges, and confidence growth.</td></tr>
-          <tr><td class="term">Group presentations</td><td class="desc">Teams present findings or solutions to reinforce communication and teamwork skills.</td></tr>
-          <tr><td class="term">Practical assignments</td><td class="desc">Hands-on tasks that apply each module's concepts to real situations.</td></tr>
-          <tr><td class="term">Community project evaluation</td><td class="desc">Assessment of the final group project's relevance, execution, and community impact.</td></tr>
-          <tr><td class="term">Post-training assessment</td><td class="desc">Measures knowledge and skill gained against the pre-training baseline.</td></tr>
-          <tr><td class="term">Certificate of completion</td><td class="desc">Formal recognition awarded to students who meet attendance and performance criteria.</td></tr>
-        </table>
-      </section>
+      <div class="break-row">12:30&ndash;13:00 &nbsp;Lunch Break</div>
 
-      <section id="outcomes">
-        <div class="sec-eyebrow">06</div>
-        <h2 class="sec-title">Expected Outcomes</h2>
-        <p class="lead">After completing the training, students will:</p>
-        <ul class="outcomes">
-          <li><span class="check">&#10003;</span>Develop digital and AI literacy.</li>
-          <li><span class="check">&#10003;</span>Strengthen communication and leadership skills.</li>
-          <li><span class="check">&#10003;</span>Improve critical thinking and creativity.</li>
-          <li><span class="check">&#10003;</span>Understand career and entrepreneurship opportunities.</li>
-          <li><span class="check">&#10003;</span>Practice financial management.</li>
-          <li><span class="check">&#10003;</span>Promote environmental conservation.</li>
-          <li><span class="check">&#10003;</span>Maintain healthy lifestyles.</li>
-          <li><span class="check">&#10003;</span>Be prepared for disasters and emergencies.</li>
-          <li><span class="check">&#10003;</span>Participate actively in community development.</li>
-        </ul>
-      </section>
-
-      <section id="partners">
-        <div class="sec-eyebrow">07</div>
-        <h2 class="sec-title">Suggested Partners</h2>
-        <p class="lead">Effective delivery depends on coordinated local partnerships:</p>
-        <div class="partner-grid">
-          <div class="partner"><span class="dot"></span>Municipal Education Section</div>
-          <div class="partner"><span class="dot"></span>Local schools</div>
-          <div class="partner"><span class="dot"></span>Youth clubs</div>
-          <div class="partner"><span class="dot"></span>NGOs / INGOs</div>
-          <div class="partner"><span class="dot"></span>Health institutions</div>
-          <div class="partner"><span class="dot"></span>Local entrepreneurs</div>
-          <div class="partner"><span class="dot"></span>Police and disaster management offices</div>
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">13:00&ndash;14:00</span><span class="title">AI Tools &amp; Responsible AI Use</span><span class="module-flag">Module 1</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students understand what AI tools can and cannot do, and how to use them honestly in schoolwork.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>What AI is in simple terms: pattern-based prediction, not "thinking" like a human.</li>
+            <li>Common AI tools students may encounter: chatbots, translation apps, image generators, homework helpers.</li>
+            <li>Benefits: faster research, language help, idea generation.</li>
+            <li>Limits: AI can be wrong, biased, or outdated; it should never replace a student's own understanding.</li>
+            <li>Academic honesty: when AI help is acceptable versus when it counts as cheating; how to acknowledge AI assistance.</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Live demo: facilitator asks an AI chatbot a question in front of the class and shows a mistake it makes.</li>
+            <li>Class discussion: how would you check if an AI's answer is correct?</li>
+            <li>Small groups draft 3 personal "rules" for responsible AI use in school; share out.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Projector/internet access for live demo, chart paper for group rules.</div>
+          <div class="tip"><strong>Facilitator tip:</strong> If internet access is unavailable, use printed screenshots of a real AI conversation, including an error, to run the same discussion.</div>
         </div>
-      </section>
+      </details>
 
-      <section id="closing">
-        <div class="sec-eyebrow">08</div>
-        <h2 class="sec-title">Closing Note</h2>
-        <div class="closing-quote">This model reflects current educational priorities in Nepal, including digital competence, AI awareness, competency-based learning, environmental sustainability, and life skills development.</div>
-      </section>
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">14:00&ndash;14:30</span><span class="title">Daily Reflection &amp; Journaling</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Reinforce learning and give facilitators a continuous-assessment record.</div>
+          <h4>Prompt</h4>
+          <ul>
+            <li>One thing I learned today&hellip;</li>
+            <li>One question I still have&hellip;</li>
+            <li>One way I will use this at home or school&hellip;</li>
+          </ul>
+          <div class="materials"><strong>Materials:</strong> Reflection journal or worksheet per student.</div>
+        </div>
+      </details>
+    </div>
 
-    </main>
+    <!-- ================= DAY 2 ================= -->
+    <div class="day-block" id="day2">
+      <div class="day-head"><span class="day-tag">Day 2</span><h2>Communication &amp; Leadership</h2></div>
+      <div class="day-sub">Module 2 &ndash; Communication &amp; Leadership &middot; 08:45&ndash;14:30</div>
+      <div class="day-links">
+        <a href="https://nepalleadershipacademy.org/" target="_blank" rel="noopener"><span class="topic-label">Communication &amp; Leadership</span>Nepal Leadership Academy &ndash; LEAD framework &amp; youth leadership courses <span class="arrow-out">&#8599;</span></a>
+      </div>
 
-    <footer>
-      <div class="credit-name">Developed by: Mr. Bishnu Singh Rayamajhi</div>
-      <div class="credit-role">Math Lecturer &amp; Head of Humanities and Social Science, KMC&ndash;Taulihawa</div>
-      <div class="credit-org">Founder, UCDL Academy</div>
-      <div class="foot-divider"></div>
-      <div class="foot-note">ISCDTM &ndash; 2026 &middot; Integrated Student Capacity Development Training Model &middot; SMART Training Guide</div>
-    </footer>
-  </div>
+      <div class="break-row">08:45&ndash;09:00 &nbsp;Attendance &amp; Energizer &mdash; voice warm-up (tongue twisters, mirror-speaking pairs).</div>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">09:00&ndash;10:15</span><span class="title">Public Speaking Fundamentals</span><span class="module-flag">Module 2</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students structure and deliver a short, confident speech.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>Basic speech structure: opening hook, 2&ndash;3 main points, clear closing.</li>
+            <li>Managing stage fear: breathing techniques, practicing out loud, focusing on friendly faces.</li>
+            <li>Voice control: pace, volume, and pausing for emphasis.</li>
+            <li>Body language: posture, eye contact, purposeful gestures.</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Facilitator models a 1-minute speech using the structure above.</li>
+            <li>Students draft a 1-minute speech on a simple topic (e.g., "My favorite place in my community").</li>
+            <li>Each student delivers it to a partner, then a few volunteers present to the full group.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Topic-prompt cards, timer.</div>
+          <div class="tip"><strong>Facilitator tip:</strong> Praise effort and structure first; save delivery polish for the Day 2 afternoon workshop.</div>
+        </div>
+      </details>
+
+      <div class="break-row">10:15&ndash;10:30 &nbsp;Tea Break</div>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">10:30&ndash;11:45</span><span class="title">Teamwork &amp; Group Dynamics</span><span class="module-flag">Module 2</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students recognize productive team roles and behaviors.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>Stages of team development: forming, storming, norming, performing.</li>
+            <li>Common team roles: organizer, timekeeper, note-taker, presenter, idea-generator.</li>
+            <li>Communication habits that help teams: listening fully, disagreeing respectfully, sharing credit.</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Human-knot activity: teams tangle hands and must untangle without letting go, practicing patient communication.</li>
+            <li>Tower-building challenge: teams build the tallest freestanding tower from limited materials in 10 minutes.</li>
+            <li>Debrief: which roles emerged naturally? What helped or hurt teamwork?</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Straws/newspaper/tape for tower challenge, open space for human knot.</div>
+        </div>
+      </details>
+
+      <div class="break-row">11:45&ndash;12:30 &nbsp;Lunch Break</div>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">12:30&ndash;13:30</span><span class="title">Leadership Styles &amp; Qualities</span><span class="module-flag">Module 2</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students identify leadership traits they want to build in themselves.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>Leadership styles in simple terms: directive (gives clear instructions), participative (invites input), supportive (puts the team's needs first).</li>
+            <li>Core qualities: integrity, empathy, decisiveness, accountability.</li>
+            <li>Leadership is an action, not a title &mdash; anyone can lead in a moment.</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Short case studies of local or national youth leaders/change-makers are read aloud or handed out.</li>
+            <li>Groups identify which style and qualities the case study shows.</li>
+            <li>Each student writes one leadership quality they will practice this month.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Printed case-study handouts.</div>
+        </div>
+      </details>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">13:30&ndash;14:15</span><span class="title">Presentation Skills Workshop</span><span class="module-flag">Module 2</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students plan and deliver a short group presentation with visual support.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>Keeping visual aids simple: one idea per slide/poster, large clear text.</li>
+            <li>Dividing speaking parts fairly within a group.</li>
+            <li>Rehearsing out loud at least once before presenting.</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Teams receive an assigned topic and 20 minutes to prepare a 2-minute presentation with a simple poster.</li>
+            <li>Each team presents; peers score using a short rubric (clarity, teamwork, confidence).</li>
+            <li>Facilitator gives one strength and one growth point per team.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Chart paper, markers, peer-feedback rubric slips.</div>
+        </div>
+      </details>
+
+      <div class="break-row">14:15&ndash;14:30 &nbsp;Daily Reflection &mdash; journal entry and quick group share-out on confidence gained.</div>
+    </div>
+
+    <!-- ================= DAY 3 ================= -->
+    <div class="day-block" id="day3">
+      <div class="day-head"><span class="day-tag">Day 3</span><h2>Critical Thinking &amp; Problem Solving</h2></div>
+      <div class="day-sub">Module 3 &ndash; Critical Thinking &amp; Problem Solving &middot; 08:45&ndash;14:30</div>
+      <div class="day-links">
+        <a href="https://www.edutopia.org/project-based-learning" target="_blank" rel="noopener"><span class="topic-label">Critical Thinking &amp; PBL</span>Edutopia &ndash; Project-Based Learning resource hub <span class="arrow-out">&#8599;</span></a>
+      </div>
+
+      <div class="break-row">08:45&ndash;09:00 &nbsp;Attendance &amp; Energizer &mdash; a lateral-thinking riddle solved in pairs.</div>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">09:00&ndash;10:15</span><span class="title">Logical Reasoning &amp; Analytical Thinking</span><span class="module-flag">Module 3</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students practice structured reasoning and evaluating evidence.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>Deductive reasoning (general rule to specific case) versus inductive reasoning (specific cases to general pattern).</li>
+            <li>Spotting common reasoning traps: jumping to conclusions, confusing correlation with causation.</li>
+            <li>Basic evidence evaluation: is the source reliable? Is the sample size reasonable?</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Warm-up puzzles solved individually, then discussed as a class.</li>
+            <li>Small groups analyze 2&ndash;3 short "claim + evidence" cards and decide if the reasoning holds up.</li>
+            <li>Groups share their verdicts and reasoning with the class.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Puzzle handouts, claim-evidence cards.</div>
+        </div>
+      </details>
+
+      <div class="break-row">10:15&ndash;10:30 &nbsp;Tea Break</div>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">10:30&ndash;11:45</span><span class="title">Introduction to Project-Based Learning</span><span class="module-flag">Module 3</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students understand how to turn a real problem into a structured project.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>What makes a good "driving question" &mdash; specific, locally relevant, and answerable through action.</li>
+            <li>The research &rarr; design &rarr; act cycle used in project-based learning.</li>
+            <li>Example: a school's water wastage problem, from noticing it to designing a fix.</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Facilitator walks through the example project step by step.</li>
+            <li>Groups brainstorm 3 possible driving questions from their own school/community.</li>
+            <li>Groups vote on their strongest question to carry forward toward Day 7.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Flip chart, sticky notes for brainstorming.</div>
+        </div>
+      </details>
+
+      <div class="break-row">11:45&ndash;12:30 &nbsp;Lunch Break</div>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">12:30&ndash;13:45</span><span class="title">Innovation &amp; Design Thinking</span><span class="module-flag">Module 3</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students apply a simple design-thinking process to a real problem.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>The five stages: empathize, define, ideate, prototype, test.</li>
+            <li>"Empathize" means talking to the people actually affected by the problem before proposing a fix.</li>
+            <li>A prototype can be as simple as a sketch or a paper model &mdash; it doesn't need to be finished or fancy.</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Groups pick a real school or community problem and interview 1&ndash;2 classmates about it ("empathize").</li>
+            <li>Groups write a one-sentence problem definition.</li>
+            <li>Groups sketch a simple, low-cost solution on a design-thinking worksheet.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Design-thinking worksheets, pencils, scrap paper for prototyping.</div>
+        </div>
+      </details>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">13:45&ndash;14:15</span><span class="title">Mini Case-Study Challenge</span><span class="module-flag">Module 3</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Apply reasoning and design skills under light time pressure.</div>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Each group receives a short scenario (e.g., "Your school canteen is wasting a lot of food &mdash; what would you do in the next 2 weeks?").</li>
+            <li>Groups have 15 minutes to propose a solution using what they learned today.</li>
+            <li>Each group presents its solution in 2 minutes; facilitator highlights strong reasoning.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Scenario cards, timer.</div>
+        </div>
+      </details>
+
+      <div class="break-row">14:15&ndash;14:30 &nbsp;Daily Reflection &mdash; journal entry on a problem-solving approach to reuse.</div>
+    </div>
+
+    <!-- ================= DAY 4 ================= -->
+    <div class="day-block" id="day4">
+      <div class="day-head"><span class="day-tag">Day 4</span><h2>Career Guidance &amp; Financial Literacy</h2></div>
+      <div class="day-sub">Module 4 &ndash; Career Guidance &amp; Module 5 &ndash; Financial Literacy &middot; 08:45&ndash;14:30</div>
+      <div class="day-links">
+        <a href="https://ctevt.org.np/" target="_blank" rel="noopener"><span class="topic-label">Career Guidance</span>CTEVT Nepal &ndash; technical &amp; vocational education pathways <span class="arrow-out">&#8599;</span></a>
+        <a href="https://www.nrb.org.np/financial-literacy/" target="_blank" rel="noopener"><span class="topic-label">Financial Literacy</span>Nepal Rastra Bank &ndash; Financial Literacy Framework &amp; resources <span class="arrow-out">&#8599;</span></a>
+      </div>
+
+      <div class="break-row">08:45&ndash;09:00 &nbsp;Attendance &amp; Energizer &mdash; pair-share: "What did you want to be at age 8?"</div>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">09:00&ndash;10:00</span><span class="title">Career Planning &amp; Self-Assessment</span><span class="module-flag">Module 4</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students connect their own interests and strengths to realistic career clusters.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>Career clusters relevant locally: health, education, agriculture, technology, trades/vocational, business.</li>
+            <li>Interests vs. skills vs. values, and why all three matter in choosing a path.</li>
+            <li>Short-, medium-, and long-term career goals.</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Students complete a simple interests-and-strengths worksheet.</li>
+            <li>Students match their top interests to 2&ndash;3 possible career clusters.</li>
+            <li>Pair-share: students explain their match to a partner.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Self-assessment worksheets.</div>
+        </div>
+      </details>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">10:00&ndash;10:15</span><span class="title">Entrepreneurship &amp; Vocational Opportunities</span><span class="module-flag">Module 4</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students hear a real, local example of an entrepreneurial or vocational path.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>Types of local livelihoods: small business, agriculture-based enterprise, skilled trades, freelance/digital work.</li>
+            <li>What it actually takes to start small: initial idea, basic costs, first customers.</li>
+          </ul>
+          <div class="materials"><strong>Materials:</strong> None &mdash; guest speaker session.</div>
+        </div>
+      </details>
+
+      <div class="break-row">10:15&ndash;10:30 &nbsp;Tea Break</div>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">10:30&ndash;11:15</span><span class="title">Entrepreneurship Q&amp;A and Idea Pitch</span><span class="module-flag">Module 4</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students generate and refine a simple business or service idea.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>Simplified idea framework: problem &rarr; who has it &rarr; your solution &rarr; what it costs to start.</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Students ask the guest speaker questions about starting out, risk, and failure.</li>
+            <li>In pairs, students sketch one small idea using the 4-part framework above.</li>
+            <li>A few pairs share their idea informally with the group.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Simple idea-framework worksheet.</div>
+        </div>
+      </details>
+
+      <div class="break-row">11:15&ndash;12:00 &nbsp;Lunch Break</div>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">12:00&ndash;13:00</span><span class="title">Budgeting &amp; Saving</span><span class="module-flag">Module 5</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students build a simple personal budget and understand saving as a habit.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>Needs versus wants, and why prioritizing needs matters.</li>
+            <li>Basic budgeting formula: income &minus; expenses = savings.</li>
+            <li>Setting a small, specific savings goal with a timeline.</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Students receive a sample monthly allowance amount and a list of typical expenses.</li>
+            <li>Individually, students allocate the amount across needs, wants, and savings on a worksheet.</li>
+            <li>Volunteers share how they prioritized and why.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Budgeting worksheets, pencils.</div>
+        </div>
+      </details>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">13:00&ndash;14:15</span><span class="title">Banking &amp; Digital Payments</span><span class="module-flag">Module 5</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students understand how to use banking and digital payment tools safely.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>What a savings account is and basic steps to open one.</li>
+            <li>How mobile/digital payment apps work in simple terms.</li>
+            <li>Safety rules: never share PIN/OTP, verify before sending money, check transaction confirmations.</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Guided walkthrough (in person or via a local bank representative) of opening a savings account.</li>
+            <li>Demonstration of a mobile payment app's safety features.</li>
+            <li>Quick quiz: "safe or unsafe?" scenario cards on digital payments.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Sample account-opening form, projector for app demo, scenario cards.</div>
+        </div>
+      </details>
+
+      <div class="break-row">14:15&ndash;14:30 &nbsp;Daily Reflection &mdash; journal entry on one career step and one saving habit to start this month.</div>
+    </div>
+
+    <!-- ================= DAY 5 ================= -->
+    <div class="day-block" id="day5">
+      <div class="day-head"><span class="day-tag">Day 5</span><h2>Environment &amp; Well-being</h2></div>
+      <div class="day-sub">Module 6 &ndash; Environmental &amp; Climate Education &amp; Module 7 &ndash; Health &amp; Well-being &middot; 08:45&ndash;14:30</div>
+      <div class="day-links">
+        <a href="https://mofe.gov.np/" target="_blank" rel="noopener"><span class="topic-label">Environment &amp; Climate</span>Ministry of Forests &amp; Environment, Nepal <span class="arrow-out">&#8599;</span></a>
+        <a href="https://mohp.gov.np/content/163/adolescent-health-strategy/" target="_blank" rel="noopener"><span class="topic-label">Health &amp; Well-being</span>Ministry of Health &amp; Population &ndash; Adolescent Health Strategy <span class="arrow-out">&#8599;</span></a>
+      </div>
+
+      <div class="break-row">08:45&ndash;09:00 &nbsp;Attendance &amp; Energizer &mdash; outdoor stretch and breathing activity.</div>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">09:00&ndash;10:00</span><span class="title">Waste Management &amp; the 3Rs</span><span class="module-flag">Module 6</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students correctly sort waste and understand reduce-reuse-recycle in daily life.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>Reduce, reuse, recycle: what each means with local, everyday examples.</li>
+            <li>Organic versus inorganic waste, and basic composting.</li>
+            <li>Where the school/community's waste currently goes, and what could improve.</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Facilitator sets up sample waste items (clean, safe examples) at a sorting station.</li>
+            <li>Students sort items into reduce/reuse/recycle/compost bins.</li>
+            <li>Group discussion: one change the school could make this term.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Sample waste items, labeled bins/boxes.</div>
+        </div>
+      </details>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">10:00&ndash;10:15</span><span class="title">Biodiversity &amp; Climate Adaptation (Intro)</span><span class="module-flag">Module 6</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students connect global climate concepts to local, visible changes.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>What biodiversity means and why it matters for food, water, and health.</li>
+            <li>Visible signs of climate change in the local area: changing rainfall patterns, temperature shifts, crop impacts.</li>
+            <li>Basic adaptation ideas: water conservation, tree planting, resilient crops.</li>
+          </ul>
+        </div>
+      </details>
+
+      <div class="break-row">10:15&ndash;10:30 &nbsp;Tea Break</div>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">10:30&ndash;11:30</span><span class="title">Nature Walk / Field Observation</span><span class="module-flag">Module 6</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students observe real biodiversity and environmental conditions firsthand.</div>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Guided walk around the school or nearby community area in small groups.</li>
+            <li>Students use an observation checklist: plants seen, water sources, signs of pollution or erosion.</li>
+            <li>Groups discuss one environmental concern they noticed and one possible action.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Observation checklist sheets, pencils.</div>
+          <div class="tip"><strong>Facilitator tip:</strong> If a field walk isn't possible, use printed local photos and satellite images instead.</div>
+        </div>
+      </details>
+
+      <div class="break-row">11:30&ndash;12:15 &nbsp;Lunch Break</div>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">12:15&ndash;13:15</span><span class="title">Mental Health &amp; Stress Management</span><span class="module-flag">Module 7</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students recognize stress and practice a healthy coping technique.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>Common signs of stress in students: trouble sleeping, irritability, difficulty concentrating.</li>
+            <li>Healthy coping strategies: talking to a trusted adult, physical activity, breathing exercises, journaling.</li>
+            <li>When and how to seek help &mdash; school counselor, family member, health worker.</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Open, age-appropriate discussion on what causes stress for students.</li>
+            <li>Guided breathing/mindfulness exercise (4-count inhale, hold, exhale).</li>
+            <li>Students write down one person they can talk to if they feel overwhelmed.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Quiet space, optional mat/cushions.</div>
+        </div>
+      </details>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">13:15&ndash;14:15</span><span class="title">Nutrition &amp; Reproductive Health</span><span class="module-flag">Module 7</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students receive accurate, age-appropriate information on nutrition and reproductive health.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>Balanced diet basics and common local nutrition gaps.</li>
+            <li>Physical and emotional changes during puberty.</li>
+            <li>Personal hygiene practices.</li>
+            <li>Separating common myths from facts in a supportive, non-judgmental way.</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Session led by a qualified health worker or trained facilitator, with genders grouped as locally appropriate.</li>
+            <li>Anonymous question-box: students submit questions in writing for the health worker to answer.</li>
+            <li>Closing reminder on where to get further confidential support.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Question box, slips of paper, age-appropriate health materials/posters.</div>
+          <div class="tip"><strong>Facilitator tip:</strong> Confirm in advance that the health worker is trained in adolescent-appropriate communication.</div>
+        </div>
+      </details>
+
+      <div class="break-row">14:15&ndash;14:30 &nbsp;Daily Reflection &mdash; journal entry on one environmental action and one well-being habit to adopt.</div>
+    </div>
+
+    <!-- ================= DAY 6 ================= -->
+    <div class="day-block" id="day6">
+      <div class="day-head"><span class="day-tag">Day 6</span><h2>Safety &amp; Citizenship</h2></div>
+      <div class="day-sub">Module 8 &ndash; Disaster Risk Reduction &amp; Module 9 &ndash; Civic Education &middot; 08:45&ndash;14:30</div>
+      <div class="day-links">
+        <a href="https://ndrrma.gov.np/" target="_blank" rel="noopener"><span class="topic-label">Disaster Risk Reduction</span>NDRRMA &ndash; National Disaster Risk Reduction &amp; Management Authority <span class="arrow-out">&#8599;</span></a>
+        <a href="https://lawcommission.gov.np/content/13437/nepal-s-constitution/" target="_blank" rel="noopener"><span class="topic-label">Civic Education</span>Nepal Law Commission &ndash; Constitution of Nepal (full text) <span class="arrow-out">&#8599;</span></a>
+      </div>
+
+      <div class="break-row">08:45&ndash;09:00 &nbsp;Attendance &amp; Energizer &mdash; practicing "duck-cover-hold" positioning as a warm-up.</div>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">09:00&ndash;10:15</span><span class="title">Earthquake &amp; Fire Preparedness</span><span class="module-flag">Module 8</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students know and can perform correct earthquake and fire response actions.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>"Drop, Cover, Hold" technique for earthquakes.</li>
+            <li>Identifying safe zones and hazards inside a classroom (heavy furniture, glass, exits).</li>
+            <li>School evacuation routes and assembly points.</li>
+            <li>Basic fire response: stop-drop-roll, using an extinguisher (PASS method), when to evacuate versus fight a small fire.</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Facilitator from the local disaster management office demonstrates "Drop, Cover, Hold."</li>
+            <li>Full live earthquake evacuation drill to the assembly point, timed and debriefed.</li>
+            <li>Fire safety demonstration, including extinguisher use if equipment is available.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Whistle, evacuation route map, fire extinguisher (demo unit if available).</div>
+        </div>
+      </details>
+
+      <div class="break-row">10:15&ndash;10:30 &nbsp;Tea Break</div>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">10:30&ndash;11:45</span><span class="title">Flood Preparedness &amp; First Aid</span><span class="module-flag">Module 8</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students recognize flood risk signs and perform basic first aid.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>Local flood warning signs and safe versus unsafe response actions (never walk/drive through moving water).</li>
+            <li>Basic first aid: cleaning and bandaging a wound, recovery position, when to call for emergency help.</li>
+            <li>Introductory CPR awareness (recognizing an emergency and the importance of calling for help immediately).</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Short talk on local flood risk areas and safe evacuation behavior.</li>
+            <li>Hands-on first-aid stations: bandaging practice, recovery position practice, in small rotating groups.</li>
+            <li>Facilitator-led CPR awareness demonstration on a mannequin, if available.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> First-aid kit, bandages, CPR mannequin (if available), local flood-risk map.</div>
+        </div>
+      </details>
+
+      <div class="break-row">11:45&ndash;12:30 &nbsp;Lunch Break</div>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">12:30&ndash;13:30</span><span class="title">Constitution &amp; Local Governance</span><span class="module-flag">Module 9</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students understand key features of the constitution and their local government structure.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>Core principles of the constitution: fundamental rights, federal structure, rule of law.</li>
+            <li>Three tiers of government and how they relate: federal, provincial, and local.</li>
+            <li>Structure of the local municipality: mayor/chairperson, ward offices, municipal assembly, and their basic functions.</li>
+            <li>How a student or citizen can raise a concern with the local government.</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Short interactive lecture with a simple diagram of government tiers.</li>
+            <li>Quiz game (team-based buzzer or hands-up format) on key facts.</li>
+            <li>Discussion: one local issue students could raise with their ward office.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Government structure diagram/poster, quiz questions.</div>
+        </div>
+      </details>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">13:30&ndash;14:15</span><span class="title">Citizenship &amp; the SDGs</span><span class="module-flag">Module 9</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Students connect the Sustainable Development Goals to real local issues.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>Overview of the 17 SDGs, grouped simply (people, planet, prosperity, peace, partnership).</li>
+            <li>What "active citizenship" looks like at a student's scale: volunteering, respecting rules, participating in local decisions.</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Groups receive SDG cards and match them to local issues they've observed (e.g., waste &rarr; SDG 11/12, health &rarr; SDG 3).</li>
+            <li>Each group shares one match and one action a student could take toward it.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> SDG cards/poster.</div>
+        </div>
+      </details>
+
+      <div class="break-row">14:15&ndash;14:30 &nbsp;Daily Reflection &mdash; journal entry on one civic action and one safety step to share with family.</div>
+    </div>
+
+    <!-- ================= DAY 7 ================= -->
+    <div class="day-block" id="day7">
+      <div class="day-head"><span class="day-tag">Day 7</span><h2>Community Project &amp; Closing</h2></div>
+      <div class="day-sub">Module 10 &ndash; Community Project, Post-Training Assessment &amp; Closing &middot; 08:45&ndash;14:30</div>
+      <div class="day-links">
+        <a href="https://npc.gov.np/" target="_blank" rel="noopener"><span class="topic-label">Community Project &amp; SDGs</span>National Planning Commission, Nepal &ndash; SDG localization <span class="arrow-out">&#8599;</span></a>
+      </div>
+
+      <div class="break-row">08:45&ndash;09:00 &nbsp;Attendance &amp; Energizer &mdash; teams reconvene with their Day 1 chant.</div>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">09:00&ndash;09:45</span><span class="title">Community Project Planning</span><span class="module-flag">Module 10</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Each fixed team finalizes a real, locally relevant issue and a simple action plan.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>Criteria for a good project topic: locally relevant, small enough to act on in one day, safe to investigate.</li>
+            <li>Structure of a one-page action plan: issue, why it matters, what we'll do, who does what.</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Teams review the driving questions drafted back on Day 3 and pick their final topic.</li>
+            <li>Teams complete a one-page action plan template.</li>
+            <li>Facilitator quickly reviews each plan for feasibility and safety before fieldwork.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Action-plan template, pens.</div>
+        </div>
+      </details>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">09:45&ndash;11:00</span><span class="title">Community Survey / Field Visit</span><span class="module-flag">Module 10</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Teams gather real information or opinions relevant to their chosen issue.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>Writing 3&ndash;5 clear, simple survey/interview questions.</li>
+            <li>Respectful data-collection etiquette: introducing yourself, asking permission, thanking participants.</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Teams finalize their short question list with facilitator sign-off.</li>
+            <li>Teams go into the community (or interview visiting community members/school staff) to collect responses.</li>
+            <li>Teams regroup and compile their raw findings.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Survey sheets, clipboards, pens.</div>
+          <div class="tip"><strong>Facilitator tip:</strong> Keep fieldwork within a supervised, pre-agreed radius of the venue for student safety.</div>
+        </div>
+      </details>
+
+      <div class="break-row">11:00&ndash;11:15 &nbsp;Tea Break</div>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">11:15&ndash;12:15</span><span class="title">Project Development &amp; Report Writing</span><span class="module-flag">Module 10</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Teams turn their findings into a short, clear report and presentation.</div>
+          <h4>Key Content</h4>
+          <ul>
+            <li>Simple report structure: the issue, what we found, what we recommend.</li>
+            <li>Using one chart or visual to make findings easier to understand.</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Teams summarize survey findings into 2&ndash;3 key points.</li>
+            <li>Teams build a short poster/report and assign speaking parts for the presentation.</li>
+            <li>Quick rehearsal within the team.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Chart paper, markers, findings notes.</div>
+        </div>
+      </details>
+
+      <div class="break-row">12:15&ndash;13:00 &nbsp;Lunch Break</div>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">13:00&ndash;13:45</span><span class="title">Community Project Presentations</span><span class="module-flag">Module 10</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Teams present their project to a panel and receive structured feedback.</div>
+          <h4>Evaluation Rubric</h4>
+          <ul>
+            <li>Relevance of the issue to the community</li>
+            <li>Quality and honesty of the data collection</li>
+            <li>Clarity of the presentation</li>
+            <li>Practicality of the recommendation</li>
+          </ul>
+          <h4>Activity Steps</h4>
+          <ol>
+            <li>Each team presents for 5 minutes to a panel of trainers, teachers, and municipal representatives.</li>
+            <li>Panel asks 1&ndash;2 questions per team.</li>
+            <li>Panel scores using the rubric above; brief public feedback given to each team.</li>
+          </ol>
+          <div class="materials"><strong>Materials:</strong> Scoring rubric sheets for panelists.</div>
+        </div>
+      </details>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">13:45&ndash;14:05</span><span class="title">Post-Training Assessment</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Measure knowledge and skill gained across all 10 modules against the Day 1 baseline.</div>
+          <ul>
+            <li>Same question format and content areas as the pre-training assessment.</li>
+            <li>Matched using the same anonymous student ID codes from Day 1.</li>
+          </ul>
+          <div class="materials"><strong>Materials:</strong> Post-assessment questionnaire, ID code slips.</div>
+        </div>
+      </details>
+
+      <details class="session">
+        <summary><span class="arrow">&#9656;</span><span class="time">14:05&ndash;14:30</span><span class="title">Closing Ceremony &amp; Certificate Distribution</span></summary>
+        <div class="session-body">
+          <div class="objective">Objective: Formally close the training and recognize student achievement.</div>
+          <ul>
+            <li>Closing remarks from municipal officials and lead facilitator.</li>
+            <li>Quick feedback collection from students on the training experience.</li>
+            <li>Group photo.</li>
+            <li>Certificates of Completion distributed to students meeting attendance and performance criteria.</li>
+          </ul>
+          <div class="materials"><strong>Materials:</strong> Certificates, feedback forms, camera.</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="closing-quote">
+      This content manual pairs with the ISCDTM&ndash;2026 SMART Training Guide and the Detailed Session-Wise Schedule. Facilitators can adapt activity examples to their specific municipality, ward, or school context while keeping each session's learning objective intact.
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="credit-name">Developed by: Mr. Bishnu Singh Rayamajhi</div>
+    <div class="credit-role">Math Lecturer &amp; Head of Humanities and Social Science, KMC&ndash;Taulihawa</div>
+    <div class="credit-org">Founder, UCDL Academy</div>
+    <div class="foot-divider"></div>
+    <div class="foot-note">ISCDTM &ndash; 2026 &middot; Integrated student capacity development training model (IScdtm-2026)  &middot; Companion to the SMART Training Guide</div>
+  </footer>
 
 </div>
-
 </body>
 </html>
