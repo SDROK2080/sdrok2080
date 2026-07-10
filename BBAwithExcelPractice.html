@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Mathematics for BBA - UCDL Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d; --primary-light: #2c5282; --accent: #d69e2e;
+            --accent-light: #ecc94b; --success: #38a169; --danger: #e53e3e;
+            --bg: #f7fafc; --card: #ffffff; --text: #2d3748; --text-light: #718096;
+            --border: #e2e8f0; --shadow: 0 10px 40px rgba(0,0,0,0.08);
+            --shadow-hover: 0 20px 60px rgba(0,0,0,0.12);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #0f2744 50%, var(--primary-light) 100%);
+            min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+            align-items: center; text-align: center; padding: 2rem; position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+        .hero-badge {
+            background: rgba(214, 158, 46, 0.2); border: 1px solid var(--accent);
+            color: var(--accent-light); padding: 0.5rem 1.5rem; border-radius: 50px;
+            font-size: 0.85rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+            margin-bottom: 2rem; animation: fadeInDown 1s ease; position: relative; z-index: 1;
+        }
+        .hero h1 {
+            font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 6vw, 5rem);
+            color: white; margin-bottom: 1rem; animation: fadeInUp 1s ease 0.2s both;
+            position: relative; z-index: 1; text-shadow: 0 4px 30px rgba(0,0,0,0.3);
+        }
+        .hero h1 span { color: var(--accent); }
+        .hero-subtitle {
+            font-size: 1.3rem; color: rgba(255,255,255,0.8); margin-bottom: 3rem;
+            max-width: 700px; animation: fadeInUp 1s ease 0.4s both; position: relative; z-index: 1;
+        }
+        .instructor-card {
+            background: rgba(255,255,255,0.08); backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.15); border-radius: 20px;
+            padding: 2rem 3rem; display: flex; align-items: center; gap: 1.5rem;
+            animation: fadeInUp 1s ease 0.6s both; position: relative; z-index: 1; max-width: 600px;
+        }
+        .instructor-avatar {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; font-weight: 700; color: var(--primary); flex-shrink: 0;
+        }
+        .instructor-info h3 { color: white; font-size: 1.3rem; margin-bottom: 0.3rem; }
+        .instructor-info p { color: rgba(255,255,255,0.7); font-size: 0.9rem; line-height: 1.5; }
+        .ucdl-badge {
+            display: inline-block; background: var(--accent); color: var(--primary);
+            padding: 0.2rem 0.8rem; border-radius: 4px; font-size: 0.75rem;
+            font-weight: 700; margin-top: 0.5rem; letter-spacing: 1px;
+        }
+        .scroll-indicator {
+            position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+            animation: bounce 2s infinite; z-index: 1;
+        }
+        .scroll-indicator svg { width: 30px; height: 30px; stroke: rgba(255,255,255,0.5); }
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: rgba(26, 54, 93, 0.95); backdrop-filter: blur(20px);
+            padding: 1rem 2rem; display: flex; justify-content: space-between;
+            align-items: center; z-index: 1000; transform: translateY(-100%); transition: transform 0.4s ease;
+        }
+        .navbar.visible { transform: translateY(0); }
+        .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: white; font-weight: 700; }
+        .nav-logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.3s; cursor: pointer; }
+        .nav-links a:hover { color: var(--accent); }
+        .section { padding: 5rem 2rem; max-width: 1400px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-header h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; }
+        .section-header p { color: var(--text-light); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+        .modules-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 2rem; }
+        .module-card {
+            background: var(--card); border-radius: 20px; overflow: hidden;
+            box-shadow: var(--shadow); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer; border: 2px solid transparent;
+        }
+        .module-card:hover { transform: translateY(-10px) scale(1.02); box-shadow: var(--shadow-hover); border-color: var(--accent); }
+        .module-card.active { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(214, 158, 46, 0.2); }
+        .module-header {
+            padding: 2rem; background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white; position: relative; overflow: hidden;
+        }
+        .module-header::after {
+            content: ''; position: absolute; top: -50%; right: -20%; width: 200px; height: 200px;
+            background: rgba(255,255,255,0.05); border-radius: 50%;
+        }
+        .module-number {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 50px; height: 50px; background: var(--accent); color: var(--primary);
+            border-radius: 12px; font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;
+        }
+        .module-header h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+        .module-header p { font-size: 0.9rem; opacity: 0.8; }
+        .module-body { padding: 1.5rem 2rem; }
+        .module-meta { display: flex; gap: 1.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .meta-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; color: var(--text-light); }
+        .meta-item svg { width: 16px; height: 16px; stroke: var(--accent); }
+        .module-progress { margin-top: 1rem; }
+        .progress-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-light)); border-radius: 3px; transition: width 0.8s ease; width: 0%; }
+        .progress-text { font-size: 0.8rem; color: var(--text-light); margin-top: 0.5rem; text-align: right; }
+        .lesson-panel {
+            background: var(--card); border-radius: 20px; box-shadow: var(--shadow);
+            margin-top: 3rem; overflow: hidden; display: none; animation: slideUp 0.5s ease;
+        }
+        .lesson-panel.active { display: block; }
+        .lesson-tabs { display: flex; background: var(--bg); border-bottom: 1px solid var(--border); overflow-x: auto; }
+        .lesson-tab {
+            padding: 1rem 2rem; background: none; border: none; font-family: inherit;
+            font-size: 0.95rem; font-weight: 600; color: var(--text-light); cursor: pointer;
+            white-space: nowrap; transition: all 0.3s; border-bottom: 3px solid transparent; position: relative;
+        }
+        .lesson-tab:hover { color: var(--primary); }
+        .lesson-tab.active { color: var(--primary); border-bottom-color: var(--accent); background: white; }
+        .lesson-content { padding: 3rem; min-height: 500px; }
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; animation: fadeIn 0.4s ease; }
+        .video-container {
+            position: relative; padding-bottom: 56.25%;
+            background: linear-gradient(135deg, #1a202c, #2d3748);
+            border-radius: 16px; overflow: hidden; margin-bottom: 2rem;
+        }
+        .video-placeholder {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; color: white;
+        }
+        .play-btn {
+            width: 80px; height: 80px; background: var(--accent); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            transition: all 0.3s; box-shadow: 0 10px 40px rgba(214, 158, 46, 0.4);
+        }
+        .play-btn:hover { transform: scale(1.1); box-shadow: 0 15px 50px rgba(214, 158, 46, 0.6); }
+        .play-btn svg { width: 30px; height: 30px; fill: var(--primary); margin-left: 4px; }
+        .video-placeholder h4 { margin-top: 1.5rem; font-size: 1.2rem; }
+        .video-placeholder p { color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-top: 0.5rem; }
+        .pdf-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .pdf-card {
+            background: linear-gradient(135deg, #fff5f5, #fff); border: 2px solid #feb2b2;
+            border-radius: 16px; padding: 1.5rem; display: flex; align-items: center; gap: 1rem;
+            transition: all 0.3s; cursor: pointer; text-decoration: none;
+        }
+        .pdf-card:hover { transform: translateX(10px); border-color: var(--danger); box-shadow: 0 10px 30px rgba(229, 62, 62, 0.1); }
+        .pdf-icon {
+            width: 60px; height: 70px; background: linear-gradient(135deg, var(--danger), #fc8181);
+            border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; position: relative;
+        }
+        .pdf-icon::after { content: 'PDF'; position: absolute; bottom: 4px; font-size: 0.6rem; font-weight: 700; color: white; }
+        .pdf-icon svg { width: 28px; height: 28px; stroke: white; margin-bottom: 10px; }
+        .pdf-info h4 { font-size: 1rem; color: var(--text); margin-bottom: 0.3rem; }
+        .pdf-info p { font-size: 0.85rem; color: var(--text-light); }
+        .pdf-size { font-size: 0.75rem; color: var(--danger); font-weight: 600; margin-top: 0.3rem; }
+        .excel-simulator {
+            background: #217346; border-radius: 16px; overflow: hidden;
+            font-family: 'Segoe UI', sans-serif; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+        .excel-toolbar {
+            background: #f3f2f1; padding: 0.5rem 1rem; display: flex; gap: 0.5rem;
+            align-items: center; border-bottom: 1px solid #d2d0ce; flex-wrap: wrap;
+        }
+        .excel-btn {
+            padding: 0.3rem 0.8rem; background: white; border: 1px solid #d2d0ce;
+            border-radius: 4px; font-size: 0.8rem; cursor: pointer; font-family: inherit;
+        }
+        .excel-btn.primary { background: #217346; color: white; border-color: #217346; }
+        .excel-formula-bar {
+            background: white; padding: 0.5rem 1rem; display: flex;
+            align-items: center; gap: 0.5rem; border-bottom: 1px solid #d2d0ce;
+        }
+        .cell-ref { background: #f3f2f1; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600; min-width: 50px; text-align: center; }
+        .formula-input { flex: 1; border: 1px solid #d2d0ce; padding: 0.3rem 0.5rem; border-radius: 4px; font-size: 0.9rem; font-family: monospace; }
+        .excel-grid { display: grid; grid-template-columns: 40px repeat(5, 1fr); background: white; }
+        .excel-grid-header { background: #f3f2f1; padding: 0.4rem; text-align: center; font-size: 0.8rem; font-weight: 600; color: #605e5c; border-right: 1px solid #d2d0ce; border-bottom: 1px solid #d2d0ce; }
+        .excel-grid-cell { padding: 0.5rem; border-right: 1px solid #e1dfdd; border-bottom: 1px solid #e1dfdd; font-size: 0.85rem; min-height: 32px; display: flex; align-items: center; }
+        .excel-grid-cell.header { background: #f3f2f1; justify-content: center; font-weight: 600; color: #605e5c; }
+        .excel-grid-cell.input-cell { background: #e6f4ea; }
+        .excel-grid-cell.output-cell { background: #fce8e6; font-weight: 600; color: #c5221f; }
+        .excel-grid-cell.formula-cell { background: #e8f0fe; color: #1967d2; font-family: monospace; }
+        .excel-grid-cell.result-cell { background: #d4edda; color: #155724; font-weight: 600; }
+        .quiz-container { background: linear-gradient(135deg, #f0fff4, #fff); border: 2px solid #9ae6b4; border-radius: 16px; padding: 2rem; }
+        .quiz-question { font-size: 1.1rem; font-weight: 600; color: var(--primary); margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--border); }
+        .quiz-options { display: flex; flex-direction: column; gap: 0.8rem; }
+        .quiz-option { padding: 1rem 1.5rem; background: white; border: 2px solid var(--border); border-radius: 12px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 1rem; }
+        .quiz-option:hover { border-color: var(--accent); background: #fffaf0; }
+        .quiz-option.correct { border-color: var(--success); background: #f0fff4; }
+        .quiz-option.wrong { border-color: var(--danger); background: #fff5f5; }
+        .option-letter { width: 36px; height: 36px; border-radius: 50%; background: var(--bg); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--primary); flex-shrink: 0; }
+        .quiz-option.correct .option-letter { background: var(--success); color: white; }
+        .quiz-option.wrong .option-letter { background: var(--danger); color: white; }
+        .quiz-feedback { margin-top: 1.5rem; padding: 1rem; border-radius: 12px; font-weight: 500; display: none; }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: #f0fff4; color: var(--success); border: 1px solid #9ae6b4; }
+        .quiz-feedback.wrong { background: #fff5f5; color: var(--danger); border: 1px solid #feb2b2; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .feature-card { background: var(--card); border-radius: 16px; padding: 2rem; text-align: center; box-shadow: var(--shadow); transition: all 0.3s; border-top: 4px solid var(--accent); }
+        .feature-card:hover { transform: translateY(-5px); }
+        .feature-icon { width: 70px; height: 70px; background: linear-gradient(135deg, var(--accent-light), var(--accent)); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 2rem; }
+        .feature-card h3 { color: var(--primary); margin-bottom: 0.8rem; font-size: 1.2rem; }
+        .feature-card p { color: var(--text-light); font-size: 0.95rem; }
+        .footer { background: var(--primary); color: white; padding: 4rem 2rem 2rem; text-align: center; }
+        .footer-content { max-width: 800px; margin: 0 auto; }
+        .footer h3 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 1rem; }
+        .footer p { color: rgba(255,255,255,0.7); margin-bottom: 0.5rem; }
+        .footer-divider { width: 60px; height: 3px; background: var(--accent); margin: 2rem auto; border-radius: 2px; }
+        .footer-bottom { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); font-size: 0.85rem; }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); } 40% { transform: translateX(-50%) translateY(-15px); } 60% { transform: translateX(-50%) translateY(-8px); } }
+        @media (max-width: 768px) {
+            .modules-grid { grid-template-columns: 1fr; }
+            .lesson-content { padding: 1.5rem; }
+            .instructor-card { flex-direction: column; text-align: center; padding: 1.5rem; }
+            .nav-links { display: none; }
+            .hero h1 { font-size: 2rem; }
+            .excel-grid { grid-template-columns: 30px repeat(3, 1fr); }
+            .excel-grid-cell { font-size: 0.75rem; padding: 0.3rem; }
+        }
+        .steps-container { display: flex; flex-direction: column; gap: 1.5rem; }
+        .step-item { display: flex; gap: 1.5rem; padding: 1.5rem; background: white; border-radius: 16px; border-left: 4px solid var(--accent); box-shadow: 0 4px 20px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .step-item:hover { transform: translateX(10px); box-shadow: 0 8px 30px rgba(0,0,0,0.1); }
+        .step-number { width: 50px; height: 50px; background: linear-gradient(135deg, var(--accent), var(--accent-light)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 700; color: var(--primary); flex-shrink: 0; }
+        .step-content h4 { color: var(--primary); margin-bottom: 0.5rem; font-size: 1.1rem; }
+        .step-content p { color: var(--text-light); font-size: 0.95rem; line-height: 1.7; }
+        .code-block { background: #1a202c; color: #e2e8f0; padding: 1rem 1.5rem; border-radius: 12px; font-family: 'Fira Code', 'Courier New', monospace; font-size: 0.9rem; margin-top: 0.8rem; overflow-x: auto; }
+        .code-block .comment { color: #68d391; }
+        .code-block .function { color: #63b3ed; }
+        .code-block .string { color: #fbd38d; }
+        .code-block .number { color: #fc8181; }
+    </style>
+<base target="_blank">
+</head>
+<body>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="navbar" id="navbar">
+    <div class="nav-logo">Business<span>Math</span> BBA</div>
+    <ul class="nav-links">
+        <li><a href="#modules" onclick="scrollToSection('modules')">Modules</a></li>
+        <li><a href="#smart" onclick="scrollToSection('smart')">SMART Learning</a></li>
+        <li><a href="#about" onclick="scrollToSection('about')">About</a></li>
+    </ul>
+</nav>
+
+<!-- ===== HERO SECTION ===== -->
+<section class="hero" id="home">
+    <div class="hero-badge">Free Online Course</div>
+    <h1>Business <span>Mathematics</span> for BBA</h1>
+    <p class="hero-subtitle">Master Excel-powered mathematical techniques through step-by-step video lessons, interactive simulations, and downloadable resources — completely free.</p>
+
+    <div class="instructor-card">
+        <div class="instructor-avatar">BSR</div>
+        <div class="instructor-info">
+            <h3>Mr. Bishnu Singh Rayamajhi</h3>
+            <p>Math Lecturer & Head of Humanities & Social Science<br>Kapilvastu Multiple Campus (KMC)</p>
+            <span class="ucdl-badge">FOUNDER: UCDL ACADEMY</span>
+        </div>
+    </div>
+
+    <div class="scroll-indicator">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+    </div>
+</section>
+
+<!-- ===== MODULES SECTION ===== -->
+<section class="section" id="modules">
+    <div class="section-header">
+        <h2>6 Core Modules</h2>
+        <p>Click any module below to unlock step-by-step video lessons, PDF notes, Excel simulations, and practice quizzes.</p>
+    </div>
+
+    <div class="modules-grid">
+        <!-- Module 1 -->
+        <div class="module-card" onclick="openModule(1)" data-module="1">
+            <div class="module-header">
+                <div class="module-number">1</div>
+                <h3>Excel for Functions & Techniques</h3>
+                <p>Master essential Excel functions for business calculations</p>
+            </div>
+            <div class="module-body">
+                <div class="module-meta">
+                    <span class="meta-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> 8 Videos</span>
+                    <span class="meta-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg> 4 PDFs</span>
+                    <span class="meta-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg> 3 Quizzes</span>
+                </div>
+                <div class="module-progress">
+                    <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+                    <div class="progress-text">Not started</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Module 2 -->
+        <div class="module-card" onclick="openModule(2)" data-module="2">
+            <div class="module-header">
+                <div class="module-number">2</div>
+                <h3>Excel for Simultaneous Equations</h3>
+                <p>Solve systems of linear equations using matrix methods</p>
+            </div>
+            <div class="module-body">
+                <div class="module-meta">
+                    <span class="meta-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> 6 Videos</span>
+                    <span class="meta-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg> 3 PDFs</span>
+                    <span class="meta-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg> 2 Quizzes</span>
+                </div>
+                <div class="module-progress">
+                    <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+                    <div class="progress-text">Not started</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Module 3 -->
+        <div class="module-card" onclick="openModule(3)" data-module="3">
+            <div class="module-header">
+                <div class="module-number">3</div>
+                <h3>Excel for Non-Linear Functions</h3>
+                <p>Quadratic, exponential, and logarithmic functions in Excel</p>
+            </div>
+            <div class="module-body">
+                <div class="module-meta">
+                    <span class="meta-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> 7 Videos</span>
+                    <span class="meta-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg> 3 PDFs</span>
+                    <span class="meta-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg> 3 Quizzes</span>
+                </div>
+                <div class="module-progress">
+                    <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+                    <div class="progress-text">Not started</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Module 4 -->
+        <div class="module-card" onclick="openModule(4)" data-module="4">
+            <div class="module-header">
+                <div class="module-number">4</div>
+                <h3>Excel for Calculator Software</h3>
+                <p>Build custom calculator tools and financial models</p>
+            </div>
+            <div class="module-body">
+                <div class="module-meta">
+                    <span class="meta-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> 5 Videos</span>
+                    <span class="meta-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg> 2 PDFs</span>
+                    <span class="meta-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg> 2 Quizzes</span>
+                </div>
+                <div class="module-progress">
+                    <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+                    <div class="progress-text">Not started</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Module 5 -->
+        <div class="module-card" onclick="openModule(5)" data-module="5">
+            <div class="module-header">
+                <div class="module-number">5</div>
+                <h3>Excel for Financial Mathematics</h3>
+                <p>Interest, annuities, depreciation, and investment analysis</p>
+            </div>
+            <div class="module-body">
+                <div class="module-meta">
+                    <span class="meta-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> 9 Videos</span>
+                    <span class="meta-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg> 5 PDFs</span>
+                    <span class="meta-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg> 4 Quizzes</span>
+                </div>
+                <div class="module-progress">
+                    <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+                    <div class="progress-text">Not started</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Module 6 -->
+        <div class="module-card" onclick="openModule(6)" data-module="6">
+            <div class="module-header">
+                <div class="module-number">6</div>
+                <h3>Excel for Derivative & Integration</h3>
+                <p>Numerical differentiation and integration techniques</p>
+            </div>
+            <div class="module-body">
+                <div class="module-meta">
+                    <span class="meta-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> 7 Videos</span>
+                    <span class="meta-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg> 4 PDFs</span>
+                    <span class="meta-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg> 3 Quizzes</span>
+                </div>
+                <div class="module-progress">
+                    <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+                    <div class="progress-text">Not started</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== LESSON PANEL ===== -->
+    <div class="lesson-panel" id="lessonPanel">
+        <div class="lesson-tabs">
+            <button class="lesson-tab active" onclick="switchTab('video')">&#128249; Video Lessons</button>
+            <button class="lesson-tab" onclick="switchTab('pdf')">&#128196; PDF Notes</button>
+            <button class="lesson-tab" onclick="switchTab('excel')">&#128202; Excel Lab</button>
+            <button class="lesson-tab" onclick="switchTab('steps')">&#128221; Step-by-Step</button>
+            <button class="lesson-tab" onclick="switchTab('quiz')">&#127919; Practice Quiz</button>
+        </div>
+
+        <div class="lesson-content">
+            <!-- VIDEO TAB -->
+            <div class="tab-pane active" id="tab-video">
+                <div class="video-container">
+                    <div class="video-placeholder">
+                        <div class="play-btn" onclick="playVideo()">
+                            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        </div>
+                        <h4 id="videoTitle">Module 1: Introduction to Excel Functions</h4>
+                        <p id="videoDesc">Click play to open the YouTube playlist</p>
+                    </div>
+                </div>
+                <div class="steps-container" id="videoList">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Introduction to Excel Interface</h4>
+                            <p>Learn the basic layout, ribbon, formula bar, and cell referencing system.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Basic Functions: SUM, AVERAGE, MAX, MIN</h4>
+                            <p>Master the fundamental statistical functions used in business calculations.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Logical Functions: IF, AND, OR</h4>
+                            <p>Build decision-making formulas for business scenarios.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PDF TAB -->
+            <div class="tab-pane" id="tab-pdf">
+                <h3 style="margin-bottom:1.5rem;color:var(--primary);">&#128218; Downloadable Study Materials</h3>
+                <div class="pdf-grid" id="pdfList">
+                    <a href="#" class="pdf-card" download>
+                        <div class="pdf-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div class="pdf-info">
+                            <h4>Module 1 Complete Notes</h4>
+                            <p>Comprehensive theory with solved examples</p>
+                            <span class="pdf-size">&#128229; 2.4 MB</span>
+                        </div>
+                    </a>
+                    <a href="#" class="pdf-card" download>
+                        <div class="pdf-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div class="pdf-info">
+                            <h4>Excel Function Cheat Sheet</h4>
+                            <p>Quick reference guide for all functions</p>
+                            <span class="pdf-size">&#128229; 1.1 MB</span>
+                        </div>
+                    </a>
+                    <a href="#" class="pdf-card" download>
+                        <div class="pdf-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div class="pdf-info">
+                            <h4>Practice Problems Set</h4>
+                            <p>50+ exercises with answer keys</p>
+                            <span class="pdf-size">&#128229; 3.2 MB</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- EXCEL TAB -->
+            <div class="tab-pane" id="tab-excel">
+                <h3 style="margin-bottom:1.5rem;color:var(--primary);">&#128202; Interactive Excel Simulator</h3>
+                <div class="excel-simulator" id="excelSim">
+                    <div class="excel-toolbar">
+                        <button class="excel-btn">File</button>
+                        <button class="excel-btn">Home</button>
+                        <button class="excel-btn">Insert</button>
+                        <button class="excel-btn">Formulas</button>
+                        <button class="excel-btn primary">Data</button>
+                        <button class="excel-btn">Review</button>
+                        <button class="excel-btn">View</button>
+                    </div>
+                    <div class="excel-formula-bar">
+                        <span class="cell-ref">B2</span>
+                        <input class="formula-input" value="=SUM(A2:A10)" readonly>
+                    </div>
+                    <div class="excel-grid" id="excelGrid">
+                        <div class="excel-grid-header"></div>
+                        <div class="excel-grid-header">A</div>
+                        <div class="excel-grid-header">B</div>
+                        <div class="excel-grid-header">C</div>
+                        <div class="excel-grid-header">D</div>
+                        <div class="excel-grid-header">E</div>
+
+                        <div class="excel-grid-cell header">1</div>
+                        <div class="excel-grid-cell">Sales Data</div>
+                        <div class="excel-grid-cell">Amount</div>
+                        <div class="excel-grid-cell">Tax (13%)</div>
+                        <div class="excel-grid-cell">Total</div>
+                        <div class="excel-grid-cell">Status</div>
+
+                        <div class="excel-grid-cell header">2</div>
+                        <div class="excel-grid-cell input-cell">Product A</div>
+                        <div class="excel-grid-cell input-cell">15000</div>
+                        <div class="excel-grid-cell formula-cell" data-formula="=B2*0.13">=B2*0.13</div>
+                        <div class="excel-grid-cell formula-cell" data-formula="=B2+C2">=B2+C2</div>
+                        <div class="excel-grid-cell formula-cell" data-formula="=IF(D2>15000,&quot;High&quot;,&quot;Low&quot;)">=IF(D2>15000,"High","Low")</div>
+
+                        <div class="excel-grid-cell header">3</div>
+                        <div class="excel-grid-cell input-cell">Product B</div>
+                        <div class="excel-grid-cell input-cell">22000</div>
+                        <div class="excel-grid-cell formula-cell" data-formula="=B3*0.13">=B3*0.13</div>
+                        <div class="excel-grid-cell formula-cell" data-formula="=B3+C3">=B3+C3</div>
+                        <div class="excel-grid-cell formula-cell" data-formula="=IF(D3>15000,&quot;High&quot;,&quot;Low&quot;)">=IF(D3>15000,"High","Low")</div>
+
+                        <div class="excel-grid-cell header">4</div>
+                        <div class="excel-grid-cell input-cell">Product C</div>
+                        <div class="excel-grid-cell input-cell">8500</div>
+                        <div class="excel-grid-cell formula-cell" data-formula="=B4*0.13">=B4*0.13</div>
+                        <div class="excel-grid-cell formula-cell" data-formula="=B4+C4">=B4+C4</div>
+                        <div class="excel-grid-cell formula-cell" data-formula="=IF(D4>15000,&quot;High&quot;,&quot;Low&quot;)">=IF(D4>15000,"High","Low")</div>
+
+                        <div class="excel-grid-cell header">5</div>
+                        <div class="excel-grid-cell input-cell">Product D</div>
+                        <div class="excel-grid-cell input-cell">31000</div>
+                        <div class="excel-grid-cell formula-cell" data-formula="=B5*0.13">=B5*0.13</div>
+                        <div class="excel-grid-cell formula-cell" data-formula="=B5+C5">=B5+C5</div>
+                        <div class="excel-grid-cell formula-cell" data-formula="=IF(D5>15000,&quot;High&quot;,&quot;Low&quot;)">=IF(D5>15000,"High","Low")</div>
+
+                        <div class="excel-grid-cell header">6</div>
+                        <div class="excel-grid-cell output-cell">TOTAL</div>
+                        <div class="excel-grid-cell output-cell" data-formula="=SUM(B2:B5)">=SUM(B2:B5)</div>
+                        <div class="excel-grid-cell output-cell" data-formula="=SUM(C2:C5)">=SUM(C2:C5)</div>
+                        <div class="excel-grid-cell output-cell" data-formula="=SUM(D2:D5)">=SUM(D2:D5)</div>
+                        <div class="excel-grid-cell output-cell" data-formula="=COUNTIF(E2:E5,&quot;High&quot;)">=COUNTIF(E2:E5,"High")</div>
+                    </div>
+                </div>
+                <div style="margin-top:1.5rem;text-align:center;">
+                    <button class="excel-btn primary" style="padding:0.8rem 2rem;font-size:1rem;" onclick="runExcelDemo()">&#9654; Run Formula Calculation</button>
+                    <button class="excel-btn" style="padding:0.8rem 2rem;font-size:1rem;margin-left:1rem;" onclick="resetExcelDemo()">&#8634; Reset</button>
+                </div>
+            </div>
+
+            <!-- STEPS TAB -->
+            <div class="tab-pane" id="tab-steps">
+                <h3 style="margin-bottom:1.5rem;color:var(--primary);">&#128221; Step-by-Step Learning Guide</h3>
+                <div class="steps-container" id="stepsList">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Understand the Problem</h4>
+                            <p>Read the business scenario carefully. Identify what needs to be calculated and what data is available.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Choose the Right Excel Function</h4>
+                            <p>Based on the requirement, select the appropriate function. For summation use SUM(), for conditions use IF().</p>
+                            <div class="code-block">
+                                <span class="comment">// Example: Calculate 13% VAT</span><br>
+                                <span class="function">=</span>B2<span class="function">*</span><span class="number">0.13</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Enter the Formula</h4>
+                            <p>Type the formula starting with = sign. Use cell references instead of hard-coded values for flexibility.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Verify and Format</h4>
+                            <p>Check the result for accuracy. Apply number formatting (currency, percentage) for professional presentation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUIZ TAB -->
+            <div class="tab-pane" id="tab-quiz">
+                <h3 style="margin-bottom:1.5rem;color:var(--primary);">&#127919; Knowledge Check</h3>
+                <div class="quiz-container" id="quizContainer">
+                    <div class="quiz-question" id="quizQuestion">Which Excel function is used to calculate the sum of a range of cells?</div>
+                    <div class="quiz-options" id="quizOptions">
+                        <div class="quiz-option" onclick="checkAnswer(this, false)">
+                            <span class="option-letter">A</span>
+                            <span>AVERAGE()</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, true)">
+                            <span class="option-letter">B</span>
+                            <span>SUM()</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, false)">
+                            <span class="option-letter">C</span>
+                            <span>COUNT()</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, false)">
+                            <span class="option-letter">D</span>
+                            <span>MAX()</span>
+                        </div>
+                    </div>
+                    <div class="quiz-feedback" id="quizFeedback"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== SMART FEATURES ===== -->
+<section class="section" id="smart" style="background: white; margin: 0; max-width: 100%; padding: 5rem 2rem;">
+    <div style="max-width: 1400px; margin: 0 auto;">
+        <div class="section-header">
+            <h2>SMART Learning Framework</h2>
+            <p>Our pedagogical approach ensures effective, measurable, and achievable learning outcomes for every BBA student.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">&#127919;</div>
+                <h3>Specific</h3>
+                <p>Each module targets exact Excel skills and mathematical concepts required for BBA curriculum — no fluff, no filler.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128207;</div>
+                <h3>Measurable</h3>
+                <p>Track your progress with built-in quizzes, Excel simulations, and completion badges for every lesson.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#9989;</div>
+                <h3>Achievable</h3>
+                <p>Step-by-step videos break complex problems into digestible 10-minute segments. Learn at your own pace.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#127919;</div>
+                <h3>Relevant</h3>
+                <p>Every example uses real business scenarios — sales data, financial reports, market analysis — directly applicable.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#9200;</div>
+                <h3>Time-Bound</h3>
+                <p>Complete each module in 1 week. The full course is designed for a 6-week semester schedule with clear deadlines.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128176;</div>
+                <h3>100% Free</h3>
+                <p>All videos, PDFs, Excel templates, and quizzes are freely accessible. No registration fees, no hidden costs.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== ABOUT / FOOTER ===== -->
+<footer class="footer" id="about">
+    <div class="footer-content">
+        <h3>UCDL Academy</h3>
+        <p><strong>Universal Career Development & Learning Academy</strong></p>
+        <p>Empowering students with practical, technology-driven education</p>
+        <div class="footer-divider"></div>
+        <p><strong>Developed by:</strong> Mr. Bishnu Singh Rayamajhi</p>
+        <p>Math Lecturer & Head of Humanities & Social Science</p>
+        <p>Kapilvastu Multiple Campus (KMC), Nepal</p>
+        <div class="footer-divider"></div>
+        <p>&#128231; Contact: bishnu.rayamajhi@ucdl.academy</p>
+        <p>&#127758; Website: www.ucdl.academy</p>
+        <div class="footer-bottom">
+            <p>&copy; 2026 UCDL Academy. All rights reserved. | Business Mathematics for BBA</p>
+            <p>Free education for all BBA students under the guidance of Mr. Bishnu Singh Rayamajhi</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+// ===== NAVBAR SCROLL EFFECT =====
+window.addEventListener('scroll', function() {
+    const navbar = document.getElementById('navbar');
+    if (window.scrollY > 100) {
+        navbar.classList.add('visible');
+    } else {
+        navbar.classList.remove('visible');
+    }
+});
+
+function scrollToSection(id) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+}
+
+// ===== MODULE DATA =====
+const moduleData = {
+    1: {
+        title: "Excel for Functions & Techniques",
+        videos: [
+            { title: "Introduction to Excel Interface", desc: "Learn the basic layout, ribbon, formula bar, and cell referencing system." },
+            { title: "Basic Functions: SUM, AVERAGE, MAX, MIN", desc: "Master the fundamental statistical functions used in business calculations." },
+            { title: "Logical Functions: IF, AND, OR", desc: "Build decision-making formulas for business scenarios." },
+            { title: "Lookup Functions: VLOOKUP, HLOOKUP", desc: "Search and retrieve data from large datasets efficiently." },
+            { title: "Text Functions: CONCATENATE, LEFT, RIGHT", desc: "Manipulate text data for business reporting." },
+            { title: "Date & Time Functions", desc: "Calculate durations, deadlines, and aging reports." },
+            { title: "Financial Functions: PMT, FV, PV", desc: "Introduction to basic financial calculations in Excel." },
+            { title: "Advanced Techniques: Array Formulas", desc: "Perform complex calculations with array formulas." }
+        ],
+        pdfs: [
+            { title: "Module 1 Complete Notes", desc: "Comprehensive theory with solved examples", size: "2.4 MB" },
+            { title: "Excel Function Cheat Sheet", desc: "Quick reference guide for all functions", size: "1.1 MB" },
+            { title: "Practice Problems Set", desc: "50+ exercises with answer keys", size: "3.2 MB" },
+            { title: "Excel Shortcuts Guide", desc: "Keyboard shortcuts to boost productivity", size: "0.8 MB" }
+        ],
+        steps: [
+            { title: "Understand the Problem", desc: "Read the business scenario carefully. Identify what needs to be calculated and what data is available." },
+            { title: "Choose the Right Excel Function", desc: "Based on the requirement, select the appropriate function. For summation use SUM(), for conditions use IF().", code: "// Example: Calculate 13% VAT\n=B2*0.13" },
+            { title: "Enter the Formula", desc: "Type the formula starting with = sign. Use cell references instead of hard-coded values for flexibility." },
+            { title: "Verify and Format", desc: "Check the result for accuracy. Apply number formatting (currency, percentage) for professional presentation." }
+        ],
+        quiz: {
+            question: "Which Excel function is used to calculate the sum of a range of cells?",
+            options: ["AVERAGE()", "SUM()", "COUNT()", "MAX()"],
+            correct: 1
+        }
+    },
+    2: {
+        title: "Excel for Simultaneous Equations",
+        videos: [
+            { title: "Understanding Simultaneous Equations", desc: "Review of linear equations and their business applications." },
+            { title: "Substitution Method in Excel", desc: "Solve 2-variable systems using substitution." },
+            { title: "Elimination Method in Excel", desc: "Use Excel to perform elimination steps systematically." },
+            { title: "Matrix Method: MINVERSE & MMULT", desc: "Solve systems using matrix inversion and multiplication." },
+            { title: "Cramer's Rule in Excel", desc: "Implement Cramer's rule with determinant functions." },
+            { title: "Real Business Applications", desc: "Break-even analysis and resource allocation problems." }
+        ],
+        pdfs: [
+            { title: "Simultaneous Equations Theory", desc: "Complete theory with matrix algebra basics", size: "2.8 MB" },
+            { title: "Excel Matrix Functions Guide", desc: "MINVERSE, MMULT, MDET explained", size: "1.5 MB" },
+            { title: "Business Case Studies", desc: "10 real-world problems with solutions", size: "3.5 MB" }
+        ],
+        steps: [
+            { title: "Write Equations in Standard Form", desc: "Convert all equations to ax + by = c format for consistency." },
+            { title: "Set Up the Matrix in Excel", desc: "Enter coefficients in a matrix format. Use one column per variable.", code: "// Coefficient matrix A\n| 2  3 |\n| 4 -1 |" },
+            { title: "Apply MINVERSE for Inverse", desc: "Select the output range and enter =MINVERSE(A1:B2) as an array formula." },
+            { title: "Multiply by Constants", desc: "Use MMULT to multiply the inverse matrix by the constants vector." }
+        ],
+        quiz: {
+            question: "Which Excel function calculates the inverse of a matrix?",
+            options: ["MMULT()", "MINVERSE()", "MDET()", "MSUM()"],
+            correct: 1
+        }
+    },
+    3: {
+        title: "Excel for Non-Linear Functions",
+        videos: [
+            { title: "Introduction to Non-Linear Functions", desc: "Understanding quadratic, exponential, and logarithmic functions." },
+            { title: "Quadratic Functions in Excel", desc: "Graph parabolas and find roots using formulas." },
+            { title: "Exponential Growth Models", desc: "Model population growth, compound interest with EXP()." },
+            { title: "Logarithmic Functions", desc: "Use LOG() and LN() for decay and scaling problems." },
+            { title: "Power Functions & Trendlines", desc: "Fit power curves to business data." },
+            { title: "Solver for Non-Linear Optimization", desc: "Use Excel Solver to find optimal solutions." },
+            { title: "Regression Analysis", desc: "Perform non-linear regression with Excel tools." }
+        ],
+        pdfs: [
+            { title: "Non-Linear Functions Theory", desc: "Mathematical foundations and properties", size: "3.1 MB" },
+            { title: "Excel Graphing Guide", desc: "Create professional charts and trendlines", size: "2.2 MB" },
+            { title: "Solver Tutorial", desc: "Step-by-step guide to Excel Solver", size: "1.8 MB" }
+        ],
+        steps: [
+            { title: "Identify the Function Type", desc: "Determine whether the relationship is quadratic, exponential, or logarithmic from the data pattern." },
+            { title: "Set Up the Data Table", desc: "Organize independent (x) and dependent (y) variables in separate columns.", code: "// Example data setup\nX (Time) | Y (Sales)\n    1    |    150\n    2    |    300\n    3    |    600" },
+            { title: "Apply the Appropriate Function", desc: "Use EXP() for exponential, POWER() for power functions, or quadratic formulas." },
+            { title: "Validate with R-Squared", desc: "Check the goodness of fit using the R-squared value from trendline options." }
+        ],
+        quiz: {
+            question: "Which function models exponential growth in Excel?",
+            options: ["POWER()", "EXP()", "LN()", "SQRT()"],
+            correct: 1
+        }
+    },
+    4: {
+        title: "Excel for Calculator Software",
+        videoLink: "https://www.youtube.com/watch?v=2BsdAa7CTpE",
+        videos: [
+            { title: "Building a Simple Calculator", desc: "Create a functional calculator interface in Excel." },
+            { title: "Loan EMI Calculator", desc: "Build an interactive EMI calculator with sliders." },
+            { title: "GST/Tax Calculator", desc: "Automated tax computation tool for businesses." },
+            { title: "Currency Converter", desc: "Real-time currency conversion with web queries." },
+            { title: "Data Validation & Protection", desc: "Lock formulas and validate user inputs." }
+        ],
+        pdfs: [
+            { title: "Calculator Templates Pack", desc: "5 ready-to-use Excel calculator templates", size: "4.2 MB" },
+            { title: "Data Validation Guide", desc: "Prevent errors with input restrictions", size: "1.3 MB" }
+        ],
+        steps: [
+            { title: "Design the Interface", desc: "Plan the layout with input cells, output cells, and control buttons." },
+            { title: "Add Data Validation", desc: "Restrict inputs to valid ranges (e.g., interest rate between 0% and 50%).", code: "// Data Validation Rule\nAllow: Decimal\nBetween: 0 and 0.50" },
+            { title: "Write the Core Formula", desc: "Implement the main calculation logic using cell references." },
+            { title: "Add Formatting & Protection", desc: "Format outputs as currency. Lock formula cells to prevent accidental changes." }
+        ],
+        quiz: {
+            question: "Which feature prevents users from editing formula cells?",
+            options: ["Data Validation", "Cell Protection", "Conditional Formatting", "Freeze Panes"],
+            correct: 1
+        }
+    },
+    5: {
+        title: "Excel for Financial Mathematics",
+        videoLink: "https://www.youtube.com/watch?v=Eqfsk9FHYgg&t=22s",
+        videos: [
+            { title: "Simple & Compound Interest", desc: "Calculate interest using Excel formulas." },
+            { title: "Present Value & Future Value", desc: "Time value of money concepts in Excel." },
+            { title: "Annuities: Ordinary & Due", desc: "PMT, PV, FV for annuity calculations." },
+            { title: "Loan Amortization Schedules", desc: "Create detailed repayment tables." },
+            { title: "Depreciation Methods", desc: "SLN, DB, DDB functions for asset depreciation." },
+            { title: "NPV & IRR Analysis", desc: "Investment appraisal techniques in Excel." },
+            { title: "Break-Even Analysis", desc: "Find the break-even point for business decisions." },
+            { title: "Sensitivity Analysis", desc: "Use data tables for what-if scenarios." },
+            { title: "Bond Valuation", desc: "Calculate bond prices and yields." }
+        ],
+        pdfs: [
+            { title: "Financial Mathematics Theory", desc: "Complete formulas and derivations", size: "4.5 MB" },
+            { title: "Excel Financial Functions", desc: "Comprehensive guide to all financial functions", size: "2.8 MB" },
+            { title: "Loan Amortization Template", desc: "Ready-to-use amortization schedule", size: "1.2 MB" },
+            { title: "Investment Analysis Workbook", desc: "NPV, IRR, payback period calculator", size: "3.1 MB" },
+            { title: "Depreciation Comparison Tool", desc: "Compare all depreciation methods", size: "1.9 MB" }
+        ],
+        steps: [
+            { title: "Identify the Financial Problem", desc: "Determine whether you need to calculate interest, annuity, depreciation, or investment return." },
+            { title: "Gather Required Parameters", desc: "Collect rate, periods, payment amount, and present/future values.", code: "// Example: Loan parameters\nPrincipal (PV) = 500,000\nRate = 12% per year\nPeriods (n) = 5 years\nPayment (PMT) = ?" },
+            { title: "Select the Right Function", desc: "Use PMT for payments, FV for future value, PV for present value, NPV for net present value." },
+            { title: "Interpret the Results", desc: "Analyze whether the investment is viable. Compare with alternative opportunities." }
+        ],
+        quiz: {
+            question: "Which function calculates the periodic payment for a loan?",
+            options: ["PV()", "FV()", "PMT()", "NPV()"],
+            correct: 2
+        }
+    },
+    6: {
+        title: "Excel for Derivative & Integration",
+        videoLink: "https://www.youtube.com/watch?v=Zp8oTlWYWSM",
+        derivativeVideoLink: "https://www.youtube.com/watch?v=lSZICtU0LpA",
+        videos: [
+            { title: "Numerical Differentiation Basics", desc: "Forward, backward, and central difference methods." },
+            { title: "Derivative in Excel", desc: "Calculate rate of change using finite differences." },
+            { title: "Numerical Integration: Trapezoidal Rule", desc: "Approximate area under curves." },
+            { title: "Simpson's Rule in Excel", desc: "More accurate integration technique." },
+            { title: "Marginal Analysis", desc: "Apply derivatives to cost and revenue functions." },
+            { title: "Consumer & Producer Surplus", desc: "Calculate economic surplus using integration." },
+            { title: "Elasticity Calculations", desc: "Price elasticity using derivative concepts." }
+        ],
+        pdfs: [
+            { title: "Numerical Methods Theory", desc: "Mathematical foundations of numerical calculus", size: "3.8 MB" },
+            { title: "Excel Calculus Workbook", desc: "Interactive worksheets for differentiation & integration", size: "2.5 MB" },
+            { title: "Business Applications Guide", desc: "Marginal cost, revenue, and profit analysis", size: "2.1 MB" },
+            { title: "Practice Problems with Solutions", desc: "30+ calculus problems solved in Excel", size: "4.0 MB" }
+        ],
+        steps: [
+            { title: "Set Up the Function Table", desc: "Create a table with x values and corresponding f(x) values at small intervals.", code: "// Data setup for differentiation\nX    |  f(X)\n1.0  |  10.0\n1.1  |  11.2\n1.2  |  12.5" },
+            { title: "Apply Finite Difference Formula", desc: "Use central difference for better accuracy: f'(x) = [f(x+h) - f(x-h)] / 2h" },
+            { title: "For Integration: Use Trapezoidal Rule", desc: "Area = h/2 * [f(x0) + 2*sum(f(xi)) + f(xn)]" },
+            { title: "Verify with Known Solutions", desc: "Compare numerical results with analytical solutions when available." }
+        ],
+        quiz: {
+            question: "Which numerical method uses the formula [f(x+h) - f(x-h)] / 2h?",
+            options: ["Forward Difference", "Backward Difference", "Central Difference", "Simpson's Rule"],
+            correct: 2
+        }
+    }
+};
+
+let currentModule = 1;
+
+// ===== OPEN MODULE =====
+function openModule(moduleId) {
+    currentModule = moduleId;
+    const data = moduleData[moduleId];
+
+    // Highlight active card
+    document.querySelectorAll('.module-card').forEach(card => card.classList.remove('active'));
+    document.querySelector(`[data-module="${moduleId}"]`).classList.add('active');
+
+    // Show lesson panel
+    document.getElementById('lessonPanel').classList.add('active');
+
+    // Update video tab
+    document.getElementById('videoTitle').textContent = `Module ${moduleId}: ${data.videos[0].title}`;
+    document.getElementById('videoDesc').textContent = data.videos[0].desc;
+
+    const videoList = document.getElementById('videoList');
+    videoList.innerHTML = data.videos.map((v, i) => `
+        <div class="step-item" onclick="playVideoByIndex(${i})" style="cursor:pointer;">
+            <div class="step-number">${i + 1}</div>
+            <div class="step-content">
+                <h4>${v.title}</h4>
+                <p>${v.desc}</p>
+            </div>
+        </div>
+    `).join('');
+
+    // Update PDF tab
+    const pdfList = document.getElementById('pdfList');
+    pdfList.innerHTML = data.pdfs.map(pdf => `
+        <a href="#" class="pdf-card" download>
+            <div class="pdf-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            </div>
+            <div class="pdf-info">
+                <h4>${pdf.title}</h4>
+                <p>${pdf.desc}</p>
+                <span class="pdf-size">&#128229; ${pdf.size}</span>
+            </div>
+        </a>
+    `).join('');
+
+    // Update steps tab
+    const stepsList = document.getElementById('stepsList');
+    stepsList.innerHTML = data.steps.map((s, i) => `
+        <div class="step-item">
+            <div class="step-number">${i + 1}</div>
+            <div class="step-content">
+                <h4>${s.title}</h4>
+                <p>${s.desc}</p>
+                ${s.code ? `<div class="code-block">${s.code.replace(/\n/g, '<br>')}</div>` : ''}
+            </div>
+        </div>
+    `).join('');
+
+    // Update quiz tab
+    document.getElementById('quizQuestion').textContent = data.quiz.question;
+    const quizOptions = document.getElementById('quizOptions');
+    quizOptions.innerHTML = data.quiz.options.map((opt, i) => `
+        <div class="quiz-option" onclick="checkAnswer(this, ${i === data.quiz.correct})">
+            <span class="option-letter">${String.fromCharCode(65 + i)}</span>
+            <span>${opt}</span>
+        </div>
+    `).join('');
+    document.getElementById('quizFeedback').classList.remove('show');
+
+    // Update Excel simulator based on module
+    updateExcelSimulator(moduleId);
+
+    // Scroll to lesson panel
+    document.getElementById('lessonPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Update progress
+    const progressFill = document.querySelector(`[data-module="${moduleId}"] .progress-fill`);
+    const progressText = document.querySelector(`[data-module="${moduleId}"] .progress-text`);
+    progressFill.style.width = '15%';
+    progressText.textContent = 'In progress';
+}
+
+function playVideoByIndex(index) {
+    const data = moduleData[currentModule];
+    document.getElementById('videoTitle').textContent = `Module ${currentModule}: ${data.videos[index].title}`;
+    document.getElementById('videoDesc').textContent = data.videos[index].desc + ' (Click play button to open YouTube playlist)';
+
+    // For Module 6, video index 0 opens Numerical Integration, index 6 opens Derivative Curve
+    if (currentModule === 6) {
+        if (index === 6) {
+            data.currentVideoLink = data.derivativeVideoLink;
+        } else {
+            data.currentVideoLink = data.videoLink;
+        }
+    }
+}
+
+function playVideo() {
+    window.open('https://www.youtube.com/watch?v=Eqfsk9FHYgg&t=22s', '_blank');
+}
+
+// ===== SWITCH TABS =====
+function switchTab(tabName) {
+    document.querySelectorAll('.lesson-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+    event.target.classList.add('active');
+    document.getElementById(`tab-${tabName}`).classList.add('active');
+}
+
+// ===== EXCEL SIMULATOR =====
+function updateExcelSimulator(moduleId) {
+    const grid = document.getElementById('excelGrid');
+    const formulaInput = document.querySelector('.formula-input');
+
+    const simulators = {
+        1: { formula: '=SUM(A2:A10)', grid: 'default' },
+        2: { formula: '=MINVERSE(A2:B3)', grid: 'matrix' },
+        3: { formula: '=EXP(A2)', grid: 'nonlinear' },
+        4: { formula: '=PMT(B2/12,B3*12,-B1)', grid: 'calculator' },
+        5: { formula: '=PV(B2/12,B3*12,-B4)', grid: 'financial' },
+        6: { formula: '=(B3-B1)/(2*0.1)', grid: 'calculus' }
+    };
+
+    const sim = simulators[moduleId];
+    formulaInput.value = sim.formula;
+
+    // Reset grid to formula view for all modules
+    resetExcelDemo();
+}
+
+function runExcelDemo() {
+    const cells = document.querySelectorAll('#excelGrid .formula-cell, #excelGrid .output-cell');
+
+    const results = {
+        '=B2*0.13': '1950',
+        '=B3*0.13': '2860',
+        '=B4*0.13': '1105',
+        '=B5*0.13': '4030',
+        '=B2+C2': '16950',
+        '=B3+C3': '24860',
+        '=B4+C4': '9605',
+        '=B5+C5': '35030',
+        '=IF(D2>15000,"High","Low")': 'High',
+        '=IF(D3>15000,"High","Low")': 'High',
+        '=IF(D4>15000,"High","Low")': 'Low',
+        '=IF(D5>15000,"High","Low")': 'High',
+        '=SUM(B2:B5)': '76500',
+        '=SUM(C2:C5)': '9945',
+        '=SUM(D2:D5)': '86445',
+        '=COUNTIF(E2:E5,"High")': '3'
+    };
+
+    cells.forEach(cell => {
+        const formula = cell.getAttribute('data-formula');
+        if (formula && results[formula]) {
+            cell.textContent = results[formula];
+            cell.classList.remove('formula-cell');
+            cell.classList.add('result-cell');
+        }
+    });
+}
+
+function resetExcelDemo() {
+    const cells = document.querySelectorAll('#excelGrid .result-cell, #excelGrid .formula-cell, #excelGrid .output-cell');
+
+    const formulas = {
+        '=B2*0.13': '=B2*0.13',
+        '=B3*0.13': '=B3*0.13',
+        '=B4*0.13': '=B4*0.13',
+        '=B5*0.13': '=B5*0.13',
+        '=B2+C2': '=B2+C2',
+        '=B3+C3': '=B3+C3',
+        '=B4+C4': '=B4+C4',
+        '=B5+C5': '=B5+C5',
+        '=IF(D2>15000,"High","Low")': '=IF(D2>15000,"High","Low")',
+        '=IF(D3>15000,"High","Low")': '=IF(D3>15000,"High","Low")',
+        '=IF(D4>15000,"High","Low")': '=IF(D4>15000,"High","Low")',
+        '=IF(D5>15000,"High","Low")': '=IF(D5>15000,"High","Low")',
+        '=SUM(B2:B5)': '=SUM(B2:B5)',
+        '=SUM(C2:C5)': '=SUM(C2:C5)',
+        '=SUM(D2:D5)': '=SUM(D2:D5)',
+        '=COUNTIF(E2:E5,"High")': '=COUNTIF(E2:E5,"High")'
+    };
+
+    cells.forEach(cell => {
+        const formula = cell.getAttribute('data-formula');
+        if (formula && formulas[formula]) {
+            cell.textContent = formulas[formula];
+            cell.classList.remove('result-cell');
+            if (!cell.classList.contains('output-cell')) {
+                cell.classList.add('formula-cell');
+            }
+        }
+    });
+}
+
+// ===== QUIZ =====
+function checkAnswer(element, isCorrect) {
+    const options = document.querySelectorAll('.quiz-option');
+    options.forEach(opt => {
+        opt.style.pointerEvents = 'none';
+        opt.classList.remove('correct', 'wrong');
+    });
+
+    if (isCorrect) {
+        element.classList.add('correct');
+        document.getElementById('quizFeedback').textContent = 'Correct! Well done. Move to the next lesson to continue learning.';
+        document.getElementById('quizFeedback').className = 'quiz-feedback show correct';
+    } else {
+        element.classList.add('wrong');
+        // Highlight correct answer
+        const correctIndex = moduleData[currentModule].quiz.correct;
+        options[correctIndex].classList.add('correct');
+        document.getElementById('quizFeedback').textContent = 'Not quite. The correct answer is highlighted in green. Review the lesson and try again.';
+        document.getElementById('quizFeedback').className = 'quiz-feedback show wrong';
+    }
+}
+</script>
+
+</body>
+</html>
