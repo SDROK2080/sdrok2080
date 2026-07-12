@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BBA Business Mathematics with Excel - Slide Presentation</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #0d0503;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.slide-container {
+  width: 100%;
+  max-width: 900px;
+  background: #1a0a05;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+}
+
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background: #2d1810;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #c75b2a, #d4a574);
+  width: 25%;
+  transition: width 0.4s ease;
+}
+
+.slide {
+  display: none;
+  min-height: 560px;
+  padding: 40px;
+  animation: fadeIn 0.5s ease;
+}
+
+.slide.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-content {
+  color: #f0e6dc;
+  height: 100%;
+}
+
+.title-slide {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 480px;
+  gap: 14px;
+}
+
+.badge {
+  background: linear-gradient(135deg, #c75b2a, #d4a574);
+  color: #1a0a05;
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+h1 {
+  font-size: 42px;
+  font-weight: 800;
+  color: #f5ebe0;
+  line-height: 1.2;
+  text-shadow: 0 2px 10px rgba(199,91,42,0.3);
+}
+
+h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #f5ebe0;
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #c4a882;
+  margin-top: 4px;
+}
+
+.link-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #2d1810;
+  border: 1px solid #5c3a2a;
+  color: #d4a574;
+  padding: 12px 24px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-size: 14px;
+  font-family: monospace;
+  margin-top: 6px;
+  transition: all 0.3s ease;
+}
+
+.link-pill:hover {
+  background: #3d2418;
+  border-color: #c75b2a;
+  transform: translateY(-2px);
+}
+
+/* Presenter Box with Face-Focused Photo */
+.presenter-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  background: linear-gradient(135deg, rgba(199,91,42,0.15), rgba(212,165,116,0.1));
+  border: 1px solid rgba(199,91,42,0.4);
+  border-radius: 16px;
+  padding: 18px 24px;
+  margin-top: 14px;
+  text-align: left;
+  max-width: 620px;
+}
+
+.presenter-photo {
+  flex-shrink: 0;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgba(199,91,42,0.6);
+  box-shadow: 0 4px 15px rgba(199,91,42,0.3);
+}
+
+.presenter-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 50%;
+  transform: scale(1.0);
+}
+
+.presenter-info {
+  color: #d4c4b0;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.presenter-info strong {
+  color: #f5ebe0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.presenter-name {
+  color: #f5ebe0;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.presenter-role {
+  color: #c4a882;
+}
+
+.presenter-org {
+  color: #c4a882;
+}
+
+.presenter-founder {
+  color: #d4a574;
+  font-weight: 600;
+  font-size: 12px;
+  margin-top: 4px;
+  display: inline-block;
+  background: rgba(212,165,116,0.12);
+  padding: 2px 10px;
+  border-radius: 6px;
+}
+
+/* Path Grid */
+.path-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.path-card {
+  background: #2d1810;
+  border: 1px solid #4a2e1f;
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.path-card:hover {
+  border-color: #c75b2a;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px -5px rgba(199,91,42,0.25);
+}
+
+.path-num {
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: linear-gradient(135deg, #c75b2a, #d4a574);
+  color: #1a0a05;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.path-icon {
+  font-size: 28px;
+  margin-bottom: 10px;
+  margin-top: 6px;
+}
+
+.path-card h3 {
+  font-size: 16px;
+  color: #f0e6dc;
+  margin-bottom: 6px;
+}
+
+.path-card p {
+  font-size: 13px;
+  color: #b89a7a;
+  line-height: 1.5;
+}
+
+/* Quiz */
+.quiz-slide { text-align: center; }
+
+.quiz-box {
+  background: #2d1810;
+  border: 1px solid #4a2e1f;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.quiz-question {
+  font-size: 18px;
+  color: #f0e6dc;
+  margin-bottom: 24px;
+  font-weight: 500;
+}
+
+.quiz-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.quiz-btn {
+  background: #1a0a05;
+  border: 2px solid #4a2e1f;
+  color: #f0e6dc;
+  padding: 14px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+  font-family: 'Courier New', monospace;
+}
+
+.quiz-btn:hover {
+  border-color: #c75b2a;
+  background: #2d1810;
+}
+
+.quiz-btn.revealed-correct {
+  background: #1a3a1a;
+  border-color: #4ade80;
+  color: #bbf7d0;
+}
+
+.quiz-btn.revealed-wrong {
+  background: #3a1a1a;
+  border-color: #f87171;
+  color: #fecaca;
+  opacity: 0.6;
+}
+
+.quiz-feedback {
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  min-height: 24px;
+}
+
+.quiz-feedback.correct { color: #4ade80; }
+.quiz-feedback.wrong { color: #f87171; }
+
+/* Resources */
+.resource-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.resource-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #2d1810;
+  border: 1px solid #4a2e1f;
+  border-radius: 12px;
+  padding: 16px 20px;
+  transition: all 0.3s ease;
+}
+
+.resource-item:hover {
+  border-color: #c75b2a;
+  transform: translateX(4px);
+}
+
+.res-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.res-info h4 {
+  color: #f0e6dc;
+  font-size: 15px;
+  margin-bottom: 3px;
+}
+
+.res-info p {
+  color: #b89a7a;
+  font-size: 13px;
+}
+
+.cta-btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: linear-gradient(135deg, #c75b2a, #d4a574);
+  color: #1a0a05;
+  padding: 16px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(199,91,42,0.4);
+}
+
+/* Nav */
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: #2d1810;
+  border-top: 1px solid #4a2e1f;
+}
+
+.nav-btn {
+  background: #4a2e1f;
+  color: #f0e6dc;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background: #c75b2a;
+  color: #1a0a05;
+}
+
+.nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.slide-counter {
+  color: #b89a7a;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: monospace;
+}
+
+@media (max-width: 600px) {
+  .slide { padding: 24px; min-height: 400px; }
+  h1 { font-size: 28px; }
+  h2 { font-size: 22px; }
+  .path-grid { grid-template-columns: 1fr; }
+  .quiz-options { grid-template-columns: 1fr; }
+  .link-pill { font-size: 11px; padding: 10px 16px; }
+  .presenter-box { flex-direction: column; text-align: center; align-items: center; }
+  .presenter-photo { width: 72px; height: 72px; }
+}
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<div class="slide-container" id="slideContainer">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+  <!-- Slide 1: Title -->
+  <div class="slide active" data-index="0">
+    <div class="slide-content title-slide">
+      <div class="badge">📊 BBA Module 1 To 6</div>
+      <h1>Business Mathematics<br>with Excel</h1>
+      <p class="subtitle">Kapilvastu Multiple Campus (KMC) — Complete Learning Materials</p>
+      <a href="https://sdrok2080.github.io/sdrok2080/BBAWithExcelBusinessMath" target="_blank" class="link-pill">
+        <span>🔗</span> sdrok2080.github.io/sdrok2080/BBAWithExcelBusinessMath
+      </a>
+      <div class="presenter-box">
+        <div class="presenter-photo">
+          <img src="data:image/jpeg;base64,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
+" alt="Mr. Bishnu Singh Rayamajhi" />
+        </div>
+        <div class="presenter-info">
+          <strong>Presented by:</strong><br>
+          <span class="presenter-name">Mr. Bishnu Singh Rayamajhi</span><br>
+          <span class="presenter-role">Math Lecturer & Head of Humanity & Social Science</span><br>
+          <span class="presenter-org">Kapilvastu Multiple Campus (KMC), Taulihawa, Kapilvastu</span><br>
+          <span class="presenter-founder">Founder: UCDL Academy</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 2: Learning Path -->
+  <div class="slide" data-index="1">
+    <div class="slide-content">
+      <h2>📋 Learning Path</h2>
+      <div class="path-grid">
+        <div class="path-card">
+          <div class="path-num">1</div>
+          <div class="path-icon">📹</div>
+          <h3>Watch Video Lessons</h3>
+          <p>Start by watching the video tutorial. Take notes on key concepts and formulas.</p>
+        </div>
+        <div class="path-card">
+          <div class="path-num">2</div>
+          <div class="path-icon">📖</div>
+          <h3>Download PDF Notes</h3>
+          <p>Download and study the comprehensive PDF materials for deeper understanding.</p>
+        </div>
+        <div class="path-card">
+          <div class="path-num">3</div>
+          <div class="path-icon">✍️</div>
+          <h3>Practice Exercises</h3>
+          <p>Complete practice problems from the PDF materials and Excel templates.</p>
+        </div>
+        <div class="path-card">
+          <div class="path-num">4</div>
+          <div class="path-icon">🎯</div>
+          <h3>Take the Quiz</h3>
+          <p>Test your knowledge with the practice quiz and review weak areas.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 3: Knowledge Check -->
+  <div class="slide" data-index="2">
+    <div class="slide-content quiz-slide">
+      <h2>🎯 Knowledge Check</h2>
+      <div class="quiz-box">
+        <p class="quiz-question">Which Excel function is used to calculate the sum of a range?</p>
+        <div class="quiz-options">
+          <button class="quiz-btn" data-answer="AVERAGE">AVERAGE()</button>
+          <button class="quiz-btn correct" data-answer="SUM">SUM()</button>
+          <button class="quiz-btn" data-answer="COUNT">COUNT()</button>
+          <button class="quiz-btn" data-answer="MAX">MAX()</button>
+        </div>
+        <div class="quiz-feedback" id="quizFeedback"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: Resources -->
+  <div class="slide" data-index="3">
+    <div class="slide-content">
+      <h2>📚 Module Resources</h2>
+      <div class="resource-list">
+        <div class="resource-item">
+          <span class="res-icon">🎬</span>
+          <div class="res-info">
+            <h4>Video Tutorials</h4>
+            <p>Step-by-step video lessons covering all business math concepts</p>
+          </div>
+        </div>
+        <div class="resource-item">
+          <span class="res-icon">📄</span>
+          <div class="res-info">
+            <h4>PDF Notes</h4>
+            <p>Comprehensive downloadable notes for offline study</p>
+          </div>
+        </div>
+        <div class="resource-item">
+          <span class="res-icon">📊</span>
+          <div class="res-info">
+            <h4>Excel Templates</h4>
+            <p>Practice spreadsheets with built-in formulas and examples</p>
+          </div>
+        </div>
+        <div class="resource-item">
+          <span class="res-icon">❓</span>
+          <div class="res-info">
+            <h4>Practice Quizzes</h4>
+            <p>Self-assessment tools to test your understanding</p>
+          </div>
+        </div>
+      </div>
+      <a href="https://sdrok2080.github.io/sdrok2080/BBAWithExcelBusinessMath" target="_blank" class="cta-btn">
+        🚀 Visit the Full Course Page
+      </a>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav-bar">
+    <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">◀ Prev</button>
+    <span class="slide-counter" id="slideCounter">1 / 4</span>
+    <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next ▶</button>
+  </div>
+</div>
+
+<script>
+let currentSlide = 0;
+const totalSlides = 4;
+const slides = document.querySelectorAll('.slide');
+const progressFill = document.getElementById('progressFill');
+const counter = document.getElementById('slideCounter');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+
+function updateSlide() {
+  slides.forEach((s, i) => {
+    s.classList.toggle('active', i === currentSlide);
+  });
+  progressFill.style.width = ((currentSlide + 1) / totalSlides * 100) + '%';
+  counter.textContent = (currentSlide + 1) + ' / ' + totalSlides;
+  prevBtn.disabled = currentSlide === 0;
+  nextBtn.disabled = currentSlide === totalSlides - 1;
+}
+
+function changeSlide(dir) {
+  const newIndex = currentSlide + dir;
+  if (newIndex >= 0 && newIndex < totalSlides) {
+    currentSlide = newIndex;
+    updateSlide();
+  }
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') changeSlide(1);
+  if (e.key === 'ArrowLeft') changeSlide(-1);
+});
+
+// Quiz interaction
+document.querySelectorAll('.quiz-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const isCorrect = this.classList.contains('correct');
+    const feedback = document.getElementById('quizFeedback');
+
+    document.querySelectorAll('.quiz-btn').forEach(b => {
+      b.disabled = true;
+      if (b.classList.contains('correct')) {
+        b.classList.add('revealed-correct');
+      } else {
+        b.classList.add('revealed-wrong');
+      }
+    });
+
+    if (isCorrect) {
+      feedback.textContent = '✅ Correct! SUM() adds all numbers in a range.';
+      feedback.className = 'quiz-feedback correct';
+    } else {
+      feedback.textContent = '❌ Not quite. The correct answer is SUM().';
+      feedback.className = 'quiz-feedback wrong';
+    }
+  });
+});
+
+updateSlide();
+</script>
+
+</body>
+</html>
