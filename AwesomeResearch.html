@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMART Research Framework</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+        .profile-img-wrapper {
+            position: relative;
+            flex-shrink: 0;
+        }
+        .profile-img {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #3b82f6;
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+        }
+        .online-indicator {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            width: 18px;
+            height: 18px;
+            background: #22c55e;
+            border-radius: 50%;
+            border: 3px solid #0f172a;
+        }
+        .header-content {
+            flex: 1;
+            min-width: 280px;
+        }
+        .header-content h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+        .header-content .subtitle {
+            color: #94a3b8;
+            font-size: 1rem;
+            margin-bottom: 12px;
+        }
+        .badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .badge-blue {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+        }
+        .badge-purple {
+            background: rgba(168, 85, 247, 0.15);
+            color: #c084fc;
+        }
+        .badge-green {
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+        }
+        .institution {
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        /* SMART Cards */
+        .smart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .smart-card {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .smart-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        .smart-card.s-blue:hover { border-color: #3b82f6; box-shadow: 0 10px 40px rgba(59, 130, 246, 0.15); }
+        .smart-card.s-purple:hover { border-color: #a855f7; box-shadow: 0 10px 40px rgba(168, 85, 247, 0.15); }
+        .smart-card.s-green:hover { border-color: #22c55e; box-shadow: 0 10px 40px rgba(34, 197, 94, 0.15); }
+        .smart-card.s-amber:hover { border-color: #f59e0b; box-shadow: 0 10px 40px rgba(245, 158, 11, 0.15); }
+        .smart-card.s-red:hover { border-color: #ef4444; box-shadow: 0 10px 40px rgba(239, 68, 68, 0.15); }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+        .icon-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .icon-purple { background: linear-gradient(135deg, #a855f7, #7c3aed); }
+        .icon-green { background: linear-gradient(135deg, #22c55e, #16a34a); }
+        .icon-amber { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .icon-red { background: linear-gradient(135deg, #ef4444, #dc2626); }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .title-blue { color: #60a5fa; }
+        .title-purple { color: #c084fc; }
+        .title-green { color: #4ade80; }
+        .title-amber { color: #fbbf24; }
+        .title-red { color: #f87171; }
+
+        .card-desc {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+        .card-example {
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+        }
+        .ex-label {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .ex-blue { background: rgba(59, 130, 246, 0.08); }
+        .ex-blue .ex-label { color: #60a5fa; }
+        .ex-purple { background: rgba(168, 85, 247, 0.08); }
+        .ex-purple .ex-label { color: #c084fc; }
+        .ex-green { background: rgba(34, 197, 94, 0.08); }
+        .ex-green .ex-label { color: #4ade80; }
+        .ex-amber { background: rgba(245, 158, 11, 0.08); }
+        .ex-amber .ex-label { color: #fbbf24; }
+        .ex-red { background: rgba(239, 68, 68, 0.08); }
+        .ex-red .ex-label { color: #f87171; }
+        .example-text {
+            color: #cbd5e1;
+            font-style: italic;
+            margin: 0;
+        }
+
+        /* Research Lifecycle */
+        .lifecycle-section {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 32px;
+        }
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #e2e8f0;
+        }
+        .lifecycle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .lifecycle-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .lifecycle-item:hover {
+            transform: translateX(4px);
+            filter: brightness(1.1);
+        }
+        .lc-blue { background: rgba(59, 130, 246, 0.06); border-left: 3px solid #3b82f6; }
+        .lc-purple { background: rgba(168, 85, 247, 0.06); border-left: 3px solid #a855f7; }
+        .lc-green { background: rgba(34, 197, 94, 0.06); border-left: 3px solid #22c55e; }
+        .lc-amber { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; }
+        .lc-red { background: rgba(239, 68, 68, 0.06); border-left: 3px solid #ef4444; }
+        .lc-cyan { background: rgba(6, 182, 212, 0.06); border-left: 3px solid #06b6d4; }
+        .lc-title {
+            color: #e2e8f0;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        .lc-desc {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin: 4px 0 0 0;
+        }
+        .lifecycle-item .lc-title:hover {
+            text-decoration: underline;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .tool-card {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 20px;
+        }
+        .tool-card h4 {
+            font-size: 1rem;
+            margin-bottom: 12px;
+        }
+        .tool-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .tool-card li {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            line-height: 1.8;
+        }
+        .tool-card a {
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .tool-card a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+        .link-blue { color: #60a5fa; }
+        .link-purple { color: #c084fc; }
+        .link-green { color: #4ade80; }
+        .link-amber { color: #fbbf24; }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 24px;
+            border-top: 1px solid #334155;
+        }
+        .footer p {
+            color: #64748b;
+            font-size: 0.85rem;
+            margin: 0 0 8px 0;
+        }
+        .footer .author {
+            color: #475569;
+            font-size: 0.8rem;
+            margin: 0;
+        }
+        .footer .credit {
+            color: #475569;
+            font-size: 0.75rem;
+            margin-top: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .header-content h1 {
+                font-size: 1.5rem;
+            }
+            .badges {
+                justify-content: center;
+            }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="container">
+        <!-- Header with Profile -->
+        <div class="header">
+            <div class="profile-img-wrapper">
+                <img src="Photo001.jpg" alt="Mr. Bishnu Singh Rayamajhi" class="profile-img">
+                <div class="online-indicator"></div>
+            </div>
+            <div class="header-content">
+                <h1>SMART Research Framework</h1>
+                <p class="subtitle">A Strategic Toolkit for Scholars, Researchers & Investigators</p>
+                <div class="badges">
+                    <span class="badge badge-blue">&#128208; Math Lecturer</span>
+                    <span class="badge badge-purple">&#127963; Head of Humanities & Social Science</span>
+                    <span class="badge badge-green">&#127891; Founder: UCDL Academy</span>
+                </div>
+                <p class="institution">Kapilvastu Multiple Campus, Taulihawa</p>
+            </div>
+        </div>
+
+        <!-- SMART Cards -->
+        <div class="smart-grid">
+            <!-- S - Specific -->
+            <div class="smart-card s-blue">
+                <div class="card-icon icon-blue">&#127919;</div>
+                <h3 class="card-title title-blue">S &mdash; Specific</h3>
+                <p class="card-desc">Define precise research questions. Narrow scope with clear variables, population, and context.</p>
+                <div class="card-example ex-blue">
+                    <span class="ex-label">Example:</span>
+                    <p class="example-text">"Examine the effect of flipped classroom on Grade 11 math scores in Taulihawa district."</p>
+                </div>
+            </div>
+
+            <!-- M - Measurable -->
+            <div class="smart-card s-purple">
+                <div class="card-icon icon-purple">&#128207;</div>
+                <h3 class="card-title title-purple">M &mdash; Measurable</h3>
+                <p class="card-desc">Establish quantifiable indicators. Use validated instruments, rubrics, and statistical benchmarks.</p>
+                <div class="card-example ex-purple">
+                    <span class="ex-label">Tools:</span>
+                    <p class="example-text">Pre/post tests, Likert scales, GPA tracking, effect size (Cohen's d)</p>
+                </div>
+            </div>
+
+            <!-- A - Achievable -->
+            <div class="smart-card s-green">
+                <div class="card-icon icon-green">&#9989;</div>
+                <h3 class="card-title title-green">A &mdash; Achievable</h3>
+                <p class="card-desc">Align with available resources, institutional support, and your expertise timeline.</p>
+                <div class="card-example ex-green">
+                    <span class="ex-label">Checklist:</span>
+                    <p class="example-text">&#10003; Sample access &#10003; Ethics approval &#10003; Software/tools &#10003; Supervisor support</p>
+                </div>
+            </div>
+
+            <!-- R - Relevant -->
+            <div class="smart-card s-amber">
+                <div class="card-icon icon-amber">&#128279;</div>
+                <h3 class="card-title title-amber">R &mdash; Relevant</h3>
+                <p class="card-desc">Connect to academic gaps, national education policy, or community needs in Nepal.</p>
+                <div class="card-example ex-amber">
+                    <span class="ex-label">Relevance Lens:</span>
+                    <p class="example-text">NEB curriculum gaps, STEM education policy, local classroom realities</p>
+                </div>
+            </div>
+
+            <!-- T - Time-bound -->
+            <div class="smart-card s-red">
+                <div class="card-icon icon-red">&#9201;</div>
+                <h3 class="card-title title-red">T &mdash; Time-bound</h3>
+                <p class="card-desc">Set clear milestones: literature review, data collection, analysis, writing, and submission deadlines.</p>
+                <div class="card-example ex-red">
+                    <span class="ex-label">Typical Timeline:</span>
+                    <p class="example-text">Months 1-2: Review | 3-5: Data | 6-7: Analysis | 8-10: Write | 11-12: Submit</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Research Lifecycle -->
+        <div class="lifecycle-section">
+            <h2 class="section-title">
+                <span style="background: linear-gradient(135deg, #3b82f6, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">&#128203;</span>
+                Research Lifecycle Checklist
+            </h2>
+            <div class="lifecycle-grid">
+                <a href="https://www.scribbr.com/research-process/research-problem/" target="_blank" class="lifecycle-item lc-blue">
+                    <span>&#128269;</span>
+                    <div>
+                        <strong class="lc-title">1. Initial Planning</strong>
+                        <p class="lc-desc">Define problem, objectives, hypotheses, and conduct literature review.</p>
+                    </div>
+                </a>
+                <a href="https://www.scribbr.com/methodology/research-design/" target="_blank" class="lifecycle-item lc-purple">
+                    <span>&#127912;</span>
+                    <div>
+                        <strong class="lc-title">2. Research Design</strong>
+                        <p class="lc-desc">Choose type (descriptive/experimental), variables, setting, and timeframe.</p>
+                    </div>
+                </a>
+                <a href="https://www.scribbr.com/methodology/sampling-methods/" target="_blank" class="lifecycle-item lc-green">
+                    <span>&#128202;</span>
+                    <div>
+                        <strong class="lc-title">3. Methodology & Sampling</strong>
+                        <p class="lc-desc">Qualitative/quantitative/mixed. Probability or non-probability sampling.</p>
+                    </div>
+                </a>
+                <a href="https://github.com/NajiElKotob/Awesome-PowerQuery" target="_blank" class="lifecycle-item lc-amber">
+                    <span>&#129529;</span>
+                    <div>
+                        <strong class="lc-title">4. Data Preparation</strong>
+                        <p class="lc-desc">Clean, organize, code, and structure data for analysis.</p>
+                    </div>
+                </a>
+                <a href="https://github.com/NajiElKotob/Awesome-Statistics-For-Data-Science" target="_blank" class="lifecycle-item lc-red">
+                    <span>&#128200;</span>
+                    <div>
+                        <strong class="lc-title">5. Data Analysis</strong>
+                        <p class="lc-desc">Apply statistical tests, thematic analysis, or computational models.</p>
+                    </div>
+                </a>
+                <a href="https://www.scribbr.com/methodology/research-ethics/" target="_blank" class="lifecycle-item lc-cyan">
+                    <span>&#128221;</span>
+                    <div>
+                        <strong class="lc-title">6. Reporting & Ethics</strong>
+                        <p class="lc-desc">Ensure validity, reliability, ethical compliance, and publish findings.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Quick Tools -->
+        <div class="tools-grid">
+            <div class="tool-card">
+                <h4 style="color: #60a5fa;">&#128218; Academic Databases</h4>
+                <ul>
+                    <li><a href="https://scholar.google.com" target="_blank" class="link-blue">Google Scholar</a></li>
+                    <li><a href="https://arxiv.org" target="_blank" class="link-blue">arXiv (Open Access)</a></li>
+                    <li><a href="https://core.ac.uk" target="_blank" class="link-blue">CORE (2M+ papers)</a></li>
+                    <li><a href="https://doaj.org" target="_blank" class="link-blue">DOAJ Journals</a></li>
+                </ul>
+            </div>
+            <div class="tool-card">
+                <h4 style="color: #c084fc;">&#129518; Statistical Tools</h4>
+                <ul>
+                    <li><a href="https://www.calculator.net/sample-size-calculator.html" target="_blank" class="link-purple">Sample Size Calculator</a></li>
+                    <li><a href="https://www.ibm.com/spss" target="_blank" class="link-purple">SPSS</a> / <a href="https://www.r-project.org" target="_blank" class="link-purple">R</a> / <a href="https://pandas.pydata.org" target="_blank" class="link-purple">Python (pandas)</a></li>
+                    <li><a href="https://www.scribbr.com/methodology/reliability-vs-validity/" target="_blank" class="link-purple">Reliability & Validity Guide</a></li>
+                    <li><a href="https://www.socscistatistics.com/effectsize/" target="_blank" class="link-purple">Effect Size Calculators</a></li>
+                </ul>
+            </div>
+            <div class="tool-card">
+                <h4 style="color: #4ade80;">&#9997; Citation & Writing</h4>
+                <ul>
+                    <li><a href="https://www.scribbr.com/dissertation/methodology/" target="_blank" class="link-green">Scribbr Methodology</a></li>
+                    <li><a href="https://www.citethisforme.com" target="_blank" class="link-green">Cite This For Me</a></li>
+                    <li><a href="https://apastyle.apa.org" target="_blank" class="link-green">APA 7th Edition Format</a></li>
+                    <li><a href="https://www.scribbr.co.uk/referencing/generator/harvard/" target="_blank" class="link-green">Harvard Referencing</a></li>
+                </ul>
+            </div>
+            <div class="tool-card">
+                <h4 style="color: #fbbf24;">&#127891; Publishing</h4>
+                <ul>
+                    <li><a href="https://www.elsevier.com/authors/submit-your-paper" target="_blank" class="link-amber">Elsevier Guide</a></li>
+                    <li><a href="https://www.springeropen.com" target="_blank" class="link-amber">SpringerOpen</a></li>
+                    <li><a href="https://pqdtopen.proquest.com" target="_blank" class="link-amber">PQDT Open Dissertations</a></li>
+                    <li><a href="https://paperswithcode.com" target="_blank" class="link-amber">Papers With Code</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Prepared with dedication for the academic community of Nepal and beyond.</p>
+            <p class="author">Mr. Bishnu Singh Rayamajhi | Kapilvastu Multiple Campus, Taulihawa | Founder: UCDL Academy</p>
+            <p class="credit">&#127760; Inspired by the Research Lifecycle Framework & SMART Goal Methodology</p>
+        </div>
+    </div>
+</body>
+</html>
