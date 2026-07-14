@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7-Day Advanced AI Training Workshop | UCDL Academy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header-content h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header-content p {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            opacity: 0.95;
+        }
+
+        .developer-info {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 0.95em;
+            border-left: 4px solid #ffd700;
+        }
+
+        .developer-info strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+
+        nav {
+            background: #0d47a1;
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        nav a {
+            display: block;
+            color: white;
+            padding: 12px 20px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            background: #1565c0;
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Overview Section */
+        .overview {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .overview h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .overview-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .overview-card h3 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .overview-card p {
+            font-size: 0.95em;
+            opacity: 0.9;
+        }
+
+        /* Day Sections */
+        .days-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .day-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .day-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .day-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            user-select: none;
+        }
+
+        .day-header:hover {
+            background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+        }
+
+        .day-number {
+            font-size: 1.3em;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            margin-right: 10px;
+        }
+
+        .toggle-icon {
+            font-size: 1.5em;
+            transition: transform 0.3s ease;
+        }
+
+        .day-card.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .day-content {
+            display: none;
+            padding: 20px;
+            background: white;
+            border-top: 2px solid #667eea;
+        }
+
+        .day-card.active .day-content {
+            display: block;
+        }
+
+        .session {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+        }
+
+        .session h4 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .session ul {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        .session li {
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .exercise {
+            background: #e8f4f8;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-style: italic;
+            color: #0277bd;
+        }
+
+        /* Assessment Section */
+        .assessment {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .assessment h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .assessment-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .assessment-table th,
+        .assessment-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .assessment-table th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+
+        .assessment-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        /* Certification Section */
+        .certification {
+            background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            color: #333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .certification h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+        }
+
+        .certification ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .certification li {
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .cert-title {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #1e3c72;
+            border-left: 4px solid #1e3c72;
+        }
+
+        /* Resources Section */
+        .resources {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .resources h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .resource-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .resource-card h4 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+
+        .resource-card p {
+            font-size: 0.95em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .resource-link {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .resource-link:hover {
+            background: #764ba2;
+            transform: translateX(3px);
+        }
+
+        /* Practical Exercises */
+        .exercises {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .exercises h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .exercises-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .exercise-item {
+            background: linear-gradient(135deg, #e8f4f8 0%, #f0e6ff 100%);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .exercise-item:before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        /* Resources Styling */
+        .resources-section {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid #cad5ff;
+        }
+
+        .resources-section h5 {
+            color: #1e3c72;
+            margin-bottom: 12px;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .resource-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+        }
+
+        .resource-link-item {
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .resource-link-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+            border-left-color: #764ba2;
+        }
+
+        .resource-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: bold;
+            margin-bottom: 5px;
+            width: fit-content;
+        }
+
+        .resource-badge.video { background: #e74c3c; }
+        .resource-badge.tool { background: #3498db; }
+        .resource-badge.guide { background: #27ae60; }
+        .resource-badge.article { background: #f39c12; }
+        .resource-badge.tutorial { background: #9b59b6; }
+        .resource-badge.template { background: #1abc9c; }
+        .resource-badge.resource { background: #34495e; }
+        .resource-badge.paper { background: #c0392b; }
+        .resource-badge.dataset { background: #16a085; }
+        .resource-badge.case-study { background: #d35400; }
+        .resource-badge.policy { background: #2980b9; }
+        .resource-badge.feedback-form { background: #8e44ad; }
+        .resource-badge.certificate { background: #f1c40f; color: #333; }
+
+        .resource-link-title {
+            font-weight: 600;
+            color: #1e3c72;
+            margin-bottom: 5px;
+        }
+
+        .resource-link-item:hover .resource-link-title {
+            color: #667eea;
+        }
+
+        /* Footer */
+        footer {
+            background: #0d47a1;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 50px;
+        }
+
+        footer p {
+            margin-bottom: 10px;
+        }
+
+        .footer-credit {
+            font-size: 0.9em;
+            opacity: 0.9;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content h1 {
+                font-size: 1.8em;
+            }
+
+            nav ul {
+                flex-direction: column;
+            }
+
+            nav a {
+                padding: 10px 15px;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+
+            .overview-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .assessment-table {
+                font-size: 0.9em;
+            }
+
+            .assessment-table th,
+            .assessment-table td {
+                padding: 8px;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .day-card {
+                page-break-inside: avoid;
+            }
+
+            nav {
+                display: none;
+            }
+        }
+
+        /* Workshop Photo */
+        .photo-section {
+            margin: 25px auto;
+            max-width: 700px;
+        }
+
+        .workshop-photo {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border-radius: 12px;
+            border: 3px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            display: block;
+            margin: 0 auto;
+            transition: transform 0.3s ease;
+        }
+
+        .workshop-photo:hover {
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 768px) {
+            .workshop-photo {
+                max-width: 100%;
+                border-radius: 8px;
+            }
+        }
+
+
+        /* Main 2x3 Grid Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: auto auto;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .grid-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+
+        .grid-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .grid-card .overview,
+        .grid-card .exercises,
+        .grid-card .assessment,
+        .grid-card .certification,
+        .grid-card .resources {
+            background: transparent;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+            border-radius: 0;
+        }
+
+        .grid-card .overview h2,
+        .grid-card .exercises h2,
+        .grid-card .assessment h2,
+        .grid-card .certification h2,
+        .grid-card .resources h2 {
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .grid-card .certification {
+            background: transparent;
+        }
+
+        .grid-card .overview-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .grid-card .overview-card {
+            padding: 12px;
+        }
+
+        .grid-card .overview-card h3 {
+            font-size: 1.5em;
+        }
+
+        .grid-card .exercises-grid {
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .grid-card .exercise-item {
+            padding: 8px 10px;
+            font-size: 0.9em;
+        }
+
+        .grid-card .assessment-table {
+            font-size: 0.85em;
+        }
+
+        .grid-card .assessment-table th,
+        .grid-card .assessment-table td {
+            padding: 8px;
+        }
+
+        .grid-card .resource-grid {
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .grid-card .resource-card {
+            padding: 12px;
+        }
+
+        .grid-card .resource-card h4 {
+            font-size: 0.95em;
+        }
+
+        .grid-card .resource-card p {
+            font-size: 0.85em;
+        }
+
+        .grid-card .resource-link {
+            padding: 5px 10px;
+            font-size: 0.8em;
+        }
+
+        .grid-card .cert-title {
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 0.9em;
+        }
+
+        .grid-card .certification h2 {
+            color: #1e3c72;
+        }
+
+        .grid-card .certification ul {
+            font-size: 0.9em;
+        }
+
+        .grid-card .certification li {
+            margin-bottom: 5px;
+        }
+
+        /* Schedule specific */
+        .grid-card .days-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .grid-card .day-card {
+            font-size: 0.85em;
+        }
+
+        .grid-card .day-header {
+            padding: 12px 15px;
+        }
+
+        .grid-card .day-number {
+            font-size: 1em;
+            padding: 3px 8px;
+        }
+
+        .grid-card .day-content {
+            padding: 12px;
+        }
+
+        .grid-card .session {
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .grid-card .session h4 {
+            font-size: 0.95em;
+        }
+
+        .grid-card .session ul {
+            font-size: 0.85em;
+        }
+
+        .grid-card .resource-links {
+            grid-template-columns: 1fr;
+        }
+
+        .grid-card .resource-link-item {
+            padding: 6px 8px;
+            font-size: 0.8em;
+        }
+
+        .grid-card .resources-section h5 {
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <h1> Seven Days Advanced AI Training Workshop</h1>
+            <p>Advanced Artificial Intelligence for Higher Education, Research, and Professional Training</p>
+
+            <div class="photo-section">
+                <img src="https://raw.githubusercontent.com/sdrok2080/sdrok2080.github.io/main/Photo02(1).png" alt="The Crucial Role of Research and Innovation in Science Education - Mr. Bishnu Singh Rayamajhi" class="workshop-photo">
+            </div>
+
+            <div class="developer-info">
+                <strong>Developed by:</strong>
+                Mr. Bishnu Singh Rayamajhi<br>
+                <strong>Position:</strong> Mathematics Lecturer & Head of Humanities & Social Sciences Department<br>
+                <strong>Institution:</strong> Kapilvastu Multiple Campus (KMC), Taulihawa, Nepal<br>
+                <strong>Initiative:</strong> Founder, UCDL Academy | Free Bilingual Educational Content Platform
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#schedule">Schedule</a></li>
+            <li><a href="#exercises">Practical Exercises</a></li>
+            <li><a href="#assessment">Assessment</a></li>
+            <li><a href="#certification">Certification</a></li>
+            <li><a href="#resources">Resources</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- 2x3 Grid Layout -->
+        <div class="main-grid">
+            <!-- Row 1 -->
+            <div class="grid-card">
+                <div class="overview" id="overview">
+            <h2>📌 Workshop Overview</h2>
+            <p>A comprehensive professional development program designed for university faculty, researchers, trainers, and academic leaders. This intensive workshop equips participants with practical AI competencies across teaching, research, data analysis, automation, and responsible AI adoption in higher education.</p>
+            
+            <div class="overview-grid">
+                <div class="overview-card">
+                    <h3>7</h3>
+                    <p>Days of Immersive Learning</p>
+                </div>
+                <div class="overview-card">
+                    <h3>42</h3>
+                    <p>Hours of Expert Training</p>
+                </div>
+                <div class="overview-card">
+                    <h3>28</h3>
+                    <p>Sessions + Hands-on Labs</p>
+                </div>
+                <div class="overview-card">
+                    <h3>10+</h3>
+                    <p>AI Tools & Platforms</p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px; color: #1e3c72;">Target Participants:</h3>
+            <ul style="margin-left: 20px; margin-top: 15px;">
+                <li>University Faculty & Instructors</li>
+                <li>Researchers & PhD Scholars</li>
+                <li>Trainers & Master Trainers</li>
+                <li>Academic Leaders & Department Heads</li>
+                <li>Curriculum Developers</li>
+            </ul>
+        </div>
+
+        <!-- Daily Schedule -->
+        
+            </div>
+            <div class="grid-card">
+                <h2 style="color: #1e3c72; margin-bottom: 20px; text-align: center;" id="schedule">📅 Day-by-Day Curriculum</h2>
+        <div class="days-container" id="daysContainer"></div>
+
+        <!-- Practical Exercises -->
+        <div class="days-container" id="daysContainer"></div>
+
+        <!-- Practical Exercises -->
+        
+            </div>
+            <div class="grid-card">
+                <div class="exercises" id="exercises">
+            <h2>🔬 Practical Exercises Throughout the Workshop</h2>
+            <div class="exercises-grid">
+                <div class="exercise-item">Build an AI-powered lesson plan</div>
+                <div class="exercise-item">Generate quizzes and grading rubrics</div>
+                <div class="exercise-item">Conduct an AI-assisted literature review</div>
+                <div class="exercise-item">Write a research proposal with AI support</div>
+                <div class="exercise-item">Analyze datasets using Excel/SPSS</div>
+                <div class="exercise-item">Create a Power BI dashboard</div>
+                <div class="exercise-item">Build an AI chatbot for student support</div>
+                <div class="exercise-item">Design an AI automation workflow</div>
+                <div class="exercise-item">Produce an educational video using AI</div>
+                <div class="exercise-item">Develop an institutional AI implementation plan</div>
+            </div>
+        </div>
+
+        <!-- Assessment Section -->
+        
+            </div>
+
+            <!-- Row 2 -->
+            <div class="grid-card">
+                <div class="assessment" id="assessment">
+            <h2>📊 Assessment Strategy</h2>
+            <table class="assessment-table">
+                <thead>
+                    <tr>
+                        <th>Assessment Component</th>
+                        <th>Weight (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Pre-test & Post-test</td>
+                        <td>10%</td>
+                    </tr>
+                    <tr>
+                        <td>Daily Practical Tasks</td>
+                        <td>25%</td>
+                    </tr>
+                    <tr>
+                        <td>Prompt Engineering Portfolio</td>
+                        <td>15%</td>
+                    </tr>
+                    <tr>
+                        <td>AI Teaching Demonstration</td>
+                        <td>15%</td>
+                    </tr>
+                    <tr>
+                        <td>Research Assignment</td>
+                        <td>15%</td>
+                    </tr>
+                    <tr>
+                        <td>Capstone Team Project</td>
+                        <td>20%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Certification Section -->
+        
+            </div>
+            <div class="grid-card">
+                <div class="certification" id="certification">
+            <h2>🎓 Certification Requirements</h2>
+            <p>Participants must complete the following to earn certification:</p>
+            <ul>
+                <li>Attend at least 90% of all sessions (38 out of 42 hours)</li>
+                <li>Complete all daily practical exercises</li>
+                <li>Submit a comprehensive Prompt Engineering Portfolio</li>
+                <li>Submit one AI-enhanced teaching or research project</li>
+                <li>Present the Capstone Project to the cohort</li>
+                <li>Achieve at least 60% on the overall assessment</li>
+            </ul>
+            <div class="cert-title">
+                Certificate Title: "Advanced AI for Higher Education: Faculty, Research, and Training Professional Development Program (42 Hours)"
+            </div>
+        </div>
+
+        <!-- Resources Section -->
+        
+            </div>
+            <div class="grid-card">
+                <div class="resources" id="resources">
+            <h2>📚 Curated Resources & Tools</h2>
+            <p>Access tools, platforms, and resources used throughout the workshop:</p>
+            
+            <div class="resource-grid">
+                <div class="resource-card">
+                    <h4>💬 Large Language Models</h4>
+                    <p>Primary AI models for prompt engineering and content generation</p>
+                    <a href="https://chatgpt.com" class="resource-link" target="_blank">ChatGPT</a>
+                    <a href="https://claude.ai" class="resource-link" target="_blank">Claude</a>
+                    <a href="https://gemini.google.com" class="resource-link" target="_blank">Gemini</a>
+                </div>
+
+                <div class="resource-card">
+                    <h4>📖 Academic Research Tools</h4>
+                    <p>AI-powered platforms for literature review and research</p>
+                    <a href="https://elicit.org" class="resource-link" target="_blank">Elicit</a>
+                    <a href="https://consensus.app" class="resource-link" target="_blank">Consensus</a>
+                    <a href="https://www.researchrabbit.ai" class="resource-link" target="_blank">ResearchRabbit</a>
+                </div>
+
+                <div class="resource-card">
+                    <h4>🎨 Presentation & Design AI</h4>
+                    <p>Create stunning presentations and visual content</p>
+                    <a href="https://gamma.app" class="resource-link" target="_blank">Gamma</a>
+                    <a href="https://canva.com" class="resource-link" target="_blank">Canva AI</a>
+                    <a href="https://beautiful.ai" class="resource-link" target="_blank">Beautiful.AI</a>
+                </div>
+
+                <div class="resource-card">
+                    <h4>📊 Data Analysis Tools</h4>
+                    <p>Statistical analysis and visualization platforms</p>
+                    <a href="https://www.ibm.com/products/spss-statistics" class="resource-link" target="_blank">SPSS</a>
+                    <a href="https://powerbi.microsoft.com" class="resource-link" target="_blank">Power BI</a>
+                    <a href="https://www.microsoft.com/en-us/microsoft-365/excel" class="resource-link" target="_blank">Excel</a>
+                </div>
+
+                <div class="resource-card">
+                    <h4>⚙️ Automation Platforms</h4>
+                    <p>Build AI workflows and automate repetitive tasks</p>
+                    <a href="https://n8n.io" class="resource-link" target="_blank">n8n</a>
+                    <a href="https://www.make.com" class="resource-link" target="_blank">Make</a>
+                    <a href="https://zapier.com" class="resource-link" target="_blank">Zapier</a>
+                </div>
+
+                <div class="resource-card">
+                    <h4>🎬 Multimedia & Video AI</h4>
+                    <p>Generate images, videos, and voiceovers</p>
+                    <a href="https://openai.com/dall-e-3" class="resource-link" target="_blank">DALL-E</a>
+                    <a href="https://elevenlabs.io" class="resource-link" target="_blank">ElevenLabs</a>
+                    <a href="https://notebooklm.google.com" class="resource-link" target="_blank">NotebookLM</a>
+                </div>
+            </div>
+        
+            </div>
+        </div>
+</div>
+
+        <!-- Quick Links -->
+        <div style="background: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            <h2 style="color: #1e3c72; margin-bottom: 20px;">🌐 UCDL Academy Platforms</h2>
+            <p style="margin-bottom: 20px;">Access educational content and resources from UCDL Academy:</p>
+            <a href="https://www.youtube.com/@ucdlacademy" target="_blank" style="display: inline-block; background: #667eea; color: white; padding: 12px 25px; margin: 10px; border-radius: 5px; text-decoration: none; font-weight: bold;">YouTube Channel</a>
+            <a href="https://sdrok2080.github.io" target="_blank" style="display: inline-block; background: #667eea; color: white; padding: 12px 25px; margin: 10px; border-radius: 5px; text-decoration: none; font-weight: bold;">SDROK Platform</a>
+            <a href="https://sdrok2080.github.io/sdrok2080/BBAWithExcelBusinessMath" target="_blank" style="display: inline-block; background: #667eea; color: white; padding: 12px 25px; margin: 10px; border-radius: 5px; text-decoration: none; font-weight: bold;">BBA Business Math Course</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>7-Day Advanced AI Training Workshop</strong></p>
+        <p>Empowering faculty, researchers, and trainers with practical AI competencies for higher education</p>
+        <div class="footer-credit">
+            <p>Developed by: <strong>Mr. Bishnu Singh Rayamajhi</strong></p>
+            <p>Mathematics Lecturer | Head of Humanities & Social Sciences Department | Kapilvastu Multiple Campus (KMC)</p>
+            <p>Founder, UCDL Academy | Free Bilingual Educational Content Platform</p>
+            <p style="margin-top: 15px;">© 2026 UCDL Academy. All rights reserved. | Last Updated: July 2026</p>
+        </div>
+    </footer>
+
+    <script>
+        // Day-by-day curriculum data with resources
+        const curriculum = [
+            {
+                day: 1,
+                title: "AI Foundations and Prompt Engineering",
+                sessions: [
+                    {
+                        title: "Session 1: Evolution of AI",
+                        topics: ["AI Timeline", "Machine Learning", "Deep Learning", "Generative AI", "Agentic AI", "AI Ethics"],
+                        activity: "Create an AI timeline",
+                        resources: [
+                            { type: "video", title: "A Brief History of AI", url: "https://www.youtube.com/watch?v=ajGX7odA87k" },
+                            { type: "video", title: "Machine Learning Explained", url: "https://www.youtube.com/watch?v=jKKR6VyL9hE" },
+                            { type: "article", title: "AI Ethics Principles", url: "https://www.anthropic.com/research" },
+                            { type: "tool", title: "OpenAI Research Blog", url: "https://openai.com/research" }
+                        ]
+                    },
+                    {
+                        title: "Session 2: Large Language Models",
+                        topics: ["GPT", "Claude", "Gemini", "Llama", "Mistral"],
+                        activity: "Compare responses from different AI models",
+                        resources: [
+                            { type: "tool", title: "ChatGPT", url: "https://chatgpt.com" },
+                            { type: "tool", title: "Claude AI", url: "https://claude.ai" },
+                            { type: "tool", title: "Google Gemini", url: "https://gemini.google.com" },
+                            { type: "video", title: "Understanding LLMs", url: "https://www.youtube.com/watch?v=zjkBMFhNj_g" },
+                            { type: "article", title: "LLM Comparison Guide", url: "https://www.llm-comparison.com" }
+                        ]
+                    },
+                    {
+                        title: "Session 3: Advanced Prompt Engineering",
+                        topics: ["Zero-shot", "Few-shot", "Chain of Thought", "Role Prompting", "Context Prompting", "Structured Prompting"],
+                        activity: "Design prompts for Teaching, Research, Assessment, Administration",
+                        resources: [
+                            { type: "guide", title: "Prompt Engineering Guide", url: "https://platform.openai.com/docs/guides/prompt-engineering" },
+                            { type: "video", title: "Prompt Engineering Tutorial", url: "https://www.youtube.com/watch?v=dOxUroR57xs" },
+                            { type: "tool", title: "Prompt Library", url: "https://promptshare.io" },
+                            { type: "article", title: "Chain of Thought Prompting", url: "https://arxiv.org/abs/2201.11903" }
+                        ]
+                    },
+                    {
+                        title: "Session 4: Prompt Challenge",
+                        topics: ["20 Real University Tasks"],
+                        activity: "Create a Prompt Library",
+                        resources: [
+                            { type: "resource", title: "University Use Cases", url: "https://www.anthropic.com/customers" },
+                            { type: "template", title: "Prompt Templates", url: "https://github.com/f/awesome-chatgpt-prompts" },
+                            { type: "guide", title: "Best Practices", url: "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview" }
+                        ]
+                    }
+                ]
+            },
+            {
+                day: 2,
+                title: "AI for Teaching and Learning",
+                sessions: [
+                    {
+                        title: "Session 1: AI-Enhanced Lesson Planning",
+                        topics: ["Bloom's Taxonomy", "Outcome-based Education", "AI Lesson Design"],
+                        activity: "",
+                        resources: [
+                            { type: "guide", title: "Bloom's Taxonomy Guide", url: "https://www.vanderbilt.edu/cft/guides-sub-pages/blooms-taxonomy/" },
+                            { type: "video", title: "Outcome-Based Education", url: "https://www.youtube.com/watch?v=fXkJNkGJSEY" },
+                            { type: "tool", title: "AI Lesson Planner", url: "https://www.teachingprompts.ai" },
+                            { type: "article", title: "AI in Pedagogical Design", url: "https://www.edutopia.org" }
+                        ]
+                    },
+                    {
+                        title: "Session 2: AI Classroom Tools",
+                        topics: ["ChatGPT", "Gamma", "Canva AI", "Napkin AI", "NotebookLM"],
+                        activity: "",
+                        resources: [
+                            { type: "tool", title: "Gamma Presentations", url: "https://gamma.app" },
+                            { type: "tool", title: "Canva AI Design", url: "https://www.canva.com/ai-tools/" },
+                            { type: "tool", title: "NotebookLM by Google", url: "https://notebooklm.google.com" },
+                            { type: "video", title: "Gamma Tutorial", url: "https://www.youtube.com/watch?v=5fFstJVXhbk" },
+                            { type: "video", title: "Canva AI Features", url: "https://www.youtube.com/watch?v=fXkJNkGJSEY" }
+                        ]
+                    },
+                    {
+                        title: "Session 3: Assessment using AI",
+                        topics: ["Quiz Generation", "Rubrics", "Feedback", "Adaptive Assessment"],
+                        activity: "",
+                        resources: [
+                            { type: "tool", title: "Quiz Generator Tools", url: "https://www.quizlet.com" },
+                            { type: "guide", title: "Rubric Design Guide", url: "https://www.uwstout.edu/sites/uwstout.edu/files/modules/wysiwyg_uploads/docs/Making%20Lesson%20Plans%20Come%20Alive.pdf" },
+                            { type: "video", title: "AI-Powered Assessment", url: "https://www.youtube.com/watch?v=L8kHqKtMgBg" },
+                            { type: "article", title: "Adaptive Learning Systems", url: "https://www.ets.org/research" }
+                        ]
+                    },
+                    {
+                        title: "Session 4: Micro-Teaching",
+                        topics: ["10-minute AI-supported Lesson"],
+                        activity: "Each participant delivers a micro-lesson",
+                        resources: [
+                            { type: "guide", title: "Micro-Teaching Guide", url: "https://ctl.wisc.edu/resources/microteaching/" },
+                            { type: "video", title: "Effective Micro-Teaching", url: "https://www.youtube.com/watch?v=VVQXwvBHHXc" },
+                            { type: "template", title: "Lesson Template", url: "https://www.teachingprompts.ai" }
+                        ]
+                    }
+                ]
+            },
+            {
+                day: 3,
+                title: "AI for Research",
+                sessions: [
+                    {
+                        title: "Session 1: Research Workflow with AI",
+                        topics: ["Topic Selection", "Literature Review", "Research Gap", "Research Questions"],
+                        activity: "",
+                        resources: [
+                            { type: "guide", title: "Research Process Guide", url: "https://libguides.isu.edu/c.php?g=81745&p=526156" },
+                            { type: "video", title: "Literature Review Strategies", url: "https://www.youtube.com/watch?v=7HLvT1cZyFw" },
+                            { type: "article", title: "Identifying Research Gaps", url: "https://www.enago.com/blog/identifying-research-gaps/" },
+                            { type: "tool", title: "Research Question Generator", url: "https://www.anthropic.com" }
+                        ]
+                    },
+                    {
+                        title: "Session 2: Academic AI Tools",
+                        topics: ["Elicit", "Consensus", "Scite", "Semantic Scholar", "ResearchRabbit", "Connected Papers"],
+                        activity: "",
+                        resources: [
+                            { type: "tool", title: "Elicit.org", url: "https://elicit.org" },
+                            { type: "tool", title: "Consensus.app", url: "https://consensus.app" },
+                            { type: "tool", title: "Scite.ai", url: "https://scite.ai" },
+                            { type: "tool", title: "Semantic Scholar", url: "https://www.semanticscholar.org" },
+                            { type: "tool", title: "ResearchRabbit", url: "https://www.researchrabbit.ai" },
+                            { type: "tool", title: "Connected Papers", url: "https://www.connectedpapers.com" },
+                            { type: "video", title: "Academic Research Tools Demo", url: "https://www.youtube.com/watch?v=3EEbk9FmpOw" }
+                        ]
+                    },
+                    {
+                        title: "Session 3: Writing Research Papers",
+                        topics: ["IMRAD", "APA 7", "Citation Management", "Academic Integrity"],
+                        activity: "",
+                        resources: [
+                            { type: "guide", title: "IMRAD Format Guide", url: "https://www.scribbr.com/research-paper/imrad/" },
+                            { type: "guide", title: "APA 7 Citation Guide", url: "https://apastyle.apa.org/" },
+                            { type: "tool", title: "Zotero Citation Manager", url: "https://www.zotero.org" },
+                            { type: "tool", title: "Mendeley Reference Manager", url: "https://www.elsevier.com/products/mendeley" },
+                            { type: "video", title: "Academic Integrity Tutorial", url: "https://www.youtube.com/watch?v=6fOjU3p6mGQ" },
+                            { type: "article", title: "Research Ethics Guide", url: "https://www.icmje.org" }
+                        ]
+                    },
+                    {
+                        title: "Session 4: SPSS and AI",
+                        topics: ["Dataset Analysis", "Statistical Interpretation", "Responsible AI"],
+                        activity: "Analyze sample datasets using AI",
+                        resources: [
+                            { type: "tool", title: "IBM SPSS Statistics", url: "https://www.ibm.com/products/spss-statistics" },
+                            { type: "video", title: "SPSS Basics Tutorial", url: "https://www.youtube.com/watch?v=A8AhC4K9OsQ" },
+                            { type: "guide", title: "SPSS with AI", url: "https://www.ibm.com/products/spss-statistics/ai" },
+                            { type: "dataset", title: "Sample Datasets", url: "https://www.ibm.com/products/spss-statistics/sample-data" }
+                        ]
+                    }
+                ]
+            },
+            {
+                day: 4,
+                title: "Data Analysis and Visualization",
+                sessions: [
+                    {
+                        title: "Session 1: Excel AI",
+                        topics: ["Data Cleaning", "Pivot Tables", "Dashboards"],
+                        activity: "",
+                        resources: [
+                            { type: "guide", title: "Excel Advanced Functions", url: "https://www.microsoft.com/en-us/microsoft-365/excel/ai" },
+                            { type: "video", title: "Excel Data Cleaning", url: "https://www.youtube.com/watch?v=9x4s1LUjNxo" },
+                            { type: "video", title: "Pivot Tables Tutorial", url: "https://www.youtube.com/watch?v=5tY9KhJpNfk" },
+                            { type: "tutorial", title: "Excel Dashboard Creation", url: "https://www.excel-easy.com" }
+                        ]
+                    },
+                    {
+                        title: "Session 2: SPSS",
+                        topics: ["Descriptive Statistics", "Correlation", "Regression", "ANOVA"],
+                        activity: "",
+                        resources: [
+                            { type: "tool", title: "SPSS Statistics", url: "https://www.ibm.com/products/spss-statistics" },
+                            { type: "video", title: "SPSS Descriptive Statistics", url: "https://www.youtube.com/watch?v=iXD_QHuKRxE" },
+                            { type: "video", title: "Correlation Analysis in SPSS", url: "https://www.youtube.com/watch?v=fqJZsxnZmW0" },
+                            { type: "video", title: "ANOVA Tutorial", url: "https://www.youtube.com/watch?v=2r_PbJLjzKo" },
+                            { type: "guide", title: "Statistical Analysis Guide", url: "https://www.statstutor.ac.uk" }
+                        ]
+                    },
+                    {
+                        title: "Session 3: Power BI",
+                        topics: ["Interactive Dashboards", "Data Visualization"],
+                        activity: "Create an interactive academic dashboard",
+                        resources: [
+                            { type: "tool", title: "Microsoft Power BI", url: "https://powerbi.microsoft.com" },
+                            { type: "guide", title: "Power BI Getting Started", url: "https://learn.microsoft.com/en-us/power-bi/" },
+                            { type: "video", title: "Power BI Dashboard Tutorial", url: "https://www.youtube.com/watch?v=cFfUb8GyiF0" },
+                            { type: "video", title: "Data Visualization Best Practices", url: "https://www.youtube.com/watch?v=KlcRNI7uWF8" }
+                        ]
+                    },
+                    {
+                        title: "Session 4: Data Storytelling",
+                        topics: ["Findings Presentation", "AI-Generated Visualizations"],
+                        activity: "Present findings using AI visualizations",
+                        resources: [
+                            { type: "guide", title: "Data Storytelling Guide", url: "https://www.interaction-design.org/literature/article/data-storytelling" },
+                            { type: "video", title: "Presenting Data Effectively", url: "https://www.youtube.com/watch?v=X1hy0XN0uKs" },
+                            { type: "tool", title: "Infogram", url: "https://infogram.com" },
+                            { type: "tool", title: "Tableau Public", url: "https://public.tableau.com" }
+                        ]
+                    }
+                ]
+            },
+            {
+                day: 5,
+                title: "AI Automation and Agentic AI",
+                sessions: [
+                    {
+                        title: "Session 1: Introduction to AI Agents",
+                        topics: ["Autonomous AI", "Multi-agent Systems"],
+                        activity: "",
+                        resources: [
+                            { type: "article", title: "AI Agents Explained", url: "https://www.anthropic.com/research" },
+                            { type: "video", title: "Understanding AI Agents", url: "https://www.youtube.com/watch?v=F8NKVhkZZWI" },
+                            { type: "guide", title: "Multi-Agent Systems", url: "https://en.wikipedia.org/wiki/Multi-agent_system" },
+                            { type: "paper", title: "Autonomous AI Systems", url: "https://arxiv.org" }
+                        ]
+                    },
+                    {
+                        title: "Session 2: Automation Platforms",
+                        topics: ["n8n", "Make", "Zapier"],
+                        activity: "",
+                        resources: [
+                            { type: "tool", title: "n8n Automation", url: "https://n8n.io" },
+                            { type: "tool", title: "Make (Integromat)", url: "https://www.make.com" },
+                            { type: "tool", title: "Zapier", url: "https://zapier.com" },
+                            { type: "video", title: "n8n Tutorial", url: "https://www.youtube.com/watch?v=fOG5AJU2Jdk" },
+                            { type: "video", title: "Make.com Workflow", url: "https://www.youtube.com/watch?v=K8HT7vT7pAo" },
+                            { type: "guide", title: "Zapier Getting Started", url: "https://zapier.com/blog/how-to-use-zapier" }
+                        ]
+                    },
+                    {
+                        title: "Session 3: Building AI Assistants",
+                        topics: ["Research Assistant", "Teaching Assistant", "Student Support Bot"],
+                        activity: "Create AI assistants",
+                        resources: [
+                            { type: "guide", title: "Building AI Chatbots", url: "https://docs.anthropic.com/en/docs/build-with-claude" },
+                            { type: "video", title: "AI Assistant Development", url: "https://www.youtube.com/watch?v=sTKjKJ6oGCY" },
+                            { type: "template", title: "Chatbot Templates", url: "https://github.com/anthropics/anthropic-sdk-python" },
+                            { type: "tool", title: "Buildship AI", url: "https://www.buildship.com" }
+                        ]
+                    },
+                    {
+                        title: "Session 4: Workflow Design",
+                        topics: ["University Department Workflows"],
+                        activity: "Develop AI workflow for a department",
+                        resources: [
+                            { type: "guide", title: "Workflow Design Best Practices", url: "https://www.process.st/workflow/" },
+                            { type: "template", title: "University Workflows", url: "https://n8n.io/workflows" },
+                            { type: "video", title: "Workflow Automation Examples", url: "https://www.youtube.com/watch?v=1Z-_-fKjfmE" },
+                            { type: "case-study", title: "Higher Ed Automation", url: "https://www.make.com/en/blog" }
+                        ]
+                    }
+                ]
+            },
+            {
+                day: 6,
+                title: "AI Content Creation and Multimedia",
+                sessions: [
+                    {
+                        title: "Session 1: AI Presentation Tools",
+                        topics: ["Gamma", "Canva AI", "Beautiful.ai"],
+                        activity: "",
+                        resources: [
+                            { type: "tool", title: "Gamma.app", url: "https://gamma.app" },
+                            { type: "tool", title: "Canva AI", url: "https://www.canva.com/ai-tools/" },
+                            { type: "tool", title: "Beautiful.ai", url: "https://www.beautiful.ai" },
+                            { type: "video", title: "Gamma AI Presentations", url: "https://www.youtube.com/watch?v=WrK9u7xNLBo" },
+                            { type: "tutorial", title: "Creating with Canva AI", url: "https://www.canva.com/learn/" }
+                        ]
+                    },
+                    {
+                        title: "Session 2: Image and Video AI",
+                        topics: ["Image Generation", "Video Generation", "Voice Synthesis"],
+                        activity: "",
+                        resources: [
+                            { type: "tool", title: "DALL-E 3", url: "https://openai.com/dall-e-3" },
+                            { type: "tool", title: "Midjourney", url: "https://www.midjourney.com" },
+                            { type: "tool", title: "Synthesia Video AI", url: "https://www.synthesia.io" },
+                            { type: "tool", title: "ElevenLabs Voice", url: "https://elevenlabs.io" },
+                            { type: "video", title: "DALL-E Tutorial", url: "https://www.youtube.com/watch?v=8MnlT5UdHiQ" },
+                            { type: "guide", title: "Prompt Engineering for Images", url: "https://platform.openai.com/docs/guides/images" }
+                        ]
+                    },
+                    {
+                        title: "Session 3: Educational Content Production",
+                        topics: ["Lecture Video", "Infographic", "Interactive Worksheet", "Social Media Content"],
+                        activity: "Create multimedia educational materials",
+                        resources: [
+                            { type: "tool", title: "Descript Video Editing", url: "https://www.descript.com" },
+                            { type: "tool", title: "Infogram", url: "https://infogram.com" },
+                            { type: "tool", title: "Genial.ly Interactive", url: "https://www.genial.ly" },
+                            { type: "guide", title: "Educational Video Creation", url: "https://www.commonsensemedia.org" },
+                            { type: "video", title: "Content Production Workflow", url: "https://www.youtube.com/watch?v=eQJhg_AuEiw" }
+                        ]
+                    },
+                    {
+                        title: "Session 4: AI Ethics",
+                        topics: ["Copyright", "Bias", "Hallucinations", "Privacy", "Institutional Policies"],
+                        activity: "",
+                        resources: [
+                            { type: "guide", title: "AI Ethics Framework", url: "https://www.anthropic.com/research/constitution" },
+                            { type: "article", title: "Copyright and AI", url: "https://www.copyright.gov/ai/" },
+                            { type: "guide", title: "Bias in AI Systems", url: "https://www.fairness-in-ai.com" },
+                            { type: "video", title: "AI Hallucinations Explained", url: "https://www.youtube.com/watch?v=F-mMnFe_j6I" },
+                            { type: "policy", title: "Data Privacy in AI", url: "https://ico.org.uk/for-organisations/ai" }
+                        ]
+                    }
+                ]
+            },
+            {
+                day: 7,
+                title: "AI Leadership, Innovation, and Capstone",
+                sessions: [
+                    {
+                        title: "Session 1: AI Strategy for Universities",
+                        topics: ["AI Governance", "Faculty Development", "AI-Ready Curriculum", "Digital Transformation"],
+                        activity: "",
+                        resources: [
+                            { type: "guide", title: "Higher Ed AI Strategy", url: "https://www.educause.edu" },
+                            { type: "article", title: "AI Governance Framework", url: "https://www.jisc.ac.uk" },
+                            { type: "guide", title: "Faculty Development in AI", url: "https://www.aacu.org" },
+                            { type: "report", title: "Digital Transformation Guide", url: "https://www.microsoft.com/en-us/education" }
+                        ]
+                    },
+                    {
+                        title: "Session 2: Capstone Project Development",
+                        topics: ["Teaching Solutions", "Research Solutions", "Administration Solutions", "Community Engagement"],
+                        activity: "Teams prepare AI solutions",
+                        resources: [
+                            { type: "guide", title: "Capstone Project Guide", url: "https://www.pbl-online.org" },
+                            { type: "template", title: "Project Proposal Template", url: "https://www.google.com/drive" },
+                            { type: "video", title: "Project Development Steps", url: "https://www.youtube.com/watch?v=ZAJNy3bFcYo" },
+                            { type: "resource", title: "Implementation Planning", url: "https://www.pm-partners.com.au" }
+                        ]
+                    },
+                    {
+                        title: "Session 3: Project Presentation",
+                        topics: ["Problem Statement", "AI Solution", "Demonstration", "Implementation Plan"],
+                        activity: "Teams present capstone projects",
+                        resources: [
+                            { type: "guide", title: "Presentation Best Practices", url: "https://www.duarte.com/design/designing-presentations/" },
+                            { type: "guide", title: "Storytelling for Presentations", url: "https://www.ted.com/talks" },
+                            { type: "video", title: "Effective Technical Presentations", url: "https://www.youtube.com/watch?v=moW9iJPubmE" },
+                            { type: "tool", title: "Presentation Tools", url: "https://gamma.app" }
+                        ]
+                    },
+                    {
+                        title: "Session 4: Reflection and Certification",
+                        topics: ["Workshop Review", "Post-Test", "Feedback", "Certificate Ceremony"],
+                        activity: "Best Project Awards",
+                        resources: [
+                            { type: "guide", title: "Reflection Prompts", url: "https://www.teachingprompts.ai" },
+                            { type: "feedback-form", title: "Workshop Evaluation", url: "https://www.google.com/forms" },
+                            { type: "certificate", title: "Certificate Template", url: "https://www.canva.com/certificates/" },
+                            { type: "article", title: "Continuous Professional Development", url: "https://www.cipd.co.uk" }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        // Daily schedule: 9:30-11:00, 11:15-12:45, 1:45-3:15, 3:30-5:00
+        const schedule = [
+            "9:30–11:00",
+            "11:15–12:45",
+            "1:45–3:15",
+            "3:30–5:00"
+        ];
+
+        // Render days
+        function renderDays() {
+            const container = document.getElementById('daysContainer');
+            
+            curriculum.forEach((day, index) => {
+                const dayCard = document.createElement('div');
+                dayCard.className = 'day-card';
+                
+                let sessionsHTML = '';
+                day.sessions.forEach((session, sIndex) => {
+                    let topicsHTML = '<ul>';
+                    session.topics.forEach(topic => {
+                        topicsHTML += `<li>${topic}</li>`;
+                    });
+                    topicsHTML += '</ul>';
+                    
+                    let exerciseHTML = '';
+                    if (session.activity) {
+                        exerciseHTML = `<div class="exercise">📝 Activity: ${session.activity}</div>`;
+                    }
+
+                    let resourcesHTML = '';
+                    if (session.resources && session.resources.length > 0) {
+                        let resourceLinksHTML = '';
+                        session.resources.forEach(resource => {
+                            const typeIcon = {
+                                'video': '🎬',
+                                'tool': '🛠️',
+                                'guide': '📖',
+                                'article': '📝',
+                                'tutorial': '🎓',
+                                'template': '📋',
+                                'resource': '📚',
+                                'paper': '📄',
+                                'dataset': '📊',
+                                'case-study': '💼',
+                                'policy': '⚖️',
+                                'feedback-form': '📋',
+                                'certificate': '🎖️'
+                            };
+                            
+                            const icon = typeIcon[resource.type] || '🔗';
+                            
+                            resourceLinksHTML += `
+                                <a href="${resource.url}" target="_blank" class="resource-link-item">
+                                    <span class="resource-badge ${resource.type}">${resource.type.toUpperCase()}</span>
+                                    <span class="resource-link-title">${icon} ${resource.title}</span>
+                                </a>
+                            `;
+                        });
+                        
+                        resourcesHTML = `
+                            <div class="resources-section">
+                                <h5>📌 Resources & Learning Materials</h5>
+                                <div class="resource-links">
+                                    ${resourceLinksHTML}
+                                </div>
+                            </div>
+                        `;
+                    }
+                    
+                    sessionsHTML += `
+                        <div class="session">
+                            <h4>${session.title}</h4>
+                            <p><strong>Time:</strong> ${schedule[sIndex]}</p>
+                            ${topicsHTML}
+                            ${exerciseHTML}
+                            ${resourcesHTML}
+                        </div>
+                    `;
+                });
+                
+                dayCard.innerHTML = `
+                    <div class="day-header">
+                        <div>
+                            <span class="day-number">Day ${day.day}</span>
+                            ${day.title}
+                        </div>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="day-content">
+                        ${sessionsHTML}
+                    </div>
+                `;
+                
+                dayCard.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                });
+                
+                container.appendChild(dayCard);
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderDays();
+            
+            // Expand first day by default
+            const firstDay = document.querySelector('.day-card');
+            if (firstDay) {
+                firstDay.classList.add('active');
+            }
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href.startsWith('#')) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
