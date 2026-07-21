@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEB Class 11 Calculator</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Space+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B1E33; --navy2: #262B45; --navy3: #14172A;
+    --gold: #C89116; --goldLight: #E3B23C; --cream: #FBF3DA;
+    --mutedBlue: #8B90B0; --crimson: #C81E3A;
+  }
+  body {
+    font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    background: linear-gradient(180deg, #FBF7EE 0%, #F4EEDD 55%, #F0E8D3 100%);
+    min-height: 100vh;
+  }
+  .font-display { font-family: 'Fraunces', Georgia, serif; }
+  .font-mono { font-family: 'Space Mono', ui-monospace, SFMono-Regular, monospace; }
+  .font-ui { font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .slate-grid {
+    background-image: linear-gradient(rgba(200,145,22,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(200,145,22,0.07) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-in { animation: fadeInUp 0.28s ease-out; }
+  @keyframes glowPulse { 0% { text-shadow: 0 0 0 rgba(200,145,22,0); } 45% { text-shadow: 0 0 22px rgba(200,145,22,0.65); } 100% { text-shadow: 0 0 16px rgba(200,145,22,0.35); } }
+  .glow-pulse { animation: glowPulse 0.5s ease-out; }
+  .btn-number { background: white; color: #1e293b; border: 1px solid #e7e5e4; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: all 0.15s; }
+  .btn-number:hover { background: #fafaf9; }
+  .btn-number:active { transform: scale(0.9); }
+  .btn-op { background: linear-gradient(135deg, #dc2626, #b91c1c); color: white; box-shadow: 0 4px 6px rgba(220,38,38,0.25); transition: all 0.15s; }
+  .btn-op:hover { background: linear-gradient(135deg, #ef4444, #dc2626); }
+  .btn-op:active { transform: scale(0.9); }
+  .btn-eq { background: linear-gradient(135deg, #fbbf24, #d97706); color: #0f172a; box-shadow: 0 4px 6px rgba(217,119,6,0.25); transition: all 0.15s; }
+  .btn-eq:hover { background: linear-gradient(135deg, #fcd34d, #fbbf24); }
+  .btn-eq:active { transform: scale(0.9); }
+  .btn-sec { background: #f5f5f4; color: #475569; border: 1px solid #e7e5e4; transition: all 0.15s; }
+  .btn-sec:hover { background: #e7e5e4; }
+  .btn-sec:active { transform: scale(0.9); }
+  .btn-func { background: #eef2ff; color: #312e81; border: 1px solid #e0e7ff; transition: all 0.15s; }
+  .btn-func:hover { background: #e0e7ff; }
+  .btn-func:active { transform: scale(0.9); }
+  .tab-btn { display: flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 9999px; white-space: nowrap; font-size: 0.875rem; font-weight: 600; transition: all 0.2s; border: 1px solid #e7e5e4; background: white; color: #475569; cursor: pointer; }
+  .tab-btn:hover { border-color: #d6d3d1; background: #fafaf9; }
+  .tab-btn.active { background: linear-gradient(90deg, #b91c1c, #dc2626); color: white; border-color: #b91c1c; box-shadow: 0 4px 6px rgba(185,28,28,0.2); transform: scale(1.05); }
+  .input-field { width: 100%; padding: 12px; border: 2px solid #e7e5e4; border-radius: 12px; font-size: 0.875rem; outline: none; font-family: 'Space Mono', monospace; transition: all 0.2s; }
+  .input-field:focus { border-color: #f87171; box-shadow: 0 0 0 3px rgba(248,113,113,0.1); }
+  .result-box { background: linear-gradient(135deg, #FFFBF0 0%, #FBF3E3 100%); border: 1px solid #F0E0B8; border-radius: 16px; padding: 20px; }
+  .result-green { background: #F0FBF4; border: 1px solid #C8ECD4; border-radius: 12px; padding: 16px; }
+  .result-red { background: #FDF3F5; border: 1px solid #F4CDD4; border-radius: 12px; padding: 16px; }
+  .result-blue { background: #EFF3FF; border: 1px solid #C9D6F7; border-radius: 16px; padding: 16px; }
+  .stat-card { background: white; padding: 14px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #f5f5f4; }
+  .history-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; border-radius: 8px; cursor: pointer; transition: background 0.15s; }
+  .history-item:hover { background: rgba(255,255,255,0.05); }
+  .mode-btn { flex: 1; padding: 8px; border-radius: 12px; font-size: 0.875rem; font-weight: 600; transition: all 0.2s; cursor: pointer; border: 1px solid #e7e5e4; }
+  .mode-btn.active { background: #dc2626; color: white; border-color: #dc2626; }
+  .mode-btn:not(.active) { background: #fafaf9; color: #475569; }
+  .na-subtab { padding: 8px 16px; border-radius: 9999px; font-size: 0.875rem; font-weight: 600; white-space: nowrap; cursor: pointer; border: 1px solid #e7e5e4; transition: all 0.2s; }
+  .na-subtab.active { background: #dc2626; color: white; border-color: #dc2626; }
+  .na-subtab:not(.active) { background: #fafaf9; color: #475569; }
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<div class="max-w-2xl mx-auto p-4 md:p-7">
+
+  <!-- Header + Digital Slate Display -->
+  <div class="rounded-3xl shadow-xl mb-5 overflow-hidden" style="background: linear-gradient(135deg, #262B45 0%, #1B1E33 100%);">
+    <div class="p-5 md:p-6">
+      <div class="flex items-start justify-between gap-3 mb-1">
+        <div class="min-w-0">
+          <p class="text-[11px] tracking-[0.25em] uppercase mb-1 font-mono" style="color: #C89116;">NEB &middot; Class 11 &middot; Nepal</p>
+          <h1 id="title" class="text-2xl md:text-3xl truncate font-display" style="font-weight: 600; color: #FBF3DA;">NEB Class 11 Calculator</h1>
+          <p id="subtitle" class="text-xs md:text-sm mt-1 font-ui" style="color: #8B90B0;">Smart Mathematics Companion for Nepali Students</p>
+        </div>
+        <div class="flex flex-col gap-2 items-end flex-shrink-0">
+          <button id="langBtn" onclick="toggleLanguage()" class="px-3 py-2 rounded-full text-xs font-semibold transition-colors font-ui" style="background: rgba(255,255,255,0.08); color: #FBF3DA;">&#2344;&#2375;&#2346;&#2366;&#2354;&#2368;</button>
+          <button id="historyBtn" onclick="toggleHistory()" class="flex items-center gap-1 px-3 py-2 rounded-full text-xs font-semibold transition-colors font-ui" style="background: rgba(200,145,22,0.15); color: #C89116;"><i data-lucide="history" style="width:13px;height:13px;"></i><span id="historyCount"></span></button>
+        </div>
+      </div>
+
+      <!-- Digital Slate -->
+      <div class="relative rounded-2xl p-5 mt-5 overflow-hidden" style="background: linear-gradient(160deg, #14172A 0%, #1B1E33 100%); border: 2px solid #C89116; box-shadow: inset 0 2px 14px rgba(0,0,0,0.55), 0 8px 20px rgba(0,0,0,0.25);">
+        <div class="absolute inset-0 slate-grid pointer-events-none"></div>
+        <button onclick="copyDisplay()" class="absolute top-3 right-3 p-1.5 rounded-lg transition-colors z-10" style="background: rgba(200,145,22,0.15);" aria-label="Copy"><i id="copyIcon" data-lucide="copy" style="width:14px;height:14px;color:#C89116;"></i></button>
+        <div class="relative">
+          <div class="flex items-center gap-2 mb-1 h-4">
+            <span id="angleIndicator" class="text-[11px] tracking-widest font-mono hidden" style="color: #C89116; opacity: 0.85;"></span>
+            <span id="errorIndicator" class="text-[11px] font-mono hidden" style="color: #FF8B8B;">&#9888; <span id="errorText">Error</span></span>
+          </div>
+          <div id="operationDisplay" class="min-h-[1.4rem] text-sm mb-0.5 truncate text-right font-mono" style="color: #C89116; opacity: 0.85;">&nbsp;</div>
+          <div id="mainDisplay" class="text-right text-4xl md:text-5xl leading-tight break-all font-mono" style="font-weight: 700; color: #FBF3DA; text-shadow: 0 0 16px rgba(200,145,22,0.35);">0</div>
+        </div>
+      </div>
+
+      <!-- History Panel -->
+      <div id="historyPanel" class="mt-4 rounded-2xl p-4 hidden fade-in" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(200,145,22,0.25);">
+        <div class="flex items-center justify-between mb-2">
+          <span id="historyLabel" class="text-xs uppercase tracking-widest font-mono" style="color: #C89116;">History</span>
+          <button id="clearHistoryBtn" onclick="clearHistory()" class="text-xs flex items-center gap-1 font-ui hidden" style="color: #8B90B0;"><i data-lucide="trash-2" style="width:12px;height:12px;"></i> <span id="clearHistoryText">Clear</span></button>
+        </div>
+        <div id="historyList" class="space-y-1.5 max-h-40 overflow-y-auto no-scrollbar">
+          <p id="noHistory" class="text-sm font-ui" style="color: #6B7094;">No calculations yet &mdash; start typing!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab Navigation -->
+  <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1 mb-2 -mx-1 px-1">
+    <button class="tab-btn active" data-tab="basic" onclick="setTab('basic')"><i data-lucide="calculator" style="width:15px;height:15px;"></i> <span class="tab-label" data-key="basic">Basic</span></button>
+    <button class="tab-btn" data-tab="scientific" onclick="setTab('scientific')"><i data-lucide="flask-conical" style="width:15px;height:15px;"></i> <span class="tab-label" data-key="scientific">Scientific</span></button>
+    <button class="tab-btn" data-tab="trigonometry" onclick="setTab('trigonometry')"><i data-lucide="triangle" style="width:15px;height:15px;"></i> <span class="tab-label" data-key="trigonometry">Trig</span></button>
+    <button class="tab-btn" data-tab="statistics" onclick="setTab('statistics')"><i data-lucide="bar-chart-3" style="width:15px;height:15px;"></i> <span class="tab-label" data-key="statistics">Stats</span></button>
+    <button class="tab-btn" data-tab="calculus" onclick="setTab('calculus')"><i data-lucide="sigma" style="width:15px;height:15px;"></i> <span class="tab-label" data-key="calculus">Calculus</span></button>
+    <button class="tab-btn" data-tab="numerical" onclick="setTab('numerical')"><i data-lucide="binary" style="width:15px;height:15px;"></i> <span class="tab-label" data-key="numerical">Numerical</span></button>
+  </div>
+
+  <p id="keyboardTip" class="text-center text-xs mb-3 flex items-center justify-center gap-1 font-ui hidden" style="color: #A89B7D;"><i data-lucide="keyboard" style="width:12px;height:12px;"></i> Your keyboard works here too</p>
+
+  <!-- ==================== BASIC ==================== -->
+  <div id="tab-basic" class="tab-content bg-white rounded-3xl shadow-lg p-5 md:p-6 border border-stone-100 fade-in">
+    <div class="grid grid-cols-4 gap-3">
+      <button onclick="handleClear()" class="btn-sec col-span-2 rounded-2xl font-semibold py-3.5 text-lg select-none font-ui"><span class="btn-label" data-key="clear">Clear</span></button>
+      <button onclick="handleDelete()" class="btn-sec rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">&larr; <span class="btn-label" data-key="delete">Delete</span></button>
+      <button onclick="handleOperation('/')" class="btn-op rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">&divide;</button>
+      <button onclick="handleNumber(7)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">7</button>
+      <button onclick="handleNumber(8)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">8</button>
+      <button onclick="handleNumber(9)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">9</button>
+      <button onclick="handleOperation('*')" class="btn-op rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">&times;</button>
+      <button onclick="handleNumber(4)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">4</button>
+      <button onclick="handleNumber(5)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">5</button>
+      <button onclick="handleNumber(6)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">6</button>
+      <button onclick="handleOperation('-')" class="btn-op rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">&minus;</button>
+      <button onclick="handleNumber(1)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">1</button>
+      <button onclick="handleNumber(2)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">2</button>
+      <button onclick="handleNumber(3)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">3</button>
+      <button onclick="handleOperation('+')" class="btn-op rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">+</button>
+      <button onclick="handleNumber(0)" class="btn-number col-span-2 rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">0</button>
+      <button onclick="handleDecimal()" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">.</button>
+      <button onclick="handleEquals()" class="btn-eq rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">=</button>
+    </div>
+  </div>
+
+  <!-- ==================== SCIENTIFIC ==================== -->
+  <div id="tab-scientific" class="tab-content bg-white rounded-3xl shadow-lg p-5 md:p-6 border border-stone-100 fade-in hidden">
+    <div class="grid grid-cols-5 gap-2 mb-5">
+      <button onclick="handleSciFunc('sqrt')" class="btn-func rounded-2xl font-semibold py-2.5 text-base select-none font-ui">&radic;</button>
+      <button onclick="handleSciFunc('cbrt')" class="btn-func rounded-2xl font-semibold py-2.5 text-base select-none font-ui">&#8731;</button>
+      <button onclick="handleSciFunc('log')" class="btn-func rounded-2xl font-semibold py-2.5 text-base select-none font-ui">log</button>
+      <button onclick="handleSciFunc('ln')" class="btn-func rounded-2xl font-semibold py-2.5 text-base select-none font-ui">ln</button>
+      <button onclick="handleSciFunc('exp')" class="btn-func rounded-2xl font-semibold py-2.5 text-base select-none font-ui">e&#x02e3;</button>
+      <button onclick="handleSciFunc('abs')" class="btn-func rounded-2xl font-semibold py-2.5 text-base select-none font-ui">|x|</button>
+      <button onclick="handleSciFunc('factorial')" class="btn-func rounded-2xl font-semibold py-2.5 text-base select-none font-ui">x!</button>
+      <button onclick="handleOperation('^')" class="btn-func rounded-2xl font-semibold py-2.5 text-base select-none font-ui">x&#x02b8;</button>
+      <button onclick="insertConstant(Math.PI, '&#960;')" class="btn-func rounded-2xl font-semibold py-2.5 text-base select-none font-ui">&#960;</button>
+      <button onclick="insertConstant(Math.E, 'e')" class="btn-func rounded-2xl font-semibold py-2.5 text-base select-none font-ui">e</button>
+    </div>
+    <div class="grid grid-cols-4 gap-3">
+      <button onclick="handleClear()" class="btn-sec col-span-2 rounded-2xl font-semibold py-3.5 text-lg select-none font-ui"><span class="btn-label" data-key="clear">Clear</span></button>
+      <button onclick="handleDelete()" class="btn-sec rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">&larr; <span class="btn-label" data-key="delete">Delete</span></button>
+      <button onclick="handleOperation('/')" class="btn-op rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">&divide;</button>
+      <button onclick="handleNumber(7)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">7</button>
+      <button onclick="handleNumber(8)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">8</button>
+      <button onclick="handleNumber(9)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">9</button>
+      <button onclick="handleOperation('*')" class="btn-op rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">&times;</button>
+      <button onclick="handleNumber(4)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">4</button>
+      <button onclick="handleNumber(5)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">5</button>
+      <button onclick="handleNumber(6)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">6</button>
+      <button onclick="handleOperation('-')" class="btn-op rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">&minus;</button>
+      <button onclick="handleNumber(1)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">1</button>
+      <button onclick="handleNumber(2)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">2</button>
+      <button onclick="handleNumber(3)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">3</button>
+      <button onclick="handleOperation('+')" class="btn-op rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">+</button>
+      <button onclick="handleNumber(0)" class="btn-number col-span-2 rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">0</button>
+      <button onclick="handleDecimal()" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">.</button>
+      <button onclick="handleEquals()" class="btn-eq rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">=</button>
+    </div>
+  </div>
+
+  <!-- ==================== TRIGONOMETRY ==================== -->
+  <div id="tab-trigonometry" class="tab-content bg-white rounded-3xl shadow-lg p-5 md:p-6 border border-stone-100 fade-in hidden">
+    <div class="mb-5 flex gap-2">
+      <button id="degBtn" onclick="setAngleMode('degree')" class="mode-btn active font-ui"><span class="btn-label" data-key="degree">Degree</span></button>
+      <button id="radBtn" onclick="setAngleMode('radian')" class="mode-btn font-ui"><span class="btn-label" data-key="radian">Radian</span></button>
+    </div>
+    <div class="grid grid-cols-3 gap-2 mb-5">
+      <button onclick="handleTrig('sin')" class="btn-func rounded-2xl font-semibold py-2.5 text-base select-none font-ui">sin</button>
+      <button onclick="handleTrig('cos')" class="btn-func rounded-2xl font-semibold py-2.5 text-base select-none font-ui">cos</button>
+      <button onclick="handleTrig('tan')" class="btn-func rounded-2xl font-semibold py-2.5 text-base select-none font-ui">tan</button>
+      <button onclick="handleTrig('sinh')" class="btn-func rounded-2xl font-semibold py-2.5 text-base select-none font-ui">sinh</button>
+      <button onclick="handleTrig('cosh')" class="btn-func rounded-2xl font-semibold py-2.5 text-base select-none font-ui">cosh</button>
+      <button onclick="handleTrig('tanh')" class="btn-func rounded-2xl font-semibold py-2.5 text-base select-none font-ui">tanh</button>
+    </div>
+    <div class="grid grid-cols-4 gap-3">
+      <button onclick="handleClear()" class="btn-sec col-span-2 rounded-2xl font-semibold py-3.5 text-lg select-none font-ui"><span class="btn-label" data-key="clear">Clear</span></button>
+      <button onclick="handleDelete()" class="btn-sec rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">&larr; <span class="btn-label" data-key="delete">Delete</span></button>
+      <button onclick="handleOperation('/')" class="btn-op rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">&divide;</button>
+      <button onclick="handleNumber(7)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">7</button>
+      <button onclick="handleNumber(8)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">8</button>
+      <button onclick="handleNumber(9)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">9</button>
+      <button onclick="handleOperation('*')" class="btn-op rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">&times;</button>
+      <button onclick="handleNumber(4)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">4</button>
+      <button onclick="handleNumber(5)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">5</button>
+      <button onclick="handleNumber(6)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">6</button>
+      <button onclick="handleOperation('-')" class="btn-op rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">&minus;</button>
+      <button onclick="handleNumber(1)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">1</button>
+      <button onclick="handleNumber(2)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">2</button>
+      <button onclick="handleNumber(3)" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">3</button>
+      <button onclick="handleOperation('+')" class="btn-op rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">+</button>
+      <button onclick="handleNumber(0)" class="btn-number col-span-2 rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">0</button>
+      <button onclick="handleDecimal()" class="btn-number rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">.</button>
+      <button onclick="handleEquals()" class="btn-eq rounded-2xl font-semibold py-3.5 text-lg select-none font-ui">=</button>
+    </div>
+  </div>
+
+  <!-- ==================== STATISTICS ==================== -->
+  <div id="tab-statistics" class="tab-content bg-white rounded-3xl shadow-lg p-5 md:p-6 border border-stone-100 fade-in hidden">
+    <div class="mb-5">
+      <label class="block text-sm font-semibold text-slate-700 mb-2 font-ui" data-key="enter">Enter values (comma-separated)</label>
+      <textarea id="statsInput" placeholder="e.g., 10, 20, 30, 40, 50" class="input-field mb-4" rows="3"></textarea>
+      <button onclick="handleStatistics()" class="btn-eq w-full rounded-2xl font-semibold py-3.5 text-lg select-none font-ui"><span class="btn-label" data-key="calculate">Calculate</span></button>
+    </div>
+    <div id="statsResult" class="hidden">
+      <div class="result-box">
+        <h3 class="font-bold text-base mb-4 font-display" style="color: #1B1E33;" data-key="result">Result</h3>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="stat-card"><p class="text-slate-500 text-xs font-semibold uppercase tracking-wide font-ui" data-key="sum">Sum</p><p id="statSum" class="text-xl font-bold text-red-600 font-mono"></p></div>
+          <div class="stat-card"><p class="text-slate-500 text-xs font-semibold uppercase tracking-wide font-ui" data-key="count">Count</p><p id="statCount" class="text-xl font-bold text-indigo-600 font-mono"></p></div>
+          <div class="stat-card"><p class="text-slate-500 text-xs font-semibold uppercase tracking-wide font-ui" data-key="mean">Mean</p><p id="statMean" class="text-xl font-bold text-emerald-600 font-mono"></p></div>
+          <div class="stat-card"><p class="text-slate-500 text-xs font-semibold uppercase tracking-wide font-ui" data-key="stdev">Std Dev</p><p id="statStdev" class="text-xl font-bold text-amber-600 font-mono"></p></div>
+          <div class="stat-card col-span-2"><p class="text-slate-500 text-xs font-semibold uppercase tracking-wide font-ui" data-key="variance">Variance</p><p id="statVariance" class="text-xl font-bold text-orange-600 font-mono"></p></div>
+        </div>
+      </div>
+    </div>
+    <div id="statsError" class="hidden"><p class="text-sm text-red-600 font-semibold font-ui" data-key="invalidInput">Invalid input</p></div>
+  </div>
+
+  <!-- ==================== CALCULUS ==================== -->
+  <div id="tab-calculus" class="tab-content bg-white rounded-3xl shadow-lg p-5 md:p-6 border border-stone-100 space-y-6 fade-in hidden">
+    <div>
+      <h3 class="text-lg font-bold text-slate-800 mb-1 flex items-center gap-2 font-display"><span>&#128208;</span> <span class="btn-label" data-key="derivative">Derivative</span></h3>
+      <p class="text-xs text-stone-500 mb-3 italic font-ui" data-key="derivativeHint">Uses the central-difference method for accurate numerical derivatives</p>
+      <div class="space-y-3 rounded-2xl p-4" style="background: #FFFBF0; border: 1px solid #F0E0B8;">
+        <div><label class="block text-xs font-semibold text-slate-600 mb-1 font-ui" data-key="function">Function f(x) <span class="text-slate-400 font-normal">(x^2, sin(x), ln(x), exp(x))</span></label><input type="text" id="calcFunction" value="x^2" class="input-field" placeholder="x^2"></div>
+        <div><label class="block text-xs font-semibold text-slate-600 mb-1 font-ui" data-key="point">Point (x)</label><input type="number" id="calcPoint" value="1" class="input-field" placeholder="1"></div>
+        <button onclick="handleDerivative()" class="btn-eq w-full rounded-2xl font-semibold py-3.5 text-lg select-none font-ui"><span class="btn-label" data-key="calculate">Calculate</span></button>
+      </div>
+      <div id="derivativeResult" class="hidden mt-3 result-green fade-in"><p class="text-xs text-slate-600 font-ui"><span class="btn-label" data-key="derivative_at">Derivative at x =</span> <span id="derivativeAt"></span></p><p id="derivativeValue" class="text-2xl font-bold text-emerald-600 font-mono"></p></div>
+      <div id="derivativeError" class="hidden mt-3"><p class="text-sm text-red-600 font-semibold font-ui" data-key="invalidInput">Invalid input</p></div>
+    </div>
+    <div class="pt-2 border-t border-stone-100">
+      <h3 class="text-lg font-bold text-slate-800 mb-1 flex items-center gap-2 font-display"><span>&#8747;</span> <span class="btn-label" data-key="integration">Integration</span></h3>
+      <p class="text-xs text-stone-500 mb-3 italic font-ui" data-key="integrationHint">Approximates the definite integral over your chosen limits</p>
+      <div class="space-y-3 rounded-2xl p-4" style="background: #FDF3F5; border: 1px solid #F4CDD4;">
+        <div><label class="block text-xs font-semibold text-slate-600 mb-1 font-ui" data-key="function">Function f(x)</label><input type="text" id="intFunction" value="x^2" class="input-field" placeholder="x^2"></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-semibold text-slate-600 mb-1 font-ui" data-key="from">From</label><input type="number" id="intA" value="0" class="input-field" placeholder="0"></div>
+          <div><label class="block text-xs font-semibold text-slate-600 mb-1 font-ui" data-key="to">To</label><input type="number" id="intB" value="1" class="input-field" placeholder="1"></div>
+        </div>
+        <div><label class="block text-xs font-semibold text-slate-600 mb-2 font-ui" data-key="method">Method</label>
+          <div class="flex gap-2">
+            <button id="simpsonBtn" onclick="setIntMethod('simpson')" class="mode-btn active font-ui"><span class="btn-label" data-key="simpson">Simpson's Rule</span></button>
+            <button id="trapezoidBtn" onclick="setIntMethod('trapezoid')" class="mode-btn font-ui"><span class="btn-label" data-key="trapezoid">Trapezoidal Rule</span></button>
+          </div>
+        </div>
+        <button onclick="handleIntegration()" class="btn-eq w-full rounded-2xl font-semibold py-3.5 text-lg select-none font-ui"><span class="btn-label" data-key="calculate">Calculate</span></button>
+      </div>
+      <div id="integralResult" class="hidden mt-3 result-green fade-in"><p class="text-xs text-slate-600 font-ui">&#8747; [<span id="intFrom"></span>, <span id="intTo"></span>] &middot; <span id="intMethodLabel"></span></p><p id="integralValue" class="text-2xl font-bold text-emerald-600 font-mono"></p></div>
+      <div id="integralError" class="hidden mt-3"><p class="text-sm text-red-600 font-semibold font-ui" data-key="invalidInput">Invalid input</p></div>
+    </div>
+  </div>
+
+  <!-- ==================== NUMERICAL ==================== -->
+  <div id="tab-numerical" class="tab-content bg-white rounded-3xl shadow-lg p-5 md:p-6 border border-stone-100 fade-in hidden">
+    <div class="flex gap-2 mb-5 overflow-x-auto no-scrollbar">
+      <button id="naRootBtn" onclick="setNaMode('rootfinding')" class="na-subtab active font-ui"><span class="btn-label" data-key="rootfinding">Root Finding</span></button>
+      <button id="naRegBtn" onclick="setNaMode('regression')" class="na-subtab font-ui"><span class="btn-label" data-key="regression">Linear Regression</span></button>
+      <button id="naQuadBtn" onclick="setNaMode('quadratic')" class="na-subtab font-ui"><span class="btn-label" data-key="quadratic">Quadratic Solver</span></button>
+    </div>
+
+    <div id="na-rootfinding" class="na-panel">
+      <p class="text-xs text-stone-500 mb-3 italic font-ui" data-key="rootHint">Finds where f(x) = 0, starting from your initial guess</p>
+      <div class="space-y-3 rounded-2xl p-4 result-red">
+        <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2 font-display">&#128269; <span class="btn-label" data-key="newtonraphson">Newton&ndash;Raphson Method</span></h3>
+        <div><label class="block text-xs font-semibold text-slate-600 mb-1 font-ui" data-key="function">Function f(x) (f(x) = 0)</label><input type="text" id="naFunction" value="x^2-2" class="input-field" placeholder="x^2-2"></div>
+        <div><label class="block text-xs font-semibold text-slate-600 mb-1 font-ui" data-key="guess">Initial Guess</label><input type="number" id="naGuess" value="1.5" class="input-field" placeholder="1.5" step="0.1"></div>
+        <button onclick="handleRootFinding()" class="btn-eq w-full rounded-2xl font-semibold py-3.5 text-lg select-none font-ui"><span class="btn-label" data-key="calculate">Calculate</span></button>
+      </div>
+      <div id="rootResult" class="hidden mt-3 result-green fade-in"><p class="text-xs text-slate-600 font-ui" data-key="root">Root</p><p id="rootValue" class="text-2xl font-bold text-emerald-600 font-mono"></p><p class="text-xs text-slate-400 mt-1 font-ui"><span class="btn-label" data-key="iterations">Iterations</span>: <span id="rootIterations"></span></p></div>
+      <div id="rootError" class="hidden mt-3"><p class="text-sm text-red-600 font-semibold font-ui" data-key="invalidInput">Invalid input</p></div>
+    </div>
+
+    <div id="na-regression" class="na-panel hidden">
+      <p class="text-xs text-stone-500 mb-3 italic font-ui" data-key="regressionHint">Fits the best straight line through your data points</p>
+      <div class="space-y-3 rounded-2xl p-4 result-box">
+        <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2 font-display">&#128200; <span class="btn-label" data-key="regression">Linear Regression</span></h3>
+        <div><label class="block text-xs font-semibold text-slate-600 mb-1 font-ui" data-key="xvalues">X Values</label><input type="text" id="regX" value="1,2,3,4,5" class="input-field" placeholder="1,2,3,4,5"></div>
+        <div><label class="block text-xs font-semibold text-slate-600 mb-1 font-ui" data-key="yvalues">Y Values</label><input type="text" id="regY" value="2,4,6,8,10" class="input-field" placeholder="2,4,6,8,10"></div>
+        <button onclick="handleRegression()" class="btn-eq w-full rounded-2xl font-semibold py-3.5 text-lg select-none font-ui"><span class="btn-label" data-key="calculate">Calculate</span></button>
+      </div>
+      <div id="regResult" class="hidden mt-3 result-green fade-in space-y-2">
+        <div class="grid grid-cols-2 gap-3">
+          <div><p class="text-xs text-slate-600 font-ui" data-key="slope">Slope (m)</p><p id="regSlope" class="text-lg font-bold text-emerald-600 font-mono"></p></div>
+          <div><p class="text-xs text-slate-600 font-ui" data-key="intercept">Intercept (b)</p><p id="regIntercept" class="text-lg font-bold text-emerald-600 font-mono"></p></div>
+        </div>
+        <p class="text-xs text-slate-600 font-ui"><span class="btn-label" data-key="rvalue">R-value</span>: <span id="regR" class="font-bold text-emerald-700 font-mono"></span></p>
+        <div class="bg-white/70 p-2.5 rounded-lg mt-1"><p id="regEquation" class="font-bold text-center font-mono" style="color: #1B1E33;"></p></div>
+      </div>
+      <div id="regError" class="hidden mt-3"><p class="text-sm text-red-600 font-semibold font-ui" data-key="invalidInput">Invalid input</p></div>
+    </div>
+
+    <div id="na-quadratic" class="na-panel hidden">
+      <p class="text-xs text-stone-500 mb-3 italic font-ui" data-key="quadraticHint">Solves ax&sup2; + bx + c = 0 using the quadratic formula</p>
+      <div class="space-y-3 rounded-2xl p-4 result-blue">
+        <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2 font-display">x&sup2; <span class="btn-label" data-key="quadratic">Quadratic Solver</span></h3>
+        <div class="grid grid-cols-3 gap-2">
+          <div><label class="block text-xs font-semibold text-slate-600 mb-1 font-ui" data-key="coeffA">Coefficient a</label><input type="number" id="quadA" value="1" class="input-field" style="padding:10px;"></div>
+          <div><label class="block text-xs font-semibold text-slate-600 mb-1 font-ui" data-key="coeffB">Coefficient b</label><input type="number" id="quadB" value="-3" class="input-field" style="padding:10px;"></div>
+          <div><label class="block text-xs font-semibold text-slate-600 mb-1 font-ui" data-key="coeffC">Coefficient c</label><input type="number" id="quadC" value="2" class="input-field" style="padding:10px;"></div>
+        </div>
+        <button onclick="handleQuadratic()" class="btn-eq w-full rounded-2xl font-semibold py-3.5 text-lg select-none font-ui"><span class="btn-label" data-key="solve">Solve</span></button>
+      </div>
+      <div id="quadResultReal" class="hidden mt-3 result-green fade-in">
+        <div class="grid grid-cols-2 gap-3 mb-2">
+          <div><p class="text-xs text-slate-600 font-ui" data-key="root1">Root 1 (x&#8321;)</p><p id="quadRoot1" class="text-lg font-bold text-emerald-600 font-mono"></p></div>
+          <div><p class="text-xs text-slate-600 font-ui" data-key="root2">Root 2 (x&#8322;)</p><p id="quadRoot2" class="text-lg font-bold text-emerald-600 font-mono"></p></div>
+        </div>
+        <p class="text-xs text-slate-500 font-ui"><span class="btn-label" data-key="discriminant">Discriminant</span>: <span id="quadDisc" class="font-mono"></span></p>
+      </div>
+      <div id="quadResultNoReal" class="hidden mt-3 result-red fade-in">
+        <p class="text-sm text-red-600 font-semibold font-ui" data-key="noRealRoots">No real roots &mdash; discriminant is negative</p>
+        <p class="text-xs text-slate-500 mt-1 font-ui"><span class="btn-label" data-key="discriminant">Discriminant</span>: <span id="quadDiscNoReal" class="font-mono"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="mt-6 text-center text-slate-500 text-sm mb-4 font-ui">
+    <p>&#128218; <span id="footerTitle">NEB Class 11 Calculator</span></p>
+    <p class="text-xs mt-0.5">&#10024; <span class="btn-label" data-key="tapToReuse">Tap any result to bring it back</span></p>
+  </div>
+
+  <!-- Developer Credit Card -->
+  <div class="rounded-3xl shadow-lg p-5 flex items-center gap-4 border border-stone-100" style="background: linear-gradient(135deg, #FFFDF8 0%, #FBF3E3 100%);">
+    <img src="data:image/jpeg;base64,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zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzTjzjbzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzjz35d/M0H/TzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzyODHyHo9HwygpDzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzSA3T2Hz1QziWAZjTzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzjqi0H0TgBAC3nHXUuJnzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz2eQ3me0TzQiDpSEa6TTzxLzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzvGnWlLEVIbCsKpqJqnfrczzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzilCAM3kniILPjLv6H8OseNXTzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzjCb8aqO8pere3s4t00iZ/NRTzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzxO4XgZyLBg3/OFf9Xjcq/8AsW8888888888888888888888888888888888888888888888LE1V+1bgPCZj2Z33UjDHP388888888888888888888888888888888888888888888888yH84pjglpNjnqwaa5Bt0x88888888888888888888888888888888888888888888884RIfUFRJAqQGTM2Gdqdm2hR888888888888888888888888888888888888888888888vpSWOtg+9qPLAckb/v5BFed888888888888888888888888888888888888888888888r4q5hpGkwnX1pEgrab3qQAA888888888888888888888888888888888888888888888svM+WiyWL2FeMUE02nj52S38888888888888888888888888888888888888888888888qKf0eXWG2oJLst8mPTR9k8888888888888888888888888888888888888888888888888c0MLcmqJm64V4a3nKB08888888888888888888888888888888888888888888888888o80tErxUYII9sDeTIzc8888888888888888888888888888888888888888888888888KpWxui6kMpgv47XH9888888888888888888888888888888888888888888888888888/qbyAsklC0BbsSLbl8888888888888888888888888888888888888888888888888888ga1NeeC6SCKiVAnB6888888888888888888888888888888888888888888888888888ota+vCFp4YYI1JKm9088888888888888888888888888888888888888888888888888sh9YJr54UIOYFJFGXT888888888888888888888888888888888888888888888888888/XO6tCiuSEVkzNRppZFw8888888888888888888888888888888888888888888888888KRDMosUQhmga8B2OZrw6DVb6888888888888888888888888888888888888888888888s04MN9Jq3tdGeKJhxvaQLT9EoOf288888888888888888888888888888888888888888YpudN5OxdeuvuiGtvPm7wN5Z4F8kR888888888888888888888888888888888888888BzENWV/q2cgBlehW1ZzX3MkEmqIM0jw888888888888888888888888888888888884RVQLfyLsSGu9hqQVNV5Zq+9rP2EYGYU5Cw88888888888888888888888888888884jNwpNEnBT1+3e+uBOywmyLBxN7T6hqoUkUQDwc8888888888888888888888888888nhAVDk3LEl2xNFevQg0Y3ltxFNELLmOMoUEYIikhjw8888888888888888888888888xZLrK7D42s6sptvQ0+YEwDnNxkEEPVBesAcwc8UMQQLv088888888888888888888883hkxyGidL3ha1glDAgWkcohrVmiMPlx8VAAMswIEMkM+yXc888888888888888888884e2DjKcGnGISIiwv6ZXcAjDPd/L9Pxr/AEhVPMOPCNAFCaUX5vfPPPPPPPPPPPPPPPPPPP19rTIuFnqWcRCItoZhoZdAaAcd11xzYIJ6AHKJGFJBDCCPMg/PPPPPPPPPPPPPPPPPBHFhGkRW6EDiLxiGnn9GNcQ0WYRf12ZfcaPuEBNKHAHHHDPHDzsfPPPPPPPPPPPPPPPPEiwCOoT/AODBDBPo7bBOzaU/H/v0ZlThivgFCTDTxSRzjzzjTRXDrXzzzzzzzzzzzzzzyjCTrm78Ee6yB+cKe4AF0k6q5Z30fLI7k713WwCxQDgxySxDixAIhkzzzzzzzzzzzzzzy9a/ryeAs4AMdZBJwS7E2FLqsOlPdrKbhomEBxTxDzhihjizwwiRzo7zzzzzzzzzzzzzzo+HKOjsGTy8Wq9xSxJtO/boaLkiZriZxYV1ayjzSxwRDBDijTCDiTDzzzzzzzzzzzzzz2tF68yVGxYm2JcLZ6k0237qp5ELK7Yp7ZMBTwDiLoyTzxQBBAgCxjzzzzzzzzzzzzzzxNY0cOIXFxZmWq/k6JISSFrLqDAbb+fj3eotJywhQhwQQBBzCASTAADzzzzzzzzzzzzzz+KpdiCNCeVP8b5BnrIuuPG2lnPnk8H1H6JjiXihAjSyixzwjxziQDDzzzzzzzzzzzzz3gbGmqepyOGVoVe/rWKlQx33GU+0F7o89Pp1UzwyBAhDyyyBDwQhDAHDDDDDDDDDDDDDen2KSWjF03U7SOOTSlTMNQXlV2Q+RnO8f18huZo++/8AfzPf7zzznTSC/8QAAv/aAAwDAQACAAMAAAAQ88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888880tx8+8888888888888888888888888888888888888888888888888888888888880t1rC+hTOf188888888888888888888888888888888888888888888888888888888kyS9OQV344Vve088888888888888888888888888888888888888888888888888880v0nG9drigkxQYG+088888888888888888888888888888888888888888888888884LSKK/qJI4tQMAJkCv/APPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP9Pvk9U9ndDJRydA1mYoiN/PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPNCBY5N/+mooU1J7xaot0n6vPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPOPzBYRcD5mQH0x3Brr+63cmdPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPLGiK33xFXKEbMDiYA6O8Ha9NPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPHCNIk67PeE3s9MW+yusNk7X/ADzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzyD2DaoWrrb5ztUh5A2M4rJ/wA8888888888888888888888888888888888888888888888fGFkef9L8O1EPogwK1m6t18888888888888888888888888888888888888888888888HgHljqFcX/znBESQaxd/f8AfPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPE1RsLR2bs+Bd/5iwny1qGEUvPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPOALzq8OEHhh6pZB0XHZ+iCePPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPLOsznOmIryVrTzr2uJ00nZ/vPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPK2uPkGznm7rHNwg1u98Z7fPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPLRquWyW6UlxWxn4j47QpvPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPOiSa7fZ2gSheRm7+/cXPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPKTVImpXWPV0D6D3ZRHvPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPDC8ZTL49vIhhgPGPFPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPtetC/zYYRD4/o8xTc/PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP4SAx5FJr/aZNw+Uo9PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPLFq1z13OQ4c/M2xul8PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPkBseAVTOFh03MjcrG4uPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPEIIEbrkhpxHjn/wBVpmRogWJz/wA888888888888888888888888888888888888888888888jaGnWC2btsO5uii6up/tL5hbM+388888888888888888888888888888888888888888nA8HHOO7pzuuG6g8R3K0BbibghKwV888888888888888888888888888888888888888GuL86DLML0UIi2h6yXkNLomUw4202I2888888888888888888888888888888888884M7wJgjqhPapfYHEmNqGWWJjSnRHT+oc+t4888888888888888888888888888888882P2r184sCwZE4zq1FCzS4YmWNE+l2gCW6eAcFW8888888888888888888888888888mRVBN+MOeF4eeOTfCz/PrGRGu28FSGghiiKaqkAyGw888888888888888888888888836xdChUNWUjM7bkMwCr3e/Vx4ND021A86i+KqKeeiVRE88888888888888888888888yIapu/TfY5ik+fzc8oB3h7xiyuHcYfqG6KyuCuemOioawTW888888888888888888884DePjaBTlrUGbZDgxahooN3QNjMe1ggsCym2eamqi+m3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" alt="Bishnu Singh Rayamajhi" class="w-16 h-16 rounded-full object-cover flex-shrink-0" style="border: 3px solid #C89116; box-shadow: 0 4px 10px rgba(200,145,22,0.25);">
+    <div class="text-left min-w-0">
+      <p class="text-[10px] font-bold uppercase tracking-widest font-mono" style="color: #C81E3A;" data-key="developedBy">Developed by</p>
+      <p class="font-bold text-slate-800 truncate font-display">Bishnu Singh Rayamajhi</p>
+      <p class="text-xs text-slate-500 font-ui" data-key="lecturerTitle">Mathematics Lecturer &amp; Head, Humanities &amp; Social Sciences</p>
+      <p class="text-xs text-slate-500 font-ui" data-key="campus">Kapilvastu Multiple Campus (KMC), Taulihawa</p>
+    </div>
+  </div>
+</div>
+
+<script>
+
+// ==================== TRANSLATIONS ====================
+const t = {
+  en: {
+    title: 'NEB Class 11 Calculator',
+    subtitle: 'Smart Mathematics Companion for Nepali Students',
+    basic: 'Basic', scientific: 'Scientific', trigonometry: 'Trig',
+    statistics: 'Stats', calculus: 'Calculus', numerical: 'Numerical',
+    clear: 'Clear', delete: 'Delete',
+    angleMode: 'Angle Mode', degree: 'Degree', radian: 'Radian',
+    mean: 'Mean', stdev: 'Std Dev', variance: 'Variance', sum: 'Sum', count: 'Count',
+    enter: 'Enter values (comma-separated)', calculate: 'Calculate', result: 'Result',
+    derivative: 'Derivative', integration: 'Integration', function: 'Function f(x)',
+    point: 'Point (x)', derivative_at: 'Derivative at x =', integral: 'Integral',
+    from: 'From', to: 'To', method: 'Method', simpson: "Simpson's Rule", trapezoid: 'Trapezoidal Rule',
+    rootfinding: 'Root Finding', regression: 'Linear Regression', quadratic: 'Quadratic Solver',
+    guess: 'Initial Guess', iterations: 'Iterations', root: 'Root',
+    slope: 'Slope (m)', intercept: 'Intercept (b)', rvalue: 'R-value',
+    xvalues: 'X Values', yvalues: 'Y Values', newtonraphson: 'Newton–Raphson Method',
+    developedBy: 'Developed by',
+    lecturerTitle: 'Mathematics Lecturer & Head, Humanities & Social Sciences',
+    campus: 'Kapilvastu Multiple Campus (KMC), Taulihawa',
+    history: 'History', noHistory: 'No calculations yet — start typing!',
+    clearHistory: 'Clear', copy: 'Copy', copied: 'Copied!',
+    error: 'Error', divByZero: 'Cannot divide by zero', invalidInput: 'Invalid input',
+    keyboardTip: 'Your keyboard works here too', coeffA: 'Coefficient a',
+    coeffB: 'Coefficient b', coeffC: 'Coefficient c', solve: 'Solve',
+    root1: 'Root 1 (x₁)', root2: 'Root 2 (x₂)',
+    noRealRoots: 'No real roots — discriminant is negative',
+    discriminant: 'Discriminant', tapToReuse: 'Tap any result to bring it back',
+    derivativeHint: 'Uses the central-difference method for accurate numerical derivatives',
+    integrationHint: 'Approximates the definite integral over your chosen limits',
+    rootHint: 'Finds where f(x) = 0, starting from your initial guess',
+    regressionHint: 'Fits the best straight line through your data points',
+    quadraticHint: 'Solves ax² + bx + c = 0 using the quadratic formula'
+  },
+  ne: {
+    title: 'NEB कक्षा ११ क्याल्कुलेटर',
+    subtitle: 'नेपाली विद्यार्थीहरूका लागि स्मार्ट गणित सहयोगी',
+    basic: 'आधारभूत', scientific: 'वैज्ञानिक', trigonometry: 'त्रिकोणमिति',
+    statistics: 'तथ्याङ्क', calculus: 'क्यालकुलस', numerical: 'संख्यात्मक',
+    clear: 'हटाउनुहोस्', delete: 'मेट्नुहोस्',
+    angleMode: 'कोण मोड', degree: 'डिग्री', radian: 'रेडियन',
+    mean: 'औसत', stdev: 'मानक विचलन', variance: 'भिन्नता', sum: 'योग', count: 'गणना',
+    enter: 'मान दर्ज गर्नुहोस् (अल्पविराम द्वारा अलग)', calculate: 'गणना गर्नुहोस्', result: 'परिणाम',
+    derivative: 'अवकलज', integration: 'समाकलन', function: 'फलन f(x)',
+    point: 'बिन्दु (x)', derivative_at: 'अवकलज, x =', integral: 'समाकल',
+    from: 'बाट', to: 'सम्म', method: 'विधि', simpson: 'सिम्पसनको नियम', trapezoid: 'ट्रापेजोइडल नियम',
+    rootfinding: 'मूल खोज', regression: 'रैखिक प्रतिगमन', quadratic: 'द्विघात समाधान',
+    guess: 'प्रारम्भिक अनुमान', iterations: 'पुनरावृत्तिहरू', root: 'मूल',
+    slope: 'ढलान (m)', intercept: 'अवरोध (b)', rvalue: 'R-मान',
+    xvalues: 'X मानहरू', yvalues: 'Y मानहरू', newtonraphson: 'न्यूटन–र्याफसन विधि',
+    developedBy: 'निर्माता',
+    lecturerTitle: 'गणित प्रवक्ता तथा प्रमुख, मानविकी तथा सामाजिक शास्त्र संकाय',
+    campus: 'कपिलवस्तु बहुमुखी क्याम्पस (KMC), तौलिहवा',
+    history: 'इतिहास', noHistory: 'अहिलेसम्म कुनै गणना छैन — टाइप गर्न सुरु गर्नुहोस्!',
+    clearHistory: 'हटाउनुहोस्', copy: 'प्रतिलिपि', copied: 'प्रतिलिपि भयो!',
+    error: 'त्रुटि', divByZero: 'शून्यले भाग गर्न मिल्दैन', invalidInput: 'अमान्य इनपुट',
+    keyboardTip: 'तपाईंको किबोर्ड पनि यहाँ काम गर्छ', coeffA: 'गुणांक a',
+    coeffB: 'गुणांक b', coeffC: 'गुणांक c', solve: 'समाधान गर्नुहोस्',
+    root1: 'मूल 1 (x₁)', root2: 'मूल 2 (x₂)',
+    noRealRoots: 'वास्तविक मूल छैन — डिस्क्रिमिनेन्ट ऋणात्मक छ',
+    discriminant: 'डिस्क्रिमिनेन्ट', tapToReuse: 'पुन: प्रयोग गर्न परिणाममा ट्याप गर्नुहोस्',
+    derivativeHint: 'सटीक संख्यात्मक अवकलजका लागि केन्द्रीय-अन्तर विधि प्रयोग गर्छ',
+    integrationHint: 'तपाईंले तोकेको सीमाभित्र निश्चित समाकल अनुमान गर्छ',
+    rootHint: 'तपाईंको प्रारम्भिक अनुमानबाट सुरु गरी f(x) = 0 भएको बिन्दु फेला पार्छ',
+    regressionHint: 'तपाईंको डाटा बिन्दुहरू मार्फत उत्तम सीधा रेखा फिट गर्छ',
+    quadraticHint: 'द्विघात सूत्र प्रयोग गरी ax² + bx + c = 0 समाधान गर्छ'
+  }
+};
+
+let language = 'en';
+let activeTab = 'basic';
+let angleMode = 'degree';
+let integrationMethod = 'simpson';
+let naMode = 'rootfinding';
+
+// Calculator state
+let display = '0';
+let previousValue = null;
+let operation = null;
+let waitingForNewValue = false;
+let errorMsg = null;
+let history = [];
+let showHistory = false;
+let copied = false;
+
+const FUNC_MAP = {
+  sin: 'Math.sin', cos: 'Math.cos', tan: 'Math.tan', sqrt: 'Math.sqrt',
+  ln: 'Math.log', log: 'Math.log10', exp: 'Math.exp', abs: 'Math.abs', pi: 'Math.PI'
+};
+
+function getLabels() { return t[language]; }
+
+function updateUI() {
+  const l = getLabels();
+  document.getElementById('title').textContent = l.title;
+  document.getElementById('subtitle').textContent = l.subtitle;
+  document.getElementById('footerTitle').textContent = l.title;
+  document.getElementById('langBtn').textContent = language === 'en' ? 'नेपाली' : 'English';
+  document.getElementById('historyLabel').textContent = l.history;
+  document.getElementById('clearHistoryText').textContent = l.clearHistory;
+  document.getElementById('noHistory').textContent = l.noHistory;
+  document.getElementById('errorText').textContent = l.error;
+  document.getElementById('keyboardTip').innerHTML = '<i data-lucide="keyboard" style="width:12px;height:12px;"></i> ' + l.keyboardTip;
+
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const key = el.getAttribute('data-key');
+    if (l[key]) el.textContent = l[key];
+  });
+
+  renderHistory();
+  lucide.createIcons();
+}
+
+function toggleLanguage() {
+  language = language === 'en' ? 'ne' : 'en';
+  updateUI();
+}
+
+// ==================== FORMATTING ====================
+function formatDisplay(str) {
+  if (str === undefined || str === null) return '0';
+  const neg = str.startsWith('-');
+  const s = neg ? str.slice(1) : str;
+  let [intPart, decPart] = s.split('.');
+  if (!intPart) intPart = '0';
+  intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return (neg ? '-' : '') + intPart + (decPart !== undefined ? '.' + decPart : '');
+}
+
+function formatResultString(num) {
+  if (!isFinite(num)) throw new Error('invalid');
+  const rounded = Math.round((num + Number.EPSILON) * 1e10) / 1e10;
+  return String(rounded);
+}
+
+function opSymbol(op) {
+  return { '+': '+', '-': '−', '*': '×', '/': '÷', '^': '^', '%': '%' }[op] || op;
+}
+
+function pushHistory(label, result) {
+  history.unshift({ id: Date.now() + Math.random(), label, result: String(result) });
+  if (history.length > 8) history.pop();
+  renderHistory();
+}
+
+function renderHistory() {
+  const l = getLabels();
+  const count = document.getElementById('historyCount');
+  count.textContent = history.length > 0 ? history.length : '';
+  const list = document.getElementById('historyList');
+  const clearBtn = document.getElementById('clearHistoryBtn');
+  if (history.length === 0) {
+    list.innerHTML = '<p class="text-sm font-ui" style="color: #6B7094;">' + l.noHistory + '</p>';
+    clearBtn.classList.add('hidden');
+  } else {
+    clearBtn.classList.remove('hidden');
+    list.innerHTML = history.map(h =>
+      '<div class="history-item" onclick="reuseResult(\'' + h.result.replace(/'/g, "\\'") + '\')">' +
+        '<span class="text-xs truncate mr-2 font-mono" style="color: #8B90B0;">' + escapeHtml(h.label) + '</span>' +
+        '<span class="text-sm font-semibold flex-shrink-0 font-mono" style="color: #FBF3DA;">' + escapeHtml(h.result) + '</span>' +
+      '</div>'
+    ).join('');
+  }
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function reuseResult(val) {
+  errorMsg = null;
+  previousValue = null;
+  operation = null;
+  display = val;
+  waitingForNewValue = true;
+  updateDisplay();
+}
+
+function toggleHistory() {
+  showHistory = !showHistory;
+  document.getElementById('historyPanel').classList.toggle('hidden', !showHistory);
+}
+
+function clearHistory() {
+  history = [];
+  renderHistory();
+}
+
+// ==================== DISPLAY UPDATE ====================
+function updateDisplay() {
+  const mainDisplay = document.getElementById('mainDisplay');
+  const opDisplay = document.getElementById('operationDisplay');
+  const angleInd = document.getElementById('angleIndicator');
+  const errorInd = document.getElementById('errorIndicator');
+
+  if (errorMsg) {
+    mainDisplay.textContent = errorMsg;
+    mainDisplay.style.color = '#FF8B8B';
+    mainDisplay.style.textShadow = 'none';
+    errorInd.classList.remove('hidden');
+    opDisplay.innerHTML = '&nbsp;';
+  } else {
+    mainDisplay.textContent = formatDisplay(display);
+    mainDisplay.style.color = '#FBF3DA';
+    mainDisplay.style.textShadow = '0 0 16px rgba(200,145,22,0.35)';
+    errorInd.classList.add('hidden');
+    if (operation && previousValue !== null) {
+      opDisplay.textContent = formatDisplay(String(previousValue)) + ' ' + opSymbol(operation);
+    } else {
+      opDisplay.innerHTML = '&nbsp;';
+    }
+  }
+
+  if (activeTab === 'trigonometry') {
+    angleInd.classList.remove('hidden');
+    angleInd.textContent = angleMode === 'degree' ? 'DEG' : 'RAD';
+  } else {
+    angleInd.classList.add('hidden');
+  }
+}
+
+function pulseDisplay() {
+  const el = document.getElementById('mainDisplay');
+  el.classList.remove('glow-pulse');
+  void el.offsetWidth;
+  el.classList.add('glow-pulse');
+}
+
+// ==================== BASIC CALCULATOR ====================
+function buzz() {
+  try { if (navigator.vibrate) navigator.vibrate(8); } catch (e) {}
+}
+
+function handleNumber(num) {
+  buzz();
+  if (errorMsg) {
+    errorMsg = null; previousValue = null; operation = null;
+    display = String(num); waitingForNewValue = false;
+    updateDisplay(); return;
+  }
+  if (waitingForNewValue) { display = String(num); waitingForNewValue = false; }
+  else { display = display === '0' ? String(num) : display + num; }
+  updateDisplay();
+}
+
+function handleDecimal() {
+  buzz();
+  if (errorMsg) {
+    errorMsg = null; previousValue = null; operation = null;
+    display = '0.'; waitingForNewValue = false;
+    updateDisplay(); return;
+  }
+  if (waitingForNewValue) { display = '0.'; waitingForNewValue = false; return; }
+  if (!display.includes('.')) { display += '.'; updateDisplay(); }
+}
+
+function calculate(prev, current, op) {
+  switch (op) {
+    case '+': return prev + current;
+    case '-': return prev - current;
+    case '*': return prev * current;
+    case '/': if (current === 0) throw new Error('divByZero'); return prev / current;
+    case '^': return Math.pow(prev, current);
+    case '%': if (current === 0) throw new Error('divByZero'); return prev % current;
+    default: return current;
+  }
+}
+
+function handleOperation(op) {
+  if (errorMsg) {
+    errorMsg = null; display = '0'; previousValue = null;
+    operation = null; waitingForNewValue = false;
+    updateDisplay(); return;
+  }
+  buzz();
+  const currentValue = parseFloat(display);
+  try {
+    if (previousValue === null) {
+      previousValue = currentValue;
+    } else if (operation) {
+      const result = calculate(previousValue, currentValue, operation);
+      const resultStr = formatResultString(result);
+      pushHistory(formatDisplay(String(previousValue)) + ' ' + opSymbol(operation) + ' ' + formatDisplay(String(currentValue)), resultStr);
+      previousValue = result;
+      display = resultStr;
+    }
+    operation = op;
+    waitingForNewValue = true;
+    updateDisplay();
+  } catch (e) {
+    errorMsg = e.message === 'divByZero' ? getLabels().divByZero : getLabels().invalidInput;
+    previousValue = null; operation = null; waitingForNewValue = true;
+    updateDisplay();
+  }
+}
+
+function handleEquals() {
+  if (errorMsg || !operation || previousValue === null) return;
+  buzz();
+  try {
+    const currentValue = parseFloat(display);
+    const result = calculate(previousValue, currentValue, operation);
+    const resultStr = formatResultString(result);
+    pushHistory(formatDisplay(String(previousValue)) + ' ' + opSymbol(operation) + ' ' + formatDisplay(String(currentValue)) + ' =', resultStr);
+    display = resultStr;
+    previousValue = null;
+    operation = null;
+    waitingForNewValue = true;
+    pulseDisplay();
+    updateDisplay();
+  } catch (e) {
+    errorMsg = e.message === 'divByZero' ? getLabels().divByZero : getLabels().invalidInput;
+    previousValue = null; operation = null; waitingForNewValue = true;
+    updateDisplay();
+  }
+}
+
+function handleClear() {
+  buzz();
+  display = '0'; previousValue = null; operation = null;
+  waitingForNewValue = false; errorMsg = null;
+  updateDisplay();
+}
+
+function handleDelete() {
+  buzz();
+  if (errorMsg) { handleClear(); return; }
+  if (display.length > 1) display = display.slice(0, -1);
+  else display = '0';
+  updateDisplay();
+}
+
+function copyDisplay() {
+  const text = errorMsg || display;
+  navigator.clipboard.writeText(text).catch(() => {});
+  copied = true;
+  const icon = document.getElementById('copyIcon');
+  icon.setAttribute('data-lucide', 'check');
+  lucide.createIcons();
+  setTimeout(() => {
+    copied = false;
+    icon.setAttribute('data-lucide', 'copy');
+    lucide.createIcons();
+  }, 1200);
+}
+
+function convertAngle(angle, toMode) {
+  if (angleMode === 'degree' && toMode === 'radian') return angle * (Math.PI / 180);
+  if (angleMode === 'radian' && toMode === 'degree') return angle * (180 / Math.PI);
+  return angle;
+}
+
+function handleTrig(func) {
+  if (errorMsg) return;
+  buzz();
+  try {
+    const value = parseFloat(display);
+    const radianValue = angleMode === 'degree' ? convertAngle(value, 'radian') : value;
+    let result;
+    switch (func) {
+      case 'sin': result = Math.sin(radianValue); break;
+      case 'cos': result = Math.cos(radianValue); break;
+      case 'tan': result = Math.tan(radianValue); break;
+      case 'sinh': result = Math.sinh(radianValue); break;
+      case 'cosh': result = Math.cosh(radianValue); break;
+      case 'tanh': result = Math.tanh(radianValue); break;
+      default: result = value;
+    }
+    const resultStr = formatResultString(result);
+    pushHistory(func + '(' + formatDisplay(String(value)) + (angleMode === 'degree' ? '°' : '') + ')', resultStr);
+    display = resultStr;
+    waitingForNewValue = true;
+    pulseDisplay();
+    updateDisplay();
+  } catch (e) {
+    errorMsg = getLabels().invalidInput;
+    updateDisplay();
+  }
+}
+
+function handleSciFunc(func) {
+  if (errorMsg) return;
+  buzz();
+  try {
+    const value = parseFloat(display);
+    let result;
+    switch (func) {
+      case 'sqrt': if (value < 0) throw new Error('invalid'); result = Math.sqrt(value); break;
+      case 'cbrt': result = Math.cbrt(value); break;
+      case 'log': if (value <= 0) throw new Error('invalid'); result = Math.log10(value); break;
+      case 'ln': if (value <= 0) throw new Error('invalid'); result = Math.log(value); break;
+      case 'exp': result = Math.exp(value); break;
+      case 'abs': result = Math.abs(value); break;
+      case 'factorial':
+        if (value < 0 || !Number.isInteger(value) || value > 170) throw new Error('invalid');
+        result = factorial(value); break;
+      default: result = value;
+    }
+    const resultStr = formatResultString(result);
+    pushHistory(func + '(' + formatDisplay(String(value)) + ')', resultStr);
+    display = resultStr;
+    waitingForNewValue = true;
+    pulseDisplay();
+    updateDisplay();
+  } catch (e) {
+    errorMsg = getLabels().invalidInput;
+    updateDisplay();
+  }
+}
+
+function factorial(n) {
+  if (n === 0 || n === 1) return 1;
+  let result = 1;
+  for (let i = 2; i <= n; i++) result *= i;
+  return result;
+}
+
+function insertConstant(value, symbol) {
+  buzz();
+  errorMsg = null;
+  display = String(value.toFixed(6));
+  waitingForNewValue = true;
+  pushHistory(symbol, value.toFixed(6));
+  updateDisplay();
+}
+
+// ==================== MATH ENGINE ====================
+function evaluateFunction(expr, xVal) {
+  let cleanExpr = expr.replace(/\^/g, '**');
+  cleanExpr = cleanExpr.replace(/\b(sin|cos|tan|sqrt|ln|log|exp|abs|pi)\b/g, (m) => FUNC_MAP[m]);
+  cleanExpr = cleanExpr.replace(/(?<![A-Za-z0-9_.])x(?![A-Za-z0-9_])/g, '(' + xVal + ')');
+  cleanExpr = cleanExpr.replace(/(?<![A-Za-z0-9_.])e(?![A-Za-z0-9_])/g, 'Math.E');
+  return Function('"use strict"; return (' + cleanExpr + ')')();
+}
+
+function numericalDerivative(func, x, h) {
+  h = h || 0.0001;
+  const fPlus = evaluateFunction(func, x + h);
+  const fMinus = evaluateFunction(func, x - h);
+  return (fPlus - fMinus) / (2 * h);
+}
+
+function simpsonsRule(func, a, b, n) {
+  n = n || 100;
+  const h = (b - a) / n;
+  let sum = evaluateFunction(func, a) + evaluateFunction(func, b);
+  for (let i = 1; i < n; i++) sum += (i % 2 === 0 ? 2 : 4) * evaluateFunction(func, a + i * h);
+  return (h / 3) * sum;
+}
+
+function trapezoidalRule(func, a, b, n) {
+  n = n || 100;
+  const h = (b - a) / n;
+  let sum = (evaluateFunction(func, a) + evaluateFunction(func, b)) / 2;
+  for (let i = 1; i < n; i++) sum += evaluateFunction(func, a + i * h);
+  return h * sum;
+}
+
+function newtonRaphson(func, guess, maxIter, tolerance) {
+  maxIter = maxIter || 60;
+  tolerance = tolerance || 1e-8;
+  let x = parseFloat(guess);
+  for (let i = 0; i < maxIter; i++) {
+    const fx = evaluateFunction(func, x);
+    const fpx = numericalDerivative(func, x);
+    if (Math.abs(fpx) < 1e-12) throw new Error('invalid');
+    const xNew = x - fx / fpx;
+    if (Math.abs(xNew - x) < tolerance) return { root: xNew.toFixed(6), iterations: i + 1 };
+    x = xNew;
+  }
+  if (!isFinite(x)) throw new Error('invalid');
+  return { root: x.toFixed(6), iterations: maxIter };
+}
+
+function linearRegression(xValues, yValues) {
+  const n = xValues.length;
+  const sumX = xValues.reduce((a, b) => a + b, 0);
+  const sumY = yValues.reduce((a, b) => a + b, 0);
+  const sumXY = xValues.reduce((sum, x, i) => sum + x * yValues[i], 0);
+  const sumX2 = xValues.reduce((sum, x) => sum + x * x, 0);
+  const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+  const intercept = (sumY - slope * sumX) / n;
+  const meanY = sumY / n;
+  const ssRes = yValues.reduce((sum, y, i) => sum + (y - (slope * xValues[i] + intercept)) ** 2, 0);
+  const ssTot = yValues.reduce((sum, y) => sum + (y - meanY) ** 2, 0);
+  const rValue = ssTot === 0 ? 1 : Math.sqrt(Math.max(0, 1 - ssRes / ssTot));
+  return {
+    slope: slope.toFixed(6), intercept: intercept.toFixed(6), rValue: rValue.toFixed(6),
+    equation: 'y = ' + slope.toFixed(4) + 'x + ' + intercept.toFixed(4)
+  };
+}
+
+function solveQuadratic(a, b, c) {
+  if (a === 0) return { error: true };
+  const discriminant = b * b - 4 * a * c;
+  if (discriminant < 0) return { noReal: true, discriminant: discriminant.toFixed(4) };
+  const root1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+  const root2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+  return { root1: root1.toFixed(6), root2: root2.toFixed(6), discriminant: discriminant.toFixed(4) };
+}
+
+// ==================== STATISTICS ====================
+function handleStatistics() {
+  const input = document.getElementById('statsInput').value;
+  const values = input.split(',').map(v => parseFloat(v.trim())).filter(v => !isNaN(v));
+  if (values.length === 0) {
+    document.getElementById('statsResult').classList.add('hidden');
+    document.getElementById('statsError').classList.remove('hidden');
+    return;
+  }
+  const sum = values.reduce((a, b) => a + b, 0);
+  const mean = sum / values.length;
+  const variance = values.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / values.length;
+  const stdev = Math.sqrt(variance);
+  document.getElementById('statSum').textContent = sum.toFixed(4);
+  document.getElementById('statCount').textContent = values.length;
+  document.getElementById('statMean').textContent = mean.toFixed(4);
+  document.getElementById('statVariance').textContent = variance.toFixed(4);
+  document.getElementById('statStdev').textContent = stdev.toFixed(4);
+  document.getElementById('statsResult').classList.remove('hidden');
+  document.getElementById('statsError').classList.add('hidden');
+  pushHistory('Stats (n=' + values.length + ')', 'μ=' + mean.toFixed(4));
+}
+
+// ==================== CALCULUS ====================
+function handleDerivative() {
+  const func = document.getElementById('calcFunction').value;
+  const point = document.getElementById('calcPoint').value;
+  try {
+    const result = numericalDerivative(func, parseFloat(point));
+    if (!isFinite(result)) throw new Error();
+    const val = result.toFixed(6);
+    document.getElementById('derivativeAt').textContent = point;
+    document.getElementById('derivativeValue').textContent = val;
+    document.getElementById('derivativeResult').classList.remove('hidden');
+    document.getElementById('derivativeError').classList.add('hidden');
+    pushHistory('d/dx[' + func + '] at x=' + point, val);
+  } catch (e) {
+    document.getElementById('derivativeResult').classList.add('hidden');
+    document.getElementById('derivativeError').classList.remove('hidden');
+  }
+}
+
+function setIntMethod(method) {
+  integrationMethod = method;
+  document.getElementById('simpsonBtn').classList.toggle('active', method === 'simpson');
+  document.getElementById('trapezoidBtn').classList.toggle('active', method === 'trapezoid');
+}
+
+function handleIntegration() {
+  const func = document.getElementById('intFunction').value;
+  const a = parseFloat(document.getElementById('intA').value);
+  const b = parseFloat(document.getElementById('intB').value);
+  try {
+    const result = integrationMethod === 'simpson' ? simpsonsRule(func, a, b) : trapezoidalRule(func, a, b);
+    if (!isFinite(result)) throw new Error();
+    const val = result.toFixed(6);
+    document.getElementById('intFrom').textContent = a;
+    document.getElementById('intTo').textContent = b;
+    document.getElementById('intMethodLabel').textContent = integrationMethod === 'simpson' ? "Simpson's Rule" : 'Trapezoidal Rule';
+    document.getElementById('integralValue').textContent = val;
+    document.getElementById('integralResult').classList.remove('hidden');
+    document.getElementById('integralError').classList.add('hidden');
+    pushHistory('∫[' + a + ',' + b + '] ' + func + ' dx', val);
+  } catch (e) {
+    document.getElementById('integralResult').classList.add('hidden');
+    document.getElementById('integralError').classList.remove('hidden');
+  }
+}
+
+// ==================== NUMERICAL ANALYSIS ====================
+function setNaMode(mode) {
+  naMode = mode;
+  document.getElementById('naRootBtn').classList.toggle('active', mode === 'rootfinding');
+  document.getElementById('naRegBtn').classList.toggle('active', mode === 'regression');
+  document.getElementById('naQuadBtn').classList.toggle('active', mode === 'quadratic');
+  document.getElementById('na-rootfinding').classList.toggle('hidden', mode !== 'rootfinding');
+  document.getElementById('na-regression').classList.toggle('hidden', mode !== 'regression');
+  document.getElementById('na-quadratic').classList.toggle('hidden', mode !== 'quadratic');
+}
+
+function handleRootFinding() {
+  const func = document.getElementById('naFunction').value;
+  const guess = document.getElementById('naGuess').value;
+  try {
+    const result = newtonRaphson(func, guess);
+    document.getElementById('rootValue').textContent = result.root;
+    document.getElementById('rootIterations').textContent = result.iterations;
+    document.getElementById('rootResult').classList.remove('hidden');
+    document.getElementById('rootError').classList.add('hidden');
+    pushHistory('root of ' + func, result.root);
+  } catch (e) {
+    document.getElementById('rootResult').classList.add('hidden');
+    document.getElementById('rootError').classList.remove('hidden');
+  }
+}
+
+function handleRegression() {
+  const xInput = document.getElementById('regX').value;
+  const yInput = document.getElementById('regY').value;
+  try {
+    const xVals = xInput.split(',').map(v => parseFloat(v.trim())).filter(v => !isNaN(v));
+    const yVals = yInput.split(',').map(v => parseFloat(v.trim())).filter(v => !isNaN(v));
+    if (xVals.length !== yVals.length || xVals.length < 2) {
+      document.getElementById('regResult').classList.add('hidden');
+      document.getElementById('regError').classList.remove('hidden');
+      return;
+    }
+    const result = linearRegression(xVals, yVals);
+    document.getElementById('regSlope').textContent = result.slope;
+    document.getElementById('regIntercept').textContent = result.intercept;
+    document.getElementById('regR').textContent = result.rValue;
+    document.getElementById('regEquation').textContent = result.equation;
+    document.getElementById('regResult').classList.remove('hidden');
+    document.getElementById('regError').classList.add('hidden');
+    pushHistory('Linear regression', result.equation);
+  } catch (e) {
+    document.getElementById('regResult').classList.add('hidden');
+    document.getElementById('regError').classList.remove('hidden');
+  }
+}
+
+function handleQuadratic() {
+  const a = parseFloat(document.getElementById('quadA').value);
+  const b = parseFloat(document.getElementById('quadB').value);
+  const c = parseFloat(document.getElementById('quadC').value);
+  const res = solveQuadratic(a, b, c);
+  if (res.error) {
+    document.getElementById('quadResultReal').classList.add('hidden');
+    document.getElementById('quadResultNoReal').classList.add('hidden');
+    return;
+  }
+  if (res.noReal) {
+    document.getElementById('quadResultReal').classList.add('hidden');
+    document.getElementById('quadResultNoReal').classList.remove('hidden');
+    document.getElementById('quadDiscNoReal').textContent = res.discriminant;
+  } else {
+    document.getElementById('quadResultNoReal').classList.add('hidden');
+    document.getElementById('quadResultReal').classList.remove('hidden');
+    document.getElementById('quadRoot1').textContent = res.root1;
+    document.getElementById('quadRoot2').textContent = res.root2;
+    document.getElementById('quadDisc').textContent = res.discriminant;
+    pushHistory(a + 'x² + ' + b + 'x + ' + c + ' = 0', 'x₁=' + res.root1 + ', x₂=' + res.root2);
+  }
+}
+
+// ==================== TAB MANAGEMENT ====================
+function setTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-tab') === tab);
+  });
+  document.querySelectorAll('.tab-content').forEach(content => {
+    content.classList.add('hidden');
+  });
+  const target = document.getElementById('tab-' + tab);
+  if (target) {
+    target.classList.remove('hidden');
+    target.classList.remove('fade-in');
+    void target.offsetWidth;
+    target.classList.add('fade-in');
+  }
+  const tip = document.getElementById('keyboardTip');
+  if (['basic', 'scientific', 'trigonometry'].includes(tab)) {
+    tip.classList.remove('hidden');
+  } else {
+    tip.classList.add('hidden');
+  }
+  updateDisplay();
+}
+
+function setAngleMode(mode) {
+  angleMode = mode;
+  document.getElementById('degBtn').classList.toggle('active', mode === 'degree');
+  document.getElementById('radBtn').classList.toggle('active', mode === 'radian');
+  updateDisplay();
+}
+
+// ==================== KEYBOARD SUPPORT ====================
+document.addEventListener('keydown', (e) => {
+  if (!['basic', 'scientific', 'trigonometry'].includes(activeTab)) return;
+  const k = e.key;
+  if (k >= '0' && k <= '9') handleNumber(Number(k));
+  else if (k === '.') handleDecimal();
+  else if (k === '+') handleOperation('+');
+  else if (k === '-') handleOperation('-');
+  else if (k === '*') handleOperation('*');
+  else if (k === '/') { e.preventDefault(); handleOperation('/'); }
+  else if (k === 'Enter' || k === '=') { e.preventDefault(); handleEquals(); }
+  else if (k === 'Backspace') handleDelete();
+  else if (k === 'Escape') handleClear();
+});
+
+// ==================== INIT ====================
+window.addEventListener('DOMContentLoaded', () => {
+  updateUI();
+  updateDisplay();
+  lucide.createIcons();
+});
+</script>
+
+</body>
+</html>
