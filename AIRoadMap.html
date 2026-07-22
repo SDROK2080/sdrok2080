@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Mastery Path — Beginner to Expert</title>
+<style>
+  :root{
+    --bg:#0b0f14;
+    --bg-alt:#10161d;
+    --panel:#131b24;
+    --panel-2:#0e141b;
+    --line:#223041;
+    --text:#e9eff5;
+    --muted:#8fa3b8;
+    --accent:#3ddc97;
+    --accent-2:#5aa9ff;
+    --accent-3:#ffb454;
+    --accent-4:#ff6b81;
+    --radius:14px;
+    --serif:'Spectral', 'Georgia', serif;
+    --sans:'Manrope', -apple-system, sans-serif;
+    --mono:'JetBrains Mono', 'Courier New', monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 600px at 85% -10%, rgba(90,169,255,0.10), transparent 60%),
+      radial-gradient(900px 500px at -10% 20%, rgba(61,220,151,0.08), transparent 55%),
+      var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  @font-face{font-family:'Spectral';src:local('Georgia');}
+
+  /* ===== Top bar ===== */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 28px;
+    background:rgba(11,15,20,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    gap:16px; flex-wrap:wrap;
+  }
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand-mark{
+    width:34px;height:34px;border-radius:9px;
+    background:conic-gradient(from 220deg, var(--accent), var(--accent-2), var(--accent-3), var(--accent));
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--serif); font-weight:700; color:#06110c; font-size:15px;
+  }
+  .brand-text{font-family:var(--serif); font-size:18px; font-weight:600; letter-spacing:0.2px;}
+  .brand-text small{display:block; font-family:var(--sans); font-size:10.5px; color:var(--muted); font-weight:500; letter-spacing:1.4px; text-transform:uppercase; margin-top:1px;}
+
+  .top-actions{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  .lang-toggle{
+    display:flex; background:var(--panel-2); border:1px solid var(--line); border-radius:999px; padding:3px;
+  }
+  .lang-toggle button{
+    border:none; background:transparent; color:var(--muted); font-family:var(--sans); font-weight:700;
+    font-size:12.5px; padding:7px 14px; border-radius:999px; cursor:pointer; transition:all .25s ease;
+  }
+  .lang-toggle button.active{background:var(--accent); color:#06140d;}
+
+  .progress-pill{
+    display:flex; align-items:center; gap:8px; background:var(--panel-2); border:1px solid var(--line);
+    padding:7px 14px; border-radius:999px; font-size:12.5px; color:var(--muted); font-weight:600;
+  }
+  .progress-pill .bar{width:70px; height:6px; border-radius:4px; background:#1b2733; overflow:hidden;}
+  .progress-pill .bar i{display:block; height:100%; background:linear-gradient(90deg, var(--accent), var(--accent-2)); width:0%; transition:width .4s ease;}
+  .progress-pill b{color:var(--text);}
+
+  /* ===== Hero ===== */
+  .hero{
+    padding:64px 28px 40px; max-width:1180px; margin:0 auto; position:relative;
+  }
+  .hero-eyebrow{
+    font-family:var(--mono); font-size:12px; letter-spacing:2px; text-transform:uppercase;
+    color:var(--accent); display:flex; align-items:center; gap:10px; margin-bottom:18px;
+  }
+  .hero-eyebrow::before{content:''; width:26px; height:1px; background:var(--accent);}
+  h1.hero-title{
+    font-family:var(--serif); font-weight:600; font-size:clamp(34px,5vw,58px); line-height:1.08; margin:0 0 18px;
+    max-width:850px;
+  }
+  h1.hero-title em{font-style:italic; color:var(--accent);}
+  .hero-sub{color:var(--muted); font-size:17px; max-width:640px; margin:0 0 30px;}
+  .hero-stats{display:flex; gap:0; flex-wrap:wrap; border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .hstat{padding:18px 26px 18px 0; margin-right:26px; border-right:1px solid var(--line); flex:0 0 auto;}
+  .hstat:last-child{border-right:none;}
+  .hstat b{display:block; font-family:var(--serif); font-size:26px; color:var(--text);}
+  .hstat span{font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:0.8px;}
+
+  /* ===== Stage nav (signature element: the pathway rail) ===== */
+  .rail-wrap{max-width:1180px; margin:34px auto 0; padding:0 28px;}
+  .rail{
+    position:relative; display:flex; border:1px solid var(--line); border-radius:999px; padding:6px;
+    background:var(--panel-2); overflow-x:auto; gap:4px;
+  }
+  .rail button{
+    flex:1; min-width:150px; position:relative; z-index:2; border:none; background:transparent; cursor:pointer;
+    padding:12px 16px; border-radius:999px; font-family:var(--sans); font-weight:700; font-size:13px; color:var(--muted);
+    display:flex; flex-direction:column; align-items:flex-start; gap:2px; transition:color .2s ease;
+  }
+  .rail button .stage-num{font-family:var(--mono); font-size:10.5px; opacity:.65;}
+  .rail button.active{color:#06140d;}
+  .rail button.active .stage-num{color:#0b2a1c;}
+  .rail-highlight{
+    position:absolute; top:6px; bottom:6px; border-radius:999px; z-index:1;
+    background:linear-gradient(120deg, var(--accent), var(--accent-2));
+    transition:left .35s cubic-bezier(.65,0,.35,1), width .35s cubic-bezier(.65,0,.35,1);
+  }
+
+  /* ===== Main layout ===== */
+  .main{max-width:1180px; margin:0 auto; padding:40px 28px 100px;}
+  .stage-panel{display:none;}
+  .stage-panel.active{display:block; animation:fadeUp .45s ease;}
+  @keyframes fadeUp{from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);}}
+
+  .stage-head{display:flex; justify-content:space-between; align-items:flex-end; gap:20px; margin-bottom:26px; flex-wrap:wrap;}
+  .stage-head h2{font-family:var(--serif); font-size:32px; margin:0 0 6px; font-weight:600;}
+  .stage-head p{color:var(--muted); margin:0; max-width:560px; font-size:14.5px;}
+  .stage-badge{
+    font-family:var(--mono); font-size:11.5px; padding:6px 12px; border-radius:8px; white-space:nowrap;
+    border:1px solid var(--line); color:var(--muted);
+  }
+
+  .week-grid{display:flex; flex-direction:column; gap:14px;}
+
+  .week-card{
+    border:1px solid var(--line); border-radius:var(--radius); background:linear-gradient(180deg, var(--panel), var(--panel-2));
+    overflow:hidden;
+  }
+  .week-header{
+    display:flex; align-items:center; gap:16px; padding:18px 20px; cursor:pointer; user-select:none;
+  }
+  .week-index{
+    font-family:var(--serif); font-size:22px; color:var(--accent); min-width:52px; flex:0 0 auto;
+  }
+  .week-titles{flex:1; min-width:0;}
+  .week-titles h3{margin:0; font-size:16.5px; font-weight:700; font-family:var(--sans);}
+  .week-titles .np{font-family:'Noto Sans Devanagari','Manrope',sans-serif; color:var(--muted); font-size:13px; margin-top:3px;}
+  .week-meta{display:flex; align-items:center; gap:14px; flex:0 0 auto;}
+  .mini-bar{width:70px; height:6px; border-radius:4px; background:#1b2733; overflow:hidden;}
+  .mini-bar i{display:block; height:100%; background:linear-gradient(90deg,var(--accent-3),var(--accent-4)); width:0%; transition:width .3s;}
+  .chevron{width:20px; height:20px; flex:0 0 auto; transition:transform .3s ease; color:var(--muted);}
+  .week-card.open .chevron{transform:rotate(180deg);}
+
+  .week-body{max-height:0; overflow:hidden; transition:max-height .4s ease;}
+  .week-body-inner{padding:0 20px 20px; border-top:1px solid var(--line); padding-top:16px;}
+
+  .day-row{
+    display:grid; grid-template-columns:auto 1fr auto auto; align-items:center; gap:14px;
+    padding:12px 10px; border-radius:10px; transition:background .2s ease;
+  }
+  .day-row:hover{background:rgba(255,255,255,0.02);}
+  .day-check{
+    width:22px; height:22px; border-radius:6px; border:1.6px solid var(--line); cursor:pointer; flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center; background:transparent; transition:all .2s;
+  }
+  .day-check.done{background:var(--accent); border-color:var(--accent);}
+  .day-check svg{width:13px; height:13px; opacity:0; transition:opacity .15s;}
+  .day-check.done svg{opacity:1;}
+  .day-text .day-label{font-size:11px; font-family:var(--mono); color:var(--accent-2); letter-spacing:0.5px; text-transform:uppercase;}
+  .day-text .day-en{font-size:14.5px; font-weight:600; margin-top:2px;}
+  .day-text .day-np{font-family:'Noto Sans Devanagari','Manrope',sans-serif; font-size:13px; color:var(--muted); margin-top:2px;}
+  .day-links{display:flex; gap:8px; flex-wrap:wrap;}
+  .link-btn{
+    display:flex; align-items:center; gap:6px; font-size:12px; font-weight:700; text-decoration:none;
+    padding:8px 12px; border-radius:8px; border:1px solid var(--line); color:var(--text); white-space:nowrap;
+    transition:all .2s ease; background:var(--panel-2);
+  }
+  .link-btn.video:hover{border-color:var(--accent-4); color:var(--accent-4);}
+  .link-btn.pdf:hover{border-color:var(--accent-2); color:var(--accent-2);}
+  .link-btn svg{width:14px; height:14px;}
+
+  .assign-row{
+    margin-top:8px; padding:12px 10px; border-radius:10px; background:rgba(255,180,84,0.06);
+    border:1px dashed rgba(255,180,84,0.35); display:flex; gap:12px; align-items:center; flex-wrap:wrap;
+  }
+  .assign-row .tag{
+    font-family:var(--mono); font-size:10.5px; text-transform:uppercase; letter-spacing:1px; color:var(--accent-3);
+    border:1px solid rgba(255,180,84,0.4); padding:3px 8px; border-radius:6px; flex:0 0 auto;
+  }
+  .assign-row .txt{font-size:13px; color:var(--muted); flex:1; min-width:180px;}
+  .assign-row .np{font-family:'Noto Sans Devanagari','Manrope',sans-serif;}
+
+  /* ===== Footer / credit ===== */
+  footer{
+    border-top:1px solid var(--line); padding:40px 28px; margin-top:20px;
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;
+    max-width:1180px; margin-left:auto; margin-right:auto;
+  }
+  .dev-card{
+    display:flex; align-items:center; gap:14px;
+  }
+  .dev-avatar{
+    width:46px; height:46px; border-radius:12px; background:linear-gradient(135deg, var(--accent-2), var(--accent));
+    display:flex; align-items:center; justify-content:center; font-family:var(--serif); font-weight:700; color:#06140d; font-size:17px;
+  }
+  .dev-info b{display:block; font-size:14.5px;}
+  .dev-info span{display:block; font-size:12px; color:var(--muted); margin-top:2px;}
+  .foot-note{font-size:12px; color:var(--muted); max-width:360px; text-align:right;}
+
+  ::-webkit-scrollbar{height:8px; width:8px;}
+  ::-webkit-scrollbar-thumb{background:#243342; border-radius:8px;}
+
+  [data-lang="np"] .lang-en{display:none;}
+  [data-lang="en"] .lang-np{display:none;}
+  [data-lang="np"] body{}
+
+  @media (max-width:720px){
+    .day-row{grid-template-columns:auto 1fr; row-gap:10px;}
+    .day-links{grid-column:1 / -1; margin-left:36px;}
+    footer{flex-direction:column; align-items:flex-start;}
+    .foot-note{text-align:left;}
+  }
+</style>
+</head>
+<body data-lang="en">
+
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-mark">AI</div>
+    <div class="brand-text">AI Mastery Path<small>Deep Learning · Step by Step</small></div>
+  </div>
+  <div class="top-actions">
+    <div class="progress-pill">
+      <span class="lang-en">Progress</span><span class="lang-np">प्रगति</span>
+      <div class="bar"><i id="globalBar"></i></div>
+      <b id="globalPct">0%</b>
+    </div>
+    <div class="lang-toggle">
+      <button id="btnEn" class="active" onclick="setLang('en')">English</button>
+      <button id="btnNp" onclick="setLang('np')">नेपाली</button>
+    </div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-eyebrow">Beginner → Intermediate → Advanced → Expert</div>
+  <h1 class="hero-title">
+    <span class="lang-en">Learn AI the way it's actually <em>built</em> — one day at a time.</span>
+    <span class="lang-np">AI लाई साँच्चै <em>निर्माण</em> हुने तरिकाले सिक्नुहोस् — एक-एक दिन गर्दै।</span>
+  </h1>
+  <p class="hero-sub">
+    <span class="lang-en">A 15-week, 60-day roadmap from Python fundamentals to Neural Networks and Deep Learning deployment — with a video tutorial and reading material linked to every single day.</span>
+    <span class="lang-np">Python आधारभूत कुराबाट सुरु गरी Neural Network र Deep Learning deployment सम्मको १५ हप्ता, ६० दिनको रोडम्याप — हरेक दिनसँग भिडियो ट्युटोरियल र पढ्ने सामग्री जोडिएको।</span>
+  </p>
+  <div class="hero-stats">
+    <div class="hstat"><b>15</b><span class="lang-en">Weeks</span><span class="lang-np">हप्ता</span></div>
+    <div class="hstat"><b>60+</b><span class="lang-en">Daily Lessons</span><span class="lang-np">दैनिक पाठहरू</span></div>
+    <div class="hstat"><b>4</b><span class="lang-en">Skill Stages</span><span class="lang-np">तहहरू</span></div>
+    <div class="hstat"><b>100%</b><span class="lang-en">Practical / Hands-on</span><span class="lang-np">व्यावहारिक</span></div>
+  </div>
+</div>
+
+<div class="rail-wrap">
+  <div class="rail" id="rail">
+    <div class="rail-highlight" id="railHi"></div>
+    <button class="active" data-stage="0" onclick="setStage(0)"><span class="stage-num">STAGE 01</span><span class="lang-en">Beginner</span><span class="lang-np">सुरुवाती</span></button>
+    <button data-stage="1" onclick="setStage(1)"><span class="stage-num">STAGE 02</span><span class="lang-en">Intermediate</span><span class="lang-np">मध्यम</span></button>
+    <button data-stage="2" onclick="setStage(2)"><span class="stage-num">STAGE 03</span><span class="lang-en">Advanced</span><span class="lang-np">उन्नत</span></button>
+    <button data-stage="3" onclick="setStage(3)"><span class="stage-num">STAGE 04</span><span class="lang-en">Expert</span><span class="lang-np">विशेषज्ञ</span></button>
+  </div>
+</div>
+
+<div class="main" id="main"></div>
+
+<footer>
+  <div class="dev-card">
+    <div class="dev-avatar">BR</div>
+    <div class="dev-info">
+      <b>Developed by Mr. Bishnu Singh Rayamajhi</b>
+      <span>Math Lecturer &amp; Head of Humanity &amp; Social Science, Kapilvastu Multiple Campus (KMC), Taulihawa</span>
+    </div>
+  </div>
+  <div class="foot-note">
+    <span class="lang-en">Video links open a curated YouTube search for that exact topic. PDF links open a search for downloadable notes/slides on that topic.</span>
+    <span class="lang-np">भिडियो लिङ्कले सोही विषयको YouTube खोज खोल्छ। PDF लिङ्कले सोही विषयको notes/slides खोज्ने खोज खोल्छ।</span>
+  </div>
+</footer>
+
+<script>
+/* ===================== DATA ===================== */
+const CURRICULUM = [
+  { // STAGE 0 - Beginner
+    weeks: [
+      { en:"Introduction to AI and Python", np:"AI र Python को परिचय",
+        days:[
+          {en:"Course Curriculum Overview & Discussion", np:"पाठ्यक्रम अवलोकन तथा छलफल"},
+          {en:"AI vs ML vs Deep Learning", np:"AI, ML र Deep Learning बीचको भिन्नता"},
+          {en:"Intro to Programming Language, Python Installation & Datatypes", np:"प्रोग्रामिङ भाषा परिचय, Python इन्स्टलेसन र Datatypes"},
+          {en:"Collection Datatypes (List, Tuples, Sets, Dict) & Its Methods", np:"Collection Datatypes (List, Tuple, Set, Dict) र तिनका Methods"},
+          {en:"Conditional Statements & Loops", np:"Conditional Statement र Loops"},
+        ], assignment:"Research & Assignment", assignmentNp:"अनुसन्धान तथा असाइनमेन्ट"},
+      { en:"Python for Data Thinking", np:"Data Thinking का लागि Python",
+        days:[
+          {en:"Functions in Python", np:"Python मा Functions"},
+          {en:"Data Thinking, Pandas & Numpy Introduction", np:"Data Thinking, Pandas र Numpy परिचय"},
+          {en:"Virtual Environment, Jupyter IDE, Pandas", np:"Virtual Environment, Jupyter IDE, Pandas"},
+          {en:"Pandas Datatypes, Reading Files", np:"Pandas Datatypes, फाइल पढ्ने विधि"},
+          {en:"Dive into Pandas Methods", np:"Pandas Methods को गहिराइमा अध्ययन"},
+        ], assignment:"Research & Assignment", assignmentNp:"अनुसन्धान तथा असाइनमेन्ट"},
+      { en:"Python for Real Data Handling", np:"वास्तविक Data ह्यान्डलिङका लागि Python",
+        days:[
+          {en:"Data Access, Filtering, Sorting in Pandas", np:"Pandas मा Data Access, Filtering, Sorting"},
+          {en:"Data Cleaning using Pandas (Missing Values)", np:"Pandas प्रयोग गरी Data Cleaning (Missing Values)"},
+          {en:"Handling Inconsistency, Duplicates, Negative & Outlier Values", np:"Inconsistency, Duplicate, Negative र Outlier Values ह्यान्डल गर्ने"},
+          {en:"Statistical Math, Quartiles, Outlier Detection (IQR)", np:"Statistical Math, Quartiles, IQR द्वारा Outlier पत्ता लगाउने"},
+          {en:"IQR Fix, Standard Deviation, Z-Score Method", np:"IQR Fix, Standard Deviation, Z-Score विधि"},
+        ], assignment:"Assignment + Answer Submission + Notes", assignmentNp:"असाइनमेन्ट + उत्तर बुझाउने + Notes"},
+      { en:"Data Cleaning for AI Systems", np:"AI System का लागि Data Cleaning",
+        days:[
+          {en:"Missing Values Handling", np:"Missing Values ह्यान्डलिङ"},
+          {en:"Data Cleaning Techniques", np:"Data Cleaning प्रविधिहरू"},
+          {en:"Basic Pandas Operations", np:"आधारभूत Pandas Operations"},
+          {en:"Data Transformation Basics", np:"Data Transformation आधारभूत"},
+          {en:"Why Data Quality Matters in AI", np:"AI मा Data Quality किन महत्वपूर्ण छ"},
+        ], assignment:"Research & Assignment", assignmentNp:"अनुसन्धान तथा असाइनमेन्ट"},
+    ]
+  },
+  { // STAGE 1 - Intermediate
+    weeks:[
+      { en:"AI Data Analysis Basics", np:"AI Data Analysis आधारभूत",
+        days:[
+          {en:"NumPy for AI Computation", np:"AI Computation का लागि NumPy"},
+          {en:"Basic Statistics for ML", np:"ML का लागि आधारभूत Statistics"},
+          {en:"Understanding Data Patterns", np:"Data Pattern बुझ्ने"},
+          {en:"Pandas Advanced Filtering", np:"Pandas Advanced Filtering"},
+          {en:"Feature Understanding in ML", np:"ML मा Feature बुझ्ने"},
+        ], assignment:"Research & Assignment", assignmentNp:"अनुसन्धान तथा असाइनमेन्ट"},
+      { en:"Data Visualization for AI", np:"AI का लागि Data Visualization",
+        days:[
+          {en:"Matplotlib Basics", np:"Matplotlib आधारभूत"},
+          {en:"Seaborn for Insight", np:"Insight का लागि Seaborn"},
+          {en:"Correlation Concept", np:"Correlation अवधारणा"},
+          {en:"Data Storytelling", np:"Data Storytelling"},
+          {en:"Visualization in AI Decision Making", np:"AI निर्णय प्रक्रियामा Visualization"},
+        ], assignment:"Research & Assignment", assignmentNp:"अनुसन्धान तथा असाइनमेन्ट"},
+      { en:"Machine Learning Preparation", np:"Machine Learning तयारी",
+        days:[
+          {en:"Train-Test Concept (Intuitive)", np:"Train-Test अवधारणा (Intuitive)"},
+          {en:"Features vs Labels", np:"Features बनाम Labels"},
+          {en:"Data Preprocessing Basics", np:"Data Preprocessing आधारभूत"},
+          {en:"Introduction to Sklearn Workflow", np:"Sklearn Workflow को परिचय"},
+          {en:"Problem Framing for AI Systems", np:"AI System का लागि समस्या फ्रेमिङ"},
+        ], assignment:"Research & Assignment", assignmentNp:"अनुसन्धान तथा असाइनमेन्ट"},
+      { en:"Mini AI Data Project", np:"Mini AI Data Project",
+        days:[
+          {en:"End-to-End Dataset Handling", np:"End-to-End Dataset ह्यान्डलिङ"},
+          {en:"Data Exploration Techniques", np:"Data Exploration प्रविधिहरू"},
+          {en:"AI Problem Understanding", np:"AI समस्या बुझ्ने"},
+          {en:"Dataset Preparation Workflow", np:"Dataset तयारी Workflow"},
+          {en:"Mini Project Structuring", np:"Mini Project संरचना"},
+        ], assignment:"Research & Assignment", assignmentNp:"अनुसन्धान तथा असाइनमेन्ट"},
+    ]
+  },
+  { // STAGE 2 - Advanced
+    weeks:[
+      { en:"Introduction to Machine Learning", np:"Machine Learning को परिचय",
+        days:[
+          {en:"What is Machine Learning in Real Systems", np:"वास्तविक System मा Machine Learning के हो"},
+          {en:"Types of ML (Supervised, Unsupervised, Reinforcement)", np:"ML का प्रकार (Supervised, Unsupervised, Reinforcement)"},
+          {en:"ML Workflow Overview", np:"ML Workflow को अवलोकन"},
+          {en:"Real-World ML Applications", np:"वास्तविक जीवनमा ML को प्रयोग"},
+          {en:"Introduction to Models", np:"Models को परिचय"},
+        ], assignment:"Research", assignmentNp:"अनुसन्धान"},
+      { en:"Regression Models", np:"Regression Models",
+        days:[
+          {en:"Linear Regression", np:"Linear Regression"},
+          {en:"Prediction Systems", np:"Prediction System"},
+          {en:"Loss / Cost Concept", np:"Loss / Cost अवधारणा"},
+          {en:"Model Training Basics", np:"Model Training आधारभूत"},
+          {en:"Evaluation Concept", np:"Evaluation अवधारणा"},
+        ], assignment:"Research", assignmentNp:"अनुसन्धान"},
+      { en:"Classification Models", np:"Classification Models",
+        days:[
+          {en:"Logistic Regression", np:"Logistic Regression"},
+          {en:"KNN Algorithm", np:"KNN Algorithm"},
+          {en:"Decision Tree", np:"Decision Tree"},
+          {en:"Spam Detection Logic", np:"Spam Detection Logic"},
+          {en:"Model Accuracy Basics", np:"Model Accuracy आधारभूत"},
+        ], assignment:"Research", assignmentNp:"अनुसन्धान"},
+      { en:"Clustering & Evaluation", np:"Clustering र Evaluation",
+        days:[
+          {en:"K-Means Clustering", np:"K-Means Clustering"},
+          {en:"Unsupervised Learning Concept", np:"Unsupervised Learning अवधारणा"},
+          {en:"Model Evaluation Metrics", np:"Model Evaluation Metrics"},
+          {en:"Accuracy, Precision, Recall", np:"Accuracy, Precision, Recall"},
+          {en:"Pattern Detection", np:"Pattern Detection"},
+        ], assignment:"Research", assignmentNp:"अनुसन्धान"},
+    ]
+  },
+  { // STAGE 3 - Expert
+    weeks:[
+      { en:"Neural Networks Basics", np:"Neural Networks आधारभूत",
+        days:[
+          {en:"Artificial Neurons", np:"Artificial Neurons"},
+          {en:"Perceptron Concept", np:"Perceptron अवधारणा"},
+          {en:"Activation Functions", np:"Activation Functions"},
+          {en:"Forward Propagation", np:"Forward Propagation"},
+          {en:"Backpropagation", np:"Backpropagation"},
+        ], assignment:"Research", assignmentNp:"अनुसन्धान"},
+      { en:"Deep Learning with TensorFlow", np:"TensorFlow सहित Deep Learning",
+        days:[
+          {en:"TensorFlow Basics", np:"TensorFlow आधारभूत"},
+          {en:"Keras Model Building", np:"Keras Model निर्माण"},
+          {en:"Neural Network Training", np:"Neural Network Training"},
+          {en:"Epochs and Accuracy", np:"Epochs र Accuracy"},
+          {en:"Model Improvement Techniques", np:"Model सुधार प्रविधिहरू"},
+        ], assignment:"Research", assignmentNp:"अनुसन्धान"},
+      { en:"Deployment + Career Readiness", np:"Deployment + Career तयारी",
+        days:[
+          {en:"Model Saving / Loading", np:"Model Save / Load गर्ने"},
+          {en:"FastAPI Basics", np:"FastAPI आधारभूत"},
+          {en:"AI API Creation", np:"AI API निर्माण"},
+          {en:"Deployment Introduction", np:"Deployment परिचय"},
+          {en:"Portfolio Building", np:"Portfolio निर्माण"},
+          {en:"Interview Preparation", np:"Interview तयारी"},
+        ], assignment:"Final Capstone Project", assignmentNp:"अन्तिम Capstone Project"},
+    ]
+  }
+];
+
+const STAGE_META = [
+  {en:"Foundations: get comfortable in Python and start thinking in data before touching a single model.",
+   np:"आधार: कुनै पनि Model छुनुअघि Python मा सहज हुनुहोस् र Data को भाषामा सोच्न सिक्नुहोस्।"},
+  {en:"Bridge the gap: analyze, visualize and prepare real data the way an ML engineer does.",
+   np:"पुल: ML Engineer ले जस्तै वास्तविक Data विश्लेषण, Visualize र तयार गर्नुहोस्।"},
+  {en:"Build real models: regression, classification and clustering, evaluated the right way.",
+   np:"वास्तविक Model निर्माण: Regression, Classification र Clustering, सही तरिकाले Evaluate।"},
+  {en:"Go deep: neural networks, TensorFlow, and shipping your work as a real, deployed product.",
+   np:"गहिराइमा जानुहोस्: Neural Network, TensorFlow, र आफ्नो काम वास्तविक Product को रूपमा Deploy गर्नुहोस्।"}
+];
+
+let currentStage = 0;
+let lang = 'en';
+let progress = {}; // key: "s-w-d" -> true
+
+/* ===================== STORAGE ===================== */
+async function loadProgress(){
+  try{
+    const res = await window.storage.get('ai-roadmap-progress');
+    if(res && res.value) progress = JSON.parse(res.value);
+  }catch(e){ progress = {}; }
+}
+async function saveProgress(){
+  try{ await window.storage.set('ai-roadmap-progress', JSON.stringify(progress)); }catch(e){}
+}
+
+/* ===================== ICONS ===================== */
+const ICON_PLAY = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
+const ICON_DOC = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
+const ICON_CHECK = `<svg viewBox="0 0 24 24" fill="none" stroke="#06140d" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`;
+const ICON_CHEV = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>`;
+
+function ytLink(topic){
+  return `https://www.youtube.com/results?search_query=${encodeURIComponent(topic + ' tutorial for beginners')}`;
+}
+function pdfLink(topic){
+  return `https://www.google.com/search?q=${encodeURIComponent(topic + ' notes pdf slides')}&tbs=` + encodeURIComponent('');
+}
+
+/* ===================== RENDER ===================== */
+function render(){
+  const main = document.getElementById('main');
+  main.innerHTML = '';
+  CURRICULUM.forEach((stage, sIdx) => {
+    const panel = document.createElement('div');
+    panel.className = 'stage-panel' + (sIdx===currentStage ? ' active' : '');
+    panel.id = 'stage-'+sIdx;
+
+    const head = document.createElement('div');
+    head.className = 'stage-head';
+    head.innerHTML = `
+      <div>
+        <h2>${['Beginner','Intermediate','Advanced','Expert'][sIdx]} <span class="lang-np">— ${['सुरुवाती','मध्यम','उन्नत','विशेषज्ञ'][sIdx]}</span></h2>
+        <p><span class="lang-en">${STAGE_META[sIdx].en}</span><span class="lang-np">${STAGE_META[sIdx].np}</span></p>
+      </div>
+      <div class="stage-badge">${stage.weeks.length} <span class="lang-en">weeks in this stage</span><span class="lang-np">यस चरणमा हप्ता</span></div>
+    `;
+    panel.appendChild(head);
+
+    const grid = document.createElement('div');
+    grid.className = 'week-grid';
+
+    stage.weeks.forEach((week, wIdx) => {
+      const weekGlobalNum = CURRICULUM.slice(0,sIdx).reduce((a,s)=>a+s.weeks.length,0) + wIdx + 1;
+      const card = document.createElement('div');
+      card.className = 'week-card';
+      card.id = `wk-${sIdx}-${wIdx}`;
+
+      const header = document.createElement('div');
+      header.className = 'week-header';
+      header.onclick = () => toggleWeek(sIdx, wIdx);
+      header.innerHTML = `
+        <div class="week-index">${String(weekGlobalNum).padStart(2,'0')}</div>
+        <div class="week-titles">
+          <h3><span class="lang-en">Week ${weekGlobalNum}: ${week.en}</span><span class="lang-np">हप्ता ${weekGlobalNum}: ${week.np}</span></h3>
+        </div>
+        <div class="week-meta">
+          <div class="mini-bar"><i id="mb-${sIdx}-${wIdx}"></i></div>
+          <div class="chevron">${ICON_CHEV}</div>
+        </div>
+      `;
+      card.appendChild(header);
+
+      const body = document.createElement('div');
+      body.className = 'week-body';
+      const inner = document.createElement('div');
+      inner.className = 'week-body-inner';
+
+      week.days.forEach((day, dIdx) => {
+        const key = `${sIdx}-${wIdx}-${dIdx}`;
+        const row = document.createElement('div');
+        row.className = 'day-row';
+        row.innerHTML = `
+          <div class="day-check ${progress[key]?'done':''}" onclick="toggleDay('${key}')">${ICON_CHECK}</div>
+          <div class="day-text">
+            <div class="day-label">Day ${dIdx+1}</div>
+            <div class="day-en lang-en">${day.en}</div>
+            <div class="day-np lang-np">${day.np}</div>
+          </div>
+          <div class="day-links">
+            <a class="link-btn video" target="_blank" rel="noopener" href="${ytLink(day.en)}">${ICON_PLAY} <span class="lang-en">Video</span><span class="lang-np">भिडियो</span></a>
+            <a class="link-btn pdf" target="_blank" rel="noopener" href="${pdfLink(day.en)}">${ICON_DOC} <span class="lang-en">PDF / Notes</span><span class="lang-np">PDF / नोट्स</span></a>
+          </div>
+        `;
+        inner.appendChild(row);
+      });
+
+      const assign = document.createElement('div');
+      assign.className = 'assign-row';
+      assign.innerHTML = `
+        <div class="tag">Task</div>
+        <div class="txt"><span class="lang-en">${week.assignment}</span><span class="lang-np np">${week.assignmentNp}</span></div>
+        <a class="link-btn video" target="_blank" rel="noopener" href="${ytLink(week.en + ' project practice')}">${ICON_PLAY} <span class="lang-en">Practice Video</span><span class="lang-np">अभ्यास भिडियो</span></a>
+      `;
+      inner.appendChild(assign);
+
+      body.appendChild(inner);
+      card.appendChild(body);
+      grid.appendChild(card);
+    });
+
+    panel.appendChild(grid);
+    main.appendChild(panel);
+  });
+
+  applyLangAttr();
+  updateAllBars();
+}
+
+function toggleWeek(s,w){
+  const card = document.getElementById(`wk-${s}-${w}`);
+  const body = card.querySelector('.week-body');
+  const isOpen = card.classList.contains('open');
+  if(isOpen){
+    body.style.maxHeight = null;
+    card.classList.remove('open');
+  } else {
+    card.classList.add('open');
+    body.style.maxHeight = body.scrollHeight + 40 + 'px';
+  }
+}
+
+async function toggleDay(key){
+  progress[key] = !progress[key];
+  await saveProgress();
+  render();
+  // re-open the week that was toggled
+  const [s,w] = key.split('-');
+  const card = document.getElementById(`wk-${s}-${w}`);
+  if(card){
+    card.classList.add('open');
+    const body = card.querySelector('.week-body');
+    body.style.maxHeight = body.scrollHeight + 40 + 'px';
+  }
+}
+
+function updateAllBars(){
+  let totalDays = 0, doneDays = 0;
+  CURRICULUM.forEach((stage,sIdx)=>{
+    stage.weeks.forEach((week,wIdx)=>{
+      let wDone = 0;
+      week.days.forEach((d,dIdx)=>{
+        totalDays++;
+        const key = `${sIdx}-${wIdx}-${dIdx}`;
+        if(progress[key]){ doneDays++; wDone++; }
+      });
+      const mb = document.getElementById(`mb-${sIdx}-${wIdx}`);
+      if(mb) mb.style.width = Math.round((wDone/week.days.length)*100) + '%';
+    });
+  });
+  const pct = totalDays ? Math.round((doneDays/totalDays)*100) : 0;
+  document.getElementById('globalBar').style.width = pct+'%';
+  document.getElementById('globalPct').textContent = pct+'%';
+}
+
+function setStage(idx){
+  currentStage = idx;
+  document.querySelectorAll('.stage-panel').forEach((p,i)=>p.classList.toggle('active', i===idx));
+  document.querySelectorAll('#rail button').forEach((b,i)=>b.classList.toggle('active', i===idx));
+  positionRailHighlight();
+  window.scrollTo({top: document.querySelector('.rail-wrap').offsetTop - 20, behavior:'smooth'});
+}
+
+function positionRailHighlight(){
+  const btn = document.querySelectorAll('#rail button')[currentStage];
+  const hi = document.getElementById('railHi');
+  if(!btn) return;
+  hi.style.left = btn.offsetLeft + 'px';
+  hi.style.width = btn.offsetWidth + 'px';
+}
+
+function setLang(l){
+  lang = l;
+  document.body.setAttribute('data-lang', l);
+  document.getElementById('btnEn').classList.toggle('active', l==='en');
+  document.getElementById('btnNp').classList.toggle('active', l==='np');
+}
+function applyLangAttr(){
+  document.body.setAttribute('data-lang', lang);
+}
+
+window.addEventListener('resize', positionRailHighlight);
+
+(async function init(){
+  await loadProgress();
+  render();
+  setTimeout(positionRailHighlight, 50);
+})();
+</script>
+</body>
+</html>
