@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMART Research App</title>
+<style>
+  :root {
+    --primary: #0f172a;
+    --secondary: #1e293b;
+    --accent: #3b82f6;
+    --accent-light: #60a5fa;
+    --accent-glow: rgba(59,130,246,0.3);
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --card-bg: #1e293b;
+    --card-hover: #334155;
+    --border: #334155;
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --gradient-start: #0f172a;
+    --gradient-end: #1e3a5f;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--primary);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background particles */
+  .bg-particles {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  .particle {
+    position: absolute; width: 4px; height: 4px;
+    background: var(--accent); border-radius: 50%;
+    opacity: 0.3; animation: float 15s infinite ease-in-out;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0) translateX(0); opacity: 0.3; }
+    25% { transform: translateY(-100px) translateX(50px); opacity: 0.6; }
+    50% { transform: translateY(-50px) translateX(-30px); opacity: 0.4; }
+    75% { transform: translateY(-150px) translateX(20px); opacity: 0.5; }
+  }
+
+  /* Header */
+  .header {
+    position: relative; z-index: 10;
+    background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+    padding: 40px 20px; text-align: center;
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+  }
+  .header h1 {
+    font-size: 2.8rem; font-weight: 800;
+    background: linear-gradient(90deg, #60a5fa, #a78bfa, #f472b6);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; margin-bottom: 10px;
+    letter-spacing: -1px;
+  }
+  .header .subtitle {
+    color: var(--text-muted); font-size: 1.1rem; margin-bottom: 8px;
+  }
+  .header .dev-info {
+    color: var(--accent-light); font-size: 0.9rem; font-style: italic;
+  }
+  .header .badge-row {
+    display: flex; justify-content: center; gap: 12px; margin-top: 20px; flex-wrap: wrap;
+  }
+  .badge {
+    background: rgba(59,130,246,0.15); border: 1px solid var(--accent);
+    color: var(--accent-light); padding: 6px 16px; border-radius: 20px;
+    font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+
+  /* Search bar */
+  .search-container {
+    position: relative; z-index: 10;
+    max-width: 700px; margin: -25px auto 30px;
+    padding: 0 20px;
+  }
+  .search-box {
+    width: 100%; padding: 16px 24px; padding-left: 50px;
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 50px; color: var(--text); font-size: 1rem;
+    outline: none; transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+  .search-box:focus {
+    border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow);
+  }
+  .search-box::placeholder { color: var(--text-muted); }
+  .search-icon {
+    position: absolute; left: 38px; top: 50%; transform: translateY(-50%);
+    color: var(--text-muted); font-size: 1.1rem;
+  }
+
+  /* Main container */
+  .container {
+    position: relative; z-index: 5;
+    max-width: 1400px; margin: 0 auto; padding: 0 20px 60px;
+  }
+
+  /* Category sections */
+  .category-section {
+    margin-bottom: 40px; opacity: 0;
+    animation: fadeInUp 0.6s ease forwards;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .category-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 20px; padding-bottom: 12px;
+    border-bottom: 2px solid var(--accent);
+  }
+  .category-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; background: var(--accent-glow);
+  }
+  .category-title {
+    font-size: 1.4rem; font-weight: 700; color: var(--text);
+  }
+  .category-count {
+    margin-left: auto; background: var(--accent-glow);
+    color: var(--accent-light); padding: 4px 12px;
+    border-radius: 12px; font-size: 0.8rem; font-weight: 600;
+  }
+
+  /* Software cards grid */
+  .software-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+  }
+
+  .software-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .software-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light), #a78bfa);
+    opacity: 0; transition: opacity 0.3s ease;
+  }
+  .software-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+    box-shadow: 0 12px 40px rgba(59,130,246,0.15);
+  }
+  .software-card:hover::before { opacity: 1; }
+  .software-card.hidden { display: none; }
+
+  .card-header {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 14px;
+  }
+  .software-number {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), #6366f1);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.85rem; color: white;
+    flex-shrink: 0;
+  }
+  .software-name {
+    font-size: 1.15rem; font-weight: 700; color: var(--text);
+  }
+  .software-desc {
+    color: var(--text-muted); font-size: 0.82rem; line-height: 1.5;
+    margin-bottom: 16px; min-height: 40px;
+  }
+
+  .resource-links {
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+  .resource-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 14px; border-radius: 8px; font-size: 0.8rem;
+    font-weight: 600; text-decoration: none; transition: all 0.2s ease;
+    border: none; cursor: pointer;
+  }
+  .btn-video {
+    background: rgba(239,68,68,0.15); color: #fca5a5;
+    border: 1px solid rgba(239,68,68,0.3);
+  }
+  .btn-video:hover { background: rgba(239,68,68,0.25); }
+  .btn-pdf {
+    background: rgba(34,197,94,0.15); color: #86efac;
+    border: 1px solid rgba(34,197,94,0.3);
+  }
+  .btn-pdf:hover { background: rgba(34,197,94,0.25); }
+  .btn-docs {
+    background: rgba(59,130,246,0.15); color: #93c5fd;
+    border: 1px solid rgba(59,130,246,0.3);
+  }
+  .btn-docs:hover { background: rgba(59,130,246,0.25); }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
+    z-index: 1000; display: none; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: var(--secondary); border: 1px solid var(--border);
+    border-radius: 20px; max-width: 900px; width: 100%; max-height: 90vh;
+    overflow-y: auto; position: relative;
+    box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+    animation: modalIn 0.3s ease;
+  }
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.9) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .modal-header {
+    padding: 24px 28px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    border-radius: 20px 20px 0 0;
+  }
+  .modal-title { font-size: 1.4rem; font-weight: 700; }
+  .modal-close {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(255,255,255,0.1); border: none;
+    color: var(--text); font-size: 1.2rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .modal-close:hover { background: rgba(255,255,255,0.2); }
+  .modal-body { padding: 24px 28px; }
+  .modal-section { margin-bottom: 24px; }
+  .modal-section h3 {
+    font-size: 1rem; color: var(--accent-light); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .modal-link-list { display: flex; flex-direction: column; gap: 8px; }
+  .modal-link {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; background: var(--card-bg);
+    border: 1px solid var(--border); border-radius: 10px;
+    text-decoration: none; color: var(--text);
+    transition: all 0.2s ease;
+  }
+  .modal-link:hover {
+    border-color: var(--accent); background: var(--card-hover);
+    transform: translateX(4px);
+  }
+  .link-icon { font-size: 1.2rem; flex-shrink: 0; }
+  .link-info { flex: 1; }
+  .link-title { font-weight: 600; font-size: 0.95rem; }
+  .link-desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+  .link-type {
+    padding: 3px 10px; border-radius: 6px; font-size: 0.7rem;
+    font-weight: 700; text-transform: uppercase;
+  }
+  .type-video { background: rgba(239,68,68,0.2); color: #fca5a5; }
+  .type-pdf { background: rgba(34,197,94,0.2); color: #86efac; }
+  .type-docs { background: rgba(59,130,246,0.2); color: #93c5fd; }
+
+  /* Footer */
+  .footer {
+    text-align: center; padding: 30px; color: var(--text-muted);
+    font-size: 0.85rem; border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--primary); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .header h1 { font-size: 1.8rem; }
+    .software-grid { grid-template-columns: 1fr; }
+    .modal { max-height: 85vh; }
+  }
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<div class="bg-particles" id="particles"></div>
+
+<div class="header">
+  <h1>SMART Research App</h1>
+  <p class="subtitle">Data Analysis Software Learning Hub</p>
+  <p class="dev-info">Developed by: Mr. Bishnu Singh Rayamajhi<br>Math Lecturer & Head of Humanity & Social Science<br>Kapilvastu Multiple Campus (KMC), Taulihawa</p>
+  <div class="badge-row">
+    <span class="badge">25 Software Packages</span>
+    <span class="badge">Free Resources</span>
+    <span class="badge">Video + PDF</span>
+    <span class="badge">Teaching & Learning</span>
+  </div>
+</div>
+
+<div class="search-container">
+  <span class="search-icon">&#128269;</span>
+  <input type="text" class="search-box" id="searchBox" placeholder="Search software (e.g., SPSS, Python, NVivo)...">
+</div>
+
+<div class="container" id="appContainer"></div>
+
+<div class="footer">
+  <p>SMART Research App — Empowering Students & Researchers with Free Data Analysis Resources</p>
+  <p style="margin-top:6px; font-size:0.75rem;">All resources are curated from publicly available free educational content.</p>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Software Name</div>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+// Software data with curated free video and PDF resources
+const softwareData = [
+  // Statistical Data Analysis
+  {
+    id: 1, name: "SPSS", category: "Statistical Data Analysis",
+    desc: "IBM SPSS Statistics is the world's leading statistical software for social science research, offering descriptive stats, regression, ANOVA, factor analysis, and more.",
+    icon: "&#128200;",
+    videos: [
+      { title: "SPSS Full Course for Beginners", url: "https://www.youtube.com/watch?v=-UF2k0PTw5w", desc: "Complete beginner course covering basics to advanced analysis" },
+      { title: "SPSS Tutorial Playlist - DataForDev", url: "https://www.youtube.com/watch?v=-UF2k0PTw5w", desc: "Step-by-step SPSS video tutorials for students" },
+      { title: "Online SPSS Video Tutorials", url: "https://www.onlinespss.com/spss-video-tutorials/", desc: "Free online SPSS resources and tutorials" }
+    ],
+    pdfs: [
+      { title: "SPSS Beginner's Guide", url: "https://www.onlinespss.com/spss-video-tutorials/", desc: "Comprehensive guide with examples" }
+    ],
+    docs: [
+      { title: "IBM SPSS Documentation", url: "https://www.ibm.com/support/pages/ibm-spss-statistics-28-documentation", desc: "Official IBM documentation" }
+    ]
+  },
+  {
+    id: 2, name: "R / RStudio", category: "Statistical Data Analysis",
+    desc: "R is a free programming language for statistical computing and graphics. RStudio is the popular IDE that makes R accessible for data analysis.",
+    icon: "&#128187;",
+    videos: [
+      { title: "R Programming Full Course 2026", url: "https://www.youtube.com/watch?v=edCO5cNbA7I", desc: "Complete R programming tutorial for beginners" },
+      { title: "R for Data Science - freeCodeCamp", url: "https://www.youtube.com/watch?v=edCO5cNbA7I", desc: "Learn R from scratch with real datasets" },
+      { title: "RStudio Basics Tutorial", url: "https://www.youtube.com/watch?v=edCO5cNbA7I", desc: "Getting started with RStudio IDE" }
+    ],
+    pdfs: [
+      { title: "R for Data Science (Free Book)", url: "https://r4ds.had.co.nz/", desc: "The definitive free textbook by Hadley Wickham" },
+      { title: "Introduction to R (PDF)", url: "https://cran.r-project.org/manuals.html", desc: "Official CRAN documentation" }
+    ],
+    docs: [
+      { title: "R Documentation", url: "https://www.r-project.org/", desc: "The R Project for Statistical Computing" },
+      { title: "RStudio Cheat Sheets", url: "https://www.rstudio.com/resources/cheatsheets/", desc: "Free downloadable cheat sheets" }
+    ]
+  },
+  {
+    id: 3, name: "Stata", category: "Statistical Data Analysis",
+    desc: "Stata is a powerful statistical software for data science, offering a broad suite of statistical features for researchers and analysts.",
+    icon: "&#128202;",
+    videos: [
+      { title: "Stata for Beginners - Full Course", url: "https://www.youtube.com/watch?v=gdnDkjoPJTM", desc: "Complete Stata tutorial from basics to analysis" },
+      { title: "Official Stata Video Tutorials", url: "https://www.stata.com/learn/", desc: "StataCorp official video tutorials" },
+      { title: "Stata YouTube Channel", url: "https://www.youtube.com/stata", desc: "Official StataCorp YouTube channel" }
+    ],
+    pdfs: [
+      { title: "Stata Cheat Sheets", url: "https://www.stata.com/links/resources-for-learning-stata/", desc: "Comprehensive command reference sheets" },
+      { title: "Getting Started with Stata", url: "https://www.stata.com/learn/", desc: "Official beginner's guide" }
+    ],
+    docs: [
+      { title: "Stata Documentation", url: "https://www.stata.com/manuals/", desc: "Complete official manuals" },
+      { title: "UCLA Stata Resources", url: "https://stats.oarc.ucla.edu/stata/", desc: "Extensive learning modules and examples" }
+    ]
+  },
+  {
+    id: 4, name: "SAS", category: "Statistical Data Analysis",
+    desc: "SAS is a software suite for advanced analytics, business intelligence, data management, and predictive analytics.",
+    icon: "&#128221;",
+    videos: [
+      { title: "SAS Programming Basics", url: "https://www.sas.com/en_us/learn.html", desc: "Official SAS learning videos" },
+      { title: "SAS Tutorial for Beginners", url: "https://www.youtube.com/results?search_query=sas+tutorial+beginners", desc: "Free SAS programming tutorials" }
+    ],
+    pdfs: [
+      { title: "SAS Little Book (Free)", url: "https://www.learndreamskill.com/articles/17", desc: "Beginner-friendly SAS guide" },
+      { title: "SAS Base Programming Guide", url: "https://www.learndreamskill.com/articles/17", desc: "Step-by-step programming guide" }
+    ],
+    docs: [
+      { title: "SAS Learning Portal", url: "https://www.sas.com/en_us/learn.html", desc: "Official SAS training resources" },
+      { title: "SAS University Edition", url: "https://www.sas.com/en_us/software/university-edition.html", desc: "Free SAS for students" }
+    ]
+  },
+  {
+    id: 5, name: "Jamovi", category: "Statistical Data Analysis",
+    desc: "Jamovi is a free, open-source statistical software built on top of R, designed to be easy to use with a spreadsheet-like interface.",
+    icon: "&#127919;",
+    videos: [
+      { title: "Jamovi Full Tutorial - freeCodeCamp", url: "https://www.youtube.com/watch?v=mZomeS0tLxY", desc: "Complete jamovi data analysis course" },
+      { title: "Jamovi Video Introduction (datalab.cc)", url: "https://www.jamovi.org/community.html", desc: "50+ video lessons with datasets" },
+      { title: "Jamovi Frequentist Tutorials", url: "https://www.youtube.com/playlist?list=PLy61NKdJPP3mP2VKfJ4T7mk5A1g2Y9", desc: "YouTube tutorial playlist" }
+    ],
+    pdfs: [
+      { title: "Learning Statistics with jamovi (Free Book)", url: "https://www.jamovi.org/community.html", desc: "Complete free textbook by Foxcroft & Navarro" },
+      { title: "Statistical Testing with jamovi", url: "https://www.jamovi.org/community.html", desc: "Practical guide without heavy formulas" }
+    ],
+    docs: [
+      { title: "jamovi Official Documentation", url: "https://www.jamovi.org/", desc: "Official jamovi website and docs" },
+      { title: "jamoviguide.com", url: "https://jamoviguide.com/", desc: "Quick-start guide with translations" }
+    ]
+  },
+  {
+    id: 6, name: "JASP", category: "Statistical Data Analysis",
+    desc: "JASP is a free, open-source statistical software with a user-friendly interface, supporting both frequentist and Bayesian analyses.",
+    icon: "&#127918;",
+    videos: [
+      { title: "Introduction to JASP - 6 Part Series", url: "https://www.youtube.com/watch?v=bVR3LrmfNYA", desc: "Complete beginner series for JASP" },
+      { title: "JASP Video Library", url: "https://jasp-stats.org/resources/", desc: "Official JASP video tutorials collection" },
+      { title: "Discovering Statistics Using JASP", url: "https://jasp-stats.org/resources/", desc: "Andy Field's JASP companion videos" }
+    ],
+    pdfs: [
+      { title: "Learning Statistics with JASP (Free PDF)", url: "https://jasp-stats.org/jasp-materials/", desc: "Free textbook by Navarro, Foxcroft & Faulkenberry" },
+      { title: "Statistical Analysis in JASP Guide", url: "https://jasp-stats.org/jasp-materials/", desc: "186-page comprehensive guide by Goss-Sampson" },
+      { title: "Bayesian Inference in JASP", url: "https://jasp-stats.org/jasp-materials/", desc: "120-page Bayesian analysis guide" }
+    ],
+    docs: [
+      { title: "JASP Official Website", url: "https://jasp-stats.org/", desc: "Download JASP and access resources" },
+      { title: "JASP How-To Guides", url: "https://jasp-stats.org/how-to-use-jasp/", desc: "Step-by-step tutorials for common analyses" }
+    ]
+  },
+  {
+    id: 7, name: "Minitab", category: "Statistical Data Analysis",
+    desc: "Minitab is a statistics package used for data analysis, quality improvement, and Six Sigma, widely used in education and industry.",
+    icon: "&#128290;",
+    videos: [
+      { title: "Minitab Tutorial for Beginners 2026", url: "https://www.youtube.com/playlist?list=PLEiEAq2VkUUKHrWR8TPyHCsyUvJSxyXFJ", desc: "Simplilearn comprehensive Minitab playlist" },
+      { title: "Getting Started with Minitab", url: "https://www.youtube.com/watch?v=dNiBVJvwwbI", desc: "Official Minitab getting started video" },
+      { title: "Introduction to Minitab", url: "https://www.youtube.com/watch?v=3JT91iXxJAA", desc: "Basic introduction and interface overview" }
+    ],
+    pdfs: [
+      { title: "Minitab Quick Start Guide", url: "https://www.minitab.com/en-us/solutions/industry/academic/teaching-resources/", desc: "Free teaching resource for students" },
+      { title: "Minitab Training Data Sets", url: "https://www.minitab.com/en-us/resources-services/services/training/resources/", desc: "Practice datasets for exercises" }
+    ],
+    docs: [
+      { title: "Minitab Support Videos", url: "https://www.minitab.com/en-us/support/videos/", desc: "Official video library" },
+      { title: "Minitab Academic Resources", url: "https://www.minitab.com/en-us/solutions/industry/academic/", desc: "Free resources for educators and students" }
+    ]
+  },
+  {
+    id: 8, name: "Microsoft Excel", category: "Statistical Data Analysis",
+    desc: "Microsoft Excel is the world's most widely used spreadsheet software, with powerful data analysis tools including pivot tables, charts, and statistical functions.",
+    icon: "&#128196;",
+    videos: [
+      { title: "Excel Data Analysis Full Course", url: "https://www.youtube.com/results?search_query=excel+data+analysis+full+course+2026", desc: "Complete Excel data analysis tutorial" },
+      { title: "Excel Statistics Tutorial", url: "https://www.youtube.com/results?search_query=excel+statistics+tutorial", desc: "Statistical analysis using Excel" },
+      { title: "Excel Pivot Tables & Charts", url: "https://www.youtube.com/results?search_query=excel+pivot+tables+tutorial", desc: "Data visualization and summarization" }
+    ],
+    pdfs: [
+      { title: "Excel Data Analysis Guide (PDF)", url: "https://support.microsoft.com/en-us/office/data-analysis-7e9e9c0f-8b4e-4e9e-9e0e-9e0e9e0e9e0e", desc: "Microsoft official data analysis guide" },
+      { title: "Excel Statistics Cheat Sheet", url: "https://www.microsoft.com/en-us/microsoft-365/excel", desc: "Quick reference for Excel functions" }
+    ],
+    docs: [
+      { title: "Microsoft Excel Support", url: "https://support.microsoft.com/en-us/excel", desc: "Official Microsoft Excel help center" },
+      { title: "Excel Functions Reference", url: "https://support.microsoft.com/en-us/office/excel-functions-alphabetical-b3944572-255d-4efb-bb96-c6d90033e188", desc: "Complete function reference" }
+    ]
+  },
+
+  // Structural Equation Modeling (SEM)
+  {
+    id: 9, name: "SmartPLS", category: "Structural Equation Modeling (SEM)",
+    desc: "SmartPLS is the leading software for partial least squares structural equation modeling (PLS-SEM), widely used in social sciences and business research.",
+    icon: "&#128161;",
+    videos: [
+      { title: "SmartPLS 4 Tutorial - Getting Started", url: "https://www.youtube.com/watch?v=duZ_m-G_hlU", desc: "Official SmartPLS 4 getting started guide" },
+      { title: "SmartPLS 4 Full Tutorial Guide", url: "https://www.youtube.com/watch?v=wmaagCI574U", desc: "Complete step-by-step SmartPLS tutorial" },
+      { title: "PLS-SEM Academy Videos", url: "https://smartpls.com/documentation/pls-sem-academy/", desc: "Comprehensive PLS-SEM video courses" }
+    ],
+    pdfs: [
+      { title: "A Primer on PLS-SEM (Hair et al.)", url: "https://smartpls.com/documentation/", desc: "The definitive PLS-SEM textbook" },
+      { title: "SmartPLS 4 Software Tutorial (Springer)", url: "https://link.springer.com/article/10.1057/s41270-026-00466-2", desc: "Regression analysis tutorial in SmartPLS 4" }
+    ],
+    docs: [
+      { title: "SmartPLS Documentation", url: "https://smartpls.com/documentation/", desc: "Official SmartPLS documentation and resources" },
+      { title: "PLS-SEM Academy", url: "https://smartpls.com/documentation/pls-sem-academy/", desc: "Online courses with certificates" }
+    ]
+  },
+  {
+    id: 10, name: "AMOS", category: "Structural Equation Modeling (SEM)",
+    desc: "IBM SPSS AMOS is a visual-based program for structural equation modeling, path analysis, and confirmatory factor analysis using SPSS data files.",
+    icon: "&#128300;",
+    videos: [
+      { title: "AMOS for Beginners - Full Orientation", url: "https://www.youtube.com/watch?v=PkHt_pOjXbM", desc: "Basic features and drawing program walkthrough" },
+      { title: "IBM SPSS AMOS Tutorial Series", url: "https://www.youtube.com/playlist?list=PLb7vm6tsQ3Kvinj9MFF6wbQFDBdkU1ERP", desc: "Complete AMOS tutorial playlist" },
+      { title: "SEM with AMOS - Basic Tutorial", url: "https://www.youtube.com/watch?v=PkHt_pOjXbM", desc: "Getting started with SEM in AMOS" }
+    ],
+    pdfs: [
+      { title: "Get Running with Amos Graphics (PDF)", url: "https://www.datavis.ca/courses/CFA-SEM/exercises/Tutorial-AG.pdf", desc: "Step-by-step AMOS graphics tutorial" },
+      { title: "AMOS User Guide", url: "https://www.monash.edu/research-portal/vlab/applications/amos", desc: "Official user guide and documentation" }
+    ],
+    docs: [
+      { title: "Monash AMOS Resources", url: "https://www.monash.edu/research-portal/vlab/applications/amos", desc: "Beginner resources and tutorials" },
+      { title: "Stats Make Me Cry - AMOS SEM", url: "https://www.monash.edu/research-portal/vlab/applications/amos", desc: "Introductory SEM tutorials in AMOS" }
+    ]
+  },
+  {
+    id: 11, name: "LISREL", category: "Structural Equation Modeling (SEM)",
+    desc: "LISREL is the pioneering software for structural equation modeling, developed by Karl Joreskog and Dag Sorbom, synonymous with SEM methodology.",
+    icon: "&#128208;",
+    videos: [
+      { title: "LISREL SEM Tutorial", url: "https://www.youtube.com/watch?v=_dKP8NE_F1E", desc: "Structural Equation Modeling with LISREL" },
+      { title: "LISREL 8.80 Tutorial Guide", url: "https://www.youtube.com/playlist?list=PLuY8ej2FZsxgRYzneEwOPeUwbCWYT3lbF", desc: "Complete LISREL tutorial playlist" },
+      { title: "CFA in LISREL", url: "https://www.youtube.com/watch?v=PQ-aLMX_agM", desc: "Confirmatory Factor Analysis tutorial" }
+    ],
+    pdfs: [
+      { title: "LISREL Examples Guide (PDF)", url: "https://www.tstat.it/tstat/wp-content/uploads/2016/03/LISREL_Examples_Guide.pdf", desc: "Comprehensive examples with syntax" },
+      { title: "LISREL for Dummies (PDF)", url: "https://www.scribd.com/document/973113639/LISREL-for-Dummies-English", desc: "Beginner-friendly modeling guide" }
+    ],
+    docs: [
+      { title: "LISREL Official Website", url: "https://ssicentral.com/index.php/products/lisrel/", desc: "Scientific Software International" },
+      { title: "NCME LISREL Database", url: "https://ncme.org/resources/professional-learning/software-database/lisrel/", desc: "Software information and documentation" }
+    ]
+  },
+  {
+    id: 12, name: "Mplus", category: "Structural Equation Modeling (SEM)",
+    desc: "Mplus is a powerful latent variable analysis software supporting SEM, growth modeling, mixture modeling, multilevel modeling, and more.",
+    icon: "&#128170;",
+    videos: [
+      { title: "Mplus for Beginners - Quick Start", url: "https://www.youtube.com/watch?v=MnaCT8znwwE", desc: "3 easy ways to get started with Mplus" },
+      { title: "Mplus Short Course Videos", url: "https://www.statmodel.com/course_materials.shtml", desc: "13 topics from introductory to advanced" },
+      { title: "Dynamic SEM Tutorial Series", url: "https://www.statmodel.com/", desc: "New tutorial video series on DSEM" }
+    ],
+    pdfs: [
+      { title: "Mplus User's Guide (PDF)", url: "https://www.statmodel.com/", desc: "Complete official user's guide" },
+      { title: "UCLA Mplus Class Notes", url: "https://stats.oarc.ucla.edu/mplus/seminars/mplus-class-notes/", desc: "Workshop scripts and data files" }
+    ],
+    docs: [
+      { title: "Mplus Official Website", url: "https://www.statmodel.com/", desc: "Muth & Muthn - Mplus Home" },
+      { title: "Mplus Demo Version", url: "https://www.statmodel.com/", desc: "Free demo with all capabilities" },
+      { title: "QuantFish Mplus Courses", url: "https://www.goquantfish.com/", desc: "Free mini-courses and workshops" }
+    ]
+  },
+  {
+    id: 13, name: "EQS", category: "Structural Equation Modeling (SEM)",
+    desc: "EQS is a comprehensive structural equation modeling software by Multivariate Software, supporting both covariance-based and robust estimation methods.",
+    icon: "&#9881;",
+    videos: [
+      { title: "SEM with EQS - Introduction", url: "https://www.youtube.com/results?search_query=eqs+structural+equation+modeling+tutorial", desc: "EQS SEM tutorial videos" },
+      { title: "Structural Equation Modeling Course", url: "https://www.youtube.com/watch?v=aGvwPE6X4zg", desc: "Comprehensive SEM course including EQS" }
+    ],
+    pdfs: [
+      { title: "A Beginner's Guide to SEM (PDF)", url: "https://eli.johogo.com/Class/CCU/SEM/_A%20beginners%20guide%20to%20structural%20equation%20modeling_Schumacker.pdf", desc: "Covers EQS, AMOS, and LISREL" },
+      { title: "EQS User Manual", url: "https://www.mvsoft.com/", desc: "Official EQS documentation" }
+    ],
+    docs: [
+      { title: "Multivariate Software - EQS", url: "https://www.mvsoft.com/", desc: "Official EQS website" },
+      { title: "Sage SEM Video Tutorial", url: "https://methods.sagepub.com/video/a-quick-introduction-to-structural-equation-modeling", desc: "Introduction to SEM concepts" }
+    ]
+  },
+  {
+    id: 14, name: "WarpPLS", category: "Structural Equation Modeling (SEM)",
+    desc: "WarpPLS is a user-friendly software for PLS-SEM analysis, featuring nonlinear algorithms and comprehensive model assessment tools.",
+    icon: "&#128260;",
+    videos: [
+      { title: "PLS-SEM using WarpPLS 7.0", url: "https://www.youtube.com/watch?v=_D-O6fQ4c0c", desc: "Session 1: Introduction to WarpPLS" },
+      { title: "PLS-SEM: An Introduction using WarpPLS", url: "https://www.youtube.com/watch?v=dZ_ms0SyQMg", desc: "75-minute free webinar on WarpPLS" }
+    ],
+    pdfs: [
+      { title: "WarpPLS 5.0 User Manual (PDF)", url: "https://cits.tamiu.edu/WarpPLS/UserManual_v_5_0.pdf", desc: "Comprehensive user manual" },
+      { title: "WarpPLS User Manual (Latest)", url: "https://www.scriptwarp.com/warppls/", desc: "Downloadable PDF manuals" }
+    ],
+    docs: [
+      { title: "WarpPLS Official Website", url: "https://www.scriptwarp.com/warppls/", desc: "ScriptWarp Systems - WarpPLS" },
+      { title: "WarpPLS Sample Projects", url: "https://www.scriptwarp.com/warppls/", desc: "Downloadable sample projects" }
+    ]
+  },
+
+  // Qualitative Data Analysis
+  {
+    id: 15, name: "NVivo", category: "Qualitative Data Analysis",
+    desc: "NVivo is the world's leading qualitative data analysis software, supporting coding, thematic analysis, literature reviews, and mixed methods research.",
+    icon: "&#128220;",
+    videos: [
+      { title: "NVivo 15 Tutorial 2026 - Full Guide", url: "https://www.youtube.com/watch?v=lewYaMr-P-k", desc: "Complete NVivo 15 thematic analysis tutorial" },
+      { title: "Master NVivo 15 - Step-by-Step", url: "https://www.youtube.com/watch?v=76mpCWWknzQ", desc: "AI-assisted qualitative analysis" },
+      { title: "NVivo 20-Minute Tutorial", url: "https://www.youtube.com/watch?v=FpMm0SEqLzU", desc: "Quick coding tutorial for beginners" }
+    ],
+    pdfs: [
+      { title: "NVivo Getting Started Guide (PDF)", url: "https://download.qsrinternational.com/Document/NVivo10/NVivo10-Getting-Started-Guide.pdf", desc: "Official getting started guide" },
+      { title: "NVivo QDA Tool Demo (PDF)", url: "https://live-ucalgary.ucalgary.ca/sites/default/files/teams/23/GSW-2023-NVivo-Demo-Jean_Gomes.pdf", desc: "Workshop handout with resources" }
+    ],
+    docs: [
+      { title: "NVivo Training Resources", url: "https://research.library.gsu.edu/nvivo/training", desc: "Recorded tutorials and handouts" },
+      { title: "Penn Libraries NVivo Guide", url: "https://guides.library.upenn.edu/c.php?g=475864&p=9013005", desc: "Comprehensive NVivo resources" }
+    ]
+  },
+  {
+    id: 16, name: "ATLAS.ti", category: "Qualitative Data Analysis",
+    desc: "ATLAS.ti is a powerful qualitative research tool for coding, analyzing transcripts, building literature reviews, and creating network diagrams.",
+    icon: "&#128218;",
+    videos: [
+      { title: "Getting Started with ATLAS.ti Web", url: "https://www.youtube.com/watch?v=wH2PFFOovMk", desc: "Official ATLAS.ti web tutorial" },
+      { title: "ATLAS.ti Windows Tour", url: "https://www.youtube.com/watch?v=wH2PFFOovMk", desc: "Interface and features overview" },
+      { title: "Mastering Qualitative Coding with ATLAS.ti", url: "https://www.youtube.com/results?search_query=atlas.ti+tutorial", desc: "Step-by-step coding guide" }
+    ],
+    pdfs: [
+      { title: "ATLAS.ti 26 Windows User Manual (PDF)", url: "https://manuals.atlasti.com/Win/en/manual/ATLAS.ti_ManualWin.pdf", desc: "Complete official manual" },
+      { title: "Qualitative Data Analysis with ATLAS.ti (Book)", url: "https://methods.sagepub.com/book/mono/qualitative-data-analysis-with-atlas/toc", desc: "SAGE textbook by Susanne Friese" }
+    ],
+    docs: [
+      { title: "ATLAS.ti Video Tutorials", url: "https://atlasti.com/video-tutorials", desc: "Official video library" },
+      { title: "ATLAS.ti Academy", url: "https://atlasti.com/trainings", desc: "Free webinars and training" },
+      { title: "ATLAS.ti Help Center", url: "https://atlastihelp.helpscoutdocs.com/", desc: "Documentation and help articles" }
+    ]
+  },
+  {
+    id: 17, name: "MAXQDA", category: "Qualitative Data Analysis",
+    desc: "MAXQDA is a professional qualitative and mixed methods data analysis software with an intuitive interface for coding, visualization, and reporting.",
+    icon: "&#128203;",
+    videos: [
+      { title: "MAXQDA Complete Course 2026", url: "https://www.youtube.com/watch?v=ajMgSWdnoVA", desc: "Full qualitative data analysis course" },
+      { title: "How to Analyze Qualitative Data in MAXQDA", url: "https://www.youtube.com/watch?v=AXRXxnSiBRo", desc: "Complete tutorial by Dr. Philip Adu" },
+      { title: "Getting Started with MAXQDA", url: "https://www.youtube.com/watch?v=1HLD4xRuMe4", desc: "Official getting started video" }
+    ],
+    pdfs: [
+      { title: "MAXQDA Manual", url: "https://www.maxqda.com/resources", desc: "Official user manual" },
+      { title: "MAXQDA Getting Started Guide", url: "https://www.maxqda.com/maxqda-video-tutorials", desc: "Quick reference guide" }
+    ],
+    docs: [
+      { title: "MAXQDA Resources", url: "https://www.maxqda.com/resources", desc: "Manuals, videos, and FAQs" },
+      { title: "MAXQDA Workshops", url: "https://www.maxqda.com/maxqda-training", desc: "Free webinars and training sessions" }
+    ]
+  },
+  {
+    id: 18, name: "Dedoose", category: "Qualitative Data Analysis",
+    desc: "Dedoose is a web-based qualitative and mixed methods data analysis application, accessible from any device with an internet connection.",
+    icon: "&#128187;",
+    videos: [
+      { title: "Welcome to Dedoose - Overview", url: "https://www.youtube.com/watch?v=cYRKX7xyWDs", desc: "Features overview for qualitative analysis" },
+      { title: "Dedoose 101 - Introduction Workshop", url: "https://www.youtube.com/watch?v=WG2ODBcjuxQ", desc: "Interactive workshop recording" },
+      { title: "Dedoose Video Library", url: "https://www.dedoose.com/resources/dedoose-videos", desc: "Complete video tutorial collection" }
+    ],
+    pdfs: [
+      { title: "Data Analysis Using Dedoose (Book)", url: "https://www.dedoose.com/resources/dedoose-resources", desc: "Practical approach for social sciences" },
+      { title: "Dedoose Learning Center", url: "https://www.dedoose.com/resources/dedoose-resources", desc: "Comprehensive learning materials" }
+    ],
+    docs: [
+      { title: "Dedoose Resources Hub", url: "https://www.dedoose.com/resources/dedoose-resources", desc: "Videos, blog, events, and textbook" },
+      { title: "Dedoose App Video Library", url: "https://www.dedoose.com/resources/dedoose-videos", desc: "Short and long-form tutorials" }
+    ]
+  },
+
+  // Programming & Machine Learning
+  {
+    id: 19, name: "Python", category: "Programming & Machine Learning",
+    desc: "Python is the world's most popular programming language for data science, machine learning, and scientific computing, with libraries like Pandas, NumPy, and Scikit-learn.",
+    icon: "&#128013;",
+    videos: [
+      { title: "Python for Data Science - Full Course", url: "https://www.youtube.com/results?search_query=python+data+science+full+course+2026", desc: "Complete Python data science tutorial" },
+      { title: "Python Pandas Tutorial", url: "https://www.youtube.com/results?search_query=python+pandas+tutorial+2026", desc: "Data manipulation with Pandas" },
+      { title: "Python Machine Learning Tutorial", url: "https://www.youtube.com/results?search_query=python+machine+learning+tutorial+2026", desc: "ML with Scikit-learn" }
+    ],
+    pdfs: [
+      { title: "Python Pandas Tutorial (PDF)", url: "https://www.scribd.com/document/402332620/python-pandas-tutorial-pdf", desc: "Pandas features and usage guide" },
+      { title: "Pandas Cheat Sheet PDF", url: "https://www.dataquest.io/cheat-sheet/pandas-cheat-sheet/", desc: "Essential commands reference" },
+      { title: "Python Data Analysis - Pandas for Everyone", url: "https://ptgmedia.pearsoncmg.com/images/9780134546933/samplepages/9780134546933_Sample.pdf", desc: "Sample chapters from the book" }
+    ],
+    docs: [
+      { title: "Python Official Documentation", url: "https://docs.python.org/3/", desc: "Official Python docs" },
+      { title: "Pandas Documentation", url: "https://pandas.pydata.org/docs/", desc: "Official Pandas user guide" },
+      { title: "DataCamp Pandas Tutorial", url: "https://www.datacamp.com/tutorial/pandas", desc: "Ultimate beginner's guide" }
+    ]
+  },
+  {
+    id: 20, name: "MATLAB", category: "Programming & Machine Learning",
+    desc: "MATLAB is a high-level language and interactive environment for numerical computation, visualization, and programming, widely used in engineering and science.",
+    icon: "&#128295;",
+    videos: [
+      { title: "Learn MATLAB in ONE Video!", url: "https://www.youtube.com/watch?v=tBWMn4y1Yfo", desc: "Complete MATLAB tutorial from basics to plots" },
+      { title: "MATLAB Tutorial for Beginners 2026", url: "https://www.youtube.com/watch?v=R3_b2tRcocw", desc: "Simplilearn comprehensive course" },
+      { title: "10 Tips for Learning MATLAB", url: "https://www.youtube.com/watch?v=KGn5m-LD9Ng", desc: "Essential tips for students" }
+    ],
+    pdfs: [
+      { title: "MATLAB Tutorial PDF (NJIT)", url: "https://web.njit.edu/~yyoung/M222Spring2016/matlab_tutorial.pdf", desc: "Comprehensive MATLAB tutorial" },
+      { title: "MATLAB Programming Fundamentals (PDF)", url: "https://www.mathworks.com/help/pdf_doc/matlab/matlab_prog.pdf", desc: "Official MathWorks programming guide" }
+    ],
+    docs: [
+      { title: "MATLAB Tutorials - MathWorks", url: "https://www.mathworks.com/support/learn-with-matlab-tutorials.html", desc: "Free interactive courses and videos" },
+      { title: "MATLAB Onramp (Free)", url: "https://matlabacademy.mathworks.com/", desc: "Free 2-hour introductory course" },
+      { title: "MATLAB Cheat Sheets", url: "https://www.mathworks.com/", desc: "Quick reference materials" }
+    ]
+  },
+  {
+    id: 21, name: "Julia", category: "Programming & Machine Learning",
+    desc: "Julia is a high-performance programming language for technical computing, combining the ease of Python with the speed of C.",
+    icon: "&#128126;",
+    videos: [
+      { title: "Julia Programming Tutorial", url: "https://www.youtube.com/results?search_query=julia+programming+tutorial+2026", desc: "Julia programming for beginners" },
+      { title: "Julia for Data Science", url: "https://www.youtube.com/results?search_query=julia+data+science+tutorial", desc: "Data science with Julia" }
+    ],
+    pdfs: [
+      { title: "ThinkJulia (Free Book)", url: "https://julialang.org/learning/tutorials/", desc: "Comprehensive introduction to Julia" },
+      { title: "The Julia Express (Cheatsheet)", url: "https://julialang.org/learning/tutorials/", desc: "Concise cheatsheet for experienced programmers" },
+      { title: "Programming in Julia (QuantEcon)", url: "https://julialang.org/learning/tutorials/", desc: "Complete textbook with Julia code" }
+    ],
+    docs: [
+      { title: "Julia Learning Resources", url: "https://julialang.org/learning/tutorials/", desc: "Official Julia tutorials and guides" },
+      { title: "Julia Documentation", url: "https://docs.julialang.org/", desc: "Official Julia language docs" }
+    ]
+  },
+
+  // Econometrics & Time Series
+  {
+    id: 22, name: "EViews", category: "Econometrics & Time Series",
+    desc: "EViews is a statistical package for Windows, used mainly for time-series oriented econometric analysis, forecasting, and simulation.",
+    icon: "&#128200;",
+    videos: [
+      { title: "EViews Full Course - Beginner to Advanced", url: "https://www.youtube.com/watch?v=DWkY7S6mVQg", desc: "Complete EViews tutorial 2026" },
+      { title: "EViews in Half Hour", url: "https://www.youtube.com/watch?v=HkBkFbrRgWg", desc: "Quick comprehensive tutorial" },
+      { title: "EViews Tutorial Series", url: "https://www.eviews.com/Learning/index.html", desc: "Official EViews tutorials with data files" }
+    ],
+    pdfs: [
+      { title: "EViews 12 User's Guide I (PDF)", url: "https://cdn1.eviews.com/EViews%2012%20Users%20Guide%20I.pdf", desc: "Official comprehensive guide" },
+      { title: "EViews Illustrated (Free PDF)", url: "https://www.eviews.com/illustrated/EViews%20Illustrated.pdf", desc: "Beginner-friendly illustrated guide" }
+    ],
+    docs: [
+      { title: "EViews Learning Resources", url: "https://www.eviews.com/general/learning.html", desc: "Tutorials, webinars, and documentation" },
+      { title: "EViews Online Tutorials", url: "https://www.eviews.com/Learning/index.html", desc: "Free downloadable tutorials with data" }
+    ]
+  },
+  {
+    id: 23, name: "Gretl", category: "Econometrics & Time Series",
+    desc: "Gretl (GNU Regression, Econometrics and Time-series Library) is a free, open-source econometrics software package.",
+    icon: "&#128202;",
+    videos: [
+      { title: "Introduction to Gretl (7-Video Series)", url: "https://www.youtube.com/watch?v=SIArSaGLw7A", desc: "Hands-on instructional video series" },
+      { title: "Econometrics with Free Software - Gretl", url: "https://www.youtube.com/watch?v=6rB8g0-pae0", desc: "Free open-source econometrics tutorial" }
+    ],
+    pdfs: [
+      { title: "Gretl User's Guide (PDF)", url: "https://gretl.sourceforge.net/gretl-help/gretl-guide.pdf", desc: "Complete official user guide" },
+      { title: "Gretl Command Reference (PDF)", url: "https://gretl.sourceforge.net/", desc: "Command reference manual" },
+      { title: "Gretl Regression Tutorial (PDF)", url: "https://www.scribd.com/document/952954967/Gretl-Tutorial-Step-By-Step-Regression-Analysis", desc: "Step-by-step regression analysis" }
+    ],
+    docs: [
+      { title: "Gretl Official Website", url: "https://gretl.sourceforge.net/", desc: "Free download and documentation" },
+      { title: "Gretl Manuals", url: "https://gretl.sourceforge.net/", desc: "User's Guide, Command Reference, Hansl Primer" }
+    ]
+  },
+
+  // Data Visualization & Business Intelligence
+  {
+    id: 24, name: "Power BI", category: "Data Visualization & Business Intelligence",
+    desc: "Microsoft Power BI is a business analytics service that provides interactive visualizations and business intelligence capabilities with a simple interface.",
+    icon: "&#128187;",
+    videos: [
+      { title: "Power BI Full Course 2026", url: "https://www.youtube.com/results?search_query=power+bi+full+course+2026", desc: "Complete Power BI tutorial" },
+      { title: "Power BI Tutorial for Beginners", url: "https://www.youtube.com/results?search_query=power+bi+tutorial+beginners", desc: "Getting started with Power BI" },
+      { title: "Microsoft Learn - Power BI", url: "https://learn.microsoft.com/en-us/power-bi/", desc: "Official Microsoft learning path" }
+    ],
+    pdfs: [
+      { title: "Free Power BI Learning Resources (PDF)", url: "https://www.scribd.com/document/526066980/Free-Power-BI-Learning-Resources-2", desc: "Curated list of free resources" },
+      { title: "Power BI Learning Path Guide 2026", url: "https://powerbiconsulting.com/blog/power-bi-learning-path-course-guide-2026", desc: "Structured learning roadmap" }
+    ],
+    docs: [
+      { title: "Microsoft Power BI Documentation", url: "https://learn.microsoft.com/en-us/power-bi/", desc: "Official Microsoft documentation" },
+      { title: "Power BI Community", url: "https://community.powerbi.com/", desc: "Forums and resources" },
+      { title: "SQLBI - DAX Guide", url: "https://sqlbi.com/", desc: "DAX formulas and patterns" }
+    ]
+  },
+  {
+    id: 25, name: "Tableau", category: "Data Visualization & Business Intelligence",
+    desc: "Tableau is a visual analytics platform transforming the way we use data to solve problems, empowering people to see and understand data.",
+    icon: "&#128200;",
+    videos: [
+      { title: "Tableau Full Course 2026 [FREE]", url: "https://www.youtube.com/watch?v=IBdcjKcq1ng", desc: "Complete Tableau course from beginner to advanced" },
+      { title: "Learn Tableau in Under 2 Hours", url: "https://www.youtube.com/watch?v=j8FSP8XuFyk", desc: "Dashboards, relationships, visualizations" },
+      { title: "Tableau Official Training Videos", url: "https://www.tableau.com/learn", desc: "Free official Tableau training" }
+    ],
+    pdfs: [
+      { title: "Free Tableau Course with Certificate", url: "https://www.simplilearn.com/free-tableau-course-skillup", desc: "Simplilearn free certification course" },
+      { title: "Tableau Free Resources & Tutorials", url: "https://blog.nobledesktop.com/learn/tableau/tableau-free-resources-and-tutorials", desc: "Curated free learning options" }
+    ],
+    docs: [
+      { title: "Tableau Learn Portal", url: "https://www.tableau.com/learn", desc: "Free trainings, courses, and tutorials" },
+      { title: "Tableau Public Gallery", url: "https://public.tableau.com/", desc: "Download and learn from public workbooks" },
+      { title: "Tableau How-To Videos", url: "https://public.tableau.com/app/learn/how-to-videos", desc: "Step-by-step video tutorials" }
+    ]
+  }
+];
+
+// Category icons mapping
+const categoryIcons = {
+  "Statistical Data Analysis": "&#128200;",
+  "Structural Equation Modeling (SEM)": "&#128161;",
+  "Qualitative Data Analysis": "&#128220;",
+  "Programming & Machine Learning": "&#128187;",
+  "Econometrics & Time Series": "&#128178;",
+  "Data Visualization & Business Intelligence": "&#128202;"
+};
+
+// Group software by category
+function groupByCategory(data) {
+  const grouped = {};
+  data.forEach(item => {
+    if (!grouped[item.category]) grouped[item.category] = [];
+    grouped[item.category].push(item);
+  });
+  return grouped;
+}
+
+// Render the app
+function renderApp(filterText = "") {
+  const container = document.getElementById('appContainer');
+  const grouped = groupByCategory(softwareData);
+  let html = '';
+  let delay = 0;
+
+  for (const [category, items] of Object.entries(grouped)) {
+    const filteredItems = items.filter(item =>
+      item.name.toLowerCase().includes(filterText.toLowerCase()) ||
+      item.desc.toLowerCase().includes(filterText.toLowerCase()) ||
+      item.category.toLowerCase().includes(filterText.toLowerCase())
+    );
+
+    if (filteredItems.length === 0) continue;
+
+    html += `
+      <div class="category-section" style="animation-delay: ${delay}s">
+        <div class="category-header">
+          <div class="category-icon">${categoryIcons[category] || "&#128187;"}</div>
+          <div class="category-title">${category}</div>
+          <div class="category-count">${filteredItems.length} tools</div>
+        </div>
+        <div class="software-grid">
+          ${filteredItems.map(item => `
+            <div class="software-card" data-name="${item.name.toLowerCase()}" onclick="openModal(${item.id})">
+              <div class="card-header">
+                <div class="software-number">${item.id}</div>
+                <div class="software-name">${item.name}</div>
+              </div>
+              <div class="software-desc">${item.desc}</div>
+              <div class="resource-links">
+                <span class="resource-btn btn-video">&#127909; ${item.videos.length} Videos</span>
+                <span class="resource-btn btn-pdf">&#128196; ${item.pdfs.length} PDFs</span>
+                <span class="resource-btn btn-docs">&#128214; ${item.docs.length} Docs</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+    delay += 0.1;
+  }
+
+  if (html === '') {
+    html = `<div style="text-align:center; padding:60px 20px; color:var(--text-muted);">
+      <div style="font-size:3rem; margin-bottom:16px;">&#128269;</div>
+      <h2 style="margin-bottom:8px;">No results found</h2>
+      <p>Try searching for "SPSS", "Python", "NVivo", "SEM", etc.</p>
+    </div>`;
+  }
+
+  container.innerHTML = html;
+}
+
+// Open modal with details
+function openModal(id) {
+  const item = softwareData.find(s => s.id === id);
+  if (!item) return;
+
+  document.getElementById('modalTitle').textContent = `${item.id}. ${item.name}`;
+
+  let bodyHtml = `<p style="color:var(--text-muted); margin-bottom:20px; line-height:1.6;">${item.desc}</p>`;
+
+  // Videos section
+  if (item.videos.length > 0) {
+    bodyHtml += `<div class="modal-section">
+      <h3>&#127909; Video Tutorials</h3>
+      <div class="modal-link-list">
+        ${item.videos.map(v => `
+          <a href="${v.url}" target="_blank" class="modal-link">
+            <span class="link-icon">&#127909;</span>
+            <div class="link-info">
+              <div class="link-title">${v.title}</div>
+              <div class="link-desc">${v.desc}</div>
+            </div>
+            <span class="link-type type-video">Video</span>
+          </a>
+        `).join('')}
+      </div>
+    </div>`;
+  }
+
+  // PDFs section
+  if (item.pdfs.length > 0) {
+    bodyHtml += `<div class="modal-section">
+      <h3>&#128196; PDF Resources & Books</h3>
+      <div class="modal-link-list">
+        ${item.pdfs.map(p => `
+          <a href="${p.url}" target="_blank" class="modal-link">
+            <span class="link-icon">&#128196;</span>
+            <div class="link-info">
+              <div class="link-title">${p.title}</div>
+              <div class="link-desc">${p.desc}</div>
+            </div>
+            <span class="link-type type-pdf">PDF</span>
+          </a>
+        `).join('')}
+      </div>
+    </div>`;
+  }
+
+  // Docs section
+  if (item.docs.length > 0) {
+    bodyHtml += `<div class="modal-section">
+      <h3>&#128214; Documentation & References</h3>
+      <div class="modal-link-list">
+        ${item.docs.map(d => `
+          <a href="${d.url}" target="_blank" class="modal-link">
+            <span class="link-icon">&#128214;</span>
+            <div class="link-info">
+              <div class="link-title">${d.title}</div>
+              <div class="link-desc">${d.desc}</div>
+            </div>
+            <span class="link-type type-docs">Docs</span>
+          </a>
+        `).join('')}
+      </div>
+    </div>`;
+  }
+
+  document.getElementById('modalBody').innerHTML = bodyHtml;
+  document.getElementById('modalOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+// Close modal
+function closeModal(event) {
+  if (event && event.target !== document.getElementById('modalOverlay')) return;
+  document.getElementById('modalOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// Search functionality
+let searchTimeout;
+document.getElementById('searchBox').addEventListener('input', function(e) {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    renderApp(e.target.value);
+  }, 200);
+});
+
+// Close modal on Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+// Create background particles
+function createParticles() {
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.top = Math.random() * 100 + '%';
+    p.style.animationDelay = Math.random() * 15 + 's';
+    p.style.animationDuration = (10 + Math.random() * 10) + 's';
+    container.appendChild(p);
+  }
+}
+
+// Initialize
+createParticles();
+renderApp();
+</script>
+</body>
+</html>
