@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeCompare Edu — Python · C · Fortran</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#171e29;
+  --bg-alt:#1f2937;
+  --bg-alt-2:#242f3f;
+  --bg-inset:#10151e;
+  --ink:#e9e4d8;
+  --ink-dim:#93a0ae;
+  --ink-faint:#5d6a78;
+  --line:#2e3948;
+  --line-soft:#26303e;
+  --amber:#e8a33d;
+  --amber-dim:#c98a2c;
+  --python:#4fa3c4;
+  --clang:#d4674a;
+  --fortran:#a587d1;
+  --font-display:'Fraunces',serif;
+  --font-body:'IBM Plex Sans',sans-serif;
+  --font-mono:'IBM Plex Mono',monospace;
+  --radius:10px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--font-body);
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--amber);color:#1a1206;}
+a{color:inherit;}
+button{font-family:inherit;cursor:pointer;}
+.eyebrow{
+  font-family:var(--font-mono);
+  font-size:11.5px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--amber);
+  display:flex;align-items:center;gap:8px;
+  margin-bottom:10px;
+}
+.eyebrow::before{content:"";width:16px;height:1px;background:var(--amber);display:inline-block;}
+
+/* ---------- Shell layout ---------- */
+.shell{display:flex;min-height:100vh;}
+.sidebar{
+  width:250px;
+  flex:0 0 250px;
+  background:linear-gradient(180deg,#141a24,#10151e);
+  border-right:1px solid var(--line);
+  padding:22px 16px;
+  position:sticky;top:0;
+  height:100vh;
+  overflow-y:auto;
+  display:flex;flex-direction:column;
+  z-index:20;
+}
+.brand{
+  display:flex;flex-direction:column;gap:2px;
+  padding:4px 10px 20px 10px;
+  border-bottom:1px solid var(--line-soft);
+  margin-bottom:14px;
+}
+.brand .mark{
+  font-family:var(--font-mono);
+  font-size:11px;letter-spacing:.18em;color:var(--ink-faint);
+  text-transform:uppercase;
+}
+.brand h1{
+  font-family:var(--font-display);
+  font-size:23px;font-weight:600;margin:2px 0 0 0;
+  color:var(--ink);
+  letter-spacing:.01em;
+}
+.brand h1 span{color:var(--amber);}
+
+nav.mainnav{display:flex;flex-direction:column;gap:2px;flex:1;}
+.navbtn{
+  display:flex;align-items:center;gap:10px;
+  background:transparent;border:1px solid transparent;
+  color:var(--ink-dim);
+  padding:10px 12px;border-radius:8px;
+  font-size:14px;font-weight:500;text-align:left;
+  transition:background .15s ease, color .15s ease, border-color .15s ease;
+}
+.navbtn .ico{font-family:var(--font-mono);font-size:12px;color:var(--ink-faint);width:18px;text-align:center;}
+.navbtn:hover{background:var(--bg-alt);color:var(--ink);}
+.navbtn.active{background:var(--bg-alt-2);color:var(--amber);border-color:var(--line);}
+.navbtn.active .ico{color:var(--amber);}
+
+.sidefoot{
+  border-top:1px solid var(--line-soft);
+  padding-top:14px;margin-top:14px;
+  font-family:var(--font-mono);
+  font-size:10.5px;color:var(--ink-faint);
+  line-height:1.6;
+}
+.sidefoot b{color:var(--ink-dim);}
+
+/* ---------- Content ---------- */
+.content{flex:1;min-width:0;padding:38px 46px 80px;max-width:1180px;}
+.view{display:none;animation:fadein .35s ease;}
+.view.active{display:block;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+h2.pagetitle{
+  font-family:var(--font-display);
+  font-size:34px;font-weight:600;margin:0 0 6px 0;letter-spacing:.005em;
+}
+p.lede{color:var(--ink-dim);font-size:15.5px;max-width:680px;margin:0 0 30px 0;}
+
+.card{
+  background:var(--bg-alt);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:20px 22px;
+}
+
+/* ---------- Home ---------- */
+.hero{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:44px 42px;
+  background:
+    radial-gradient(circle at 85% 10%, rgba(232,163,61,.10), transparent 45%),
+    radial-gradient(circle at 10% 90%, rgba(165,135,209,.08), transparent 40%),
+    linear-gradient(180deg,#1b2330,#161c26);
+  margin-bottom:34px;
+  position:relative;
+  overflow:hidden;
+}
+.hero h1{
+  font-family:var(--font-display);
+  font-size:44px;line-height:1.08;font-weight:600;margin:8px 0 14px 0;
+  max-width:600px;
+}
+.hero h1 em{font-style:italic;color:var(--amber);font-weight:500;}
+.hero p{color:var(--ink-dim);max-width:520px;font-size:15.5px;margin-bottom:26px;}
+.hero .langs{display:flex;gap:10px;flex-wrap:wrap;}
+.langpill{
+  font-family:var(--font-mono);font-size:12.5px;
+  padding:7px 13px;border-radius:100px;border:1px solid var(--line);
+  display:flex;align-items:center;gap:7px;color:var(--ink-dim);
+}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;}
+.dot.py{background:var(--python);} .dot.c{background:var(--clang);} .dot.ft{background:var(--fortran);}
+
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:32px;}
+.stat{
+  border:1px solid var(--line);border-radius:var(--radius);
+  padding:16px 18px;background:var(--bg-alt);
+}
+.stat .n{font-family:var(--font-display);font-size:28px;color:var(--amber);}
+.stat .l{font-family:var(--font-mono);font-size:11px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.08em;margin-top:4px;}
+
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+.mini-card{
+  border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;
+  background:var(--bg-alt);cursor:pointer;transition:border-color .15s, transform .15s;
+}
+.mini-card:hover{border-color:var(--amber-dim);transform:translateY(-2px);}
+.mini-card h3{font-family:var(--font-display);font-size:18px;margin:0 0 6px 0;font-weight:600;}
+.mini-card p{color:var(--ink-dim);font-size:13.5px;margin:0;}
+.mini-card .go{font-family:var(--font-mono);font-size:11px;color:var(--amber);margin-top:10px;display:block;}
+
+.section-heading{font-family:var(--font-display);font-size:20px;font-weight:600;margin:36px 0 14px 0;}
+
+/* who its for */
+.userlist{display:flex;flex-wrap:wrap;gap:8px;}
+.usertag{
+  font-family:var(--font-mono);font-size:12px;border:1px solid var(--line);
+  padding:6px 12px;border-radius:100px;color:var(--ink-dim);
+}
+
+/* ---------- Learn ---------- */
+details.module{
+  border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;
+  background:var(--bg-alt);overflow:hidden;
+}
+details.module summary{
+  padding:16px 20px;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;
+  font-weight:600;font-size:15.5px;
+}
+details.module summary::-webkit-details-marker{display:none;}
+details.module summary .m-num{font-family:var(--font-mono);color:var(--amber);font-size:12px;margin-right:12px;}
+details.module summary .chev{font-family:var(--font-mono);color:var(--ink-faint);transition:transform .2s;}
+details.module[open] summary .chev{transform:rotate(90deg);}
+.module-body{padding:0 20px 20px 20px;border-top:1px solid var(--line-soft);}
+.topic-cols{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:16px;}
+.topic-cols h4{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-faint);margin:0 0 10px 0;}
+.topic-cols ul{margin:0;padding:0;list-style:none;}
+.topic-cols li{
+  font-size:13.8px;color:var(--ink-dim);padding:6px 0 6px 16px;position:relative;border-bottom:1px dashed var(--line-soft);
+}
+.topic-cols li:last-child{border-bottom:none;}
+.topic-cols li::before{content:"·";position:absolute;left:0;color:var(--amber);}
+
+/* ---------- Compare ---------- */
+.subtabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px;border-bottom:1px solid var(--line);padding-bottom:14px;}
+.subtab{
+  font-family:var(--font-mono);font-size:12.5px;padding:8px 14px;border-radius:8px;
+  border:1px solid var(--line);background:transparent;color:var(--ink-dim);
+}
+.subtab.active{background:var(--amber);color:#1a1206;border-color:var(--amber);font-weight:600;}
+
+.codepanels{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.codepanel{
+  border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);
+  background:var(--bg-inset);
+}
+.codepanel .bar{
+  padding:9px 14px;font-family:var(--font-mono);font-size:12px;font-weight:600;
+  display:flex;align-items:center;gap:8px;color:#0d1015;
+}
+.codepanel.py .bar{background:var(--python);}
+.codepanel.c .bar{background:var(--clang);}
+.codepanel.ft .bar{background:var(--fortran);}
+.codepanel pre{
+  margin:0;padding:16px 16px 20px;font-family:var(--font-mono);font-size:13px;
+  color:#d7e2ea;overflow-x:auto;min-height:120px;white-space:pre;
+}
+.compare-note{margin-top:16px;color:var(--ink-faint);font-size:12.5px;font-family:var(--font-mono);}
+
+table.cmp{width:100%;border-collapse:collapse;margin-top:8px;}
+table.cmp th, table.cmp td{
+  padding:12px 14px;border-bottom:1px solid var(--line-soft);text-align:left;font-size:13.8px;
+}
+table.cmp th{
+  font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-faint);font-weight:600;
+}
+table.cmp td.pyc{color:var(--python);font-family:var(--font-mono);}
+table.cmp td.cc{color:var(--clang);font-family:var(--font-mono);}
+table.cmp td.ftc{color:var(--fortran);font-family:var(--font-mono);}
+table.cmp tr:hover{background:var(--bg-alt);}
+
+/* ---------- Playground ---------- */
+.pg-tabs{display:flex;gap:6px;margin-bottom:16px;}
+.pg-tab{
+  font-family:var(--font-mono);font-size:12.5px;padding:9px 16px;border-radius:8px 8px 0 0;
+  border:1px solid var(--line);border-bottom:none;background:var(--bg-alt);color:var(--ink-dim);
+}
+.pg-tab.active.py{color:var(--python);border-top:2px solid var(--python);}
+.pg-tab.active.c{color:var(--clang);border-top:2px solid var(--clang);}
+.pg-tab.active.ft{color:var(--fortran);border-top:2px solid var(--fortran);}
+.pg-editor{border:1px solid var(--line);border-radius:0 var(--radius) var(--radius) var(--radius);overflow:hidden;background:var(--bg-inset);}
+.pg-editor textarea{
+  width:100%;min-height:220px;background:var(--bg-inset);color:#e2e9ee;border:none;
+  font-family:var(--font-mono);font-size:13.5px;padding:18px;resize:vertical;outline:none;line-height:1.6;
+}
+.pg-controls{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#141a23;border-top:1px solid var(--line);}
+.runbtn{
+  background:var(--amber);color:#1a1206;border:none;font-weight:700;font-size:13px;
+  padding:9px 20px;border-radius:8px;font-family:var(--font-mono);letter-spacing:.02em;
+  transition:background .15s;
+}
+.runbtn:hover{background:#f4b657;}
+.pg-hint{font-family:var(--font-mono);font-size:11px;color:var(--ink-faint);}
+.pg-output{
+  margin-top:14px;border:1px solid var(--line);border-radius:var(--radius);
+  background:#0d1219;padding:16px 18px;font-family:var(--font-mono);font-size:13px;min-height:70px;color:#8fe3a8;
+  white-space:pre-wrap;
+}
+.pg-output .tag{color:var(--ink-faint);display:block;margin-bottom:6px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;}
+
+/* ---------- Performance ---------- */
+.bench-row{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+.bench-label{width:90px;font-family:var(--font-mono);font-size:13px;color:var(--ink-dim);flex-shrink:0;}
+.bench-track{flex:1;background:var(--bg-inset);border-radius:6px;height:26px;overflow:hidden;border:1px solid var(--line);}
+.bench-fill{height:100%;width:0%;border-radius:6px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;
+  font-family:var(--font-mono);font-size:11.5px;color:#0d1015;font-weight:700;transition:width 1.1s cubic-bezier(.2,.8,.2,1);}
+.bench-fill.py{background:var(--python);}
+.bench-fill.c{background:var(--clang);}
+.bench-fill.ft{background:var(--fortran);}
+.bench-block{border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;background:var(--bg-alt);margin-bottom:20px;}
+.bench-block h3{font-family:var(--font-display);font-size:17px;margin:0 0 4px 0;}
+.bench-block .sub{color:var(--ink-faint);font-family:var(--font-mono);font-size:11.5px;margin-bottom:18px;}
+
+/* ---------- Quiz ---------- */
+.quiz-box{border:1px solid var(--line);border-radius:14px;padding:30px 32px;background:var(--bg-alt);max-width:680px;}
+.quiz-progress{font-family:var(--font-mono);font-size:11.5px;color:var(--ink-faint);margin-bottom:14px;display:flex;justify-content:space-between;}
+.quiz-q{font-family:var(--font-display);font-size:20px;margin:0 0 20px 0;font-weight:600;line-height:1.3;}
+.quiz-opts{display:flex;flex-direction:column;gap:10px;}
+.quiz-opt{
+  text-align:left;padding:13px 16px;border-radius:9px;border:1px solid var(--line);background:var(--bg-inset);
+  color:var(--ink);font-size:14.5px;transition:border-color .15s,background .15s;
+}
+.quiz-opt:hover:not(:disabled){border-color:var(--amber-dim);}
+.quiz-opt.correct{border-color:#5fbf7a;background:rgba(95,191,122,.12);color:#8fe3a8;}
+.quiz-opt.wrong{border-color:#d4674a;background:rgba(212,103,74,.12);color:#f0a58f;}
+.quiz-opt:disabled{cursor:default;}
+.quiz-footer{display:flex;justify-content:space-between;align-items:center;margin-top:22px;}
+.quiz-score{font-family:var(--font-mono);font-size:13px;color:var(--ink-dim);}
+.nextbtn{background:var(--amber);border:none;color:#1a1206;font-weight:700;padding:10px 20px;border-radius:8px;font-family:var(--font-mono);font-size:13px;visibility:hidden;}
+.nextbtn.show{visibility:visible;}
+.quiz-result{text-align:center;padding:50px 20px;}
+.quiz-result .big{font-family:var(--font-display);font-size:48px;color:var(--amber);}
+
+/* ---------- Projects ---------- */
+.proj-tier{margin-bottom:30px;}
+.proj-tier h3{font-family:var(--font-mono);font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-faint);margin-bottom:12px;}
+.proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.proj-card{
+  border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;background:var(--bg-alt);cursor:pointer;
+}
+.proj-card h4{margin:0 0 6px 0;font-family:var(--font-display);font-size:16px;}
+.proj-card p{margin:0;font-size:12.5px;color:var(--ink-faint);display:none;}
+.proj-card.open p{display:block;margin-top:8px;}
+.proj-card .arrow{font-family:var(--font-mono);font-size:11px;color:var(--amber);}
+
+/* ---------- Research ---------- */
+.tagcloud{display:flex;flex-wrap:wrap;gap:10px;}
+.tagcloud span{
+  font-family:var(--font-mono);font-size:13px;padding:9px 16px;border-radius:100px;border:1px solid var(--line);
+  color:var(--ink-dim);background:var(--bg-alt);
+}
+.tagcloud span:nth-child(3n+1){border-color:rgba(79,163,196,.4);}
+.tagcloud span:nth-child(3n+2){border-color:rgba(212,103,74,.4);}
+.tagcloud span:nth-child(3n){border-color:rgba(165,135,209,.4);}
+
+/* ---------- About / Developer ---------- */
+.dev-card{
+  display:flex;gap:26px;align-items:center;border:1px solid var(--line);border-radius:14px;
+  padding:32px;background:linear-gradient(135deg,#1c2532,#161c26);
+}
+.avatar{
+  width:96px;height:96px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--amber),var(--fortran));
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-size:34px;font-weight:600;color:#191009;
+}
+.dev-name{font-family:var(--font-display);font-size:24px;font-weight:600;margin:0 0 4px 0;}
+.dev-role{color:var(--amber);font-family:var(--font-mono);font-size:12.5px;margin-bottom:10px;}
+.dev-org{color:var(--ink-dim);font-size:14px;max-width:480px;}
+
+/* ---------- Resource links (free videos / pdf) ---------- */
+.reslinks{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;}
+.reslink{
+  display:flex;align-items:center;gap:9px;
+  border:1px solid var(--line);border-radius:9px;
+  padding:10px 14px;background:var(--bg-inset);
+  text-decoration:none;color:var(--ink);
+  font-size:13px;transition:border-color .15s,transform .15s;
+}
+.reslink:hover{border-color:var(--amber-dim);transform:translateY(-1px);}
+.reslink .ricon{
+  font-family:var(--font-mono);font-size:11px;width:22px;height:22px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.reslink.video .ricon{background:rgba(232,163,61,.16);color:var(--amber);}
+.reslink.pdf .ricon{background:rgba(165,135,209,.16);color:var(--fortran);}
+.reslink .rtext{display:flex;flex-direction:column;line-height:1.3;}
+.reslink .rtext b{font-size:12.5px;font-weight:600;}
+.reslink .rtext span{font-family:var(--font-mono);font-size:10.5px;color:var(--ink-faint);}
+.res-heading{
+  font-family:var(--font-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.09em;
+  color:var(--ink-faint);margin:18px 0 0 0;
+}
+.reslib-group{margin-bottom:26px;}
+.reslib-group h4{font-family:var(--font-display);font-size:16px;margin:0 0 4px 0;font-weight:600;}
+.reslib-group .lang-sub{font-family:var(--font-mono);font-size:11px;color:var(--ink-faint);margin-bottom:10px;}
+
+.footer-credit{
+  margin-top:60px;padding-top:20px;border-top:1px solid var(--line-soft);
+  font-family:var(--font-mono);font-size:11.5px;color:var(--ink-faint);text-align:center;
+}
+.footer-credit b{color:var(--ink-dim);}
+
+@media (max-width:920px){
+  .shell{flex-direction:column;}
+  .sidebar{width:100%;flex:none;height:auto;position:relative;}
+  .content{padding:26px 20px 60px;}
+  .grid3,.grid2,.codepanels,.proj-grid,.stat-row,.topic-cols{grid-template-columns:1fr;}
+  .hero h1{font-size:32px;}
+  .dev-card{flex-direction:column;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="mark">Comparative Programming Lab</span>
+      <h1>CodeCompare <span>Edu</span></h1>
+    </div>
+    <nav class="mainnav" id="mainnav">
+      <button class="navbtn active" data-target="home"><span class="ico">◆</span>Home</button>
+      <button class="navbtn" data-target="learn"><span class="ico">01</span>Learn Languages</button>
+      <button class="navbtn" data-target="compare"><span class="ico">02</span>Compare Languages</button>
+      <button class="navbtn" data-target="playground"><span class="ico">03</span>Coding Playground</button>
+      <button class="navbtn" data-target="performance"><span class="ico">04</span>Performance Lab</button>
+      <button class="navbtn" data-target="quiz"><span class="ico">05</span>Quiz</button>
+      <button class="navbtn" data-target="projects"><span class="ico">06</span>Projects</button>
+      <button class="navbtn" data-target="research"><span class="ico">07</span>Research Resources</button>
+      <button class="navbtn" data-target="about"><span class="ico">✎</span>About / Developer</button>
+    </nav>
+    <div class="sidefoot">
+      <b>CodeCompare Edu</b><br>
+      Python · C · Fortran<br>
+      Teaching · Research · HPC
+    </div>
+  </aside>
+
+  <main class="content">
+
+    <!-- HOME -->
+    <section id="home" class="view active">
+      <div class="hero">
+        <div class="eyebrow">Comparative Coding Platform</div>
+        <h1>Learn programming through <em>three lenses</em> at once.</h1>
+        <p>CodeCompare Edu puts Python, C, and Fortran side by side — for students, researchers, and faculty who need to reason across languages, not just memorize syntax in one.</p>
+        <div class="langs">
+          <span class="langpill"><span class="dot py"></span>Python — expressive, data & AI</span>
+          <span class="langpill"><span class="dot c"></span>C — systems & memory control</span>
+          <span class="langpill"><span class="dot ft"></span>Fortran — numerical & HPC workhorse</span>
+        </div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat"><div class="n">3</div><div class="l">Languages Compared</div></div>
+        <div class="stat"><div class="n">22</div><div class="l">Interactive Modules</div></div>
+        <div class="stat"><div class="n">14</div><div class="l">Featured Projects</div></div>
+        <div class="stat"><div class="n">9</div><div class="l">Target User Groups</div></div>
+      </div>
+
+      <div class="section-heading">Jump in</div>
+      <div class="grid3">
+        <div class="mini-card" data-goto="learn"><h3>Learn Languages</h3><p>Four modules: fundamentals, Python, C, and Fortran — topics and real-world applications.</p><span class="go">Open module list →</span></div>
+        <div class="mini-card" data-goto="compare"><h3>Compare Languages</h3><p>Synchronized three-panel code: hello world, variables, loops, functions, arrays.</p><span class="go">Open comparison →</span></div>
+        <div class="mini-card" data-goto="playground"><h3>Coding Playground</h3><p>Write and preview Python, C, and Fortran snippets side by side.</p><span class="go">Open playground →</span></div>
+        <div class="mini-card" data-goto="performance"><h3>Performance Lab</h3><p>Benchmark and memory comparisons, animated on demand.</p><span class="go">Run the numbers →</span></div>
+        <div class="mini-card" data-goto="quiz"><h3>Quiz</h3><p>Ten questions covering syntax, memory, and language trade-offs.</p><span class="go">Test yourself →</span></div>
+        <div class="mini-card" data-goto="projects"><h3>Projects</h3><p>Beginner to advanced builds, from calculators to fluid dynamics.</p><span class="go">Browse projects →</span></div>
+      </div>
+
+      <div class="section-heading">Who it's for</div>
+      <div class="userlist">
+        <span class="usertag">Undergraduate Students</span>
+        <span class="usertag">Graduate Students</span>
+        <span class="usertag">PhD Scholars</span>
+        <span class="usertag">Engineering Students</span>
+        <span class="usertag">Mathematics Students</span>
+        <span class="usertag">Physics Students</span>
+        <span class="usertag">Computer Science Students</span>
+        <span class="usertag">Scientific Researchers</span>
+        <span class="usertag">Faculty Members</span>
+      </div>
+    </section>
+
+    <!-- LEARN -->
+    <section id="learn" class="view">
+      <div class="eyebrow">Curriculum</div>
+      <h2 class="pagetitle">Learn Languages</h2>
+      <p class="lede">Four modules, from programming fundamentals through each language's own ecosystem. Click a module to expand it.</p>
+
+      <details class="module" open>
+        <summary><span><span class="m-num">MOD 01</span>Introduction to Programming</span><span class="chev">▸</span></summary>
+        <div class="module-body">
+          <div class="topic-cols">
+            <div><h4>Core Ideas</h4><ul><li>History</li><li>Evolution</li><li>Programming Paradigms</li></ul></div>
+            <div><h4>Tooling</h4><ul><li>Compilers</li><li>Interpreters</li><li>IDEs</li></ul></div>
+          </div>
+          <div class="res-heading">Free resources</div>
+          <div class="reslinks">
+            <a class="reslink video" href="https://www.youtube.com/watch?v=8mAITcNt710" target="_blank" rel="noopener"><span class="ricon">▶</span><span class="rtext"><b>CS50 — Full Course</b><span>Harvard University · YouTube</span></span></a>
+            <a class="reslink pdf" href="https://pll.harvard.edu/course/cs50-introduction-computer-science" target="_blank" rel="noopener"><span class="ricon">✎</span><span class="rtext"><b>CS50x Course Page</b><span>Harvard Online · free enrollment</span></span></a>
+          </div>
+        </div>
+      </details>
+
+      <details class="module">
+        <summary><span><span class="m-num" style="color:var(--python)">MOD 02</span>Python</span><span class="chev">▸</span></summary>
+        <div class="module-body">
+          <div class="topic-cols">
+            <div><h4>Topics</h4><ul><li>Variables</li><li>Data Types</li><li>Operators</li><li>Loops</li><li>Functions</li><li>OOP</li><li>Modules</li><li>NumPy · Pandas · Matplotlib · SciPy</li></ul></div>
+            <div><h4>Applications</h4><ul><li>AI</li><li>Machine Learning</li><li>Data Science</li><li>Automation</li><li>Research</li></ul></div>
+          </div>
+          <div class="res-heading">Free resources</div>
+          <div class="reslinks">
+            <a class="reslink video" href="https://www.youtube.com/watch?v=rfscVS0vtbw" target="_blank" rel="noopener"><span class="ricon">▶</span><span class="rtext"><b>Python — Full Course for Beginners</b><span>freeCodeCamp.org · YouTube</span></span></a>
+            <a class="reslink pdf" href="https://docs.python.org/3/tutorial/index.html" target="_blank" rel="noopener"><span class="ricon">✎</span><span class="rtext"><b>The Python Tutorial</b><span>Official docs · python.org</span></span></a>
+            <a class="reslink pdf" href="https://numpy.org/doc/stable/user/index.html" target="_blank" rel="noopener"><span class="ricon">✎</span><span class="rtext"><b>NumPy User Guide</b><span>Official docs · numpy.org</span></span></a>
+          </div>
+        </div>
+      </details>
+
+      <details class="module">
+        <summary><span><span class="m-num" style="color:var(--clang)">MOD 03</span>C Programming</span><span class="chev">▸</span></summary>
+        <div class="module-body">
+          <div class="topic-cols">
+            <div><h4>Topics</h4><ul><li>Variables</li><li>Data Types</li><li>Memory</li><li>Arrays</li><li>Pointers</li><li>Structures</li><li>File Handling</li><li>Dynamic Memory</li></ul></div>
+            <div><h4>Applications</h4><ul><li>Operating Systems</li><li>Embedded Systems</li><li>Robotics</li><li>Device Drivers</li></ul></div>
+          </div>
+          <div class="res-heading">Free resources</div>
+          <div class="reslinks">
+            <a class="reslink video" href="https://www.youtube.com/watch?v=KJgsSFOSQv0" target="_blank" rel="noopener"><span class="ricon">▶</span><span class="rtext"><b>C Programming — Full Course</b><span>freeCodeCamp.org · YouTube</span></span></a>
+            <a class="reslink pdf" href="https://beej.us/guide/bgc/" target="_blank" rel="noopener"><span class="ricon">✎</span><span class="rtext"><b>Beej's Guide to C Programming</b><span>Free official guide · beej.us</span></span></a>
+          </div>
+        </div>
+      </details>
+
+      <details class="module">
+        <summary><span><span class="m-num" style="color:var(--fortran)">MOD 04</span>Fortran Programming</span><span class="chev">▸</span></summary>
+        <div class="module-body">
+          <div class="topic-cols">
+            <div><h4>Topics</h4><ul><li>Variables</li><li>Arrays</li><li>Procedures</li><li>Modules</li><li>Numerical Methods</li><li>Parallel Programming</li><li>Scientific Libraries</li></ul></div>
+            <div><h4>Applications</h4><ul><li>Climate Modeling</li><li>Weather Prediction</li><li>Fluid Dynamics</li><li>Astronomy</li><li>Engineering Simulation</li></ul></div>
+          </div>
+          <div class="res-heading">Free resources</div>
+          <div class="reslinks">
+            <a class="reslink video" href="https://www.youtube.com/watch?v=Nuz9UR53B84" target="_blank" rel="noopener"><span class="ricon">▶</span><span class="rtext"><b>Introduction to Fortran — Part 1</b><span>Free tutorial · YouTube</span></span></a>
+            <a class="reslink pdf" href="https://gcc.gnu.org/onlinedocs/gfortran.pdf" target="_blank" rel="noopener"><span class="ricon">✎</span><span class="rtext"><b>GNU Fortran Manual</b><span>Official PDF · gcc.gnu.org</span></span></a>
+            <a class="reslink pdf" href="https://fortran-lang.org/en/learn/" target="_blank" rel="noopener"><span class="ricon">✎</span><span class="rtext"><b>Fortran-lang Learn Hub</b><span>Free community docs</span></span></a>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- COMPARE -->
+    <section id="compare" class="view">
+      <div class="eyebrow">Rosetta View</div>
+      <h2 class="pagetitle">Compare Languages</h2>
+      <p class="lede">The same idea, written three ways. Switch topics to see how each language expresses it.</p>
+
+      <div class="res-heading">Free resources for this page</div>
+      <div class="reslinks">
+        <a class="reslink video" href="https://www.youtube.com/watch?v=rfscVS0vtbw" target="_blank" rel="noopener"><span class="ricon">▶</span><span class="rtext"><b>Python Full Course</b><span>freeCodeCamp · YouTube</span></span></a>
+        <a class="reslink video" href="https://www.youtube.com/watch?v=KJgsSFOSQv0" target="_blank" rel="noopener"><span class="ricon">▶</span><span class="rtext"><b>C Full Course</b><span>freeCodeCamp · YouTube</span></span></a>
+        <a class="reslink video" href="https://www.youtube.com/watch?v=Nuz9UR53B84" target="_blank" rel="noopener"><span class="ricon">▶</span><span class="rtext"><b>Fortran Intro</b><span>Free tutorial · YouTube</span></span></a>
+        <a class="reslink pdf" href="https://beej.us/guide/bgc/" target="_blank" rel="noopener"><span class="ricon">✎</span><span class="rtext"><b>Beej's Guide to C</b><span>Free PDF · beej.us</span></span></a>
+      </div>
+
+      <div class="subtabs" id="cmpTabs" style="margin-top:24px;"></div>
+      <div class="codepanels" id="cmpPanels"></div>
+      <div class="compare-note">Illustrative syntax for teaching purposes — always check current compiler/interpreter documentation for edge cases.</div>
+
+      <div class="section-heading">Variables at a glance</div>
+      <div class="card">
+        <table class="cmp">
+          <thead><tr><th>Concept</th><th style="color:var(--python)">Python</th><th style="color:var(--clang)">C</th><th style="color:var(--fortran)">Fortran</th></tr></thead>
+          <tbody>
+            <tr><td>Integer</td><td class="pyc">x = 10</td><td class="cc">int x = 10;</td><td class="ftc">integer :: x = 10</td></tr>
+            <tr><td>Float</td><td class="pyc">y = 2.5</td><td class="cc">float y = 2.5;</td><td class="ftc">real :: y = 2.5</td></tr>
+            <tr><td>String</td><td class="pyc">name = "John"</td><td class="cc">char name[] = "John";</td><td class="ftc">character(len=20) :: name = "John"</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section-heading">Scientific computing strengths</div>
+      <div class="card">
+        <table class="cmp">
+          <thead><tr><th>Feature</th><th style="color:var(--python)">Python</th><th style="color:var(--clang)">C</th><th style="color:var(--fortran)">Fortran</th></tr></thead>
+          <tbody id="sciTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- PLAYGROUND -->
+    <section id="playground" class="view">
+      <div class="eyebrow">Sandbox</div>
+      <h2 class="pagetitle">Coding Playground</h2>
+      <p class="lede">Edit the default snippet and press Run. This demo previews expected output locally — full compilation runs through Docker-based sandboxes (Python, GCC, GFortran) in the production build.</p>
+
+      <div class="pg-tabs" id="pgTabs"></div>
+      <div class="pg-editor">
+        <textarea id="pgEditor" spellcheck="false"></textarea>
+        <div class="pg-controls">
+          <button class="runbtn" id="pgRun">▶ Run</button>
+          <span class="pg-hint" id="pgHint">gfortran / gcc / python3 · demo mode</span>
+        </div>
+      </div>
+      <div class="pg-output" id="pgOutput"><span class="tag">Output</span>Press “Run” to see the expected result of this snippet.</div>
+    </section>
+
+    <!-- PERFORMANCE -->
+    <section id="performance" class="view">
+      <div class="eyebrow">Benchmarks</div>
+      <h2 class="pagetitle">Performance Lab</h2>
+      <p class="lede">Illustrative comparisons only — real numbers depend on compiler, optimization flags, algorithm, and hardware.</p>
+
+      <div class="bench-block">
+        <h3>Sorting 10 Million Numbers</h3>
+        <div class="sub">Execution time · lower is faster · press run to animate</div>
+        <div class="bench-row"><div class="bench-label">Python</div><div class="bench-track"><div class="bench-fill py" data-target="88" id="fillPy">6.2s</div></div></div>
+        <div class="bench-row"><div class="bench-label">C</div><div class="bench-track"><div class="bench-fill c" data-target="12" id="fillC">0.8s</div></div></div>
+        <div class="bench-row"><div class="bench-label">Fortran</div><div class="bench-track"><div class="bench-fill ft" data-target="10" id="fillFt">0.7s</div></div></div>
+        <button class="runbtn" id="runBench" style="margin-top:6px;">▶ Run Benchmark</button>
+      </div>
+
+      <div class="bench-block">
+        <h3>Relative Memory Footprint</h3>
+        <div class="sub">Same workload, illustrative footprint only</div>
+        <div class="bench-row"><div class="bench-label">Python</div><div class="bench-track"><div class="bench-fill py" data-target="100" id="memPy">high</div></div></div>
+        <div class="bench-row"><div class="bench-label">C</div><div class="bench-track"><div class="bench-fill c" data-target="42" id="memC">low</div></div></div>
+        <div class="bench-row"><div class="bench-label">Fortran</div><div class="bench-track"><div class="bench-fill ft" data-target="36" id="memFt">low</div></div></div>
+        <button class="runbtn" id="runMem" style="margin-top:6px;">▶ Run Memory Test</button>
+      </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section id="quiz" class="view">
+      <div class="eyebrow">Check Yourself</div>
+      <h2 class="pagetitle">Quiz</h2>
+      <p class="lede">Ten questions across syntax, memory models, and language trade-offs.</p>
+      <div class="quiz-box" id="quizBox"></div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="view">
+      <div class="eyebrow">Build Something</div>
+      <h2 class="pagetitle">Projects</h2>
+      <p class="lede">Click any project to see a short brief. Try building it in all three languages.</p>
+      <div id="projectsRoot"></div>
+    </section>
+
+    <!-- RESEARCH -->
+    <section id="research" class="view">
+      <div class="eyebrow">Beyond the Classroom</div>
+      <h2 class="pagetitle">Research Resources</h2>
+      <p class="lede">Where these three languages show up in active research and engineering practice.</p>
+      <div class="tagcloud">
+        <span>Numerical Analysis</span>
+        <span>Data Analysis</span>
+        <span>Machine Learning</span>
+        <span>Parallel Computing</span>
+        <span>Computational Physics</span>
+        <span>Computational Chemistry</span>
+        <span>Engineering Simulation</span>
+        <span>High Performance Computing</span>
+      </div>
+
+      <div class="section-heading">Free Learning Library — Videos &amp; PDFs</div>
+      <p class="lede" style="margin-bottom:20px;">One good free video course and one free reference document per language — enough to teach a full semester without a textbook budget.</p>
+
+      <div class="reslib-group">
+        <h4 style="color:var(--python)">Python</h4>
+        <div class="lang-sub">AI · Data Science · Automation · Research</div>
+        <div class="reslinks">
+          <a class="reslink video" href="https://www.youtube.com/watch?v=rfscVS0vtbw" target="_blank" rel="noopener"><span class="ricon">▶</span><span class="rtext"><b>Python — Full Course for Beginners</b><span>freeCodeCamp.org · YouTube</span></span></a>
+          <a class="reslink pdf" href="https://docs.python.org/3/tutorial/index.html" target="_blank" rel="noopener"><span class="ricon">✎</span><span class="rtext"><b>The Python Tutorial</b><span>Official docs · python.org</span></span></a>
+          <a class="reslink pdf" href="https://numpy.org/doc/stable/user/index.html" target="_blank" rel="noopener"><span class="ricon">✎</span><span class="rtext"><b>NumPy User Guide</b><span>Official docs · numpy.org</span></span></a>
+        </div>
+      </div>
+
+      <div class="reslib-group">
+        <h4 style="color:var(--clang)">C</h4>
+        <div class="lang-sub">Operating Systems · Embedded · Robotics</div>
+        <div class="reslinks">
+          <a class="reslink video" href="https://www.youtube.com/watch?v=KJgsSFOSQv0" target="_blank" rel="noopener"><span class="ricon">▶</span><span class="rtext"><b>C Programming — Full Course</b><span>freeCodeCamp.org · YouTube</span></span></a>
+          <a class="reslink pdf" href="https://beej.us/guide/bgc/" target="_blank" rel="noopener"><span class="ricon">✎</span><span class="rtext"><b>Beej's Guide to C Programming</b><span>Free official guide · beej.us</span></span></a>
+        </div>
+      </div>
+
+      <div class="reslib-group">
+        <h4 style="color:var(--fortran)">Fortran</h4>
+        <div class="lang-sub">Climate · Fluid Dynamics · HPC · Astronomy</div>
+        <div class="reslinks">
+          <a class="reslink video" href="https://www.youtube.com/watch?v=Nuz9UR53B84" target="_blank" rel="noopener"><span class="ricon">▶</span><span class="rtext"><b>Introduction to Fortran — Part 1</b><span>Free tutorial · YouTube</span></span></a>
+          <a class="reslink pdf" href="https://gcc.gnu.org/onlinedocs/gfortran.pdf" target="_blank" rel="noopener"><span class="ricon">✎</span><span class="rtext"><b>GNU Fortran Manual</b><span>Official PDF · gcc.gnu.org</span></span></a>
+          <a class="reslink pdf" href="https://fortran-lang.org/en/learn/" target="_blank" rel="noopener"><span class="ricon">✎</span><span class="rtext"><b>Fortran-lang Learn Hub</b><span>Free community docs</span></span></a>
+        </div>
+      </div>
+
+      <div class="reslib-group">
+        <h4>Foundations</h4>
+        <div class="lang-sub">Programming fundamentals · CS theory</div>
+        <div class="reslinks">
+          <a class="reslink video" href="https://www.youtube.com/watch?v=8mAITcNt710" target="_blank" rel="noopener"><span class="ricon">▶</span><span class="rtext"><b>CS50 — Full Course</b><span>Harvard University · YouTube</span></span></a>
+          <a class="reslink pdf" href="https://pll.harvard.edu/course/cs50-introduction-computer-science" target="_blank" rel="noopener"><span class="ricon">✎</span><span class="rtext"><b>CS50x Course Page</b><span>Harvard Online · free enrollment</span></span></a>
+        </div>
+      </div>
+
+      <div class="section-heading">Technology stack behind this app</div>
+      <div class="grid2">
+        <div class="card"><b>Frontend</b><p style="color:var(--ink-dim);font-size:13.5px;margin:6px 0 0 0;">Flutter (Android · iOS · Web · Desktop) or React</p></div>
+        <div class="card"><b>Backend</b><p style="color:var(--ink-dim);font-size:13.5px;margin:6px 0 0 0;">Python — FastAPI / Django</p></div>
+        <div class="card"><b>Database</b><p style="color:var(--ink-dim);font-size:13.5px;margin:6px 0 0 0;">PostgreSQL, or SQLite for offline mode</p></div>
+        <div class="card"><b>Code Execution</b><p style="color:var(--ink-dim);font-size:13.5px;margin:6px 0 0 0;">Docker-based sandboxes — Python, GCC, GFortran</p></div>
+        <div class="card"><b>Visualization</b><p style="color:var(--ink-dim);font-size:13.5px;margin:6px 0 0 0;">Plotly, Chart.js, or D3.js</p></div>
+        <div class="card"><b>AI Integration</b><p style="color:var(--ink-dim);font-size:13.5px;margin:6px 0 0 0;">LLM-based code explanation, translation, debugging, tutoring</p></div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="view">
+      <div class="eyebrow">Credits</div>
+      <h2 class="pagetitle">About / Developer</h2>
+      <p class="lede">CodeCompare Edu was conceived as a comparative-programming teaching tool for higher education, research labs, and engineering programs.</p>
+
+      <div class="dev-card">
+        <div class="avatar">BR</div>
+        <div>
+          <div class="dev-name">Mr. Bishnu Singh Rayamajhi</div>
+          <div class="dev-role">Developed by</div>
+          <div class="dev-org">Math Lecturer &amp; Head of Humanity &amp; Social Science<br>Kapilvastu Multiple Campus (KMC), Taulihawa</div>
+        </div>
+      </div>
+
+      <div class="section-heading">Learning outcomes</div>
+      <div class="card">
+        <ul style="margin:0;padding-left:20px;color:var(--ink-dim);font-size:14px;line-height:1.9;">
+          <li>Explain the syntax and programming paradigms of Python, C, and Fortran.</li>
+          <li>Compare language features, memory models, execution characteristics, and application domains.</li>
+          <li>Implement equivalent algorithms in all three languages.</li>
+          <li>Evaluate trade-offs among readability, development speed, performance, and maintainability.</li>
+          <li>Apply appropriate languages and libraries to scientific and engineering problems.</li>
+          <li>Interpret benchmarking results with awareness of compilers, optimization, and hardware.</li>
+          <li>Develop foundational skills for HPC, numerical methods, and computational research.</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="footer-credit">
+      CodeCompare Edu — Comparative Study of Python, C &amp; Fortran for Teaching, Learning &amp; Research<br>
+      Developed by: <b>Mr. Bishnu Singh Rayamajhi</b>, Math Lecturer and Head of Humanity &amp; Social Science, Kapilvastu Multiple Campus (KMC), Taulihawa
+    </div>
+
+  </main>
+</div>
+
+<script>
+/* ---------------- Navigation ---------------- */
+const navbtns = document.querySelectorAll('.navbtn');
+const views = document.querySelectorAll('.view');
+function goTo(target){
+  navbtns.forEach(b=>b.classList.toggle('active', b.dataset.target===target));
+  views.forEach(v=>v.classList.toggle('active', v.id===target));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+navbtns.forEach(b=>b.addEventListener('click',()=>goTo(b.dataset.target)));
+document.querySelectorAll('.mini-card[data-goto]').forEach(el=>{
+  el.addEventListener('click',()=>goTo(el.dataset.goto));
+});
+
+/* ---------------- Compare data ---------------- */
+const compareTopics = {
+  "Hello World": {
+    py: `print("Hello World")`,
+    c: `#include <stdio.h>\n\nint main() {\n    printf("Hello World");\n    return 0;\n}`,
+    ft: `program hello\nprint *, "Hello World"\nend program hello`
+  },
+  "Conditionals": {
+    py: `if x > 10:\n    print("Large")\nelse:\n    print("Small")`,
+    c: `if (x > 10) {\n    printf("Large");\n} else {\n    printf("Small");\n}`,
+    ft: `if (x > 10) then\n  print *, "Large"\nelse\n  print *, "Small"\nend if`
+  },
+  "Loops": {
+    py: `for i in range(5):\n    print(i)`,
+    c: `for (int i = 0; i < 5; i++) {\n    printf("%d", i);\n}`,
+    ft: `do i = 1, 5\n  print *, i\nend do`
+  },
+  "Functions": {
+    py: `def add(a, b):\n    return a + b`,
+    c: `int add(int a, int b) {\n    return a + b;\n}`,
+    ft: `function add(a, b)\n  integer :: add, a, b\n  add = a + b\nend function`
+  },
+  "Arrays": {
+    py: `numbers = [1, 2, 3, 4]`,
+    c: `int numbers[4] = {1, 2, 3, 4};`,
+    ft: `integer :: numbers(4)\nnumbers = (/1, 2, 3, 4/)`
+  }
+};
+const cmpTabs = document.getElementById('cmpTabs');
+const cmpPanels = document.getElementById('cmpPanels');
+function renderCompare(topic){
+  cmpTabs.innerHTML='';
+  Object.keys(compareTopics).forEach(t=>{
+    const b=document.createElement('button');
+    b.className='subtab'+(t===topic?' active':'');
+    b.textContent=t;
+    b.addEventListener('click',()=>renderCompare(t));
+    cmpTabs.appendChild(b);
+  });
+  const d = compareTopics[topic];
+  cmpPanels.innerHTML = `
+    <div class="codepanel py"><div class="bar">Python</div><pre>${escapeHtml(d.py)}</pre></div>
+    <div class="codepanel c"><div class="bar">C</div><pre>${escapeHtml(d.c)}</pre></div>
+    <div class="codepanel ft"><div class="bar">Fortran</div><pre>${escapeHtml(d.ft)}</pre></div>
+  `;
+}
+function escapeHtml(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+renderCompare("Hello World");
+
+const sciRows = [
+  ["Numerical Analysis","Excellent","Good","Excellent"],
+  ["AI","Excellent","Moderate","Limited"],
+  ["HPC","Good","Excellent","Excellent"],
+  ["Engineering","Good","Excellent","Excellent"],
+  ["Scientific Simulation","Good","Excellent","Outstanding"]
+];
+document.getElementById('sciTable').innerHTML = sciRows.map(r=>
+  `<tr><td>${r[0]}</td><td class="pyc">${r[1]}</td><td class="cc">${r[2]}</td><td class="ftc">${r[3]}</td></tr>`
+).join('');
+
+/* ---------------- Playground ---------------- */
+const pgSnippets = {
+  py: { label:"Python", code:`print("Hello World")\n\nfor i in range(5):\n    print(i)`, output:"Hello World\n0\n1\n2\n3\n4" },
+  c: { label:"C", code:`#include <stdio.h>\n\nint main() {\n    printf("Hello World\\n");\n    for (int i = 0; i < 5; i++) {\n        printf("%d\\n", i);\n    }\n    return 0;\n}`, output:"Hello World\n0\n1\n2\n3\n4" },
+  ft: { label:"Fortran", code:`program demo\n  integer :: i\n  print *, "Hello World"\n  do i = 0, 4\n    print *, i\n  end do\nend program demo`, output:"Hello World\n0\n1\n2\n3\n4" }
+};
+let pgActive = 'py';
+const pgTabsEl = document.getElementById('pgTabs');
+const pgEditor = document.getElementById('pgEditor');
+const pgOutput = document.getElementById('pgOutput');
+const pgHint = document.getElementById('pgHint');
+
+function renderPgTabs(){
+  pgTabsEl.innerHTML='';
+  Object.keys(pgSnippets).forEach(key=>{
+    const b=document.createElement('button');
+    b.className='pg-tab '+key+(key===pgActive?' active':'');
+    b.textContent=pgSnippets[key].label;
+    b.addEventListener('click',()=>{ pgActive=key; renderPgTabs(); loadSnippet(); });
+    pgTabsEl.appendChild(b);
+  });
+}
+function loadSnippet(){
+  pgEditor.value = pgSnippets[pgActive].code;
+  pgHint.textContent = {py:"python3 · demo mode", c:"gcc -O2 · demo mode", ft:"gfortran -O2 · demo mode"}[pgActive];
+  pgOutput.innerHTML = '<span class="tag">Output</span>Press "Run" to see the expected result of this snippet.';
+}
+document.getElementById('pgRun').addEventListener('click',()=>{
+  const current = pgEditor.value.trim();
+  const original = pgSnippets[pgActive].code.trim();
+  if(current === original){
+    pgOutput.innerHTML = '<span class="tag">Output</span>' + escapeHtml(pgSnippets[pgActive].output);
+  } else {
+    pgOutput.innerHTML = '<span class="tag">Simulated Preview</span>Edited snippet detected. This in-browser demo previews the stock example only — live compilation for edited code runs through the Docker-based Python / GCC / GFortran sandboxes in the full app.\n\nReset the editor to see the reference output for the default '+pgSnippets[pgActive].label+' snippet.';
+  }
+});
+renderPgTabs();
+loadSnippet();
+
+/* ---------------- Performance ---------------- */
+function runBars(ids){
+  ids.forEach(id=>{
+    const el = document.getElementById(id);
+    const target = el.dataset.target;
+    el.style.width = '0%';
+    requestAnimationFrame(()=> requestAnimationFrame(()=>{ el.style.width = target+'%'; }));
+  });
+}
+document.getElementById('runBench').addEventListener('click',()=>runBars(['fillPy','fillC','fillFt']));
+document.getElementById('runMem').addEventListener('click',()=>runBars(['memPy','memC','memFt']));
+
+/* ---------------- Quiz ---------------- */
+const quizData = [
+  {q:"Which language typically requires explicit memory management with malloc/free?", opts:["Python","C","Fortran (modern)"], a:1, ex:"C exposes manual memory management through malloc/free; Python and modern Fortran largely manage this for you."},
+  {q:"Which of these is Python's array/list literal?", opts:['numbers(4) = (/1,2,3,4/)','int numbers[4] = {1,2,3,4};','numbers = [1, 2, 3, 4]'], a:2, ex:"Square brackets define a list literal in Python."},
+  {q:"Fortran is historically strongest in which domain?", opts:["Mobile app UI","Numerical & scientific computing","Web front-ends"], a:1, ex:"Fortran was built for numerical computation and remains central to HPC and simulation codes."},
+  {q:"Which language is typically fastest for raw execution speed in these examples?", opts:["Python","C or Fortran","They're always identical"], a:1, ex:"Compiled languages like C and Fortran generally outperform interpreted Python for raw loops."},
+  {q:"Which keyword declares a loop counter block in Fortran?", opts:["for","do","while(true)"], a:1, ex:'Fortran uses "do i = 1, 5 ... end do" for counted loops.'},
+  {q:"Python's `range(5)` loop produces which values?", opts:["1 to 5","0 to 4","0 to 5"], a:1, ex:"range(5) yields 0,1,2,3,4 — five values starting at zero."},
+  {q:"Which language is most associated with device drivers and operating systems?", opts:["C","Python","Fortran"], a:0, ex:"C's low-level memory access makes it the standard for OS and driver development."},
+  {q:"In C, which symbol commonly indicates a pointer declaration?", opts:["&","*","#"], a:1, ex:"The asterisk (*) declares a pointer type in C, e.g. int *p;"},
+  {q:"Which of these libraries is part of the Python scientific stack mentioned in this app?", opts:["NumPy","LAPACK95","OpenMP"], a:0, ex:"NumPy, Pandas, Matplotlib and SciPy make up Python's core scientific stack here."},
+  {q:"Which application area is listed under Fortran in this app?", opts:["Embedded Systems","Climate Modeling","Device Drivers"], a:1, ex:"Climate modeling, weather prediction, fluid dynamics, astronomy and engineering simulation are all listed under Fortran."}
+];
+let qIndex = 0, qScore = 0, qAnswered = false;
+const quizBox = document.getElementById('quizBox');
+
+function renderQuiz(){
+  if(qIndex >= quizData.length){
+    quizBox.innerHTML = `
+      <div class="quiz-result">
+        <div class="big">${qScore} / ${quizData.length}</div>
+        <p style="color:var(--ink-dim);margin-top:8px;">Nice work — review the modules and try again anytime.</p>
+        <button class="runbtn" id="quizRestart" style="margin-top:16px;">↺ Restart Quiz</button>
+      </div>`;
+    document.getElementById('quizRestart').addEventListener('click',()=>{ qIndex=0; qScore=0; renderQuiz(); });
+    return;
+  }
+  const item = quizData[qIndex];
+  qAnswered = false;
+  quizBox.innerHTML = `
+    <div class="quiz-progress"><span>Question ${qIndex+1} of ${quizData.length}</span><span>Score: ${qScore}</span></div>
+    <div class="quiz-q">${item.q}</div>
+    <div class="quiz-opts">
+      ${item.opts.map((o,i)=>`<button class="quiz-opt" data-i="${i}">${o}</button>`).join('')}
+    </div>
+    <div id="quizExplain" style="margin-top:14px;font-size:13px;color:var(--ink-faint);display:none;"></div>
+    <div class="quiz-footer">
+      <span class="quiz-score">Progress ${Math.round((qIndex/quizData.length)*100)}%</span>
+      <button class="nextbtn" id="quizNext">Next →</button>
+    </div>
+  `;
+  quizBox.querySelectorAll('.quiz-opt').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(qAnswered) return;
+      qAnswered = true;
+      const chosen = parseInt(btn.dataset.i);
+      quizBox.querySelectorAll('.quiz-opt').forEach(b=>b.disabled=true);
+      if(chosen === item.a){
+        btn.classList.add('correct');
+        qScore++;
+      } else {
+        btn.classList.add('wrong');
+        quizBox.querySelector(`.quiz-opt[data-i="${item.a}"]`).classList.add('correct');
+      }
+      const ex = document.getElementById('quizExplain');
+      ex.style.display='block';
+      ex.textContent = item.ex;
+      document.getElementById('quizNext').classList.add('show');
+    });
+  });
+  document.getElementById('quizNext').addEventListener('click',()=>{ qIndex++; renderQuiz(); });
+}
+renderQuiz();
+
+/* ---------------- Projects ---------------- */
+const projects = {
+  "Beginner": [
+    {n:"Calculator", d:"Basic arithmetic operations implemented and compared across all three languages."},
+    {n:"Prime Number", d:"Check primality with a loop-and-modulo approach; compare loop syntax."},
+    {n:"Factorial", d:"Iterative and recursive factorial — a good first look at functions."},
+    {n:"Fibonacci", d:"Classic sequence generator; compare recursion support and performance."},
+    {n:"Student Record", d:"Simple structured record-keeping — arrays/structs vs. dictionaries vs. derived types."}
+  ],
+  "Intermediate": [
+    {n:"Matrix Calculator", d:"Addition, multiplication, and transpose across NumPy, manual C arrays, and Fortran's native array syntax."},
+    {n:"Scientific Calculator", d:"Extend the basic calculator with trig, logs, and exponents."},
+    {n:"Sorting Algorithms", d:"Bubble, quick, and merge sort — a natural setup for the Performance Lab benchmarks."},
+    {n:"Statistics", d:"Mean, variance, and standard deviation over a dataset."}
+  ],
+  "Advanced": [
+    {n:"Finite Element Analysis", d:"A minimal FEA solver — where Fortran and C typically outperform pure Python."},
+    {n:"Weather Simulation", d:"Simplified grid-based simulation echoing real climate modeling workloads."},
+    {n:"Neural Networks", d:"A from-scratch forward pass — usually easiest to prototype first in Python."},
+    {n:"Computational Fluid Dynamics", d:"A toy CFD solver on a 2D grid, showcasing Fortran's numerical roots."},
+    {n:"Big Data Processing", d:"Batch aggregation over a large dataset — compare Pandas against hand-rolled C/Fortran loops."}
+  ]
+};
+const projectsRoot = document.getElementById('projectsRoot');
+Object.keys(projects).forEach(tier=>{
+  const tierDiv = document.createElement('div');
+  tierDiv.className = 'proj-tier';
+  tierDiv.innerHTML = `<h3>${tier}</h3><div class="proj-grid"></div>`;
+  const grid = tierDiv.querySelector('.proj-grid');
+  projects[tier].forEach(p=>{
+    const card = document.createElement('div');
+    card.className = 'proj-card';
+    card.innerHTML = `<h4>${p.n}</h4><span class="arrow">＋ details</span><p>${p.d}</p>`;
+    card.addEventListener('click', ()=>{
+      card.classList.toggle('open');
+      card.querySelector('.arrow').textContent = card.classList.contains('open') ? '－ hide' : '＋ details';
+    });
+    grid.appendChild(card);
+  });
+  projectsRoot.appendChild(tierDiv);
+});
+</script>
+</body>
+</html>
