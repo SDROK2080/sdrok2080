@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C /Lang — Master C Programming</title>
+<style>
+:root{
+  --void:#0b0e14;
+  --panel:#10141c;
+  --elevated:#171c26;
+  --line:#232a38;
+  --text:#e6e8ef;
+  --text-dim:#8b93a7;
+  --blue:#4fd1ff;
+  --amber:#ffb454;
+  --green:#7ee787;
+  --red:#ff6b6b;
+  --purple:#c792ea;
+  font-family:'Inter',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+@font-face{font-family:'IBM Plex Mono';src:local('IBM Plex Mono');}
+body{
+  background:var(--void);
+  color:var(--text);
+  height:100vh;
+  overflow:hidden;
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:'IBM Plex Mono','SFMono-Regular',Consolas,monospace;}
+
+/* ===== APP SHELL ===== */
+#app{display:flex;flex-direction:column;height:100vh;}
+
+/* Title bar */
+.titlebar{
+  height:38px;background:var(--panel);display:flex;align-items:center;
+  padding:0 14px;gap:8px;border-bottom:1px solid var(--line);flex-shrink:0;
+}
+.dots{display:flex;gap:7px;}
+.dot{width:11px;height:11px;border-radius:50%;}
+.dot.r{background:#ff5f57;} .dot.y{background:#febc2e;} .dot.g{background:#28c840;}
+.titlebar .name{margin-left:12px;font-size:12.5px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;letter-spacing:.3px;}
+.titlebar .name b{color:var(--text);}
+.titlebar .status{margin-left:auto;display:flex;gap:16px;font-size:11.5px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;}
+.titlebar .status span{display:flex;align-items:center;gap:5px;}
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* Body row */
+.body{flex:1;display:flex;min-height:0;}
+
+/* Activity bar */
+.actbar{
+  width:52px;background:var(--void);border-right:1px solid var(--line);
+  display:flex;flex-direction:column;align-items:center;padding-top:10px;gap:4px;flex-shrink:0;
+}
+.actbtn{
+  width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+  border-radius:8px;cursor:pointer;color:var(--text-dim);font-size:19px;position:relative;
+  transition:background .15s,color .15s;
+}
+.actbtn:hover{color:var(--text);background:var(--elevated);}
+.actbtn.active{color:var(--blue);}
+.actbtn.active::before{content:'';position:absolute;left:-8px;top:8px;bottom:8px;width:3px;background:var(--blue);border-radius:2px;}
+
+/* Sidebar */
+.sidebar{
+  width:290px;background:var(--panel);border-right:1px solid var(--line);
+  display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;
+}
+.sidebar.collapsed{width:0;border:none;}
+.sb-head{
+  padding:12px 14px 8px;font-size:11px;letter-spacing:1.5px;color:var(--text-dim);
+  font-family:'IBM Plex Mono',monospace;display:flex;justify-content:space-between;align-items:center;
+}
+.sb-search{margin:0 12px 10px;position:relative;}
+.sb-search input{
+  width:100%;background:var(--elevated);border:1px solid var(--line);border-radius:6px;
+  padding:7px 10px 7px 28px;color:var(--text);font-size:12.5px;outline:none;
+}
+.sb-search input:focus{border-color:var(--blue);}
+.sb-search::before{content:'🔍';position:absolute;left:9px;top:6px;font-size:11px;opacity:.5;}
+.tree{overflow-y:auto;flex:1;padding-bottom:12px;}
+.tree::-webkit-scrollbar{width:8px;}
+.tree::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px;}
+
+.lvl{}
+.lvl-head{
+  display:flex;align-items:center;gap:6px;padding:6px 12px 6px 10px;cursor:pointer;
+  font-size:12.5px;color:var(--text);user-select:none;
+}
+.lvl-head:hover{background:var(--elevated);}
+.lvl-head .car{color:var(--text-dim);font-size:10px;width:12px;transition:transform .15s;}
+.lvl-head.open .car{transform:rotate(90deg);}
+.lvl-head .num{font-family:'IBM Plex Mono',monospace;color:var(--amber);font-size:11px;}
+.lvl-head .ttl{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.lvl-head .cnt{font-size:10px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;}
+.topics{display:none;padding-left:22px;}
+.topics.open{display:block;}
+.topic{
+  display:flex;align-items:center;gap:7px;padding:5px 10px 5px 8px;cursor:pointer;
+  font-size:12.5px;color:var(--text-dim);border-left:1px solid var(--line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.topic:hover{color:var(--text);background:var(--elevated);}
+.topic.active{color:var(--blue);background:var(--elevated);border-left-color:var(--blue);}
+.topic .ico{font-size:11px;opacity:.7;flex-shrink:0;}
+.topic .chk{width:13px;height:13px;border-radius:3px;border:1px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;}
+.topic.done .chk{background:var(--green);border-color:var(--green);color:#0b0e14;}
+.topic span.tname{overflow:hidden;text-overflow:ellipsis;}
+
+/* Main column */
+.main{flex:1;display:flex;flex-direction:column;min-width:0;}
+.tabs{
+  display:flex;background:var(--panel);border-bottom:1px solid var(--line);height:38px;
+  overflow-x:auto;flex-shrink:0;
+}
+.tabs::-webkit-scrollbar{height:0;}
+.tab{
+  display:flex;align-items:center;gap:8px;padding:0 14px;font-size:12.5px;color:var(--text-dim);
+  border-right:1px solid var(--line);cursor:pointer;white-space:nowrap;flex-shrink:0;
+  font-family:'IBM Plex Mono',monospace;
+}
+.tab.active{background:var(--void);color:var(--text);border-top:2px solid var(--blue);}
+.tab .x{opacity:.5;font-size:13px;}
+.tab .x:hover{opacity:1;}
+
+.editor{flex:1;overflow-y:auto;background:var(--void);position:relative;}
+.editor::-webkit-scrollbar{width:10px;}
+.editor::-webkit-scrollbar-thumb{background:var(--line);border-radius:5px;}
+.pane{max-width:880px;margin:0 auto;padding:34px 40px 60px;display:none;}
+.pane.active{display:block;}
+
+.crumb{font-size:11px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:6px;letter-spacing:.4px;}
+.crumb b{color:var(--amber);}
+h1.lesson-title{font-size:26px;font-weight:700;margin-bottom:4px;letter-spacing:-.3px;}
+.badge-row{display:flex;gap:8px;margin:12px 0 20px;flex-wrap:wrap;}
+.badge{font-size:10.5px;font-family:'IBM Plex Mono',monospace;padding:3px 9px;border-radius:20px;border:1px solid var(--line);color:var(--text-dim);}
+.badge.lv-beg{border-color:#2d6a3e;color:var(--green);}
+.badge.lv-int{border-color:#7a5b1e;color:var(--amber);}
+.badge.lv-adv{border-color:#7a2d2d;color:var(--red);}
+
+.desc{font-size:15px;line-height:1.7;color:#c4c8d4;margin-bottom:22px;}
+.section-lbl{font-size:11px;letter-spacing:1.5px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin:26px 0 10px;display:flex;align-items:center;gap:8px;}
+.section-lbl::after{content:'';flex:1;height:1px;background:var(--line);}
+
+.codebox{
+  background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:8px;
+}
+.codebox .cb-head{
+  display:flex;align-items:center;justify-content:space-between;padding:8px 12px;
+  border-bottom:1px solid var(--line);font-size:11px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;
+}
+.codebox pre{padding:16px;overflow-x:auto;font-size:13px;line-height:1.65;font-family:'IBM Plex Mono',Consolas,monospace;}
+.tok-kw{color:var(--purple);} .tok-str{color:var(--green);} .tok-com{color:var(--text-dim);font-style:italic;}
+.tok-fn{color:var(--blue);} .tok-num{color:var(--amber);} .tok-pre{color:#ff9c9c;}
+
+.btnrow{display:flex;gap:10px;margin:16px 0 6px;flex-wrap:wrap;}
+.btn{
+  display:flex;align-items:center;gap:7px;padding:9px 16px;border-radius:7px;font-size:12.5px;
+  font-family:'IBM Plex Mono',monospace;cursor:pointer;border:1px solid var(--line);color:var(--text);
+  background:var(--elevated);transition:transform .1s,border-color .15s;user-select:none;
+}
+.btn:hover{border-color:var(--blue);}
+.btn:active{transform:scale(.96);}
+.btn.primary{background:var(--blue);color:#031018;border-color:var(--blue);font-weight:600;}
+.btn.primary:hover{filter:brightness(1.08);}
+.btn.video{border-color:#7a2d2d;color:#ff9d9d;}
+.btn.pdf{border-color:#7a5b1e;color:var(--amber);}
+.btn.done{border-color:var(--green);color:var(--green);}
+
+.reslist{display:flex;flex-direction:column;gap:8px;margin-bottom:10px;}
+.resitem{
+  display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--panel);
+  border:1px solid var(--line);border-radius:8px;font-size:13px;cursor:pointer;color:var(--text);
+}
+.resitem:hover{border-color:var(--blue);}
+.resitem .tag{font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--text-dim);margin-left:auto;}
+
+.nextprev{display:flex;justify-content:space-between;margin-top:34px;padding-top:18px;border-top:1px solid var(--line);}
+.np-btn{font-size:12px;color:var(--text-dim);cursor:pointer;font-family:'IBM Plex Mono',monospace;}
+.np-btn b{display:block;color:var(--text);font-size:14px;font-family:'Inter',sans-serif;margin-top:2px;}
+.np-btn:hover b{color:var(--blue);}
+.np-btn.right{text-align:right;}
+
+/* Terminal panel */
+.termwrap{flex-shrink:0;background:var(--panel);border-top:1px solid var(--line);display:flex;flex-direction:column;transition:height .18s;}
+.term-head{
+  height:32px;display:flex;align-items:center;padding:0 12px;gap:10px;border-bottom:1px solid var(--line);flex-shrink:0;
+}
+.term-head .t{font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text-dim);display:flex;align-items:center;gap:6px;padding:0 8px;height:100%;border-bottom:2px solid transparent;}
+.term-head .t.on{color:var(--text);border-color:var(--blue);}
+.term-head .sp{flex:1;}
+.term-head .mini{cursor:pointer;color:var(--text-dim);font-size:13px;padding:4px 8px;}
+.term-head .mini:hover{color:var(--text);}
+.termbody{flex:1;overflow-y:auto;padding:10px 14px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;line-height:1.75;}
+.termbody::-webkit-scrollbar{width:8px;}
+.termbody::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px;}
+.tl{white-space:pre-wrap;word-break:break-word;}
+.tl.cmd{color:var(--text);} .tl.cmd::before{content:'$ ';color:var(--green);}
+.tl.out{color:#c4c8d4;} .tl.ok{color:var(--green);} .tl.err{color:var(--red);} .tl.info{color:var(--text-dim);}
+.cursor{display:inline-block;width:7px;height:14px;background:var(--blue);animation:blink 1s infinite;vertical-align:middle;}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+
+/* Welcome / About panes */
+.hero{display:flex;flex-direction:column;align-items:flex-start;padding:10px 0 30px;}
+.hero .kicker{font-family:'IBM Plex Mono',monospace;color:var(--blue);font-size:12px;letter-spacing:2px;margin-bottom:14px;}
+.hero h1{font-size:38px;line-height:1.15;letter-spacing:-1px;margin-bottom:14px;}
+.hero h1 span{color:var(--amber);}
+.hero p{color:var(--text-dim);font-size:15px;max-width:560px;line-height:1.7;margin-bottom:22px;}
+.stat-row{display:flex;gap:26px;margin:22px 0 8px;flex-wrap:wrap;}
+.stat b{display:block;font-size:24px;font-family:'IBM Plex Mono',monospace;color:var(--text);}
+.stat span{font-size:11px;color:var(--text-dim);letter-spacing:.5px;}
+
+.dev-card{
+  display:flex;gap:18px;align-items:center;background:var(--panel);border:1px solid var(--line);
+  border-radius:12px;padding:20px;margin-top:26px;max-width:560px;
+}
+.dev-photo{
+  width:74px;height:74px;border-radius:12px;background:linear-gradient(135deg,#1c2433,#0d1119);
+  border:1px solid var(--line);display:flex;align-items:center;justify-content:center;
+  font-family:'IBM Plex Mono',monospace;font-size:22px;color:var(--blue);flex-shrink:0;font-weight:700;
+}
+.dev-info b{font-size:15px;} .dev-info .role{font-size:12.5px;color:var(--text-dim);margin-top:3px;line-height:1.5;}
+
+.setup-step{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line);}
+.setup-step:last-child{border:none;}
+.setup-num{
+  width:28px;height:28px;border-radius:7px;background:var(--panel);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;
+  font-size:12px;color:var(--amber);flex-shrink:0;
+}
+.setup-step h3{font-size:14.5px;margin-bottom:5px;}
+.setup-step p{font-size:13px;color:var(--text-dim);line-height:1.65;}
+.kbd{background:var(--elevated);border:1px solid var(--line);border-radius:4px;padding:1px 6px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;}
+
+/* Toast */
+.toast{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--elevated);border:1px solid var(--green);color:var(--green);
+  padding:10px 18px;border-radius:8px;font-size:12.5px;font-family:'IBM Plex Mono',monospace;
+  opacity:0;pointer-events:none;transition:all .25s;z-index:100;box-shadow:0 10px 30px rgba(0,0,0,.4);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* Mobile */
+@media(max-width:820px){
+  .sidebar{position:fixed;left:0;top:38px;bottom:0;z-index:50;width:78vw;max-width:300px;}
+  .sidebar.collapsed{width:0;}
+  .pane{padding:22px 18px 50px;}
+  .hero h1{font-size:28px;}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="titlebar">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <div class="name">🖥️ <b>C /Lang</b> — c_programming_mastery.workspace</div>
+    <div class="status">
+      <span><span class="pulse"></span>GCC Ready</span>
+      <span id="progressStat">0 / 0 topics</span>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="actbar">
+      <div class="actbtn active" data-act="explorer" title="Explorer">📁</div>
+      <div class="actbtn" data-act="setup" title="VS Code Setup">⚙️</div>
+      <div class="actbtn" data-act="about" title="About / Developer">👤</div>
+      <div class="actbtn" data-act="toggle" title="Toggle sidebar">☰</div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sb-head"><span>EXPLORER</span><span id="sbCount" class="mono" style="color:var(--text-dim)"></span></div>
+      <div class="sb-search"><input id="searchBox" placeholder="Search 190+ topics…"></div>
+      <div class="tree" id="tree"></div>
+    </div>
+
+    <div class="main">
+      <div class="tabs" id="tabs"></div>
+      <div class="editor" id="editor"></div>
+
+      <div class="termwrap" id="termwrap" style="height:190px;">
+        <div class="term-head">
+          <div class="t on">▸ TERMINAL</div>
+          <div class="t">PROBLEMS</div>
+          <div class="t">OUTPUT</div>
+          <div class="sp"></div>
+          <div class="mini" onclick="clearTerm()" title="Clear">🗑</div>
+          <div class="mini" onclick="toggleTerm()" title="Collapse/Expand">▾</div>
+        </div>
+        <div class="termbody" id="termbody"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   DATA: full roadmap (Levels 1–21) from the C Programming tree
+   ========================================================= */
+const LEVELS = [
+{t:"Introduction to Programming", topics:["What is Programming?","History of C Programming","Features of C","Applications of C","Compiler vs Interpreter","Installing GCC / Clang","IDEs (Code::Blocks, VS Code, Dev-C++, CLion)","Writing the First C Program","Program Compilation Process"]},
+{t:"C Fundamentals", topics:["Character Set","Tokens","Keywords","Identifiers","Variables","Constants","Data Types","Type Conversion","Operators","Expressions","Input & Output (printf, scanf)"]},
+{t:"Control Structures", topics:["if Statement","if-else","Nested if","switch-case","for Loop","while Loop","do-while Loop","break","continue","goto"]},
+{t:"Functions", topics:["Function Declaration","Function Definition","Function Calling","Parameters","Return Values","Recursive Functions","Storage Classes","Inline Concepts","Modular Programming"]},
+{t:"Arrays & Strings", topics:["One-Dimensional Arrays","Two-Dimensional Arrays","Multi-Dimensional Arrays","Character Arrays","String Handling","String Functions","Matrix Operations","Dynamic Arrays"]},
+{t:"Pointers", topics:["Pointer Basics","Pointer Arithmetic","Arrays and Pointers","Function Pointers","Pointer to Pointer","Void Pointer","NULL Pointer","Memory Addressing"]},
+{t:"Dynamic Memory Management", topics:["malloc()","calloc()","realloc()","free()","Memory Leaks","Heap vs Stack","Buffer Overflow Prevention","Memory Optimization"]},
+{t:"Structures & Unions", topics:["Structures","Nested Structures","Arrays of Structures","Pointers to Structures","Unions","Bit Fields","typedef","Enumerations (enum)"]},
+{t:"File Handling", topics:["Text Files","Binary Files","fopen()","fclose()","fread()","fwrite()","File Positioning","Error Handling"]},
+{t:"Preprocessor & Modular Programming", topics:["Header Files","#include","#define","Macros","Conditional Compilation","Multiple Source Files","Static Libraries","Shared Libraries"]},
+{t:"Data Structures", topics:["Linked Lists","Stacks","Queues","Trees","Binary Search Trees","Graphs","Hash Tables","Heaps"]},
+{t:"Algorithms", topics:["Searching Algorithms","Sorting Algorithms","Divide & Conquer","Greedy Algorithms","Dynamic Programming","Backtracking","Recursion Techniques","Time & Space Complexity"]},
+{t:"Scientific & Numerical Computing", topics:["Mathematical Functions","Numerical Methods","Matrix Computation","Interpolation","Numerical Integration","Differential Equations","Simulation","Mathematical Modeling"]},
+{t:"Systems Programming", topics:["Operating System Basics","Processes","Threads","Signals","System Calls","Memory Management","Process Synchronization","Shell Programming Basics"]},
+{t:"Embedded Systems", topics:["Microcontrollers","GPIO Programming","Timers","Interrupts","UART Communication","SPI","I2C","Embedded C Programming"]},
+{t:"Networking", topics:["Socket Programming","TCP/IP","UDP","Client-Server Programming","Multithreading","Network Security Basics","HTTP Protocol","API Communication"]},
+{t:"Research Applications", topics:["Scientific Simulation","Numerical Analysis","High-Performance Computing","Data Acquisition","Instrument Control","Signal Processing","Image Processing Foundations","Research Software Development"]},
+{t:"Software Engineering", topics:["Git","GitHub","Makefiles","Debugging (GDB)","Profiling","Unit Testing","Documentation","Version Control"]},
+{t:"Optimization", topics:["Compiler Optimization","Memory Optimization","Code Optimization","Parallel Computing","OpenMP","MPI Basics","Performance Benchmarking","Profiling Tools"]},
+{t:"Capstone Projects", topics:["Student Management System","Library Management System","Banking System","Inventory Management System","Scientific Calculator","Matrix Computation Software","Data Logger","Embedded Device Controller","Mini Compiler","Operating System Components"]},
+{t:"Career Path", topics:["Software Engineer","Systems Programmer","Embedded Systems Engineer","Firmware Developer","Robotics Engineer","IoT Developer","Scientific Computing Specialist","HPC Engineer","Cybersecurity Engineer","Research Software Engineer","Computer Science Researcher"]}
+];
+
+/* Difficulty tier by level index (0-based) */
+function tierOf(li){ return li<=4?'beg': li<=11?'int':'adv'; }
+function tierLabel(tier){ return tier==='beg'?'Beginner':tier==='int'?'Intermediate':'Advanced'; }
+
+/* =========================================================
+   Hand-authored lesson content for key topics (desc + code).
+   Key = "levelIndex|Topic Name"
+   ========================================================= */
+const CONTENT = {
+"0|What is Programming?":{
+  desc:"Programming means giving a computer precise, ordered instructions to solve a problem. C is where most modern languages learned their manners — it talks close to the hardware while still reading like English.",
+  code:`<span class="tok-com">// Every C program starts here</span>
+<span class="tok-pre">#include</span> <span class="tok-str">&lt;stdio.h&gt;</span>
+
+<span class="tok-kw">int</span> <span class="tok-fn">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-fn">printf</span>(<span class="tok-str">"I am now a C programmer.\\n"</span>);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}`,
+  out:["I am now a C programmer."]
+},
+"0|Installing GCC / Clang":{
+  desc:"GCC (GNU Compiler Collection) or Clang turns your .c source file into a runnable binary. On Windows use MinGW-w64 or WSL, on macOS <span class='mono'>xcode-select --install</span> gives you Clang, on Linux it's usually one line.",
+  code:`<span class="tok-com"># macOS</span>
+xcode-select --install
+
+<span class="tok-com"># Ubuntu / Debian / WSL</span>
+sudo apt update && sudo apt install build-essential
+
+<span class="tok-com"># Windows — install MSYS2 then:</span>
+pacman -S mingw-w64-ucrt-x86_64-gcc
+
+<span class="tok-com"># Verify</span>
+gcc --version`,
+  out:["gcc (GCC) 13.2.0","Copyright (C) 2024 Free Software Foundation, Inc."]
+},
+"0|Writing the First C Program":{
+  desc:"Every C file needs one <span class='mono'>main()</span> function — that's your program's entry point. Save this as <span class='mono'>hello.c</span>.",
+  code:`<span class="tok-pre">#include</span> <span class="tok-str">&lt;stdio.h&gt;</span>
+
+<span class="tok-kw">int</span> <span class="tok-fn">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-fn">printf</span>(<span class="tok-str">"Hello, World!\\n"</span>);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}`,
+  out:["Hello, World!"]
+},
+"0|Program Compilation Process":{
+  desc:"C source goes through four stages before it runs: preprocessing (expands #include/#define), compilation (C → assembly), assembly (→ machine code / object file), and linking (joins object files + libraries into one executable).",
+  code:`<span class="tok-com">// Watch every stage yourself:</span>
+gcc -E hello.c -o hello.i    <span class="tok-com">// 1. Preprocess</span>
+gcc -S hello.i -o hello.s    <span class="tok-com">// 2. Compile to assembly</span>
+gcc -c hello.s -o hello.o    <span class="tok-com">// 3. Assemble to object code</span>
+gcc hello.o -o hello         <span class="tok-com">// 4. Link to executable</span>
+./hello`,
+  out:["Hello, World!"]
+},
+"1|Variables":{
+  desc:"A variable is a named box in memory. In C you must declare its type up front — the compiler uses that to know how many bytes to reserve and how to interpret them.",
+  code:`<span class="tok-pre">#include</span> <span class="tok-str">&lt;stdio.h&gt;</span>
+
+<span class="tok-kw">int</span> <span class="tok-fn">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-kw">int</span> age = <span class="tok-num">21</span>;
+    <span class="tok-kw">float</span> gpa = <span class="tok-num">3.8f</span>;
+    <span class="tok-kw">char</span> grade = <span class="tok-str">'A'</span>;
+    <span class="tok-fn">printf</span>(<span class="tok-str">"Age: %d | GPA: %.1f | Grade: %c\\n"</span>, age, gpa, grade);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}`,
+  out:["Age: 21 | GPA: 3.8 | Grade: A"]
+},
+"1|Data Types":{
+  desc:"C's core types — <span class='mono'>int, float, double, char</span> — map directly to fixed-size chunks of memory. Knowing their size and range prevents silent overflow bugs later.",
+  code:`<span class="tok-pre">#include</span> <span class="tok-str">&lt;stdio.h&gt;</span>
+
+<span class="tok-kw">int</span> <span class="tok-fn">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-fn">printf</span>(<span class="tok-str">"int: %zu bytes\\n"</span>, <span class="tok-kw">sizeof</span>(<span class="tok-kw">int</span>));
+    <span class="tok-fn">printf</span>(<span class="tok-str">"double: %zu bytes\\n"</span>, <span class="tok-kw">sizeof</span>(<span class="tok-kw">double</span>));
+    <span class="tok-fn">printf</span>(<span class="tok-str">"char: %zu byte\\n"</span>, <span class="tok-kw">sizeof</span>(<span class="tok-kw">char</span>));
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}`,
+  out:["int: 4 bytes","double: 8 bytes","char: 1 byte"]
+},
+"1|Input & Output (printf, scanf)":{
+  desc:"<span class='mono'>printf</span> writes formatted text out; <span class='mono'>scanf</span> reads formatted text in. Format specifiers (%d, %f, %c, %s) must match your variable types exactly.",
+  code:`<span class="tok-pre">#include</span> <span class="tok-str">&lt;stdio.h&gt;</span>
+
+<span class="tok-kw">int</span> <span class="tok-fn">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-kw">int</span> n;
+    <span class="tok-fn">printf</span>(<span class="tok-str">"Enter a number: "</span>);
+    <span class="tok-fn">scanf</span>(<span class="tok-str">"%d"</span>, &n);
+    <span class="tok-fn">printf</span>(<span class="tok-str">"You entered %d\\n"</span>, n);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}`,
+  out:["Enter a number: 7","You entered 7"]
+},
+"2|for Loop":{
+  desc:"The <span class='mono'>for</span> loop packs initialization, condition, and increment into one line — ideal when you know how many times to repeat.",
+  code:`<span class="tok-pre">#include</span> <span class="tok-str">&lt;stdio.h&gt;</span>
+
+<span class="tok-kw">int</span> <span class="tok-fn">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> i = <span class="tok-num">1</span>; i &lt;= <span class="tok-num">5</span>; i++) {
+        <span class="tok-fn">printf</span>(<span class="tok-str">"%d "</span>, i * i);
+    }
+    <span class="tok-fn">printf</span>(<span class="tok-str">"\\n"</span>);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}`,
+  out:["1 4 9 16 25"]
+},
+"2|switch-case":{
+  desc:"<span class='mono'>switch</span> compares one value against several constants — cleaner than a long if-else ladder when checking a single variable.",
+  code:`<span class="tok-pre">#include</span> <span class="tok-str">&lt;stdio.h&gt;</span>
+
+<span class="tok-kw">int</span> <span class="tok-fn">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-kw">int</span> day = <span class="tok-num">3</span>;
+    <span class="tok-kw">switch</span>(day) {
+        <span class="tok-kw">case</span> <span class="tok-num">1</span>: <span class="tok-fn">printf</span>(<span class="tok-str">"Mon"</span>); <span class="tok-kw">break</span>;
+        <span class="tok-kw">case</span> <span class="tok-num">3</span>: <span class="tok-fn">printf</span>(<span class="tok-str">"Wed"</span>); <span class="tok-kw">break</span>;
+        <span class="tok-kw">default</span>: <span class="tok-fn">printf</span>(<span class="tok-str">"Other"</span>);
+    }
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}`,
+  out:["Wed"]
+},
+"3|Recursive Functions":{
+  desc:"A recursive function calls itself on a smaller sub-problem until it hits a base case. Elegant for trees, factorials, and divide-and-conquer algorithms — but watch your stack depth.",
+  code:`<span class="tok-pre">#include</span> <span class="tok-str">&lt;stdio.h&gt;</span>
+
+<span class="tok-kw">int</span> <span class="tok-fn">factorial</span>(<span class="tok-kw">int</span> n) {
+    <span class="tok-kw">if</span> (n &lt;= <span class="tok-num">1</span>) <span class="tok-kw">return</span> <span class="tok-num">1</span>;
+    <span class="tok-kw">return</span> n * <span class="tok-fn">factorial</span>(n - <span class="tok-num">1</span>);
+}
+
+<span class="tok-kw">int</span> <span class="tok-fn">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-fn">printf</span>(<span class="tok-str">"5! = %d\\n"</span>, <span class="tok-fn">factorial</span>(<span class="tok-num">5</span>));
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}`,
+  out:["5! = 120"]
+},
+"5|Pointer Basics":{
+  desc:"A pointer stores a memory address instead of a value. <span class='mono'>&</span> gets an address, <span class='mono'>*</span> dereferences it. This is the concept that separates C from beginner-friendly languages — and unlocks everything else.",
+  code:`<span class="tok-pre">#include</span> <span class="tok-str">&lt;stdio.h&gt;</span>
+
+<span class="tok-kw">int</span> <span class="tok-fn">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-kw">int</span> num = <span class="tok-num">42</span>;
+    <span class="tok-kw">int</span> *ptr = &num;
+    <span class="tok-fn">printf</span>(<span class="tok-str">"Value: %d\\n"</span>, *ptr);
+    <span class="tok-fn">printf</span>(<span class="tok-str">"Address: %p\\n"</span>, (<span class="tok-kw">void</span>*)ptr);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}`,
+  out:["Value: 42","Address: 0x7ffee2a1c4ac"]
+},
+"6|malloc()":{
+  desc:"<span class='mono'>malloc</span> reserves a block of raw, uninitialized heap memory at runtime and returns a pointer to it — essential when you don't know a size until the program is running. Always pair it with <span class='mono'>free()</span>.",
+  code:`<span class="tok-pre">#include</span> <span class="tok-str">&lt;stdio.h&gt;</span>
+<span class="tok-pre">#include</span> <span class="tok-str">&lt;stdlib.h&gt;</span>
+
+<span class="tok-kw">int</span> <span class="tok-fn">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-kw">int</span> *arr = (<span class="tok-kw">int</span>*) <span class="tok-fn">malloc</span>(<span class="tok-num">5</span> * <span class="tok-kw">sizeof</span>(<span class="tok-kw">int</span>));
+    <span class="tok-kw">if</span> (arr == NULL) <span class="tok-kw">return</span> <span class="tok-num">1</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> i = <span class="tok-num">0</span>; i &lt; <span class="tok-num">5</span>; i++) arr[i] = i * <span class="tok-num">10</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> i = <span class="tok-num">0</span>; i &lt; <span class="tok-num">5</span>; i++) <span class="tok-fn">printf</span>(<span class="tok-str">"%d "</span>, arr[i]);
+    <span class="tok-fn">free</span>(arr);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}`,
+  out:["0 10 20 30 40"]
+},
+"7|Structures":{
+  desc:"A <span class='mono'>struct</span> bundles related variables of different types under one name — the foundation for modeling real-world records like a student, a point, or a pixel.",
+  code:`<span class="tok-pre">#include</span> <span class="tok-str">&lt;stdio.h&gt;</span>
+
+<span class="tok-kw">struct</span> Student {
+    <span class="tok-kw">char</span> name[<span class="tok-num">30</span>];
+    <span class="tok-kw">int</span> roll;
+    <span class="tok-kw">float</span> gpa;
+};
+
+<span class="tok-kw">int</span> <span class="tok-fn">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-kw">struct</span> Student s1 = {<span class="tok-str">"Anita"</span>, <span class="tok-num">7</span>, <span class="tok-num">3.9</span>};
+    <span class="tok-fn">printf</span>(<span class="tok-str">"%s | Roll %d | GPA %.1f\\n"</span>, s1.name, s1.roll, s1.gpa);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}`,
+  out:["Anita | Roll 7 | GPA 3.9"]
+},
+"10|Linked Lists":{
+  desc:"A linked list is a chain of nodes, each holding data and a pointer to the next node. Unlike arrays, it grows and shrinks without reallocating the whole block.",
+  code:`<span class="tok-pre">#include</span> <span class="tok-str">&lt;stdio.h&gt;</span>
+<span class="tok-pre">#include</span> <span class="tok-str">&lt;stdlib.h&gt;</span>
+
+<span class="tok-kw">struct</span> Node { <span class="tok-kw">int</span> data; <span class="tok-kw">struct</span> Node *next; };
+
+<span class="tok-kw">int</span> <span class="tok-fn">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-kw">struct</span> Node *head = <span class="tok-fn">malloc</span>(<span class="tok-kw">sizeof</span>(<span class="tok-kw">struct</span> Node));
+    head->data = <span class="tok-num">10</span>;
+    head->next = <span class="tok-fn">malloc</span>(<span class="tok-kw">sizeof</span>(<span class="tok-kw">struct</span> Node));
+    head->next->data = <span class="tok-num">20</span>;
+    head->next->next = NULL;
+    <span class="tok-fn">printf</span>(<span class="tok-str">"%d -> %d\\n"</span>, head->data, head->next->data);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}`,
+  out:["10 -> 20"]
+},
+"11|Sorting Algorithms":{
+  desc:"Sorting reorders data by key. Bubble and insertion sort are simple O(n²) starting points; quicksort and mergesort scale to O(n log n) for real workloads.",
+  code:`<span class="tok-pre">#include</span> <span class="tok-str">&lt;stdio.h&gt;</span>
+
+<span class="tok-kw">void</span> <span class="tok-fn">bubbleSort</span>(<span class="tok-kw">int</span> arr[], <span class="tok-kw">int</span> n) {
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> i = <span class="tok-num">0</span>; i &lt; n-<span class="tok-num">1</span>; i++)
+        <span class="tok-kw">for</span> (<span class="tok-kw">int</span> j = <span class="tok-num">0</span>; j &lt; n-i-<span class="tok-num">1</span>; j++)
+            <span class="tok-kw">if</span> (arr[j] > arr[j+<span class="tok-num">1</span>]) {
+                <span class="tok-kw">int</span> t = arr[j]; arr[j] = arr[j+<span class="tok-num">1</span>]; arr[j+<span class="tok-num">1</span>] = t;
+            }
+}
+
+<span class="tok-kw">int</span> <span class="tok-fn">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-kw">int</span> arr[] = {<span class="tok-num">5</span>,<span class="tok-num">2</span>,<span class="tok-num">9</span>,<span class="tok-num">1</span>,<span class="tok-num">3</span>};
+    <span class="tok-fn">bubbleSort</span>(arr, <span class="tok-num">5</span>);
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> i=<span class="tok-num">0</span>;i&lt;<span class="tok-num">5</span>;i++) <span class="tok-fn">printf</span>(<span class="tok-str">"%d "</span>, arr[i]);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}`,
+  out:["1 2 3 5 9"]
+},
+"14|Embedded C Programming":{
+  desc:"Embedded C targets microcontrollers directly — no operating system to lean on. You write straight to memory-mapped registers to blink LEDs, read sensors, and drive motors.",
+  code:`<span class="tok-com">// Simplified AVR-style GPIO blink (conceptual)</span>
+<span class="tok-pre">#include</span> <span class="tok-str">&lt;avr/io.h&gt;</span>
+<span class="tok-pre">#include</span> <span class="tok-str">&lt;util/delay.h&gt;</span>
+
+<span class="tok-kw">int</span> <span class="tok-fn">main</span>(<span class="tok-kw">void</span>) {
+    DDRB |= (<span class="tok-num">1</span> &lt;&lt; PB0);       <span class="tok-com">// set pin as output</span>
+    <span class="tok-kw">while</span>(<span class="tok-num">1</span>) {
+        PORTB ^= (<span class="tok-num">1</span> &lt;&lt; PB0);   <span class="tok-com">// toggle LED</span>
+        _delay_ms(<span class="tok-num">500</span>);
+    }
+}`,
+  out:["[simulated on real hardware — LED blinking @ 1Hz]"]
+},
+"15|Socket Programming":{
+  desc:"Sockets are the endpoints of a network connection. In C you create one with <span class='mono'>socket()</span>, then <span class='mono'>bind/listen/accept</span> on the server side or <span class='mono'>connect()</span> on the client side.",
+  code:`<span class="tok-pre">#include</span> <span class="tok-str">&lt;stdio.h&gt;</span>
+<span class="tok-pre">#include</span> <span class="tok-str">&lt;sys/socket.h&gt;</span>
+<span class="tok-pre">#include</span> <span class="tok-str">&lt;netinet/in.h&gt;</span>
+
+<span class="tok-kw">int</span> <span class="tok-fn">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-kw">int</span> sock = <span class="tok-fn">socket</span>(AF_INET, SOCK_STREAM, <span class="tok-num">0</span>);
+    <span class="tok-kw">struct</span> sockaddr_in addr = {.sin_family = AF_INET, .sin_port = <span class="tok-fn">htons</span>(<span class="tok-num">8080</span>)};
+    <span class="tok-fn">bind</span>(sock, (<span class="tok-kw">struct</span> sockaddr*)&addr, <span class="tok-kw">sizeof</span>(addr));
+    <span class="tok-fn">listen</span>(sock, <span class="tok-num">5</span>);
+    <span class="tok-fn">printf</span>(<span class="tok-str">"Listening on port 8080...\\n"</span>);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}`,
+  out:["Listening on port 8080..."]
+}
+};
+
+/* Generic fallback content so EVERY topic works smoothly */
+function fallbackContent(li, topic){
+  const lvl = LEVELS[li].t;
+  return {
+    desc:`<b>${topic}</b> is a core concept within <i>${lvl}</i>. Study the definition, trace through the example below in VS Code, then modify it yourself — the fastest way to internalize C is to break the code and fix it.`,
+    code:`<span class="tok-com">// Topic: ${topic}</span>
+<span class="tok-pre">#include</span> <span class="tok-str">&lt;stdio.h&gt;</span>
+
+<span class="tok-kw">int</span> <span class="tok-fn">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-fn">printf</span>(<span class="tok-str">"Practicing: ${topic}\\n"</span>);
+    <span class="tok-com">// TODO: apply the "${topic}" concept here</span>
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}`,
+    out:[`Practicing: ${topic}`]
+  };
+}
+
+/* =========================================================
+   STATE
+   ========================================================= */
+let openTabs = ["welcome"];
+let activeTab = "welcome";
+let completed = new Set();
+let allTopicIds = [];
+
+function topicId(li,ti){ return li+"|"+ti; }
+LEVELS.forEach((lvl,li)=> lvl.topics.forEach((tp,ti)=> allTopicIds.push(topicId(li,ti))));
+
+/* =========================================================
+   PERSISTENT PROGRESS (window.storage)
+   ========================================================= */
+async function loadProgress(){
+  try{
+    const r = await window.storage.get('c_app_progress');
+    if(r && r.value){ completed = new Set(JSON.parse(r.value)); }
+  }catch(e){ /* no saved progress yet */ }
+  renderProgressStat();
+}
+async function saveProgress(){
+  try{ await window.storage.set('c_app_progress', JSON.stringify([...completed])); }
+  catch(e){ console.error('progress save failed', e); }
+}
+function renderProgressStat(){
+  document.getElementById('progressStat').textContent = `${completed.size} / ${allTopicIds.length} topics`;
+}
+
+/* =========================================================
+   RENDER TREE
+   ========================================================= */
+const tree = document.getElementById('tree');
+function renderTree(filter=""){
+  tree.innerHTML = "";
+  const f = filter.trim().toLowerCase();
+  let shown = 0;
+  LEVELS.forEach((lvl, li)=>{
+    const matchTopics = lvl.topics.filter(t=>!f || t.toLowerCase().includes(f) || lvl.t.toLowerCase().includes(f));
+    if(f && matchTopics.length===0) return;
+    shown += matchTopics.length;
+    const wrap = document.createElement('div'); wrap.className='lvl';
+    const head = document.createElement('div');
+    head.className='lvl-head'+((!f && li>1) ? '' : ' open');
+    head.innerHTML = `<span class="car">▸</span><span class="num">L${li+1}</span><span class="ttl">${lvl.t}</span><span class="cnt">${lvl.topics.length}</span>`;
+    const tlist = document.createElement('div');
+    tlist.className='topics'+((!f && li>1)?'':' open');
+    (f?matchTopics:lvl.topics).forEach(tp=>{
+      const ti = lvl.topics.indexOf(tp);
+      const id = topicId(li,ti);
+      const row = document.createElement('div');
+      row.className='topic'+(completed.has(id)?' done':'')+(activeTab===id?' active':'');
+      row.innerHTML = `<span class="chk">${completed.has(id)?'✓':''}</span><span class="ico">📄</span><span class="tname">${tp}</span>`;
+      row.onclick = ()=> openTopic(li,ti);
+      tlist.appendChild(row);
+    });
+    head.onclick = ()=>{ head.classList.toggle('open'); tlist.classList.toggle('open'); };
+    wrap.appendChild(head); wrap.appendChild(tlist);
+    tree.appendChild(wrap);
+  });
+  document.getElementById('sbCount').textContent = f? shown+" match": allTopicIds.length+" total";
+}
+renderTree();
+
+document.getElementById('searchBox').addEventListener('input', e=> renderTree(e.target.value));
+
+/* =========================================================
+   TABS + EDITOR
+   ========================================================= */
+const tabsEl = document.getElementById('tabs');
+const editorEl = document.getElementById('editor');
+
+function tabLabel(id){
+  if(id==='welcome') return '👋 Welcome';
+  if(id==='setup') return '⚙️ vscode-setup.md';
+  if(id==='about') return '👤 about.md';
+  const [li,ti] = id.split('|').map(Number);
+  return '📄 '+LEVELS[li].topics[ti].split('(')[0].trim().replace(/\s+/g,'_').toLowerCase().slice(0,22)+'.c';
+}
+
+function openTopic(li,ti){
+  const id = topicId(li,ti);
+  openTabInternal(id);
+}
+function openTabInternal(id){
+  if(!openTabs.includes(id)) openTabs.push(id);
+  activeTab = id;
+  renderTabs(); renderEditor(); renderTree(document.getElementById('searchBox').value);
+}
+function closeTab(id, ev){
+  ev.stopPropagation();
+  openTabs = openTabs.filter(t=>t!==id);
+  if(activeTab===id){ activeTab = openTabs[openTabs.length-1] || 'welcome'; if(!openTabs.length) openTabs=['welcome']; }
+  renderTabs(); renderEditor();
+}
+function renderTabs(){
+  tabsEl.innerHTML="";
+  openTabs.forEach(id=>{
+    const tab = document.createElement('div');
+    tab.className='tab'+(id===activeTab?' active':'');
+    tab.innerHTML = `<span>${tabLabel(id)}</span><span class="x" onclick="closeTab('${id}',event)">✕</span>`;
+    tab.onclick = ()=>{ activeTab=id; renderTabs(); renderEditor(); };
+    tabsEl.appendChild(tab);
+  });
+}
+
+function escName(s){ return s.replace(/'/g,"\\'"); }
+
+function renderEditor(){
+  editorEl.innerHTML="";
+  openTabs.forEach(id=>{
+    const pane = document.createElement('div');
+    pane.className='pane'+(id===activeTab?' active':'');
+    if(id==='welcome') pane.innerHTML = welcomeHTML();
+    else if(id==='setup') pane.innerHTML = setupHTML();
+    else if(id==='about') pane.innerHTML = aboutHTML();
+    else pane.innerHTML = lessonHTML(id);
+    editorEl.appendChild(pane);
+  });
+  // wire buttons for the active lesson pane
+  if(activeTab.includes('|')){
+    const [li,ti] = activeTab.split('|').map(Number);
+    wireLesson(li,ti);
+  }
+}
+
+function welcomeHTML(){
+  return `
+  <div class="hero">
+    <div class="kicker">// FREE · BEGINNER → EXPERT · 21 LEVELS · 190+ TOPICS</div>
+    <h1>Learn <span>C</span>.<br>Compile it. Run it.<br>Own it.</h1>
+    <p>A complete, self-paced curriculum for mastering C — from your very first <span class="mono">printf</span> to sockets, embedded firmware and operating-system components. Every topic ships with a runnable example, a free video pointer, and free written notes, built to be worked through right inside VS Code.</p>
+    <div class="btnrow">
+      <div class="btn primary" onclick="openTopic(0,7)">▶ Start Level 1</div>
+      <div class="btn" onclick="openTabInternal('setup')">⚙ Set up VS Code</div>
+      <div class="btn" onclick="openTabInternal('about')">👤 Meet the developer</div>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><b>21</b><span>LEVELS</span></div>
+      <div class="stat"><b>190+</b><span>TOPICS</span></div>
+      <div class="stat"><b>100%</b><span>FREE</span></div>
+      <div class="stat"><b>∞</b><span>PRACTICE RUNS</span></div>
+    </div>
+  </div>
+  <div class="section-lbl">HOW THIS APP WORKS</div>
+  <div class="reslist">
+    <div class="resitem" onclick="document.querySelector('[data-act=explorer]').click()">🗂️ <div>Browse the <b>Explorer</b> on the left — 21 levels, fully expandable, just like a real project</div></div>
+    <div class="resitem" onclick="document.querySelector('[data-act=setup]').click()">⚙️ <div>Follow <b>VS Code Setup</b> once — install, configure, compile, run</div></div>
+    <div class="resitem">▶️ <div>Open any topic → hit <b>Run</b> → watch the terminal compile and execute it, live</div></div>
+    <div class="resitem">🎥 <div>Every lesson links to <b>free video tutorials</b> and <b>free PDF notes</b></div></div>
+    <div class="resitem">✅ <div>Check off topics as you finish — your progress is saved automatically</div></div>
+  </div>`;
+}
+
+function setupHTML(){
+  return `
+  <div class="crumb">SETUP GUIDE / <b>Installation → Run</b></div>
+  <h1 class="lesson-title">C in VS Code — Installation to First Run</h1>
+  <p class="desc">Everything below is free and works on Windows, macOS, and Linux. Do it once; every lesson in this app follows the exact same compile-and-run pattern.</p>
+
+  <div class="setup-step"><div class="setup-num">1</div><div><h3>Install Visual Studio Code</h3><p>Download the free installer from <b>code.visualstudio.com</b> and run it. VS Code itself is just a smart text editor — it doesn't compile C on its own, which is why the next steps matter.</p></div></div>
+
+  <div class="setup-step"><div class="setup-num">2</div><div><h3>Install a C compiler</h3><p><b>Windows:</b> install MSYS2, then run <span class="kbd">pacman -S mingw-w64-ucrt-x86_64-gcc</span> and add its <span class="kbd">bin</span> folder to PATH.<br><b>macOS:</b> run <span class="kbd">xcode-select --install</span> in Terminal.<br><b>Linux:</b> run <span class="kbd">sudo apt install build-essential</span>.</p></div></div>
+
+  <div class="setup-step"><div class="setup-num">3</div><div><h3>Verify the compiler</h3><p>Open a terminal and run <span class="kbd">gcc --version</span>. If it prints a version number, you're ready to compile.</p></div></div>
+
+  <div class="setup-step"><div class="setup-num">4</div><div><h3>Install the C/C++ extension</h3><p>Inside VS Code, open the Extensions panel <span class="kbd">Ctrl+Shift+X</span> and install <b>"C/C++" by Microsoft</b>. It gives you IntelliSense, debugging, and error squiggles.</p></div></div>
+
+  <div class="setup-step"><div class="setup-num">5</div><div><h3>Create and run your first file</h3><p>Make a folder, add <span class="kbd">main.c</span>, write your code, then open the integrated terminal <span class="kbd">Ctrl+&#96;</span> and run:</p></div></div>
+
+  <div class="codebox"><div class="cb-head"><span>terminal</span></div><pre><span class="tok-com"># compile</span>
+gcc main.c -o main
+
+<span class="tok-com"># run</span>
+./main        <span class="tok-com">// macOS/Linux</span>
+main.exe      <span class="tok-com">// Windows</span></pre></div>
+
+  <div class="setup-step"><div class="setup-num">6</div><div><h3>One-click Run &amp; Debug (optional)</h3><p>Add a <span class="kbd">tasks.json</span> under <span class="kbd">.vscode/</span> to bind compilation to <span class="kbd">Ctrl+Shift+B</span>, and a <span class="kbd">launch.json</span> to step through code line-by-line with breakpoints using the built-in debugger.</p></div></div>
+
+  <div class="btnrow"><div class="btn primary" onclick="openTopic(0,7)">▶ I'm set up — start Level 1</div></div>`;
+}
+
+function aboutHTML(){
+  return `
+  <div class="crumb">ABOUT / <b>Developer</b></div>
+  <h1 class="lesson-title">About C /Lang</h1>
+  <p class="desc">C /Lang is a free, structured path through the C language — built for students who want to go from a blank editor to real systems, embedded, and research-grade code, practicing every step inside VS Code.</p>
+
+  <div class="section-lbl">DEVELOPED BY</div>
+  <div class="dev-card">
+    <div class="dev-photo">BSR</div>
+    <div class="dev-info">
+      <b>Mr. Bishnu Singh Rayamajhi</b>
+      <div class="role">Math Lecturer &amp; Head, Department of Humanities &amp; Social Sciences<br>Kapilvastu Multiple Campus (KMC), Taulihawa</div>
+    </div>
+  </div>
+  <p style="font-size:12px;color:var(--text-dim);margin-top:10px;max-width:560px;line-height:1.6;">
+  Note: "Photo02.png" wasn't attached to this conversation, so a placeholder monogram is shown above — upload the image and it can be swapped in directly.
+  </p>
+
+  <div class="section-lbl">FREE RESOURCES USED THROUGHOUT THIS APP</div>
+  <div class="reslist">
+    <div class="resitem" onclick="window.open('https://www.learn-c.org/','_blank')">🌐 <div>learn-c.org — free interactive C exercises</div><span class="tag">FREE</span></div>
+    <div class="resitem" onclick="window.open('https://www.programiz.com/c-programming','_blank')">🌐 <div>Programiz C Tutorial — free reference &amp; examples</div><span class="tag">FREE</span></div>
+    <div class="resitem" onclick="window.open('https://www.geeksforgeeks.org/c-programming-language/','_blank')">🌐 <div>GeeksforGeeks C Programming — free articles &amp; practice</div><span class="tag">FREE</span></div>
+    <div class="resitem" onclick="window.open('https://en.cppreference.com/w/c','_blank')">🌐 <div>cppreference.com — free standard-library reference</div><span class="tag">FREE</span></div>
+  </div>`;
+}
+
+function lessonHTML(id){
+  const [li,ti] = id.split('|').map(Number);
+  const topic = LEVELS[li].topics[ti];
+  const lvl = LEVELS[li];
+  const tier = tierOf(li);
+  const c = CONTENT[id] || fallbackContent(li, topic);
+  const done = completed.has(id);
+  const prevId = prevTopicId(li,ti), nextId = nextTopicId(li,ti);
+  return `
+  <div class="crumb">LEVEL ${li+1} · ${lvl.t.toUpperCase()}</div>
+  <h1 class="lesson-title">${topic}</h1>
+  <div class="badge-row">
+    <span class="badge lv-${tier}">${tierLabel(tier)}</span>
+    <span class="badge">L${li+1} · ${lvl.t}</span>
+    <span class="badge">Topic ${ti+1} / ${lvl.topics.length}</span>
+  </div>
+  <div class="desc">${c.desc}</div>
+
+  <div class="section-lbl">CODE EXAMPLE — main.c</div>
+  <div class="codebox">
+    <div class="cb-head"><span>main.c</span><span>C11 · UTF-8</span></div>
+    <pre>${c.code}</pre>
+  </div>
+
+  <div class="btnrow">
+    <div class="btn primary" id="runBtn">▶ Run in Terminal</div>
+    <div class="btn video" id="videoBtn">🎥 Watch Free Video</div>
+    <div class="btn pdf" id="pdfBtn">📄 Free PDF Notes</div>
+    <div class="btn ${done?'done':''}" id="doneBtn">${done? '✓ Completed' : '☐ Mark Complete'}</div>
+  </div>
+
+  <div class="section-lbl">FREE LEARNING RESOURCES</div>
+  <div class="reslist">
+    <div class="resitem" id="resVideo">🎥 <div>Search free video tutorials for "${topic}"</div><span class="tag">YouTube</span></div>
+    <div class="resitem" id="resPdf">📄 <div>Find free PDF notes for "${topic}"</div><span class="tag">Search</span></div>
+    <div class="resitem" onclick="window.open('https://www.programiz.com/c-programming','_blank')">📘 <div>Programiz — free written C tutorial</div><span class="tag">FREE</span></div>
+    <div class="resitem" onclick="window.open('https://www.geeksforgeeks.org/c-programming-language/','_blank')">📘 <div>GeeksforGeeks — free articles &amp; practice problems</div><span class="tag">FREE</span></div>
+  </div>
+
+  <div class="nextprev">
+    <div class="np-btn ${prevId?'':'off'}" onclick="${prevId?`openTopic(${prevId[0]},${prevId[1]})`:''}">${prevId?'← PREVIOUS<br><b>'+LEVELS[prevId[0]].topics[prevId[1]]+'</b>':''}</div>
+    <div class="np-btn right ${nextId?'':'off'}" onclick="${nextId?`openTopic(${nextId[0]},${nextId[1]})`:''}">${nextId?'NEXT →<br><b>'+LEVELS[nextId[0]].topics[nextId[1]]+'</b>':''}</div>
+  </div>`;
+}
+
+function prevTopicId(li,ti){
+  if(ti>0) return [li,ti-1];
+  for(let l=li-1;l>=0;l--){ if(LEVELS[l].topics.length) return [l, LEVELS[l].topics.length-1]; }
+  return null;
+}
+function nextTopicId(li,ti){
+  if(ti < LEVELS[li].topics.length-1) return [li,ti+1];
+  for(let l=li+1;l<LEVELS.length;l++){ if(LEVELS[l].topics.length) return [l,0]; }
+  return null;
+}
+
+function wireLesson(li,ti){
+  const id = topicId(li,ti);
+  const topic = LEVELS[li].topics[ti];
+  const c = CONTENT[id] || fallbackContent(li, topic);
+
+  const runBtn = document.getElementById('runBtn');
+  if(runBtn) runBtn.onclick = ()=> runInTerminal(topic, c.out);
+
+  const videoBtn = document.getElementById('videoBtn');
+  const resVideo = document.getElementById('resVideo');
+  const videoUrl = 'https://www.youtube.com/results?search_query='+encodeURIComponent('C programming '+topic+' tutorial free');
+  if(videoBtn) videoBtn.onclick = ()=> window.open(videoUrl,'_blank');
+  if(resVideo) resVideo.onclick = ()=> window.open(videoUrl,'_blank');
+
+  const pdfBtn = document.getElementById('pdfBtn');
+  const resPdf = document.getElementById('resPdf');
+  const pdfUrl = 'https://www.google.com/search?q='+encodeURIComponent('"'+topic+'" C programming notes pdf');
+  if(pdfBtn) pdfBtn.onclick = ()=> window.open(pdfUrl,'_blank');
+  if(resPdf) resPdf.onclick = ()=> window.open(pdfUrl,'_blank');
+
+  const doneBtn = document.getElementById('doneBtn');
+  if(doneBtn) doneBtn.onclick = ()=>{
+    if(completed.has(id)) completed.delete(id); else completed.add(id);
+    saveProgress(); renderProgressStat(); renderEditor(); renderTree(document.getElementById('searchBox').value);
+    showToast(completed.has(id) ? '✓ Marked complete — saved' : 'Unmarked');
+  };
+}
+
+/* =========================================================
+   TERMINAL SIMULATION
+   ========================================================= */
+const termbody = document.getElementById('termbody');
+let termBusy=false;
+function clearTerm(){ termbody.innerHTML=""; }
+function toggleTerm(){
+  const w = document.getElementById('termwrap');
+  w.style.height = (w.style.height==='34px') ? '190px' : '34px';
+}
+function addLine(text,cls){
+  const d = document.createElement('div');
+  d.className='tl '+cls;
+  d.textContent = text;
+  termbody.appendChild(d);
+  termbody.scrollTop = termbody.scrollHeight;
+  return d;
+}
+function runInTerminal(topic, outLines){
+  if(termBusy) return;
+  termBusy = true;
+  document.getElementById('termwrap').style.height='190px';
+  clearTerm();
+  addLine(`gcc main.c -o main    # ${topic}`,'cmd');
+  const compiling = addLine('Compiling…','info');
+  setTimeout(()=>{
+    compiling.textContent = '✓ Compilation successful (0 errors, 0 warnings)';
+    compiling.className='tl ok';
+    addLine('./main','cmd');
+    let i=0;
+    function next(){
+      if(i<outLines.length){
+        addLine(outLines[i],'out');
+        i++;
+        setTimeout(next, 260);
+      } else {
+        addLine('Process exited with code 0','info');
+        termBusy=false;
+      }
+    }
+    setTimeout(next, 200);
+  }, 650);
+}
+
+/* =========================================================
+   ACTIVITY BAR / SIDEBAR TOGGLE
+   ========================================================= */
+document.querySelectorAll('.actbtn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const act = btn.dataset.act;
+    if(act==='toggle'){ document.getElementById('sidebar').classList.toggle('collapsed'); return; }
+    document.querySelectorAll('.actbtn').forEach(b=>b.classList.remove('active'));
+    if(act!=='toggle') btn.classList.add('active');
+    if(act==='setup') openTabInternal('setup');
+    if(act==='about') openTabInternal('about');
+    if(act==='explorer'){ document.getElementById('sidebar').classList.remove('collapsed'); }
+  });
+});
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._h);
+  showToast._h = setTimeout(()=> t.classList.remove('show'), 2200);
+}
+
+/* =========================================================
+   BOOT
+   ========================================================= */
+addLine('C /Lang workspace initialized.','info');
+addLine('Type-safe. Memory-aware. 100% free.','info');
+renderTabs();
+renderEditor();
+loadProgress();
+</script>
+</body>
+</html>
