@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Mastery — Zero to Expert, With All Libraries</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root{
+    --ink:#10161a;
+    --ink-2:#161f22;
+    --panel:#1b2622;
+    --panel-2:#20302a;
+    --line: rgba(243,236,217,0.12);
+    --parchment:#f3ecd9;
+    --parchment-dim: rgba(243,236,217,0.62);
+    --parchment-faint: rgba(243,236,217,0.38);
+    --gold:#e0a63c;
+    --gold-dim: rgba(224,166,60,0.16);
+    --teal:#4fa89c;
+    --teal-dim: rgba(79,168,156,0.16);
+    --wine:#b5443c;
+    --shadow: 0 20px 50px rgba(0,0,0,0.45);
+    --radius: 14px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1100px 600px at 85% -10%, rgba(79,168,156,0.10), transparent 60%),
+      radial-gradient(900px 500px at -10% 10%, rgba(224,166,60,0.08), transparent 55%),
+      var(--ink);
+    color:var(--parchment);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;}
+  ::selection{background:var(--gold); color:#1a1200;}
+  :focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:40;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:16px;
+    padding:14px 28px;
+    background:rgba(16,22,26,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .brand{display:flex; align-items:center; gap:10px; font-family:'Fraunces',serif; font-weight:700; font-size:1.05rem;}
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--gold); box-shadow:0 0 0 4px var(--gold-dim);}
+  .topbar-actions{display:flex; gap:10px; align-items:center;}
+  .search-wrap{position:relative;}
+  .search-wrap input{
+    width:220px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    color:var(--parchment);
+    padding:9px 12px 9px 32px;
+    border-radius:999px;
+    font-family:'Inter',sans-serif;
+    font-size:0.85rem;
+  }
+  .search-wrap input:focus{border-color:var(--gold);}
+  .search-wrap svg{position:absolute; left:11px; top:50%; transform:translateY(-50%); width:14px; height:14px; opacity:0.5;}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:9px 16px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--parchment);
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:0.85rem;
+    cursor:pointer;
+    transition:transform .15s ease, border-color .15s ease, background .15s ease;
+    white-space:nowrap;
+  }
+  .btn:hover{transform:translateY(-1px); border-color:var(--gold);}
+  .btn-gold{background:var(--gold); border-color:var(--gold); color:#1a1200;}
+  .btn-gold:hover{filter:brightness(1.08);}
+  .btn-teal{background:var(--teal-dim); border-color:var(--teal); color:var(--teal);}
+  .btn-ghost{background:transparent;}
+  .btn:disabled{opacity:0.4; cursor:not-allowed; transform:none;}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    max-width:1180px; margin:0 auto;
+    padding:64px 28px 40px;
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:48px; align-items:center;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--teal); margin-bottom:16px; display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:''; width:22px; height:1px; background:var(--teal);}
+  .hero h1{font-size:clamp(2.3rem, 4.2vw, 3.4rem); line-height:1.05; margin:0 0 20px;}
+  .hero h1 em{font-style:normal; color:var(--gold);}
+  .hero p.lede{font-size:1.05rem; color:var(--parchment-dim); max-width:52ch; line-height:1.6; margin:0 0 28px;}
+  .hero-ctas{display:flex; gap:12px; flex-wrap:wrap; margin-bottom:36px;}
+
+  .dev-card{
+    display:flex; gap:14px; align-items:center;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:14px 18px;
+    max-width:520px;
+  }
+  .dev-photo{
+    width:56px; height:56px; border-radius:50%;
+    background:linear-gradient(135deg, var(--gold), var(--teal));
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces',serif; font-weight:700; font-size:1.2rem; color:#10161a;
+    flex-shrink:0; overflow:hidden;
+    border:2px solid var(--line);
+  }
+  .dev-photo img{width:100%; height:100%; object-fit:cover;}
+  .dev-info .name{font-weight:700; font-size:0.95rem;}
+  .dev-info .role{font-size:0.78rem; color:var(--parchment-dim); line-height:1.4; margin-top:2px;}
+
+  /* Terminal signature */
+  .terminal{
+    background:#0c1114;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .terminal-bar{
+    display:flex; align-items:center; gap:8px;
+    padding:11px 14px;
+    background:#141c1f;
+    border-bottom:1px solid var(--line);
+  }
+  .terminal-bar span{width:10px; height:10px; border-radius:50%; display:inline-block;}
+  .terminal-bar .r{background:#e2685a;} .terminal-bar .y{background:#e0a63c;} .terminal-bar .g{background:#4fa89c;}
+  .terminal-bar .title{margin-left:8px; font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--parchment-faint);}
+  .terminal-body{
+    padding:20px; min-height:230px;
+    font-family:'JetBrains Mono',monospace; font-size:0.84rem; line-height:1.8;
+    color:#c9e8de;
+  }
+  .terminal-body .prompt{color:var(--teal);}
+  .terminal-body .out{color:var(--parchment-dim);}
+  .terminal-body .ok{color:var(--gold);}
+  .cursor{display:inline-block; width:7px; height:15px; background:var(--gold); vertical-align:middle; animation:blink 1s step-end infinite;}
+  @keyframes blink{50%{opacity:0;}}
+
+  /* ---------- Ledger stats ---------- */
+  .ledger{
+    max-width:1180px; margin:0 auto; padding:0 28px 56px;
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  .ledger-cell{background:var(--panel); padding:20px 22px;}
+  .ledger-cell .num{font-family:'Fraunces',serif; font-weight:700; font-size:1.7rem; color:var(--gold);}
+  .ledger-cell .lab{font-size:0.76rem; color:var(--parchment-dim); margin-top:4px; text-transform:uppercase; letter-spacing:0.06em;}
+
+  /* ---------- Section shell ---------- */
+  .section{max-width:1180px; margin:0 auto; padding:20px 28px 80px;}
+  .section-head{display:flex; align-items:baseline; justify-content:space-between; gap:16px; margin-bottom:22px; flex-wrap:wrap;}
+  .section-head h2{font-size:1.7rem; margin:0;}
+  .section-head p{color:var(--parchment-dim); font-size:0.9rem; margin:6px 0 0; max-width:60ch;}
+  .overall-progress{display:flex; align-items:center; gap:10px; font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--parchment-dim);}
+  .bar{width:140px; height:6px; border-radius:999px; background:var(--panel-2); overflow:hidden;}
+  .bar > i{display:block; height:100%; background:linear-gradient(90deg,var(--teal),var(--gold)); width:0%; transition:width .4s ease;}
+
+  /* ---------- Level list ---------- */
+  .level{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    margin-bottom:12px;
+    background:var(--panel);
+    overflow:hidden;
+  }
+  .level-head{
+    display:flex; align-items:center; gap:16px;
+    padding:18px 20px;
+    cursor:pointer;
+    user-select:none;
+  }
+  .level-num{
+    font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--teal);
+    border:1px solid var(--teal); border-radius:6px; padding:3px 8px; flex-shrink:0;
+  }
+  .level-title{flex:1; min-width:0;}
+  .level-title h3{margin:0; font-size:1.05rem;}
+  .level-title p{margin:3px 0 0; font-size:0.82rem; color:var(--parchment-dim); font-family:'Inter',sans-serif;}
+  .level-meta{display:flex; align-items:center; gap:14px; flex-shrink:0;}
+  .level-progress{width:70px; text-align:right; font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--parchment-faint);}
+  .chevron{transition:transform .2s ease; opacity:0.6; flex-shrink:0;}
+  .level.open .chevron{transform:rotate(180deg);}
+  .level-body{
+    max-height:0; overflow:hidden; transition:max-height .35s ease;
+    border-top:1px solid transparent;
+  }
+  .level.open .level-body{border-top:1px solid var(--line);}
+  .topics-grid{
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+    gap:10px; padding:18px 20px;
+  }
+  .topic-chip{
+    display:flex; align-items:flex-start; gap:10px;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:12px 12px;
+    cursor:pointer;
+    transition:border-color .15s ease, transform .15s ease;
+    text-align:left;
+  }
+  .topic-chip:hover{border-color:var(--gold); transform:translateY(-1px);}
+  .topic-chip.done{border-color:var(--teal); background:var(--teal-dim);}
+  .chk{
+    width:17px; height:17px; border-radius:5px; border:1.5px solid var(--parchment-faint);
+    flex-shrink:0; margin-top:2px; display:flex; align-items:center; justify-content:center;
+  }
+  .topic-chip.done .chk{background:var(--teal); border-color:var(--teal);}
+  .chk svg{width:11px; height:11px; display:none;}
+  .topic-chip.done .chk svg{display:block;}
+  .topic-chip .t-name{font-size:0.86rem; font-weight:600; line-height:1.3;}
+  .topic-chip .t-hint{display:block; font-size:0.72rem; color:var(--parchment-faint); margin-top:2px; font-family:'JetBrains Mono',monospace;}
+
+  /* ---------- Modal ---------- */
+  .modal-backdrop{
+    position:fixed; inset:0; background:rgba(8,10,10,0.7); backdrop-filter:blur(3px);
+    display:none; align-items:center; justify-content:center; z-index:100; padding:20px;
+  }
+  .modal-backdrop.show{display:flex;}
+  .modal{
+    background:var(--ink-2); border:1px solid var(--line); border-radius:18px;
+    max-width:560px; width:100%; max-height:86vh; overflow:auto;
+    box-shadow:var(--shadow);
+  }
+  .modal-head{
+    display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+    padding:22px 24px 14px; position:sticky; top:0; background:var(--ink-2); border-bottom:1px solid var(--line);
+  }
+  .modal-head .lvl-tag{font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--teal); text-transform:uppercase; letter-spacing:0.08em;}
+  .modal-head h3{margin:4px 0 0; font-size:1.3rem;}
+  .modal-close{
+    background:transparent; border:1px solid var(--line); color:var(--parchment);
+    width:30px; height:30px; border-radius:50%; cursor:pointer; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .modal-close:hover{border-color:var(--gold);}
+  .modal-body{padding:20px 24px 26px;}
+  .modal-body p{color:var(--parchment-dim); line-height:1.6; font-size:0.92rem;}
+  .modal-actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:18px;}
+  .code-box{
+    background:#0c1114; border:1px solid var(--line); border-radius:10px;
+    padding:14px 16px; font-family:'JetBrains Mono',monospace; font-size:0.82rem;
+    color:#c9e8de; margin-top:14px; white-space:pre-wrap; line-height:1.6;
+  }
+
+  /* ---------- VS Code guide ---------- */
+  .steps{list-style:none; margin:0; padding:0; counter-reset:step;}
+  .steps li{
+    counter-increment:step;
+    display:grid; grid-template-columns:34px 1fr; gap:14px;
+    padding:14px 0; border-bottom:1px solid var(--line);
+  }
+  .steps li:last-child{border-bottom:none;}
+  .steps li::before{
+    content:counter(step);
+    font-family:'Fraunces',serif; font-weight:700; color:var(--gold);
+    width:34px; height:34px; border-radius:50%; border:1px solid var(--gold);
+    display:flex; align-items:center; justify-content:center; font-size:0.9rem;
+  }
+  .steps li .s-title{font-weight:700; font-size:0.92rem; margin-bottom:3px;}
+  .steps li .s-body{color:var(--parchment-dim); font-size:0.86rem; line-height:1.55;}
+  .steps li code{background:var(--panel-2); padding:1px 6px; border-radius:5px; font-family:'JetBrains Mono',monospace; font-size:0.82rem; color:var(--gold);}
+
+  /* ---------- Footer ---------- */
+  .footer{
+    border-top:1px solid var(--line);
+    padding:44px 28px 60px;
+  }
+  .footer-inner{max-width:1180px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center;}
+  .footer-card{display:flex; gap:18px; align-items:center;}
+  .footer-photo{
+    width:80px; height:80px; border-radius:16px;
+    background:linear-gradient(135deg, var(--teal), var(--gold));
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+    font-family:'Fraunces',serif; font-weight:700; font-size:1.6rem; color:#10161a;
+    flex-shrink:0; border:2px solid var(--line);
+  }
+  .footer-photo img{width:100%; height:100%; object-fit:cover;}
+  .footer-card h4{margin:0 0 4px; font-size:1.05rem;}
+  .footer-card p{margin:0; color:var(--parchment-dim); font-size:0.84rem; line-height:1.5;}
+  .footer-note{color:var(--parchment-faint); font-size:0.78rem; text-align:right; line-height:1.6;}
+
+  .empty{padding:40px; text-align:center; color:var(--parchment-faint); font-size:0.9rem;}
+
+  @media (max-width:860px){
+    .hero{grid-template-columns:1fr; padding-top:40px;}
+    .ledger{grid-template-columns:repeat(2,1fr);}
+    .topbar .search-wrap input{width:130px;}
+    .footer-inner{grid-template-columns:1fr; text-align:left;}
+    .footer-note{text-align:left;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001s !important; transition-duration:0.001s !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><span class="dot"></span> Python&nbsp;Mastery</div>
+  <div class="topbar-actions">
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="searchInput" type="text" placeholder="Search a topic…" autocomplete="off">
+    </div>
+    <button class="btn btn-teal" id="vsCodeBtn">VS Code Setup</button>
+    <button class="btn btn-gold" id="syllabusBtn">Download Syllabus</button>
+  </div>
+</div>
+
+<section class="hero">
+  <div>
+    <div class="eyebrow">Beginner → Expert · 24 Levels · 100% Free</div>
+    <h1>Learn <em>Python</em> the way it's actually used —<br>with every major library, inside VS&nbsp;Code.</h1>
+    <p class="lede">A complete, self-paced roadmap from "what is programming?" to AI, machine learning, GIS, and full-stack development. Every topic pairs a free video tutorial with hands-on practice you run yourself, in real time, in VS Code.</p>
+    <div class="hero-ctas">
+      <button class="btn btn-gold" onclick="document.getElementById('levels').scrollIntoView({behavior:'smooth'})">Start Learning ↓</button>
+      <button class="btn btn-ghost" id="heroVsBtn">See the VS Code Workflow</button>
+    </div>
+    <div class="dev-card">
+      <div class="dev-photo" id="devPhotoWrap">BSR</div>
+      <div class="dev-info">
+        <div class="name">Mr. Bishnu Singh Rayamajhi</div>
+        <div class="role">Math Lecturer &amp; Head, Department of Humanities &amp; Social Science<br>Kapilvastu Multiple Campus (KMC), Taulihawa</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="terminal">
+    <div class="terminal-bar">
+      <span class="r"></span><span class="y"></span><span class="g"></span>
+      <span class="title">bash — VS Code integrated terminal</span>
+    </div>
+    <div class="terminal-body" id="termBody"></div>
+  </div>
+</section>
+
+<div class="ledger">
+  <div class="ledger-cell"><div class="num">24</div><div class="lab">Structured Levels</div></div>
+  <div class="ledger-cell"><div class="num" id="topicCount">0</div><div class="lab">Topics to Master</div></div>
+  <div class="ledger-cell"><div class="num">$0</div><div class="lab">Cost, Ever</div></div>
+  <div class="ledger-cell"><div class="num">VS Code</div><div class="lab">Install → Run, Every Time</div></div>
+</div>
+
+<section class="section" id="levels">
+  <div class="section-head">
+    <div>
+      <h2>The Roadmap</h2>
+      <p>Click a level to open it, click any topic for its free tutorial, VS Code practice steps, and a downloadable notes sheet. Check items off as you finish them.</p>
+    </div>
+    <div class="overall-progress">
+      <span id="overallLabel">0 / 0 complete</span>
+      <div class="bar"><i id="overallBar"></i></div>
+    </div>
+  </div>
+  <div id="levelsContainer"></div>
+</section>
+
+<div class="footer">
+  <div class="footer-inner">
+    <div class="footer-card">
+      <div class="footer-photo" id="footerPhotoWrap"><Photo02.png class="png"></Photo02.png></div>
+      <div>
+        <h4>Developed by Mr. Bishnu Singh Rayamajhi</h4>
+        <p>Math Lecturer &amp; Head of Humanities &amp; Social Science, Kapilvastu Multiple Campus (KMC), Taulihawa. Built this roadmap to give students a free, practical, one-stop path from their first line of code to real research and industry tools.</p>
+      </div>
+    </div>
+    <div class="footer-note">
+      All tutorials link to free public videos and open documentation.<br>
+      Progress is kept for this session only — download your notes as you go.<br>
+      Photo02.png wasn't attached to this chat — upload it and it will replace the initials mark above.
+    </div>
+  </div>
+</div>
+
+<!-- Topic modal -->
+<div class="modal-backdrop" id="topicModalBackdrop">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="lvl-tag" id="modalLevelTag"></div>
+        <h3 id="modalTopicTitle"></h3>
+      </div>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="modalDesc"></p>
+      <div class="code-box" id="modalCode"></div>
+      <div class="modal-actions">
+        <a class="btn btn-gold" id="modalVideoBtn" target="_blank" rel="noopener">▶ Watch Free Tutorial</a>
+        <button class="btn btn-teal" id="modalNotesBtn">⬇ Download Notes (PDF)</button>
+        <button class="btn btn-ghost" id="modalDoneBtn">Mark as Done</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VS Code guide modal -->
+<div class="modal-backdrop" id="vsModalBackdrop">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="lvl-tag">Practical Workflow</div>
+        <h3>Installation → Run, in VS Code</h3>
+      </div>
+      <button class="modal-close" id="vsModalClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <ol class="steps">
+        <li><div class="s-title">Install Python</div><div class="s-body">Go to <code>python.org/downloads</code>, download the latest version, and run the installer. Tick <code>Add python.exe to PATH</code> before clicking Install.</div></li>
+        <li><div class="s-title">Install VS Code</div><div class="s-body">Go to <code>code.visualstudio.com</code>, download for your OS, and install it with the default options.</div></li>
+        <li><div class="s-title">Add the Python extension</div><div class="s-body">Open VS Code → Extensions icon (<code>Ctrl+Shift+X</code>) → search "Python" (by Microsoft) → click Install.</div></li>
+        <li><div class="s-title">Select your interpreter</div><div class="s-body">Press <code>Ctrl+Shift+P</code> → type "Python: Select Interpreter" → choose the Python version you installed.</div></li>
+        <li><div class="s-title">Create your first file</div><div class="s-body">File → New File → save it as <code>hello.py</code> in a folder you'll reuse for every topic.</div></li>
+        <li><div class="s-title">Write and run code</div><div class="s-body">Type <code>print("Hello, World!")</code> then click the ▷ Run button top-right, or press <code>Ctrl+F5</code>.</div></li>
+        <li><div class="s-title">Read the output</div><div class="s-body">Results appear in the Integrated Terminal panel at the bottom — that's the same terminal you'll use for every level.</div></li>
+        <li><div class="s-title">Install a library</div><div class="s-body">Open the terminal (<code>Ctrl+`</code>) and run <code>pip install numpy pandas matplotlib</code> — swap in whatever library the current topic needs.</div></li>
+        <li><div class="s-title">Debug when stuck</div><div class="s-body">Click just left of a line number to set a breakpoint, then press <code>F5</code> to step through your code line by line.</div></li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------------- Data ---------------- */
+const LEVELS = [
+{n:1, title:"Introduction to Programming", blurb:"Get your machine ready and understand what code actually does before you write any.", topics:["What is Programming?","Software and Programming Languages","Installing Python","Installing VS Code / PyCharm","Python Interpreter","Running Python Programs","Jupyter Notebook","Google Colab"]},
+{n:2, title:"Python Fundamentals", blurb:"The vocabulary of Python — variables, types, and how data moves in and out of a program.", topics:["Variables","Data Types","Input & Output","Comments","Operators","Type Conversion","String Formatting","Keywords"]},
+{n:3, title:"Control Structures", blurb:"Make decisions and repeat work — the logic that turns a script into a program.", topics:["if Statement","if-else","elif","Nested if","Match Case","for Loop","while Loop","break","continue","pass"]},
+{n:4, title:"Data Structures", blurb:"Store and organize collections of data the way real programs do.", topics:["List","Tuple","Dictionary","Set","List Comprehension","Dictionary Comprehension","Nested Collections","Iterators"]},
+{n:5, title:"Functions", blurb:"Package logic into reusable, testable building blocks.", topics:["Function Definition","Parameters","Return Statement","Lambda Functions","Recursion","Variable Scope","Modules","Packages"]},
+{n:6, title:"Object-Oriented Programming (OOP)", blurb:"Model real-world things as classes and objects — how large software is actually structured.", topics:["Classes","Objects","Constructors","Methods","Encapsulation","Inheritance","Polymorphism","Abstraction","Magic Methods"]},
+{n:7, title:"Exception Handling", blurb:"Write programs that fail gracefully instead of crashing.", topics:["try","except","else","finally","raise","Custom Exceptions","Logging"]},
+{n:8, title:"File Handling", blurb:"Read and write the file formats you'll meet in every real project.", topics:["Text Files","CSV Files","Excel Files","JSON","XML","Pickle","File Management"]},
+{n:9, title:"Python Standard Library", blurb:"The built-in toolkit every Python program quietly relies on.", topics:["math","random","statistics","datetime","os","sys","pathlib","shutil","collections","itertools"]},
+{n:10, title:"Data Analysis", blurb:"Clean, reshape, and summarize real datasets with NumPy and Pandas.", topics:["NumPy","Pandas","Data Cleaning","Data Wrangling","Missing Values","Descriptive Statistics","Pivot Tables","Data Export"]},
+{n:11, title:"Data Visualization", blurb:"Turn numbers into charts that actually communicate something.", topics:["Matplotlib","Plotly","Histograms","Scatter Plots","Bar Charts","Pie Charts","Box Plots","Heatmaps"]},
+{n:12, title:"Statistics for Research", blurb:"The statistical toolkit behind academic and applied research.", topics:["Probability","Hypothesis Testing","Correlation","Regression","ANOVA","Chi-square","t-Test","Statistical Modeling"]},
+{n:13, title:"Machine Learning", blurb:"Teach a model to find patterns in data with Scikit-Learn.", topics:["Scikit-Learn","Supervised Learning","Unsupervised Learning","Classification","Regression","Clustering","Feature Engineering","Model Evaluation"]},
+{n:14, title:"Deep Learning", blurb:"Neural networks, from first principles to modern architectures.", topics:["TensorFlow","Keras","PyTorch","Neural Networks","CNN","RNN","LSTM","Transformers"]},
+{n:15, title:"Artificial Intelligence", blurb:"Apply Python to language, vision, and the current generation of AI systems.", topics:["Natural Language Processing","Computer Vision","Generative AI","Large Language Models","AI Agents","Prompt Engineering","Retrieval-Augmented Generation (RAG)","AI Applications"]},
+{n:16, title:"Research Applications", blurb:"Python for academic work — surveys, citations, and reproducible reports.", topics:["Survey Data Analysis","Bibliometric Analysis","Text Mining","Research Automation","Publication Graphics","Scientific Computing","Reproducible Research","Academic Report Generation"]},
+{n:17, title:"GIS & Spatial Analysis", blurb:"Work with maps, coordinates, and geographic data in Python.", topics:["GeoPandas","Rasterio","Shapely","Folium","Network Analysis","Spatial Statistics","QGIS Python (PyQGIS)","Remote Sensing"]},
+{n:18, title:"Automation", blurb:"Let Python do the repetitive parts of your job for you.", topics:["Web Scraping","Selenium","BeautifulSoup","PDF Automation","Excel Automation","Email Automation","File Automation","Task Scheduling"]},
+{n:19, title:"Web Development", blurb:"Build and serve real web applications and APIs.", topics:["Flask","Django","FastAPI","REST APIs","Authentication","Database Integration","Deployment"]},
+{n:20, title:"Database Programming", blurb:"Store data properly and query it with confidence.", topics:["SQLite","MySQL","PostgreSQL","MongoDB","SQLAlchemy","CRUD Operations"]},
+{n:21, title:"Software Development", blurb:"The professional habits that separate a script from shippable software.", topics:["Git","GitHub","Unit Testing","Debugging","Packaging","Documentation","CI/CD"]},
+{n:22, title:"Scientific Computing", blurb:"Solve real mathematical and engineering problems in Python.", topics:["SciPy","SymPy","Numerical Methods","Optimization","Simulation","Differential Equations","Mathematical Modeling"]},
+{n:23, title:"Capstone Projects", blurb:"Combine everything into complete, portfolio-ready applications.", topics:["Student Management System","Library Management System","Research Data Analyzer","AI Chatbot","Weather Dashboard","GIS Mapping Tool","Face Recognition","Research Paper Analyzer","Machine Learning Prediction System","Academic Portfolio"]},
+{n:24, title:"Career Path", blurb:"Where this roadmap can take you professionally.", topics:["Python Developer","Data Analyst","Data Scientist","AI Engineer","Machine Learning Engineer","Research Scientist","GIS Analyst","Automation Engineer","Software Engineer","Full Stack Developer","Quantitative Researcher"]}
+];
+
+const CODE_HINTS = {
+  "Variables": 'name = "Bishnu"\nage = 30\nprint(name, age)',
+  "if Statement": 'marks = 82\nif marks >= 80:\n    print("Distinction")',
+  "for Loop": 'for i in range(5):\n    print(i)',
+  "List": 'students = ["Ram", "Sita", "Hari"]\nstudents.append("Gita")\nprint(students)',
+  "Function Definition": 'def greet(name):\n    return f"Hello, {name}!"\n\nprint(greet("KMC"))',
+  "Classes": 'class Student:\n    def __init__(self, name):\n        self.name = name\n\ns = Student("Bishnu")\nprint(s.name)',
+  "try": 'try:\n    x = 10 / 0\nexcept ZeroDivisionError:\n    print("Can\'t divide by zero")',
+  "NumPy": 'import numpy as np\narr = np.array([1, 2, 3])\nprint(arr.mean())',
+  "Pandas": 'import pandas as pd\ndf = pd.read_csv("data.csv")\nprint(df.head())',
+  "Matplotlib": 'import matplotlib.pyplot as plt\nplt.plot([1,2,3],[4,1,7])\nplt.show()',
+  "Flask": 'from flask import Flask\napp = Flask(__name__)\n\n@app.route("/")\ndef home():\n    return "Running in VS Code!"',
+  "Git": 'git init\ngit add .\ngit commit -m "first commit"'
+};
+
+let completed = new Set();
+let openLevels = new Set([1]);
+let activeTopic = null;
+
+const totalTopics = LEVELS.reduce((s,l)=>s+l.topics.length,0);
+document.getElementById('topicCount').textContent = totalTopics;
+
+/* ---------------- Terminal typewriter ---------------- */
+const termLines = [
+  {c:'prompt', t:'$ python --version'},
+  {c:'out', t:'Python 3.12.4'},
+  {c:'prompt', t:'$ code .'},
+  {c:'out', t:'Opening VS Code…'},
+  {c:'prompt', t:'$ pip install numpy pandas matplotlib'},
+  {c:'ok', t:'Successfully installed numpy pandas matplotlib'},
+  {c:'prompt', t:'$ python hello_world.py'},
+  {c:'ok', t:'Hello, World! 👋'}
+];
+const termBody = document.getElementById('termBody');
+async function typeTerminal(){
+  termBody.innerHTML = '';
+  for(const line of termLines){
+    const div = document.createElement('div');
+    div.className = line.c;
+    termBody.appendChild(div);
+    for(let i=0;i<line.t.length;i++){
+      div.textContent = line.t.slice(0,i+1);
+      await new Promise(r=>setTimeout(r, 14));
+    }
+    await new Promise(r=>setTimeout(r, 180));
+  }
+  const cur = document.createElement('span');
+  cur.className='cursor';
+  termBody.appendChild(cur);
+  await new Promise(r=>setTimeout(r, 2200));
+  typeTerminal();
+}
+typeTerminal();
+
+/* ---------------- Rendering ---------------- */
+function slug(s){ return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,''); }
+function topicId(levelN, topic){ return levelN + '::' + topic; }
+
+function videoLink(level, topic){
+  if(level.n === 24){
+    return 'https://www.google.com/search?q=' + encodeURIComponent(topic + ' career roadmap skills');
+  }
+  const suffix = level.n <= 3 ? ' python tutorial for beginners' : ' python tutorial';
+  return 'https://www.youtube.com/results?search_query=' + encodeURIComponent(topic + suffix);
+}
+
+function render(){
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const container = document.getElementById('levelsContainer');
+  container.innerHTML = '';
+  let anyMatch = false;
+
+  LEVELS.forEach(level=>{
+    const matchedTopics = level.topics.filter(t => !q || t.toLowerCase().includes(q) || level.title.toLowerCase().includes(q));
+    if(q && matchedTopics.length === 0) return;
+    anyMatch = true;
+
+    const doneCount = level.topics.filter(t => completed.has(topicId(level.n,t))).length;
+    const isOpen = openLevels.has(level.n) || (q && matchedTopics.length>0);
+
+    const wrap = document.createElement('div');
+    wrap.className = 'level' + (isOpen ? ' open' : '');
+
+    wrap.innerHTML = `
+      <div class="level-head" data-level="${level.n}">
+        <span class="level-num">${String(level.n).padStart(2,'0')}</span>
+        <div class="level-title">
+          <h3>${level.title}</h3>
+          <p>${level.blurb}</p>
+        </div>
+        <div class="level-meta">
+          <span class="level-progress">${doneCount}/${level.topics.length}</span>
+          <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+      </div>
+      <div class="level-body" style="${isOpen ? '' : 'max-height:0;'}">
+        <div class="topics-grid"></div>
+      </div>
+    `;
+
+    const grid = wrap.querySelector('.topics-grid');
+    (q ? matchedTopics : level.topics).forEach(topic=>{
+      const id = topicId(level.n, topic);
+      const chip = document.createElement('button');
+      chip.className = 'topic-chip' + (completed.has(id) ? ' done' : '');
+      chip.innerHTML = `
+        <span class="chk"><svg viewBox="0 0 24 24" fill="none" stroke="#0c1114" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <span>
+          <span class="t-name">${topic}</span>
+          <span class="t-hint">Level ${level.n} · tutorial + VS Code</span>
+        </span>
+      `;
+      chip.addEventListener('click', ()=> openTopicModal(level, topic));
+      grid.appendChild(chip);
+    });
+
+    const head = wrap.querySelector('.level-head');
+    head.addEventListener('click', ()=>{
+      if(openLevels.has(level.n)) openLevels.delete(level.n);
+      else openLevels.add(level.n);
+      render();
+      if(!openLevels.has(level.n)) return;
+      requestAnimationFrame(()=> wrap.scrollIntoView({behavior:'smooth', block:'nearest'}));
+    });
+
+    container.appendChild(wrap);
+
+    // set real max-height after insertion for smooth transition
+    if(isOpen){
+      const body = wrap.querySelector('.level-body');
+      requestAnimationFrame(()=>{ body.style.maxHeight = body.scrollHeight + 'px'; });
+    }
+  });
+
+  if(!anyMatch){
+    container.innerHTML = '<div class="empty">No topics match "' + q + '". Try another word.</div>';
+  }
+
+  updateOverallProgress();
+}
+
+function updateOverallProgress(){
+  const done = completed.size;
+  document.getElementById('overallLabel').textContent = done + ' / ' + totalTopics + ' complete';
+  document.getElementById('overallBar').style.width = (totalTopics? (done/totalTopics*100) : 0) + '%';
+}
+
+document.getElementById('searchInput').addEventListener('input', render);
+
+/* ---------------- Topic modal ---------------- */
+const topicModalBackdrop = document.getElementById('topicModalBackdrop');
+function openTopicModal(level, topic){
+  activeTopic = {level, topic};
+  document.getElementById('modalLevelTag').textContent = 'Level ' + String(level.n).padStart(2,'0') + ' · ' + level.title;
+  document.getElementById('modalTopicTitle').textContent = topic;
+  document.getElementById('modalDesc').textContent =
+    level.n === 24
+      ? `Explore what a ${topic} does day to day, and which topics from earlier levels matter most for that path.`
+      : `Watch the free tutorial to understand ${topic}, then rebuild the example yourself in VS Code before moving on — typing it out beats copy-pasting.`;
+  const codeBox = document.getElementById('modalCode');
+  if(CODE_HINTS[topic]){
+    codeBox.style.display='block';
+    codeBox.textContent = CODE_HINTS[topic];
+  } else {
+    codeBox.style.display='none';
+  }
+  const videoBtn = document.getElementById('modalVideoBtn');
+  videoBtn.href = videoLink(level, topic);
+  videoBtn.textContent = level.n === 24 ? '🔎 Explore This Career' : '▶ Watch Free Tutorial';
+
+  const id = topicId(level.n, topic);
+  document.getElementById('modalDoneBtn').textContent = completed.has(id) ? '✓ Marked Done' : 'Mark as Done';
+
+  topicModalBackdrop.classList.add('show');
+}
+document.getElementById('modalClose').addEventListener('click', ()=> topicModalBackdrop.classList.remove('show'));
+topicModalBackdrop.addEventListener('click', e=>{ if(e.target===topicModalBackdrop) topicModalBackdrop.classList.remove('show'); });
+
+document.getElementById('modalDoneBtn').addEventListener('click', ()=>{
+  if(!activeTopic) return;
+  const id = topicId(activeTopic.level.n, activeTopic.topic);
+  if(completed.has(id)) completed.delete(id); else completed.add(id);
+  document.getElementById('modalDoneBtn').textContent = completed.has(id) ? '✓ Marked Done' : 'Mark as Done';
+  render();
+});
+
+document.getElementById('modalNotesBtn').addEventListener('click', ()=>{
+  if(!activeTopic) return;
+  downloadTopicNotes(activeTopic.level, activeTopic.topic);
+});
+
+function downloadTopicNotes(level, topic){
+  const body = [
+    'PYTHON MASTERY — ACTIVE RECALL NOTES',
+    '=====================================',
+    'Level ' + level.n + ': ' + level.title,
+    'Topic: ' + topic,
+    '',
+    '1. CONCEPT',
+    '   Explain "' + topic + '" in your own words:',
+    '   ______________________________________________',
+    '',
+    '2. KEY SYNTAX / IDEA (from the tutorial)',
+    '   ______________________________________________',
+    '',
+    '3. VS CODE PRACTICE',
+    '   File: ' + slug(topic) + '.py',
+    '   - Type the example yourself (don\'t copy-paste)',
+    '   - Run with the Run button or Ctrl+F5',
+    '   - Record the output below',
+    '',
+    '4. OUTPUT I GOT',
+    '   ______________________________________________',
+    '',
+    '5. MISTAKE(S) I MADE AND FIXED',
+    '   ______________________________________________',
+    '',
+    '6. ONE THING I COULD TEACH SOMEONE ELSE ABOUT THIS',
+    '   ______________________________________________',
+    '',
+    '-------------------------------------------------',
+    'Python Programming with All Libraries — Zero to Expert',
+    'Developed by Mr. Bishnu Singh Rayamajhi',
+    'Math Lecturer & Head, Humanities & Social Science',
+    'Kapilvastu Multiple Campus (KMC), Taulihawa'
+  ].join('\n');
+
+  try{
+    if(window.jspdf && window.jspdf.jsPDF){
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({unit:'pt', format:'a4'});
+      const margin = 48;
+      const maxWidth = 495;
+      doc.setFont('helvetica','bold'); doc.setFontSize(14);
+      doc.text('Python Mastery — Notes', margin, 56);
+      doc.setFont('helvetica','normal'); doc.setFontSize(10.5);
+      const lines = doc.splitTextToSize(body, maxWidth);
+      let y = 84;
+      lines.forEach(line=>{
+        if(y > 780){ doc.addPage(); y = 56; }
+        doc.text(line, margin, y);
+        y += 15;
+      });
+      doc.save(slug(topic) + '-notes.pdf');
+      return;
+    }
+  }catch(e){ console.error('PDF generation failed, falling back to text file', e); }
+
+  const blob = new Blob([body], {type:'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = slug(topic) + '-notes.txt';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+
+/* ---------------- Syllabus download (full roadmap) ---------------- */
+document.getElementById('syllabusBtn').addEventListener('click', ()=>{
+  try{
+    if(window.jspdf && window.jspdf.jsPDF){
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({unit:'pt', format:'a4'});
+      const margin = 48;
+      doc.setFont('helvetica','bold'); doc.setFontSize(16);
+      doc.text('Python Programming with All Libraries — Full Syllabus', margin, 56);
+      doc.setFont('helvetica','normal'); doc.setFontSize(9.5);
+      doc.text('Developed by Mr. Bishnu Singh Rayamajhi, KMC Taulihawa', margin, 74);
+      let y = 100;
+      LEVELS.forEach(level=>{
+        if(y > 760){ doc.addPage(); y = 56; }
+        doc.setFont('helvetica','bold'); doc.setFontSize(11.5);
+        doc.text('Level ' + level.n + ' — ' + level.title, margin, y);
+        y += 16;
+        doc.setFont('helvetica','normal'); doc.setFontSize(9.5);
+        const wrapped = doc.splitTextToSize(level.topics.join('  ·  '), 495);
+        wrapped.forEach(line=>{
+          if(y > 780){ doc.addPage(); y = 56; }
+          doc.text(line, margin+8, y);
+          y += 13;
+        });
+        y += 10;
+      });
+      doc.save('python-mastery-syllabus.pdf');
+      return;
+    }
+  }catch(e){ console.error('Syllabus PDF failed, falling back to print', e); }
+  window.print();
+});
+
+/* ---------------- VS Code modal ---------------- */
+const vsModalBackdrop = document.getElementById('vsModalBackdrop');
+document.getElementById('vsCodeBtn').addEventListener('click', ()=> vsModalBackdrop.classList.add('show'));
+document.getElementById('heroVsBtn').addEventListener('click', ()=> vsModalBackdrop.classList.add('show'));
+document.getElementById('vsModalClose').addEventListener('click', ()=> vsModalBackdrop.classList.remove('show'));
+vsModalBackdrop.addEventListener('click', e=>{ if(e.target===vsModalBackdrop) vsModalBackdrop.classList.remove('show'); });
+
+document.addEventListener('keydown', e=>{
+  if(e.key === 'Escape'){
+    topicModalBackdrop.classList.remove('show');
+    vsModalBackdrop.classList.remove('show');
+  }
+});
+
+render();
+</script>
+</body>
+</html>
