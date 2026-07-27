@@ -245,6 +245,37 @@ h1.lesson-title{font-size:26px;font-weight:700;margin-bottom:4px;letter-spacing:
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
+/* Teacher mode */
+.teach-box{
+  display:none;background:linear-gradient(135deg,#1a2a1e,#141b16);border:1px solid #2d6a3e;border-radius:10px;
+  padding:16px 18px;margin:18px 0 8px;
+}
+body.teacher-on .teach-box{display:block;}
+.teach-box .tb-head{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:1.2px;color:var(--green);font-family:'IBM Plex Mono',monospace;margin-bottom:12px;}
+.teach-row{margin-bottom:10px;}
+.teach-row:last-child{margin-bottom:0;}
+.teach-row b{display:block;font-size:11.5px;color:var(--green);font-family:'IBM Plex Mono',monospace;margin-bottom:3px;letter-spacing:.3px;}
+.teach-row p{font-size:13px;color:#c4c8d4;line-height:1.6;}
+.actbtn.teacher-active{color:var(--green);}
+.actbtn.teacher-active::before{content:'';position:absolute;left:-8px;top:8px;bottom:8px;width:3px;background:var(--green);border-radius:2px;}
+
+.lvl-head .plan-ico{margin-left:4px;opacity:.55;font-size:11px;}
+.lvl-head .plan-ico:hover{opacity:1;color:var(--blue);}
+
+.plan-row{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px;}
+.plan-row .pn{width:26px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;flex-shrink:0;}
+.plan-row .pt{flex:1;}
+.plan-row .pt b{display:block;font-size:13.5px;}
+.plan-row .pt span{font-size:12px;color:var(--text-dim);}
+
+@media print{
+  .titlebar,.actbar,.sidebar,.tabs,.termwrap,.btnrow,.nextprev{display:none !important;}
+  body,.editor{background:#fff !important;color:#111 !important;overflow:visible !important;height:auto !important;}
+  .pane{display:block !important;max-width:100% !important;}
+  .pane:not(.active){display:none !important;}
+  .codebox,.teach-box,.resitem,.plan-row{border-color:#ccc !important;background:#f7f7f7 !important;color:#111 !important;}
+}
+
 /* Mobile */
 @media(max-width:820px){
   .sidebar{position:fixed;left:0;top:38px;bottom:0;z-index:50;width:78vw;max-width:300px;}
@@ -271,6 +302,7 @@ h1.lesson-title{font-size:26px;font-weight:700;margin-bottom:4px;letter-spacing:
       <div class="actbtn active" data-act="explorer" title="Explorer">📁</div>
       <div class="actbtn" data-act="setup" title="VS Code Setup">⚙️</div>
       <div class="actbtn" data-act="about" title="About / Developer">👤</div>
+      <div class="actbtn" id="teacherBtn" data-act="teacher" title="Teacher Mode — objectives, activities, discussion prompts">🧑‍🏫</div>
       <div class="actbtn" data-act="toggle" title="Toggle sidebar">☰</div>
     </div>
 
@@ -581,6 +613,211 @@ gcc hello.o -o hello         <span class="tok-com">// 4. Link to executable</spa
 }
 };
 
+/* =========================================================
+   CURATED FREE RESOURCES — real, verified, free links.
+   Keyed by lowercase topic name (stripped of parentheses) so the
+   same curated link applies wherever a matching topic appears.
+   Anything not listed here falls back to a live free search below.
+   ========================================================= */
+const FREE_FULL_COURSE_1 = "https://www.youtube.com/watch?v=87SH2Cn0s9A"; // "C Programming Full Course for free" — freeCodeCamp-style, timestamped
+const FREE_FULL_COURSE_2 = "https://www.youtube.com/watch?v=ssJY5MDLjlo"; // "C Programming for Beginners | Full Course" — timestamped
+const FCC_KR_COURSE      = "https://www.freecodecamp.org/news/complete-c-programming-course-from-dr-chuck/"; // Dr. Chuck's free 19-hr K&R course
+
+function cleanKey(topic){ return topic.replace(/\s*\(.*?\)\s*/g,'').trim().toLowerCase(); }
+
+const LEARN_C_LINKS = {
+  "what is programming?": "https://learn-c.org/en/Hello%2C_World%21",
+  "writing the first c program": "https://learn-c.org/en/Hello%2C_World%21",
+  "variables": "https://learn-c.org/en/Variables_and_Types",
+  "constants": "https://learn-c.org/en/Variables_and_Types",
+  "data types": "https://learn-c.org/en/Variables_and_Types",
+  "type conversion": "https://learn-c.org/en/Variables_and_Types",
+  "one-dimensional arrays": "https://learn-c.org/en/Arrays",
+  "two-dimensional arrays": "https://learn-c.org/en/Multidimensional_Arrays",
+  "multi-dimensional arrays": "https://learn-c.org/en/Multidimensional_Arrays",
+  "matrix operations": "https://learn-c.org/en/Multidimensional_Arrays",
+  "if statement": "https://learn-c.org/en/Conditions",
+  "if-else": "https://learn-c.org/en/Conditions",
+  "nested if": "https://learn-c.org/en/Conditions",
+  "character arrays": "https://learn-c.org/en/Strings",
+  "string handling": "https://learn-c.org/en/Strings",
+  "string functions": "https://learn-c.org/en/Strings",
+  "for loop": "https://learn-c.org/en/For_loops",
+  "while loop": "https://learn-c.org/en/While_loops",
+  "do-while loop": "https://learn-c.org/en/While_loops",
+  "function declaration": "https://learn-c.org/en/Functions",
+  "function definition": "https://learn-c.org/en/Functions",
+  "function calling": "https://learn-c.org/en/Functions",
+  "parameters": "https://learn-c.org/en/Functions",
+  "return values": "https://learn-c.org/en/Functions",
+  "modular programming": "https://learn-c.org/en/Functions",
+  "storage classes": "https://learn-c.org/en/Static",
+  "pointer basics": "https://learn-c.org/en/Pointers",
+  "pointer to pointer": "https://learn-c.org/en/Pointers",
+  "void pointer": "https://learn-c.org/en/Pointers",
+  "null pointer": "https://learn-c.org/en/Pointers",
+  "memory addressing": "https://learn-c.org/en/Pointers",
+  "pointer arithmetic": "https://learn-c.org/en/Pointer_Arithmetics",
+  "arrays and pointers": "https://learn-c.org/en/Arrays_and_Pointers",
+  "function pointers": "https://learn-c.org/en/Function_Pointers",
+  "malloc()": "https://learn-c.org/en/Dynamic_allocation",
+  "calloc()": "https://learn-c.org/en/Dynamic_allocation",
+  "realloc()": "https://learn-c.org/en/Dynamic_allocation",
+  "free()": "https://learn-c.org/en/Dynamic_allocation",
+  "dynamic arrays": "https://learn-c.org/en/Dynamic_allocation",
+  "recursive functions": "https://learn-c.org/en/Recursion",
+  "recursion techniques": "https://learn-c.org/en/Recursion",
+  "backtracking": "https://learn-c.org/en/Recursion",
+  "linked lists": "https://learn-c.org/en/Linked_lists",
+  "trees": "https://learn-c.org/en/Binary_trees",
+  "binary search trees": "https://learn-c.org/en/Binary_trees",
+  "structures": "https://learn-c.org/en/Structures",
+  "nested structures": "https://learn-c.org/en/Structures",
+  "arrays of structures": "https://learn-c.org/en/Structures",
+  "pointers to structures": "https://learn-c.org/en/Structures",
+  "unions": "https://learn-c.org/en/Unions",
+  "bit fields": "https://learn-c.org/en/Bitmasks"
+};
+
+// Real, free, non-video reference PDFs/pages for high-value topics
+const CURATED_PDF = {
+  "pointer basics": "https://pdos.csail.mit.edu/6.828/2018/readings/pointers.pdf",
+  "pointer arithmetic": "https://pdos.csail.mit.edu/6.828/2018/readings/pointers.pdf",
+  "pointer to pointer": "https://pdos.csail.mit.edu/6.828/2018/readings/pointers.pdf",
+  "arrays and pointers": "https://pdos.csail.mit.edu/6.828/2018/readings/pointers.pdf",
+  "function pointers": "https://pdos.csail.mit.edu/6.828/2018/readings/pointers.pdf",
+  "memory addressing": "https://pdos.csail.mit.edu/6.828/2018/readings/pointers.pdf"
+};
+
+// GeeksforGeeks — verified real article URLs (free), covering ~90 additional topics
+const GFG_LINKS = {
+  "what is programming?": "https://www.geeksforgeeks.org/c/c-language-introduction/",
+  "history of c programming": "https://www.geeksforgeeks.org/c/c-language-introduction/",
+  "features of c": "https://www.geeksforgeeks.org/c/c-language-introduction/",
+  "applications of c": "https://www.geeksforgeeks.org/c/c-language-introduction/",
+  "installing gcc / clang": "https://www.geeksforgeeks.org/c/setting-up-c-development-environment/",
+  "ides (code::blocks, vs code, dev-c++, clion)": "https://www.geeksforgeeks.org/c/setting-up-c-development-environment/",
+  "program compilation process": "https://www.geeksforgeeks.org/c/compiling-a-c-program-behind-the-scenes/",
+  "identifiers": "https://www.geeksforgeeks.org/c/c-identifiers/",
+  "keywords": "https://www.geeksforgeeks.org/c/keywords-in-c/",
+  "variables": "https://www.geeksforgeeks.org/c/variables-in-c/",
+  "data types": "https://www.geeksforgeeks.org/c/data-types-in-c/",
+  "operators": "https://www.geeksforgeeks.org/c/operators-in-c/",
+  "input & output (printf, scanf)": "https://www.geeksforgeeks.org/c/basic-input-and-output-in-c/",
+  "if statement": "https://www.geeksforgeeks.org/c/decision-making-in-c/",
+  "if-else": "https://www.geeksforgeeks.org/c/decision-making-in-c/",
+  "nested if": "https://www.geeksforgeeks.org/c/decision-making-in-c/",
+  "for loop": "https://www.geeksforgeeks.org/c/c-loops/",
+  "while loop": "https://www.geeksforgeeks.org/c/c-loops/",
+  "do-while loop": "https://www.geeksforgeeks.org/c/c-loops/",
+  "function declaration": "https://www.geeksforgeeks.org/c/c-functions/",
+  "function definition": "https://www.geeksforgeeks.org/c/c-functions/",
+  "function calling": "https://www.geeksforgeeks.org/c/c-functions/",
+  "modular programming": "https://www.geeksforgeeks.org/c/c-functions/",
+  "parameters": "https://www.geeksforgeeks.org/c/parameter-passing-techniques-in-c-cpp/",
+  "recursive functions": "https://www.geeksforgeeks.org/c/c-recursion/",
+  "recursion techniques": "https://www.geeksforgeeks.org/dsa/recursion-algorithms/",
+  "storage classes": "https://www.geeksforgeeks.org/c/storage-classes-in-c/",
+  "inline concepts": "https://www.geeksforgeeks.org/c/inline-function-in-c/",
+  "one-dimensional arrays": "https://www.geeksforgeeks.org/c/c-arrays/",
+  "two-dimensional arrays": "https://www.geeksforgeeks.org/c/multidimensional-arrays-in-c/",
+  "multi-dimensional arrays": "https://www.geeksforgeeks.org/c/multidimensional-arrays-in-c/",
+  "matrix operations": "https://www.geeksforgeeks.org/dsa/matrix/",
+  "character arrays": "https://www.geeksforgeeks.org/c/strings-in-c/",
+  "string handling": "https://www.geeksforgeeks.org/c/strings-in-c/",
+  "string functions": "https://www.geeksforgeeks.org/c/string-functions-in-c/",
+  "dynamic arrays": "https://www.geeksforgeeks.org/c/dynamic-memory-allocation-in-c-using-malloc-calloc-free-and-realloc/",
+  "pointer basics": "https://www.geeksforgeeks.org/c/c-pointers/",
+  "pointer arithmetic": "https://www.geeksforgeeks.org/c/pointer-arithmetics-in-c-with-examples/",
+  "pointer to pointer": "https://www.geeksforgeeks.org/c/c-pointer-to-pointer-double-pointer/",
+  "function pointers": "https://www.geeksforgeeks.org/c/function-pointer-in-c/",
+  "malloc()": "https://www.geeksforgeeks.org/c/dynamic-memory-allocation-in-c-using-malloc-calloc-free-and-realloc/",
+  "calloc()": "https://www.geeksforgeeks.org/c/dynamic-memory-allocation-in-c-using-malloc-calloc-free-and-realloc/",
+  "realloc()": "https://www.geeksforgeeks.org/c/dynamic-memory-allocation-in-c-using-malloc-calloc-free-and-realloc/",
+  "free()": "https://www.geeksforgeeks.org/c/dynamic-memory-allocation-in-c-using-malloc-calloc-free-and-realloc/",
+  "memory leaks": "https://www.geeksforgeeks.org/c/what-is-memory-leak-how-can-we-avoid/",
+  "heap vs stack": "https://www.geeksforgeeks.org/c/memory-layout-of-c-program/",
+  "structures": "https://www.geeksforgeeks.org/c/structures-c/",
+  "nested structures": "https://www.geeksforgeeks.org/c/structures-c/",
+  "arrays of structures": "https://www.geeksforgeeks.org/c/structures-c/",
+  "pointers to structures": "https://www.geeksforgeeks.org/c/structures-c/",
+  "unions": "https://www.geeksforgeeks.org/c/c-unions/",
+  "enumerations (enum)": "https://www.geeksforgeeks.org/c/enumeration-enum-c/",
+  "text files": "https://www.geeksforgeeks.org/c/basics-file-handling-c/",
+  "binary files": "https://www.geeksforgeeks.org/c/basics-file-handling-c/",
+  "fopen()": "https://www.geeksforgeeks.org/c/basics-file-handling-c/",
+  "fclose()": "https://www.geeksforgeeks.org/c/basics-file-handling-c/",
+  "fread()": "https://www.geeksforgeeks.org/c/basics-file-handling-c/",
+  "fwrite()": "https://www.geeksforgeeks.org/c/basics-file-handling-c/",
+  "file positioning": "https://www.geeksforgeeks.org/c/basics-file-handling-c/",
+  "error handling": "https://www.geeksforgeeks.org/c/error-handling-in-c/",
+  "header files": "https://www.geeksforgeeks.org/c/header-files-in-c-cpp-and-its-uses/",
+  "#include": "https://www.geeksforgeeks.org/c/cc-preprocessors/",
+  "#define": "https://www.geeksforgeeks.org/c/macros-and-its-types-in-c-cpp/",
+  "macros": "https://www.geeksforgeeks.org/c/macros-and-its-types-in-c-cpp/",
+  "linked lists": "https://www.geeksforgeeks.org/c/linked-list-in-c/",
+  "stacks": "https://www.geeksforgeeks.org/c/implement-stack-in-c/",
+  "queues": "https://www.geeksforgeeks.org/c/queue-in-c/",
+  "trees": "https://www.geeksforgeeks.org/c/binary-tree-in-c/",
+  "binary search trees": "https://www.geeksforgeeks.org/c/binary-tree-in-c/",
+  "graphs": "https://www.geeksforgeeks.org/c/implementation-of-graph-in-c/",
+  "hash tables": "https://www.geeksforgeeks.org/dsa/implementation-of-hash-table-in-c-using-separate-chaining/",
+  "heaps": "https://www.geeksforgeeks.org/c/heap-in-c/",
+  "searching algorithms": "https://www.geeksforgeeks.org/dsa/searching-algorithms/",
+  "sorting algorithms": "https://www.geeksforgeeks.org/dsa/sorting-algorithms/",
+  "divide & conquer": "https://www.geeksforgeeks.org/dsa/divide-and-conquer/",
+  "greedy algorithms": "https://www.geeksforgeeks.org/dsa/greedy-algorithms/",
+  "dynamic programming": "https://www.geeksforgeeks.org/competitive-programming/dynamic-programming/",
+  "backtracking": "https://www.geeksforgeeks.org/dsa/backtracking-algorithms/",
+  "time & space complexity": "https://www.geeksforgeeks.org/dsa/analysis-of-algorithms/",
+  "signals": "https://www.geeksforgeeks.org/c/signals-c-language/",
+  "system calls": "https://www.geeksforgeeks.org/c/input-output-system-calls-c-create-open-close-read-write/",
+  "memory management": "https://www.geeksforgeeks.org/c/memory-layout-of-c-program/",
+  "threads": "https://www.geeksforgeeks.org/c/multithreading-in-c/",
+  "socket programming": "https://www.geeksforgeeks.org/c/socket-programming-cc/",
+  "multithreading": "https://www.geeksforgeeks.org/c/multithreading-in-c/"
+};
+
+// Official free documentation — stable canonical sources for tools (Level 18: Software Engineering)
+const OFFICIAL_LINKS = {
+  "git": "https://git-scm.com/doc",
+  "github": "https://docs.github.com/en/get-started",
+  "makefiles": "https://www.gnu.org/software/make/manual/make.html",
+  "debugging (gdb)": "https://sourceware.org/gdb/documentation/",
+  "version control": "https://git-scm.com/doc"
+};
+
+function resourceLinksFor(li, topic){
+  const key = cleanKey(topic);
+  const tier = tierOf(li);
+  const hasArticle = LEARN_C_LINKS[key] || GFG_LINKS[key];
+  const video = hasArticle ? FREE_FULL_COURSE_1 : (tier==='adv' ? FCC_KR_COURSE : FREE_FULL_COURSE_1);
+  const searchVideo = 'https://www.youtube.com/results?search_query='+encodeURIComponent('C programming '+topic+' tutorial free');
+  const article = LEARN_C_LINKS[key] || null;   // interactive lesson w/ live compiler
+  const gfg = GFG_LINKS[key] || null;           // written reference article
+  const official = OFFICIAL_LINKS[key] || null; // official free docs
+  const pdf = CURATED_PDF[key] || null;
+  const searchPdf = 'https://www.google.com/search?q='+encodeURIComponent('"'+topic+'" C programming notes filetype:pdf');
+  return {video, searchVideo, article, gfg, official, pdf, searchPdf, curated: !!(article||gfg||official)};
+}
+
+function estMinutes(li,ti){
+  // Deterministic pseudo-varied estimate: 15–40 min based on tier + position
+  const tier = tierOf(li);
+  const base = tier==='beg'?18:tier==='int'?25:35;
+  return base + ((li*7+ti*3) % 10);
+}
+
+function teachingAid(li,ti,topic,tier){
+  const lvl = LEVELS[li].t;
+  const mins = estMinutes(li,ti);
+  return `
+    <div class="teach-row"><b>LEARNING OBJECTIVE</b><p>By the end of this session, students will be able to explain <i>${topic}</i> in their own words and write a short, correctly compiling C program that demonstrates it.</p></div>
+    <div class="teach-row"><b>SUGGESTED CLASSROOM ACTIVITY (${mins} min)</b><p>Live-code the example on-screen in VS Code. Pause before running it and ask students to predict the output on paper. Then hit Run together, compare predictions, and have students modify one line (a value, a condition, a loop bound) and re-predict.</p></div>
+    <div class="teach-row"><b>DISCUSSION QUESTION</b><p>Where else in the ${lvl} unit — or earlier in the course — have you seen an idea similar to ${topic}? What would break if you removed it from the example program?</p></div>
+    <div class="teach-row"><b>QUICK CHECK</b><p>Ask one student to explain ${topic} back to the class in a single sentence before moving on — if they can't, revisit the code example together.</p></div>`;
+}
+
 /* Generic fallback content so EVERY topic works smoothly */
 function fallbackContent(li, topic){
   const lvl = LEVELS[li].t;
@@ -642,7 +879,7 @@ function renderTree(filter=""){
     const wrap = document.createElement('div'); wrap.className='lvl';
     const head = document.createElement('div');
     head.className='lvl-head'+((!f && li>1) ? '' : ' open');
-    head.innerHTML = `<span class="car">▸</span><span class="num">L${li+1}</span><span class="ttl">${lvl.t}</span><span class="cnt">${lvl.topics.length}</span>`;
+    head.innerHTML = `<span class="car">▸</span><span class="num">L${li+1}</span><span class="ttl">${lvl.t}</span><span class="cnt">${lvl.topics.length}</span><span class="plan-ico" title="Printable lesson plan" onclick="event.stopPropagation();openPlan(${li})">🖨</span>`;
     const tlist = document.createElement('div');
     tlist.className='topics'+((!f && li>1)?'':' open');
     (f?matchTopics:lvl.topics).forEach(tp=>{
@@ -674,9 +911,12 @@ function tabLabel(id){
   if(id==='welcome') return '👋 Welcome';
   if(id==='setup') return '⚙️ vscode-setup.md';
   if(id==='about') return '👤 about.md';
+  if(id.startsWith('plan-')) return '🖨 plan_L'+(Number(id.split('-')[1])+1)+'.md';
   const [li,ti] = id.split('|').map(Number);
   return '📄 '+LEVELS[li].topics[ti].split('(')[0].trim().replace(/\s+/g,'_').toLowerCase().slice(0,22)+'.c';
 }
+
+function openPlan(li){ openTabInternal('plan-'+li); }
 
 function openTopic(li,ti){
   const id = topicId(li,ti);
@@ -714,6 +954,7 @@ function renderEditor(){
     if(id==='welcome') pane.innerHTML = welcomeHTML();
     else if(id==='setup') pane.innerHTML = setupHTML();
     else if(id==='about') pane.innerHTML = aboutHTML();
+    else if(id.startsWith('plan-')) pane.innerHTML = planHTML(Number(id.split('-')[1]));
     else pane.innerHTML = lessonHTML(id);
     editorEl.appendChild(pane);
   });
@@ -727,9 +968,9 @@ function renderEditor(){
 function welcomeHTML(){
   return `
   <div class="hero">
-    <div class="kicker">// FREE · BEGINNER → EXPERT · 21 LEVELS · 190+ TOPICS</div>
-    <h1>Learn <span>C</span>.<br>Compile it. Run it.<br>Own it.</h1>
-    <p>A complete, self-paced curriculum for mastering C — from your very first <span class="mono">printf</span> to sockets, embedded firmware and operating-system components. Every topic ships with a runnable example, a free video pointer, and free written notes, built to be worked through right inside VS Code.</p>
+    <div class="kicker">// FOR TEACHING &amp; LEARNING · FREE · BEGINNER → EXPERT · 21 LEVELS · 190+ TOPICS</div>
+    <h1>Teach <span>C</span>. Learn <span>C</span>.<br>Compile it. Run it.<br>Own it.</h1>
+    <p>A classroom-ready, self-paced curriculum for mastering C — from your very first <span class="mono">printf</span> to sockets, embedded firmware and operating-system components. Every topic ships with a runnable example, a linked free video tutorial, and free PDF/written notes — built for teachers to demonstrate and students to practice right inside VS Code.</p>
     <div class="btnrow">
       <div class="btn primary" onclick="openTopic(0,7)">▶ Start Level 1</div>
       <div class="btn" onclick="openTabInternal('setup')">⚙ Set up VS Code</div>
@@ -747,7 +988,9 @@ function welcomeHTML(){
     <div class="resitem" onclick="document.querySelector('[data-act=explorer]').click()">🗂️ <div>Browse the <b>Explorer</b> on the left — 21 levels, fully expandable, just like a real project</div></div>
     <div class="resitem" onclick="document.querySelector('[data-act=setup]').click()">⚙️ <div>Follow <b>VS Code Setup</b> once — install, configure, compile, run</div></div>
     <div class="resitem">▶️ <div>Open any topic → hit <b>Run</b> → watch the terminal compile and execute it, live</div></div>
-    <div class="resitem">🎥 <div>Every lesson links to <b>free video tutorials</b> and <b>free PDF notes</b></div></div>
+    <div class="resitem">🎥 <div>Every lesson links a <b>free video tutorial</b> and <b>free PDF / reference notes</b> — curated from learn-c.org, freeCodeCamp and MIT-hosted material where available</div></div>
+    <div class="resitem">💻 <div>Each topic includes exact <b>Run in VS Code</b> steps — save, compile with <b>gcc</b>, run — no separate setup guessing</div></div>
+    <div class="resitem" onclick="document.getElementById('teacherBtn').click()">🧑‍🏫 <div>Flip on <b>Teacher Mode</b> (top-left) to add a learning objective, classroom activity, and discussion prompt to every topic — plus a printable lesson plan per level (🖨 icon next to each level)</div></div>
     <div class="resitem">✅ <div>Check off topics as you finish — your progress is saved automatically</div></div>
   </div>`;
 }
@@ -778,6 +1021,32 @@ main.exe      <span class="tok-com">// Windows</span></pre></div>
   <div class="setup-step"><div class="setup-num">6</div><div><h3>One-click Run &amp; Debug (optional)</h3><p>Add a <span class="kbd">tasks.json</span> under <span class="kbd">.vscode/</span> to bind compilation to <span class="kbd">Ctrl+Shift+B</span>, and a <span class="kbd">launch.json</span> to step through code line-by-line with breakpoints using the built-in debugger.</p></div></div>
 
   <div class="btnrow"><div class="btn primary" onclick="openTopic(0,7)">▶ I'm set up — start Level 1</div></div>`;
+}
+
+function planHTML(li){
+  const lvl = LEVELS[li];
+  const tier = tierOf(li);
+  const totalMin = lvl.topics.reduce((s,_,ti)=> s+estMinutes(li,ti), 0);
+  const rows = lvl.topics.map((tp,ti)=>{
+    return `<div class="plan-row"><div class="pn">${String(ti+1).padStart(2,'0')}</div><div class="pt"><b>${tp}</b><span>${estMinutes(li,ti)} min · ${tierLabel(tier)}</span></div></div>`;
+  }).join('');
+  return `
+  <div class="crumb">LESSON PLAN / <b>LEVEL ${li+1}</b></div>
+  <h1 class="lesson-title">${lvl.t}</h1>
+  <div class="badge-row">
+    <span class="badge lv-${tier}">${tierLabel(tier)}</span>
+    <span class="badge">${lvl.topics.length} topics</span>
+    <span class="badge">~${totalMin} min total</span>
+  </div>
+  <div class="desc">Printable overview for classroom use — objectives, activities, and discussion prompts for every topic in this level live inside each lesson when <b>Teacher Mode</b> is on.</div>
+  <div class="btnrow">
+    <div class="btn primary" onclick="window.print()">🖨 Print this plan</div>
+    <div class="btn" onclick="toggleTeacherMode()">🧑‍🏫 Toggle Teacher Mode</div>
+  </div>
+  <div class="section-lbl">TOPIC SEQUENCE</div>
+  <div>${rows}</div>
+  <div class="section-lbl">LEVEL OBJECTIVE</div>
+  <div class="desc">By the end of <i>${lvl.t}</i>, students should be able to read, write, and run C programs that correctly use every topic listed above, and explain each one aloud in a single sentence.</div>`;
 }
 
 function aboutHTML(){
@@ -825,6 +1094,11 @@ function lessonHTML(id){
   </div>
   <div class="desc">${c.desc}</div>
 
+  <div class="teach-box">
+    <div class="tb-head">🧑‍🏫 FOR TEACHERS — LESSON AID</div>
+    ${teachingAid(li,ti,topic,tier)}
+  </div>
+
   <div class="section-lbl">CODE EXAMPLE — main.c</div>
   <div class="codebox">
     <div class="cb-head"><span>main.c</span><span>C11 · UTF-8</span></div>
@@ -834,22 +1108,31 @@ function lessonHTML(id){
   <div class="btnrow">
     <div class="btn primary" id="runBtn">▶ Run in Terminal</div>
     <div class="btn video" id="videoBtn">🎥 Watch Free Video</div>
-    <div class="btn pdf" id="pdfBtn">📄 Free PDF Notes</div>
+    <div class="btn pdf" id="pdfBtn">📄 Free PDF / Notes</div>
     <div class="btn ${done?'done':''}" id="doneBtn">${done? '✓ Completed' : '☐ Mark Complete'}</div>
   </div>
 
   <div class="section-lbl">FREE LEARNING RESOURCES</div>
-  <div class="reslist">
-    <div class="resitem" id="resVideo">🎥 <div>Search free video tutorials for "${topic}"</div><span class="tag">YouTube</span></div>
-    <div class="resitem" id="resPdf">📄 <div>Find free PDF notes for "${topic}"</div><span class="tag">Search</span></div>
-    <div class="resitem" onclick="window.open('https://www.programiz.com/c-programming','_blank')">📘 <div>Programiz — free written C tutorial</div><span class="tag">FREE</span></div>
-    <div class="resitem" onclick="window.open('https://www.geeksforgeeks.org/c-programming-language/','_blank')">📘 <div>GeeksforGeeks — free articles &amp; practice problems</div><span class="tag">FREE</span></div>
+  <div class="reslist" id="resList"></div>
+
+  <div class="section-lbl">▶ RUN THIS IN VS CODE</div>
+  <div class="codebox">
+    <div class="cb-head"><span>steps</span><span>takes ~30 sec</span></div>
+    <pre><span class="tok-num">1.</span>  Create a folder, open it in VS Code (<span class="tok-str">File → Open Folder</span>)
+<span class="tok-num">2.</span>  New file → save as <span class="tok-fn">${fileName(topic)}</span>, paste the code above
+<span class="tok-num">3.</span>  Open the integrated terminal — <span class="tok-str">Ctrl + &#96;</span> (macOS: <span class="tok-str">Cmd + &#96;</span>)
+<span class="tok-num">4.</span>  Compile:  <span class="tok-fn">gcc ${fileName(topic)} -o out</span>
+<span class="tok-num">5.</span>  Run:      <span class="tok-fn">./out</span>   <span class="tok-com">(Windows: out.exe)</span></pre>
   </div>
 
   <div class="nextprev">
     <div class="np-btn ${prevId?'':'off'}" onclick="${prevId?`openTopic(${prevId[0]},${prevId[1]})`:''}">${prevId?'← PREVIOUS<br><b>'+LEVELS[prevId[0]].topics[prevId[1]]+'</b>':''}</div>
     <div class="np-btn right ${nextId?'':'off'}" onclick="${nextId?`openTopic(${nextId[0]},${nextId[1]})`:''}">${nextId?'NEXT →<br><b>'+LEVELS[nextId[0]].topics[nextId[1]]+'</b>':''}</div>
   </div>`;
+}
+
+function fileName(topic){
+  return topic.split('(')[0].trim().replace(/[^a-zA-Z0-9]+/g,'_').toLowerCase().replace(/^_+|_+$/g,'').slice(0,24) + '.c';
 }
 
 function prevTopicId(li,ti){
@@ -867,21 +1150,42 @@ function wireLesson(li,ti){
   const id = topicId(li,ti);
   const topic = LEVELS[li].topics[ti];
   const c = CONTENT[id] || fallbackContent(li, topic);
+  const r = resourceLinksFor(li, topic);
 
   const runBtn = document.getElementById('runBtn');
   if(runBtn) runBtn.onclick = ()=> runInTerminal(topic, c.out);
 
   const videoBtn = document.getElementById('videoBtn');
-  const resVideo = document.getElementById('resVideo');
-  const videoUrl = 'https://www.youtube.com/results?search_query='+encodeURIComponent('C programming '+topic+' tutorial free');
-  if(videoBtn) videoBtn.onclick = ()=> window.open(videoUrl,'_blank');
-  if(resVideo) resVideo.onclick = ()=> window.open(videoUrl,'_blank');
+  if(videoBtn) videoBtn.onclick = ()=> window.open(r.video,'_blank');
 
   const pdfBtn = document.getElementById('pdfBtn');
-  const resPdf = document.getElementById('resPdf');
-  const pdfUrl = 'https://www.google.com/search?q='+encodeURIComponent('"'+topic+'" C programming notes pdf');
-  if(pdfBtn) pdfBtn.onclick = ()=> window.open(pdfUrl,'_blank');
-  if(resPdf) resPdf.onclick = ()=> window.open(pdfUrl,'_blank');
+  const pdfTarget = r.pdf || r.gfg || r.article || r.searchPdf;
+  if(pdfBtn) pdfBtn.onclick = ()=> window.open(pdfTarget,'_blank');
+
+  // Build the resource list — curated (real, verified) links first, then live search fallbacks
+  const resList = document.getElementById('resList');
+  if(resList){
+    let rows = "";
+    rows += `<div class="resitem" onclick="window.open('${r.video}','_blank')">🎥 <div>Watch: free full C course covering "${topic}"</div><span class="tag">YouTube · Free</span></div>`;
+    if(r.article){
+      rows += `<div class="resitem" onclick="window.open('${r.article}','_blank')">📘 <div>learn-c.org — interactive lesson &amp; live editor for "${topic}"</div><span class="tag">Verified free</span></div>`;
+    }
+    if(r.gfg){
+      rows += `<div class="resitem" onclick="window.open('${r.gfg}','_blank')">📗 <div>GeeksforGeeks — written article on "${topic}"</div><span class="tag">Verified free</span></div>`;
+    }
+    if(r.official){
+      rows += `<div class="resitem" onclick="window.open('${r.official}','_blank')">🛠️ <div>Official free documentation for "${topic}"</div><span class="tag">Official · Free</span></div>`;
+    }
+    if(r.pdf){
+      rows += `<div class="resitem" onclick="window.open('${r.pdf}','_blank')">📄 <div>Free PDF: "A Tutorial on Pointers and Arrays in C" (MIT-hosted)</div><span class="tag">Verified free</span></div>`;
+    }
+    if(!r.article && !r.gfg){
+      rows += `<div class="resitem" onclick="window.open('${r.searchVideo}','_blank')">🔎 <div>More free videos specifically on "${topic}"</div><span class="tag">YouTube search</span></div>`;
+    }
+    rows += `<div class="resitem" onclick="window.open('${r.searchPdf}','_blank')">🔎 <div>More free PDF notes on "${topic}"</div><span class="tag">Search</span></div>`;
+    rows += `<div class="resitem" onclick="window.open('https://www.programiz.com/c-programming','_blank')">📘 <div>Programiz — free written C tutorial</div><span class="tag">Free</span></div>`;
+    resList.innerHTML = rows;
+  }
 
   const doneBtn = document.getElementById('doneBtn');
   if(doneBtn) doneBtn.onclick = ()=>{
@@ -942,13 +1246,33 @@ document.querySelectorAll('.actbtn').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     const act = btn.dataset.act;
     if(act==='toggle'){ document.getElementById('sidebar').classList.toggle('collapsed'); return; }
-    document.querySelectorAll('.actbtn').forEach(b=>b.classList.remove('active'));
-    if(act!=='toggle') btn.classList.add('active');
+    if(act==='teacher'){ toggleTeacherMode(); return; }
+    document.querySelectorAll('.actbtn').forEach(b=>{ if(b.id!=='teacherBtn') b.classList.remove('active'); });
+    btn.classList.add('active');
     if(act==='setup') openTabInternal('setup');
     if(act==='about') openTabInternal('about');
     if(act==='explorer'){ document.getElementById('sidebar').classList.remove('collapsed'); }
   });
 });
+
+let teacherMode = false;
+function toggleTeacherMode(){
+  teacherMode = !teacherMode;
+  document.body.classList.toggle('teacher-on', teacherMode);
+  document.getElementById('teacherBtn').classList.toggle('teacher-active', teacherMode);
+  try{ window.storage.set('c_app_teacher_mode', teacherMode ? '1':'0'); }catch(e){}
+  showToast(teacherMode ? '🧑‍🏫 Teacher Mode on — objectives & activities added to every lesson' : 'Teacher Mode off');
+}
+async function loadTeacherMode(){
+  try{
+    const r = await window.storage.get('c_app_teacher_mode');
+    if(r && r.value==='1'){
+      teacherMode = true;
+      document.body.classList.add('teacher-on');
+      document.getElementById('teacherBtn').classList.add('teacher-active');
+    }
+  }catch(e){}
+}
 
 /* =========================================================
    TOAST
@@ -969,6 +1293,7 @@ addLine('Type-safe. Memory-aware. 100% free.','info');
 renderTabs();
 renderEditor();
 loadProgress();
+loadTeacherMode();
 </script>
 </body>
 </html>
