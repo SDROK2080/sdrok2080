@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMART Modern Excel Master Program</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #217346;
+            --primary-dark: #185c37;
+            --accent: #d83b01;
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --text: #2d3436;
+            --text-light: #636e72;
+            --border: #dfe6e9;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        .app-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 40px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .app-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        .app-header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 50%;
+        }
+        .app-header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin: 0 0 8px 0;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .app-header .subtitle {
+            font-size: 15px;
+            opacity: 0.9;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 1;
+        }
+        .app-header .author {
+            font-size: 13px;
+            opacity: 0.8;
+            margin-top: 16px;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+        }
+        .smart-badge {
+            display: inline-flex;
+            gap: 8px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+        .smart-badge span {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .search-bar {
+            padding: 20px 24px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+        .search-bar input {
+            width: 100%;
+            max-width: 700px;
+            display: block;
+            margin: 0 auto;
+            padding: 14px 20px 14px 48px;
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s;
+            background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") no-repeat 16px center;
+            font-family: 'Inter', sans-serif;
+        }
+        .search-bar input:focus {
+            border-color: var(--primary);
+            background-color: white;
+            box-shadow: 0 0 0 4px rgba(33,115,70,0.1);
+        }
+        .search-bar input::placeholder { color: #b2bec3; }
+        .audience-tabs {
+            display: flex;
+            gap: 8px;
+            padding: 16px 24px;
+            overflow-x: auto;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .audience-tabs::-webkit-scrollbar { display: none; }
+        .tab-btn {
+            padding: 8px 18px;
+            border: 1.5px solid var(--border);
+            background: white;
+            border-radius: 24px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.25s;
+            font-family: 'Inter', sans-serif;
+        }
+        .tab-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-1px);
+        }
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(33,115,70,0.3);
+        }
+        .content-area {
+            padding: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .progress-tracker {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+            margin-bottom: 28px;
+            border: 1px solid var(--border);
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        .progress-header h3 {
+            font-size: 16px;
+            margin: 0;
+            color: var(--text);
+            font-weight: 700;
+        }
+        .progress-bar {
+            height: 10px;
+            background: #e8f5e9;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #2ecc71);
+            border-radius: 5px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0%;
+            position: relative;
+        }
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 30px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-30px); }
+            100% { transform: translateX(30px); }
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 14px;
+            margin-top: 20px;
+        }
+        .stat-box {
+            text-align: center;
+            padding: 16px 12px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: transform 0.2s;
+        }
+        .stat-box:hover { transform: translateY(-2px); }
+        .stat-number {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-top: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .module-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: all 0.3s;
+            border: 1px solid var(--border);
+        }
+        .module-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+        }
+        .module-header {
+            padding: 22px 24px;
+            background: linear-gradient(90deg, #f8f9fa 0%, white 100%);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s;
+        }
+        .module-header:hover { background: linear-gradient(90deg, #e8f5e9 0%, white 100%); }
+        .module-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .module-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .module-meta {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 6px;
+            margin-left: 58px;
+            font-weight: 500;
+        }
+        .toggle-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: white;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            font-size: 12px;
+            color: var(--text-light);
+            flex-shrink: 0;
+        }
+        .module-card.expanded .toggle-icon {
+            transform: rotate(180deg);
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .module-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .module-card.expanded .module-body { max-height: 3000px; }
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+            padding: 20px 24px 24px;
+        }
+        .resource-item {
+            background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+            border-radius: 12px;
+            padding: 18px;
+            border: 1.5px solid var(--border);
+            transition: all 0.25s;
+            position: relative;
+        }
+        .resource-item:hover {
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 4px 16px rgba(33,115,70,0.08);
+            transform: translateY(-2px);
+        }
+        .resource-item.completed { opacity: 0.7; }
+        .resource-item.completed .resource-title { text-decoration: line-through; color: var(--text-light); }
+        .resource-top {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+        .check-btn {
+            width: 22px;
+            height: 22px;
+            border: 2.5px solid #c8d6e5;
+            border-radius: 50%;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: transparent;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            background: white;
+        }
+        .check-btn:hover { border-color: var(--primary); }
+        .check-btn.checked {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+        .resource-type {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+        .type-video { background: #ffebee; color: #c62828; }
+        .type-pdf { background: #e3f2fd; color: #1565c0; }
+        .type-ppt { background: #fff3e0; color: #ef6c00; }
+        .resource-title {
+            font-size: 14.5px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 14px;
+            line-height: 1.5;
+            padding-left: 32px;
+        }
+        .resource-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding-left: 32px;
+        }
+        .resource-links a {
+            padding: 7px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Inter', sans-serif;
+            border: 1.5px solid transparent;
+        }
+        .link-video {
+            background: #ffebee;
+            color: #c62828;
+            border-color: #ffcdd2;
+        }
+        .link-video:hover { background: #c62828; color: white; border-color: #c62828; transform: translateY(-1px); }
+        .link-pdf {
+            background: #e3f2fd;
+            color: #1565c0;
+            border-color: #bbdefb;
+        }
+        .link-pdf:hover { background: #1565c0; color: white; border-color: #1565c0; transform: translateY(-1px); }
+        .link-ppt {
+            background: #fff3e0;
+            color: #ef6c00;
+            border-color: #ffe0b2;
+        }
+        .link-ppt:hover { background: #ef6c00; color: white; border-color: #ef6c00; transform: translateY(-1px); }
+        .no-results {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-light);
+        }
+        .no-results-icon {
+            font-size: 56px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        .no-results h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+        .footer-info {
+            text-align: center;
+            padding: 40px 24px;
+            color: var(--text-light);
+            font-size: 13px;
+            border-top: 1px solid var(--border);
+            margin-top: 20px;
+            background: white;
+        }
+        .footer-info strong { color: var(--primary); font-size: 14px; }
+        .footer-info em { display: block; margin-top: 8px; font-style: italic; }
+        .audience-tag {
+            display: inline-block;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: #e8f5e9;
+            color: var(--primary);
+            font-weight: 600;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        @media (max-width: 768px) {
+            .app-header h1 { font-size: 24px; }
+            .app-header { padding: 28px 16px; }
+            .resources-grid { grid-template-columns: 1fr; }
+            .module-header { padding: 16px; }
+            .module-title { font-size: 15px; }
+            .content-area { padding: 16px; }
+            .smart-badge { gap: 5px; }
+            .smart-badge span { font-size: 10px; padding: 4px 10px; }
+        }
+        @media (max-width: 480px) {
+            .app-header h1 { font-size: 20px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .resource-links a { padding: 6px 12px; font-size: 11px; }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="app-header">
+        <h1>SMART Modern Excel Master Program</h1>
+        <div class="subtitle">Practical Learning Application for Advanced Spreadsheet Mastery</div>
+        <div class="smart-badge">
+            <span>Specific</span>
+            <span>Measurable</span>
+            <span>Achievable</span>
+            <span>Relevant</span>
+            <span>Time-bound</span>
+        </div>
+        <div class="author">
+            <strong>Developed by: Mr. Bishnu Singh Rayamajhi</strong><br>
+            Math Lecturer & Head of Humanity & Social Science<br>
+            Kapilvastu Multiple Campus (KMC), Taulihawa
+        </div>
+    </div>
+
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search modules, topics, or resources..." oninput="filterContent()">
+    </div>
+
+    <div class="audience-tabs" id="audienceTabs">
+        <button class="tab-btn active" onclick="switchAudience('all')">All Learners</button>
+        <button class="tab-btn" onclick="switchAudience('bba')">BBA Students</button>
+        <button class="tab-btn" onclick="switchAudience('mba')">MBA Students</button>
+        <button class="tab-btn" onclick="switchAudience('mbs')">MBS Students</button>
+        <button class="tab-btn" onclick="switchAudience('researcher')">Researchers</button>
+        <button class="tab-btn" onclick="switchAudience('phd')">PhD Scholars</button>
+        <button class="tab-btn" onclick="switchAudience('teacher')">Teachers</button>
+        <button class="tab-btn" onclick="switchAudience('analyst')">Data Analysts</button>
+        <button class="tab-btn" onclick="switchAudience('entrepreneur')">Entrepreneurs</button>
+        <button class="tab-btn" onclick="switchAudience('innovator')">Innovators</button>
+    </div>
+
+    <div class="content-area" id="contentArea">
+        <div class="progress-tracker">
+            <div class="progress-header">
+                <h3>Your Learning Progress</h3>
+                <span id="progressText" style="font-size:14px;color:var(--text-light);font-weight:700;">0%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-number" id="statModules">12</div>
+                    <div class="stat-label">Modules</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="statVideos">36</div>
+                    <div class="stat-label">Video Tutorials</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="statPdfs">24</div>
+                    <div class="stat-label">PDF Guides</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="statPpts">12</div>
+                    <div class="stat-label">PPT Presentations</div>
+                </div>
+            </div>
+        </div>
+        <div id="modulesContainer"></div>
+    </div>
+
+    <div class="footer-info">
+        <strong>Kapilvastu Multiple Campus (KMC), Taulihawa</strong><br>
+        Department of Humanity & Social Science<br>
+        <em>Empowering learners through structured Excel education</em>
+    </div>
+
+    <script>
+        const programData = [
+            {
+                id: 1,
+                title: "Excel Fundamentals & Interface Mastery",
+                icon: "&#128202;",
+                color: "#217346",
+                audiences: ["all","bba","mba","mbs","teacher","analyst","entrepreneur","innovator"],
+                duration: "3 Hours",
+                resources: [
+                    { type: "video", title: "Excel Interface Walkthrough & Ribbon Customization", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "video", title: "Workbook vs Worksheet: Best Practices", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "pdf", title: "Excel Shortcuts Cheat Sheet (Windows & Mac)", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "ppt", title: "Excel Interface & Navigation Slides", links: { video: "#", pdf: "#", ppt: "#" } }
+                ]
+            },
+            {
+                id: 2,
+                title: "Data Entry, Formatting & Validation",
+                icon: "&#128221;",
+                color: "#2e7d32",
+                audiences: ["all","bba","mba","mbs","researcher","teacher","analyst","entrepreneur"],
+                duration: "4 Hours",
+                resources: [
+                    { type: "video", title: "Smart Data Entry Techniques & AutoFill", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "video", title: "Conditional Formatting for Data Visualization", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "pdf", title: "Data Validation Rules & Custom Formulas Guide", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "ppt", title: "Formatting Standards for Business Reports", links: { video: "#", pdf: "#", ppt: "#" } }
+                ]
+            },
+            {
+                id: 3,
+                title: "Formulas & Functions Deep Dive",
+                icon: "&#128290;",
+                color: "#1565c0",
+                audiences: ["all","bba","mba","mbs","researcher","phd","analyst"],
+                duration: "6 Hours",
+                resources: [
+                    { type: "video", title: "Logical Functions: IF, AND, OR, Nested IFs", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "video", title: "Lookup Functions: VLOOKUP, HLOOKUP, INDEX-MATCH", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "video", title: "Statistical Functions: AVERAGE, STDEV, CORREL", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "pdf", title: "300+ Excel Functions Reference Guide", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "ppt", title: "Advanced Function Combinations for Analysis", links: { video: "#", pdf: "#", ppt: "#" } }
+                ]
+            },
+            {
+                id: 4,
+                title: "Data Analysis with PivotTables & PivotCharts",
+                icon: "&#128200;",
+                color: "#6a1b9a",
+                audiences: ["bba","mba","mbs","researcher","phd","analyst","entrepreneur"],
+                duration: "5 Hours",
+                resources: [
+                    { type: "video", title: "Creating Dynamic PivotTables from Raw Data", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "video", title: "PivotTable Slicers, Timelines & Dashboard Connection", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "pdf", title: "PivotTable Best Practices for Large Datasets", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "ppt", title: "Interactive Dashboard Design with PivotCharts", links: { video: "#", pdf: "#", ppt: "#" } }
+                ]
+            },
+            {
+                id: 5,
+                title: "Statistical Analysis & Hypothesis Testing",
+                icon: "&#128201;",
+                color: "#c62828",
+                audiences: ["mba","mbs","researcher","phd","analyst","teacher"],
+                duration: "6 Hours",
+                resources: [
+                    { type: "video", title: "Descriptive Statistics using Analysis ToolPak", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "video", title: "Regression Analysis & Trend Forecasting", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "video", title: "T-Tests, ANOVA & Chi-Square in Excel", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "pdf", title: "Statistical Analysis Workbook for Researchers", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "ppt", title: "Presenting Statistical Findings in Excel", links: { video: "#", pdf: "#", ppt: "#" } }
+                ]
+            },
+            {
+                id: 6,
+                title: "Financial Modeling & Business Analysis",
+                icon: "&#128176;",
+                color: "#2e7d32",
+                audiences: ["bba","mba","mbs","entrepreneur","analyst","innovator"],
+                duration: "7 Hours",
+                resources: [
+                    { type: "video", title: "Building Financial Statements in Excel", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "video", title: "NPV, IRR & Investment Appraisal Models", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "video", title: "Break-Even Analysis & Sensitivity Modeling", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "pdf", title: "Financial Modeling Standards & Templates", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "ppt", title: "Business Plan Financial Projections", links: { video: "#", pdf: "#", ppt: "#" } }
+                ]
+            },
+            {
+                id: 7,
+                title: "Data Visualization & Dashboard Design",
+                icon: "&#127912;",
+                color: "#ef6c00",
+                audiences: ["all","bba","mba","researcher","teacher","analyst","entrepreneur","innovator"],
+                duration: "5 Hours",
+                resources: [
+                    { type: "video", title: "Advanced Chart Types: Waterfall, Funnel, Sunburst", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "video", title: "Building Executive Dashboards with Slicers", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "video", title: "Sparklines, Heat Maps & Mini Charts", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "pdf", title: "Dashboard Design Principles & Color Theory", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "ppt", title: "KPI Dashboard Templates Collection", links: { video: "#", pdf: "#", ppt: "#" } }
+                ]
+            },
+            {
+                id: 8,
+                title: "Power Query: Data Transformation & ETL",
+                icon: "&#9889;",
+                color: "#fdd835",
+                audiences: ["mba","mbs","researcher","phd","analyst","innovator"],
+                duration: "5 Hours",
+                resources: [
+                    { type: "video", title: "Importing Data from Multiple Sources", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "video", title: "Cleaning Messy Data: Split, Merge, Replace", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "video", title: "M Language Basics for Custom Transformations", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "pdf", title: "Power Query Recipe Book for Data Analysts", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "ppt", title: "ETL Pipeline Design in Power Query", links: { video: "#", pdf: "#", ppt: "#" } }
+                ]
+            },
+            {
+                id: 9,
+                title: "Power Pivot & DAX for Data Modeling",
+                icon: "&#128279;",
+                color: "#5e35b1",
+                audiences: ["mba","mbs","researcher","phd","analyst","innovator"],
+                duration: "6 Hours",
+                resources: [
+                    { type: "video", title: "Creating Data Models with Relationships", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "video", title: "DAX Measures: CALCULATE, FILTER, ALL", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "video", title: "Time Intelligence Functions for Trend Analysis", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "pdf", title: "DAX Function Reference & Pattern Library", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "ppt", title: "Star Schema Design for Business Intelligence", links: { video: "#", pdf: "#", ppt: "#" } }
+                ]
+            },
+            {
+                id: 10,
+                title: "VBA Macros & Automation",
+                icon: "&#129302;",
+                color: "#00838f",
+                audiences: ["mba","mbs","analyst","entrepreneur","innovator","teacher"],
+                duration: "8 Hours",
+                resources: [
+                    { type: "video", title: "Recording & Editing Your First Macro", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "video", title: "VBA Programming: Variables, Loops & Conditions", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "video", title: "Creating Custom Functions (UDFs) in VBA", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "video", title: "Automating Reports with VBA & Outlook Integration", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "pdf", title: "VBA Code Library for Common Business Tasks", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "ppt", title: "VBA Best Practices & Error Handling", links: { video: "#", pdf: "#", ppt: "#" } }
+                ]
+            },
+            {
+                id: 11,
+                title: "Research Methodology & Academic Data Analysis",
+                icon: "&#128300;",
+                color: "#ad1457",
+                audiences: ["researcher","phd","mbs","mba","teacher"],
+                duration: "6 Hours",
+                resources: [
+                    { type: "video", title: "Designing Data Collection Sheets for Research", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "video", title: "Bibliometric Analysis & Citation Metrics in Excel", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "video", title: "Survey Data Processing & Likert Scale Analysis", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "pdf", title: "Research Data Management Protocol", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "ppt", title: "Thesis Data Presentation Templates", links: { video: "#", pdf: "#", ppt: "#" } }
+                ]
+            },
+            {
+                id: 12,
+                title: "Excel for Entrepreneurs & Business Innovation",
+                icon: "&#128640;",
+                color: "#00695c",
+                audiences: ["entrepreneur","innovator","bba","mba","analyst"],
+                duration: "5 Hours",
+                resources: [
+                    { type: "video", title: "Startup Financial Projections & Burn Rate Calculator", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "video", title: "Inventory Management & Supply Chain Models", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "video", title: "Customer Analytics: RFM Segmentation in Excel", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "pdf", title: "Business Model Canvas Excel Templates", links: { video: "#", pdf: "#", ppt: "#" } },
+                    { type: "ppt", title: "Pitch Deck Data Preparation Guide", links: { video: "#", pdf: "#", ppt: "#" } }
+                ]
+            }
+        ];
+
+        let currentAudience = 'all';
+        let completedItems = new Set();
+        let expandedModules = new Set();
+
+        function init() {
+            renderModules();
+            updateStats();
+        }
+
+        function switchAudience(audience) {
+            currentAudience = audience;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderModules();
+        }
+
+        function toggleModule(moduleId) {
+            const card = document.getElementById('module-' + moduleId);
+            if (expandedModules.has(moduleId)) {
+                expandedModules.delete(moduleId);
+                card.classList.remove('expanded');
+            } else {
+                expandedModules.add(moduleId);
+                card.classList.add('expanded');
+            }
+        }
+
+        function toggleComplete(moduleId, resourceIdx) {
+            const key = moduleId + '-' + resourceIdx;
+            const item = document.getElementById('res-' + key);
+            const btn = document.getElementById('chk-' + key);
+            if (completedItems.has(key)) {
+                completedItems.delete(key);
+                item.classList.remove('completed');
+                btn.classList.remove('checked');
+                btn.innerHTML = '';
+            } else {
+                completedItems.add(key);
+                item.classList.add('completed');
+                btn.classList.add('checked');
+                btn.innerHTML = '&#10003;';
+            }
+            updateProgress();
+        }
+
+        function updateProgress() {
+            let total = 0;
+            programData.forEach(m => total += m.resources.length);
+            const pct = Math.round((completedItems.size / total) * 100);
+            document.getElementById('progressFill').style.width = pct + '%';
+            document.getElementById('progressText').textContent = pct + '%';
+        }
+
+        function updateStats() {
+            let videos = 0, pdfs = 0, ppts = 0;
+            programData.forEach(m => {
+                m.resources.forEach(r => {
+                    if (r.type === 'video') videos++;
+                    else if (r.type === 'pdf') pdfs++;
+                    else if (r.type === 'ppt') ppts++;
+                });
+            });
+            document.getElementById('statModules').textContent = programData.length;
+            document.getElementById('statVideos').textContent = videos;
+            document.getElementById('statPdfs').textContent = pdfs;
+            document.getElementById('statPpts').textContent = ppts;
+        }
+
+        function renderModules() {
+            const container = document.getElementById('modulesContainer');
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            let filtered = programData;
+
+            if (currentAudience !== 'all') {
+                filtered = filtered.filter(m => m.audiences.includes(currentAudience));
+            }
+            if (search) {
+                filtered = filtered.filter(m => 
+                    m.title.toLowerCase().includes(search) ||
+                    m.resources.some(r => r.title.toLowerCase().includes(search))
+                );
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="no-results"><div class="no-results-icon">&#128269;</div><h3>No modules found</h3><p>Try adjusting your search or audience filter.</p></div>';
+                return;
+            }
+
+            container.innerHTML = filtered.map(module => {
+                const isExpanded = expandedModules.has(module.id);
+                const audienceLabel = currentAudience !== 'all' ? '<span class="audience-tag">' + currentAudience.toUpperCase() + '</span>' : '';
+                return `
+                    <div class="module-card ${isExpanded ? 'expanded' : ''}" id="module-${module.id}">
+                        <div class="module-header" onclick="toggleModule(${module.id})">
+                            <div>
+                                <div class="module-title">
+                                    <div class="module-icon" style="background:${module.color}15;color:${module.color}">${module.icon}</div>
+                                    ${module.title} ${audienceLabel}
+                                </div>
+                                <div class="module-meta">&#9201; ${module.duration} &nbsp;|&nbsp; ${module.resources.length} Resources</div>
+                            </div>
+                            <div class="toggle-icon">&#9660;</div>
+                        </div>
+                        <div class="module-body">
+                            <div class="resources-grid">
+                                ${module.resources.map((res, idx) => {
+                                    const key = module.id + '-' + idx;
+                                    const isDone = completedItems.has(key);
+                                    const typeClass = 'type-' + res.type;
+                                    const linkClass = 'link-' + res.type;
+                                    const typeLabel = res.type === 'video' ? 'Video Tutorial' : res.type === 'pdf' ? 'PDF Guide' : 'PPT Presentation';
+                                    const typeIcon = res.type === 'video' ? '&#9654;' : res.type === 'pdf' ? '&#128196;' : '&#128202;';
+                                    return `
+                                        <div class="resource-item ${isDone ? 'completed' : ''}" id="res-${key}">
+                                            <div class="resource-top">
+                                                <div class="check-btn ${isDone ? 'checked' : ''}" id="chk-${key}" onclick="event.stopPropagation();toggleComplete(${module.id},${idx})">${isDone ? '&#10003;' : ''}</div>
+                                                <span class="resource-type ${typeClass}">${typeIcon} ${typeLabel}</span>
+                                            </div>
+                                            <div class="resource-title">${res.title}</div>
+                                            <div class="resource-links">
+                                                <a href="${res.links.video}" class="link-video" target="_blank" rel="noopener noreferrer">&#9654; Watch</a>
+                                                <a href="${res.links.pdf}" class="link-pdf" target="_blank" rel="noopener noreferrer">&#128196; PDF</a>
+                                                <a href="${res.links.ppt}" class="link-ppt" target="_blank" rel="noopener noreferrer">&#128202; PPT</a>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterContent() {
+            renderModules();
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
