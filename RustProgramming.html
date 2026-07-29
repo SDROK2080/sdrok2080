@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust Programming: Leveled Learning Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        rust: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            200: '#fed7aa',
+                            300: '#fdba74',
+                            400: '#fb923c',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c',
+                            800: '#9a3412',
+                            900: '#7c2d12',
+                        },
+                        dark: {
+                            900: '#0f172a',
+                            800: '#1e293b',
+                            700: '#334155',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #e2e8f0;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .rust-gradient {
+            background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+        }
+        .day-card {
+            transition: all 0.3s ease;
+        }
+        .day-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(234, 88, 12, 0.3);
+        }
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ea580c; 
+        }
+        .resource-link:hover .link-icon {
+            transform: translateX(4px);
+        }
+        .level-tab {
+            transition: all 0.3s ease;
+        }
+        .level-tab.active {
+            background: rgba(234, 88, 12, 0.2);
+            border-color: #ea580c;
+            color: #fb923c;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Header / Hero Section -->
+    <header class="relative overflow-hidden border-b border-dark-700">
+        <div class="absolute inset-0 rust-gradient opacity-10"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="text-center md:text-left">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rust-900/50 border border-rust-700 text-rust-300 text-xs font-semibold tracking-wide uppercase mb-4">
+                        <i class="fas fa-layer-group"></i> Leveled Learning System
+                    </div>
+                    <h1 class="text-4xl md:text-6xl font-bold text-white tracking-tight mb-2">
+                        Rust <span class="text-transparent bg-clip-text bg-gradient-to-r from-rust-400 to-rust-600">Mastery</span> Path
+                    </h1>
+                    <p class="text-slate-400 text-lg max-w-2xl">
+                        Structured learning paths from Beginner to Advanced. 
+                        <span class="block mt-2 text-rust-400 font-semibold">Developed By: Mr. Bishnu Singh Rayamajhi</span>
+                        <span class="text-sm text-slate-500">Math Lecturer & Head of Humanity & Social Science, KMC Taulihawa</span>
+                    </p>
+                </div>
+
+                <!-- Overall Progress Widget -->
+                <div class="glass-panel p-6 rounded-2xl flex flex-col items-center min-w-[200px]">
+                    <div class="relative w-24 h-24 mb-2">
+                        <svg class="w-full h-full" viewBox="0 0 100 100">
+                            <circle class="text-dark-700 stroke-current" stroke-width="8" cx="50" cy="50" r="40" fill="transparent"></circle>
+                            <circle id="progress-circle" class="text-rust-500 progress-ring__circle stroke-current" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="251.2"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center flex-col">
+                            <span id="progress-text" class="text-2xl font-bold text-white">0%</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-400">Total Completion</p>
+                    <button onclick="resetProgress()" class="mt-3 text-xs text-rust-400 hover:text-rust-300 underline">Reset All</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Level Selection Tabs -->
+    <div class="sticky top-0 z-40 bg-dark-900/95 backdrop-blur border-b border-dark-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex space-x-1 overflow-x-auto py-3" id="level-tabs">
+                <button onclick="switchLevel('beginner')" class="level-tab active flex-1 min-w-[120px] px-4 py-3 rounded-lg border border-transparent text-sm font-medium text-slate-400 hover:text-white flex items-center justify-center gap-2" data-level="beginner">
+                    <i class="fas fa-seedling text-green-400"></i>
+                    <span>Beginner</span>
+                    <span class="ml-2 text-xs bg-dark-800 px-2 py-0.5 rounded-full text-slate-500" id="badge-beginner">0/10</span>
+                </button>
+                <button onclick="switchLevel('intermediate')" class="level-tab flex-1 min-w-[120px] px-4 py-3 rounded-lg border border-transparent text-sm font-medium text-slate-400 hover:text-white flex items-center justify-center gap-2" data-level="intermediate">
+                    <i class="fas fa-layer-group text-blue-400"></i>
+                    <span>Intermediate</span>
+                    <span class="ml-2 text-xs bg-dark-800 px-2 py-0.5 rounded-full text-slate-500" id="badge-intermediate">0/10</span>
+                </button>
+                <button onclick="switchLevel('advanced')" class="level-tab flex-1 min-w-[120px] px-4 py-3 rounded-lg border border-transparent text-sm font-medium text-slate-400 hover:text-white flex items-center justify-center gap-2" data-level="advanced">
+                    <i class="fas fa-rocket text-rust-400"></i>
+                    <span>Advanced</span>
+                    <span class="ml-2 text-xs bg-dark-800 px-2 py-0.5 rounded-full text-slate-500" id="badge-advanced">0/10</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+        <!-- Sidebar Navigation -->
+        <aside class="lg:col-span-3 hidden lg:block">
+            <div class="sticky top-24 glass-panel rounded-xl p-4 max-h-[80vh] overflow-y-auto">
+                <h3 class="text-rust-400 font-bold uppercase text-sm mb-4 tracking-wider">Current Path</h3>
+                <nav class="space-y-1" id="nav-links">
+                    <!-- Generated by JS -->
+                </nav>
+
+                <div class="mt-8 pt-6 border-t border-dark-700">
+                    <h3 class="text-slate-400 font-bold uppercase text-xs mb-3">Resources</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#resources" class="flex items-center gap-2 text-slate-300 hover:text-rust-400 transition-colors"><i class="fas fa-book w-4"></i> PDF & PPT</a></li>
+                        <li><a href="#videos" class="flex items-center gap-2 text-slate-300 hover:text-rust-400 transition-colors"><i class="fab fa-youtube w-4 text-red-500"></i> Video Tutorials</a></li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Roadmap Content -->
+        <div class="lg:col-span-9 space-y-8">
+
+            <!-- Level Info Card -->
+            <div id="level-info" class="glass-panel rounded-xl p-6 border-l-4 border-green-500 fade-in">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white mb-2" id="level-title">Beginner Level</h2>
+                        <p class="text-slate-400" id="level-desc">Master the fundamentals of Rust syntax, ownership, and basic data structures.</p>
+                        <div class="mt-4 flex items-center gap-4">
+                            <div class="flex items-center gap-2 text-sm text-slate-300">
+                                <i class="fas fa-clock text-green-400"></i>
+                                <span id="level-duration">Days 1-10</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-300">
+                                <i class="fas fa-project-diagram text-green-400"></i>
+                                <span id="level-project">Project: Student Grade Manager</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hidden md:block text-6xl opacity-20" id="level-icon">
+                        <i class="fas fa-seedling text-green-500"></i>
+                    </div>
+                </div>
+                <div class="mt-4 w-full bg-dark-900 rounded-full h-2">
+                    <div id="level-progress-bar" class="bg-green-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Days Grid -->
+            <div id="days-container" class="grid grid-cols-1 gap-4">
+                <!-- Content injected via JS -->
+            </div>
+
+            <!-- Resources Section -->
+            <section id="resources" class="glass-panel rounded-xl p-6 md:p-8 mt-12 scroll-mt-24">
+                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <i class="fas fa-folder-open text-rust-500"></i> Learning Resources
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- PDF / PPT Links -->
+                    <div class="bg-dark-800/50 rounded-lg p-5 border border-dark-700">
+                        <h3 class="text-lg font-semibold text-rust-400 mb-4">Documents & Slides</h3>
+                        <ul class="space-y-3">
+                            <li class="resource-link group flex items-center justify-between p-3 rounded bg-dark-900/50 hover:bg-dark-900 transition-colors cursor-pointer border border-transparent hover:border-rust-900">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-file-pdf text-red-500 text-xl"></i>
+                                    <div>
+                                        <p class="font-medium text-slate-200">Rust Cheat Sheet PDF</p>
+                                        <p class="text-xs text-slate-500">Quick reference guide</p>
+                                    </div>
+                                </div>
+                                <a href="https://www.cs.brandeis.edu/~cs146a/rust/doc-20160601/rustbook/rust-cheatsheet.pdf" target="_blank" class="text-rust-400 hover:text-white"><i class="fas fa-download link-icon transition-transform"></i></a>
+                            </li>
+                            <li class="resource-link group flex items-center justify-between p-3 rounded bg-dark-900/50 hover:bg-dark-900 transition-colors cursor-pointer border border-transparent hover:border-rust-900">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-file-powerpoint text-orange-500 text-xl"></i>
+                                    <div>
+                                        <p class="font-medium text-slate-200">Rust Intro Presentation</p>
+                                        <p class="text-xs text-slate-500">Core concepts slides</p>
+                                    </div>
+                                </div>
+                                <a href="https://www.slideshare.net/slideshow/rust-programming-language-introduction/256527898" target="_blank" class="text-rust-400 hover:text-white"><i class="fas fa-external-link-alt link-icon transition-transform"></i></a>
+                            </li>
+                             <li class="resource-link group flex items-center justify-between p-3 rounded bg-dark-900/50 hover:bg-dark-900 transition-colors cursor-pointer border border-transparent hover:border-rust-900">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-book text-blue-400 text-xl"></i>
+                                    <div>
+                                        <p class="font-medium text-slate-200">The Rust Book (Online)</p>
+                                        <p class="text-xs text-slate-500">Official Documentation</p>
+                                    </div>
+                                </div>
+                                <a href="https://doc.rust-lang.org/book/" target="_blank" class="text-rust-400 hover:text-white"><i class="fas fa-external-link-alt link-icon transition-transform"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Video Tutorials -->
+                    <div id="videos" class="bg-dark-800/50 rounded-lg p-5 border border-dark-700">
+                        <h3 class="text-lg font-semibold text-rust-400 mb-4">YouTube Playlists</h3>
+                        <ul class="space-y-3">
+                            <li class="resource-link group flex items-center justify-between p-3 rounded bg-dark-900/50 hover:bg-dark-900 transition-colors cursor-pointer border border-transparent hover:border-rust-900">
+                                <div class="flex items-center gap-3">
+                                    <i class="fab fa-youtube text-red-600 text-xl"></i>
+                                    <div>
+                                        <p class="font-medium text-slate-200">Rust Tutorial (Traversy)</p>
+                                        <p class="text-xs text-slate-500">Full Crash Course</p>
+                                    </div>
+                                </div>
+                                <a href="https://www.youtube.com/watch?v=zF34dRivLOw" target="_blank" class="text-rust-400 hover:text-white"><i class="fas fa-play link-icon transition-transform"></i></a>
+                            </li>
+                            <li class="resource-link group flex items-center justify-between p-3 rounded bg-dark-900/50 hover:bg-dark-900 transition-colors cursor-pointer border border-transparent hover:border-rust-900">
+                                <div class="flex items-center gap-3">
+                                    <i class="fab fa-youtube text-red-600 text-xl"></i>
+                                    <div>
+                                        <p class="font-medium text-slate-200">Let's Get Rusty</p>
+                                        <p class="text-xs text-slate-500">Weekly Rust Tutorials</p>
+                                    </div>
+                                </div>
+                                <a href="https://www.youtube.com/c/LetsGetRusty" target="_blank" class="text-rust-400 hover:text-white"><i class="fas fa-play link-icon transition-transform"></i></a>
+                            </li>
+                             <li class="resource-link group flex items-center justify-between p-3 rounded bg-dark-900/50 hover:bg-dark-900 transition-colors cursor-pointer border border-transparent hover:border-rust-900">
+                                <div class="flex items-center gap-3">
+                                    <i class="fab fa-youtube text-red-600 text-xl"></i>
+                                    <div>
+                                        <p class="font-medium text-slate-200">Rust for Beginners (FreeCodeCamp)</p>
+                                        <p class="text-xs text-slate-500">13 Hour Course</p>
+                                    </div>
+                                </div>
+                                <a href="https://www.youtube.com/watch?v=BpPEoZW5IiY" target="_blank" class="text-rust-400 hover:text-white"><i class="fas fa-play link-icon transition-transform"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="text-center text-slate-500 py-8 border-t border-dark-700 mt-8">
+                <p> 2026 Rust Learning Roadmap. Designed for Educational Purposes.</p>
+                <p class="text-sm mt-2">Kapilvastu Multiple Campus (KMC), Taulihawa</p>
+            </footer>
+
+        </div>
+    </main>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Roadmap Data Structure organized by Level
+        const roadmapData = {
+            beginner: {
+                title: "Beginner Level",
+                desc: "Master the fundamentals of Rust syntax, ownership, and basic data structures. No prior systems programming experience required.",
+                duration: "Days 1-10",
+                project: "Student Grade Management System",
+                color: "green",
+                icon: "fa-seedling",
+                days: [
+                    { day: 1, title: "Introduction to Rust", topic: "Installation, Cargo, Hello World", project: "Install Rust and create your first program", icon: "fa-rocket" },
+                    { day: 2, title: "Variables & Data Types", topic: "Constants, Mutability", project: "Temperature converter (°C ↔️ °F)", icon: "fa-thermometer-half" },
+                    { day: 3, title: "Operators & I/O", topic: "Input/Output handling", project: "Simple calculator", icon: "fa-calculator" },
+                    { day: 4, title: "Control Flow", topic: "if, else, match", project: "Grade evaluation system", icon: "fa-code-branch" },
+                    { day: 5, title: "Loops", topic: "loop, while, for", project: "Multiplication table generator", icon: "fa-redo" },
+                    { day: 6, title: "Functions & Scope", topic: "Modularity", project: "Unit conversion toolkit", icon: "fa-box" },
+                    { day: 7, title: "Ownership & Borrowing", topic: "References", project: "String analyzer", icon: "fa-memory" },
+                    { day: 8, title: "Strings", topic: "String manipulation", project: "Word counter", icon: "fa-font" },
+                    { day: 9, title: "Arrays, Vectors, Slices", topic: "Collections basics", project: "Student marks manager", icon: "fa-list-ol" },
+                    { day: 10, title: "Tuples & Structs", topic: "Custom data types", project: "Employee record system", icon: "fa-users" }
+                ]
+            },
+            intermediate: {
+                title: "Intermediate Level",
+                desc: "Deep dive into error handling, collections, file I/O, and building robust CLI applications.",
+                duration: "Days 11-20",
+                project: "Library Management System",
+                color: "blue",
+                icon: "fa-layer-group",
+                days: [
+                    { day: 11, title: "Enums & Pattern Matching", topic: "Advanced matching", project: "Traffic light simulator", icon: "fa-traffic-light" },
+                    { day: 12, title: "Error Handling", topic: "Result, Option", project: "Safe division calculator", icon: "fa-shield-alt" },
+                    { day: 13, title: "Modules & Packages", topic: "Code organization", project: "Library management project", icon: "fa-folder-tree" },
+                    { day: 14, title: "Collections", topic: "HashMap, HashSet", project: "Phonebook application", icon: "fa-address-book" },
+                    { day: 15, title: "File Handling", topic: "Read/Write text files", project: "Text file processor", icon: "fa-file-alt" },
+                    { day: 16, title: "Traits & Generics", topic: "Abstract behavior", project: "Generic math library", icon: "fa-cogs" },
+                    { day: 17, title: "Lifetimes", topic: "Reference validation", project: "Safe reference manager", icon: "fa-clock" },
+                    { day: 18, title: "Smart Pointers", topic: "Box, Rc, Arc", project: "Recursive tree structure", icon: "fa-sitemap" },
+                    { day: 19, title: "Closures & Iterators", topic: "Functional style", project: "Data filtering tool", icon: "fa-filter" },
+                    { day: 20, title: "Testing", topic: "cargo test", project: "Test a calculator app", icon: "fa-vial" }
+                ]
+            },
+            advanced: {
+                title: "Advanced Level",
+                desc: "Concurrency, async programming, web development, and building production-ready systems.",
+                duration: "Days 21-30",
+                project: "Inventory Management / Blog API",
+                color: "rust",
+                icon: "fa-rocket",
+                days: [
+                    { day: 21, title: "Crates & Dependencies", topic: "Using Serde", project: "JSON parser using serde", icon: "fa-cubes" },
+                    { day: 22, title: "Concurrency", topic: "Threads", project: "Multi-threaded processor", icon: "fa-bolt" },
+                    { day: 23, title: "Channels & Sync", topic: "Message passing", project: "Producer-consumer simulation", icon: "fa-exchange-alt" },
+                    { day: 24, title: "Async Programming", topic: "Futures", project: "Async downloader", icon: "fa-cloud-download-alt" },
+                    { day: 25, title: "Networking (TCP)", topic: "Low-level net", project: "TCP chat server", icon: "fa-network-wired" },
+                    { day: 26, title: "Web Development", topic: "Axum/Actix", project: "REST API", icon: "fa-globe" },
+                    { day: 27, title: "Database Integration", topic: "SQLite", project: "CRUD application", icon: "fa-database" },
+                    { day: 28, title: "CLI Applications", topic: "Arguments parsing", project: "To-do list CLI", icon: "fa-terminal" },
+                    { day: 29, title: "Performance", topic: "Profiling", project: "Optimize file search", icon: "fa-tachometer-alt" },
+                    { day: 30, title: "Final Project", topic: "Integration", project: "Inventory System / Blog API", icon: "fa-flag-checkered" }
+                ]
+            }
+        };
+
+        // State
+        let completedDays = new Set();
+        let currentLevel = 'beginner';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLevel('beginner');
+            updateProgress();
+        });
+
+        function switchLevel(level) {
+            currentLevel = level;
+
+            // Update tabs
+            document.querySelectorAll('.level-tab').forEach(tab => {
+                if (tab.dataset.level === level) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+
+            renderLevel(level);
+        }
+
+        function renderLevel(level) {
+            const data = roadmapData[level];
+            const container = document.getElementById('days-container');
+            const infoSection = document.getElementById('level-info');
+
+            // Update Info Section
+            infoSection.className = `glass-panel rounded-xl p-6 border-l-4 border-${data.color}-500 fade-in`;
+            document.getElementById('level-title').innerText = data.title;
+            document.getElementById('level-desc').innerText = data.desc;
+            document.getElementById('level-duration').innerHTML = `<i class="fas fa-clock text-${data.color}-400"></i> ${data.duration}`;
+            document.getElementById('level-project').innerHTML = `<i class="fas fa-project-diagram text-${data.color}-400"></i> Project: ${data.project}`;
+            document.getElementById('level-icon').innerHTML = `<i class="fas ${data.icon} text-${data.color}-500"></i>`;
+
+            // Update Progress Bar
+            const levelDays = data.days.map(d => d.day);
+            const completedInLevel = levelDays.filter(d => completedDays.has(d)).length;
+            const percent = (completedInLevel / 10) * 100;
+            document.getElementById('level-progress-bar').className = `bg-${data.color}-500 h-2 rounded-full transition-all duration-500`;
+            document.getElementById('level-progress-bar').style.width = `${percent}%`;
+
+            // Render Days
+            container.innerHTML = data.days.map(d => `
+                <div class="day-card bg-dark-800 border border-dark-700 rounded-xl p-4 relative overflow-hidden group" id="day-${d.day}">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i class="fas ${d.icon} text-6xl text-${data.color}-500"></i>
+                    </div>
+
+                    <div class="flex items-start gap-4 relative z-10">
+                        <div class="flex-shrink-0 pt-1">
+                            <input type="checkbox" 
+                                class="w-6 h-6 rounded border-2 border-slate-600 bg-dark-900 text-${data.color}-500 focus:ring-${data.color}-500 focus:ring-offset-dark-900 cursor-pointer transition-all checked:border-${data.color}-500"
+                                onchange="toggleDay(${d.day})"
+                                ${completedDays.has(d.day) ? 'checked' : ''}
+                            >
+                        </div>
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-start mb-1">
+                                <h4 class="font-bold text-lg text-white group-hover:text-${data.color}-400 transition-colors">Day ${d.day}: ${d.title}</h4>
+                                <span class="text-xs font-mono px-2 py-1 rounded bg-dark-900 text-slate-400 border border-dark-700">${d.topic}</span>
+                            </div>
+                            <p class="text-slate-400 text-sm mb-3"><i class="fas fa-project-diagram mr-2 text-${data.color}-500"></i>${d.project}</p>
+
+                            <div class="flex gap-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <a href="https://doc.rust-lang.org/book/" target="_blank" class="text-xs flex items-center gap-1 px-2 py-1 rounded bg-dark-700 hover:bg-${data.color}-900 text-slate-300 hover:text-${data.color}-300 transition-colors">
+                                    <i class="fas fa-book"></i> Book
+                                </a>
+                                <a href="https://www.youtube.com/results?search_query=rust+programming+day+${d.day}+${d.title.replace(/\s+/g, '+')}" target="_blank" class="text-xs flex items-center gap-1 px-2 py-1 rounded bg-dark-700 hover:bg-red-900/30 text-slate-300 hover:text-red-300 transition-colors">
+                                    <i class="fab fa-youtube"></i> Video
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Update Nav
+            renderNav(data.days);
+
+            // Update Badges
+            updateBadges();
+        }
+
+        function renderNav(days) {
+            const nav = document.getElementById('nav-links');
+            nav.innerHTML = days.map(d => `
+                <a href="#day-${d.day}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-400 hover:bg-dark-800 hover:text-white transition-colors group">
+                    <span class="w-6 h-6 rounded flex items-center justify-center bg-dark-800 group-hover:bg-rust-900 text-xs text-slate-500 group-hover:text-rust-400 transition-colors">${d.day}</span>
+                    <span class="truncate">${d.title}</span>
+                </a>
+            `).join('');
+        }
+
+        function toggleDay(dayNum) {
+            if (completedDays.has(dayNum)) {
+                completedDays.delete(dayNum);
+            } else {
+                completedDays.add(dayNum);
+            }
+
+            // Re-render current level to update UI
+            renderLevel(currentLevel);
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const totalDays = 30;
+            const completed = completedDays.size;
+            const percentage = Math.round((completed / totalDays) * 100);
+
+            // Update text
+            document.getElementById('progress-text').innerText = `${percentage}%`;
+
+            // Update circle
+            const circle = document.getElementById('progress-circle');
+            const radius = circle.r.baseVal.value;
+            const circumference = radius * 2 * Math.PI;
+            const offset = circumference - (percentage / 100) * circumference;
+
+            circle.style.strokeDashoffset = offset;
+        }
+
+        function updateBadges() {
+            const levels = ['beginner', 'intermediate', 'advanced'];
+            levels.forEach(level => {
+                const days = roadmapData[level].days.map(d => d.day);
+                const completed = days.filter(d => completedDays.has(d)).length;
+                document.getElementById(`badge-${level}`).innerText = `${completed}/10`;
+            });
+        }
+
+        function resetProgress() {
+            if(confirm("Reset all progress?")) {
+                completedDays.clear();
+                renderLevel(currentLevel);
+                updateProgress();
+            }
+        }
+    </script>
+</body>
+</html>
