@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Professional English Speaking — Beginner to Advanced</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#0B1626;
+    --bg-1:#122036;
+    --bg-2:#182A45;
+    --card:#152540;
+    --gold:#C9A227;
+    --gold-soft:#E8CE7A;
+    --teal:#3EA88F;
+    --teal-soft:#7ED0BC;
+    --rose:#C46B5A;
+    --text-hi:#F3EFE3;
+    --text-mid:#B9C4D6;
+    --text-lo:#7C8AA0;
+    --line:#28395A;
+    --line-soft:#1D2E4C;
+  }
+  *{box-sizing:border-box;}
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--bg-0);
+    color:var(--text-hi);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.55;
+  }
+  button, .level-tab, .chip, .res-link, .search-input, .step-link, .cat-link{
+    -webkit-tap-highlight-color:transparent;
+  }
+  @keyframes fadeSlideIn{
+    from{ opacity:0; transform:translateY(6px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  .fade-in{ animation:fadeSlideIn .28s ease both; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .fade-in{ animation:none; }
+    *{ transition-duration:.01ms !important; }
+  }
+  h1,h2,h3,.serif{font-family:'Source Serif 4', serif;}
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  a{color:var(--gold-soft);}
+
+  /* ===== Letterhead ===== */
+  .letterhead{
+    border-bottom:1px solid var(--line);
+    padding:28px 6vw 22px;
+    background:linear-gradient(180deg, var(--bg-1) 0%, var(--bg-0) 100%);
+  }
+  .letterhead-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:24px;
+    flex-wrap:wrap;
+    max-width:1180px;
+    margin:0 auto;
+  }
+  .brand-eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--teal-soft);
+    margin:0 0 10px;
+  }
+  .brand-title{
+    font-size:clamp(26px,3.4vw,40px);
+    font-weight:700;
+    margin:0 0 8px;
+    color:var(--text-hi);
+  }
+  .brand-sub{
+    color:var(--text-mid);
+    font-size:15px;
+    max-width:560px;
+    margin:0;
+  }
+  .credit-block{
+    text-align:right;
+    font-size:12.5px;
+    color:var(--text-lo);
+    border-left:1px solid var(--line);
+    padding-left:20px;
+    min-width:220px;
+  }
+  .credit-block .name{
+    color:var(--gold-soft);
+    font-family:'Source Serif 4', serif;
+    font-size:16px;
+    font-weight:600;
+    display:block;
+    margin-bottom:3px;
+  }
+  .credit-block .role{ color:var(--text-mid); display:block; margin-bottom:2px; }
+
+  /* ===== Level selector ===== */
+  .level-wrap{
+    max-width:1180px;
+    margin:34px auto 0;
+    padding:0 6vw;
+  }
+  .level-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--text-lo);
+    margin-bottom:12px;
+  }
+  .level-tabs{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+  }
+  .level-tab{
+    background:var(--bg-1);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:16px 18px;
+    cursor:pointer;
+    text-align:left;
+    transition:border-color .18s ease, background .18s ease, box-shadow .18s ease, transform .12s ease;
+    color:var(--text-hi);
+    transform:translateY(0) scale(1);
+  }
+  .level-tab:hover{ border-color:var(--gold); transform:translateY(-2px); }
+  .level-tab:active{ transform:translateY(0) scale(.98); }
+  .level-tab.active{
+    background:var(--bg-2);
+    border-color:var(--gold);
+    box-shadow:inset 0 0 0 1px var(--gold);
+  }
+  .level-tab .numeral{
+    font-family:'Source Serif 4', serif;
+    font-size:13px;
+    color:var(--gold-soft);
+    letter-spacing:.06em;
+  }
+  .level-tab .lvl-name{
+    font-family:'Source Serif 4', serif;
+    font-size:19px;
+    font-weight:600;
+    margin:4px 0 4px;
+  }
+  .level-tab .lvl-desc{
+    font-size:12.5px;
+    color:var(--text-mid);
+  }
+
+  /* ===== Steps with resources ===== */
+  .steps-section{
+    max-width:1180px;
+    margin:30px auto 0;
+    padding:20px 6vw;
+  }
+  .section-title{
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.14em;
+    color:var(--text-lo);
+    font-family:'IBM Plex Mono', monospace;
+    margin:0 0 14px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .section-title::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--line-soft);
+  }
+  .steps-row{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:12px;
+  }
+  .step-card{
+    background:var(--bg-1);
+    border:1px solid var(--line-soft);
+    border-radius:6px;
+    padding:14px;
+    transition:border-color .18s ease, transform .18s ease;
+  }
+  .step-card:hover{ border-color:var(--teal); transform:translateY(-2px); }
+  .step-card .step-num{
+    font-family:'Source Serif 4', serif;
+    color:var(--gold-soft);
+    font-size:20px;
+    display:block;
+    margin-bottom:6px;
+  }
+  .step-card .step-title{
+    font-size:13.5px;
+    font-weight:600;
+    margin-bottom:4px;
+  }
+  .step-card .step-text{
+    font-size:12px;
+    color:var(--text-mid);
+    margin-bottom:8px;
+  }
+  .step-links{
+    font-size:11px;
+    margin-top:8px;
+    padding-top:8px;
+    border-top:1px solid var(--line);
+  }
+  .step-link{
+    display:inline-block;
+    color:var(--teal-soft);
+    text-decoration:none;
+    padding:2px 0;
+    margin-right:6px;
+    transition:color .15s ease;
+    cursor:pointer;
+  }
+  .step-link:hover{ color:#FBEAB0; text-decoration:underline; }
+
+  /* ===== Category filter ===== */
+  .filter-section{
+    max-width:1180px;
+    margin:30px auto 0;
+    padding:0 6vw;
+  }
+  .filter-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .chip{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    padding:8px 14px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--text-mid);
+    cursor:pointer;
+    transition:background .16s ease, border-color .16s ease, color .16s ease, transform .12s ease;
+    transform:scale(1);
+  }
+  .chip:hover{ border-color:var(--gold-soft); color:var(--text-hi); }
+  .chip:active{ transform:scale(.94); }
+  .chip.active{
+    background:var(--gold);
+    border-color:var(--gold);
+    color:#241C05;
+    font-weight:500;
+  }
+  .search-input{
+    margin-left:auto;
+    background:var(--bg-1);
+    border:1px solid var(--line);
+    color:var(--text-hi);
+    padding:8px 12px;
+    border-radius:6px;
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:13px;
+    min-width:200px;
+    transition:border-color .16s ease, box-shadow .16s ease;
+  }
+  .search-input:focus{
+    outline:none;
+    border-color:var(--gold);
+    box-shadow:0 0 0 3px rgba(201,162,39,.18);
+  }
+  .search-input::placeholder{ color:var(--text-lo); }
+
+  /* ===== Category resources ===== */
+  .cat-resources-section{
+    max-width:1180px;
+    margin:20px auto 0;
+    padding:0 6vw 20px;
+    display:none;
+  }
+  .cat-resources-section.active{
+    display:block;
+  }
+  .cat-res-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:14px;
+  }
+  .cat-res-card{
+    background:var(--bg-2);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:14px;
+    transition:border-color .18s ease, transform .18s ease;
+  }
+  .cat-res-card:hover{ border-color:var(--teal); transform:translateY(-2px); }
+  .cat-res-card .res-kind{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--teal-soft);
+    margin-bottom:6px;
+  }
+  .cat-res-card .res-title{
+    font-family:'Source Serif 4', serif;
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:6px;
+    color:var(--text-hi);
+  }
+  .cat-res-card .res-desc{
+    font-size:12px;
+    color:var(--text-mid);
+    margin-bottom:10px;
+  }
+  .cat-link{
+    display:inline-block;
+    font-size:12px;
+    color:var(--gold-soft);
+    text-decoration:none;
+    border-bottom:1px solid var(--gold);
+    padding-bottom:1px;
+    margin-right:8px;
+    margin-bottom:4px;
+    transition:color .15s ease;
+  }
+  .cat-link:hover{ color:#FBEAB0; }
+
+  /* ===== Word cards (index-card motif) ===== */
+  .cards-section{
+    max-width:1180px;
+    margin:22px auto 0;
+    padding:0 6vw 10px;
+  }
+  .card-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+    gap:16px;
+  }
+  .word-card{
+    position:relative;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:18px 16px 16px;
+    overflow:hidden;
+    transition:border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+  }
+  .word-card:hover{
+    border-color:var(--teal);
+    transform:translateY(-3px);
+    box-shadow:0 8px 18px rgba(0,0,0,.28);
+  }
+  .word-card::before{
+    content:"";
+    position:absolute;
+    top:12px; right:12px;
+    width:9px; height:9px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:var(--bg-0);
+  }
+  .word-card .cat-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    padding:3px 8px;
+    border-radius:3px;
+    display:inline-block;
+    margin-bottom:10px;
+  }
+  .tag-technical{ background:#1E3A4E; color:#8FD4F5; }
+  .tag-research{ background:#20372A; color:#8FE0B0; }
+  .tag-innovative{ background:#3B2C1B; color:#F2C879; }
+  .tag-entrepreneurship{ background:#3A2436; color:#F0A8CA; }
+  .tag-professional{ background:#2A2A46; color:#B9AEF2; }
+
+  .word-card .word{
+    font-family:'Source Serif 4', serif;
+    font-size:21px;
+    font-weight:600;
+    color:var(--text-hi);
+    margin:0 0 3px;
+  }
+  .word-card .pos-pron{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:var(--teal-soft);
+    margin-bottom:10px;
+  }
+  .word-card .meaning{
+    font-size:13.5px;
+    color:var(--text-mid);
+    margin-bottom:10px;
+  }
+  .word-card .example{
+    font-size:13px;
+    font-style:italic;
+    color:var(--text-hi);
+    border-left:2px solid var(--gold);
+    padding-left:10px;
+  }
+  .empty-note{
+    color:var(--text-lo);
+    font-size:13px;
+    padding:30px 0;
+  }
+
+  /* ===== Resources ===== */
+  .resources-section{
+    max-width:1180px;
+    margin:36px auto 0;
+    padding:24px 6vw 10px;
+  }
+  .resource-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+  }
+  .res-card{
+    background:var(--bg-1);
+    border:1px solid var(--line-soft);
+    border-radius:6px;
+    padding:16px;
+    transition:border-color .18s ease, transform .18s ease;
+  }
+  .res-card:hover{ border-color:var(--gold); transform:translateY(-2px); }
+  .res-card .res-kind{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--gold-soft);
+    margin-bottom:8px;
+  }
+  .res-card .res-title{
+    font-family:'Source Serif 4', serif;
+    font-size:15.5px;
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  .res-card .res-text{
+    font-size:12.5px;
+    color:var(--text-mid);
+    margin-bottom:10px;
+  }
+  .res-link{
+    display:inline-block;
+    font-size:12.5px;
+    color:var(--gold-soft);
+    text-decoration:none;
+    border-bottom:1px solid var(--gold);
+    padding-bottom:1px;
+    transition:color .15s ease;
+  }
+  .res-link:hover{ color:#FBEAB0; }
+  .res-link:active{ transform:translateY(1px); }
+  .res-link + .res-link{ margin-left:14px; }
+  .res-note{
+    font-size:11.5px;
+    color:var(--text-lo);
+    margin-top:6px;
+  }
+
+  /* ===== Footer ===== */
+  .footer{
+    margin-top:50px;
+    border-top:1px solid var(--line);
+    padding:22px 6vw 30px;
+    text-align:center;
+  }
+  .footer .dev-line{
+    font-family:'Source Serif 4', serif;
+    font-size:14.5px;
+    color:var(--gold-soft);
+  }
+  .footer .dev-sub{
+    font-size:12px;
+    color:var(--text-lo);
+    margin-top:4px;
+  }
+
+  @media (max-width:820px){
+    .level-tabs{ grid-template-columns:1fr; }
+    .steps-row{ grid-template-columns:repeat(2,1fr); }
+    .resource-grid{ grid-template-columns:1fr; }
+    .cat-res-grid{ grid-template-columns:1fr; }
+    .credit-block{ text-align:left; border-left:none; padding-left:0; border-top:1px solid var(--line); padding-top:12px; }
+    .search-input{ margin-left:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="letterhead">
+  <div class="letterhead-top">
+    <div>
+      <p class="brand-eyebrow">Kapilvastu Multiple Campus &middot; Taulihawa</p>
+      <h1 class="brand-title">Professional English Speaking</h1>
+      <p class="brand-sub">A step-by-step vocabulary and speaking companion for Beginner, Intermediate, and Advanced learners — built around Technical, Research, Innovative, Entrepreneurship, and Professional language.</p>
+    </div>
+    <div class="credit-block">
+      <span class="name">Mr. Bishnu Singh Rayamajhi</span>
+      <span class="role">Lecturer, Mathematics</span>
+      <span class="role">Head, Department of Humanities &amp; Social Science</span>
+      <span class="role">Kapilvastu Multiple Campus (KMC), Taulihawa</span>
+    </div>
+  </div>
+</div>
+
+<div class="level-wrap">
+  <p class="level-label">Step 1 — Choose your level</p>
+  <div class="level-tabs" id="levelTabs"></div>
+</div>
+
+<div class="steps-section">
+  <p class="section-title">Learning path for this level</p>
+  <div class="steps-row" id="stepsRow"></div>
+</div>
+
+<div class="filter-section">
+  <p class="section-title">Step 2 — Choose a word category</p>
+  <div class="filter-row" id="filterRow">
+    <input class="search-input" id="searchBox" placeholder="Search a word...">
+  </div>
+</div>
+
+<div class="cat-resources-section" id="catResources">
+  <p class="section-title">Resources for this category</p>
+  <div class="cat-res-grid" id="catResGrid"></div>
+</div>
+
+<div class="cards-section">
+  <p class="section-title">Vocabulary index cards</p>
+  <div class="card-grid" id="cardGrid"></div>
+</div>
+
+<div class="resources-section">
+  <p class="section-title">Step 3 — Practise with linked resources</p>
+  <div class="resource-grid" id="resourceGrid"></div>
+</div>
+
+<div class="footer">
+  <p class="dev-line">Developed By: Mr. Bishnu Singh Rayamajhi</p>
+  <p class="dev-sub">Math Lecturer &amp; Head of Humanities &amp; Social Science, Kapilvastu Multiple Campus (KMC), Taulihawa</p>
+</div>
+
+<script>
+const LEVELS = [
+  {id:"beginner", numeral:"I", name:"Beginner", desc:"Everyday professional words, simple sentences."},
+  {id:"intermediate", numeral:"II", name:"Intermediate", desc:"Workplace phrases, structured speaking."},
+  {id:"advanced", numeral:"III", name:"Advanced", desc:"Nuanced, academic, and executive language."}
+];
+
+const CATEGORIES = ["technical","research","innovative","entrepreneurship","professional"];
+const CAT_LABEL = {
+  technical:"Technical", research:"Research", innovative:"Innovative",
+  entrepreneurship:"Entrepreneurship", professional:"Professional"
+};
+
+// Step resources with video and PDF links
+const STEPS = {
+  beginner:[
+    {t:"Learn the word", d:"Read the word, meaning, and pronunciation guide.", resources:[{l:"Word Guide PDF",u:"professional-english-speaking-handbook.pdf"},{l:"Playlist",u:"https://www.youtube.com/playlist?list=PLOw9F0IEF2AD-A6hnuGJUsjUveKFGPY2j"}]},
+    {t:"Say it aloud", d:"Repeat each word 3 times, stressing the marked syllable.", resources:[{l:"Pronunciation Video",u:"https://www.youtube.com/watch?v=gt1Nrqia-uE"},{l:"Practice PDF",u:"professional-english-speaking-handbook.pdf"}]},
+    {t:"Build a sentence", d:"Use the example sentence, then make your own.", resources:[{l:"Examples PDF",u:"professional-english-speaking-handbook.pdf"},{l:"Speaking Guide",u:"https://www.youtube.com/watch?v=ZSCvHb3a5_0"}]},
+    {t:"Watch and repeat", d:"Follow Prof. Sumita Roy's beginner videos below.", resources:[{l:"10-Min Video",u:"https://www.youtube.com/watch?v=gt1Nrqia-uE"},{l:"Full Playlist",u:"https://www.youtube.com/playlist?list=PLOw9F0IEF2AD-A6hnuGJUsjUveKFGPY2j"}]},
+    {t:"Record yourself", d:"Record a 30-second intro using 5 new words.", resources:[{l:"Tips PDF",u:"professional-english-speaking-handbook.pdf"},{l:"Deck",u:"professional-english-speaking-deck.pptx"}]}
+  ],
+  intermediate:[
+    {t:"Expand in context", d:"Learn words inside full workplace situations.", resources:[{l:"Workplace PDF",u:"professional-english-speaking-handbook.pdf"},{l:"Video",u:"https://www.youtube.com/watch?v=vVUWxJtHMGE"}]},
+    {t:"Practise phrases", d:"Turn words into emails, updates, and small talk.", resources:[{l:"Phrases PDF",u:"professional-english-speaking-handbook.pdf"},{l:"Stories Video",u:"https://www.youtube.com/watch?v=Zxq6oosJgQg"}]},
+    {t:"Mock discussion", d:"Discuss a work topic aloud for 2 minutes, unscripted.", resources:[{l:"Topics PDF",u:"professional-english-speaking-handbook.pdf"},{l:"Fluency Video",u:"https://www.youtube.com/watch?v=bc5n9ZXAKbk"}]},
+    {t:"Study register", d:"Compare casual vs. professional phrasing choices.", resources:[{l:"Register PDF",u:"professional-english-speaking-handbook.pdf"},{l:"Improvement Video",u:"https://www.youtube.com/watch?v=vVUWxJtHMGE"}]},
+    {t:"Get feedback", d:"Ask a peer or mentor to correct your recording.", resources:[{l:"Feedback PDF",u:"professional-english-speaking-handbook.pdf"},{l:"Playlist",u:"https://www.youtube.com/playlist?list=PLOw9F0IEF2AD-A6hnuGJUsjUveKFGPY2j"}]}
+  ],
+  advanced:[
+    {t:"Master nuance", d:"Learn idiomatic and diplomatic professional language.", resources:[{l:"Nuance PDF",u:"professional-english-speaking-handbook.pdf"},{l:"Fluency Video",u:"https://www.youtube.com/watch?v=bc5n9ZXAKbk"}]},
+    {t:"Impromptu speaking", d:"Respond to a prompt with zero preparation time.", resources:[{l:"Prompts PDF",u:"professional-english-speaking-handbook.pdf"},{l:"Improvement Video",u:"https://www.youtube.com/watch?v=YpxTxVWnw5U"}]},
+    {t:"Deliver a talk", d:"Present a 3-minute research or business update.", resources:[{l:"Delivery PDF",u:"professional-english-speaking-handbook.pdf"},{l:"Presentation Deck",u:"professional-english-speaking-deck.pptx"}]},
+    {t:"Debate a position", d:"Argue and defend a viewpoint under questioning.", resources:[{l:"Debate PDF",u:"professional-english-speaking-handbook.pdf"},{l:"Playlist",u:"https://www.youtube.com/playlist?list=PLOw9F0IEF2AD-A6hnuGJUsjUveKFGPY2j"}]},
+    {t:"Mentor a peer", d:"Teach one advanced word set to another learner.", resources:[{l:"Teaching PDF",u:"professional-english-speaking-handbook.pdf"},{l:"Expert Deck",u:"professional-english-speaking-deck.pptx"}]}
+  ]
+};
+
+// Category-specific resources
+const CATEGORY_RESOURCES = {
+  technical:[
+    {k:"Video · Prof. Sumita Roy", t:"Tech Vocabulary Basics", d:"Learn technical terminology for computers and systems.", l:[{n:"Watch",u:"https://www.youtube.com/watch?v=vVUWxJtHMGE"}]},
+    {k:"PDF · Free", t:"Technical Handbook", d:"Complete technical vocabulary reference with examples.", l:[{n:"Download",u:"professional-english-speaking-handbook.pdf"}]},
+    {k:"Presentation", t:"Technical Deck", d:"Slide presentation on tech speaking.", l:[{n:"Download",u:"professional-english-speaking-deck.pptx"}]}
+  ],
+  research:[
+    {k:"Video · Prof. Sumita Roy", t:"Research English Fundamentals", d:"Master research vocabulary and academic speaking.", l:[{n:"Watch",u:"https://www.youtube.com/watch?v=bc5n9ZXAKbk"}]},
+    {k:"PDF · Free", t:"Research Handbook", d:"Research methodology and academic phrasing guide.", l:[{n:"Download",u:"professional-english-speaking-handbook.pdf"}]},
+    {k:"Full Playlist", t:"Prof. Sumita Roy Channel", d:"Complete collection of English speaking lessons.", l:[{n:"Open",u:"https://www.youtube.com/playlist?list=PLOw9F0IEF2AD-A6hnuGJUsjUveKFGPY2j"}]}
+  ],
+  innovative:[
+    {k:"Video · Prof. Sumita Roy", t:"Creative English & Innovation", d:"Learn language for pitching ideas and innovations.", l:[{n:"Watch",u:"https://www.youtube.com/watch?v=gt1Nrqia-uE"}]},
+    {k:"PDF · Free", t:"Innovation Vocabulary", d:"Words and phrases for creative and disruptive ideas.", l:[{n:"Download",u:"professional-english-speaking-handbook.pdf"}]},
+    {k:"Presentation", t:"Innovation Deck", d:"Presentation slides for innovative concepts.", l:[{n:"Download",u:"professional-english-speaking-deck.pptx"}]}
+  ],
+  entrepreneurship:[
+    {k:"Video · Prof. Sumita Roy", t:"Business English Essentials", d:"Entrepreneurship vocabulary and startup terminology.", l:[{n:"Watch",u:"https://www.youtube.com/watch?v=Zxq6oosJgQg"}]},
+    {k:"PDF · Free", t:"Business Handbook", d:"Complete entrepreneurship vocabulary and case studies.", l:[{n:"Download",u:"professional-english-speaking-handbook.pdf"}]},
+    {k:"Full Playlist", t:"Prof. Sumita Roy Channel", d:"Learn from India's top English speaking coach.", l:[{n:"Open",u:"https://www.youtube.com/playlist?list=PLOw9F0IEF2AD-A6hnuGJUsjUveKFGPY2j"}]}
+  ],
+  professional:[
+    {k:"Video · Prof. Sumita Roy", t:"Professional Communication Mastery", d:"Workplace etiquette, meetings, and professional language.", l:[{n:"Watch",u:"https://www.youtube.com/watch?v=ZSCvHb3a5_0"}]},
+    {k:"PDF · Free", t:"Professional Handbook", d:"Email, report, and formal communication templates.", l:[{n:"Download",u:"professional-english-speaking-handbook.pdf"}]},
+    {k:"Presentation", t:"Professional Deck", d:"Slides for workplace presentations and meetings.", l:[{n:"Download",u:"professional-english-speaking-deck.pptx"}]}
+  ]
+};
+
+const RESOURCES = {
+  beginner:[
+    {kind:"Video · Prof. Sumita Roy", title:"Learn English in 10 minutes", text:"A gentle, spoken-first introduction ideal for absolute beginners.", links:[["Watch on YouTube","https://www.youtube.com/watch?v=gt1Nrqia-uE"]]},
+    {kind:"Video · Prof. Sumita Roy", title:"The right way to learn to speak English", text:"Foundational habits for building daily speaking confidence.", links:[["Watch on YouTube","https://www.youtube.com/watch?v=ZSCvHb3a5_0"]]},
+    {kind:"PDF & PPT · Free", title:"Beginner vocabulary handbook", text:"Printable word list, pronunciation guide, and practice sentences for this level.", links:[["Download PDF","professional-english-speaking-handbook.pdf"],["Download PPT","professional-english-speaking-deck.pptx"]], note:"Keep this file in the same folder as the PDF and PPT for the links to open."}
+  ],
+  intermediate:[
+    {kind:"Video · Prof. Sumita Roy", title:"How to improve English", text:"Workplace-style phrasing and everyday professional expressions.", links:[["Watch on YouTube","https://www.youtube.com/watch?v=vVUWxJtHMGE"]]},
+    {kind:"Video · Prof. Sumita Roy", title:"Learn English speaking through stories", text:"Story-based listening to build natural sentence flow.", links:[["Watch on YouTube","https://www.youtube.com/watch?v=Zxq6oosJgQg"]]},
+    {kind:"PDF & PPT · Free", title:"Intermediate vocabulary handbook", text:"Workplace phrase bank and email/report language for this level.", links:[["Download PDF","professional-english-speaking-handbook.pdf"],["Download PPT","professional-english-speaking-deck.pptx"]], note:"Keep this file in the same folder as the PDF and PPT for the links to open."}
+  ],
+  advanced:[
+    {kind:"Video · Prof. Sumita Roy", title:"How to speak English fluently", text:"Fluency, oratory technique, and confident delivery.", links:[["Watch on YouTube","https://www.youtube.com/watch?v=bc5n9ZXAKbk"]]},
+    {kind:"Video · Prof. Sumita Roy", title:"The best way to improve your English speaking", text:"Building self-confidence for high-stakes professional speaking.", links:[["Watch on YouTube","https://www.youtube.com/watch?v=YpxTxVWnw5U"]]},
+    {kind:"PDF & PPT · Free", title:"Advanced vocabulary handbook", text:"Research, innovation, and executive-level language reference.", links:[["Download PDF","professional-english-speaking-handbook.pdf"],["Download PPT","professional-english-speaking-deck.pptx"]], note:"Keep this file in the same folder as the PDF and PPT for the links to open."}
+  ]
+};
+const PLAYLIST_URL = "https://www.youtube.com/playlist?list=PLOw9F0IEF2AD-A6hnuGJUsjUveKFGPY2j";
+
+const WORDS = [
+  // BEGINNER
+  {level:"beginner", cat:"technical", word:"Device", pron:"/dih-VYCE/ · noun", meaning:"A machine or tool made for a particular purpose.", ex:"Please charge your device before the online class."},
+  {level:"beginner", cat:"technical", word:"Software", pron:"/SOFT-wair/ · noun", meaning:"Programs that run on a computer or phone.", ex:"Our office uses new software to track attendance."},
+  {level:"beginner", cat:"technical", word:"Network", pron:"/NET-wurk/ · noun", meaning:"A system of connected computers or people.", ex:"The campus network was slow this morning."},
+  {level:"beginner", cat:"technical", word:"Data", pron:"/DAY-tuh/ · noun", meaning:"Facts or numbers collected for study or use.", ex:"We saved the student data in a new file."},
+  {level:"beginner", cat:"technical", word:"Update", pron:"/uhp-DATE/ · verb", meaning:"To make something more current or add new information.", ex:"I will update the report by tomorrow morning."},
+
+  {level:"beginner", cat:"research", word:"Survey", pron:"/SUR-vay/ · noun", meaning:"A set of questions used to collect information.", ex:"We conducted a survey among first-year students."},
+  {level:"beginner", cat:"research", word:"Evidence", pron:"/EV-ih-duhns/ · noun", meaning:"Facts that show something is true.", ex:"The report gave clear evidence for the result."},
+  {level:"beginner", cat:"research", word:"Method", pron:"/METH-uhd/ · noun", meaning:"A planned way of doing something.", ex:"Our teacher explained the method step by step."},
+  {level:"beginner", cat:"research", word:"Result", pron:"/rih-ZUHLT/ · noun", meaning:"What happens because of a study or test.", ex:"The result of the experiment surprised everyone."},
+  {level:"beginner", cat:"research", word:"Analyze", pron:"/AN-uh-lyze/ · verb", meaning:"To study something carefully to understand it.", ex:"Let us analyze the data before the meeting."},
+
+  {level:"beginner", cat:"innovative", word:"Idea", pron:"/eye-DEE-uh/ · noun", meaning:"A new thought or plan.", ex:"She shared a good idea for the college fair."},
+  {level:"beginner", cat:"innovative", word:"Creative", pron:"/kree-AY-tiv/ · adjective", meaning:"Able to make or think of new things.", ex:"He gave a creative answer during the interview."},
+  {level:"beginner", cat:"innovative", word:"Invent", pron:"/in-VENT/ · verb", meaning:"To make something for the first time.", ex:"Students tried to invent a simple water filter."},
+  {level:"beginner", cat:"innovative", word:"Improve", pron:"/im-PROOV/ · verb", meaning:"To make something better.", ex:"We must improve our English speaking skills."},
+  {level:"beginner", cat:"innovative", word:"Design", pron:"/dih-ZINE/ · verb", meaning:"To plan how something will look or work.", ex:"They asked me to design the event poster."},
+
+  {level:"beginner", cat:"entrepreneurship", word:"Business", pron:"/BIZ-nis/ · noun", meaning:"Work done to earn money by trade.", ex:"My uncle runs a small stationery business."},
+  {level:"beginner", cat:"entrepreneurship", word:"Customer", pron:"/KUHS-tuh-mer/ · noun", meaning:"A person who buys goods or services.", ex:"The shop keeps its customers happy with good service."},
+  {level:"beginner", cat:"entrepreneurship", word:"Profit", pron:"/PROF-it/ · noun", meaning:"Money gained after paying all costs.", ex:"The shop made a good profit this month."},
+  {level:"beginner", cat:"entrepreneurship", word:"Market", pron:"/MAR-kit/ · noun", meaning:"A place or system where goods are bought and sold.", ex:"They are studying the local market before opening a shop."},
+  {level:"beginner", cat:"entrepreneurship", word:"Startup", pron:"/START-uhp/ · noun", meaning:"A new small business, often with a fresh idea.", ex:"Two students launched a startup selling handmade bags."},
+
+  {level:"beginner", cat:"professional", word:"Meeting", pron:"/MEE-ting/ · noun", meaning:"A gathering of people to discuss something.", ex:"We have a staff meeting every Sunday morning."},
+  {level:"beginner", cat:"professional", word:"Deadline", pron:"/DED-line/ · noun", meaning:"The time by which something must be finished.", ex:"Please submit the assignment before the deadline."},
+  {level:"beginner", cat:"professional", word:"Colleague", pron:"/KOL-eeg/ · noun", meaning:"A person you work with.", ex:"My colleague helped me prepare the presentation."},
+  {level:"beginner", cat:"professional", word:"Report", pron:"/rih-PORT/ · noun", meaning:"A written or spoken account of something.", ex:"I will send the monthly report by email."},
+  {level:"beginner", cat:"professional", word:"Punctual", pron:"/PUHNK-choo-uhl/ · adjective", meaning:"Arriving or acting at the right time.", ex:"Being punctual creates a good impression at work."},
+
+  // INTERMEDIATE
+  {level:"intermediate", cat:"technical", word:"Algorithm", pron:"/AL-guh-rith-uhm/ · noun", meaning:"A set of steps followed to solve a problem or task.", ex:"The app uses an algorithm to suggest nearby routes."},
+  {level:"intermediate", cat:"technical", word:"Interface", pron:"/IN-ter-fays/ · noun", meaning:"The point where a user interacts with a system.", ex:"The new interface makes the software easier to use."},
+  {level:"intermediate", cat:"technical", word:"Bandwidth", pron:"/BAND-width/ · noun", meaning:"The amount of data a network can carry.", ex:"Low bandwidth slowed down our video call."},
+  {level:"intermediate", cat:"technical", word:"Integration", pron:"/in-tuh-GRAY-shuhn/ · noun", meaning:"Combining different parts into one working system.", ex:"The integration of the two systems took two weeks."},
+  {level:"intermediate", cat:"technical", word:"Optimization", pron:"/op-tuh-my-ZAY-shuhn/ · noun", meaning:"Making something as effective or efficient as possible.", ex:"We focused on optimization to reduce loading time."},
+
+  {level:"intermediate", cat:"research", word:"Hypothesis", pron:"/hy-POTH-uh-sis/ · noun", meaning:"An idea proposed as a starting point for testing.", ex:"Our hypothesis was that shorter classes improve focus."},
+  {level:"intermediate", cat:"research", word:"Methodology", pron:"/meth-uh-DOL-uh-jee/ · noun", meaning:"The overall approach used to carry out research.", ex:"The methodology section explains how data was collected."},
+  {level:"intermediate", cat:"research", word:"Correlation", pron:"/kor-uh-LAY-shuhn/ · noun", meaning:"A connection or relationship between two things.", ex:"There is a strong correlation between attendance and marks."},
+  {level:"intermediate", cat:"research", word:"Citation", pron:"/sy-TAY-shuhn/ · noun", meaning:"A reference to a source used in your work.", ex:"Every claim in the paper needs a proper citation."},
+  {level:"intermediate", cat:"research", word:"Qualitative", pron:"/KWOL-ih-tay-tiv/ · adjective", meaning:"Based on descriptions or qualities, not numbers.", ex:"We used qualitative interviews alongside the survey."},
+
+  {level:"intermediate", cat:"innovative", word:"Prototype", pron:"/PROH-tuh-type/ · noun", meaning:"An early sample built to test an idea.", ex:"We built a prototype before the final product."},
+  {level:"intermediate", cat:"innovative", word:"Disruption", pron:"/dis-RUHP-shuhn/ · noun", meaning:"A major change that alters how things are done.", ex:"Online classes caused a disruption in traditional teaching."},
+  {level:"intermediate", cat:"innovative", word:"Ideation", pron:"/eye-dee-AY-shuhn/ · noun", meaning:"The process of forming and developing new ideas.", ex:"The workshop began with a group ideation session."},
+  {level:"intermediate", cat:"innovative", word:"Scalability", pron:"/skay-luh-BIL-ih-tee/ · noun", meaning:"The ability to grow without losing quality.", ex:"Investors asked about the scalability of the project."},
+  {level:"intermediate", cat:"innovative", word:"Breakthrough", pron:"/BRAYK-throo/ · noun", meaning:"An important discovery or sudden progress.", ex:"The team announced a breakthrough in their research."},
+
+  {level:"intermediate", cat:"entrepreneurship", word:"Investor", pron:"/in-VES-tor/ · noun", meaning:"A person who puts money into a business for future gain.", ex:"An investor agreed to fund the new app."},
+  {level:"intermediate", cat:"entrepreneurship", word:"Revenue model", pron:"/REV-uh-noo MOD-uhl/ · noun", meaning:"The plan for how a business will earn money.", ex:"Explain your revenue model clearly to the panel."},
+  {level:"intermediate", cat:"entrepreneurship", word:"Pitch", pron:"/pich/ · noun", meaning:"A short persuasive presentation of an idea.", ex:"She practised her pitch before the competition."},
+  {level:"intermediate", cat:"entrepreneurship", word:"Equity", pron:"/EK-wih-tee/ · noun", meaning:"Ownership share in a company.", ex:"The founders kept most of the equity for themselves."},
+  {level:"intermediate", cat:"entrepreneurship", word:"Stakeholder", pron:"/STAYK-hohl-der/ · noun", meaning:"Anyone affected by or interested in a project's outcome.", ex:"We invited every stakeholder to the planning meeting."},
+
+  {level:"intermediate", cat:"professional", word:"Negotiation", pron:"/nih-goh-shee-AY-shuhn/ · noun", meaning:"Discussion aimed at reaching an agreement.", ex:"The negotiation ended with a fair salary offer."},
+  {level:"intermediate", cat:"professional", word:"Collaboration", pron:"/kuh-lab-uh-RAY-shuhn/ · noun", meaning:"Working together with others toward a shared goal.", ex:"Good collaboration made the project finish early."},
+  {level:"intermediate", cat:"professional", word:"Feedback", pron:"/FEED-bak/ · noun", meaning:"Comments given on someone's work or performance.", ex:"Please give me feedback on my presentation."},
+  {level:"intermediate", cat:"professional", word:"Accountability", pron:"/uh-kown-tuh-BIL-ih-tee/ · noun", meaning:"Being responsible for one's actions and decisions.", ex:"Accountability is expected from every team member."},
+  {level:"intermediate", cat:"professional", word:"Initiative", pron:"/ih-NISH-uh-tiv/ · noun", meaning:"The ability to act independently without being told.", ex:"She showed initiative by fixing the issue herself."},
+
+  // ADVANCED
+  {level:"advanced", cat:"technical", word:"Infrastructure", pron:"/IN-fruh-struhk-cher/ · noun", meaning:"The basic systems needed for an organisation to run.", ex:"The college is upgrading its digital infrastructure."},
+  {level:"advanced", cat:"technical", word:"Architecture", pron:"/AR-kih-tek-cher/ · noun", meaning:"The overall design and structure of a system.", ex:"The engineers reviewed the software architecture together."},
+  {level:"advanced", cat:"technical", word:"Encryption", pron:"/en-KRIP-shuhn/ · noun", meaning:"Converting data into a secure, unreadable form.", ex:"Encryption protects student records from misuse."},
+  {level:"advanced", cat:"technical", word:"Interoperability", pron:"/in-ter-op-er-uh-BIL-ih-tee/ · noun", meaning:"The ability of systems to work together smoothly.", ex:"Interoperability between departments reduced paperwork."},
+  {level:"advanced", cat:"technical", word:"Cloud-native", pron:"/klowd NAY-tiv/ · adjective", meaning:"Built specifically to run using cloud computing.", ex:"The new platform was designed as cloud-native."},
+
+  {level:"advanced", cat:"research", word:"Peer review", pron:"/peer rih-VYOO/ · noun", meaning:"Evaluation of research by experts in the same field.", ex:"The paper passed peer review after two revisions."},
+  {level:"advanced", cat:"research", word:"Empirical", pron:"/em-PIR-ih-kuhl/ · adjective", meaning:"Based on observation or experiment, not theory alone.", ex:"We need empirical support before publishing this claim."},
+  {level:"advanced", cat:"research", word:"Longitudinal", pron:"/lon-jih-TOOD-uh-nuhl/ · adjective", meaning:"Studying the same subjects over a long period.", ex:"It was a longitudinal study spanning five years."},
+  {level:"advanced", cat:"research", word:"Statistical significance", pron:"/stuh-TIS-tih-kuhl sig-NIF-ih-kuhns/ · noun", meaning:"A result unlikely to have occurred by chance.", ex:"The findings showed statistical significance at p<0.05."},
+  {level:"advanced", cat:"research", word:"Triangulation", pron:"/try-ang-guh-LAY-shuhn/ · noun", meaning:"Using multiple methods to confirm a finding.", ex:"Triangulation strengthened the reliability of our results."},
+
+  {level:"advanced", cat:"innovative", word:"Paradigm shift", pron:"/PAIR-uh-dyme shift/ · noun", meaning:"A fundamental change in approach or thinking.", ex:"Remote learning caused a paradigm shift in education."},
+  {level:"advanced", cat:"innovative", word:"Disruptive innovation", pron:"/dis-RUHP-tiv in-uh-VAY-shuhn/ · noun", meaning:"An innovation that transforms an existing market.", ex:"The startup's model is a case of disruptive innovation."},
+  {level:"advanced", cat:"innovative", word:"Ideation sprint", pron:"/eye-dee-AY-shuhn sprint/ · noun", meaning:"A focused, time-boxed session for generating ideas.", ex:"The team ran a two-day ideation sprint before launch."},
+  {level:"advanced", cat:"innovative", word:"Convergence", pron:"/kuhn-VUR-juhns/ · noun", meaning:"Different technologies or ideas coming together.", ex:"The convergence of AI and education is accelerating."},
+  {level:"advanced", cat:"innovative", word:"Diffusion of innovation", pron:"/dih-FYOO-zhuhn uhv in-uh-VAY-shuhn/ · noun", meaning:"How a new idea spreads through a population over time.", ex:"His thesis examined diffusion of innovation in rural markets."},
+
+  {level:"advanced", cat:"entrepreneurship", word:"Venture capital", pron:"/VEN-cher KAP-ih-tuhl/ · noun", meaning:"Funding provided to early-stage, high-growth companies.", ex:"The startup secured venture capital in its second year."},
+  {level:"advanced", cat:"entrepreneurship", word:"Bootstrapping", pron:"/BOOT-strap-ing/ · noun", meaning:"Building a business using personal funds, without outside investment.", ex:"They grew the company entirely through bootstrapping."},
+  {level:"advanced", cat:"entrepreneurship", word:"Value proposition", pron:"/VAL-yoo prop-uh-ZISH-uhn/ · noun", meaning:"The core benefit a product promises to customers.", ex:"Define your value proposition in a single sentence."},
+  {level:"advanced", cat:"entrepreneurship", word:"Exit strategy", pron:"/EG-zit STRAT-uh-jee/ · noun", meaning:"A founder's plan for leaving or selling a business.", ex:"Investors always ask about the founder's exit strategy."},
+  {level:"advanced", cat:"entrepreneurship", word:"Due diligence", pron:"/doo DIL-ih-juhns/ · noun", meaning:"Careful investigation before making a business decision.", ex:"The firm conducted due diligence before the merger."},
+
+  {level:"advanced", cat:"professional", word:"Diplomacy", pron:"/dih-PLOH-muh-see/ · noun", meaning:"Tact and skill in dealing with sensitive matters.", ex:"She handled the client complaint with great diplomacy."},
+  {level:"advanced", cat:"professional", word:"Executive presence", pron:"/ig-ZEK-yuh-tiv PREZ-uhns/ · noun", meaning:"The confidence and gravitas expected of senior leaders.", ex:"His executive presence impressed the interview panel."},
+  {level:"advanced", cat:"professional", word:"Stakeholder alignment", pron:"/STAYK-hohl-der uh-LYNE-muhnt/ · noun", meaning:"Ensuring all interested parties agree on goals.", ex:"Stakeholder alignment was reached before the rollout."},
+  {level:"advanced", cat:"professional", word:"Strategic foresight", pron:"/struh-TEE-jik FOR-syte/ · noun", meaning:"The ability to anticipate future trends and plan ahead.", ex:"Strategic foresight helped the college adapt early."},
+  {level:"advanced", cat:"professional", word:"Cross-functional", pron:"/kraws FUHNK-shuh-nuhl/ · adjective", meaning:"Involving people from different departments or skill areas.", ex:"A cross-functional team delivered the project on time."}
+];
+
+let state = { level:"beginner", cat:"all", search:"" };
+
+function renderLevelTabs(){
+  const wrap = document.getElementById("levelTabs");
+  wrap.innerHTML = "";
+  LEVELS.forEach(lv=>{
+    const el = document.createElement("div");
+    el.className = "level-tab fade-in" + (state.level===lv.id ? " active" : "");
+    el.innerHTML = `<div class="numeral">${lv.numeral}</div><div class="lvl-name">${lv.name}</div><div class="lvl-desc">${lv.desc}</div>`;
+    el.onclick = ()=>{ if(state.level===lv.id) return; state.level = lv.id; state.cat="all"; renderAll(); };
+    wrap.appendChild(el);
+  });
+}
+
+function renderSteps(){
+  const wrap = document.getElementById("stepsRow");
+  wrap.innerHTML = "";
+  STEPS[state.level].forEach((s,i)=>{
+    const el = document.createElement("div");
+    el.className = "step-card fade-in";
+    el.style.animationDelay = (i*0.03)+"s";
+    let linksHtml = "";
+    if(s.resources){
+      linksHtml = "<div class='step-links'>" + s.resources.map(r=>{
+        const isLocal = !r.u.startsWith("http");
+        return `<a class="step-link" href="${r.u}" ${isLocal ? 'download' : 'target="_blank"'}>${r.l}</a>`;
+      }).join(" ") + "</div>";
+    }
+    el.innerHTML = `<span class="step-num">${i+1}</span><div class="step-title">${s.t}</div><div class="step-text">${s.d}</div>${linksHtml}`;
+    wrap.appendChild(el);
+  });
+}
+
+function renderFilters(){
+  const wrap = document.getElementById("filterRow");
+  wrap.innerHTML = "";
+  const allChip = document.createElement("button");
+  allChip.type = "button";
+  allChip.className = "chip" + (state.cat==="all"?" active":"");
+  allChip.textContent = "All categories";
+  allChip.onclick = ()=>{ if(state.cat==="all") return; state.cat="all"; renderAll(); };
+  wrap.appendChild(allChip);
+
+  CATEGORIES.forEach(c=>{
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "chip" + (state.cat===c?" active":"");
+    chip.textContent = CAT_LABEL[c];
+    chip.onclick = ()=>{ if(state.cat===c) return; state.cat=c; renderAll(); };
+    wrap.appendChild(chip);
+  });
+
+  const search = document.createElement("input");
+  search.className = "search-input";
+  search.id = "searchBox";
+  search.placeholder = "Search a word...";
+  search.value = state.search;
+  search.oninput = (e)=>{ state.search = e.target.value; renderCards(); };
+  wrap.appendChild(search);
+}
+
+function renderCategoryResources(){
+  const section = document.getElementById("catResources");
+  const grid = document.getElementById("catResGrid");
+  if(state.cat === "all"){
+    section.classList.remove("active");
+    return;
+  }
+  section.classList.add("active");
+  grid.innerHTML = "";
+  const resources = CATEGORY_RESOURCES[state.cat] || [];
+  resources.forEach((r,i)=>{
+    const el = document.createElement("div");
+    el.className = "cat-res-card fade-in";
+    el.style.animationDelay = (i*0.04)+"s";
+    const linksHtml = r.l.map(link=>{
+      const isLocal = !link.u.startsWith("http");
+      return `<a class="cat-link" href="${link.u}" ${isLocal ? 'download' : 'target="_blank"'}>${link.n}</a>`;
+    }).join(" ");
+    el.innerHTML = `
+      <div class="res-kind">${r.k}</div>
+      <div class="res-title">${r.t}</div>
+      <div class="res-desc">${r.d}</div>
+      ${linksHtml}
+    `;
+    grid.appendChild(el);
+  });
+}
+
+function renderCards(){
+  const wrap = document.getElementById("cardGrid");
+  wrap.innerHTML = "";
+  const q = state.search.trim().toLowerCase();
+  const list = WORDS.filter(w=>{
+    if(w.level!==state.level) return false;
+    if(state.cat!=="all" && w.cat!==state.cat) return false;
+    if(q && !w.word.toLowerCase().includes(q)) return false;
+    return true;
+  });
+  if(list.length===0){
+    wrap.innerHTML = `<div class="empty-note">No words match this search. Try a different term or category.</div>`;
+    return;
+  }
+  list.forEach((w,i)=>{
+    const el = document.createElement("div");
+    el.className = "word-card fade-in";
+    el.style.animationDelay = Math.min(i*0.025, 0.4)+"s";
+    el.innerHTML = `
+      <span class="cat-tag tag-${w.cat}">${CAT_LABEL[w.cat]}</span>
+      <div class="word">${w.word}</div>
+      <div class="pos-pron">${w.pron}</div>
+      <div class="meaning">${w.meaning}</div>
+      <div class="example">"${w.ex}"</div>
+    `;
+    wrap.appendChild(el);
+  });
+}
+
+function renderResources(){
+  const wrap = document.getElementById("resourceGrid");
+  wrap.innerHTML = "";
+  RESOURCES[state.level].forEach((r,i)=>{
+    const el = document.createElement("div");
+    el.className = "res-card fade-in";
+    el.style.animationDelay = (i*0.04)+"s";
+    const linksHtml = r.links.map(l=>{
+      const isLocalFile = !l[1].startsWith("http");
+      const attrs = isLocalFile ? `download` : `target="_blank" rel="noopener"`;
+      return `<a class="res-link" href="${l[1]}" ${attrs}>${l[0]}</a>`;
+    }).join("");
+    el.innerHTML = `
+      <div class="res-kind">${r.kind}</div>
+      <div class="res-title">${r.title}</div>
+      <div class="res-text">${r.text}</div>
+      ${linksHtml}
+      ${r.note ? `<div class="res-note">${r.note}</div>` : ""}
+    `;
+    wrap.appendChild(el);
+  });
+  const playlistEl = document.createElement("div");
+  playlistEl.className = "res-card fade-in";
+  playlistEl.style.animationDelay = "0.12s";
+  playlistEl.innerHTML = `
+    <div class="res-kind">Full playlist · Prof. Sumita Roy</div>
+    <div class="res-title">English Speaking Practice</div>
+    <div class="res-text">The complete playlist, useful across all three levels.</div>
+    <a class="res-link" href="${PLAYLIST_URL}" target="_blank" rel="noopener">Open playlist</a>
+  `;
+  wrap.appendChild(playlistEl);
+}
+
+function renderAll(){
+  renderLevelTabs();
+  renderSteps();
+  renderFilters();
+  renderCategoryResources();
+  renderCards();
+  renderResources();
+}
+
+renderAll();
+</script>
+</body>
+</html>
