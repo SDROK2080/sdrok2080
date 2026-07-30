@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scientific Vocabulary & Professional Speaking Coach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root {
+  --bg:#0a0e1a; --bg-elevated:#111827; --bg-card:#161d2e; --bg-hover:#1e2738; --bg-overlay:rgba(10,14,26,.95);
+  --border:#232b3d; --border-light:#2f3a52; --border-glow:rgba(59,130,246,.15);
+  --text:#f0f2f7; --text-secondary:#a0aec0; --text-muted:#64748b;
+  --accent:#3b82f6; --accent-light:#60a5fa; --accent-glow:rgba(59,130,246,.2);
+  --purple:#8b5cf6; --cyan:#06b6d4; --green:#10b981; --orange:#f59e0b; --pink:#ec4899; --red:#ef4444;
+  --grad-blue:linear-gradient(135deg,#3b82f6,#2563eb); --grad-purple:linear-gradient(135deg,#8b5cf6,#7c3aed);
+  --grad-cyan:linear-gradient(135deg,#06b6d4,#0891b2); --grad-green:linear-gradient(135deg,#10b981,#059669);
+  --grad-orange:linear-gradient(135deg,#f59e0b,#d97706); --grad-pink:linear-gradient(135deg,#ec4899,#db2777);
+  --shadow:0 4px 24px rgba(0,0,0,.5); --shadow-lg:0 12px 48px rgba(0,0,0,.6);
+  --radius:14px; --radius-lg:18px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; line-height:1.6; overflow-x:hidden; }
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:var(--accent); }
+
+/* Particles */
+.particles { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+.particle { position:absolute; width:2px; height:2px; background:var(--accent); border-radius:50%; opacity:.15; animation:float 18s infinite linear; }
+@keyframes float { 0%{transform:translateY(100vh) translateX(0);opacity:0} 10%{opacity:.25} 90%{opacity:.25} 100%{transform:translateY(-10vh) translateX(80px);opacity:0} }
+
+/* Layout */
+.app { position:relative; z-index:1; display:flex; min-height:100vh; }
+.sidebar { width:270px; background:var(--bg-elevated); border-right:1px solid var(--border); display:flex; flex-direction:column; position:fixed; height:100vh; z-index:100; transition:transform .35s cubic-bezier(.4,0,.2,1); }
+.sidebar-header { padding:24px 20px; border-bottom:1px solid var(--border); }
+.brand { display:flex; align-items:center; gap:12px; }
+.brand-icon { width:44px; height:44px; background:var(--grad-blue); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; box-shadow:0 0 24px var(--accent-glow); animation:pulse 3s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{box-shadow:0 0 20px var(--accent-glow)} 50%{box-shadow:0 0 35px var(--accent-glow),0 0 60px rgba(59,130,246,.08)} }
+.brand-title { font-size:1.05rem; font-weight:800; letter-spacing:-.3px; }
+.brand-sub { font-size:.72rem; color:var(--text-muted); margin-top:2px; }
+.nav { padding:12px 10px; flex:1; overflow-y:auto; }
+.nav-item { display:flex; align-items:center; gap:12px; padding:11px 16px; border-radius:10px; color:var(--text-secondary); cursor:pointer; transition:all .2s; margin-bottom:3px; font-size:.87rem; font-weight:500; border:none; background:transparent; width:100%; text-align:left; position:relative; }
+.nav-item:hover { background:var(--bg-hover); color:var(--text); }
+.nav-item.active { background:rgba(59,130,246,.1); color:var(--accent-light); }
+.nav-item i { width:22px; text-align:center; font-size:.95rem; }
+.nav-item .nav-badge { position:absolute; right:12px; background:var(--red); color:#fff; font-size:.65rem; padding:2px 6px; border-radius:10px; font-weight:700; }
+.sidebar-footer { padding:16px; border-top:1px solid var(--border); font-size:.73rem; color:var(--text-muted); text-align:center; line-height:1.5; }
+.main { flex:1; margin-left:270px; min-height:100vh; }
+.topbar { position:sticky; top:0; background:rgba(10,14,26,.9); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); padding:14px 28px; display:flex; align-items:center; justify-content:space-between; z-index:50; }
+.page-title { font-size:1.2rem; font-weight:700; }
+.topbar-actions { display:flex; gap:12px; align-items:center; }
+.search-wrap { position:relative; }
+.search-wrap input { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:9px 14px 9px 38px; color:var(--text); width:280px; font-size:.85rem; transition:all .25s; }
+.search-wrap input:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-glow); }
+.search-wrap i { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--text-muted); font-size:.85rem; }
+.content { padding:24px 28px; max-width:1280px; }
+
+/* Cards */
+.card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px; transition:all .3s; }
+.card:hover { border-color:var(--border-light); box-shadow:var(--shadow); }
+.card-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:10px; }
+.card-title { font-size:1.05rem; font-weight:700; display:flex; align-items:center; gap:10px; }
+.icon-box { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:.9rem; flex-shrink:0; }
+.ib-blue { background:rgba(59,130,246,.12); color:#60a5fa; }
+.ib-purple { background:rgba(139,92,246,.12); color:#a78bfa; }
+.ib-cyan { background:rgba(6,182,212,.12); color:#22d3ee; }
+.ib-green { background:rgba(16,185,129,.12); color:#34d399; }
+.ib-orange { background:rgba(245,158,11,.12); color:#fbbf24; }
+.ib-pink { background:rgba(236,72,153,.12); color:#f472b6; }
+.ib-red { background:rgba(239,68,68,.12); color:#f87171; }
+
+/* Buttons */
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 18px; border-radius:10px; border:none; font-size:.85rem; font-weight:600; cursor:pointer; transition:all .2s; font-family:inherit; text-decoration:none; line-height:1.4; }
+.btn-primary { background:var(--grad-blue); color:#fff; box-shadow:0 4px 16px var(--accent-glow); }
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 6px 24px var(--accent-glow); }
+.btn-secondary { background:var(--bg-hover); border:1px solid var(--border); color:var(--text); }
+.btn-secondary:hover { border-color:var(--border-light); background:#263044; }
+.btn-success { background:var(--grad-green); color:#fff; }
+.btn-accent { background:var(--grad-purple); color:#fff; }
+.btn-orange { background:var(--grad-orange); color:#fff; }
+.btn-cyan { background:var(--grad-cyan); color:#fff; }
+.btn-pink { background:var(--grad-pink); color:#fff; }
+.btn-ghost { background:transparent; border:1px solid var(--border); color:var(--text-secondary); }
+.btn-ghost:hover { border-color:var(--accent); color:var(--accent-light); background:rgba(59,130,246,.05); }
+.btn-sm { padding:7px 14px; font-size:.78rem; }
+.btn-lg { padding:14px 24px; font-size:.95rem; }
+
+/* Content Button - Special styling for teaching-learning */
+.content-btn { display:inline-flex; align-items:center; gap:8px; padding:8px 16px; border-radius:10px; background:linear-gradient(135deg,rgba(59,130,246,.12),rgba(139,92,246,.12)); border:1px solid rgba(139,92,246,.3); color:#a78bfa; font-size:.82rem; font-weight:600; cursor:pointer; transition:all .25s; }
+.content-btn:hover { background:linear-gradient(135deg,rgba(59,130,246,.2),rgba(139,92,246,.2)); border-color:rgba(139,92,246,.5); transform:translateY(-1px); box-shadow:0 4px 12px rgba(139,92,246,.15); }
+.content-btn i { font-size:.85rem; }
+
+/* Tags */
+.tags { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; }
+.tag { padding:5px 14px; border-radius:20px; border:1px solid var(--border); background:var(--bg-elevated); color:var(--text-muted); font-size:.78rem; font-weight:500; cursor:pointer; transition:all .2s; }
+.tag:hover { border-color:var(--accent); color:var(--accent-light); }
+.tag.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+
+/* Grid */
+.grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+.grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+@media(max-width:1024px){ .grid-4{grid-template-columns:repeat(2,1fr);} .grid-3{grid-template-columns:repeat(2,1fr);} }
+@media(max-width:768px){ .sidebar{transform:translateX(-100%);} .sidebar.open{transform:translateX(0);} .main{margin-left:0;} .grid-2,.grid-3{grid-template-columns:1fr;} .grid-4{grid-template-columns:1fr;} .search-wrap input{width:160px;} }
+
+/* Stat cards */
+.stat-card { background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--radius); padding:20px; text-align:center; transition:all .3s; }
+.stat-card:hover { transform:translateY(-3px); border-color:var(--border-light); }
+.stat-value { font-size:1.7rem; font-weight:800; background:var(--grad-blue); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.stat-label { font-size:.78rem; color:var(--text-muted); margin-top:4px; }
+
+/* Vocab list */
+.vocab-list { display:flex; flex-direction:column; gap:8px; max-height:600px; overflow-y:auto; padding-right:6px; }
+.vocab-item { background:var(--bg-elevated); border:1px solid var(--border); border-radius:12px; padding:13px 16px; cursor:pointer; transition:all .2s; display:flex; align-items:center; justify-content:space-between; }
+.vocab-item:hover { border-color:var(--accent); background:#1a2233; transform:translateX(4px); }
+.vocab-item.active { border-color:var(--accent); background:rgba(59,130,246,.06); }
+.vocab-item-left { display:flex; align-items:center; gap:12px; }
+.vocab-num { width:28px; height:28px; border-radius:8px; background:var(--bg-hover); display:flex; align-items:center; justify-content:center; font-size:.75rem; font-weight:700; color:var(--text-muted); flex-shrink:0; }
+.vocab-item.active .vocab-num { background:var(--accent); color:#fff; }
+.vocab-word-text { font-weight:600; font-size:.93rem; }
+.vocab-phonetic-small { font-family:'JetBrains Mono',monospace; font-size:.7rem; color:var(--text-muted); }
+.vocab-cat { padding:2px 10px; border-radius:6px; font-size:.68rem; font-weight:600; text-transform:capitalize; flex-shrink:0; }
+.cat-research { background:rgba(59,130,246,.1); color:#60a5fa; }
+.cat-innovation { background:rgba(139,92,246,.1); color:#a78bfa; }
+.cat-professional { background:rgba(6,182,212,.1); color:#22d3ee; }
+.cat-academic { background:rgba(16,185,129,.1); color:#34d399; }
+.cat-speaking { background:rgba(245,158,11,.1); color:#fbbf24; }
+.cat-data { background:rgba(236,72,153,.1); color:#f472b6; }
+.cat-leadership { background:rgba(239,68,68,.1); color:#f87171; }
+
+/* Detail panel */
+.detail-panel { position:sticky; top:20px; }
+.detail-empty { text-align:center; padding:50px 20px; color:var(--text-muted); }
+.detail-empty i { font-size:2.8rem; margin-bottom:14px; opacity:.35; }
+.detail-content { animation:fadeIn .35s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+.detail-word { font-size:1.8rem; font-weight:800; background:var(--grad-blue); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:4px; }
+.detail-phonetic { font-family:'JetBrains Mono',monospace; color:var(--text-secondary); font-size:.88rem; margin-bottom:18px; }
+.detail-section { margin-bottom:18px; }
+.detail-section-title { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:var(--text-muted); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+.detail-definition { color:var(--text); line-height:1.7; font-size:.9rem; }
+.detail-example { background:var(--bg-elevated); border-left:3px solid var(--accent); padding:12px 16px; border-radius:0 10px 10px 0; color:var(--text-secondary); font-style:italic; font-size:.84rem; line-height:1.6; }
+.synonyms { display:flex; flex-wrap:wrap; gap:6px; }
+.synonym-tag { padding:4px 12px; background:var(--bg-hover); border:1px solid var(--border); border-radius:20px; font-size:.75rem; color:var(--text-secondary); cursor:pointer; transition:all .2s; }
+.synonym-tag:hover { border-color:var(--accent); color:var(--accent-light); }
+.action-row { display:flex; gap:10px; margin-top:18px; flex-wrap:wrap; }
+
+/* Flashcards */
+.fc-container { perspective:1000px; width:100%; max-width:500px; margin:0 auto; height:280px; }
+.flashcard { width:100%; height:100%; position:relative; transform-style:preserve-3d; transition:transform .6s cubic-bezier(.4,0,.2,1); cursor:pointer; }
+.flashcard.flipped { transform:rotateY(180deg); }
+.fc-face { position:absolute; width:100%; height:100%; backface-visibility:hidden; border-radius:var(--radius-lg); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:30px; border:1px solid var(--border); }
+.fc-front { background:var(--grad-blue); color:#fff; }
+.fc-back { background:var(--bg-card); transform:rotateY(180deg); border-color:var(--accent); }
+.fc-word { font-size:1.6rem; font-weight:800; margin-bottom:4px; }
+.fc-phonetic { font-family:'JetBrains Mono',monospace; opacity:.8; font-size:.88rem; }
+.fc-hint { font-size:.82rem; opacity:.65; margin-top:10px; }
+.fc-definition { font-size:.95rem; color:var(--text); text-align:center; line-height:1.6; margin-bottom:14px; }
+.fc-example { font-size:.84rem; color:var(--text-secondary); font-style:italic; text-align:center; }
+.fc-controls { display:flex; justify-content:center; gap:12px; margin-top:22px; }
+.fc-progress { text-align:center; margin-bottom:14px; color:var(--text-muted); font-size:.85rem; }
+
+/* Quiz */
+.quiz-option { padding:13px 16px; background:var(--bg-elevated); border:1px solid var(--border); border-radius:12px; cursor:pointer; transition:all .2s; font-size:.9rem; display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+.quiz-option:hover { border-color:var(--accent); background:rgba(59,130,246,.04); }
+.quiz-option.correct { border-color:var(--green); background:rgba(16,185,129,.1); }
+.quiz-option.wrong { border-color:var(--red); background:rgba(239,68,68,.1); }
+.quiz-end { text-align:center; padding:40px; }
+.quiz-score-big { font-size:3.2rem; font-weight:800; background:var(--grad-blue); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+/* Speaking */
+.mic-btn { width:84px; height:84px; border-radius:50%; background:var(--grad-blue); border:none; color:#fff; font-size:1.8rem; cursor:pointer; transition:all .3s; box-shadow:0 4px 20px var(--accent-glow); display:flex; align-items:center; justify-content:center; margin:18px auto; }
+.mic-btn:hover { transform:scale(1.08); }
+.mic-btn.recording { animation:micPulse 1.5s ease-in-out infinite; background:var(--red); }
+@keyframes micPulse { 0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.4)} 50%{box-shadow:0 0 0 22px rgba(239,68,68,0)} }
+.transcript-box { min-height:90px; background:var(--bg-elevated); border:1px solid var(--border); border-radius:12px; padding:14px; margin-top:14px; font-size:.88rem; color:var(--text-muted); line-height:1.6; }
+.transcript-box.has-text { color:var(--text); }
+.feedback-box { margin-top:14px; padding:14px; background:rgba(16,185,129,.06); border:1px solid rgba(16,185,129,.15); border-radius:12px; display:none; }
+.feedback-box.show { display:block; }
+
+/* Video cards */
+.video-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; }
+.video-card { background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; transition:all .3s; cursor:pointer; }
+.video-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); border-color:var(--border-light); }
+.video-thumb { position:relative; width:100%; padding-top:56.25%; background:var(--bg-hover); overflow:hidden; }
+.video-thumb img { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; transition:transform .3s; }
+.video-card:hover .video-thumb img { transform:scale(1.05); }
+.play-btn { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:48px; height:48px; background:rgba(0,0,0,.7); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:1rem; transition:all .3s; }
+.video-card:hover .play-btn { background:var(--accent); transform:translate(-50%,-50%) scale(1.1); }
+.video-info { padding:13px 15px; }
+.video-title { font-size:.86rem; font-weight:600; color:var(--text); line-height:1.4; margin-bottom:5px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.video-meta { font-size:.74rem; color:var(--text-muted); display:flex; align-items:center; gap:10px; }
+.video-cat-tag { display:inline-block; padding:2px 8px; border-radius:4px; font-size:.65rem; font-weight:600; text-transform:capitalize; margin-top:6px; }
+
+/* PDF cards */
+.pdf-card { background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--radius); padding:20px; transition:all .3s; display:flex; flex-direction:column; height:100%; }
+.pdf-card:hover { border-color:var(--accent); transform:translateY(-3px); box-shadow:var(--shadow); }
+.pdf-icon { width:44px; height:44px; background:rgba(239,68,68,.1); color:var(--red); border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; margin-bottom:12px; }
+.pdf-title { font-weight:700; font-size:.92rem; margin-bottom:5px; line-height:1.4; }
+.pdf-desc { font-size:.8rem; color:var(--text-secondary); line-height:1.5; flex:1; margin-bottom:12px; }
+.pdf-source { font-size:.72rem; color:var(--text-muted); margin-bottom:12px; }
+
+/* Scenarios */
+.scenario-item { background:var(--bg-elevated); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:10px; cursor:pointer; transition:all .2s; }
+.scenario-item:hover { border-color:var(--accent); transform:translateX(4px); background:#1a2233; }
+.scenario-title { font-weight:700; display:flex; align-items:center; gap:10px; margin-bottom:5px; font-size:.95rem; }
+.scenario-desc { font-size:.84rem; color:var(--text-secondary); line-height:1.5; }
+
+/* Resource Hub Modal */
+.modal-overlay { position:fixed; inset:0; background:var(--bg-overlay); backdrop-filter:blur(12px); z-index:2000; display:none; align-items:center; justify-content:center; padding:20px; opacity:0; transition:opacity .3s; }
+.modal-overlay.show { display:flex; opacity:1; }
+.modal-box { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); max-width:1000px; width:100%; max-height:90vh; overflow:hidden; display:flex; flex-direction:column; transform:scale(.95); transition:transform .3s cubic-bezier(.4,0,.2,1); }
+.modal-overlay.show .modal-box { transform:scale(1); }
+.modal-head { padding:18px 24px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; background:var(--bg-elevated); }
+.modal-body { padding:24px; overflow-y:auto; flex:1; }
+.modal-close { width:36px; height:36px; border-radius:10px; border:1px solid var(--border); background:var(--bg-hover); color:var(--text); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s; }
+.modal-close:hover { background:var(--red); border-color:var(--red); color:#fff; }
+
+/* Resource Hub Tabs */
+.res-tabs { display:flex; gap:6px; margin-bottom:20px; border-bottom:1px solid var(--border); padding-bottom:12px; }
+.res-tab { padding:8px 18px; border-radius:8px; border:none; background:transparent; color:var(--text-muted); font-size:.85rem; font-weight:600; cursor:pointer; transition:all .2s; }
+.res-tab:hover { color:var(--text); background:var(--bg-hover); }
+.res-tab.active { background:rgba(59,130,246,.1); color:var(--accent-light); }
+.res-content { display:none; }
+.res-content.active { display:block; animation:fadeIn .3s ease; }
+
+/* Teaching Resource Cards in Hub */
+.res-card { background:var(--bg-elevated); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:12px; transition:all .2s; }
+.res-card:hover { border-color:var(--accent); transform:translateX(3px); }
+.res-card-title { font-weight:700; font-size:.92rem; margin-bottom:4px; display:flex; align-items:center; gap:8px; }
+.res-card-meta { font-size:.78rem; color:var(--text-muted); margin-bottom:8px; }
+.res-card-desc { font-size:.84rem; color:var(--text-secondary); line-height:1.5; margin-bottom:10px; }
+.res-card-actions { display:flex; gap:8px; flex-wrap:wrap; }
+
+/* Content Hub Button - floating or inline */
+.hub-trigger { display:inline-flex; align-items:center; gap:8px; padding:10px 20px; border-radius:12px; background:linear-gradient(135deg,rgba(59,130,246,.15),rgba(139,92,246,.15)); border:1px solid rgba(139,92,246,.25); color:#c4b5fd; font-size:.88rem; font-weight:600; cursor:pointer; transition:all .25s; }
+.hub-trigger:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(139,92,246,.15); border-color:rgba(139,92,246,.4); }
+.hub-trigger i { font-size:.9rem; }
+
+/* Section title with content button */
+.section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px; }
+.section-header h2 { font-size:1.1rem; font-weight:700; }
+
+/* Toast */
+.toast-wrap { position:fixed; bottom:24px; right:24px; z-index:3000; display:flex; flex-direction:column; gap:10px; }
+.toast { padding:14px 20px; border-radius:12px; background:var(--bg-card); border:1px solid var(--border); color:var(--text); font-size:.85rem; display:flex; align-items:center; gap:10px; box-shadow:var(--shadow-lg); animation:toastIn .3s ease; max-width:380px; }
+@keyframes toastIn { from{transform:translateX(100%);opacity:0} to{transform:translateX(0);opacity:1} }
+.toast.ok { border-color:var(--green); }
+.toast.err { border-color:var(--red); }
+
+/* Word of Day */
+.wotd { background:var(--grad-blue); border-radius:var(--radius-lg); padding:26px; color:#fff; position:relative; overflow:hidden; margin-bottom:22px; }
+.wotd::before { content:''; position:absolute; top:-40%; right:-12%; width:260px; height:260px; background:rgba(255,255,255,.05); border-radius:50%; }
+.wotd-label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:2px; opacity:.7; margin-bottom:10px; position:relative; }
+.wotd-word { font-size:1.8rem; font-weight:800; margin-bottom:4px; position:relative; }
+.wotd-phonetic { font-family:'JetBrains Mono',monospace; opacity:.7; font-size:.88rem; margin-bottom:10px; position:relative; }
+.wotd-def { font-size:.9rem; line-height:1.6; opacity:.9; position:relative; }
+.wotd-actions { position:relative; margin-top:14px; display:flex; gap:10px; }
+
+/* Difficulty badge */
+.diff-badge { padding:2px 8px; border-radius:4px; font-size:.65rem; font-weight:700; text-transform:uppercase; }
+.diff-easy { background:rgba(16,185,129,.15); color:#34d399; }
+.diff-medium { background:rgba(245,158,11,.15); color:#fbbf24; }
+.diff-hard { background:rgba(239,68,68,.15); color:#f87171; }
+
+/* Section display */
+.section { display:none; animation:fadeIn .35s ease; }
+.section.active { display:block; }
+
+/* Empty states */
+.empty { text-align:center; padding:45px 20px; color:var(--text-muted); }
+.empty i { font-size:2.4rem; margin-bottom:12px; opacity:.35; }
+
+/* Mobile toggle */
+.mobile-toggle { display:none; position:fixed; top:16px; left:16px; z-index:200; width:40px; height:40px; background:var(--bg-card); border:1px solid var(--border); border-radius:10px; align-items:center; justify-content:center; color:var(--text); cursor:pointer; }
+@media(max-width:768px){ .mobile-toggle{display:flex;} }
+
+/* Footer */
+.footer { text-align:center; padding:28px; border-top:1px solid var(--border); color:var(--text-muted); font-size:.76rem; margin-top:20px; }
+.footer a { color:var(--accent-light); text-decoration:none; }
+
+/* Dict result */
+.dict-result { margin-top:16px; }
+.dict-word { font-size:1.5rem; font-weight:800; margin-bottom:4px; }
+.dict-phonetic { font-family:'JetBrains Mono',monospace; color:var(--text-secondary); font-size:.88rem; margin-bottom:14px; }
+.dict-meaning { margin-bottom:14px; padding:14px; background:var(--bg-elevated); border-radius:12px; border:1px solid var(--border); }
+.dict-pos { font-size:.78rem; font-weight:700; color:var(--accent-light); text-transform:uppercase; margin-bottom:6px; }
+.dict-def { color:var(--text); line-height:1.6; margin-bottom:4px; font-size:.9rem; }
+.dict-ex { color:var(--text-secondary); font-style:italic; font-size:.84rem; }
+.dict-audio { margin-top:8px; }
+.dict-audio audio { width:100%; height:34px; border-radius:8px; }
+
+/* Loading */
+.loading { text-align:center; padding:35px; color:var(--text-muted); }
+.loading i { font-size:1.8rem; animation:spin 1s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
+
+/* Resource category header in hub */
+.res-cat-header { font-size:.85rem; font-weight:700; color:var(--text-secondary); margin:16px 0 10px; padding-bottom:6px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px; }
+.res-cat-header:first-child { margin-top:0; }
+
+/* Inline video preview in detail panel */
+.inline-video { margin-top:12px; }
+.inline-video .video-card { max-width:320px; }
+
+/* Smooth scroll for modal body */
+.modal-body { scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
+</style>
+<base target="_blank">
+</head>
+<body>
+<div class="particles" id="particles"></div>
+
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand">
+        <div class="brand-icon"><i class="fas fa-microscope"></i></div>
+        <div><div class="brand-title">SciVocab Coach</div><div class="brand-sub">Master Scientific Speaking</div></div>
+      </div>
+    </div>
+    <nav class="nav">
+      <button class="nav-item active" data-section="dashboard"><i class="fas fa-home"></i> Dashboard</button>
+      <button class="nav-item" data-section="vocabulary"><i class="fas fa-book-open"></i> Vocabulary</button>
+      <button class="nav-item" data-section="flashcards"><i class="fas fa-clone"></i> Flashcards</button>
+      <button class="nav-item" data-section="quiz"><i class="fas fa-brain"></i> Quiz Challenge</button>
+      <button class="nav-item" data-section="speaking"><i class="fas fa-microphone"></i> Speaking Practice</button>
+      <button class="nav-item" data-section="videos"><i class="fas fa-play-circle"></i> Video Tutorials</button>
+      <button class="nav-item" data-section="dictionary"><i class="fas fa-search"></i> Free Dictionary</button>
+      <button class="nav-item" data-section="pdfs"><i class="fas fa-file-pdf"></i> PDF Resources</button>
+      <button class="nav-item" data-section="scenarios"><i class="fas fa-briefcase"></i> Scenarios</button>
+      <button class="nav-item" data-section="resources" style="margin-top:8px; background:rgba(139,92,246,.08); color:#a78bfa;"><i class="fas fa-graduation-cap"></i> Teaching Hub <span class="nav-badge">NEW</span></button>
+    </nav>
+    <div class="sidebar-footer"><i class="fas fa-code"></i> Free & Open Source<br>No subscriptions required</div>
+  </aside>
+
+  <main class="main">
+    <button class="mobile-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+    <div class="topbar">
+      <div class="page-title" id="pageTitle">Dashboard</div>
+      <div class="topbar-actions">
+        <div class="search-wrap"><i class="fas fa-search"></i><input type="text" id="globalSearch" placeholder="Search words, videos, topics..."></div>
+        <button class="hub-trigger" id="globalHubBtn" title="Open Teaching & Learning Resources"><i class="fas fa-graduation-cap"></i> Content Hub</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div class="section active" id="section-dashboard">
+        <div class="wotd" id="wotdBox">
+          <div class="wotd-label"><i class="fas fa-star"></i> Word of the Day</div>
+          <div class="wotd-word" id="wotdWord">--</div>
+          <div class="wotd-phonetic" id="wotdPhonetic">--</div>
+          <div class="wotd-def" id="wotdDef">--</div>
+          <div class="wotd-actions">
+            <button class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;" onclick="speak(document.getElementById('wotdWord').textContent)"><i class="fas fa-volume-up"></i> Listen</button>
+            <button class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;" onclick="openResourceHub('vocabulary')"><i class="fas fa-graduation-cap"></i> Related Content</button>
+          </div>
+        </div>
+
+        <div class="grid-4" style="margin-bottom:22px;">
+          <div class="stat-card"><div class="stat-value" id="dashTotal">0</div><div class="stat-label">Total Words</div></div>
+          <div class="stat-card"><div class="stat-value" id="dashLearned">0</div><div class="stat-label">Learned</div></div>
+          <div class="stat-card"><div class="stat-value" id="dashQuiz">0</div><div class="stat-label">Quiz Score</div></div>
+          <div class="stat-card"><div class="stat-value" id="dashStreak">0</div><div class="stat-label">Day Streak</div></div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><div class="card-title"><i class="icon-box ib-blue"><i class="fas fa-fire"></i></i> Quick Actions</div></div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <button class="btn btn-primary" onclick="navTo('flashcards')" style="justify-content:center;"><i class="fas fa-clone"></i> Start Flashcards</button>
+              <button class="btn btn-secondary" onclick="navTo('quiz')" style="justify-content:center;"><i class="fas fa-brain"></i> Take Quiz</button>
+              <button class="btn btn-secondary" onclick="navTo('speaking')" style="justify-content:center;"><i class="fas fa-microphone"></i> Practice Speaking</button>
+              <button class="btn btn-secondary" onclick="navTo('dictionary')" style="justify-content:center;"><i class="fas fa-search"></i> Look Up Word</button>
+              <button class="btn btn-accent" onclick="openResourceHub('all')" style="justify-content:center;"><i class="fas fa-graduation-cap"></i> Open Content Hub</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title"><i class="icon-box ib-green"><i class="fas fa-chart-pie"></i></i> Category Breakdown</div></div>
+            <div id="categoryBreakdown" style="display:flex; flex-direction:column; gap:10px;"></div>
+            <div style="margin-top:14px; padding-top:14px; border-top:1px solid var(--border);">
+              <button class="content-btn" style="width:100%; justify-content:center;" onclick="openResourceHub('all')"><i class="fas fa-book-open"></i> Browse All Teaching Materials</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VOCABULARY -->
+      <div class="section" id="section-vocabulary">
+        <div class="grid-2">
+          <div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title"><i class="icon-box ib-blue"><i class="fas fa-book-open"></i></i> Vocabulary Library</div>
+                <button class="content-btn" onclick="openResourceHub('vocabulary')"><i class="fas fa-graduation-cap"></i> Teaching Materials</button>
+              </div>
+              <div class="search-wrap" style="margin-bottom:12px;"><i class="fas fa-search"></i><input type="text" id="vocabSearch" placeholder="Search words..."></div>
+              <div class="tags" id="vocabTags">
+                <span class="tag active" data-cat="all">All</span>
+                <span class="tag" data-cat="research">Research</span>
+                <span class="tag" data-cat="innovation">Innovation</span>
+                <span class="tag" data-cat="professional">Professional</span>
+                <span class="tag" data-cat="academic">Academic</span>
+                <span class="tag" data-cat="speaking">Speaking</span>
+                <span class="tag" data-cat="data">Data</span>
+                <span class="tag" data-cat="leadership">Leadership</span>
+              </div>
+              <div class="vocab-list" id="vocabList"></div>
+            </div>
+          </div>
+          <div class="detail-panel">
+            <div class="card" id="vocabDetailCard">
+              <div class="detail-empty"><i class="fas fa-hand-point-left"></i><h3 style="margin-bottom:6px;">Select a Word</h3><p>Click any vocabulary word to view its full definition, examples, synonyms, and related teaching resources.</p></div>
+              <div class="detail-content" id="vocabDetail" style="display:none;">
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
+                  <div class="detail-word" id="vdWord"></div><span class="diff-badge" id="vdDiff"></span>
+                </div>
+                <div class="detail-phonetic" id="vdPhonetic"></div>
+                <div class="detail-section"><div class="detail-section-title">Definition</div><div class="detail-definition" id="vdDef"></div></div>
+                <div class="detail-section"><div class="detail-section-title">Example</div><div class="detail-example" id="vdEx"></div></div>
+                <div class="detail-section"><div class="detail-section-title">Synonyms</div><div class="synonyms" id="vdSyn"></div></div>
+                <div class="detail-section"><div class="detail-section-title">Category</div><span class="vocab-cat" id="vdCat"></span></div>
+                <div class="action-row">
+                  <button class="btn btn-primary" id="vdSpeak"><i class="fas fa-volume-up"></i> Pronounce</button>
+                  <button class="btn btn-secondary" id="vdLearned"><i class="fas fa-check"></i> Mark Learned</button>
+                  <button class="btn btn-secondary" id="vdDict"><i class="fas fa-external-link-alt"></i> Full Dictionary</button>
+                </div>
+                <div class="detail-section" style="margin-top:18px;">
+                  <div class="detail-section-title"><i class="fas fa-graduation-cap"></i> Teaching Resources</div>
+                  <div id="vdResources"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FLASHCARDS -->
+      <div class="section" id="section-flashcards">
+        <div class="card" style="max-width:600px; margin:0 auto;">
+          <div class="card-header">
+            <div class="card-title"><i class="icon-box ib-purple"><i class="fas fa-clone"></i></i> Flashcard Practice</div>
+            <button class="content-btn" onclick="openResourceHub('flashcards')"><i class="fas fa-graduation-cap"></i> Content</button>
+          </div>
+          <div class="fc-progress">Click card to flip &bull; Use controls to navigate</div>
+          <div class="fc-container">
+            <div class="flashcard" id="flashcard">
+              <div class="fc-face fc-front"><div class="fc-word" id="fcWord"></div><div class="fc-phonetic" id="fcPhonetic"></div><div class="fc-hint"><i class="fas fa-hand-pointer"></i> Click to reveal</div></div>
+              <div class="fc-face fc-back"><div class="fc-definition" id="fcDef"></div><div class="fc-example" id="fcEx"></div></div>
+            </div>
+          </div>
+          <div class="fc-controls">
+            <button class="btn btn-secondary" id="fcPrev"><i class="fas fa-arrow-left"></i> Prev</button>
+            <button class="btn btn-primary" id="fcFlip"><i class="fas fa-sync-alt"></i> Flip</button>
+            <button class="btn btn-secondary" id="fcNext">Next <i class="fas fa-arrow-right"></i></button>
+          </div>
+          <div style="text-align:center; margin-top:20px;">
+            <button class="btn btn-success" id="fcKnown"><i class="fas fa-check"></i> I Know This</button>
+            <button class="btn btn-secondary" id="fcShuffle" style="margin-left:8px;"><i class="fas fa-random"></i> Shuffle</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUIZ -->
+      <div class="section" id="section-quiz">
+        <div class="card" style="max-width:700px; margin:0 auto;">
+          <div class="card-header">
+            <div class="card-title"><i class="icon-box ib-cyan"><i class="fas fa-brain"></i></i> Vocabulary Quiz</div>
+            <button class="content-btn" onclick="openResourceHub('quiz')"><i class="fas fa-graduation-cap"></i> Content</button>
+          </div>
+          <div id="quizArea">
+            <div style="font-size:1rem; font-weight:600; margin-bottom:8px; color:var(--text-secondary);" id="quizQuestionNum">Question 1 of 10</div>
+            <div style="font-size:1.1rem; font-weight:700; margin-bottom:18px; padding:16px; background:var(--bg-elevated); border-radius:12px; border:1px solid var(--border);" id="quizQuestion"></div>
+            <div id="quizOptions"></div>
+          </div>
+          <div class="quiz-end" id="quizEnd" style="display:none;">
+            <div class="quiz-score-big" id="finalScore">0</div>
+            <p style="color:var(--text-muted); margin-top:8px;">out of <span id="totalQ">0</span></p>
+            <p style="color:var(--text-secondary); margin-top:6px; font-size:.9rem;" id="quizFeedback"></p>
+            <div style="margin-top:18px; display:flex; gap:10px; justify-content:center;">
+              <button class="btn btn-primary" id="restartQuiz"><i class="fas fa-redo"></i> Try Again</button>
+              <button class="btn btn-accent" onclick="openResourceHub('quiz')"><i class="fas fa-graduation-cap"></i> Study Materials</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPEAKING -->
+      <div class="section" id="section-speaking">
+        <div class="grid-2">
+          <div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title"><i class="icon-box ib-green"><i class="fas fa-microphone"></i></i> Speech Recognition Practice</div>
+                <button class="content-btn" onclick="openResourceHub('speaking')"><i class="fas fa-graduation-cap"></i> Content</button>
+              </div>
+              <p style="color:var(--text-secondary); margin-bottom:14px; font-size:.88rem;">Practice pronouncing scientific vocabulary. Your browser's built-in speech recognition transcribes your voice. No data leaves your device.</p>
+              <div style="text-align:center; padding:8px 0;">
+                <p style="color:var(--text-muted); font-size:.84rem;">Try saying:</p>
+                <h2 style="margin:8px 0; color:var(--accent-light); font-size:1.4rem;" id="practiceWord">Hypothesis</h2>
+                <button class="mic-btn" id="micBtn"><i class="fas fa-microphone"></i></button>
+                <p style="color:var(--text-muted); font-size:.78rem;" id="micStatus">Click microphone to start</p>
+              </div>
+              <div class="transcript-box" id="transcriptBox">Your speech will appear here...</div>
+              <div class="feedback-box" id="feedbackBox"><div style="font-weight:700; color:var(--green); margin-bottom:6px;"><i class="fas fa-check-circle"></i> Analysis</div><div id="feedbackText"></div></div>
+              <div class="action-row" style="margin-top:14px;">
+                <button class="btn btn-secondary" id="nextPractice"><i class="fas fa-random"></i> Next Word</button>
+                <button class="btn btn-primary" id="hearPractice"><i class="fas fa-volume-up"></i> Hear Pronunciation</button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <div class="card-header"><div class="card-title"><i class="icon-box ib-orange"><i class="fas fa-chart-line"></i></i> Your Progress</div></div>
+              <div class="grid-2" style="margin-bottom:14px;">
+                <div class="stat-card"><div class="stat-value" id="spTotal">0</div><div class="stat-label">Total Words</div></div>
+                <div class="stat-card"><div class="stat-value" id="spLearned">0</div><div class="stat-label">Learned</div></div>
+                <div class="stat-card"><div class="stat-value" id="spPracticed">0</div><div class="stat-label">Practiced</div></div>
+                <div class="stat-card"><div class="stat-value" id="spAccuracy">0%</div><div class="stat-label">Accuracy</div></div>
+              </div>
+              <div class="detail-section-title">Recent Activity</div>
+              <div id="activityLog" style="margin-top:8px; max-height:180px; overflow-y:auto;"><div class="empty"><i class="fas fa-history"></i><p>No practice sessions yet. Start speaking!</p></div></div>
+              <div style="margin-top:14px; padding-top:14px; border-top:1px solid var(--border);">
+                <button class="content-btn" style="width:100%; justify-content:center;" onclick="openResourceHub('speaking')"><i class="fas fa-play-circle"></i> Watch Speaking Tutorials</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIDEOS -->
+      <div class="section" id="section-videos">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="icon-box ib-pink"><i class="fas fa-play-circle"></i></i> Free Video Tutorials</div>
+            <button class="content-btn" onclick="openResourceHub('videos')"><i class="fas fa-graduation-cap"></i> All Resources</button>
+          </div>
+          <div class="tags" id="videoTags">
+            <span class="tag active" data-vcat="all">All</span>
+            <span class="tag" data-vcat="presentation">Presentation Skills</span>
+            <span class="tag" data-vcat="vocabulary">Vocabulary Building</span>
+            <span class="tag" data-vcat="speaking">Public Speaking</span>
+            <span class="tag" data-vcat="academic">Academic English</span>
+            <span class="tag" data-vcat="interview">Interview Skills</span>
+          </div>
+          <div class="video-grid" id="videoGrid"></div>
+        </div>
+      </div>
+
+      <!-- DICTIONARY -->
+      <div class="section" id="section-dictionary">
+        <div class="card" style="max-width:800px; margin:0 auto;">
+          <div class="card-header">
+            <div class="card-title"><i class="icon-box ib-blue"><i class="fas fa-book"></i></i> Free Dictionary Lookup</div>
+            <button class="content-btn" onclick="openResourceHub('dictionary')"><i class="fas fa-graduation-cap"></i> Content</button>
+          </div>
+          <p style="color:var(--text-secondary); margin-bottom:14px; font-size:.88rem;">Look up any word using the <strong>Free Dictionary API</strong> (dictionaryapi.dev) &mdash; completely free, no API key required. Get definitions, phonetics, audio pronunciations, and synonyms.</p>
+          <div class="search-wrap"><i class="fas fa-search"></i><input type="text" id="dictInput" placeholder="Type a word and press Enter..."></div>
+          <div class="loading" id="dictLoading" style="display:none;"><i class="fas fa-spinner"></i><p>Looking up definition...</p></div>
+          <div class="dict-result" id="dictResult" style="display:none;"></div>
+          <div style="margin-top:18px; padding-top:18px; border-top:1px solid var(--border);">
+            <div class="detail-section-title">Trusted Free Dictionary Links</div>
+            <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:10px;">
+              <a href="https://dictionary.cambridge.org/" target="_blank" class="btn btn-secondary btn-sm"><i class="fas fa-external-link-alt"></i> Cambridge Dictionary</a>
+              <a href="https://www.merriam-webster.com/" target="_blank" class="btn btn-secondary btn-sm"><i class="fas fa-external-link-alt"></i> Merriam-Webster</a>
+              <a href="https://www.collinsdictionary.com/" target="_blank" class="btn btn-secondary btn-sm"><i class="fas fa-external-link-alt"></i> Collins Dictionary</a>
+              <a href="https://www.oxfordlearnersdictionaries.com/" target="_blank" class="btn btn-secondary btn-sm"><i class="fas fa-external-link-alt"></i> Oxford Learner's</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PDFS -->
+      <div class="section" id="section-pdfs">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="icon-box ib-red"><i class="fas fa-file-pdf"></i></i> Free PDF Resources for Teaching & Learning</div>
+            <button class="content-btn" onclick="openResourceHub('pdfs')"><i class="fas fa-graduation-cap"></i> All Resources</button>
+          </div>
+          <p style="color:var(--text-secondary); margin-bottom:18px; font-size:.88rem;">Download free guides on scientific writing, research communication, and professional development. All resources are open access or freely distributed by academic publishers.</p>
+          <div class="grid-3" id="pdfGrid"></div>
+        </div>
+      </div>
+
+      <!-- SCENARIOS -->
+      <div class="section" id="section-scenarios">
+        <div class="grid-2">
+          <div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title"><i class="icon-box ib-orange"><i class="fas fa-briefcase"></i></i> Professional Speaking Scenarios</div>
+                <button class="content-btn" onclick="openResourceHub('scenarios')"><i class="fas fa-graduation-cap"></i> Content</button>
+              </div>
+              <p style="color:var(--text-secondary); margin-bottom:14px; font-size:.88rem;">Select a scenario to see recommended vocabulary, key phrases, and speaking frameworks. Each scenario links to video tutorials and PDF guides.</p>
+              <div id="scenarioList"></div>
+            </div>
+          </div>
+          <div class="detail-panel">
+            <div class="card" id="scenarioCard">
+              <div class="detail-empty"><i class="fas fa-hand-point-left"></i><h3 style="margin-bottom:6px;">Select a Scenario</h3><p>Choose a professional context to unlock scenario-specific vocabulary, communication strategies, and teaching resources.</p></div>
+              <div class="detail-content" id="scenarioDetail" style="display:none;">
+                <div class="detail-word" id="scTitle"></div>
+                <div class="detail-section"><div class="detail-section-title">Key Vocabulary</div><div id="scVocab"></div></div>
+                <div class="detail-section"><div class="detail-section-title">Useful Phrases</div><div id="scPhrases"></div></div>
+                <div class="detail-section"><div class="detail-section-title">Communication Framework</div><div class="detail-definition" id="scFramework"></div></div>
+                <div class="detail-section"><div class="detail-section-title">Tips for Success</div><div id="scTips"></div></div>
+                <div class="detail-section"><div class="detail-section-title"><i class="fas fa-graduation-cap"></i> Teaching Resources</div><div id="scResources"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TEACHING RESOURCES HUB PAGE -->
+      <div class="section" id="section-resources">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="icon-box ib-purple"><i class="fas fa-graduation-cap"></i></i> Teaching & Learning Content Hub</div>
+          </div>
+          <p style="color:var(--text-secondary); margin-bottom:20px; font-size:.9rem;">A centralized collection of all videos, PDFs, and external resources organized by topic for effective teaching and self-study.</p>
+
+          <div class="res-tabs" id="hubTabs">
+            <button class="res-tab active" data-hub="all"><i class="fas fa-th-large"></i> All Resources</button>
+            <button class="res-tab" data-hub="videos"><i class="fas fa-play-circle"></i> Video Tutorials</button>
+            <button class="res-tab" data-hub="pdfs"><i class="fas fa-file-pdf"></i> PDF Guides</button>
+            <button class="res-tab" data-hub="research"><i class="fas fa-flask"></i> Research</button>
+            <button class="res-tab" data-hub="speaking"><i class="fas fa-microphone"></i> Speaking</button>
+            <button class="res-tab" data-hub="academic"><i class="fas fa-university"></i> Academic</button>
+          </div>
+
+          <div class="res-content active" id="hub-all">
+            <div id="hubAllContent"></div>
+          </div>
+          <div class="res-content" id="hub-videos">
+            <div class="video-grid" id="hubVideoGrid"></div>
+          </div>
+          <div class="res-content" id="hub-pdfs">
+            <div class="grid-3" id="hubPdfGrid"></div>
+          </div>
+          <div class="res-content" id="hub-research">
+            <div id="hubResearchContent"></div>
+          </div>
+          <div class="res-content" id="hub-speaking">
+            <div id="hubSpeakingContent"></div>
+          </div>
+          <div class="res-content" id="hub-academic">
+            <div id="hubAcademicContent"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p><i class="fas fa-microscope"></i> Scientific Vocabulary & Professional Speaking Coach</p>
+        <p style="margin-top:6px;">Built with free, open-source resources. No subscriptions or paid APIs required.</p>
+        <p style="margin-top:6px; font-size:.72rem;">Dictionary API: <a href="https://dictionaryapi.dev/" target="_blank">Free Dictionary API</a> | Videos: <a href="https://youtube.com" target="_blank">YouTube Educational Content</a> | PDFs: <a href="https://openbookpublishers.com" target="_blank">Open Book Publishers</a>, <a href="https://rupress.org" target="_blank">RU Press</a></p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Video Player Modal -->
+<div class="modal-overlay" id="videoModal">
+  <div class="modal-box">
+    <div class="modal-head"><h3 style="font-size:1rem; font-weight:700;" id="modalTitle">Video Tutorial</h3><button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body" style="padding:0;"><iframe id="modalFrame" src="" allowfullscreen></iframe></div>
+  </div>
+</div>
+
+<!-- Resource Hub Modal -->
+<div class="modal-overlay" id="hubModal">
+  <div class="modal-box" style="max-width:900px;">
+    <div class="modal-head">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <i class="fas fa-graduation-cap" style="color:var(--purple); font-size:1.2rem;"></i>
+        <h3 style="font-size:1.05rem; font-weight:700;">Teaching & Learning Resources</h3>
+      </div>
+      <button class="modal-close" id="hubModalClose"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="res-tabs" id="modalHubTabs">
+        <button class="res-tab active" data-mhub="all">All</button>
+        <button class="res-tab" data-mhub="videos">Videos</button>
+        <button class="res-tab" data-mhub="pdfs">PDFs</button>
+        <button class="res-tab" data-mhub="external">External Links</button>
+      </div>
+      <div class="res-content active" id="mhub-all"><div id="mhubAllContent"></div></div>
+      <div class="res-content" id="mhub-videos"><div class="video-grid" id="mhubVideoGrid"></div></div>
+      <div class="res-content" id="mhub-pdfs"><div id="mhubPdfGrid"></div></div>
+      <div class="res-content" id="mhub-external"><div id="mhubExternalGrid"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+// ===================== VOCABULARY DATA (70 words) =====================
+const vocabData = [
+  // RESEARCH
+  {w:"Hypothesis",p:"/haɪˈpɒθəsɪs/",cat:"research",d:"A proposed explanation made on the basis of limited evidence as a starting point for further investigation.",ex:"The researcher formulated a hypothesis that increased sunlight would accelerate plant growth.",syn:["theory","proposition","assumption","postulate"],diff:"easy"},
+  {w:"Empirical",p:"/ɪmˈpɪrɪkəl/",cat:"research",d:"Based on, concerned with, or verifiable by observation or experience rather than theory.",ex:"The study provided empirical evidence supporting the effectiveness of the new teaching method.",syn:["observational","experimental","practical","factual"],diff:"medium"},
+  {w:"Methodology",p:"/ˌmeθəˈdɒlədʒi/",cat:"research",d:"A system of methods used in a particular area of study or activity.",ex:"The thesis clearly outlined the research methodology employed in the experiment.",syn:["approach","procedure","technique","framework"],diff:"easy"},
+  {w:"Correlation",p:"/ˌkɒrəˈleɪʃn/",cat:"research",d:"A mutual relationship or connection between two or more things.",ex:"There is a strong correlation between regular exercise and improved mental health.",syn:["association","connection","link","relationship"],diff:"easy"},
+  {w:"Variable",p:"/ˈveəriəbl/",cat:"research",d:"An element, feature, or factor that is liable to vary or change.",ex:"Temperature was the independent variable in the chemical reaction experiment.",syn:["factor","element","component","parameter"],diff:"easy"},
+  {w:"Quantitative",p:"/ˈkwɒntɪtətɪv/",cat:"research",d:"Relating to, measuring, or measured by the quantity of something rather than its quality.",ex:"The survey collected quantitative data on consumer spending habits.",syn:["numerical","statistical","measurable","analytical"],diff:"medium"},
+  {w:"Qualitative",p:"/ˈkwɒlɪtətɪv/",cat:"research",d:"Relating to, measuring, or measured by the quality of something rather than its quantity.",ex:"The interviews provided qualitative insights into participants' experiences.",syn:["descriptive","subjective","interpretive","narrative"],diff:"medium"},
+  {w:"Peer Review",p:"/pɪə rɪˈvjuː/",cat:"research",d:"Evaluation of scientific, academic, or professional work by others working in the same field.",ex:"The journal article underwent rigorous peer review before publication.",syn:["assessment","evaluation","appraisal","scrutiny"],diff:"easy"},
+  {w:"Replication",p:"/ˌreplɪˈkeɪʃn/",cat:"research",d:"The action of copying or reproducing something; repeating an experiment to verify results.",ex:"Replication of the study confirmed the original findings.",syn:["reproduction","duplication","repetition","verification"],diff:"medium"},
+  {w:"Significance",p:"/sɪɡˈnɪfɪkəns/",cat:"research",d:"The quality of being worthy of attention; in statistics, the probability that a result is not due to chance.",ex:"The results showed statistical significance with a p-value less than 0.05.",syn:["importance","meaning","relevance","consequence"],diff:"medium"},
+  {w:"Paradigm",p:"/ˈpærədaɪm/",cat:"research",d:"A typical example or pattern of something; a model.",ex:"The discovery caused a paradigm shift in our understanding of genetics.",syn:["model","pattern","framework","standard"],diff:"hard"},
+  {w:"Bias",p:"/ˈbaɪəs/",cat:"research",d:"Prejudice in favor of or against one thing, person, or group compared with another, usually unfairly.",ex:"Researchers must be aware of confirmation bias when analyzing data.",syn:["prejudice","partiality","favoritism","inclination"],diff:"easy"},
+  {w:"Abstract",p:"/ˈæbstrækt/",cat:"research",d:"A summary of the contents of a book, article, or formal speech.",ex:"The abstract provides a concise overview of the research findings.",syn:["summary","synopsis","overview","digest"],diff:"easy"},
+  {w:"Citation",p:"/saɪˈteɪʃn/",cat:"research",d:"A quotation from or reference to a book, paper, or author, especially in a scholarly work.",ex:"Proper citation is essential to avoid plagiarism in academic writing.",syn:["reference","quotation","attribution","acknowledgment"],diff:"easy"},
+  {w:"Control Group",p:"/kənˈtrəʊl ɡruːp/",cat:"research",d:"A group in an experiment that does not receive the treatment being tested, used as a benchmark.",ex:"The control group received a placebo instead of the actual medication.",syn:["baseline","reference group","comparison group"],diff:"easy"},
+  // INNOVATION
+  {w:"Innovation",p:"/ˌɪnəˈveɪʃn/",cat:"innovation",d:"The action or process of innovating; a new method, idea, product, etc.",ex:"The company's culture of innovation led to breakthrough technologies.",syn:["novelty","creativity","invention","progress"],diff:"easy"},
+  {w:"Disruptive",p:"/dɪsˈrʌptɪv/",cat:"innovation",d:"Innovative or groundbreaking in a way that creates a new market and value network.",ex:"Smartphones were a disruptive technology that transformed multiple industries.",syn:["revolutionary","transformative","groundbreaking","pioneering"],diff:"medium"},
+  {w:"Prototype",p:"/ˈprəʊtətaɪp/",cat:"innovation",d:"A first or preliminary version of a device or vehicle from which other forms are developed.",ex:"The engineering team built a working prototype of the new electric vehicle.",syn:["model","mock-up","sample","draft"],diff:"easy"},
+  {w:"Iteration",p:"/ˌɪtəˈreɪʃn/",cat:"innovation",d:"The repetition of a process or utterance; a version of a design or product.",ex:"Each iteration of the software improved upon the previous version.",syn:["cycle","repetition","version","revision"],diff:"medium"},
+  {w:"Scalability",p:"/ˌskeɪləˈbɪlɪti/",cat:"innovation",d:"The capacity to be changed in size or scale; ability of a system to handle growing amounts of work.",ex:"Cloud computing offers scalability that traditional servers cannot match.",syn:["expandability","flexibility","adaptability","growth potential"],diff:"medium"},
+  {w:"Sustainable",p:"/səˈsteɪnəbl/",cat:"innovation",d:"Able to be maintained at a certain rate or level; conserving an ecological balance.",ex:"The company is committed to sustainable manufacturing practices.",syn:["renewable","viable","enduring","eco-friendly"],diff:"easy"},
+  {w:"Feasibility",p:"/ˌfiːzəˈbɪlɪti/",cat:"innovation",d:"The state or degree of being easily or conveniently done; practicability.",ex:"A feasibility study was conducted before committing to the project.",syn:["practicability","viability","workability","achievability"],diff:"medium"},
+  {w:"Optimization",p:"/ˌɒptɪmaɪˈzeɪʃn/",cat:"innovation",d:"The action of making the best or most effective use of a situation or resource.",ex:"Process optimization reduced production costs by 30 percent.",syn:["improvement","enhancement","refinement","streamlining"],diff:"medium"},
+  {w:"Automation",p:"/ˌɔːtəˈmeɪʃn/",cat:"innovation",d:"The use of largely automatic equipment in a system of manufacturing or other production process.",ex:"Factory automation has increased efficiency while reducing human error.",syn:["mechanization","computerization","robotics","autonomy"],diff:"easy"},
+  {w:"Disseminate",p:"/dɪˈsemɪneɪt/",cat:"innovation",d:"Spread or disperse widely, especially information or knowledge.",ex:"The research team worked to disseminate their findings through conferences and journals.",syn:["spread","circulate","distribute","broadcast"],diff:"hard"},
+  // PROFESSIONAL
+  {w:"Collaborate",p:"/kəˈlæbəreɪt/",cat:"professional",d:"Work jointly on an activity or project.",ex:"The two departments decided to collaborate on the new marketing strategy.",syn:["cooperate","partner","team up","work together"],diff:"easy"},
+  {w:"Negotiate",p:"/nɪˈɡəʊʃieɪt/",cat:"professional",d:"Try to reach an agreement or compromise by discussion.",ex:"We need to negotiate the terms of the contract before signing.",syn:["bargain","discuss","mediate","arbitrate"],diff:"easy"},
+  {w:"Delegate",p:"/ˈdelɪɡeɪt/",cat:"professional",d:"Entrust a task or responsibility to another person, typically one less senior.",ex:"A good manager knows when to delegate tasks to team members.",syn:["assign","entrust","transfer","devolve"],diff:"easy"},
+  {w:"Advocate",p:"/ˈædvəkeɪt/",cat:"professional",d:"Publicly recommend or support a particular cause or policy.",ex:"She continues to advocate for greater transparency in corporate governance.",syn:["promote","support","champion","endorse"],diff:"medium"},
+  {w:"Comprehensive",p:"/ˌkɒmprɪˈhensɪv/",cat:"professional",d:"Including or dealing with all or nearly all elements of something.",ex:"The report provided a comprehensive analysis of market trends.",syn:["thorough","extensive","complete","inclusive"],diff:"easy"},
+  {w:"Pragmatic",p:"/præɡˈmætɪk/",cat:"professional",d:"Dealing with things sensibly and realistically in a way that is based on practical considerations.",ex:"We need a pragmatic approach to solve this budget constraint.",syn:["practical","realistic","sensible","down-to-earth"],diff:"medium"},
+  {w:"Stakeholder",p:"/ˈsteɪkhəʊldə/",cat:"professional",d:"A person with an interest or concern in something, especially a business.",ex:"All stakeholders were invited to the meeting to discuss the merger.",syn:["interested party","shareholder","investor","participant"],diff:"easy"},
+  {w:"Accountability",p:"/əˌkaʊntəˈbɪlɪti/",cat:"professional",d:"The fact or condition of being accountable; responsibility.",ex:"The new policy increased accountability among department heads.",syn:["responsibility","liability","answerability","ownership"],diff:"medium"},
+  {w:"Proficient",p:"/prəˈfɪʃnt/",cat:"professional",d:"Competent or skilled in doing or using something.",ex:"She is proficient in multiple programming languages.",syn:["skilled","expert","accomplished","adept"],diff:"easy"},
+  {w:"Initiative",p:"/ɪˈnɪʃətɪv/",cat:"professional",d:"The ability to assess and initiate things independently; a fresh approach to something.",ex:"He showed great initiative by proposing the new workflow system.",syn:["enterprise","drive","ambition","resourcefulness"],diff:"easy"},
+  // ACADEMIC
+  {w:"Synthesize",p:"/ˈsɪnθəsaɪz/",cat:"academic",d:"Combine a number of things into a coherent whole.",ex:"The literature review synthesizes findings from over fifty studies.",syn:["integrate","combine","fuse","merge"],diff:"medium"},
+  {w:"Critique",p:"/krɪˈtiːk/",cat:"academic",d:"A detailed analysis and assessment of something, especially a literary, philosophical, or political theory.",ex:"The professor asked students to write a critique of the assigned article.",syn:["review","analysis","evaluation","assessment"],diff:"easy"},
+  {w:"Thesis",p:"/ˈθiːsɪs/",cat:"academic",d:"A statement or theory that is put forward as a premise to be maintained or proved.",ex:"Her doctoral thesis examined climate change effects on marine ecosystems.",syn:["argument","proposition","hypothesis","contention"],diff:"easy"},
+  {w:"Discourse",p:"/ˈdɪskɔːs/",cat:"academic",d:"Written or spoken communication or debate.",ex:"The academic discourse around artificial intelligence is rapidly evolving.",syn:["discussion","conversation","dialogue","communication"],diff:"medium"},
+  {w:"Juxtapose",p:"/ˌdʒʌkstəˈpəʊz/",cat:"academic",d:"Place or deal with close together for contrasting effect.",ex:"The author juxtaposes the two theories to highlight their differences.",syn:["compare","contrast","set side by side","appose"],diff:"hard"},
+  {w:"Coherent",p:"/kəʊˈhɪərənt/",cat:"academic",d:"Logical and consistent; forming a unified whole.",ex:"The essay presented a coherent argument supported by evidence.",syn:["logical","consistent","rational","systematic"],diff:"easy"},
+  {w:"Eloquent",p:"/ˈeləkwənt/",cat:"academic",d:"Fluent or persuasive in speaking or writing.",ex:"The keynote speaker delivered an eloquent address on scientific ethics.",syn:["articulate","expressive","persuasive","fluent"],diff:"medium"},
+  {w:"Rigorous",p:"/ˈrɪɡərəs/",cat:"academic",d:"Extremely thorough, exhaustive, or accurate.",ex:"The experiment followed a rigorous protocol to ensure valid results.",syn:["thorough","meticulous","precise","stringent"],diff:"easy"},
+  {w:"Plagiarism",p:"/ˈpleɪdʒərɪzəm/",cat:"academic",d:"The practice of taking someone else's work or ideas and passing them off as one's own.",ex:"Understanding citation rules helps students avoid unintentional plagiarism.",syn:["copying","infringement","piracy","theft"],diff:"easy"},
+  {w:"Pedagogy",p:"/ˈpedəɡɒdʒi/",cat:"academic",d:"The method and practice of teaching, especially as an academic subject or theoretical concept.",ex:"Modern pedagogy emphasizes active learning over passive lectures.",syn:["teaching","instruction","education","didactics"],diff:"hard"},
+  // SPEAKING
+  {w:"Articulate",p:"/ɑːˈtɪkjələt/",cat:"speaking",d:"Having or showing the ability to speak fluently and coherently.",ex:"She was able to articulate her research findings clearly to the audience.",syn:["expressive","eloquent","fluent","coherent"],diff:"easy"},
+  {w:"Elocution",p:"/ˌeləˈkjuːʃn/",cat:"speaking",d:"The skill of clear and expressive speech, especially of distinct pronunciation and articulation.",ex:"His elocution improved dramatically after joining the debate club.",syn:["diction","enunciation","delivery","oration"],diff:"hard"},
+  {w:"Rhetoric",p:"/ˈretərɪk/",cat:"speaking",d:"The art of effective or persuasive speaking or writing, especially the use of figures of speech.",ex:"The politician's rhetoric captivated the entire auditorium.",syn:["oratory","eloquence","expression","persuasion"],diff:"medium"},
+  {w:"Enunciate",p:"/ɪˈnʌnsieɪt/",cat:"speaking",d:"Say or pronounce clearly.",ex:"Remember to enunciate your words when presenting to a large room.",syn:["pronounce","articulate","utter","voice"],diff:"easy"},
+  {w:"Modulate",p:"/ˈmɒdjuleɪt/",cat:"speaking",d:"Vary the tone, pitch, or volume of one's voice.",ex:"A good speaker knows how to modulate their voice to maintain audience interest.",syn:["adjust","vary","regulate","control"],diff:"medium"},
+  {w:"Extemporaneous",p:"/ɪkˌstempəˈreɪniəs/",cat:"speaking",d:"Spoken or done without preparation.",ex:"The professor's extemporaneous remarks were more engaging than his prepared slides.",syn:["impromptu","improvised","unrehearsed","offhand"],diff:"hard"},
+  {w:"Cadence",p:"/ˈkeɪdns/",cat:"speaking",d:"A modulation or inflection of the voice; a rhythmic flow of sounds.",ex:"The speaker's cadence created a hypnotic effect on the listeners.",syn:["rhythm","tempo","beat","flow"],diff:"medium"},
+  {w:"Assertive",p:"/əˈsɜːtɪv/",cat:"speaking",d:"Having or showing a confident and forceful personality.",ex:"Being assertive in meetings helps ensure your ideas are heard.",syn:["confident","forceful","self-assured","decisive"],diff:"easy"},
+  {w:"Concise",p:"/kənˈsaɪs/",cat:"speaking",d:"Giving a lot of information clearly and in a few words; brief but comprehensive.",ex:"Keep your presentation concise to respect the audience's time.",syn:["succinct","terse","brief","compact"],diff:"easy"},
+  {w:"Compelling",p:"/kəmˈpelɪŋ/",cat:"speaking",d:"Evoking interest, attention, or admiration in a powerfully irresistible way.",ex:"She made a compelling case for increased research funding.",syn:["persuasive","convincing","gripping","powerful"],diff:"easy"},
+  // DATA
+  {w:"Analyze",p:"/ˈænəlaɪz/",cat:"data",d:"Examine methodically and in detail the constitution or structure of something.",ex:"We need to analyze the survey data before drawing any conclusions.",syn:["examine","investigate","study","evaluate"],diff:"easy"},
+  {w:"Interpret",p:"/ɪnˈtɜːprɪt/",cat:"data",d:"Explain the meaning of information or actions.",ex:"The scientist interpreted the results cautiously, noting several limitations.",syn:["explain","understand","translate","decipher"],diff:"easy"},
+  {w:"Deviate",p:"/ˈdiːvieɪt/",cat:"data",d:"Depart from an established course or standard.",ex:"Any data points that deviate significantly from the mean were excluded.",syn:["diverge","differ","stray","vary"],diff:"medium"},
+  {w:"Anomaly",p:"/əˈnɒməli/",cat:"data",d:"Something that deviates from what is standard, normal, or expected.",ex:"The sudden spike in temperature was identified as an anomaly.",syn:["abnormality","irregularity","exception","deviation"],diff:"medium"},
+  {w:"Extrapolate",p:"/ɪkˈstræpəleɪt/",cat:"data",d:"Extend the application of data or methodology to an unknown situation by assuming that existing trends will continue.",ex:"We cannot extrapolate these findings to the general population.",syn:["infer","deduce","project","estimate"],diff:"hard"},
+  {w:"Aggregate",p:"/ˈæɡrɪɡət/",cat:"data",d:"Formed or calculated by the combination of many separate units or items.",ex:"The aggregate data showed a clear upward trend over the decade.",syn:["total","combined","cumulative","collective"],diff:"medium"},
+  {w:"Discrepancy",p:"/dɪˈskrepənsi/",cat:"data",d:"A lack of compatibility or similarity between two or more facts.",ex:"There was a discrepancy between the two sets of experimental results.",syn:["difference","inconsistency","disparity","variation"],diff:"medium"},
+  {w:"Parametric",p:"/ˌpærəˈmetrɪk/",cat:"data",d:"Relating to or expressed in terms of a parameter or parameters.",ex:"Parametric tests assume that the data follows a normal distribution.",syn:["numerical","quantitative","statistical","measurable"],diff:"hard"},
+  {w:"Normalize",p:"/ˈnɔːməlaɪz/",cat:"data",d:"Bring or return to a normal condition or state; in statistics, adjust data to a common scale.",ex:"The data was normalized to account for differences in sample size.",syn:["standardize","regularize","stabilize","calibrate"],diff:"medium"},
+  {w:"Validate",p:"/ˈvælɪdeɪt/",cat:"data",d:"Check or prove the validity or accuracy of something.",ex:"The model was validated using an independent dataset.",syn:["confirm","verify","authenticate","substantiate"],diff:"easy"},
+  // LEADERSHIP
+  {w:"Visionary",p:"/ˈvɪʒənri/",cat:"leadership",d:"Thinking about or planning the future with imagination or wisdom.",ex:"The visionary leader anticipated market changes years in advance.",syn:["farsighted","imaginative","prophetic","inspired"],diff:"easy"},
+  {w:"Resilient",p:"/rɪˈzɪliənt/",cat:"leadership",d:"Able to withstand or recover quickly from difficult conditions.",ex:"Resilient teams adapt quickly to unexpected challenges.",syn:["flexible","tough","adaptable","robust"],diff:"easy"},
+  {w:"Empower",p:"/ɪmˈpaʊə/",cat:"leadership",d:"Give someone the authority or power to do something.",ex:"Good leaders empower their employees to make independent decisions.",syn:["authorize","enable","equip","entitle"],diff:"easy"},
+  {w:"Strategic",p:"/strəˈtiːdʒɪk/",cat:"leadership",d:"Relating to the identification of long-term or overall aims and interests.",ex:"The board developed a strategic plan for the next five years.",syn:["tactical","planned","calculated","deliberate"],diff:"easy"},
+  {w:"Diplomatic",p:"/ˌdɪpləˈmætɪk/",cat:"leadership",d:"Having or showing skill in dealing with people in sensitive situations without upsetting or offending them.",ex:"Her diplomatic handling of the conflict prevented a team breakdown.",syn:["tactful","sensitive","discreet","politic"],diff:"medium"},
+  {w:"Tenacious",p:"/təˈneɪʃəs/",cat:"leadership",d:"Tending to keep a firm hold of something; persistent and determined.",ex:"His tenacious pursuit of the research question eventually led to a breakthrough.",syn:["persistent","determined","stubborn","resolute"],diff:"medium"},
+  {w:"Pivotal",p:"/ˈpɪvətl/",cat:"leadership",d:"Of crucial importance in relation to the development or success of something else.",ex:"This discovery was pivotal in advancing cancer treatment.",syn:["crucial","critical","central","key"],diff:"easy"},
+  {w:"Catalyst",p:"/ˈkætəlɪst/",cat:"leadership",d:"A person or thing that precipitates an event or change.",ex:"The new policy acted as a catalyst for organizational reform.",syn:["stimulus","impetus","spur","trigger"],diff:"medium"},
+  {w:"Integrity",p:"/ɪnˈteɡrɪti/",cat:"leadership",d:"The quality of being honest and having strong moral principles.",ex:"Scientific integrity is fundamental to maintaining public trust.",syn:["honesty","probity","rectitude","honor"],diff:"easy"},
+  {w:"Consensus",p:"/kənˈsensəs/",cat:"leadership",d:"A general agreement among a group of people.",ex:"The committee reached a consensus after three hours of discussion.",syn:["agreement","accord","harmony","unity"],diff:"easy"}
+];
+
+// ===================== VIDEO DATA =====================
+const videoData = [
+  {id:"n0VSqz69k3Q",title:"How To Give The Perfect Presentation (Academic Conferences & Keynotes)",channel:"Prof. David Stuckler",cat:"presentation",thumb:"https://img.youtube.com/vi/n0VSqz69k3Q/mqdefault.jpg",desc:"Learn how to structure and deliver compelling academic presentations that engage your audience and communicate your research effectively."},
+  {id:"MXKkXXYUxBc",title:"Public Speaking for Beginners – Free Full Course | Speak with Confidence",channel:"David JP Phillips",cat:"speaking",thumb:"https://img.youtube.com/vi/MXKkXXYUxBc/mqdefault.jpg",desc:"A complete free course covering public speaking fundamentals, confidence building, and delivery techniques for beginners."},
+  {id:"YsyVTeSNyws",title:"From Data to Story: Crafting Compelling Scientific Presentation",channel:"iBiology",cat:"presentation",thumb:"https://img.youtube.com/vi/YsyVTeSNyws/mqdefault.jpg",desc:"iBiology teaches how to transform raw scientific data into compelling narratives for conferences and seminars."},
+  {id:"bMEMqjrupHk",title:"Academic English: Learning Academic Vocabulary",channel:"ABC Education",cat:"vocabulary",thumb:"https://img.youtube.com/vi/bMEMqjrupHk/mqdefault.jpg",desc:"Essential academic vocabulary building strategies for students and researchers writing in English."},
+  {id:"dzqmXw60BVA",title:"English Vocabulary in 1 hour: advanced vocabulary lesson",channel:"Speak English With Vanessa",cat:"vocabulary",thumb:"https://img.youtube.com/vi/dzqmXw60BVA/mqdefault.jpg",desc:"One-hour intensive vocabulary lesson covering advanced English words useful for professional and academic contexts."},
+  {id:"GCU4e6KfNPM",title:"PowerPoint Presentation Skills Tutorial",channel:"Learnit",cat:"presentation",thumb:"https://img.youtube.com/vi/GCU4e6KfNPM/mqdefault.jpg",desc:"Step-by-step tutorial on creating professional PowerPoint presentations with design and delivery tips."},
+  {id:"N5t3NTix1hw",title:"How To Improve Your Presentation Skills",channel:"Brian Tracy",cat:"presentation",thumb:"https://img.youtube.com/vi/N5t3NTix1hw/mqdefault.jpg",desc:"Brian Tracy shares proven techniques to improve your presentation skills and communicate with impact."},
+  {id:"552LX7EudZU",title:"Advanced English Vocabulary made EASY",channel:"Speak English With Vanessa",cat:"vocabulary",thumb:"https://img.youtube.com/vi/552LX7EudZU/mqdefault.jpg",desc:"Learn advanced vocabulary through context and real-world examples, perfect for academic and professional use."},
+  {id:"QdEhMAlQ8wI",title:"1 Hour English Vocabulary Lesson",channel:"Speak English With Vanessa",cat:"academic",thumb:"https://img.youtube.com/vi/QdEhMAlQ8wI/mqdefault.jpg",desc:"Comprehensive one-hour lesson building vocabulary for academic writing, reading, and speaking."},
+  {id:"K0G5h17TuEI",title:"How to Write a Research Paper: Step-by-Step Guide",channel:"Scribbr",cat:"academic",thumb:"https://img.youtube.com/vi/K0G5h17TuEI/mqdefault.jpg",desc:"Complete guide to writing research papers from choosing a topic to final submission and formatting."},
+  {id:"L1VjIiX5Z8E",title:"Academic Interview Skills: How to Prepare and Succeed",channel:"University of Cambridge",cat:"interview",thumb:"https://img.youtube.com/vi/L1VjIiX5Z8E/mqdefault.jpg",desc:"Expert advice on preparing for academic interviews, from research presentations to Q&A sessions."},
+  {id:"1cKc1kV8fVA",title:"Job Interview Tips: How to Make a Great Impression",channel:"Indeed",cat:"interview",thumb:"https://img.youtube.com/vi/1cKc1kV8fVA/mqdefault.jpg",desc:"Practical job interview tips including common questions, body language, and follow-up strategies."}
+];
+
+// ===================== PDF DATA =====================
+const pdfData = [
+  {title:"Scientific Writing for Graduate Students",desc:"A comprehensive guide from Rockefeller University Press covering style, structure, and clarity in scientific writing. Includes exercises and examples.",url:"https://books.rupress.org/sites/books.rupress.org/files/ebooks/9780874700800.pdf",source:"Rockefeller University Press",cat:"academic",icon:"fa-flask"},
+  {title:"Writing and Publishing Scientific Papers",desc:"Open access book from Open Book Publishers. Covers writing, submitting, revising, and publishing scientific manuscripts with practical advice.",url:"https://books.openbookpublishers.com/10.11647/obp.0235.pdf",source:"Open Book Publishers",cat:"academic",icon:"fa-book"},
+  {title:"Effective Scientific Writing",desc:"Advanced guide for non-native English speakers on writing scientific articles with practical advice, templates, and common mistake corrections.",url:"https://www.nature.com/nature-index/news-blog/effective-scientific-writing",source:"Nature Index",cat:"academic",icon:"fa-pen"},
+  {title:"Scientific Writing And Publishing Guide",desc:"A comprehensive guide for students covering the entire publication process from manuscript preparation to peer review and revision.",url:"https://www.academia.edu/77562643/Scientific_Writing_And_Publishing_A_Guide_For_Students",source:"Academia.edu",cat:"academic",icon:"fa-graduation-cap"},
+  {title:"How to Write and Publish a Scientific Paper",desc:"The classic reference guide covering all aspects of scientific publishing, from ethics to manuscript preparation and journal selection.",url:"https://www.elsevier.com/connect/infographic-10-tips-for-writing-a-great-research-paper",source:"Elsevier",cat:"academic",icon:"fa-file-alt"},
+  {title:"Successful Scientific Writing (3rd Edition)",desc:"Step-by-step guide for biological and medical sciences by Matthews & Matthews. Covers structure, style, figures, and submission.",url:"https://www.cambridge.org/core/books/successful-scientific-writing/",source:"Cambridge University Press",cat:"academic",icon:"fa-university"},
+  {title:"Presentation Skills Guide for Scientists",desc:"Free PDF guide on creating effective scientific presentations, including slide design, data visualization, and delivery techniques.",url:"https://www.nature.com/articles/d41586-019-01781-5",source:"Nature Careers",cat:"presentation",icon:"fa-chalkboard-teacher"},
+  {title:"Public Speaking Handbook for Researchers",desc:"Comprehensive handbook covering public speaking anxiety, vocal techniques, body language, and audience engagement for researchers.",url:"https://www.science.org/content/article/scientists-guide-giving-powerful-presentations",source:"Science Magazine",cat:"speaking",icon:"fa-microphone"},
+  {title:"Research Methods Handbook",desc:"Open access handbook covering quantitative and qualitative research methods, data collection, and analysis techniques for students.",url:"https://www.bps.org.uk/sites/www.bps.org.uk/files/Policy/Policy%20-%20Files/Research%20Guidelines%20and%20Policy%20Documents/Research%20Methods%20Handbook.pdf",source:"British Psychological Society",cat:"research",icon:"fa-search"},
+  {title:"Academic Vocabulary List",desc:"Curated list of the most frequently used academic words across disciplines, with definitions and example sentences for ESL learners.",url:"https://www.victoria.ac.nz/lals/resources/academicwordlist",source:"Victoria University of Wellington",cat:"vocabulary",icon:"fa-list"},
+  {title:"The Craft of Scientific Presentations",desc:"Guide on designing and delivering scientific presentations with focus on visual communication and audience engagement.",url:"https://www.springer.com/gp/book/9781441982780",source:"Springer",cat:"presentation",icon:"fa-desktop"},
+  {title:"Interview Skills Workbook",desc:"Practical workbook with exercises for preparing for academic and professional interviews, including mock questions and answer frameworks.",url:"https://www.jobs.ac.uk/careers-advice/interview-techniques",source:"jobs.ac.uk",cat:"interview",icon:"fa-user-tie"}
+];
+
+// ===================== SCENARIO DATA =====================
+const scenarioData = [
+  {id:"seminar",title:"Academic Seminar",icon:"fa-chalkboard-teacher",desc:"Presenting research findings to peers and faculty in a seminar setting.",vocab:["Hypothesis","Empirical","Paradigm","Significance","Replication"],phrases:["Today I will present our findings on...","The data suggests that...","These results are consistent with...","Future research should address..."],framework:"Introduction (2 min) → Methods Overview (3 min) → Key Results (8 min) → Discussion (5 min) → Q&A (7 min)",tips:["Speak slowly and clearly","Use visuals to support data","Anticipate questions","Acknowledge limitations honestly"],video:"n0VSqz69k3Q",pdfs:["Presentation Skills Guide for Scientists","The Craft of Scientific Presentations"]},
+  {id:"interview",title:"Job Interview",icon:"fa-user-tie",desc:"Answering questions and demonstrating expertise in a professional interview setting.",vocab:["Proficient","Initiative","Collaborate","Accountability","Strategic"],phrases:["In my previous role, I successfully...","I am particularly skilled at...","My approach would be to...","I am eager to contribute to..."],framework:"Research the Organization → Prepare STAR Stories → Practice Common Questions → Prepare Thoughtful Questions → Follow Up",tips:["Use specific examples","Show enthusiasm for the role","Demonstrate cultural fit","Ask insightful questions about the team"],video:"L1VjIiX5Z8E",pdfs:["Interview Skills Workbook"]},
+  {id:"conference",title:"Conference Presentation",icon:"fa-presentation-screen",desc:"Delivering a talk at a professional or academic conference to a large audience.",vocab:["Disseminate","Synthesize","Rigorous","Coherent","Compelling"],phrases:["Good morning, it is a pleasure to be here...","Let me begin by outlining...","The implications of this work are...","Thank you for your attention, I welcome your questions."],framework:"Hook (1 min) → Background (3 min) → Problem Statement (2 min) → Methodology (4 min) → Results (6 min) → Conclusion (2 min) → Q&A",tips:["Start with a compelling hook","Keep slides minimal","Make eye contact","Practice transitions between sections"],video:"YsyVTeSNyws",pdfs:["Presentation Skills Guide for Scientists","The Craft of Scientific Presentations"]},
+  {id:"classroom",title:"Classroom Teaching",icon:"fa-graduation-cap",desc:"Explaining complex concepts to students in an educational setting.",vocab:["Pedagogy","Synthesize","Articulate","Concise","Coherent"],phrases:["Let's break this concept down...","Can anyone give me an example of...","To summarize what we've covered...","The key takeaway is..."],framework:"Learning Objective (2 min) → Activate Prior Knowledge (3 min) → New Content Delivery (15 min) → Guided Practice (10 min) → Independent Practice (8 min) → Closure (2 min)",tips:["Check for understanding frequently","Use analogies for complex ideas","Encourage questions","Summarize key points at the end"],video:"bMEMqjrupHk",pdfs:["Research Methods Handbook","Academic Vocabulary List"]},
+  {id:"podcast",title:"Science Podcast",icon:"fa-podcast",desc:"Discussing scientific topics in an audio format for public audiences.",vocab:["Disseminate","Eloquent","Cadence","Rhetoric","Engaging"],phrases:["Welcome to today's episode where we explore...","To put that in perspective...","What fascinates me about this is...","Before we wrap up, let's consider..."],framework:"Intro & Hook (1 min) → Guest Introduction (1 min) → Main Discussion (20 min) → Key Insights Summary (3 min) → Call to Action (1 min)",tips:["Use conversational language","Explain jargon when used","Maintain energy in your voice","Structure with clear segments"],video:"MXKkXXYUxBc",pdfs:["Public Speaking Handbook for Researchers"]},
+  {id:"meeting",title:"Team Meeting",icon:"fa-users",desc:"Leading or participating in professional team discussions and decision-making.",vocab:["Delegate","Collaborate","Consensus","Pragmatic","Accountability"],phrases:["Let's align on our objectives...","I propose we move forward with...","Does anyone have concerns about...","Let's assign action items..."],framework:"Agenda Review (2 min) → Updates (10 min) → Discussion Topics (15 min) → Decision Making (5 min) → Action Items & Owners (3 min)",tips:["Stay on topic and on time","Encourage participation from everyone","Document decisions clearly","Follow up on action items"],video:"N5t3NTix1hw",pdfs:["Interview Skills Workbook"]}
+];
+
+// ===================== EXTERNAL RESOURCES =====================
+const externalResources = [
+  {title:"Cambridge Dictionary",url:"https://dictionary.cambridge.org/",desc:"Free online English dictionary with pronunciation audio, thesaurus, and learner features.",icon:"fa-book",cat:"dictionary"},
+  {title:"Merriam-Webster Dictionary",url:"https://www.merriam-webster.com/",desc:"America's most trusted online dictionary with word of the day, games, and vocabulary quizzes.",icon:"fa-spell-check",cat:"dictionary"},
+  {title:"Oxford Learner's Dictionaries",url:"https://www.oxfordlearnersdictionaries.com/",desc:"Specialized dictionary for English language learners with clear definitions and example sentences.",icon:"fa-language",cat:"dictionary"},
+  {title:"Google Scholar",url:"https://scholar.google.com/",desc:"Free search engine for scholarly literature across disciplines and sources.",icon:"fa-search",cat:"research"},
+  {title:"Purdue OWL - Academic Writing",url:"https://owl.purdue.edu/owl/research_and_citation/apa_style/apa_formatting_and_style_guide/general_format.html",desc:"Comprehensive free writing and citation guide from Purdue University.",icon:"fa-university",cat:"academic"},
+  {title:"TED Talks - Science",url:"https://www.ted.com/talks?topics%5B%5D=science",desc:"Inspiring scientific talks from experts worldwide, excellent for learning presentation styles.",icon:"fa-video",cat:"speaking"},
+  {title:"Coursera - Free Courses",url:"https://www.coursera.org/courses?query=academic%20writing",desc:"Free audit access to courses on academic writing, research methods, and communication.",icon:"fa-laptop",cat:"academic"},
+  {title:"Grammarly Free Version",url:"https://www.grammarly.com/",desc:"Free grammar and spelling checker that helps improve scientific and professional writing.",icon:"fa-check-circle",cat:"academic"}
+];
+
+// ===================== STATE =====================
+let currentVocab = vocabData.slice();
+let selectedWord = null;
+let fcIndex = 0;
+let fcOrder = [];
+let quizQuestions = [];
+let quizIndex = 0;
+let quizScore = 0;
+let practiceWords = [];
+let practiceIndex = 0;
+let recognition = null;
+let learnedWords = JSON.parse(localStorage.getItem('scivocab_learned')||'[]');
+let practicedWords = JSON.parse(localStorage.getItem('scivocab_practiced')||'[]');
+let quizHistory = JSON.parse(localStorage.getItem('scivocab_quiz')||'[]');
+let streak = parseInt(localStorage.getItem('scivocab_streak')||'0');
+let lastDate = localStorage.getItem('scivocab_lastdate')||'';
+
+// ===================== UTILITIES =====================
+function $(sel){ return document.querySelector(sel); }
+function $$(sel){ return document.querySelectorAll(sel); }
+function toast(msg,type='ok'){
+  const div=document.createElement('div');
+  div.className='toast '+(type==='ok'?'ok':'err');
+  div.innerHTML='<i class="fas '+(type==='ok'?'fa-check-circle':'fa-exclamation-circle')+'"></i> '+msg;
+  $('#toastWrap').appendChild(div);
+  setTimeout(()=>div.remove(),3000);
+}
+function speak(text){
+  if('speechSynthesis' in window){
+    window.speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.rate=.9; u.pitch=1;
+    window.speechSynthesis.speak(u);
+  }
+}
+function shuffle(arr){
+  const a=arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function saveProgress(){
+  localStorage.setItem('scivocab_learned',JSON.stringify(learnedWords));
+  localStorage.setItem('scivocab_practiced',JSON.stringify(practicedWords));
+  localStorage.setItem('scivocab_quiz',JSON.stringify(quizHistory));
+  localStorage.setItem('scivocab_streak',String(streak));
+  localStorage.setItem('scivocab_lastdate',new Date().toDateString());
+  updateStats();
+}
+function checkStreak(){
+  const today=new Date().toDateString();
+  if(lastDate && lastDate!==today){
+    const yesterday=new Date(); yesterday.setDate(yesterday.getDate()-1);
+    if(lastDate===yesterday.toDateString()) streak++;
+    else streak=1;
+  } else if(!lastDate) streak=1;
+  saveProgress();
+}
+
+// ===================== NAVIGATION =====================
+function navTo(section){
+  $$('.section').forEach(s=>s.classList.remove('active'));
+  $$('.nav-item').forEach(n=>n.classList.remove('active'));
+  const sec=$('#section-'+section);
+  if(sec) sec.classList.add('active');
+  const nav=$('.nav-item[data-section="'+section+'"]');
+  if(nav) nav.classList.add('active');
+  const titles={dashboard:'Dashboard',vocabulary:'Vocabulary Library',flashcards:'Flashcard Practice',quiz:'Quiz Challenge',speaking:'Speaking Practice',videos:'Video Tutorials',dictionary:'Free Dictionary',pdfs:'PDF Resources',scenarios:'Speaking Scenarios',resources:'Teaching Hub'};
+  $('#pageTitle').textContent=titles[section]||section;
+  if(section==='vocabulary') renderVocabList();
+  if(section==='flashcards') initFlashcards();
+  if(section==='quiz') initQuiz();
+  if(section==='speaking') initSpeaking();
+  if(section==='videos') renderVideos('all');
+  if(section==='pdfs') renderPDFs();
+  if(section==='scenarios') renderScenarios();
+  if(section==='dashboard') updateDashboard();
+  if(section==='resources') renderHubPage('all');
+  if(window.innerWidth<=768) $('#sidebar').classList.remove('open');
+}
+$$('.nav-item').forEach(item=>{
+  item.addEventListener('click',()=>navTo(item.dataset.section));
+});
+$('#menuToggle').addEventListener('click',()=>$('#sidebar').classList.toggle('open'));
+
+// ===================== PARTICLES =====================
+(function initParticles(){
+  const container=$('#particles');
+  for(let i=0;i<25;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.style.left=Math.random()*100+'%';
+    p.style.animationDuration=(15+Math.random()*18)+'s';
+    p.style.animationDelay=(-Math.random()*18)+'s';
+    container.appendChild(p);
+  }
+})();
+
+// ===================== DASHBOARD =====================
+function updateDashboard(){
+  $('#dashTotal').textContent=vocabData.length;
+  $('#dashLearned').textContent=learnedWords.length;
+  $('#dashQuiz').textContent=quizHistory.length>0?Math.round(quizHistory.reduce((a,b)=>a+b,0)/quizHistory.length)+'%':'0';
+  $('#dashStreak').textContent=streak;
+  const breakdown=$('#categoryBreakdown');
+  breakdown.innerHTML='';
+  const cats=['research','innovation','professional','academic','speaking','data','leadership'];
+  const catNames={research:'Research & Methodology',innovation:'Innovation & Technology',professional:'Professional Skills',academic:'Academic Writing',speaking:'Public Speaking',data:'Data & Analysis',leadership:'Leadership'};
+  const catColors={research:'#3b82f6',innovation:'#8b5cf6',professional:'#06b6d4',academic:'#10b981',speaking:'#f59e0b',data:'#ec4899',leadership:'#ef4444'};
+  cats.forEach(c=>{
+    const count=vocabData.filter(v=>v.cat===c).length;
+    const learned=vocabData.filter(v=>v.cat===c&&learnedWords.includes(v.w)).length;
+    const pct=Math.round((learned/count)*100);
+    const row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;gap:12px;';
+    row.innerHTML='<div style="width:110px;font-size:.84rem;font-weight:600;">'+catNames[c]+'</div><div style="flex:1;height:8px;background:var(--bg-hover);border-radius:4px;overflow:hidden;"><div style="width:'+pct+'%;height:100%;background:'+catColors[c]+';border-radius:4px;transition:width .5s;"></div></div><div style="width:36px;text-align:right;font-size:.78rem;color:var(--text-muted);font-weight:600;">'+pct+'%</div>';
+    breakdown.appendChild(row);
+  });
+}
+function updateStats(){
+  $('#dashTotal').textContent=vocabData.length;
+  $('#dashLearned').textContent=learnedWords.length;
+  $('#dashQuiz').textContent=quizHistory.length>0?Math.round(quizHistory.reduce((a,b)=>a+b,0)/quizHistory.length)+'%':'0';
+  $('#dashStreak').textContent=streak;
+  $('#spTotal').textContent=vocabData.length;
+  $('#spLearned').textContent=learnedWords.length;
+  $('#spPracticed').textContent=practicedWords.length;
+  const acc=practicedWords.length>0?Math.round((learnedWords.length/practicedWords.length)*100):0;
+  $('#spAccuracy').textContent=acc+'%';
+}
+
+// ===================== VOCABULARY =====================
+function renderVocabList(){
+  const list=$('#vocabList');
+  const search=$('#vocabSearch').value.toLowerCase();
+  const activeCat=$('#vocabTags .tag.active')?.dataset.cat||'all';
+  let filtered=vocabData;
+  if(activeCat!=='all') filtered=filtered.filter(v=>v.cat===activeCat);
+  if(search) filtered=filtered.filter(v=>v.w.toLowerCase().includes(search)||v.d.toLowerCase().includes(search));
+  list.innerHTML='';
+  filtered.forEach((v,i)=>{
+    const item=document.createElement('div');
+    item.className='vocab-item'+(selectedWord&&selectedWord.w===v.w?' active':'');
+    item.innerHTML='<div class="vocab-item-left"><div class="vocab-num">'+(i+1)+'</div><div><div class="vocab-word-text">'+v.w+'</div><div class="vocab-phonetic-small">'+v.p+'</div></div></div><span class="vocab-cat cat-'+v.cat+'">'+v.cat+'</span>';
+    item.addEventListener('click',()=>selectWord(v));
+    list.appendChild(item);
+  });
+  if(filtered.length===0) list.innerHTML='<div class="empty"><i class="fas fa-search"></i><p>No words found.</p></div>';
+}
+function selectWord(v){
+  selectedWord=v;
+  renderVocabList();
+  $('#vocabDetailCard .detail-empty').style.display='none';
+  $('#vocabDetail').style.display='block';
+  $('#vdWord').textContent=v.w;
+  $('#vdPhonetic').textContent=v.p;
+  $('#vdDef').textContent=v.d;
+  $('#vdEx').textContent='"'+v.ex+'"';
+  $('#vdDiff').textContent=v.diff;
+  $('#vdDiff').className='diff-badge diff-'+v.diff;
+  $('#vdCat').textContent=v.cat;
+  $('#vdCat').className='vocab-cat cat-'+v.cat;
+  $('#vdSyn').innerHTML=v.syn.map(s=>'<span class="synonym-tag" onclick="speak(''+s+'')">'+s+' <i class="fas fa-volume-up" style="font-size:.6rem;opacity:.5;"></i></span>').join('');
+  $('#vdSpeak').onclick=()=>speak(v.w);
+  $('#vdLearned').innerHTML=learnedWords.includes(v.w)?'<i class="fas fa-check-double"></i> Learned':'<i class="fas fa-check"></i> Mark Learned';
+  $('#vdLearned').onclick=()=>{
+    if(!learnedWords.includes(v.w)){ learnedWords.push(v.w); toast('Marked as learned!'); }
+    else { learnedWords=learnedWords.filter(x=>x!==v.w); toast('Removed from learned.'); }
+    $('#vdLearned').innerHTML=learnedWords.includes(v.w)?'<i class="fas fa-check-double"></i> Learned':'<i class="fas fa-check"></i> Mark Learned';
+    saveProgress();
+  };
+  $('#vdDict').onclick=()=>window.open('https://dictionary.cambridge.org/dictionary/english/'+encodeURIComponent(v.w.toLowerCase().replace(/ /g,'-')),'_blank');
+
+  // Build resources for this word
+  const relatedVids=videoData.filter(vid=>vid.cat===v.cat||(v.cat==='research'&&vid.cat==='academic')||(v.cat==='data'&&vid.cat==='academic'));
+  const relatedPdfs=pdfData.filter(pdf=>pdf.cat===v.cat||pdf.cat==='academic');
+  let resHtml='';
+  if(relatedVids.length>0){
+    resHtml+='<div style="margin-bottom:14px;"><div style="font-size:.78rem;font-weight:600;color:var(--text-muted);margin-bottom:8px;"><i class="fas fa-play-circle" style="color:var(--accent);"></i> Related Videos</div>';
+    resHtml+='<div class="video-grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;">';
+    relatedVids.slice(0,2).forEach(vid=>{
+      resHtml+='<div class="video-card" onclick="openVideo(''+vid.id+'',''+vid.title.replace(/'/g,"\'")+'')"><div class="video-thumb"><img src="'+vid.thumb+'" alt="" loading="lazy"><div class="play-btn"><i class="fas fa-play"></i></div></div><div class="video-info"><div class="video-title">'+vid.title+'</div></div></div>';
+    });
+    resHtml+='</div></div>';
+  }
+  if(relatedPdfs.length>0){
+    resHtml+='<div><div style="font-size:.78rem;font-weight:600;color:var(--text-muted);margin-bottom:8px;"><i class="fas fa-file-pdf" style="color:var(--red);"></i> Related PDF Guides</div>';
+    relatedPdfs.slice(0,2).forEach(pdf=>{
+      resHtml+='<div class="res-card" style="margin-bottom:8px;"><div class="res-card-title"><i class="fas '+pdf.icon+'" style="color:var(--red);"></i> '+pdf.title+'</div><div class="res-card-desc">'+pdf.desc.substring(0,80)+'...</div><div class="res-card-actions"><a href="'+pdf.url+'" target="_blank" class="btn btn-sm btn-secondary"><i class="fas fa-external-link-alt"></i> Open PDF</a></div></div>';
+    });
+    resHtml+='</div>';
+  }
+  if(!resHtml) resHtml='<p style="color:var(--text-muted);font-size:.84rem;">No specific resources for this category. Browse the Content Hub for more.</p>';
+  $('#vdResources').innerHTML=resHtml;
+}
+$('#vocabSearch').addEventListener('input',renderVocabList);
+$$('#vocabTags .tag').forEach(tag=>{
+  tag.addEventListener('click',()=>{
+    $$('#vocabTags .tag').forEach(t=>t.classList.remove('active'));
+    tag.classList.add('active');
+    renderVocabList();
+  });
+});
+
+// ===================== FLASHCARDS =====================
+function initFlashcards(){
+  fcOrder=shuffle(vocabData.map((_,i)=>i));
+  fcIndex=0;
+  renderFlashcard();
+}
+function renderFlashcard(){
+  if(fcOrder.length===0) return;
+  const v=vocabData[fcOrder[fcIndex]];
+  $('#fcIndex').textContent=fcIndex+1;
+  $('#fcTotal').textContent=fcOrder.length;
+  $('#fcWord').textContent=v.w;
+  $('#fcPhonetic').textContent=v.p;
+  $('#fcDef').textContent=v.d;
+  $('#fcEx').textContent='"'+v.ex+'"';
+  $('#flashcard').classList.remove('flipped');
+}
+$('#flashcard').addEventListener('click',()=>$('#flashcard').classList.toggle('flipped'));
+$('#fcFlip').addEventListener('click',()=>$('#flashcard').classList.toggle('flipped'));
+$('#fcPrev').addEventListener('click',()=>{ fcIndex=(fcIndex-1+fcOrder.length)%fcOrder.length; renderFlashcard(); });
+$('#fcNext').addEventListener('click',()=>{ fcIndex=(fcIndex+1)%fcOrder.length; renderFlashcard(); });
+$('#fcShuffle').addEventListener('click',()=>{ fcOrder=shuffle(fcOrder); fcIndex=0; renderFlashcard(); toast('Cards shuffled!'); });
+$('#fcKnown').addEventListener('click',()=>{
+  const v=vocabData[fcOrder[fcIndex]];
+  if(!learnedWords.includes(v.w)) learnedWords.push(v.w);
+  if(!practicedWords.includes(v.w)) practicedWords.push(v.w);
+  toast('Great! Moved to next card.');
+  fcIndex=(fcIndex+1)%fcOrder.length;
+  renderFlashcard();
+  saveProgress();
+});
+
+// ===================== QUIZ =====================
+function initQuiz(){
+  quizScore=0; quizIndex=0;
+  const pool=shuffle(vocabData).slice(0,10);
+  quizQuestions=pool.map(v=>{
+    const wrong=shuffle(vocabData.filter(x=>x.w!==v.w)).slice(0,3);
+    const opts=shuffle([v,...wrong]);
+    return {word:v,options:opts};
+  });
+  $('#quizScore').textContent='0';
+  $('#quizEnd').style.display='none';
+  $('#quizArea').style.display='block';
+  renderQuizQuestion();
+}
+function renderQuizQuestion(){
+  if(quizIndex>=quizQuestions.length){ endQuiz(); return; }
+  const q=quizQuestions[quizIndex];
+  $('#quizQuestionNum').textContent='Question '+(quizIndex+1)+' of '+quizQuestions.length;
+  $('#quizQuestion').textContent='What is the meaning of "'+q.word.w+'"?';
+  const opts=$('#quizOptions');
+  opts.innerHTML='';
+  q.options.forEach(opt=>{
+    const btn=document.createElement('div');
+    btn.className='quiz-option';
+    btn.innerHTML='<i class="far fa-circle"></i> '+opt.d;
+    btn.addEventListener('click',()=>handleQuizAnswer(btn,opt,q.word));
+    opts.appendChild(btn);
+  });
+}
+function handleQuizAnswer(btn,opt,correct){
+  const opts=$$('#quizOptions .quiz-option');
+  opts.forEach(o=>o.style.pointerEvents='none');
+  if(opt.w===correct.w){
+    btn.classList.add('correct');
+    btn.querySelector('i').className='fas fa-check-circle';
+    quizScore++;
+    $('#quizScore').textContent=quizScore;
+    toast('Correct!','ok');
+    if(!learnedWords.includes(correct.w)) learnedWords.push(correct.w);
+  } else {
+    btn.classList.add('wrong');
+    btn.querySelector('i').className='fas fa-times-circle';
+    opts.forEach(o=>{ if(o.textContent.includes(correct.d)){ o.classList.add('correct'); o.querySelector('i').className='fas fa-check-circle'; } });
+    toast('Incorrect. The correct answer was: '+correct.w,'err');
+  }
+  if(!practicedWords.includes(correct.w)) practicedWords.push(correct.w);
+  saveProgress();
+  setTimeout(()=>{ quizIndex++; renderQuizQuestion(); },1500);
+}
+function endQuiz(){
+  $('#quizArea').style.display='none';
+  $('#quizEnd').style.display='block';
+  $('#finalScore').textContent=quizScore;
+  $('#totalQ').textContent=quizQuestions.length;
+  const pct=Math.round((quizScore/quizQuestions.length)*100);
+  let fb='';
+  if(pct>=90) fb='Outstanding! You have mastered these words.';
+  else if(pct>=70) fb='Great job! Keep practicing to reach mastery.';
+  else if(pct>=50) fb='Good effort! Review the words you missed.';
+  else fb='Keep practicing! Use flashcards to build confidence.';
+  $('#quizFeedback').textContent=fb;
+  quizHistory.push(pct);
+  saveProgress();
+}
+$('#restartQuiz').addEventListener('click',initQuiz);
+
+// ===================== SPEAKING PRACTICE =====================
+function initSpeaking(){
+  practiceWords=shuffle(vocabData.map(v=>v.w));
+  practiceIndex=0;
+  $('#practiceWord').textContent=practiceWords[0];
+  updateStats();
+  renderActivityLog();
+}
+function renderActivityLog(){
+  const log=$('#activityLog');
+  const acts=JSON.parse(localStorage.getItem('scivocab_activity')||'[]');
+  if(acts.length===0){ log.innerHTML='<div class="empty"><i class="fas fa-history"></i><p>No practice sessions yet. Start speaking!</p></div>'; return; }
+  log.innerHTML='';
+  acts.slice().reverse().forEach(a=>{
+    const div=document.createElement('div');
+    div.style.cssText='padding:10px 12px;background:var(--bg-elevated);border-radius:8px;margin-bottom:6px;font-size:.84rem;border-left:3px solid '+(a.result.includes('Correct')?'var(--green)':'var(--orange)')+';';
+    div.innerHTML='<div style="font-weight:600;color:var(--text);">'+a.word+'</div><div style="color:var(--text-muted);font-size:.76rem;">'+a.result+' &bull; '+a.time+'</div>';
+    log.appendChild(div);
+  });
+}
+function addActivity(word,result){
+  const acts=JSON.parse(localStorage.getItem('scivocab_activity')||'[]');
+  acts.push({word,result,time:new Date().toLocaleTimeString()});
+  if(acts.length>20) acts.shift();
+  localStorage.setItem('scivocab_activity',JSON.stringify(acts));
+  renderActivityLog();
+}
+$('#hearPractice').addEventListener('click',()=>speak($('#practiceWord').textContent));
+$('#nextPractice').addEventListener('click',()=>{
+  practiceIndex=(practiceIndex+1)%practiceWords.length;
+  $('#practiceWord').textContent=practiceWords[practiceIndex];
+  $('#transcriptBox').textContent='Your speech will appear here...';
+  $('#transcriptBox').classList.remove('has-text');
+  $('#feedbackBox').classList.remove('show');
+  $('#micStatus').textContent='Click microphone to start';
+});
+$('#micBtn').addEventListener('click',()=>{
+  if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){ toast('Speech recognition not supported in this browser. Try Chrome.','err'); return; }
+  if(recognition){ recognition.stop(); return; }
+  const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+  recognition=new SpeechRecognition();
+  recognition.lang='en-US'; recognition.interimResults=false; recognition.maxAlternatives=1;
+  $('#micBtn').classList.add('recording');
+  $('#micStatus').textContent='Listening... Speak now';
+  recognition.onresult=(e)=>{
+    const transcript=e.results[0][0].transcript;
+    $('#transcriptBox').textContent=transcript;
+    $('#transcriptBox').classList.add('has-text');
+    const target=$('#practiceWord').textContent.toLowerCase().replace(/[^a-z]/g,'');
+    const spoken=transcript.toLowerCase().replace(/[^a-z]/g,'');
+    const match=spoken.includes(target)||target.includes(spoken);
+    $('#feedbackBox').classList.add('show');
+    if(match){
+      $('#feedbackText').innerHTML='<span style="color:var(--green);font-weight:700;"><i class="fas fa-check-circle"></i> Excellent pronunciation!</span><p style="margin-top:6px;color:var(--text-secondary);font-size:.85rem;">You said: "'+transcript+'"</p>';
+      if(!practicedWords.includes($('#practiceWord').textContent)) practicedWords.push($('#practiceWord').textContent);
+      if(!learnedWords.includes($('#practiceWord').textContent)) learnedWords.push($('#practiceWord').textContent);
+      addActivity($('#practiceWord').textContent,'Correct pronunciation');
+    } else {
+      $('#feedbackText').innerHTML='<span style="color:var(--orange);font-weight:700;"><i class="fas fa-exclamation-circle"></i> Keep practicing!</span><p style="margin-top:6px;color:var(--text-secondary);font-size:.85rem;">You said: "'+transcript+'"<br>Target: "'+$('#practiceWord').textContent+'"</p>';
+      if(!practicedWords.includes($('#practiceWord').textContent)) practicedWords.push($('#practiceWord').textContent);
+      addActivity($('#practiceWord').textContent,'Needs practice');
+    }
+    saveProgress();
+  };
+  recognition.onerror=(e)=>{ toast('Error: '+e.error,'err'); $('#micBtn').classList.remove('recording'); $('#micStatus').textContent='Click to try again'; recognition=null; };
+  recognition.onend=()=>{ $('#micBtn').classList.remove('recording'); $('#micStatus').textContent='Click microphone to start'; recognition=null; };
+  recognition.start();
+});
+
+// ===================== VIDEOS =====================
+function renderVideos(cat){
+  const grid=$('#videoGrid');
+  grid.innerHTML='';
+  const filtered=cat==='all'?videoData:videoData.filter(v=>v.cat===cat);
+  filtered.forEach(v=>{
+    const card=document.createElement('div');
+    card.className='video-card';
+    card.innerHTML='<div class="video-thumb"><img src="'+v.thumb+'" alt="'+v.title+'" loading="lazy"><div class="play-btn"><i class="fas fa-play"></i></div></div><div class="video-info"><div class="video-title">'+v.title+'</div><div class="video-meta"><i class="fas fa-user"></i> '+v.channel+' &bull; <i class="fas fa-tag"></i> '+v.cat+'</div></div>';
+    card.addEventListener('click',()=>openVideo(v.id,v.title));
+    grid.appendChild(card);
+  });
+}
+$$('#videoTags .tag').forEach(tag=>{
+  tag.addEventListener('click',()=>{
+    $$('#videoTags .tag').forEach(t=>t.classList.remove('active'));
+    tag.classList.add('active');
+    renderVideos(tag.dataset.vcat);
+  });
+});
+function openVideo(id,title){
+  $('#modalTitle').textContent=title;
+  $('#modalFrame').src='https://www.youtube.com/embed/'+id+'?autoplay=1';
+  $('#videoModal').classList.add('show');
+}
+$('#modalClose').addEventListener('click',()=>{ $('#videoModal').classList.remove('show'); $('#modalFrame').src=''; });
+$('#videoModal').addEventListener('click',(e)=>{ if(e.target===$('#videoModal')){ $('#videoModal').classList.remove('show'); $('#modalFrame').src=''; } });
+
+// ===================== PDFS =====================
+function renderPDFs(){
+  const grid=$('#pdfGrid');
+  grid.innerHTML='';
+  pdfData.forEach(pdf=>{
+    const card=document.createElement('div');
+    card.className='pdf-card';
+    card.innerHTML='<div class="pdf-icon"><i class="fas '+pdf.icon+'"></i></div><div class="pdf-title">'+pdf.title+'</div><div class="pdf-desc">'+pdf.desc+'</div><div class="pdf-source"><i class="fas fa-university"></i> '+pdf.source+'</div><div style="display:flex;gap:8px;"><a href="'+pdf.url+'" target="_blank" class="btn btn-primary btn-sm"><i class="fas fa-external-link-alt"></i> Access PDF</a><button class="btn btn-ghost btn-sm" onclick="openResourceHub(''+pdf.cat+'')"><i class="fas fa-graduation-cap"></i> More</button></div>';
+    grid.appendChild(card);
+  });
+}
+
+// ===================== SCENARIOS =====================
+function renderScenarios(){
+  const list=$('#scenarioList');
+  list.innerHTML='';
+  scenarioData.forEach(s=>{
+    const item=document.createElement('div');
+    item.className='scenario-item';
+    item.innerHTML='<div class="scenario-title"><i class="fas '+s.icon+'" style="color:var(--accent);"></i> '+s.title+'</div><div class="scenario-desc">'+s.desc+'</div>';
+    item.addEventListener('click',()=>showScenario(s));
+    list.appendChild(item);
+  });
+}
+function showScenario(s){
+  $('#scenarioCard .detail-empty').style.display='none';
+  $('#scenarioDetail').style.display='block';
+  $('#scTitle').textContent=s.title;
+  $('#scVocab').innerHTML=s.vocab.map(v=>'<span class="synonym-tag" style="cursor:pointer;" onclick="speak(''+v+'')">'+v+' <i class="fas fa-volume-up" style="font-size:.6rem;"></i></span>').join('');
+  $('#scPhrases').innerHTML=s.phrases.map(p=>'<div style="padding:8px 12px;background:var(--bg-elevated);border-radius:8px;margin-bottom:6px;font-size:.86rem;color:var(--text);border-left:3px solid var(--accent);"><i class="fas fa-quote-left" style="color:var(--accent);margin-right:6px;opacity:.6;"></i>'+p+'</div>').join('');
+  $('#scFramework').textContent=s.framework;
+  $('#scTips').innerHTML=s.tips.map(t=>'<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;font-size:.86rem;color:var(--text-secondary);"><i class="fas fa-lightbulb" style="color:var(--orange);margin-top:3px;"></i> '+t+'</div>').join('');
+
+  // Build resources
+  let resHtml='';
+  const vid=videoData.find(v=>v.id===s.video);
+  if(vid){
+    resHtml+='<div style="margin-bottom:14px;"><div style="font-size:.78rem;font-weight:600;color:var(--text-muted);margin-bottom:8px;"><i class="fas fa-play-circle" style="color:var(--accent);"></i> Recommended Video</div>';
+    resHtml+='<div class="video-card" style="max-width:320px;" onclick="openVideo(''+vid.id+'',''+vid.title.replace(/'/g,"\'")+'')"><div class="video-thumb"><img src="'+vid.thumb+'" alt=""><div class="play-btn"><i class="fas fa-play"></i></div></div><div class="video-info"><div class="video-title">'+vid.title+'</div><div class="video-meta"><i class="fas fa-user"></i> '+vid.channel+'</div></div></div></div>';
+  }
+  if(s.pdfs&&s.pdfs.length>0){
+    resHtml+='<div><div style="font-size:.78rem;font-weight:600;color:var(--text-muted);margin-bottom:8px;"><i class="fas fa-file-pdf" style="color:var(--red);"></i> Recommended PDF Guides</div>';
+    s.pdfs.forEach(pdfTitle=>{
+      const pdf=pdfData.find(p=>p.title===pdfTitle);
+      if(pdf) resHtml+='<div class="res-card" style="margin-bottom:8px;"><div class="res-card-title"><i class="fas '+pdf.icon+'" style="color:var(--red);"></i> '+pdf.title+'</div><div class="res-card-desc">'+pdf.desc.substring(0,90)+'...</div><div class="res-card-actions"><a href="'+pdf.url+'" target="_blank" class="btn btn-sm btn-secondary"><i class="fas fa-external-link-alt"></i> Open PDF</a></div></div>';
+    });
+    resHtml+='</div>';
+  }
+  $('#scResources').innerHTML=resHtml;
+}
+
+// ===================== DICTIONARY API =====================
+$('#dictInput').addEventListener('keydown',(e)=>{ if(e.key==='Enter') lookupWord($('#dictInput').value.trim()); });
+async function lookupWord(word){
+  if(!word) return;
+  $('#dictLoading').style.display='block';
+  $('#dictResult').style.display='none';
+  try{
+    const res=await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/'+encodeURIComponent(word));
+    if(!res.ok) throw new Error('Word not found');
+    const data=await res.json();
+    renderDictResult(data[0]);
+  }catch(err){
+    $('#dictResult').innerHTML='<div class="empty"><i class="fas fa-exclamation-circle"></i><p>'+err.message+'</p><p style="font-size:.8rem;margin-top:8px;">Try checking the spelling or search Cambridge Dictionary below.</p></div>';
+    $('#dictResult').style.display='block';
+  }finally{
+    $('#dictLoading').style.display='none';
+  }
+}
+function renderDictResult(data){
+  const r=$('#dictResult');
+  r.style.display='block';
+  let html='<div class="dict-word">'+data.word+'</div>';
+  if(data.phonetic) html+='<div class="dict-phonetic">'+data.phonetic+'</div>';
+  else if(data.phonetics&&data.phonetics[0]&&data.phonetics[0].text) html+='<div class="dict-phonetic">'+data.phonetics[0].text+'</div>';
+  const audio=data.phonetics?.find(p=>p.audio)?.audio;
+  if(audio) html+='<div class="dict-audio"><audio controls src="'+audio+'"></audio></div>';
+  if(data.meanings){
+    data.meanings.forEach(m=>{
+      html+='<div class="dict-meaning"><div class="dict-pos">'+m.partOfSpeech+'</div>';
+      if(m.definitions){
+        m.definitions.forEach((d,i)=>{
+          if(i<3){
+            html+='<div class="dict-def">'+(i+1)+'. '+d.definition+'</div>';
+            if(d.example) html+='<div class="dict-ex">"'+d.example+'"</div>';
+          }
+        });
+      }
+      html+='</div>';
+    });
+  }
+  if(data.sourceUrls&&data.sourceUrls.length) html+='<div style="margin-top:10px;"><a href="'+data.sourceUrls[0]+'" target="_blank" class="btn btn-secondary btn-sm"><i class="fas fa-external-link-alt"></i> View Source</a></div>';
+  r.innerHTML=html;
+}
+
+// ===================== RESOURCE HUB SYSTEM =====================
+function openResourceHub(filter){
+  const modal=$('#hubModal');
+  modal.classList.add('show');
+  // Set active tab based on filter
+  let tabName='all';
+  if(filter==='videos'||filter==='presentation'||filter==='vocabulary'||filter==='speaking'||filter==='academic'||filter==='interview') tabName='videos';
+  else if(filter==='pdfs'||filter==='research') tabName='pdfs';
+  else if(filter==='dictionary') tabName='external';
+  else if(filter==='all'||filter==='flashcards'||filter==='quiz') tabName='all';
+
+  $$('#modalHubTabs .res-tab').forEach(t=>t.classList.remove('active'));
+  const activeTab=$('.res-tab[data-mhub="'+tabName+'"]');
+  if(activeTab) activeTab.classList.add('active');
+
+  $$('.res-content').forEach(c=>c.classList.remove('active'));
+  $('#mhub-'+tabName).classList.add('active');
+
+  renderHubModal(filter);
+}
+function renderHubModal(filter){
+  // All tab
+  const allContainer=$('#mhubAllContent');
+  allContainer.innerHTML='';
+
+  // Add videos section
+  let vids=videoData;
+  if(filter!=='all'&&filter!=='flashcards'&&filter!=='quiz') vids=videoData.filter(v=>v.cat===filter||filter==='vocabulary'&&v.cat==='vocabulary'||filter==='speaking'&&v.cat==='speaking'||filter==='research'&&v.cat==='academic');
+  if(vids.length>0){
+    allContainer.innerHTML+='<div class="res-cat-header"><i class="fas fa-play-circle" style="color:var(--accent);"></i> Video Tutorials ('+vids.length+')</div>';
+    allContainer.innerHTML+='<div class="video-grid" style="margin-bottom:20px;">';
+    vids.forEach(v=>{
+      allContainer.innerHTML+='<div class="video-card" onclick="openVideo(''+v.id+'',''+v.title.replace(/'/g,"\'")+'')"><div class="video-thumb"><img src="'+v.thumb+'" alt="" loading="lazy"><div class="play-btn"><i class="fas fa-play"></i></div></div><div class="video-info"><div class="video-title">'+v.title+'</div><div class="video-meta"><i class="fas fa-user"></i> '+v.channel+'</div></div></div>';
+    });
+    allContainer.innerHTML+='</div>';
+  }
+
+  // Add PDFs section
+  let pdfs=pdfData;
+  if(filter!=='all'&&filter!=='flashcards'&&filter!=='quiz') pdfs=pdfData.filter(p=>p.cat===filter||filter==='vocabulary'&&p.cat==='vocabulary'||filter==='speaking'&&p.cat==='speaking'||filter==='research'&&p.cat==='research');
+  if(pdfs.length>0){
+    allContainer.innerHTML+='<div class="res-cat-header"><i class="fas fa-file-pdf" style="color:var(--red);"></i> PDF Guides ('+pdfs.length+')</div>';
+    pdfs.forEach(pdf=>{
+      allContainer.innerHTML+='<div class="res-card"><div class="res-card-title"><i class="fas '+pdf.icon+'" style="color:var(--red);"></i> '+pdf.title+'</div><div class="res-card-meta"><i class="fas fa-university"></i> '+pdf.source+' &bull; <i class="fas fa-tag"></i> '+pdf.cat+'</div><div class="res-card-desc">'+pdf.desc+'</div><div class="res-card-actions"><a href="'+pdf.url+'" target="_blank" class="btn btn-sm btn-secondary"><i class="fas fa-external-link-alt"></i> Open PDF</a></div></div>';
+    });
+  }
+
+  // Add external links
+  if(filter==='all'||filter==='dictionary'){
+    allContainer.innerHTML+='<div class="res-cat-header"><i class="fas fa-link" style="color:var(--green);"></i> External Resources</div>';
+    externalResources.forEach(ext=>{
+      allContainer.innerHTML+='<div class="res-card"><div class="res-card-title"><i class="fas '+ext.icon+'" style="color:var(--green);"></i> '+ext.title+'</div><div class="res-card-desc">'+ext.desc+'</div><div class="res-card-actions"><a href="'+ext.url+'" target="_blank" class="btn btn-sm btn-secondary"><i class="fas fa-external-link-alt"></i> Visit</a></div></div>';
+    });
+  }
+
+  // Videos tab
+  const vidGrid=$('#mhubVideoGrid');
+  vidGrid.innerHTML='';
+  vids.forEach(v=>{
+    vidGrid.innerHTML+='<div class="video-card" onclick="openVideo(''+v.id+'',''+v.title.replace(/'/g,"\'")+'')"><div class="video-thumb"><img src="'+v.thumb+'" alt="" loading="lazy"><div class="play-btn"><i class="fas fa-play"></i></div></div><div class="video-info"><div class="video-title">'+v.title+'</div><div class="video-meta"><i class="fas fa-user"></i> '+v.channel+'</div></div></div>';
+  });
+
+  // PDFs tab
+  const pdfGrid=$('#mhubPdfGrid');
+  pdfGrid.innerHTML='';
+  pdfs.forEach(pdf=>{
+    pdfGrid.innerHTML+='<div class="res-card"><div class="res-card-title"><i class="fas '+pdf.icon+'" style="color:var(--red);"></i> '+pdf.title+'</div><div class="res-card-meta"><i class="fas fa-university"></i> '+pdf.source+'</div><div class="res-card-desc">'+pdf.desc+'</div><div class="res-card-actions"><a href="'+pdf.url+'" target="_blank" class="btn btn-sm btn-secondary"><i class="fas fa-external-link-alt"></i> Open PDF</a></div></div>';
+  });
+
+  // External tab
+  const extGrid=$('#mhubExternalGrid');
+  extGrid.innerHTML='';
+  externalResources.forEach(ext=>{
+    extGrid.innerHTML+='<div class="res-card"><div class="res-card-title"><i class="fas '+ext.icon+'" style="color:var(--green);"></i> '+ext.title+'</div><div class="res-card-desc">'+ext.desc+'</div><div class="res-card-actions"><a href="'+ext.url+'" target="_blank" class="btn btn-sm btn-secondary"><i class="fas fa-external-link-alt"></i> Visit</a></div></div>';
+  });
+}
+
+// Hub modal tabs
+$$('#modalHubTabs .res-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    $$('#modalHubTabs .res-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    $$('.res-content').forEach(c=>c.classList.remove('active'));
+    $('#mhub-'+tab.dataset.mhub).classList.add('active');
+  });
+});
+$('#hubModalClose').addEventListener('click',()=>$('#hubModal').classList.remove('show'));
+$('#hubModal').addEventListener('click',(e)=>{ if(e.target===$('#hubModal')) $('#hubModal').classList.remove('show'); });
+$('#globalHubBtn').addEventListener('click',()=>openResourceHub('all'));
+
+// ===================== TEACHING HUB PAGE =====================
+function renderHubPage(filter){
+  // Hub page tabs
+  $$('#hubTabs .res-tab').forEach(tab=>{
+    tab.addEventListener('click',()=>{
+      $$('#hubTabs .res-tab').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      $$('.res-content').forEach(c=>c.classList.remove('active'));
+      $('#hub-'+tab.dataset.hub).classList.add('active');
+    });
+  });
+
+  // All resources
+  const allC=$('#hubAllContent');
+  allC.innerHTML='';
+  allC.innerHTML+='<div class="res-cat-header"><i class="fas fa-play-circle" style="color:var(--accent);"></i> All Video Tutorials ('+videoData.length+')</div>';
+  allC.innerHTML+='<div class="video-grid" style="margin-bottom:20px;">';
+  videoData.forEach(v=>{
+    allC.innerHTML+='<div class="video-card" onclick="openVideo(''+v.id+'',''+v.title.replace(/'/g,"\'")+'')"><div class="video-thumb"><img src="'+v.thumb+'" alt="" loading="lazy"><div class="play-btn"><i class="fas fa-play"></i></div></div><div class="video-info"><div class="video-title">'+v.title+'</div><div class="video-meta"><i class="fas fa-user"></i> '+v.channel+' &bull; '+v.cat+'</div></div></div>';
+  });
+  allC.innerHTML+='</div>';
+
+  allC.innerHTML+='<div class="res-cat-header"><i class="fas fa-file-pdf" style="color:var(--red);"></i> All PDF Guides ('+pdfData.length+')</div>';
+  pdfData.forEach(pdf=>{
+    allC.innerHTML+='<div class="res-card"><div class="res-card-title"><i class="fas '+pdf.icon+'" style="color:var(--red);"></i> '+pdf.title+'</div><div class="res-card-meta"><i class="fas fa-university"></i> '+pdf.source+' &bull; <i class="fas fa-tag"></i> '+pdf.cat+'</div><div class="res-card-desc">'+pdf.desc+'</div><div class="res-card-actions"><a href="'+pdf.url+'" target="_blank" class="btn btn-sm btn-secondary"><i class="fas fa-external-link-alt"></i> Open PDF</a></div></div>';
+  });
+
+  // Videos only
+  const hubVid=$('#hubVideoGrid');
+  hubVid.innerHTML='';
+  videoData.forEach(v=>{
+    hubVid.innerHTML+='<div class="video-card" onclick="openVideo(''+v.id+'',''+v.title.replace(/'/g,"\'")+'')"><div class="video-thumb"><img src="'+v.thumb+'" alt="" loading="lazy"><div class="play-btn"><i class="fas fa-play"></i></div></div><div class="video-info"><div class="video-title">'+v.title+'</div><div class="video-meta"><i class="fas fa-user"></i> '+v.channel+' &bull; '+v.cat+'</div></div></div>';
+  });
+
+  // PDFs only
+  const hubPdf=$('#hubPdfGrid');
+  hubPdf.innerHTML='';
+  pdfData.forEach(pdf=>{
+    hubPdf.innerHTML+='<div class="pdf-card"><div class="pdf-icon"><i class="fas '+pdf.icon+'"></i></div><div class="pdf-title">'+pdf.title+'</div><div class="pdf-desc">'+pdf.desc+'</div><div class="pdf-source"><i class="fas fa-university"></i> '+pdf.source+'</div><div style="display:flex;gap:8px;"><a href="'+pdf.url+'" target="_blank" class="btn btn-primary btn-sm"><i class="fas fa-external-link-alt"></i> Access PDF</a></div></div>';
+  });
+
+  // Research
+  const hubRes=$('#hubResearchContent');
+  hubRes.innerHTML='';
+  const resVids=videoData.filter(v=>v.cat==='academic');
+  const resPdfs=pdfData.filter(p=>p.cat==='research'||p.cat==='academic');
+  if(resVids.length>0){
+    hubRes.innerHTML+='<div class="res-cat-header"><i class="fas fa-play-circle" style="color:var(--accent);"></i> Research Videos</div><div class="video-grid" style="margin-bottom:20px;">';
+    resVids.forEach(v=>{
+      hubRes.innerHTML+='<div class="video-card" onclick="openVideo(''+v.id+'',''+v.title.replace(/'/g,"\'")+'')"><div class="video-thumb"><img src="'+v.thumb+'" alt="" loading="lazy"><div class="play-btn"><i class="fas fa-play"></i></div></div><div class="video-info"><div class="video-title">'+v.title+'</div></div></div>';
+    });
+    hubRes.innerHTML+='</div>';
+  }
+  hubRes.innerHTML+='<div class="res-cat-header"><i class="fas fa-file-pdf" style="color:var(--red);"></i> Research PDFs</div>';
+  resPdfs.forEach(pdf=>{
+    hubRes.innerHTML+='<div class="res-card"><div class="res-card-title"><i class="fas '+pdf.icon+'" style="color:var(--red);"></i> '+pdf.title+'</div><div class="res-card-desc">'+pdf.desc+'</div><div class="res-card-actions"><a href="'+pdf.url+'" target="_blank" class="btn btn-sm btn-secondary"><i class="fas fa-external-link-alt"></i> Open PDF</a></div></div>';
+  });
+
+  // Speaking
+  const hubSpeak=$('#hubSpeakingContent');
+  hubSpeak.innerHTML='';
+  const speakVids=videoData.filter(v=>v.cat==='speaking'||v.cat==='presentation');
+  const speakPdfs=pdfData.filter(p=>p.cat==='speaking'||p.cat==='presentation');
+  if(speakVids.length>0){
+    hubSpeak.innerHTML+='<div class="res-cat-header"><i class="fas fa-play-circle" style="color:var(--accent);"></i> Speaking & Presentation Videos</div><div class="video-grid" style="margin-bottom:20px;">';
+    speakVids.forEach(v=>{
+      hubSpeak.innerHTML+='<div class="video-card" onclick="openVideo(''+v.id+'',''+v.title.replace(/'/g,"\'")+'')"><div class="video-thumb"><img src="'+v.thumb+'" alt="" loading="lazy"><div class="play-btn"><i class="fas fa-play"></i></div></div><div class="video-info"><div class="video-title">'+v.title+'</div></div></div>';
+    });
+    hubSpeak.innerHTML+='</div>';
+  }
+  hubSpeak.innerHTML+='<div class="res-cat-header"><i class="fas fa-file-pdf" style="color:var(--red);"></i> Speaking & Presentation PDFs</div>';
+  speakPdfs.forEach(pdf=>{
+    hubSpeak.innerHTML+='<div class="res-card"><div class="res-card-title"><i class="fas '+pdf.icon+'" style="color:var(--red);"></i> '+pdf.title+'</div><div class="res-card-desc">'+pdf.desc+'</div><div class="res-card-actions"><a href="'+pdf.url+'" target="_blank" class="btn btn-sm btn-secondary"><i class="fas fa-external-link-alt"></i> Open PDF</a></div></div>';
+  });
+
+  // Academic
+  const hubAcad=$('#hubAcademicContent');
+  hubAcad.innerHTML='';
+  const acadVids=videoData.filter(v=>v.cat==='academic'||v.cat==='vocabulary');
+  const acadPdfs=pdfData.filter(p=>p.cat==='academic'||p.cat==='vocabulary');
+  if(acadVids.length>0){
+    hubAcad.innerHTML+='<div class="res-cat-header"><i class="fas fa-play-circle" style="color:var(--accent);"></i> Academic English Videos</div><div class="video-grid" style="margin-bottom:20px;">';
+    acadVids.forEach(v=>{
+      hubAcad.innerHTML+='<div class="video-card" onclick="openVideo(''+v.id+'',''+v.title.replace(/'/g,"\'")+'')"><div class="video-thumb"><img src="'+v.thumb+'" alt="" loading="lazy"><div class="play-btn"><i class="fas fa-play"></i></div></div><div class="video-info"><div class="video-title">'+v.title+'</div></div></div>';
+    });
+    hubAcad.innerHTML+='</div>';
+  }
+  hubAcad.innerHTML+='<div class="res-cat-header"><i class="fas fa-file-pdf" style="color:var(--red);"></i> Academic Writing PDFs</div>';
+  acadPdfs.forEach(pdf=>{
+    hubAcad.innerHTML+='<div class="res-card"><div class="res-card-title"><i class="fas '+pdf.icon+'" style="color:var(--red);"></i> '+pdf.title+'</div><div class="res-card-desc">'+pdf.desc+'</div><div class="res-card-actions"><a href="'+pdf.url+'" target="_blank" class="btn btn-sm btn-secondary"><i class="fas fa-external-link-alt"></i> Open PDF</a></div></div>';
+  });
+}
+
+// ===================== GLOBAL SEARCH =====================
+$('#globalSearch').addEventListener('keydown',(e)=>{
+  if(e.key==='Enter'){
+    const q=$('#globalSearch').value.trim().toLowerCase();
+    if(!q) return;
+    navTo('vocabulary');
+    $('#vocabSearch').value=q;
+    renderVocabList();
+  }
+});
+
+// ===================== INIT =====================
+checkStreak();
+updateStats();
+updateDashboard();
+const todayWord=vocabData[new Date().getDate()%vocabData.length];
+$('#wotdWord').textContent=todayWord.w;
+$('#wotdPhonetic').textContent=todayWord.p;
+$('#wotdDef').textContent=todayWord.d;
+</script>
+</body>
+</html>
