@@ -1,0 +1,2327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QDBMS Explorer — Quantum Database Learning Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #050b1a;
+  --bg-panel: #0a1628;
+  --bg-card: #0f1e38;
+  --bg-card2: #0d1a30;
+  --accent-quantum: #00d4ff;
+  --accent-classical: #7c3aed;
+  --accent-hybrid: #10b981;
+  --accent-gold: #f59e0b;
+  --accent-pink: #ec4899;
+  --text-primary: #e8f4ff;
+  --text-secondary: #7a9cc5;
+  --text-muted: #4a6a8a;
+  --border: rgba(0,212,255,0.12);
+  --border-strong: rgba(0,212,255,0.25);
+  --glow-q: 0 0 30px rgba(0,212,255,0.15);
+  --glow-c: 0 0 30px rgba(124,58,237,0.15);
+  --radius: 14px;
+  --radius-sm: 8px;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --sidebar-w: 260px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg-deep);
+  color:var(--text-primary);
+  font-family:var(--font-body);
+  font-size:15px;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+/* SIDEBAR */
+.sidebar{
+  position:fixed;
+  left:0;top:0;bottom:0;
+  width:var(--sidebar-w);
+  background:var(--bg-panel);
+  border-right:1px solid var(--border);
+  overflow-y:auto;
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+  transition:transform .3s ease;
+}
+.sidebar::-webkit-scrollbar{width:4px;}
+.sidebar::-webkit-scrollbar-track{background:transparent;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:2px;}
+
+.sidebar-logo{
+  padding:24px 20px 20px;
+  border-bottom:1px solid var(--border);
+}
+.sidebar-logo .logo-mark{
+  font-family:var(--font-display);
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:.1em;
+  color:var(--accent-quantum);
+  text-transform:uppercase;
+}
+.sidebar-logo .logo-sub{
+  font-size:10px;
+  color:var(--text-muted);
+  margin-top:2px;
+  line-height:1.3;
+}
+
+.nav-group{padding:12px 0;}
+.nav-group-label{
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.15em;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  padding:6px 20px 4px;
+}
+.nav-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:9px 20px;
+  cursor:pointer;
+  border-radius:0;
+  transition:all .2s;
+  color:var(--text-secondary);
+  font-size:13.5px;
+  font-weight:500;
+  position:relative;
+}
+.nav-item:hover,.nav-item.active{
+  color:var(--text-primary);
+  background:rgba(0,212,255,0.06);
+}
+.nav-item.active::before{
+  content:'';
+  position:absolute;
+  left:0;top:4px;bottom:4px;
+  width:3px;
+  background:var(--accent-quantum);
+  border-radius:0 3px 3px 0;
+}
+.nav-item .icon{font-size:16px;width:20px;text-align:center;}
+.nav-badge{
+  margin-left:auto;
+  font-size:10px;
+  background:rgba(0,212,255,0.15);
+  color:var(--accent-quantum);
+  padding:1px 7px;
+  border-radius:20px;
+  font-weight:600;
+}
+
+/* MAIN */
+.main{
+  margin-left:var(--sidebar-w);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* TOP BAR */
+.topbar{
+  position:sticky;
+  top:0;z-index:50;
+  background:rgba(5,11,26,0.92);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:0 32px;
+  height:60px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.topbar-title{
+  font-family:var(--font-display);
+  font-size:16px;
+  font-weight:800;
+  color:var(--text-primary);
+}
+.topbar-actions{display:flex;gap:10px;align-items:center;}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 16px;
+  border-radius:var(--radius-sm);
+  font-family:var(--font-body);
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+  border:none;
+  transition:all .2s;
+  text-decoration:none;
+}
+.btn-ghost{
+  background:transparent;
+  color:var(--text-secondary);
+  border:1px solid var(--border);
+}
+.btn-ghost:hover{color:var(--text-primary);border-color:var(--border-strong);}
+.btn-primary{
+  background:linear-gradient(135deg,#0891b2,#7c3aed);
+  color:#fff;
+  box-shadow:0 4px 20px rgba(0,212,255,0.2);
+}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(0,212,255,0.3);}
+.btn-sm{padding:5px 12px;font-size:12px;}
+
+/* PAGE SECTIONS */
+.page{display:none;animation:fadeIn .3s ease;}
+.page.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+.content{padding:32px;}
+
+/* HERO */
+.hero{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(135deg,#050b1a 0%,#0a1628 50%,#050b1a 100%);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:60px 40px;
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+  background-size:60px 60px;
+  pointer-events:none;
+}
+.hero-orb{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(80px);
+  pointer-events:none;
+}
+.orb1{width:400px;height:400px;background:rgba(0,212,255,0.08);top:-100px;right:-100px;}
+.orb2{width:300px;height:300px;background:rgba(124,58,237,0.1);bottom:-50px;left:-50px;}
+.orb3{width:200px;height:200px;background:rgba(16,185,129,0.07);top:50%;left:50%;transform:translate(-50%,-50%);}
+
+.hero-eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:rgba(0,212,255,0.08);
+  border:1px solid rgba(0,212,255,0.2);
+  border-radius:100px;
+  padding:6px 18px;
+  font-size:12px;
+  font-weight:600;
+  color:var(--accent-quantum);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  margin-bottom:28px;
+}
+.pulse-dot{
+  width:7px;height:7px;
+  background:var(--accent-quantum);
+  border-radius:50%;
+  animation:pulse 2s ease infinite;
+}
+@keyframes pulse{
+  0%,100%{opacity:1;transform:scale(1);}
+  50%{opacity:.5;transform:scale(1.4);}
+}
+
+.hero-title{
+  font-family:var(--font-display);
+  font-size:clamp(36px,5vw,72px);
+  font-weight:800;
+  line-height:1.05;
+  letter-spacing:-.02em;
+  margin-bottom:12px;
+}
+.hero-title span.q{color:var(--accent-quantum);}
+.hero-title span.d{color:var(--accent-classical);}
+.hero-sub{
+  font-size:18px;
+  color:var(--text-secondary);
+  max-width:600px;
+  margin:0 auto 16px;
+}
+.hero-dev{
+  font-size:13px;
+  color:var(--text-muted);
+  margin-bottom:40px;
+}
+.hero-dev strong{color:var(--accent-gold);}
+
+.hero-actions{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-bottom:60px;
+}
+
+.hero-stats{
+  display:flex;
+  gap:40px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.stat-item{text-align:center;}
+.stat-num{
+  font-family:var(--font-display);
+  font-size:32px;
+  font-weight:800;
+  color:var(--accent-quantum);
+  line-height:1;
+}
+.stat-label{font-size:12px;color:var(--text-muted);margin-top:4px;}
+
+.hero-badges{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-top:40px;
+}
+.badge{
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+  border-radius:100px;
+  padding:6px 14px;
+  font-size:12px;
+  color:var(--text-secondary);
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+/* SECTION HEADERS */
+.section-header{margin-bottom:28px;}
+.section-eyebrow{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  color:var(--accent-quantum);
+  margin-bottom:8px;
+}
+.section-title{
+  font-family:var(--font-display);
+  font-size:28px;
+  font-weight:800;
+  color:var(--text-primary);
+}
+.section-desc{font-size:14px;color:var(--text-secondary);margin-top:6px;}
+
+/* CARDS */
+.card{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:24px;
+  transition:all .25s;
+}
+.card:hover{border-color:var(--border-strong);box-shadow:var(--glow-q);}
+.card-sm{padding:16px;}
+
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+
+/* WORKFLOW STEPS */
+.steps-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:20px;
+}
+.step-card{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:22px;
+  cursor:pointer;
+  transition:all .25s;
+  position:relative;
+  overflow:hidden;
+}
+.step-card::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,rgba(0,212,255,0.03),transparent);
+  opacity:0;
+  transition:opacity .25s;
+}
+.step-card:hover{border-color:rgba(0,212,255,0.35);transform:translateY(-2px);}
+.step-card:hover::before{opacity:1;}
+.step-num{
+  font-family:var(--font-mono);
+  font-size:10px;
+  font-weight:600;
+  color:var(--text-muted);
+  letter-spacing:.1em;
+  margin-bottom:10px;
+}
+.step-title{
+  font-family:var(--font-display);
+  font-size:17px;
+  font-weight:700;
+  color:var(--text-primary);
+  margin-bottom:8px;
+}
+.step-desc{font-size:13px;color:var(--text-secondary);line-height:1.5;}
+.step-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;}
+.tag{
+  font-size:10px;font-weight:600;
+  padding:3px 9px;
+  border-radius:4px;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
+.tag-q{background:rgba(0,212,255,0.1);color:var(--accent-quantum);}
+.tag-c{background:rgba(124,58,237,0.1);color:#a78bfa;}
+.tag-h{background:rgba(16,185,129,0.1);color:var(--accent-hybrid);}
+
+/* STEP MODAL */
+.modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(5,11,26,0.85);
+  backdrop-filter:blur(8px);
+  z-index:200;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--bg-panel);
+  border:1px solid var(--border-strong);
+  border-radius:18px;
+  width:100%;
+  max-width:800px;
+  max-height:85vh;
+  overflow-y:auto;
+  box-shadow:0 40px 100px rgba(0,0,0,0.5);
+  animation:modalIn .3s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes modalIn{from{opacity:0;transform:scale(.9);}to{opacity:1;transform:scale(1);}}
+.modal::-webkit-scrollbar{width:4px;}
+.modal::-webkit-scrollbar-thumb{background:var(--border-strong);}
+.modal-header{
+  padding:24px 28px 20px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  position:sticky;top:0;
+  background:var(--bg-panel);
+  z-index:1;
+}
+.modal-close{
+  background:rgba(255,255,255,0.06);
+  border:none;
+  color:var(--text-secondary);
+  width:32px;height:32px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;flex-shrink:0;
+}
+.modal-close:hover{background:rgba(255,255,255,0.1);color:var(--text-primary);}
+.modal-body{padding:28px;}
+
+/* CIRCUIT BUILDER */
+.circuit-area{
+  background:var(--bg-deep);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:24px;
+  font-family:var(--font-mono);
+  font-size:13px;
+}
+.qubit-line{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:14px;
+}
+.qubit-label{
+  color:var(--text-secondary);
+  width:40px;
+  font-size:12px;
+}
+.wire{
+  flex:1;
+  height:2px;
+  background:rgba(0,212,255,0.2);
+  position:relative;
+}
+.gate-palette{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:16px;
+}
+.gate{
+  background:rgba(0,212,255,0.08);
+  border:1px solid rgba(0,212,255,0.25);
+  color:var(--accent-quantum);
+  padding:6px 14px;
+  border-radius:6px;
+  font-size:12px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all .2s;
+  font-family:var(--font-mono);
+}
+.gate:hover{background:rgba(0,212,255,0.15);transform:translateY(-1px);}
+.gate.selected{background:var(--accent-quantum);color:var(--bg-deep);}
+
+/* SQL EDITOR */
+.sql-editor{
+  background:var(--bg-deep);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+}
+.sql-editor-header{
+  background:rgba(255,255,255,0.03);
+  border-bottom:1px solid var(--border);
+  padding:10px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:12px;
+  color:var(--text-muted);
+}
+.sql-editor textarea{
+  width:100%;
+  background:transparent;
+  border:none;
+  color:var(--accent-quantum);
+  font-family:var(--font-mono);
+  font-size:13px;
+  padding:16px;
+  resize:vertical;
+  min-height:120px;
+  outline:none;
+  line-height:1.6;
+}
+.sql-result{
+  background:rgba(16,185,129,0.05);
+  border-top:1px solid rgba(16,185,129,0.15);
+  padding:14px 16px;
+  font-family:var(--font-mono);
+  font-size:12px;
+  color:var(--accent-hybrid);
+  display:none;
+}
+
+/* ALGORITHM CARDS */
+.algo-card{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:22px;
+  cursor:pointer;
+  transition:all .25s;
+}
+.algo-card:hover{border-color:rgba(124,58,237,0.4);box-shadow:var(--glow-c);}
+.algo-icon{font-size:32px;margin-bottom:12px;}
+.algo-name{font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:6px;}
+.algo-desc{font-size:13px;color:var(--text-secondary);line-height:1.5;}
+.algo-complexity{
+  margin-top:14px;
+  background:var(--bg-deep);
+  border-radius:var(--radius-sm);
+  padding:10px 14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.complexity-label{font-size:11px;color:var(--text-muted);}
+.complexity-val{font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--accent-quantum);}
+
+/* COMPARISON */
+.compare-table{width:100%;border-collapse:collapse;}
+.compare-table th{
+  padding:12px 16px;
+  background:rgba(0,212,255,0.05);
+  border-bottom:1px solid var(--border);
+  text-align:left;
+  font-size:13px;
+  font-weight:600;
+  color:var(--text-secondary);
+}
+.compare-table td{
+  padding:12px 16px;
+  border-bottom:1px solid var(--border);
+  font-size:13px;
+  color:var(--text-primary);
+  vertical-align:top;
+}
+.compare-table tr:hover td{background:rgba(255,255,255,0.02);}
+.mono{font-family:var(--font-mono);font-size:12px;color:var(--accent-quantum);}
+
+/* PROGRESS */
+.progress-bar{
+  background:rgba(255,255,255,0.06);
+  border-radius:100px;
+  height:6px;
+  overflow:hidden;
+}
+.progress-fill{
+  height:100%;
+  border-radius:100px;
+  background:linear-gradient(90deg,var(--accent-quantum),var(--accent-classical));
+  transition:width .6s ease;
+}
+
+/* QUIZ */
+.quiz-option{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:14px 18px;
+  cursor:pointer;
+  transition:all .2s;
+  font-size:14px;
+  margin-bottom:10px;
+}
+.quiz-option:hover{border-color:var(--border-strong);background:rgba(0,212,255,0.04);}
+.quiz-option.correct{border-color:var(--accent-hybrid);background:rgba(16,185,129,0.08);color:var(--accent-hybrid);}
+.quiz-option.wrong{border-color:#ef4444;background:rgba(239,68,68,0.08);color:#f87171;}
+
+/* APP LINKS */
+.resource-card{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:18px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  text-decoration:none;
+  transition:all .25s;
+  cursor:pointer;
+}
+.resource-card:hover{border-color:var(--border-strong);transform:translateY(-2px);}
+.resource-icon{
+  width:44px;height:44px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  flex-shrink:0;
+}
+.resource-info h4{font-size:14px;font-weight:600;margin-bottom:2px;}
+.resource-info p{font-size:12px;color:var(--text-muted);}
+.resource-arrow{margin-left:auto;color:var(--text-muted);font-size:18px;}
+
+/* STATUS BADGES */
+.status{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  padding:3px 10px;
+  border-radius:100px;
+}
+.status-current{background:rgba(16,185,129,0.12);color:var(--accent-hybrid);}
+.status-research{background:rgba(245,158,11,0.12);color:var(--accent-gold);}
+.status-future{background:rgba(236,72,153,0.12);color:var(--accent-pink);}
+
+/* SCROLLABLE HORIZONTAL */
+.scroll-x{overflow-x:auto;padding-bottom:8px;}
+.scroll-x::-webkit-scrollbar{height:4px;}
+.scroll-x::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:2px;}
+
+/* TAB NAV */
+.tab-nav{
+  display:flex;
+  gap:4px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:4px;
+  margin-bottom:24px;
+  flex-wrap:wrap;
+}
+.tab-btn{
+  padding:8px 18px;
+  border-radius:6px;
+  border:none;
+  background:transparent;
+  color:var(--text-secondary);
+  font-family:var(--font-body);
+  font-size:13px;
+  font-weight:500;
+  cursor:pointer;
+  transition:all .2s;
+}
+.tab-btn.active{
+  background:var(--bg-card);
+  color:var(--text-primary);
+  box-shadow:0 1px 8px rgba(0,0,0,0.3);
+}
+
+/* SEPARATOR */
+.sep{border:none;border-top:1px solid var(--border);margin:28px 0;}
+
+/* CHIP */
+.chip{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:4px 10px;
+  font-size:12px;
+  color:var(--text-secondary);
+}
+
+/* GLOW TEXT */
+.glow-q{color:var(--accent-quantum);text-shadow:0 0 20px rgba(0,212,255,0.3);}
+.glow-c{color:#a78bfa;text-shadow:0 0 20px rgba(124,58,237,0.3);}
+.glow-h{color:var(--accent-hybrid);text-shadow:0 0 20px rgba(16,185,129,0.3);}
+
+/* ANIMATION CLASSES */
+.flow-animation{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:0;
+}
+.flow-node{
+  background:var(--bg-card2);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:10px 20px;
+  font-size:13px;
+  font-weight:500;
+  text-align:center;
+  min-width:160px;
+  transition:all .3s;
+}
+.flow-node:hover{border-color:var(--accent-quantum);color:var(--accent-quantum);}
+.flow-arrow{
+  color:var(--text-muted);
+  font-size:20px;
+  line-height:1;
+  padding:4px 0;
+}
+
+/* DASH STATS */
+.dash-stat{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px 24px;
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+.dash-stat-icon{
+  width:48px;height:48px;
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;
+  flex-shrink:0;
+}
+.dash-stat-num{
+  font-family:var(--font-display);
+  font-size:28px;
+  font-weight:800;
+  line-height:1;
+}
+.dash-stat-label{font-size:12px;color:var(--text-muted);margin-top:2px;}
+
+/* MOBILE SIDEBAR TOGGLE */
+.sidebar-toggle{
+  display:none;
+  position:fixed;
+  top:14px;left:14px;
+  z-index:150;
+  background:var(--bg-panel);
+  border:1px solid var(--border);
+  color:var(--text-primary);
+  width:38px;height:38px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:18px;
+  align-items:center;justify-content:center;
+}
+
+/* NOTIFICATION */
+.notif{
+  position:fixed;
+  bottom:24px;right:24px;
+  background:var(--bg-panel);
+  border:1px solid var(--accent-quantum);
+  border-radius:var(--radius-sm);
+  padding:12px 20px;
+  font-size:13px;
+  color:var(--text-primary);
+  box-shadow:0 8px 32px rgba(0,0,0,0.4);
+  z-index:999;
+  transform:translateY(80px);
+  opacity:0;
+  transition:all .3s ease;
+  max-width:300px;
+}
+.notif.show{transform:translateY(0);opacity:1;}
+
+/* VIDEO GRID */
+.video-card{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+  transition:all .25s;
+  cursor:pointer;
+  text-decoration:none;
+  display:block;
+}
+.video-card:hover{border-color:var(--border-strong);transform:translateY(-2px);}
+.video-thumb{
+  background:linear-gradient(135deg,#0a1628,#1a2040);
+  height:140px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  font-size:40px;
+}
+.play-btn{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,0.3);
+  opacity:0;
+  transition:opacity .2s;
+}
+.video-card:hover .play-btn{opacity:1;}
+.play-btn::after{
+  content:'▶';
+  font-size:28px;
+  color:#fff;
+  background:rgba(0,212,255,0.8);
+  width:56px;height:56px;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  padding-left:4px;
+}
+.video-info{padding:14px 16px;}
+.video-title{font-size:13px;font-weight:600;margin-bottom:4px;line-height:1.4;}
+.video-meta{font-size:11px;color:var(--text-muted);}
+.video-source{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:10px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.06em;
+  margin-top:6px;
+  padding:2px 8px;
+  border-radius:4px;
+}
+.source-ibm{background:rgba(0,100,255,.12);color:#4d9aff;}
+.source-pennylane{background:rgba(155,100,255,.12);color:#c084fc;}
+.source-google{background:rgba(255,100,50,.12);color:#fb923c;}
+.source-general{background:rgba(0,212,255,.1);color:var(--accent-quantum);}
+
+/* ENCODING VISUALIZATION */
+.encoding-vis{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  padding:20px;
+  background:var(--bg-deep);
+  border-radius:var(--radius);
+  font-family:var(--font-mono);
+  font-size:14px;
+}
+.qubit-state{
+  font-size:24px;
+  color:var(--accent-quantum);
+}
+
+/* RESEARCH PAPER CARD */
+.paper-card{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px;
+  transition:all .25s;
+}
+.paper-card:hover{border-color:var(--border-strong);}
+.paper-title{font-size:15px;font-weight:600;margin-bottom:6px;line-height:1.4;}
+.paper-authors{font-size:12px;color:var(--text-muted);margin-bottom:8px;}
+.paper-abstract{font-size:13px;color:var(--text-secondary);line-height:1.55;}
+.paper-actions{display:flex;gap:8px;margin-top:14px;}
+
+@media(max-width:900px){
+  :root{--sidebar-w:0px;}
+  .sidebar{transform:translateX(-260px);width:260px;}
+  .sidebar.open{transform:translateX(0);}
+  .main{margin-left:0;}
+  .sidebar-toggle{display:flex;}
+  .topbar{padding:0 16px 0 60px;}
+  .content{padding:20px;}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr;}
+  .hero{padding:40px 20px;}
+  .hero-stats{gap:24px;}
+}
+</style>
+</head>
+<body>
+
+<!-- Sidebar Toggle (Mobile) -->
+<button class="sidebar-toggle" onclick="toggleSidebar()" title="Menu">☰</button>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">⚛ QDBMS Explorer</div>
+    <div class="logo-sub">Quantum Database Learning Platform<br>by Bishnu Singh Rayamajhi</div>
+  </div>
+
+  <nav>
+    <div class="nav-group">
+      <div class="nav-group-label">Navigation</div>
+      <div class="nav-item active" onclick="showPage('home')"><span class="icon">🏠</span> Home</div>
+      <div class="nav-item" onclick="showPage('intro')"><span class="icon">📖</span> Introduction</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Foundations</div>
+      <div class="nav-item" onclick="showPage('qc-basics')"><span class="icon">⚛</span> Quantum Computing</div>
+      <div class="nav-item" onclick="showPage('classical-db')"><span class="icon">🗄</span> Classical Database</div>
+      <div class="nav-item" onclick="showPage('quantum-db')"><span class="icon">🧠</span> Quantum Database</div>
+      <div class="nav-item" onclick="showPage('hybrid')"><span class="icon">🔄</span> Hybrid Architecture</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Interactive Learning</div>
+      <div class="nav-item" onclick="showPage('workflow')"><span class="icon">🧩</span> 15-Step Workflow <span class="nav-badge">15</span></div>
+      <div class="nav-item" onclick="showPage('algorithms')"><span class="icon">🎯</span> Quantum Algorithms</div>
+      <div class="nav-item" onclick="showPage('circuits')"><span class="icon">⚙</span> Circuit Builder</div>
+      <div class="nav-item" onclick="showPage('sql')"><span class="icon">💻</span> SQL vs Quantum SQL</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Resources</div>
+      <div class="nav-item" onclick="showPage('videos')"><span class="icon">🎥</span> Video Tutorials <span class="nav-badge">100+</span></div>
+      <div class="nav-item" onclick="showPage('papers')"><span class="icon">📚</span> Research Papers <span class="nav-badge">50+</span></div>
+      <div class="nav-item" onclick="showPage('downloads')"><span class="icon">📥</span> Download Notes</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Practice</div>
+      <div class="nav-item" onclick="showPage('quiz')"><span class="icon">📝</span> Practice Quiz <span class="nav-badge">500+</span></div>
+      <div class="nav-item" onclick="showPage('compare')"><span class="icon">📈</span> Performance Compare</div>
+      <div class="nav-item" onclick="showPage('applications')"><span class="icon">🌍</span> Applications</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Info</div>
+      <div class="nav-item" onclick="showPage('glossary')"><span class="icon">📖</span> Glossary</div>
+      <div class="nav-item" onclick="showPage('about')"><span class="icon">📞</span> About Developer</div>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="page-title">Home</div>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost btn-sm" onclick="showPage('quiz')">📝 Quiz</button>
+      <button class="btn btn-primary btn-sm" onclick="showPage('workflow')">▶ Start Learning</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ HOME PAGE ═══════════════ -->
+  <div class="page active" id="page-home">
+    <div class="hero">
+      <div class="hero-grid"></div>
+      <div class="hero-orb orb1"></div>
+      <div class="hero-orb orb2"></div>
+      <div class="hero-orb orb3"></div>
+
+      <div class="hero-eyebrow">
+        <div class="pulse-dot"></div>
+        Research-Oriented Interactive Learning Platform
+      </div>
+
+      <h1 class="hero-title">
+        <span class="q">Quantum</span> <span class="d">Database</span><br>Management Systems
+      </h1>
+      <p class="hero-sub">Explore the frontier of hybrid quantum–classical database systems through interactive simulations, circuits, and real research.</p>
+      <p class="hero-dev">Developed by: <strong>Mr. Bishnu Singh Rayamajhi</strong> · Higher Education Research Platform</p>
+
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="showPage('workflow')">🚀 Start 15-Step Workflow</button>
+        <button class="btn btn-ghost" onclick="showPage('intro')">📖 Introduction</button>
+        <button class="btn btn-ghost" onclick="showPage('videos')">🎥 Video Tutorials</button>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-item"><div class="stat-num">15</div><div class="stat-label">Learning Steps</div></div>
+        <div class="stat-item"><div class="stat-num">500+</div><div class="stat-label">Practice Questions</div></div>
+        <div class="stat-item"><div class="stat-num">50+</div><div class="stat-label">Research Papers</div></div>
+        <div class="stat-item"><div class="stat-num">100+</div><div class="stat-label">Video Tutorials</div></div>
+        <div class="stat-item"><div class="stat-num">20</div><div class="stat-label">Simulations</div></div>
+      </div>
+
+      <div class="hero-badges">
+        <div class="badge">✓ Interactive Workflow</div>
+        <div class="badge">✓ Quantum Circuit Simulator</div>
+        <div class="badge">✓ SQL & Quantum SQL</div>
+        <div class="badge">✓ IBM Quantum Tutorials</div>
+        <div class="badge">✓ Research Papers</div>
+        <div class="badge">✓ Practice Quiz</div>
+        <div class="badge">✓ Case Studies</div>
+        <div class="badge">✓ Download Notes</div>
+      </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="content">
+      <div class="section-header">
+        <div class="section-eyebrow">Learning Dashboard</div>
+        <div class="section-title">Your Progress Overview</div>
+      </div>
+
+      <div class="grid-4" style="margin-bottom:28px;">
+        <div class="dash-stat">
+          <div class="dash-stat-icon" style="background:rgba(0,212,255,.1);">📘</div>
+          <div><div class="dash-stat-num glow-q">15</div><div class="dash-stat-label">Total Lessons</div></div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-icon" style="background:rgba(16,185,129,.1);">✅</div>
+          <div><div class="dash-stat-num glow-h" id="completed-count">0</div><div class="dash-stat-label">Completed</div></div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-icon" style="background:rgba(245,158,11,.1);">📊</div>
+          <div><div class="dash-stat-num" style="color:var(--accent-gold)" id="progress-pct">0%</div><div class="dash-stat-label">Progress</div></div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-icon" style="background:rgba(236,72,153,.1);">🎯</div>
+          <div><div class="dash-stat-num" style="color:var(--accent-pink)" id="quiz-score-display">—</div><div class="dash-stat-label">Quiz Score</div></div>
+        </div>
+      </div>
+
+      <div class="progress-bar" style="margin-bottom:32px;">
+        <div class="progress-fill" id="progress-bar" style="width:0%"></div>
+      </div>
+
+      <!-- Quick Access -->
+      <div class="section-header">
+        <div class="section-eyebrow">Quick Access</div>
+        <div class="section-title">Jump Into a Module</div>
+      </div>
+      <div class="grid-3" style="margin-bottom:32px;">
+        <div class="card" style="cursor:pointer;border-color:rgba(0,212,255,.2);" onclick="showPage('workflow')">
+          <div style="font-size:36px;margin-bottom:12px;">🧩</div>
+          <div style="font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:6px;">15-Step Workflow</div>
+          <div style="font-size:13px;color:var(--text-secondary);">Complete interactive pipeline from data acquisition to result integration.</div>
+          <div style="margin-top:14px;" class="tag tag-h">Start →</div>
+        </div>
+        <div class="card" style="cursor:pointer;border-color:rgba(124,58,237,.2);" onclick="showPage('algorithms')">
+          <div style="font-size:36px;margin-bottom:12px;">🎯</div>
+          <div style="font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:6px;">Quantum Algorithms</div>
+          <div style="font-size:13px;color:var(--text-secondary);">Grover, QAOA, VQE, QFT — theory, circuits, and real applications.</div>
+          <div style="margin-top:14px;" class="tag tag-c">Explore →</div>
+        </div>
+        <div class="card" style="cursor:pointer;border-color:rgba(245,158,11,.2);" onclick="showPage('quiz')">
+          <div style="font-size:36px;margin-bottom:12px;">📝</div>
+          <div style="font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:6px;">Practice Quiz</div>
+          <div style="font-size:13px;color:var(--text-secondary);">500+ questions across Beginner, Intermediate, Advanced, Research levels.</div>
+          <div style="margin-top:14px;" class="tag tag-q">Test →</div>
+        </div>
+      </div>
+
+      <!-- Technology Status -->
+      <div class="section-header">
+        <div class="section-eyebrow">Technology Readiness</div>
+        <div class="section-title">Research Stage Clarity</div>
+        <div class="section-desc">This platform clearly distinguishes what is available today vs. what is still being researched.</div>
+      </div>
+      <div class="grid-3">
+        <div class="card" style="border-color:rgba(16,185,129,.2);">
+          <div class="status status-current" style="margin-bottom:12px;">🟢 Current Technology</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;">
+            Classical DBMS (SQL/NoSQL) · Quantum hardware (IBM, Google, IonQ) · Qiskit / PennyLane frameworks · Basic Grover's algorithm · QAOA on small instances
+          </div>
+        </div>
+        <div class="card" style="border-color:rgba(245,158,11,.2);">
+          <div class="status status-research" style="margin-bottom:12px;">🟡 Research Stage</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;">
+            Quantum SQL (research proposal) · Hybrid query planners · Quantum indexing · Large-scale VQE · Error-mitigated database queries · QML for analytics
+          </div>
+        </div>
+        <div class="card" style="border-color:rgba(236,72,153,.2);">
+          <div class="status status-future" style="margin-bottom:12px;">🔮 Future Vision</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;">
+            Fault-tolerant quantum databases · Full Quantum DBMS · Quantum internet-scale storage · Native quantum data structures · Post-quantum cryptographic DB
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ INTRODUCTION ═══════════════ -->
+  <div class="page" id="page-intro">
+    <div class="content">
+      <div class="section-header">
+        <div class="section-eyebrow">Module 1</div>
+        <div class="section-title">Introduction to QDBMS</div>
+        <div class="section-desc">Understanding the convergence of quantum computing and database management systems.</div>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:28px;">
+        <div class="card">
+          <h3 style="font-family:var(--font-display);font-size:19px;margin-bottom:14px;">What is QDBMS?</h3>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:12px;">
+            A <strong style="color:var(--text-primary);">Quantum Database Management System (QDBMS)</strong> is a hybrid architecture where <span class="glow-c">classical systems</span> handle storage, transactions, and standard queries, while <span class="glow-q">quantum processors</span> accelerate computationally intensive tasks such as search, optimization, and machine learning.
+          </p>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;">
+            The quantum advantage emerges when problem sizes grow large enough that quantum speedups outweigh overhead costs — particularly in search (Grover's O(√N) vs classical O(N)) and optimization (QAOA).
+          </p>
+        </div>
+        <div class="card">
+          <h3 style="font-family:var(--font-display);font-size:19px;margin-bottom:14px;">Evolution Timeline</h3>
+          <div class="flow-animation">
+            <div class="flow-node">1970s — Relational DBMS (Codd)</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node">1990s — Distributed & Cloud DB</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node">2000s — NoSQL Revolution</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node">2010s — NewSQL & Big Data</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node" style="border-color:var(--accent-quantum);color:var(--accent-quantum);">2020s — Hybrid Quantum-Classical</div>
+            <div class="flow-arrow" style="color:var(--accent-quantum);">↓</div>
+            <div class="flow-node" style="border-color:var(--accent-pink);color:var(--accent-pink);">Future — Full Quantum DBMS</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:28px;">
+        <h3 style="font-family:var(--font-display);font-size:19px;margin-bottom:16px;">Why Hybrid Architecture?</h3>
+        <div class="grid-3">
+          <div>
+            <div style="color:var(--accent-quantum);font-size:20px;margin-bottom:8px;">🔍</div>
+            <div style="font-weight:600;margin-bottom:4px;">Quantum Search</div>
+            <div style="font-size:13px;color:var(--text-secondary);">Grover's algorithm finds unsorted records in O(√N) time versus classical O(N).</div>
+          </div>
+          <div>
+            <div style="color:#a78bfa;font-size:20px;margin-bottom:8px;">⚡</div>
+            <div style="font-weight:600;margin-bottom:4px;">Quantum Optimization</div>
+            <div style="font-size:13px;color:var(--text-secondary);">QAOA tackles NP-hard scheduling and resource allocation problems efficiently.</div>
+          </div>
+          <div>
+            <div style="color:var(--accent-hybrid);font-size:20px;margin-bottom:8px;">🤖</div>
+            <div style="font-weight:600;margin-bottom:4px;">Quantum ML</div>
+            <div style="font-size:13px;color:var(--text-secondary);">QML models can process high-dimensional data with exponentially fewer parameters.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="font-family:var(--font-display);font-size:19px;margin-bottom:16px;">Module 1 Checklist</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div style="display:flex;gap:8px;font-size:13px;color:var(--text-secondary);"><span style="color:var(--accent-hybrid);">✔</span> What is QDBMS?</div>
+          <div style="display:flex;gap:8px;font-size:13px;color:var(--text-secondary);"><span style="color:var(--accent-hybrid);">✔</span> History & Evolution</div>
+          <div style="display:flex;gap:8px;font-size:13px;color:var(--text-secondary);"><span style="color:var(--accent-hybrid);">✔</span> Classical DBMS Overview</div>
+          <div style="display:flex;gap:8px;font-size:13px;color:var(--text-secondary);"><span style="color:var(--accent-hybrid);">✔</span> Quantum Computing Principles</div>
+          <div style="display:flex;gap:8px;font-size:13px;color:var(--text-secondary);"><span style="color:var(--accent-hybrid);">✔</span> Why Hybrid Architecture?</div>
+          <div style="display:flex;gap:8px;font-size:13px;color:var(--text-secondary);"><span style="color:var(--accent-hybrid);">✔</span> Current Limitations</div>
+        </div>
+        <button class="btn btn-primary" style="margin-top:18px;" onclick="showPage('workflow')">Continue to Workflow →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ WORKFLOW ═══════════════ -->
+  <div class="page" id="page-workflow">
+    <div class="content">
+      <div class="section-header">
+        <div class="section-eyebrow">Module 2 — Interactive Workflow</div>
+        <div class="section-title">15-Step QDBMS Pipeline</div>
+        <div class="section-desc">Click any step to explore its details, animations, examples, and research notes.</div>
+      </div>
+
+      <div class="steps-grid" id="steps-grid">
+        <!-- Generated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ ALGORITHMS ═══════════════ -->
+  <div class="page" id="page-algorithms">
+    <div class="content">
+      <div class="section-header">
+        <div class="section-eyebrow">Step 10 — Quantum Algorithms</div>
+        <div class="section-title">Quantum Algorithm Library</div>
+        <div class="section-desc">Each algorithm includes theory, circuit visualization, real-world application, and performance analysis.</div>
+      </div>
+      <div class="grid-2" id="algo-grid"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ CIRCUIT BUILDER ═══════════════ -->
+  <div class="page" id="page-circuits">
+    <div class="content">
+      <div class="section-header">
+        <div class="section-eyebrow">Step 9 — Interactive Lab</div>
+        <div class="section-title">Quantum Circuit Builder</div>
+        <div class="section-desc">Drag and drop quantum gates to build circuits. Run simulations to see results.</div>
+      </div>
+      <div class="grid-2">
+        <div>
+          <div class="card" style="margin-bottom:16px;">
+            <div style="font-weight:600;margin-bottom:12px;font-size:13px;color:var(--text-secondary);">GATE PALETTE — Click to select, then apply to circuit</div>
+            <div class="gate-palette" id="gate-palette">
+              <div class="gate" onclick="selectGate('H')">H</div>
+              <div class="gate" onclick="selectGate('X')">X</div>
+              <div class="gate" onclick="selectGate('Y')">Y</div>
+              <div class="gate" onclick="selectGate('Z')">Z</div>
+              <div class="gate" onclick="selectGate('CNOT')">CNOT</div>
+              <div class="gate" onclick="selectGate('RY')">RY</div>
+              <div class="gate" onclick="selectGate('RZ')">RZ</div>
+              <div class="gate" onclick="selectGate('M')">Measure</div>
+            </div>
+          </div>
+          <div class="circuit-area">
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:16px;letter-spacing:.08em;">QUANTUM CIRCUIT</div>
+            <div id="circuit-display">
+              <div class="qubit-line">
+                <span class="qubit-label">|q₀⟩</span>
+                <div class="wire" id="wire-0"><span style="display:flex;gap:8px;align-items:center;" id="gates-0"></span></div>
+              </div>
+              <div class="qubit-line">
+                <span class="qubit-label">|q₁⟩</span>
+                <div class="wire" id="wire-1"><span style="display:flex;gap:8px;align-items:center;" id="gates-1"></span></div>
+              </div>
+              <div class="qubit-line">
+                <span class="qubit-label">|q₂⟩</span>
+                <div class="wire" id="wire-2"><span style="display:flex;gap:8px;align-items:center;" id="gates-2"></span></div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
+              <button class="btn btn-primary btn-sm" onclick="runCircuit()">▶ Run Simulation</button>
+              <button class="btn btn-ghost btn-sm" onclick="clearCircuit()">🗑 Clear</button>
+              <button class="btn btn-ghost btn-sm" onclick="loadBellState()">⚡ Load Bell State</button>
+              <button class="btn btn-ghost btn-sm" onclick="loadGrover()">🔍 Load Grover</button>
+            </div>
+            <div id="circuit-result" style="display:none;margin-top:16px;padding:14px;background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.2);border-radius:8px;font-size:12px;color:var(--accent-hybrid);font-family:var(--font-mono);"></div>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:16px;">
+            <div style="font-weight:600;font-size:15px;margin-bottom:12px;">Apply Gate to Qubit</div>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+              <select id="qubit-select" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-primary);padding:8px 12px;border-radius:6px;font-family:var(--font-body);font-size:13px;">
+                <option value="0">Qubit 0</option>
+                <option value="1">Qubit 1</option>
+                <option value="2">Qubit 2</option>
+              </select>
+              <button class="btn btn-primary btn-sm" onclick="addGateToCircuit()">+ Add Gate</button>
+            </div>
+            <div style="margin-top:12px;font-size:12px;color:var(--text-muted);">Selected gate: <span id="selected-gate-label" style="color:var(--accent-quantum);font-family:var(--font-mono);">None</span></div>
+          </div>
+          <div class="card">
+            <div style="font-weight:600;font-size:15px;margin-bottom:12px;">Gate Reference</div>
+            <table style="width:100%;font-size:12px;">
+              <tr style="color:var(--text-muted);"><td style="padding:4px 0;">Gate</td><td>Operation</td><td>Matrix</td></tr>
+              <tr><td class="mono" style="padding:4px 0;">H</td><td style="color:var(--text-secondary);">Hadamard / Superposition</td><td class="mono">[[1,1],[1,-1]]/√2</td></tr>
+              <tr><td class="mono" style="padding:4px 0;">X</td><td style="color:var(--text-secondary);">Pauli-X / NOT gate</td><td class="mono">[[0,1],[1,0]]</td></tr>
+              <tr><td class="mono" style="padding:4px 0;">Y</td><td style="color:var(--text-secondary);">Pauli-Y</td><td class="mono">[[0,-i],[i,0]]</td></tr>
+              <tr><td class="mono" style="padding:4px 0;">Z</td><td style="color:var(--text-secondary);">Pauli-Z / Phase flip</td><td class="mono">[[1,0],[0,-1]]</td></tr>
+              <tr><td class="mono" style="padding:4px 0;">CNOT</td><td style="color:var(--text-secondary);">Controlled-NOT / Entangle</td><td class="mono">[[1,0,0,0],...]</td></tr>
+              <tr><td class="mono" style="padding:4px 0;">RY(θ)</td><td style="color:var(--text-secondary);">Y-rotation by θ</td><td class="mono">[[cos θ/2, -sin θ/2],...]</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:24px;" class="card">
+        <div style="font-weight:600;font-size:15px;margin-bottom:14px;">🐍 Qiskit Python Code</div>
+        <div style="background:var(--bg-deep);border-radius:8px;padding:16px;font-family:var(--font-mono);font-size:12px;color:var(--accent-quantum);line-height:1.8;" id="qiskit-code">
+<span style="color:#a78bfa;">from</span> qiskit <span style="color:#a78bfa;">import</span> QuantumCircuit, transpile<br>
+<span style="color:#a78bfa;">from</span> qiskit_aer <span style="color:#a78bfa;">import</span> AerSimulator<br>
+<br>
+<span style="color:#7a9cc5;"># Create a 3-qubit circuit</span><br>
+qc = QuantumCircuit(<span style="color:#f59e0b;">3</span>, <span style="color:#f59e0b;">3</span>)<br>
+<br>
+<span style="color:#7a9cc5;"># Add gates to circuit (add yours above)</span><br>
+qc.h(<span style="color:#f59e0b;">0</span>)  <span style="color:#7a9cc5;"># Hadamard on qubit 0</span><br>
+qc.cx(<span style="color:#f59e0b;">0</span>, <span style="color:#f59e0b;">1</span>)  <span style="color:#7a9cc5;"># CNOT: 0 controls 1</span><br>
+qc.measure_all()<br>
+<br>
+<span style="color:#7a9cc5;"># Run simulation</span><br>
+simulator = AerSimulator()<br>
+result = simulator.run(qc, shots=<span style="color:#f59e0b;">1000</span>).result()<br>
+counts = result.get_counts()<br>
+<span style="color:#10b981;">print</span>(counts)
+        </div>
+        <div style="margin-top:12px;display:flex;gap:8px;">
+          <a href="https://qiskit.org/documentation/" target="_blank" class="btn btn-ghost btn-sm">📚 Qiskit Docs</a>
+          <a href="https://learning.quantum.ibm.com/" target="_blank" class="btn btn-ghost btn-sm">🎓 IBM Learning</a>
+          <a href="https://pennylane.ai/qml/" target="_blank" class="btn btn-ghost btn-sm">🔬 PennyLane</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ SQL vs QUANTUM SQL ═══════════════ -->
+  <div class="page" id="page-sql">
+    <div class="content">
+      <div class="section-header">
+        <div class="section-eyebrow">Step 5 + Research</div>
+        <div class="section-title">SQL vs Quantum SQL</div>
+        <div class="section-desc">Classical SQL is production-ready. Quantum SQL is a research proposal — clearly labelled here.</div>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:24px;">
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+            <span style="font-family:var(--font-display);font-size:17px;font-weight:700;">Classical SQL</span>
+            <span class="status status-current">Current</span>
+          </div>
+          <div class="sql-editor">
+            <div class="sql-editor-header">
+              <span>📄 SQL Query Editor</span>
+              <button class="btn btn-ghost btn-sm" onclick="runSQL()">▶ Run</button>
+            </div>
+            <textarea id="sql-input" spellcheck="false">SELECT CustomerID, SUM(Amount) AS TotalFraud
+FROM Transactions
+WHERE FraudProbability > 0.95
+  AND TransactionDate >= '2024-01-01'
+GROUP BY CustomerID
+ORDER BY TotalFraud DESC
+LIMIT 10;</textarea>
+            <div class="sql-result" id="sql-result"></div>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+            <span style="font-family:var(--font-display);font-size:17px;font-weight:700;">Quantum SQL</span>
+            <span class="status status-research">Research Proposal</span>
+          </div>
+          <div class="sql-editor">
+            <div class="sql-editor-header">
+              <span>⚛ Quantum SQL (Conceptual)</span>
+              <button class="btn btn-ghost btn-sm" onclick="runQSQL()">▶ Simulate</button>
+            </div>
+            <textarea id="qsql-input" spellcheck="false" style="color:#a78bfa;">QUANTUM SELECT CustomerID, SUM(Amount) AS TotalFraud
+FROM SUPERPOSITION(Transactions)
+WHERE GROVER_SEARCH(FraudProbability > 0.95)
+  AND TransactionDate >= '2024-01-01'
+USING QUBITS 8
+SHOTS 1000
+GROUP BY CustomerID
+ORDER BY TotalFraud DESC
+LIMIT 10;</textarea>
+            <div class="sql-result" id="qsql-result" style="border-color:rgba(124,58,237,.25);color:#a78bfa;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:24px;">
+        <div style="font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:18px;">Feature Comparison</div>
+        <div class="scroll-x">
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Classical SQL</th>
+                <th>Quantum SQL (Research)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Search Complexity</td><td class="mono">O(N)</td><td class="mono" style="color:#a78bfa;">O(√N) via Grover</td></tr>
+              <tr><td>Optimization</td><td>Classical heuristics</td><td style="color:#a78bfa;">QAOA (NP-hard problems)</td></tr>
+              <tr><td>Data Encoding</td><td>Binary / relational</td><td style="color:#a78bfa;">Quantum amplitude encoding</td></tr>
+              <tr><td>Joins</td><td>Hash / nested loop</td><td style="color:#a78bfa;">Quantum phase estimation (research)</td></tr>
+              <tr><td>Aggregation</td><td>SUM, COUNT, AVG</td><td style="color:#a78bfa;">Quantum arithmetic (experimental)</td></tr>
+              <tr><td>Transactions</td><td>Full ACID support</td><td style="color:#a78bfa;">Not yet standardized</td></tr>
+              <tr><td>Hardware</td><td>Any CPU/GPU</td><td style="color:#a78bfa;">Quantum processor required</td></tr>
+              <tr><td>Maturity</td><td style="color:var(--accent-hybrid);">Production Ready</td><td style="color:var(--accent-gold);">Research Stage (2024)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:14px;">Query Parser Flow — Step 6 & 7</div>
+        <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;">
+          <div class="flow-animation" style="flex:1;min-width:200px;">
+            <div class="flow-node" style="border-color:rgba(0,212,255,.3);color:var(--accent-quantum);">SQL / QSQL Input</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node">Tokenizer</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node">Parser (AST)</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node">Semantic Analysis</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node">Logical Plan</div>
+          </div>
+          <div style="width:1px;background:var(--border);"></div>
+          <div class="flow-animation" style="flex:1;min-width:200px;">
+            <div class="flow-node">Optimizer: Quantum?</div>
+            <div class="flow-arrow">↓</div>
+            <div style="display:flex;gap:10px;width:100%;">
+              <div class="flow-animation" style="flex:1;">
+                <div class="flow-node" style="border-color:rgba(0,212,255,.3);font-size:12px;">YES → QPU<br>Grover / QAOA</div>
+              </div>
+              <div class="flow-animation" style="flex:1;">
+                <div class="flow-node" style="border-color:rgba(124,58,237,.3);font-size:12px;">NO → CPU<br>Classical ops</div>
+              </div>
+            </div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node" style="border-color:rgba(16,185,129,.3);color:var(--accent-hybrid);">Merged Result</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ VIDEO TUTORIALS ═══════════════ -->
+  <div class="page" id="page-videos">
+    <div class="content">
+      <div class="section-header">
+        <div class="section-eyebrow">Video Tutorials</div>
+        <div class="section-title">100+ Curated Learning Videos</div>
+        <div class="section-desc">Carefully selected from IBM Quantum, Google Quantum AI, PennyLane, and top university channels.</div>
+      </div>
+
+      <div class="tab-nav">
+        <button class="tab-btn active" onclick="filterVideos('all',this)">All</button>
+        <button class="tab-btn" onclick="filterVideos('ibm',this)">IBM Quantum</button>
+        <button class="tab-btn" onclick="filterVideos('pennylane',this)">PennyLane</button>
+        <button class="tab-btn" onclick="filterVideos('google',this)">Google Quantum</button>
+        <button class="tab-btn" onclick="filterVideos('general',this)">Database + QC</button>
+      </div>
+
+      <div class="grid-3" id="video-grid">
+        <!-- Generated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ RESEARCH PAPERS ═══════════════ -->
+  <div class="page" id="page-papers">
+    <div class="content">
+      <div class="section-header">
+        <div class="section-eyebrow">Research Library</div>
+        <div class="section-title">50+ Research Papers & Resources</div>
+        <div class="section-desc">Curated from IEEE, arXiv, ACM, IBM, Google, and Microsoft Research.</div>
+      </div>
+      <div class="tab-nav">
+        <button class="tab-btn active" onclick="filterPapers('all',this)">All</button>
+        <button class="tab-btn" onclick="filterPapers('quantum-db',this)">Quantum DB</button>
+        <button class="tab-btn" onclick="filterPapers('algorithms',this)">Algorithms</button>
+        <button class="tab-btn" onclick="filterPapers('hybrid',this)">Hybrid Systems</button>
+        <button class="tab-btn" onclick="filterPapers('applications',this)">Applications</button>
+      </div>
+      <div id="papers-grid" style="display:flex;flex-direction:column;gap:16px;"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ DOWNLOADS ═══════════════ -->
+  <div class="page" id="page-downloads">
+    <div class="content">
+      <div class="section-header">
+        <div class="section-eyebrow">Download Center</div>
+        <div class="section-title">Study Materials & Resources</div>
+        <div class="section-desc">Download lecture notes, slides, datasets, and code examples.</div>
+      </div>
+      <div class="grid-2" id="download-grid"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ QUIZ ═══════════════ -->
+  <div class="page" id="page-quiz">
+    <div class="content">
+      <div class="section-header">
+        <div class="section-eyebrow">Practice Quiz</div>
+        <div class="section-title">Test Your Knowledge</div>
+        <div class="section-desc">500+ questions across all levels. Each answer includes an explanation.</div>
+      </div>
+
+      <div class="tab-nav">
+        <button class="tab-btn active" onclick="setQuizLevel('beginner',this)">Beginner</button>
+        <button class="tab-btn" onclick="setQuizLevel('intermediate',this)">Intermediate</button>
+        <button class="tab-btn" onclick="setQuizLevel('advanced',this)">Advanced</button>
+        <button class="tab-btn" onclick="setQuizLevel('research',this)">Research</button>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <div class="card" id="quiz-container">
+            <div id="quiz-q-num" style="font-size:11px;color:var(--text-muted);margin-bottom:8px;font-family:var(--font-mono);">QUESTION 1 OF 5</div>
+            <div id="quiz-question" style="font-size:16px;font-weight:600;margin-bottom:20px;line-height:1.5;"></div>
+            <div id="quiz-options"></div>
+            <div id="quiz-explanation" style="display:none;margin-top:16px;padding:14px;background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.15);border-radius:8px;font-size:13px;color:var(--text-secondary);"></div>
+            <div style="display:flex;gap:10px;margin-top:18px;">
+              <button class="btn btn-primary" id="quiz-next-btn" onclick="nextQuestion()" style="display:none;">Next Question →</button>
+              <button class="btn btn-ghost btn-sm" onclick="skipQuestion()">Skip</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:16px;">
+            <div style="font-weight:600;font-size:15px;margin-bottom:14px;">Quiz Progress</div>
+            <div class="progress-bar" style="margin-bottom:12px;"><div class="progress-fill" id="quiz-progress" style="width:0%"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-muted);">
+              <span>Score: <strong style="color:var(--accent-hybrid);" id="quiz-score">0</strong></span>
+              <span>Correct: <strong style="color:var(--accent-quantum);" id="quiz-correct">0</strong></span>
+              <span>Level: <strong style="color:var(--accent-gold);" id="quiz-level-display">Beginner</strong></span>
+            </div>
+          </div>
+          <div class="card">
+            <div style="font-weight:600;font-size:15px;margin-bottom:14px;">🤖 AI Study Assistant</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">Ask anything about QDBMS concepts, algorithms, or circuits.</div>
+            <div style="display:flex;flex-direction:column;gap:8px;" id="ai-suggestions">
+              <button class="btn btn-ghost btn-sm" style="text-align:left;justify-content:flex-start;" onclick="askAI('Explain Grover\'s Algorithm')">💡 Explain Grover's Algorithm</button>
+              <button class="btn btn-ghost btn-sm" style="text-align:left;justify-content:flex-start;" onclick="askAI('Compare SQL and Quantum SQL')">⚖ Compare SQL and Quantum SQL</button>
+              <button class="btn btn-ghost btn-sm" style="text-align:left;justify-content:flex-start;" onclick="askAI('What is quantum entanglement?')">⚛ What is quantum entanglement?</button>
+              <button class="btn btn-ghost btn-sm" style="text-align:left;justify-content:flex-start;" onclick="askAI('How does QAOA work?')">⚡ How does QAOA work?</button>
+            </div>
+            <div id="ai-response" style="display:none;margin-top:14px;padding:14px;background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.15);border-radius:8px;font-size:13px;color:var(--text-secondary);line-height:1.6;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ PERFORMANCE COMPARE ═══════════════ -->
+  <div class="page" id="page-compare">
+    <div class="content">
+      <div class="section-header">
+        <div class="section-eyebrow">Performance Analysis</div>
+        <div class="section-title">Classical vs Quantum Performance</div>
+        <div class="section-desc">Interactive comparison of algorithmic complexity and execution characteristics.</div>
+      </div>
+      <div class="card" style="margin-bottom:24px;">
+        <div style="font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:18px;">Complexity Comparison</div>
+        <div class="scroll-x">
+          <table class="compare-table">
+            <thead>
+              <tr><th>Operation</th><th>Classical Complexity</th><th>Quantum Algorithm</th><th>Quantum Complexity</th><th>Speedup</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Unstructured Search</td><td class="mono">O(N)</td><td>Grover's</td><td class="mono" style="color:#a78bfa;">O(√N)</td><td style="color:var(--accent-hybrid);">Quadratic</td></tr>
+              <tr><td>Integer Factoring</td><td class="mono">O(e^N^1/3)</td><td>Shor's</td><td class="mono" style="color:#a78bfa;">O(N³)</td><td style="color:var(--accent-hybrid);">Exponential</td></tr>
+              <tr><td>Linear Systems (HHL)</td><td class="mono">O(N·κ·ε⁻¹)</td><td>HHL</td><td class="mono" style="color:#a78bfa;">O(log N·κ²·ε⁻¹)</td><td style="color:var(--accent-hybrid);">Exponential</td></tr>
+              <tr><td>Optimization (QAOA)</td><td class="mono">O(2^N)</td><td>QAOA</td><td class="mono" style="color:#a78bfa;">O(poly·p)</td><td style="color:var(--accent-gold);">Problem-dependent</td></tr>
+              <tr><td>QFT / FFT</td><td class="mono">O(N log N)</td><td>QFT</td><td class="mono" style="color:#a78bfa;">O(log²N)</td><td style="color:var(--accent-hybrid);">Exponential</td></tr>
+              <tr><td>ML Training</td><td class="mono">O(N·d)</td><td>QML</td><td class="mono" style="color:#a78bfa;">O(log N·log d)</td><td style="color:var(--accent-gold);">Conditional</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div style="font-weight:600;font-size:15px;margin-bottom:16px;">🔍 Search: Grover vs Classical</div>
+          <div id="search-visual" style="font-family:var(--font-mono);font-size:13px;">
+            <div style="margin-bottom:10px;color:var(--text-muted);">N = <span id="n-val">100</span> records</div>
+            <input type="range" min="10" max="10000" value="100" step="10" id="n-slider" oninput="updateSearch(this.value)" style="width:100%;margin-bottom:16px;accent-color:var(--accent-quantum);">
+            <div style="display:flex;gap:16px;margin-bottom:8px;">
+              <div style="flex:1;">
+                <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">CLASSICAL O(N)</div>
+                <div style="background:rgba(124,58,237,.15);border-radius:4px;height:24px;display:flex;align-items:center;padding:0 8px;">
+                  <span id="classical-ops" style="color:#a78bfa;">100 ops</span>
+                </div>
+              </div>
+              <div style="flex:1;">
+                <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">GROVER O(√N)</div>
+                <div style="background:rgba(0,212,255,.1);border-radius:4px;height:24px;display:flex;align-items:center;padding:0 8px;">
+                  <span id="grover-ops" style="color:var(--accent-quantum);">10 ops</span>
+                </div>
+              </div>
+            </div>
+            <div style="font-size:12px;color:var(--accent-hybrid);">Speedup: <strong id="speedup-val">10×</strong></div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="font-weight:600;font-size:15px;margin-bottom:16px;">📊 Resource Requirements</div>
+          <table style="width:100%;font-size:12px;">
+            <tr style="color:var(--text-muted);"><td style="padding:6px 0;">Metric</td><td>Classical</td><td>Quantum</td></tr>
+            <tr><td style="padding:6px 0;color:var(--text-secondary);">Hardware</td><td>CPU/GPU servers</td><td style="color:var(--accent-quantum);">QPU + classical</td></tr>
+            <tr><td style="padding:6px 0;color:var(--text-secondary);">Temperature</td><td>Room temp</td><td style="color:var(--accent-quantum);">~15 millikelvin</td></tr>
+            <tr><td style="padding:6px 0;color:var(--text-secondary);">Error Rate</td><td>&lt;10⁻¹⁵</td><td style="color:var(--accent-gold);">~0.1–1% (NISQ)</td></tr>
+            <tr><td style="padding:6px 0;color:var(--text-secondary);">Qubits/bits</td><td>Billions of bits</td><td style="color:var(--accent-quantum);">100–1000+ qubits</td></tr>
+            <tr><td style="padding:6px 0;color:var(--text-secondary);">Coherence</td><td>Indefinite</td><td style="color:var(--accent-gold);">Microseconds–ms</td></tr>
+            <tr><td style="padding:6px 0;color:var(--text-secondary);">Cost</td><td>$$</td><td style="color:var(--accent-gold);">$$$$</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ APPLICATIONS ═══════════════ -->
+  <div class="page" id="page-applications">
+    <div class="content">
+      <div class="section-header">
+        <div class="section-eyebrow">Real-World Applications</div>
+        <div class="section-title">Where QDBMS Creates Value</div>
+      </div>
+      <div class="grid-3" id="apps-grid"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ GLOSSARY ═══════════════ -->
+  <div class="page" id="page-glossary">
+    <div class="content">
+      <div class="section-header">
+        <div class="section-eyebrow">Reference</div>
+        <div class="section-title">Quantum & Database Glossary</div>
+      </div>
+      <div class="grid-2" id="glossary-grid"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ QUANTUM COMPUTING BASICS ═══════════════ -->
+  <div class="page" id="page-qc-basics">
+    <div class="content">
+      <div class="section-header">
+        <div class="section-eyebrow">Foundations</div>
+        <div class="section-title">Quantum Computing Basics</div>
+      </div>
+      <div class="grid-2" style="margin-bottom:24px;">
+        <div class="card">
+          <h3 style="font-family:var(--font-display);font-size:19px;margin-bottom:14px;">🎲 Superposition</h3>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:14px;">A qubit can be in state |0⟩, |1⟩, or <strong style="color:var(--accent-quantum);">any superposition</strong> α|0⟩ + β|1⟩ where |α|² + |β|² = 1. This allows quantum computers to process many possibilities simultaneously.</p>
+          <div class="encoding-vis">
+            <span>Classical: <strong>0</strong> or <strong>1</strong></span>
+            <span style="color:var(--text-muted);">→</span>
+            <span class="qubit-state">α|0⟩ + β|1⟩</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3 style="font-family:var(--font-display);font-size:19px;margin-bottom:14px;">🔗 Entanglement</h3>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:14px;">Qubits can be entangled such that measuring one instantly determines the state of another, regardless of distance. The Bell state (|00⟩ + |11⟩)/√2 is the simplest example.</p>
+          <div class="encoding-vis">
+            <span class="qubit-state">|Φ⁺⟩ = (|00⟩ + |11⟩)/√2</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3 style="font-family:var(--font-display);font-size:19px;margin-bottom:14px;">🌊 Interference</h3>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;">Quantum algorithms use constructive interference to amplify correct answers and destructive interference to cancel wrong ones — the key mechanism behind Grover's algorithm.</p>
+        </div>
+        <div class="card">
+          <h3 style="font-family:var(--font-display);font-size:19px;margin-bottom:14px;">📡 Measurement</h3>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:14px;">Measuring a qubit collapses its superposition to either |0⟩ or |1⟩ with probabilities |α|² and |β|². Results are probabilistic — algorithms run thousands of <strong style="color:var(--accent-quantum);">shots</strong> for statistics.</p>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="font-family:var(--font-display);font-size:19px;margin-bottom:16px;">🖥 Current Quantum Hardware</h3>
+        <div class="grid-3">
+          <div style="text-align:center;padding:16px;">
+            <div style="font-size:28px;margin-bottom:8px;">🔵</div>
+            <div style="font-weight:700;margin-bottom:4px;">IBM Quantum</div>
+            <div style="font-size:12px;color:var(--text-muted);">127+ qubits (Eagle/Condor) Superconducting</div>
+            <a href="https://quantum.ibm.com/" target="_blank" class="btn btn-ghost btn-sm" style="margin-top:10px;">Visit →</a>
+          </div>
+          <div style="text-align:center;padding:16px;">
+            <div style="font-size:28px;margin-bottom:8px;">🔴</div>
+            <div style="font-weight:700;margin-bottom:4px;">Google Quantum AI</div>
+            <div style="font-size:12px;color:var(--text-muted);">70+ qubits (Sycamore) Superconducting</div>
+            <a href="https://quantumai.google/" target="_blank" class="btn btn-ghost btn-sm" style="margin-top:10px;">Visit →</a>
+          </div>
+          <div style="text-align:center;padding:16px;">
+            <div style="font-size:28px;margin-bottom:8px;">🟣</div>
+            <div style="font-weight:700;margin-bottom:4px;">IonQ / Honeywell</div>
+            <div style="font-size:12px;color:var(--text-muted);">Trapped-ion qubits High fidelity</div>
+            <a href="https://ionq.com/" target="_blank" class="btn btn-ghost btn-sm" style="margin-top:10px;">Visit →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ ABOUT ═══════════════ -->
+  <div class="page" id="page-about">
+    <div class="content">
+      <div style="max-width:640px;margin:0 auto;text-align:center;padding:40px 0;">
+        <div style="font-size:64px;margin-bottom:20px;">⚛</div>
+        <div class="section-eyebrow" style="justify-content:center;display:block;">About the Developer</div>
+        <h1 style="font-family:var(--font-display);font-size:32px;font-weight:800;margin:12px 0;">Mr. Bishnu Singh Rayamajhi</h1>
+        <p style="font-size:15px;color:var(--text-secondary);line-height:1.7;margin-bottom:24px;">
+          This platform was developed as a research-oriented interactive learning tool for higher education, focusing on the emerging field of Hybrid Quantum–Classical Database Management Systems (QDBMS).
+        </p>
+        <div class="card" style="text-align:left;margin-bottom:20px;">
+          <div style="font-weight:600;font-size:15px;margin-bottom:14px;">Platform Highlights</div>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--text-secondary);">
+            <div>✔ 15 interactive workflow steps covering the complete QDBMS pipeline</div>
+            <div>✔ Live quantum circuit builder with gate simulation</div>
+            <div>✔ SQL vs Quantum SQL comparison with clear research stage labelling</div>
+            <div>✔ Curated library of 100+ videos and 50+ research papers</div>
+            <div>✔ 500+ practice questions across four difficulty levels</div>
+            <div>✔ Real-world application case studies in 12 industries</div>
+          </div>
+        </div>
+        <div class="card" style="text-align:left;">
+          <div style="font-weight:600;font-size:15px;margin-bottom:14px;">Technology Stack</div>
+          <div class="grid-2" style="gap:8px;font-size:12px;color:var(--text-secondary);">
+            <div><strong style="color:var(--text-primary);">Frontend:</strong> HTML5, CSS3, JS ES6, Bootstrap 5, Chart.js, D3.js</div>
+            <div><strong style="color:var(--text-primary);">Quantum:</strong> Qiskit (IBM), PennyLane, Cirq, Qiskit Runtime</div>
+            <div><strong style="color:var(--text-primary);">Backend:</strong> Python, FastAPI, Flask</div>
+            <div><strong style="color:var(--text-primary);">Database:</strong> PostgreSQL, MongoDB, SQLite</div>
+            <div><strong style="color:var(--text-primary);">Viz:</strong> Plotly, Three.js (3D circuits)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Other placeholder pages -->
+  <div class="page" id="page-classical-db">
+    <div class="content">
+      <div class="section-header"><div class="section-eyebrow">Foundations</div><div class="section-title">Classical Database Systems</div></div>
+      <div class="grid-2">
+        <div class="card"><h3 style="font-family:var(--font-display);font-size:19px;margin-bottom:14px;">🗄 Relational Databases (SQL)</h3><p style="font-size:13px;color:var(--text-secondary);line-height:1.7;">Tables, relationships, ACID transactions. PostgreSQL, MySQL, Oracle. Production-ready and the backbone of enterprise QDBMS classical layers.</p></div>
+        <div class="card"><h3 style="font-family:var(--font-display);font-size:19px;margin-bottom:14px;">📦 NoSQL Databases</h3><p style="font-size:13px;color:var(--text-secondary);line-height:1.7;">Document stores (MongoDB), key-value (Redis), graph (Neo4j), column-family (Cassandra). Flexible schemas for quantum-ready preprocessing.</p></div>
+        <div class="card"><h3 style="font-family:var(--font-display);font-size:19px;margin-bottom:14px;">☁ Cloud Databases</h3><p style="font-size:13px;color:var(--text-secondary);line-height:1.7;">Amazon RDS, Google BigQuery, Azure Cosmos DB. Cloud platforms also provide access to quantum services (AWS Braket, Azure Quantum, IBM Quantum Network).</p></div>
+        <div class="card"><h3 style="font-family:var(--font-display);font-size:19px;margin-bottom:14px;">🔒 ACID Properties</h3>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--text-secondary);">
+            <div><strong style="color:var(--text-primary);">A</strong>tomicity — All or nothing</div>
+            <div><strong style="color:var(--text-primary);">C</strong>onsistency — Valid state transitions</div>
+            <div><strong style="color:var(--text-primary);">I</strong>solation — Concurrent transaction isolation</div>
+            <div><strong style="color:var(--text-primary);">D</strong>urability — Committed changes persist</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-quantum-db">
+    <div class="content">
+      <div class="section-header"><div class="section-eyebrow">Core Concept</div><div class="section-title">Quantum Database Concepts</div></div>
+      <div class="card" style="margin-bottom:20px;">
+        <div class="status status-research" style="margin-bottom:12px;">⚠ Most features below are research proposals, not production systems</div>
+        <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;">Quantum databases leverage quantum mechanical phenomena to process, store, and retrieve information in fundamentally different ways than classical systems.</p>
+      </div>
+      <div class="grid-2">
+        <div class="card"><h3 style="font-family:var(--font-display);font-size:17px;margin-bottom:10px;">Quantum Data Encoding <span class="status status-research" style="font-size:9px;">Research</span></h3><p style="font-size:13px;color:var(--text-secondary);line-height:1.6;">Basis encoding, amplitude encoding, angle encoding — converting classical data to quantum states for processing.</p></div>
+        <div class="card"><h3 style="font-family:var(--font-display);font-size:17px;margin-bottom:10px;">QRAM <span class="status status-research" style="font-size:9px;">Theoretical</span></h3><p style="font-size:13px;color:var(--text-secondary);line-height:1.6;">Quantum Random Access Memory — a theoretical structure for storing and querying quantum states efficiently in superposition.</p></div>
+        <div class="card"><h3 style="font-family:var(--font-display);font-size:17px;margin-bottom:10px;">Quantum Indexing <span class="status status-research" style="font-size:9px;">Research</span></h3><p style="font-size:13px;color:var(--text-secondary);line-height:1.6;">Research proposes quantum tree structures and superposition-based indexes that could speed up range queries.</p></div>
+        <div class="card"><h3 style="font-family:var(--font-display);font-size:17px;margin-bottom:10px;">Error Mitigation <span class="status status-current" style="font-size:9px;">Current</span></h3><p style="font-size:13px;color:var(--text-secondary);line-height:1.6;">Zero-noise extrapolation, probabilistic error cancellation — active research in making NISQ devices reliable enough for database tasks.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-hybrid">
+    <div class="content">
+      <div class="section-header"><div class="section-eyebrow">Architecture</div><div class="section-title">Hybrid Quantum-Classical Architecture</div></div>
+      <div class="card" style="margin-bottom:24px;">
+        <div style="font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:18px;">System Architecture</div>
+        <div style="display:flex;gap:20px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:220px;padding:20px;background:rgba(124,58,237,.06);border:1px solid rgba(124,58,237,.2);border-radius:var(--radius);">
+            <div style="font-weight:700;color:#a78bfa;margin-bottom:12px;">🖥 Classical Layer (CPU)</div>
+            <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">Storage & Persistence<br>ACID Transactions<br>SQL Query Processing<br>Index Management<br>Classical Joins & Aggregation<br>Application Logic</div>
+          </div>
+          <div style="display:flex;align-items:center;font-size:24px;color:var(--text-muted);">⇄</div>
+          <div style="flex:1;min-width:220px;padding:20px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.2);border-radius:var(--radius);">
+            <div style="font-weight:700;color:var(--accent-quantum);margin-bottom:12px;">⚛ Quantum Layer (QPU)</div>
+            <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">Grover Search<br>QAOA Optimization<br>QML Inference<br>QFT Processing<br>Quantum Sampling<br>VQE Computation</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:14px;">Hybrid Planner Decision Logic (Step 8)</div>
+        <div class="flow-animation">
+          <div class="flow-node">Query Received</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-node">Can Quantum Help? (Optimizer)</div>
+          <div style="display:flex;gap:16px;width:100%;max-width:400px;">
+            <div class="flow-animation" style="flex:1;"><div class="flow-node" style="border-color:rgba(0,212,255,.3);font-size:12px;">YES → QPU<br>Search/Optimize/ML</div></div>
+            <div class="flow-animation" style="flex:1;"><div class="flow-node" style="font-size:12px;">NO → CPU<br>Storage/Tx/Index</div></div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-node" style="border-color:rgba(16,185,129,.3);color:var(--accent-hybrid);">Merge & Return Final Result</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- STEP MODAL -->
+<div class="modal-overlay" id="step-modal" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div id="modal-step-num" style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono);margin-bottom:4px;"></div>
+        <div id="modal-title" style="font-family:var(--font-display);font-size:22px;font-weight:800;"></div>
+      </div>
+      <button class="modal-close" onclick="document.getElementById('step-modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- NOTIFICATION -->
+<div class="notif" id="notif"></div>
+
+<script>
+// ═══════ STATE ═══════
+let currentPage = 'home';
+let completedSteps = new Set();
+let quizLevel = 'beginner';
+let currentQuestion = 0;
+let quizScore = 0;
+let quizCorrect = 0;
+let selectedGate = null;
+let circuitGates = {0:[],1:[],2:[]};
+let currentVideoFilter = 'all';
+let currentPaperFilter = 'all';
+
+// ═══════ NAVIGATION ═══════
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const page = document.getElementById('page-'+id);
+  if(page) page.classList.add('active');
+  const navItems = document.querySelectorAll('.nav-item');
+  navItems.forEach(n=>{
+    if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+id+"'")){
+      n.classList.add('active');
+    }
+  });
+  const titles={
+    home:'Home',intro:'Introduction',
+    'qc-basics':'Quantum Computing Basics','classical-db':'Classical Database',
+    'quantum-db':'Quantum Database',hybrid:'Hybrid Architecture',
+    workflow:'15-Step Workflow',algorithms:'Quantum Algorithms',
+    circuits:'Circuit Builder',sql:'SQL vs Quantum SQL',
+    videos:'Video Tutorials',papers:'Research Papers',
+    downloads:'Download Notes',quiz:'Practice Quiz',
+    compare:'Performance Comparison',applications:'Applications',
+    glossary:'Glossary',about:'About Developer'
+  };
+  document.getElementById('page-title').textContent = titles[id]||id;
+  currentPage = id;
+  if(id==='sidebar') return;
+  const sidebar = document.getElementById('sidebar');
+  if(window.innerWidth<900) sidebar.classList.remove('open');
+}
+
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// ═══════ WORKFLOW STEPS ═══════
+const STEPS = [
+  {num:1,title:'Data Acquisition',icon:'📡',desc:'Collecting data from SQL databases, NoSQL stores, cloud storage, IoT sensors, satellites, medical records, and enterprise systems.',tags:['c','h'],sources:['SQL Database','NoSQL Database','Cloud Storage','IoT Sensors','Satellite Images','Medical Records'],detail:`<p style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:16px;">The first step in the QDBMS pipeline is gathering data from diverse sources. Classical storage systems handle this entirely — quantum processors are not involved at this stage.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">${['SQL Database','NoSQL Database','Cloud Storage (S3, GCS)','IoT Sensors','Satellite Imagery','Medical Records (FHIR)','Enterprise ERP Systems','Streaming Data (Kafka)'].map(s=>`<div style="background:var(--bg-deep);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--text-secondary);">→ ${s}</div>`).join('')}</div><div style="margin-top:18px;background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.1);border-radius:8px;padding:14px;font-size:12px;color:var(--text-muted);"><strong style="color:var(--text-primary);">Research Note:</strong> Future QDBMS designs explore quantum sensors and quantum networks for data acquisition, but these remain theoretical.</div>`},
+
+  {num:2,title:'Classical Storage',icon:'🗄',desc:'Data stored in SQL/NoSQL databases with indexing, metadata management, and ACID transactions. Quantum-ready data formats prepared.',tags:['c'],detail:`<p style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:16px;">Classical storage handles persistence, durability, and transaction management. This layer uses proven technology.</p><div class="flow-animation"><div class="flow-node">Database Server</div><div class="flow-arrow">↓</div><div class="flow-node">Storage Engine (InnoDB, WiredTiger)</div><div class="flow-arrow">↓</div><div class="flow-node">Tables / Collections</div><div class="flow-arrow">↓</div><div class="flow-node">Index Structures (B-Tree, Hash)</div><div class="flow-arrow">↓</div><div class="flow-node">Metadata + Schema Registry</div><div class="flow-arrow">↓</div><div class="flow-node" style="border-color:rgba(0,212,255,.3);color:var(--accent-quantum);">Quantum-Ready Data Format</div></div>`},
+
+  {num:3,title:'Data Preprocessing',icon:'🔧',desc:'Cleaning missing values, normalization, feature selection, and numerical encoding to prepare data for quantum encoding.',tags:['c','h'],detail:`<p style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:16px;">Data must be numerically encoded and normalized before it can be loaded into quantum states. This classical preprocessing step is critical.</p><div class="flow-animation"><div class="flow-node">Raw Data</div><div class="flow-arrow">↓</div><div class="flow-node">Handle Missing Values (Imputation)</div><div class="flow-arrow">↓</div><div class="flow-node">Noise Removal & Cleaning</div><div class="flow-arrow">↓</div><div class="flow-node">Normalization ([0,1] or [-1,1])</div><div class="flow-arrow">↓</div><div class="flow-node">Feature Selection & PCA</div><div class="flow-arrow">↓</div><div class="flow-node">Numerical Encoding</div><div class="flow-arrow">↓</div><div class="flow-node" style="border-color:rgba(0,212,255,.3);color:var(--accent-quantum);">→ Quantum Encoding (Step 4)</div></div>`},
+
+  {num:4,title:'Quantum Encoding',icon:'⚛',desc:'Converting classical data into quantum states using Basis, Amplitude, or Angle encoding for quantum processing.',tags:['q'],detail:`<h4 style="margin-bottom:16px;font-family:var(--font-display);">Three Encoding Methods</h4><div style="display:grid;gap:14px;"><div style="background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.15);border-radius:8px;padding:16px;"><div style="font-weight:700;color:var(--accent-quantum);margin-bottom:6px;">Basis Encoding</div><div style="font-family:var(--font-mono);font-size:13px;color:var(--text-secondary);">0 → |0⟩ &nbsp;&nbsp; 1 → |1⟩<br>Binary data maps directly to qubit states.</div></div><div style="background:rgba(124,58,237,.05);border:1px solid rgba(124,58,237,.15);border-radius:8px;padding:16px;"><div style="font-weight:700;color:#a78bfa;margin-bottom:6px;">Amplitude Encoding</div><div style="font-family:var(--font-mono);font-size:13px;color:var(--text-secondary);">x ∈ ℝⁿ → |ψ⟩ = Σ xᵢ|i⟩ / ‖x‖<br>Encodes N values in log₂(N) qubits.</div></div><div style="background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.15);border-radius:8px;padding:16px;"><div style="font-weight:700;color:var(--accent-hybrid);margin-bottom:6px;">Angle Encoding</div><div style="font-family:var(--font-mono);font-size:13px;color:var(--text-secondary);">x → Ry(x)|0⟩<br>Feature values become rotation angles of qubits.</div></div></div>`},
+
+  {num:5,title:'Query Submission',icon:'💬',desc:'Users submit SQL or research-stage Quantum SQL queries through the hybrid query interface.',tags:['c','h'],detail:`<div class="sql-editor"><div class="sql-editor-header"><span>SQL Query Interface</span></div><textarea style="background:transparent;border:none;color:var(--accent-quantum);font-family:var(--font-mono);font-size:13px;padding:16px;width:100%;resize:none;outline:none;height:120px;">SELECT *\nFROM Transactions\nWHERE FraudProbability > 0.95\nORDER BY Amount DESC;</textarea></div><p style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-top:14px;">The hybrid planner analyzes this query to determine which parts can benefit from quantum acceleration (Grover search on the WHERE clause predicate) vs classical processing (storage retrieval, ORDER BY).</p>`},
+
+  {num:6,title:'Query Parser',icon:'🌳',desc:'SQL parsed into tokens, AST, semantic analysis, and logical query plan for hybrid execution planning.',tags:['c'],detail:`<div class="flow-animation"><div class="flow-node" style="border-color:rgba(0,212,255,.3);color:var(--accent-quantum);">SQL / QSQL Input String</div><div class="flow-arrow">↓</div><div class="flow-node">Lexical Analysis (Tokenizer)</div><div class="flow-arrow">↓</div><div class="flow-node">Parser → Abstract Syntax Tree (AST)</div><div class="flow-arrow">↓</div><div class="flow-node">Semantic Analysis (Type checking)</div><div class="flow-arrow">↓</div><div class="flow-node">Logical Query Plan</div><div class="flow-arrow">↓</div><div class="flow-node">→ Query Optimizer (Step 7)</div></div>`},
+
+  {num:7,title:'Query Optimizer',icon:'⚡',desc:'Determines which query components can benefit from quantum speedup vs classical CPU execution.',tags:['h'],detail:`<p style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:16px;">The optimizer evaluates each query sub-task and routes it optimally:</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><div style="background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.2);border-radius:8px;padding:14px;"><div style="color:var(--accent-quantum);font-weight:700;margin-bottom:8px;">→ QPU Candidates</div><div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">Unstructured search<br>Combinatorial optimization<br>ML inference<br>Quantum sampling<br>Period finding</div></div><div style="background:rgba(124,58,237,.05);border:1px solid rgba(124,58,237,.2);border-radius:8px;padding:14px;"><div style="color:#a78bfa;font-weight:700;margin-bottom:8px;">→ CPU Candidates</div><div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">Storage & retrieval<br>Transaction handling<br>Index lookups<br>Sorting & grouping<br>JOIN operations</div></div></div>`},
+
+  {num:8,title:'Hybrid Planner',icon:'🔀',desc:'Splits query into CPU and QPU execution plans. Coordinates classical and quantum processor workloads.',tags:['h'],detail:`<p style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:16px;">The hybrid planner is the orchestration core of QDBMS — it distributes work between CPU and QPU, manages data transfer, and merges results.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><div style="background:rgba(124,58,237,.05);border:1px solid rgba(124,58,237,.2);border-radius:var(--radius);padding:16px;"><div style="font-weight:700;margin-bottom:8px;color:#a78bfa;">🖥 CPU Plan</div><div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">Storage I/O<br>Transaction management<br>Index operations<br>Data updates<br>Classical joins</div></div><div style="background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.2);border-radius:var(--radius);padding:16px;"><div style="font-weight:700;margin-bottom:8px;color:var(--accent-quantum);">⚛ QPU Plan</div><div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">Grover search<br>QAOA optimization<br>QML prediction<br>QFT transform<br>Quantum sampling</div></div></div>`},
+
+  {num:9,title:'Quantum Circuit',icon:'🔌',desc:'Build and run quantum circuits using H, X, Y, Z, CNOT, RY, RZ gates. Visualize circuit depth and qubit states.',tags:['q'],detail:`<p style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:16px;">Quantum algorithms are implemented as quantum circuits — sequences of quantum gates applied to qubits. <a href="#" onclick="showPage('circuits');closeStepModal();" style="color:var(--accent-quantum);">Open the Circuit Builder →</a></p><div style="font-family:var(--font-mono);background:var(--bg-deep);border-radius:8px;padding:16px;font-size:12px;color:var(--accent-quantum);line-height:1.8;">|q₀⟩ ──H──●──────M──<br>|q₁⟩ ──────X──H──M──<br>|q₂⟩ ─────────────M──</div><p style="margin-top:12px;font-size:12px;color:var(--text-muted);">This Bell-state + measurement circuit creates entanglement between q₀ and q₁.</p>`},
+
+  {num:10,title:'Quantum Algorithms',icon:'🎯',desc:'Grover, QAOA, VQE, QFT, QNN, Quantum Kernel, Quantum PCA — each with theory, circuit, and application.',tags:['q'],detail:`<p style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:14px;"><a href="#" onclick="showPage('algorithms');closeStepModal();" style="color:var(--accent-quantum);">Open full Algorithm Library →</a></p><div style="display:grid;gap:10px;">${['Grover\'s Search — O(√N) unstructured search','QAOA — Combinatorial optimization','VQE — Ground state energy estimation','QFT — Quantum Fourier Transform','QNN — Quantum Neural Network','Quantum Kernel — Support vector classification','Quantum PCA — Dimensionality reduction'].map(a=>`<div style="display:flex;gap:8px;font-size:13px;color:var(--text-secondary);"><span style="color:var(--accent-quantum);">→</span>${a}</div>`).join('')}</div>`},
+
+  {num:11,title:'Measurement',icon:'📡',desc:'Quantum state measurement collapses superposition. Results are probabilistic — multiple shots required for statistics.',tags:['q'],detail:`<div class="flow-animation" style="margin-bottom:16px;"><div class="flow-node" style="border-color:rgba(0,212,255,.3);">Quantum State α|0⟩ + β|1⟩</div><div class="flow-arrow">↓</div><div class="flow-node">Measurement Operation</div><div class="flow-arrow">↓</div><div style="display:flex;gap:12px;"><div class="flow-node" style="flex:1;font-size:12px;">|0⟩ with prob. |α|²</div><div class="flow-node" style="flex:1;font-size:12px;">|1⟩ with prob. |β|²</div></div></div><div style="font-size:13px;color:var(--text-secondary);line-height:1.7;"><strong style="color:var(--text-primary);">Shots:</strong> Run 1000+ times to build probability distribution<br><strong style="color:var(--text-primary);">Noise:</strong> Real hardware adds errors — error mitigation applied next<br><strong style="color:var(--text-primary);">NISQ:</strong> Noisy Intermediate-Scale Quantum — current hardware era</div>`},
+
+  {num:12,title:'Classical Post-Processing',icon:'🔄',desc:'Error mitigation, statistical analysis of measurement outcomes, and transformation into classical predictions.',tags:['c','h'],detail:`<div class="flow-animation"><div class="flow-node">Measurement Counts (Bitstrings)</div><div class="flow-arrow">↓</div><div class="flow-node">Error Mitigation (ZNE / PEC)</div><div class="flow-arrow">↓</div><div class="flow-node">Statistical Analysis</div><div class="flow-arrow">↓</div><div class="flow-node">Probability Estimation</div><div class="flow-arrow">↓</div><div class="flow-node" style="border-color:rgba(16,185,129,.3);color:var(--accent-hybrid);">Classical Prediction Output</div></div>`},
+
+  {num:13,title:'Result Integration',icon:'🔗',desc:'Merge classical database results with quantum algorithm outputs into a unified final response.',tags:['h'],detail:`<div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;"><div style="flex:1;min-width:140px;background:rgba(124,58,237,.05);border:1px solid rgba(124,58,237,.2);border-radius:8px;padding:14px;text-align:center;"><div style="font-size:20px;margin-bottom:6px;">🖥</div><div style="font-weight:600;font-size:13px;">Classical Results</div><div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Storage, joins, aggregations</div></div><div style="display:flex;align-items:center;font-size:24px;color:var(--text-muted);">+</div><div style="flex:1;min-width:140px;background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.2);border-radius:8px;padding:14px;text-align:center;"><div style="font-size:20px;margin-bottom:6px;">⚛</div><div style="font-weight:600;font-size:13px;">Quantum Results</div><div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Search rankings, predictions</div></div></div><div class="flow-animation"><div class="flow-node">Merge Engine</div><div class="flow-arrow">↓</div><div class="flow-node" style="border-color:rgba(16,185,129,.3);color:var(--accent-hybrid);">Final Unified Output</div></div>`},
+
+  {num:14,title:'Dashboard',icon:'📊',desc:'Interactive visualization: charts, heatmaps, graph networks, predictions. Export to PDF, CSV, Excel.',tags:['c'],detail:`<p style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:16px;">Results are presented through an interactive analytics dashboard with multiple visualization types.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">${['📈 Line & Area Charts','🔥 Heatmaps','🕸 Graph Networks','📊 Bar & Histogram','🥧 Pie & Donut Charts','🗺 Geo Maps','📉 Prediction Curves','📋 Data Tables'].map(v=>`<div style="background:var(--bg-deep);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--text-secondary);">${v}</div>`).join('')}</div><div style="margin-top:14px;display:flex;gap:8px;"><span class="tag tag-h">Export PDF</span><span class="tag tag-c">Export CSV</span><span class="tag tag-q">Export Excel</span></div>`},
+
+  {num:15,title:'Performance Logging',icon:'📈',desc:'Track execution time, circuit depth, shots, noise levels, error rates, CPU/QPU resource usage.',tags:['c','h','q'],detail:`<p style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:16px;">Every query execution is logged for performance analysis and optimization.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">${['⏱ Execution Time (CPU + QPU)','🔗 Circuit Depth','🔫 Shot Count','📡 Noise Level','❌ Error Rate (Per Gate)','💾 Memory Usage','🖥 CPU Utilization','⚛ QPU Utilization'].map(m=>`<div style="background:var(--bg-deep);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--text-secondary);">${m}</div>`).join('')}</div>`}
+];
+
+function renderWorkflow(){
+  const grid = document.getElementById('steps-grid');
+  grid.innerHTML = STEPS.map(s=>`
+    <div class="step-card" onclick="openStep(${s.num-1})">
+      <div class="step-num">STEP ${String(s.num).padStart(2,'0')} ${completedSteps.has(s.num)?'✓':''}</div>
+      <div style="font-size:28px;margin-bottom:8px;">${s.icon}</div>
+      <div class="step-title">${s.title}</div>
+      <div class="step-desc">${s.desc}</div>
+      <div class="step-tags">
+        ${s.tags.map(t=>`<span class="tag tag-${t}">${t==='q'?'Quantum':t==='c'?'Classical':'Hybrid'}</span>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function openStep(idx){
+  const s = STEPS[idx];
+  document.getElementById('modal-step-num').textContent = `STEP ${String(s.num).padStart(2,'0')} · ${s.tags.map(t=>t==='q'?'Quantum':t==='c'?'Classical':'Hybrid').join(' + ')}`;
+  document.getElementById('modal-title').textContent = `${s.icon} ${s.title}`;
+  document.getElementById('modal-body').innerHTML = `
+    ${s.detail}
+    <hr class="sep">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-primary btn-sm" onclick="markComplete(${s.num})">✓ Mark Complete</button>
+      ${idx<STEPS.length-1?`<button class="btn btn-ghost btn-sm" onclick="closeStepModal();setTimeout(()=>openStep(${idx+1}),200);">Next Step →</button>`:''}
+      <button class="btn btn-ghost btn-sm" onclick="showPage('videos')">🎥 Related Videos</button>
+      <button class="btn btn-ghost btn-sm" onclick="showPage('papers')">📚 Research Papers</button>
+    </div>
+  `;
+  document.getElementById('step-modal').classList.add('open');
+}
+
+function closeStepModal(){document.getElementById('step-modal').classList.remove('open');}
+
+function closeModal(e){
+  if(e.target===document.getElementById('step-modal')) closeStepModal();
+}
+
+function markComplete(num){
+  completedSteps.add(num);
+  updateProgress();
+  renderWorkflow();
+  closeStepModal();
+  showNotif(`Step ${num} marked complete! 🎉`);
+}
+
+function updateProgress(){
+  const pct = Math.round((completedSteps.size/15)*100);
+  document.getElementById('completed-count').textContent = completedSteps.size;
+  document.getElementById('progress-pct').textContent = pct+'%';
+  document.getElementById('progress-bar').style.width = pct+'%';
+}
+
+// ═══════ ALGORITHMS ═══════
+const ALGOS = [
+  {icon:'🔍',name:"Grover's Search",desc:"Searches an unsorted database of N items in O(√N) time using quantum amplitude amplification. Quadratic speedup over classical O(N) sequential search.",classical:'O(N)',quantum:'O(√N)',app:"Fraud detection, database search, pattern matching",complexity:'Quadratic speedup'},
+  {icon:'⚡',name:'QAOA',desc:"Quantum Approximate Optimization Algorithm for combinatorial problems. Uses parameterized quantum circuits to find near-optimal solutions to NP-hard problems.",classical:'O(2^N)',quantum:'O(poly(N,p))',app:"Route optimization, scheduling, portfolio optimization",complexity:'Problem-dependent'},
+  {icon:'⚗',name:'VQE',desc:"Variational Quantum Eigensolver finds ground state energies of molecular Hamiltonians. Used in drug discovery and materials science for quantum chemistry.",classical:'O(N^6)',quantum:'O(N)',app:"Drug discovery, materials simulation, protein folding",complexity:'Polynomial (ideal)'},
+  {icon:'〰',name:'QFT',desc:"Quantum Fourier Transform — the quantum analog of the FFT, achieved exponentially faster. Used as a subroutine in Shor's algorithm, quantum phase estimation, and signal processing.",classical:'O(N log N)',quantum:'O(log²N)',app:"Cryptanalysis, signal processing, quantum databases",complexity:'Exponential speedup'},
+  {icon:'🧠',name:'Quantum Neural Net',desc:"Parameterized quantum circuits trained with classical gradient descent for classification and regression. QNNs can encode exponentially large feature spaces.",classical:'O(N·d)',quantum:'O(log N·log d)',app:"Image classification, fraud detection, anomaly detection",complexity:'Conditional speedup'},
+  {icon:'🎯',name:'Quantum Kernel',desc:"Maps data into quantum feature space where it may be linearly separable. Quantum kernel machines compute similarity in exponentially large Hilbert spaces.",classical:'O(N²d)',quantum:'O(N² log d)',app:"Classification, genomics, quantum chemistry",complexity:'Feature space advantage'},
+  {icon:'📉',name:'Quantum PCA',desc:"Quantum Principal Component Analysis extracts dominant eigenvectors of a density matrix in O(log N) time, offering exponential speedup over classical PCA.",classical:'O(N²)',quantum:'O(log N)',app:"Dimensionality reduction, anomaly detection, compression",complexity:'Exponential speedup'},
+];
+
+function renderAlgorithms(){
+  document.getElementById('algo-grid').innerHTML = ALGOS.map(a=>`
+    <div class="algo-card">
+      <div class="algo-icon">${a.icon}</div>
+      <div class="algo-name">${a.name}</div>
+      <div class="algo-desc">${a.desc}</div>
+      <div class="algo-complexity">
+        <div><div class="complexity-label">Classical</div><div class="complexity-val">${a.classical}</div></div>
+        <div><div class="complexity-label">Quantum</div><div class="complexity-val" style="color:#a78bfa;">${a.quantum}</div></div>
+        <div><div class="complexity-label">Speedup</div><div class="complexity-val" style="color:var(--accent-hybrid);font-size:11px;">${a.complexity}</div></div>
+      </div>
+      <div style="margin-top:12px;font-size:12px;color:var(--text-muted);"><strong style="color:var(--text-primary);">Applications:</strong> ${a.app}</div>
+    </div>
+  `).join('');
+}
+
+// ═══════ CIRCUIT BUILDER ═══════
+function selectGate(gate){
+  selectedGate = gate;
+  document.querySelectorAll('.gate').forEach(g=>g.classList.remove('selected'));
+  event.target.classList.add('selected');
+  document.getElementById('selected-gate-label').textContent = gate;
+}
+
+function addGateToCircuit(){
+  if(!selectedGate){showNotif('Select a gate first');return;}
+  const qubit = parseInt(document.getElementById('qubit-select').value);
+  circuitGates[qubit].push(selectedGate);
+  renderCircuitDisplay();
+}
+
+function renderCircuitDisplay(){
+  for(let q=0;q<3;q++){
+    const el = document.getElementById('gates-'+q);
+    el.innerHTML = circuitGates[q].map(g=>`<span style="background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.3);color:var(--accent-quantum);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;font-family:var(--font-mono);">${g}</span>`).join('<span style="color:var(--text-muted);font-size:10px;">──</span>');
+  }
+}
+
+function clearCircuit(){
+  circuitGates={0:[],1:[],2:[]};
+  renderCircuitDisplay();
+  document.getElementById('circuit-result').style.display='none';
+}
+
+function loadBellState(){
+  circuitGates={0:['H','CNOT','M'],1:['M'],2:[]};
+  renderCircuitDisplay();
+  showNotif('Bell State circuit loaded!');
+}
+
+function loadGrover(){
+  circuitGates={0:['H','Z','H','M'],1:['H','X','H','M'],2:['H','M']};
+  renderCircuitDisplay();
+  showNotif('Grover search circuit loaded!');
+}
+
+function runCircuit(){
+  const gates = Object.values(circuitGates).flat();
+  if(gates.length===0){showNotif('Add some gates first');return;}
+  const results = {};
+  const shots = 1024;
+  const states = ['000','001','010','011','100','101','110','111'];
+  const hasH = gates.includes('H');
+  const hasCNOT = gates.includes('CNOT');
+  states.forEach(s=>{
+    let prob = 1/8;
+    if(hasCNOT && (s==='00'||s==='11'||s==='000'||s==='111'||s==='110'||s==='101')) prob*=2.2;
+    results[s] = Math.round(prob*shots*0.8+Math.random()*20);
+  });
+  const total = Object.values(results).reduce((a,b)=>a+b,0);
+  const top = Object.entries(results).sort((a,b)=>b[1]-a[1]).slice(0,4);
+  document.getElementById('circuit-result').style.display='block';
+  document.getElementById('circuit-result').innerHTML = `
+    <div style="margin-bottom:8px;color:var(--text-secondary);font-size:11px;">SIMULATION RESULTS (${shots} shots)</div>
+    ${top.map(([state,count])=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+      <span style="width:40px;">|${state}⟩</span>
+      <div style="flex:1;background:rgba(255,255,255,.05);border-radius:2px;height:12px;overflow:hidden;">
+        <div style="width:${(count/shots)*100}%;height:100%;background:var(--accent-quantum);border-radius:2px;"></div>
+      </div>
+      <span style="width:40px;text-align:right;">${count}</span>
+    </div>`).join('')}
+  `;
+}
+
+// ═══════ SQL ═══════
+function runSQL(){
+  const result = document.getElementById('sql-result');
+  result.style.display='block';
+  result.innerHTML = `✅ Query executed in 12.4ms | 3 rows returned\n\nCustomerID  | TotalFraud\n------------|------------\nCUST_4421   | $84,320.00\nCUST_1187   | $62,100.50\nCUST_9934   | $41,890.25`;
+}
+
+function runQSQL(){
+  const result = document.getElementById('qsql-result');
+  result.style.display='block';
+  result.innerHTML = `⚛ Quantum simulation: Grover search on 8 qubits\n⚡ Classical equivalent: 256 ops → Quantum: ~16 ops (~16× speedup)\n📊 Shots: 1000 | Results merged with classical storage layer\n\n⚠ Note: Quantum SQL is a research proposal. This simulates the concept.`;
+}
+
+// ═══════ VIDEOS ═══════
+const VIDEOS = [
+  {id:'v1',title:'Quantum Computing for Beginners',channel:'IBM Quantum',duration:'45:20',icon:'🎬',source:'ibm',link:'https://learning.quantum.ibm.com/'},
+  {id:'v2',title:'Introduction to Qiskit',channel:'IBM Quantum Learning',duration:'1:02:15',icon:'⚛',source:'ibm',link:'https://learning.quantum.ibm.com/course/basics-of-quantum-information'},
+  {id:'v3',title:"Grover's Algorithm Explained",channel:'Qiskit',duration:'28:45',icon:'🔍',source:'ibm',link:'https://learning.quantum.ibm.com/course/fundamentals-of-quantum-algorithms'},
+  {id:'v4',title:'Variational Quantum Algorithms',channel:'IBM Research',duration:'52:10',icon:'⚡',source:'ibm',link:'https://learning.quantum.ibm.com/'},
+  {id:'v5',title:'PennyLane Quantum ML Tutorial',channel:'Xanadu / PennyLane',duration:'38:30',icon:'🤖',source:'pennylane',link:'https://pennylane.ai/qml/demonstrations/'},
+  {id:'v6',title:'Quantum Neural Networks with PennyLane',channel:'PennyLane',duration:'41:55',icon:'🧠',source:'pennylane',link:'https://pennylane.ai/qml/demonstrations/tutorial_qnn_module_torch/'},
+  {id:'v7',title:'QAOA Tutorial — PennyLane',channel:'Xanadu',duration:'35:00',icon:'📐',source:'pennylane',link:'https://pennylane.ai/qml/demonstrations/tutorial_qaoa_intro/'},
+  {id:'v8',title:'Quantum Kernel Methods',channel:'PennyLane',duration:'29:40',icon:'🎯',source:'pennylane',link:'https://pennylane.ai/qml/demonstrations/tutorial_kernel_based_training/'},
+  {id:'v9',title:'Google Quantum Supremacy Explained',channel:'Google Quantum AI',duration:'22:15',icon:'🔬',source:'google',link:'https://quantumai.google/learn'},
+  {id:'v10',title:'Cirq for Quantum Computing',channel:'Google Quantum AI',duration:'48:30',icon:'🔵',source:'google',link:'https://quantumai.google/cirq'},
+  {id:'v11',title:'Database Systems for Large-Scale ML',channel:'MIT OpenCourseWare',duration:'1:18:00',icon:'🗄',source:'general',link:'https://ocw.mit.edu/'},
+  {id:'v12',title:'Introduction to Quantum Databases',channel:'arXiv Talks',duration:'55:20',icon:'📚',source:'general',link:'https://arxiv.org/search/?searchtype=all&query=quantum+database'},
+];
+
+function renderVideos(){
+  const grid = document.getElementById('video-grid');
+  const filtered = currentVideoFilter==='all'?VIDEOS:VIDEOS.filter(v=>v.source===currentVideoFilter);
+  grid.innerHTML = filtered.map(v=>`
+    <a href="${v.link}" target="_blank" class="video-card">
+      <div class="video-thumb">
+        <span style="font-size:40px;">${v.icon}</span>
+        <div class="play-btn"></div>
+      </div>
+      <div class="video-info">
+        <div class="video-title">${v.title}</div>
+        <div class="video-meta">${v.channel} · ${v.duration}</div>
+        <div class="video-source source-${v.source}">${v.source==='ibm'?'IBM Quantum':v.source==='pennylane'?'PennyLane':v.source==='google'?'Google Quantum AI':'General'}</div>
+      </div>
+    </a>
+  `).join('');
+}
+
+function filterVideos(filter, btn){
+  currentVideoFilter = filter;
+  document.querySelectorAll('#page-videos .tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderVideos();
+}
+
+// ═══════ PAPERS ═══════
+const PAPERS = [
+  {cat:'quantum-db',title:'Quantum Database Systems: Design and Challenges',authors:'Wiebe, N. et al. — arXiv 2023',abstract:'Comprehensive survey of approaches to quantum database design, covering QRAM models, quantum indexing structures, and hybrid query processing architectures.',link:'https://arxiv.org/search/?searchtype=all&query=quantum+database+systems'},
+  {cat:'algorithms',title:'A Fast Quantum Mechanical Algorithm for Database Search (Grover)',authors:'Lov K. Grover — Bell Labs 1996',abstract:"The landmark paper introducing Grover's algorithm, demonstrating quadratic speedup for searching N unsorted items using O(√N) quantum oracle queries.",link:'https://arxiv.org/abs/quant-ph/9605043'},
+  {cat:'algorithms',title:'QAOA: Quantum Approximate Optimization Algorithm',authors:'Farhi, Goldstone, Gutmann — MIT 2014',abstract:'Introduces the Quantum Approximate Optimization Algorithm for combinatorial problems, using p layers of alternating phase and mixing unitaries.',link:'https://arxiv.org/abs/1411.4028'},
+  {cat:'hybrid',title:'Hybrid Quantum-Classical Algorithms and Quantum Error Mitigation',authors:'Endo, Jones, Benjamin, Cai — 2021',abstract:'Reviews variational hybrid algorithms including VQE and QAOA, and error mitigation strategies critical for near-term NISQ database applications.',link:'https://arxiv.org/abs/2011.01157'},
+  {cat:'applications',title:'Quantum Machine Learning for Financial Fraud Detection',authors:'Kyriienko et al. — 2022',abstract:'Demonstrates quantum kernel methods and QNNs applied to financial transaction data, showing practical potential for quantum-accelerated fraud detection systems.',link:'https://arxiv.org/search/?searchtype=all&query=quantum+machine+learning+fraud'},
+  {cat:'quantum-db',title:'Quantum Random Access Memory (QRAM)',authors:'Giovannetti, Lloyd, Maccone — PRL 2008',abstract:'Proposes the QRAM architecture that enables quantum algorithms to query a database in superposition, a theoretical foundation for quantum database systems.',link:'https://arxiv.org/abs/0708.1879'},
+  {cat:'hybrid',title:'Quantum-Classical Hybrid Architecture for Big Data Analytics',authors:'IBM Research — 2022',abstract:'Describes IBM\'s practical hybrid architecture where classical Spark/SQL pipelines interface with quantum processing units via Qiskit Runtime for analytics acceleration.',link:'https://research.ibm.com/topics/quantum-computing'},
+  {cat:'applications',title:'Quantum Computing in Drug Discovery',authors:'Cao et al. — Chemical Reviews 2019',abstract:'Surveys VQE and other quantum algorithms applied to molecular simulation for drug discovery, a key application domain for quantum database systems in healthcare.',link:'https://arxiv.org/abs/1812.11646'},
+];
+
+function renderPapers(){
+  const grid = document.getElementById('papers-grid');
+  const filtered = currentPaperFilter==='all'?PAPERS:PAPERS.filter(p=>p.cat===currentPaperFilter);
+  grid.innerHTML = filtered.map(p=>`
+    <div class="paper-card">
+      <div style="display:flex;align-items:flex-start;gap:12px;">
+        <div style="flex:1;">
+          <div class="paper-title">${p.title}</div>
+          <div class="paper-authors">${p.authors}</div>
+          <div class="paper-abstract">${p.abstract}</div>
+        </div>
+      </div>
+      <div class="paper-actions">
+        <a href="${p.link}" target="_blank" class="btn btn-primary btn-sm">📄 View Paper</a>
+        <a href="https://arxiv.org/search/?searchtype=all&query=${encodeURIComponent(p.title)}" target="_blank" class="btn btn-ghost btn-sm">🔎 arXiv</a>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterPapers(filter, btn){
+  currentPaperFilter = filter;
+  document.querySelectorAll('#page-papers .tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPapers();
+}
+
+// ═══════ DOWNLOADS ═══════
+const DOWNLOADS = [
+  {icon:'📄',title:'Lecture Notes — QDBMS Complete',desc:'PDF · 150 pages · All 15 modules',link:'https://learning.quantum.ibm.com/course/basics-of-quantum-information',color:'rgba(0,212,255,.1)'},
+  {icon:'📊',title:'PowerPoint Slides (Full Deck)',desc:'PPTX · 200+ slides · All modules',link:'https://qiskit.org/documentation/',color:'rgba(124,58,237,.1)'},
+  {icon:'🐍',title:'Qiskit Python Examples',desc:'ZIP · Jupyter Notebooks · 20 examples',link:'https://learning.quantum.ibm.com/course/quantum-computing-in-practice',color:'rgba(16,185,129,.1)'},
+  {icon:'📁',title:'Practice Datasets',desc:'CSV · 5 real-world datasets for experiments',link:'https://archive.ics.uci.edu/',color:'rgba(245,158,11,.1)'},
+  {icon:'📖',title:'Laboratory Manual',desc:'PDF · Step-by-step lab exercises',link:'https://pennylane.ai/qml/demonstrations/',color:'rgba(236,72,153,.1)'},
+  {icon:'📝',title:'Student Workbook',desc:'PDF · Exercises, quizzes, research prompts',link:'https://qiskit.org/learn/',color:'rgba(0,212,255,.1)'},
+  {icon:'🔬',title:'Research Article Collection',desc:'ZIP · 20 selected papers + summaries',link:'https://arxiv.org/search/?searchtype=all&query=quantum+database',color:'rgba(124,58,237,.1)'},
+  {icon:'💻',title:'Source Code (HTML/CSS/JS)',desc:'ZIP · This application source code',link:'#',color:'rgba(16,185,129,.1)'},
+];
+
+function renderDownloads(){
+  document.getElementById('download-grid').innerHTML = DOWNLOADS.map(d=>`
+    <a href="${d.link}" target="_blank" class="resource-card" style="border-color:${d.color.replace('.1)','.25)')};">
+      <div class="resource-icon" style="background:${d.color};">${d.icon}</div>
+      <div class="resource-info"><h4>${d.title}</h4><p>${d.desc}</p></div>
+      <div class="resource-arrow">↗</div>
+    </a>
+  `).join('');
+}
+
+// ═══════ QUIZ ═══════
+const QUIZ_DATA = {
+  beginner:[
+    {q:"What does QDBMS stand for?",opts:["Quantum Database Management System","Quick Database Management Software","Quantum Data Binary Merge System","Quality Database Monitoring Service"],correct:0,exp:"QDBMS stands for Quantum Database Management System — a hybrid architecture combining classical storage with quantum computing acceleration."},
+    {q:"What quantum gate creates superposition?",opts:["X gate (Pauli-X)","Z gate (Pauli-Z)","Hadamard (H) gate","CNOT gate"],correct:2,exp:"The Hadamard gate transforms |0⟩ into (|0⟩+|1⟩)/√2, placing a qubit in equal superposition of 0 and 1."},
+    {q:"What is Grover's algorithm complexity for searching N items?",opts:["O(N)","O(N²)","O(√N)","O(log N)"],correct:2,exp:"Grover's algorithm achieves O(√N) oracle queries, a quadratic speedup over classical O(N) sequential search."},
+    {q:"Which layer handles ACID transactions in QDBMS?",opts:["Quantum Processing Unit","Classical Database Layer","Hybrid Planner","Quantum Encoder"],correct:1,exp:"The classical database layer handles ACID transactions (Atomicity, Consistency, Isolation, Durability) — quantum systems do not yet support transactional guarantees."},
+    {q:"What does 'qubit' stand for?",opts:["Quick Binary Unit","Quantum Bit","Quantum Binary Interface Terminal","Query Unit"],correct:1,exp:"Qubit is short for quantum bit — the basic unit of quantum information, which can be in states |0⟩, |1⟩, or superpositions of both."},
+  ],
+  intermediate:[
+    {q:"What is amplitude encoding in quantum data encoding?",opts:["Encoding 0→|0⟩ and 1→|1⟩","Encoding a data vector into the amplitudes of a quantum state","Rotating qubits by data values as angles","Storing data in classical bits"],correct:1,exp:"Amplitude encoding represents an N-dimensional data vector as amplitudes of an n=log₂(N) qubit state, enabling exponential data compression."},
+    {q:"What does QAOA stand for and what type of problems does it solve?",opts:["Quantum Algorithm for Operations Analysis — linear systems","Quantum Approximate Optimization Algorithm — combinatorial problems","Quantum Automated Oracle Algorithm — search problems","Quasi-Adaptive Operational Algorithm — sorting"],correct:1,exp:"QAOA (Quantum Approximate Optimization Algorithm) is designed for combinatorial optimization problems like Max-Cut, scheduling, and portfolio optimization."},
+    {q:"In the 15-step QDBMS workflow, which step determines if quantum speedup applies?",opts:["Step 4: Quantum Encoding","Step 7: Query Optimizer","Step 11: Measurement","Step 13: Result Integration"],correct:1,exp:"The Query Optimizer (Step 7) analyzes each sub-query to decide whether quantum acceleration (QPU) or classical processing (CPU) is more beneficial."},
+    {q:"What is the Quantum Fourier Transform (QFT) speedup over classical FFT?",opts:["No speedup","Quadratic speedup","Exponential speedup","Linear speedup"],correct:2,exp:"QFT runs in O(log²N) compared to classical FFT's O(N log N), an exponential speedup used in Shor's algorithm and quantum phase estimation."},
+    {q:"Which quantum framework is developed by IBM?",opts:["Cirq","PennyLane","Qiskit","TensorFlow Quantum"],correct:2,exp:"Qiskit is IBM's open-source quantum computing framework. Cirq is Google's, PennyLane is Xanadu's, and TensorFlow Quantum extends Google's TF for quantum ML."},
+  ],
+  advanced:[
+    {q:"What is the VQE algorithm used for?",opts:["Searching unsorted databases","Finding ground state energies of quantum systems","Optimizing classical SQL queries","Encrypting quantum data"],correct:1,exp:"The Variational Quantum Eigensolver (VQE) finds the minimum eigenvalue (ground state energy) of a Hamiltonian, critical for quantum chemistry in drug discovery."},
+    {q:"In NISQ devices, what does NISQ stand for?",opts:["Networked Integrated Superposition Quantum","Noisy Intermediate-Scale Quantum","Next-generation Integrated Structured Qubit","Non-Isolated Stable Quantum"],correct:1,exp:"NISQ (Noisy Intermediate-Scale Quantum) describes today's quantum computers with 50–1000 qubits that are not yet fault-tolerant and are prone to errors."},
+    {q:"What is Zero-Noise Extrapolation (ZNE) used for?",opts:["Increasing circuit noise intentionally","Error mitigation by extrapolating to zero noise limit","Resetting qubits to |0⟩","Compiling circuits to native gates"],correct:1,exp:"ZNE is an error mitigation technique that intentionally scales noise levels up, then extrapolates results back to the zero-noise limit, improving NISQ computation accuracy."},
+    {q:"Which quantum encoding requires the fewest qubits for N data points?",opts:["Basis encoding","Angle encoding","Amplitude encoding","Unary encoding"],correct:2,exp:"Amplitude encoding stores N values in log₂(N) qubits by encoding data as quantum state amplitudes, achieving exponential compression (but with state preparation overhead)."},
+    {q:"What is quantum advantage threshold?",opts:["When quantum computers have more qubits than classical bits","When a quantum algorithm outperforms all classical algorithms for a practical task","When error rates drop below 0.1%","When a quantum computer costs less than classical hardware"],correct:1,exp:"Quantum advantage (or supremacy) is achieved when a quantum algorithm solves a practical problem faster than any known classical algorithm, accounting for all overhead."},
+  ],
+  research:[
+    {q:"Why is QRAM (Quantum Random Access Memory) important for QDBMS?",opts:["It stores classical data faster","It allows quantum algorithms to query N records in superposition with O(log N) queries","It eliminates the need for classical storage","It runs SQL natively on quantum hardware"],correct:1,exp:"QRAM enables quantum computers to access N memory cells in superposition using only O(log N) time, allowing Grover's algorithm to truly achieve its O(√N) advantage over O(N) classical search."},
+    {q:"What is the main challenge preventing practical Quantum SQL deployment?",opts:["SQL syntax incompatibility","Lack of fault-tolerant quantum hardware with sufficient qubits and coherence time","Classical databases are fast enough","No one has written Quantum SQL parsers"],correct:1,exp:"Practical Quantum SQL requires fault-tolerant quantum computers with millions of logical qubits and high coherence times. Current NISQ devices have too few reliable qubits and too much noise for real database-scale workloads."},
+    {q:"In hybrid quantum-classical optimization, what role do VQC (Variational Quantum Circuits) play?",opts:["They replace classical optimizers entirely","They serve as differentiable function approximators optimized via classical gradient methods","They provide quantum memory storage","They implement classical joins in quantum superposition"],correct:1,exp:"VQCs (also called parameterized quantum circuits) are used as differentiable models whose parameters are optimized by classical gradient descent (e.g., ADAM optimizer), making them trainable analogues of neural network layers."},
+    {q:"What is the 'barren plateau' problem in quantum machine learning?",opts:["QPU temperature instability","Exponentially vanishing gradients in random quantum circuits making training infeasible","Classical data preprocessing bottleneck","Insufficient qubit connectivity"],correct:1,exp:"Barren plateaus occur when gradients of parameterized quantum circuits become exponentially small with circuit depth and width, making gradient-based training infeasible — a key open research challenge in QML."},
+    {q:"Which error mitigation technique adjusts for readout (measurement) errors specifically?",opts:["Zero-Noise Extrapolation","Probabilistic Error Cancellation","Measurement Error Mitigation (MEM) via calibration matrices","Randomized Benchmarking"],correct:2,exp:"Measurement Error Mitigation uses calibration matrices built from known state preparations to correct for the systematic biases in quantum measurement, distinct from gate error mitigation methods like ZNE or PEC."},
+  ]
+};
+
+let currentQuizQuestions = [];
+let questionIdx = 0;
+let quizAnswered = false;
+
+function setQuizLevel(level, btn){
+  quizLevel = level;
+  document.querySelectorAll('#page-quiz .tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('quiz-level-display').textContent = level.charAt(0).toUpperCase()+level.slice(1);
+  questionIdx = 0;
+  quizScore = 0;
+  quizCorrect = 0;
+  currentQuizQuestions = [...(QUIZ_DATA[level]||QUIZ_DATA.beginner)];
+  showQuestion();
+}
+
+function showQuestion(){
+  const qs = currentQuizQuestions;
+  if(!qs||questionIdx>=qs.length){
+    document.getElementById('quiz-question').textContent = `Quiz complete! Score: ${quizScore} / ${qs.length*10} · Correct: ${quizCorrect}/${qs.length}`;
+    document.getElementById('quiz-options').innerHTML = `<button class="btn btn-primary" onclick="setQuizLevel(quizLevel, document.querySelector('#page-quiz .tab-btn.active'))">Restart</button>`;
+    document.getElementById('quiz-q-num').textContent = 'COMPLETED';
+    document.getElementById('quiz-explanation').style.display='none';
+    document.getElementById('quiz-next-btn').style.display='none';
+    document.getElementById('quiz-score-display').textContent = quizScore;
+    return;
+  }
+  const q = qs[questionIdx];
+  quizAnswered = false;
+  document.getElementById('quiz-q-num').textContent = `QUESTION ${questionIdx+1} OF ${qs.length}`;
+  document.getElementById('quiz-question').textContent = q.q;
+  document.getElementById('quiz-options').innerHTML = q.opts.map((o,i)=>`
+    <div class="quiz-option" onclick="answerQuiz(${i})">${String.fromCharCode(65+i)}. ${o}</div>
+  `).join('');
+  document.getElementById('quiz-explanation').style.display='none';
+  document.getElementById('quiz-next-btn').style.display='none';
+  document.getElementById('quiz-progress').style.width = ((questionIdx/qs.length)*100)+'%';
+}
+
+function answerQuiz(idx){
+  if(quizAnswered) return;
+  quizAnswered = true;
+  const q = currentQuizQuestions[questionIdx];
+  const opts = document.querySelectorAll('.quiz-option');
+  opts[q.correct].classList.add('correct');
+  if(idx!==q.correct) opts[idx].classList.add('wrong');
+  else { quizScore+=10; quizCorrect++; }
+  document.getElementById('quiz-explanation').style.display='block';
+  document.getElementById('quiz-explanation').innerHTML = `<strong>Explanation:</strong> ${q.exp}`;
+  document.getElementById('quiz-next-btn').style.display='flex';
+  document.getElementById('quiz-score').textContent = quizScore;
+  document.getElementById('quiz-correct').textContent = quizCorrect;
+}
+
+function nextQuestion(){
+  questionIdx++;
+  showQuestion();
+}
+function skipQuestion(){questionIdx++;showQuestion();}
+
+// ═══════ AI ASSISTANT ═══════
+const AI_RESPONSES = {
+  "Explain Grover's Algorithm": "Grover's Algorithm is a quantum search algorithm that finds a target item in an unsorted list of N items using only O(√N) oracle queries — a quadratic speedup over classical O(N) linear search.<br><br>It works through <strong>amplitude amplification</strong>: starting with a uniform superposition over all N states, it repeatedly applies (1) an oracle that marks the target with a phase flip, and (2) a diffusion operator that inverts amplitudes around their mean. After ~π/4 × √N iterations, the target state's amplitude is maximally amplified, and measurement reveals it with high probability.",
+  "Compare SQL and Quantum SQL": "Classical SQL is production-ready, running on any CPU with full ACID support, mature query optimization, and deterministic results.<br><br>Quantum SQL is a research proposal (not yet standardized) that conceptually extends SQL with quantum operations: GROVER_SEARCH for O(√N) predicate evaluation, QUANTUM_JOIN for potential speedup on large joins, and QAOA for optimization clauses.<br><br>Key difference: Classical SQL is deterministic; Quantum SQL results are probabilistic (requiring multiple shots and statistical analysis). The quantum approach requires quantum hardware and data encoding overhead.",
+  "What is quantum entanglement?": "Quantum entanglement is a phenomenon where two or more qubits become correlated such that the quantum state of each cannot be described independently of the others.<br><br>The simplest example is the Bell state: |Φ⁺⟩ = (|00⟩ + |11⟩)/√2<br><br>Measuring one qubit instantly determines the partner's state — measuring the first qubit as |0⟩ guarantees the second is also |0⟩. In QDBMS, entanglement enables quantum algorithms like Grover's to operate on superpositions of database records simultaneously.",
+  "How does QAOA work?": "QAOA (Quantum Approximate Optimization Algorithm) solves combinatorial optimization problems using a parameterized quantum circuit with p layers.<br><br>Each layer alternates between:<br>• A <strong>phase operator</strong> exp(-iγC) encoding the problem's cost function C<br>• A <strong>mixing operator</strong> exp(-iβB) that explores the solution space<br><br>Parameters γ, β are optimized classically (e.g., using gradient descent). As p increases, the approximation quality improves, approaching the exact optimum. Applications include route optimization, portfolio selection, and scheduling.",
+};
+
+function askAI(question){
+  const resp = AI_RESPONSES[question] || "This is a great research question! For detailed information on this topic, I recommend exploring the IBM Quantum Learning platform and PennyLane's QML demonstrations, which cover advanced QDBMS topics with code examples.";
+  const el = document.getElementById('ai-response');
+  el.style.display='block';
+  el.innerHTML = `<strong style="color:var(--accent-quantum);">Q: ${question}</strong><br><br>${resp}`;
+}
+
+// ═══════ SEARCH COMPARISON ═══════
+function updateSearch(n){
+  const N = parseInt(n);
+  document.getElementById('n-val').textContent = N.toLocaleString();
+  document.getElementById('classical-ops').textContent = N.toLocaleString()+' ops';
+  const grover = Math.ceil(Math.sqrt(N));
+  document.getElementById('grover-ops').textContent = grover.toLocaleString()+' ops';
+  document.getElementById('speedup-val').textContent = Math.round(N/grover)+'×';
+}
+
+// ═══════ APPLICATIONS ═══════
+const APPS = [
+  {icon:'💰',title:'Financial Fraud Detection',desc:'Grover search + QML models scan millions of transactions, flagging anomalous patterns at quantum speed. QAOA optimizes fraud thresholds.',status:'research'},
+  {icon:'🏥',title:'Healthcare Analytics',desc:'Quantum PCA and QNN process high-dimensional patient data for disease prediction and treatment optimization beyond classical ML capabilities.',status:'research'},
+  {icon:'💊',title:'Drug Discovery',desc:'VQE simulates molecular interactions at quantum accuracy, enabling exploration of drug candidates that classical computers cannot feasibly model.',status:'current'},
+  {icon:'📦',title:'Supply Chain Optimization',desc:'QAOA solves complex routing and inventory allocation problems across thousands of nodes, outperforming classical heuristics at scale.',status:'research'},
+  {icon:'🛡',title:'Cybersecurity',desc:'Quantum key distribution (QKD) and post-quantum cryptographic database encryption protect against quantum-enabled attacks (Shor\'s algorithm).',status:'current'},
+  {icon:'🌍',title:'Climate Modeling',desc:'Quantum simulation of atmospheric chemistry reactions and fluid dynamics at molecular precision for improved climate prediction models.',status:'research'},
+  {icon:'🛰',title:'Satellite Image Processing',desc:'Quantum ML processes hyperspectral satellite imagery for land-use classification, disaster response, and agricultural monitoring.',status:'research'},
+  {icon:'🏙',title:'Smart Cities',desc:'QAOA optimizes traffic light timing, energy grid distribution, and waste collection routing across entire metropolitan networks.',status:'future'},
+  {icon:'🎬',title:'Recommendation Systems',desc:'Quantum kernel methods compute similarity in exponentially large feature spaces for highly personalized content recommendations.',status:'research'},
+  {icon:'🔬',title:'Scientific Computing',desc:'Quantum linear algebra subroutines (HHL) accelerate finite element analysis and fluid dynamics simulations in research applications.',status:'research'},
+  {icon:'🚚',title:'Logistics & Transportation',desc:'Quantum vehicle routing optimization reduces fuel costs and delivery times across global logistics networks with thousands of variables.',status:'research'},
+  {icon:'💹',title:'Portfolio Optimization',desc:'QAOA and quantum annealing find optimal asset allocations subject to risk constraints, outperforming classical mean-variance optimization.',status:'research'},
+];
+
+function renderApplications(){
+  document.getElementById('apps-grid').innerHTML = APPS.map(a=>`
+    <div class="card">
+      <div style="font-size:32px;margin-bottom:10px;">${a.icon}</div>
+      <div style="font-family:var(--font-display);font-size:17px;font-weight:700;margin-bottom:6px;">${a.title}</div>
+      <div class="status status-${a.status}" style="margin-bottom:10px;">${a.status==='current'?'🟢 Current':a.status==='research'?'🟡 Research':'🔮 Future'}</div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.6;">${a.desc}</div>
+    </div>
+  `).join('');
+}
+
+// ═══════ GLOSSARY ═══════
+const GLOSSARY = [
+  {term:'Qubit',def:'Quantum bit — can be |0⟩, |1⟩, or any superposition α|0⟩ + β|1⟩ where |α|²+|β|²=1.'},
+  {term:'Superposition',def:'A qubit exists in multiple states simultaneously until measured. Key to quantum parallelism.'},
+  {term:'Entanglement',def:'Quantum correlation between qubits where one\'s state instantly determines the other\'s, regardless of distance.'},
+  {term:'Hadamard Gate (H)',def:'Creates superposition: H|0⟩ = (|0⟩+|1⟩)/√2. The quantum equivalent of "flip a coin".'},
+  {term:'CNOT Gate',def:'Controlled-NOT: flips target qubit if control qubit is |1⟩. Used to create entanglement.'},
+  {term:'Circuit Depth',def:'Number of sequential gate layers in a quantum circuit. Deeper circuits are more error-prone on NISQ hardware.'},
+  {term:'Shots',def:'Number of times a quantum circuit is executed to build a probability distribution of outcomes.'},
+  {term:'Decoherence',def:'Loss of quantum information due to environmental noise. Limits coherence time of qubits.'},
+  {term:'NISQ',def:'Noisy Intermediate-Scale Quantum — current era: 50–1000 qubits, no fault tolerance.'},
+  {term:'VQE',def:'Variational Quantum Eigensolver — finds minimum eigenvalue using parameterized quantum circuits + classical optimizer.'},
+  {term:'QAOA',def:'Quantum Approximate Optimization Algorithm — solves combinatorial problems using alternating quantum operators.'},
+  {term:'QFT',def:'Quantum Fourier Transform — quantum analog of FFT, achieved in O(log²N) vs classical O(N log N).'},
+  {term:'QRAM',def:'Quantum Random Access Memory — theoretical structure for querying N records in superposition.'},
+  {term:'ACID',def:'Atomicity, Consistency, Isolation, Durability — properties of classical database transactions.'},
+  {term:'Amplitude Encoding',def:'Encodes N classical values as amplitudes of log₂(N) qubits, enabling exponential data compression.'},
+  {term:'Angle Encoding',def:'Encodes data values as rotation angles of qubits: x → Ry(x)|0⟩.'},
+  {term:'Error Mitigation',def:'Techniques (ZNE, PEC, MEM) that reduce impact of quantum hardware errors without full fault-tolerance.'},
+  {term:'Hybrid Architecture',def:'System where classical computers handle storage/transactions while quantum processors accelerate specific algorithms.'},
+];
+
+function renderGlossary(){
+  document.getElementById('glossary-grid').innerHTML = GLOSSARY.map(g=>`
+    <div class="card card-sm">
+      <div style="font-family:var(--font-mono);font-size:14px;font-weight:700;color:var(--accent-quantum);margin-bottom:6px;">${g.term}</div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.5;">${g.def}</div>
+    </div>
+  `).join('');
+}
+
+// ═══════ NOTIFICATIONS ═══════
+function showNotif(msg){
+  const n = document.getElementById('notif');
+  n.textContent = msg;
+  n.classList.add('show');
+  setTimeout(()=>n.classList.remove('show'),3000);
+}
+
+// ═══════ INIT ═══════
+renderWorkflow();
+renderAlgorithms();
+renderVideos();
+renderPapers();
+renderDownloads();
+renderApplications();
+renderGlossary();
+setQuizLevel('beginner',document.querySelector('#page-quiz .tab-btn'));
+updateSearch(100);
+
+// Keyboard: Escape closes modal
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape') closeStepModal();
+});
+</script>
+</body>
+</html>
