@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>English Mastery App — Mr. Bishnu Singh Rayamajhi</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --royal: #1a237e;
+    --royal-light: #3949ab;
+    --royal-lighter: #5c6bc0;
+    --gold: #f9a825;
+    --gold-light: #fdd835;
+    --gold-dark: #f57f17;
+    --teal: #00695c;
+    --teal-light: #26a69a;
+    --bg: #f5f7ff;
+    --card: #ffffff;
+    --text: #1a1a2e;
+    --muted: #5c6070;
+    --radius: 14px;
+    --shadow: 0 4px 18px rgba(26, 35, 126, 0.10);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #1a237e 0%, #3949ab 60%, #00695c 100%);
+    padding: 2.5rem 1.5rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(249, 168, 37, 0.15);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: #7a4200;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 16px;
+    border-radius: 20px;
+    letter-spacing: .7px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(1.6rem, 5vw, 2.5rem);
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .hero h1 span { color: var(--gold-light); }
+  .hero-sub {
+    color: rgba(255,255,255,0.82);
+    font-size: 14px;
+    margin-bottom: 16px;
+    line-height: 1.6;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-dev {
+    background: rgba(255,255,255,0.13);
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 12px;
+    padding: 10px 20px;
+    display: inline-block;
+    color: #e8eaf6;
+    font-size: 12.5px;
+    line-height: 1.65;
+    max-width: 480px;
+  }
+  .hero-dev b { color: var(--gold-light); }
+
+  /* ── NAV TABS ── */
+  .nav-wrap {
+    background: #fff;
+    border-bottom: 2px solid #e8eaf6;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(26,35,126,0.07);
+  }
+  .nav-tabs {
+    display: inline-flex;
+    padding: 0 10px;
+    min-width: 100%;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    padding: 13px 15px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: color .2s, border-color .2s, background .15s;
+    white-space: nowrap;
+    outline: none;
+  }
+  .tab-btn.active {
+    color: var(--royal);
+    border-bottom-color: var(--royal);
+  }
+  .tab-btn:hover:not(.active) {
+    color: var(--royal-light);
+    background: #f0f2ff;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    display: none;
+    padding: 1.6rem 1rem 2.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+    animation: fadeIn .25s ease;
+  }
+  .section.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--royal);
+    margin-bottom: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e3e8ff;
+  }
+  .section-title i {
+    font-size: 17px;
+    color: var(--gold-dark);
+  }
+
+  /* ── TOPIC CARDS ── */
+  .topic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 13px;
+  }
+  .topic-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1.5px solid #e3e8ff;
+    padding: 15px 16px;
+    transition: box-shadow .22s, transform .15s;
+  }
+  .topic-card:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-3px);
+  }
+  .topic-card h3 {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--royal);
+    margin-bottom: 6px;
+  }
+  .topic-card p {
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.55;
+    margin-bottom: 11px;
+  }
+  .btn-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  /* ── BUTTONS ── */
+  .btn-yt, .btn-pdf {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 6px 13px;
+    border-radius: 8px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background .18s, transform .12s, box-shadow .15s;
+  }
+  .btn-yt {
+    background: #e53935;
+    color: #fff;
+  }
+  .btn-yt:hover {
+    background: #b71c1c;
+    transform: scale(1.04);
+    box-shadow: 0 3px 10px rgba(229,57,53,0.35);
+  }
+  .btn-pdf {
+    background: #1565c0;
+    color: #fff;
+  }
+  .btn-pdf:hover {
+    background: #0d47a1;
+    transform: scale(1.04);
+    box-shadow: 0 3px 10px rgba(21,101,192,0.35);
+  }
+
+  /* ── DAILY PRACTICE ── */
+  .practice-block {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1.5px solid #e3e8ff;
+    padding: 17px 18px;
+    margin-bottom: 13px;
+    transition: box-shadow .22s;
+  }
+  .practice-block:hover {
+    box-shadow: var(--shadow);
+  }
+  .practice-block h3 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .practice-block p {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    line-height: 1.55;
+  }
+  .timer-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .timer-badge {
+    background: #e8f5e9;
+    color: #2e7d32;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 13px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .btn-start {
+    background: var(--teal);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background .18s, transform .12s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-start:hover {
+    background: var(--teal-light);
+    transform: scale(1.03);
+  }
+
+  /* ── DAILY SUMMARY BOX ── */
+  .daily-summary {
+    background: linear-gradient(135deg, #e8eaf6, #e0f2f1);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-top: 18px;
+    border: 1.5px solid #c5cae9;
+  }
+  .daily-summary h4 {
+    font-weight: 700;
+    color: #1a237e;
+    font-size: 14.5px;
+    margin-bottom: 7px;
+  }
+  .daily-summary p {
+    font-size: 13px;
+    color: #37474f;
+    line-height: 1.7;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 1.5rem 1rem 2rem;
+    font-size: 12px;
+    color: var(--muted);
+    border-top: 1px solid #e3e8ff;
+    margin-top: 1rem;
+    line-height: 1.8;
+  }
+  .footer b { color: var(--royal); }
+  .footer .footer-note {
+    color: #9e9e9e;
+    font-size: 11px;
+    margin-top: 4px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 540px) {
+    .topic-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 1.4rem; }
+    .tab-btn { padding: 12px 11px; font-size: 12px; }
+    .timer-row { gap: 7px; }
+  }
+  @media (max-width: 380px) {
+    .hero { padding: 1.8rem 1rem 1.5rem; }
+    .section { padding: 1.2rem 0.7rem 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════ HERO ════════════════ -->
+<header class="hero">
+  <div class="hero-badge">✦ Smart · Beautiful · Appropriate</div>
+  <h1>English <span>Mastery</span> App</h1>
+  <p class="hero-sub">Your complete guide to Grammar · Vocabulary · Speaking · Academic &amp; Professional Communication</p>
+  <div class="hero-dev">
+    Developed by <b>Mr. Bishnu Singh Rayamajhi</b><br>
+    Math Lecturer &amp; Head of Humanity &amp; Social Science<br>
+    Kapilvastu Multiple Campus (KMC), Taulihawa
+  </div>
+</header>
+
+<!-- ════════════════ NAV ════════════════ -->
+<nav class="nav-wrap" role="navigation" aria-label="Main sections">
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showTab('grammar',this)">📖 Grammar</button>
+    <button class="tab-btn" onclick="showTab('vocab',this)">📚 Vocabulary</button>
+    <button class="tab-btn" onclick="showTab('speaking',this)">🎤 Speaking</button>
+    <button class="tab-btn" onclick="showTab('academic',this)">🎓 Academic</button>
+    <button class="tab-btn" onclick="showTab('research',this)">🔬 Research</button>
+    <button class="tab-btn" onclick="showTab('interview',this)">💼 Interview</button>
+    <button class="tab-btn" onclick="showTab('professional',this)">🌐 Professional</button>
+    <button class="tab-btn" onclick="showTab('daily',this)">⏱ Daily Practice</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ════════════════ A. GRAMMAR ════════════════ -->
+<section id="grammar" class="section active">
+  <div class="section-title"><i class="fas fa-book-open"></i> A. Grammar</div>
+  <div class="topic-grid">
+
+    <div class="topic-card">
+      <h3>Parts of Speech</h3>
+      <p>Nouns, pronouns, verbs, adjectives, adverbs, prepositions, conjunctions &amp; interjections.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=parts+of+speech+english+grammar" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.englishgrammar.org/parts-of-speech/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Sentence Structure</h3>
+      <p>Subject, predicate, clauses, phrases — simple, compound &amp; complex sentences.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=english+sentence+structure+tutorial" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.grammarly.com/blog/sentence-structure/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>All 12 Tenses</h3>
+      <p>Present, past, future × simple, continuous, perfect, perfect continuous explained.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/watch?v=bhnZMzAqG_k" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.perfect-english-grammar.com/tenses.html" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Conditional Sentences</h3>
+      <p>Zero, first, second, third &amp; mixed conditionals with examples &amp; practice.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=conditional+sentences+all+types+english" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.englishpage.com/conditional/conditionalintro.html" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Active &amp; Passive Voice</h3>
+      <p>Conversion rules across all tenses with structured practice exercises.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=active+passive+voice+english+all+tenses" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.perfect-english-grammar.com/passive.html" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Direct &amp; Indirect Speech</h3>
+      <p>Reporting verbs, tense backshift, pronoun changes &amp; time expression rules.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=direct+indirect+speech+english+grammar" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.englishgrammar.org/reported-speech/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Modal Verbs</h3>
+      <p>Can, could, may, might, must, shall, should, will, would — uses &amp; nuances.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=modal+verbs+english+grammar+tutorial" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.perfect-english-grammar.com/modal-verbs.html" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Articles</h3>
+      <p>Definite (the), indefinite (a/an), and zero article — rules with exceptions.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=articles+a+an+the+english+grammar" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.englishgrammar.org/articles/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Prepositions</h3>
+      <p>Of place, time, direction, manner — with common collocations and usage.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=prepositions+english+grammar+tutorial" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.englishgrammar.org/prepositions/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Subject–Verb Agreement</h3>
+      <p>Rules for singular/plural subjects, collective nouns &amp; indefinite pronouns.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=subject+verb+agreement+english+rules" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.grammarly.com/blog/subject-verb-agreement/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════ B. VOCABULARY ════════════════ -->
+<section id="vocab" class="section">
+  <div class="section-title"><i class="fas fa-spell-check"></i> B. Vocabulary</div>
+  <div class="topic-grid">
+
+    <div class="topic-card">
+      <h3>Academic Vocabulary</h3>
+      <p>Academic Word List (AWL), word families, collocations for essays &amp; reports.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=academic+vocabulary+english+AWL" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.victoria.ac.nz/lals/resources/academicwordlist" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Research Vocabulary</h3>
+      <p>Terms for methodology, analysis, findings, implications &amp; conclusions.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=research+vocabulary+academic+english" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.phrasebank.manchester.ac.uk/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Business English</h3>
+      <p>Workplace phrases, formal correspondence, meetings &amp; negotiation language.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=business+english+vocabulary+tutorial" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.bbc.co.uk/learningenglish/english/features/6-minute-english" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Presentation Vocabulary</h3>
+      <p>Opening, signposting, transitions, summarising &amp; Q&amp;A language.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=presentation+vocabulary+english+phrases" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.speakconfidentenglish.com/presentation-phrases/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Technical Vocabulary</h3>
+      <p>Discipline-specific terminology for science, technology, engineering &amp; maths.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=technical+english+vocabulary+STEM" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.oxfordlearnersdictionaries.com/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Idioms &amp; Phrasal Verbs</h3>
+      <p>Common idioms, separable &amp; inseparable phrasal verbs with contextual usage.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=english+idioms+phrasal+verbs+tutorial" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.englishclub.com/vocabulary/phrasal-verbs-list.htm" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════ C. SPEAKING ════════════════ -->
+<section id="speaking" class="section">
+  <div class="section-title"><i class="fas fa-microphone-alt"></i> C. Speaking Skills</div>
+  <div class="topic-grid">
+
+    <div class="topic-card">
+      <h3>Self-introduction</h3>
+      <p>Structure your personal, academic &amp; professional introduction confidently.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=self+introduction+english+speaking+skills" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.toastmasters.org/resources/public-speaking-tips" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Conversation Skills</h3>
+      <p>Turn-taking, active listening, asking questions &amp; keeping dialogue flowing naturally.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=english+conversation+skills+tutorial" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.bbc.co.uk/learningenglish" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Pronunciation</h3>
+      <p>Phonemes, word stress, sentence stress, intonation &amp; connected speech.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=english+pronunciation+tutorial+beginners" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.englishclub.com/pronunciation/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Fluency</h3>
+      <p>Filler reduction, thought grouping, pacing &amp; natural rhythm strategies.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=speak+english+fluently+fast+tips" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.fluentu.com/blog/english/how-to-speak-english-fluently/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Storytelling</h3>
+      <p>Narrative arc, vivid language, suspense building &amp; engaging delivery techniques.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=storytelling+english+public+speaking" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.ted.com/talks" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Debate</h3>
+      <p>Argument structure, rebuttal techniques, logical fallacies &amp; persuasion skills.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=debate+skills+english+tutorial" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.idebate.org/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Group Discussion</h3>
+      <p>Initiating, contributing, agreeing/disagreeing politely &amp; summarising ideas.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=group+discussion+english+tips+skills" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.indiabix.com/group-discussion/tips/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════ D. ACADEMIC COMMUNICATION ════════════════ -->
+<section id="academic" class="section">
+  <div class="section-title"><i class="fas fa-graduation-cap"></i> D. Academic Communication</div>
+  <div class="topic-grid">
+
+    <div class="topic-card">
+      <h3>Seminar Presentation</h3>
+      <p>Structure, slide design, engaging the audience &amp; handling Q&amp;A in seminars.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=seminar+presentation+skills+english" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.skillsyouneed.com/present/presentation-tips.html" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Conference Presentation</h3>
+      <p>Academic conference conventions, timing, visuals &amp; professional delivery.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=academic+conference+presentation+tips" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.nature.com/articles/nj7649-137a" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Research Proposal Presentation</h3>
+      <p>Background, gap, objectives, methodology &amp; expected research contributions.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=research+proposal+presentation+skills" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.scribbr.com/research-process/research-proposal/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Thesis Defense (Viva)</h3>
+      <p>Viva preparation, common examiner questions &amp; defending your methodology.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=PhD+thesis+defense+viva+tips" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.theguardian.com/higher-education-network/blog/2014/sep/10/ten-tips-prepare-viva" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Poster Presentation</h3>
+      <p>Layout, visual hierarchy, stand-beside explanation &amp; engaging passers-by.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=academic+poster+presentation+tips" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1876493/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Classroom Teaching</h3>
+      <p>Lesson delivery, questioning techniques, board work &amp; student engagement.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=effective+classroom+teaching+english+skills" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.teachingenglish.org.uk/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Workshop Facilitation</h3>
+      <p>Ice-breakers, group activities, time management &amp; participant management skills.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=workshop+facilitation+skills+training" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.mindtools.com/pages/article/RoleofFacilitator.htm" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════ E. RESEARCH COMMUNICATION ════════════════ -->
+<section id="research" class="section">
+  <div class="section-title"><i class="fas fa-microscope"></i> E. Research Communication</div>
+  <div class="topic-grid">
+
+    <div class="topic-card">
+      <h3>Literature Review Presentation</h3>
+      <p>Synthesising sources, identifying gaps &amp; presenting a coherent narrative.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=literature+review+presentation+academic" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.scribbr.com/dissertation/literature-review/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Explaining Research Methodology</h3>
+      <p>Qualitative vs quantitative, data collection methods &amp; justification language.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=research+methodology+explained+tutorial" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://research-methodology.net/research-methodology/research-design/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Presenting Data &amp; Results</h3>
+      <p>Graphs, tables, statistical language &amp; significance explanation techniques.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=presenting+research+data+results+english" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.apa.org/pubs/journals/results-reporting" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Answering Questions</h3>
+      <p>Buying time, clarifying unclear questions &amp; handling difficult examiners confidently.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=answering+questions+academic+presentation+skills" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.ox.ac.uk/students/academic/guidance/skills" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Academic Discussion</h3>
+      <p>Hedging language, agreeing/disagreeing academically &amp; critical engagement.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=academic+discussion+phrases+english" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.phrasebank.manchester.ac.uk/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════ F. INTERVIEW SKILLS ════════════════ -->
+<section id="interview" class="section">
+  <div class="section-title"><i class="fas fa-user-tie"></i> F. Interview Skills</div>
+  <div class="topic-grid">
+
+    <div class="topic-card">
+      <h3>HR Interview</h3>
+      <p>Tell me about yourself, strengths/weaknesses, situational &amp; behavioural questions.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=HR+interview+tips+english+questions" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.glassdoor.com/blog/common-interview-questions/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Faculty Interview</h3>
+      <p>Teaching philosophy, research agenda, course development &amp; academic fit questions.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=faculty+interview+questions+academic+job" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.chronicle.com/article/the-academic-job-interview/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>PhD Interview</h3>
+      <p>Research proposal, motivation, methodology, prior work &amp; future academic goals.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=PhD+interview+tips+questions+answers" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.findaphd.com/advice/finding/phd-interview-tips.aspx" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Scholarship Interview</h3>
+      <p>Why this scholarship, career impact, leadership potential &amp; vision answers.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=scholarship+interview+tips+questions" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.studyabroad.com/scholarship-interview-tips" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Job Interview</h3>
+      <p>STAR method, salary negotiation, questions to ask &amp; follow-up etiquette.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=job+interview+skills+english+tutorial" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.indeed.com/career-advice/interviewing" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Research Fellowship Interview</h3>
+      <p>Demonstrating research potential, independence &amp; collaborative skills clearly.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=research+fellowship+interview+tips" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.nature.com/articles/d41586-019-00871-x" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════ G. PROFESSIONAL SKILLS ════════════════ -->
+<section id="professional" class="section">
+  <div class="section-title"><i class="fas fa-briefcase"></i> G. Professional Skills</div>
+  <div class="topic-grid">
+
+    <div class="topic-card">
+      <h3>Public Speaking</h3>
+      <p>Overcoming fear, body language, voice modulation &amp; engaging large audiences.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=public+speaking+skills+tips+english" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.toastmasters.org/resources/public-speaking-tips" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Leadership Communication</h3>
+      <p>Inspiring teams, giving feedback, conflict resolution &amp; strategic messaging.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=leadership+communication+skills+english" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://hbr.org/topic/communication" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Meeting Skills</h3>
+      <p>Opening, agenda management, facilitating discussion &amp; recording action points.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=business+meeting+english+skills+phrases" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.mindtools.com/pages/article/newTMM_55.htm" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Negotiation</h3>
+      <p>BATNA, persuasion tactics, compromise language &amp; closing deals professionally.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=negotiation+skills+english+business" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.pon.harvard.edu/daily/negotiation-skills-daily/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Networking</h3>
+      <p>Small talk, elevator pitch, LinkedIn language &amp; professional relationship-building.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=professional+networking+english+skills" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.linkedin.com/learning/topics/networking" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Email Writing</h3>
+      <p>Formal structure, tone, subject lines, requests &amp; follow-up email techniques.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=professional+email+writing+english+tutorial" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.grammarly.com/blog/how-to-write-a-professional-email/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <h3>Report Writing</h3>
+      <p>Executive summary, sections, formal register, recommendations &amp; appendices.</p>
+      <div class="btn-row">
+        <a class="btn-yt" href="https://www.youtube.com/results?search_query=report+writing+english+tutorial" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+        <a class="btn-pdf" href="https://www.bbc.co.uk/bitesize/guides/zxpv97h/revision/1" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════ H. DAILY PRACTICE ════════════════ -->
+<section id="daily" class="section">
+  <div class="section-title"><i class="fas fa-clock"></i> Daily Practice — 1 Hour Plan</div>
+
+  <div class="practice-block">
+    <h3><i class="fas fa-pen-nib" style="color:#1a237e;"></i> 10 min · Grammar</h3>
+    <p>One focused grammar topic per day — review rules, do 5–10 exercises, note your errors and revisit them the next day.</p>
+    <div class="timer-row">
+      <span class="timer-badge">⏱ 10 minutes</span>
+      <a class="btn-yt" href="https://www.youtube.com/results?search_query=daily+english+grammar+practice" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+      <a class="btn-pdf" href="https://www.perfect-english-grammar.com/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Practice</a>
+      <button class="btn-start" onclick="startTimer(this, 600)"><i class="fas fa-play"></i> Start Timer</button>
+    </div>
+  </div>
+
+  <div class="practice-block">
+    <h3><i class="fas fa-book" style="color:#1565c0;"></i> 10 min · Vocabulary</h3>
+    <p>Learn 5 new words — definition, pronunciation, example sentence, collocations. Write them in a vocabulary journal.</p>
+    <div class="timer-row">
+      <span class="timer-badge">⏱ 10 minutes</span>
+      <a class="btn-yt" href="https://www.youtube.com/results?search_query=learn+english+vocabulary+daily+5+words" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+      <a class="btn-pdf" href="https://www.vocabulary.com/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Practice</a>
+      <button class="btn-start" onclick="startTimer(this, 600)"><i class="fas fa-play"></i> Start Timer</button>
+    </div>
+  </div>
+
+  <div class="practice-block">
+    <h3><i class="fas fa-volume-up" style="color:#00695c;"></i> 10 min · Pronunciation</h3>
+    <p>Repeat after native speakers — focus on one sound, stress pattern or intonation feature. Use a mirror to observe mouth shape.</p>
+    <div class="timer-row">
+      <span class="timer-badge">⏱ 10 minutes</span>
+      <a class="btn-yt" href="https://www.youtube.com/results?search_query=english+pronunciation+practice+daily" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+      <a class="btn-pdf" href="https://www.englishclub.com/pronunciation/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Resource</a>
+      <button class="btn-start" onclick="startTimer(this, 600)"><i class="fas fa-play"></i> Start Timer</button>
+    </div>
+  </div>
+
+  <div class="practice-block">
+    <h3><i class="fas fa-headphones" style="color:#f57f17;"></i> 15 min · Listen to a Lecture or TED Talk</h3>
+    <p>Choose one academic lecture or TED Talk — take notes on vocabulary, argument structure and speaker techniques. Summarise in 3 sentences.</p>
+    <div class="timer-row">
+      <span class="timer-badge">⏱ 15 minutes</span>
+      <a class="btn-yt" href="https://www.youtube.com/results?search_query=TED+talks+english+academic+lecture" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> TED Talks</a>
+      <a class="btn-pdf" href="https://www.ted.com/talks" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> ted.com</a>
+      <button class="btn-start" onclick="startTimer(this, 900)"><i class="fas fa-play"></i> Start Timer</button>
+    </div>
+  </div>
+
+  <div class="practice-block">
+    <h3><i class="fas fa-microphone" style="color:#880e4f;"></i> 15 min · Record a Short Speech</h3>
+    <p>Pick any topic, speak for 1–3 minutes, record yourself, then self-evaluate on fluency, vocabulary, clarity &amp; confidence. Track weekly progress.</p>
+    <div class="timer-row">
+      <span class="timer-badge">⏱ 15 minutes</span>
+      <a class="btn-yt" href="https://www.youtube.com/results?search_query=how+to+improve+english+speaking+by+recording" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> Watch</a>
+      <a class="btn-pdf" href="https://www.speakconfidentenglish.com/" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Tips</a>
+      <button class="btn-start" onclick="startTimer(this, 900)"><i class="fas fa-play"></i> Start Timer</button>
+    </div>
+  </div>
+
+  <div class="daily-summary">
+    <h4>📅 Total: 60 Minutes of Focused Daily Practice</h4>
+    <p>Consistency is the key to mastery. Even 30 minutes daily beats 3 hours once a week. Track your progress, record yourself regularly, and celebrate every small win. Repeat. Improve. Excel.</p>
+  </div>
+
+</section>
+
+</main>
+
+<!-- ════════════════ FOOTER ════════════════ -->
+<footer class="footer">
+  <b>English Mastery App</b> &nbsp;·&nbsp; Developed by <b>Mr. Bishnu Singh Rayamajhi</b><br>
+  Math Lecturer &amp; Head of Humanity &amp; Social Science<br>
+  Kapilvastu Multiple Campus (KMC), Taulihawa<br>
+  <span class="footer-note">Smart · Beautiful · Appropriate &nbsp;|&nbsp; All links open free YouTube tutorials &amp; online resources</span>
+</footer>
+
+<!-- ════════════════ SCRIPT ════════════════ -->
+<script>
+  function showTab(id, btn) {
+    // hide all sections
+    document.querySelectorAll('.section').forEach(function(s) {
+      s.classList.remove('active');
+    });
+    // deactivate all tabs
+    document.querySelectorAll('.tab-btn').forEach(function(b) {
+      b.classList.remove('active');
+    });
+    // show selected
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+    // scroll to top of content
+    window.scrollTo({ top: document.querySelector('.nav-wrap').offsetTop, behavior: 'smooth' });
+  }
+
+  function startTimer(btn, seconds) {
+    // Toggle off if already running
+    if (btn._interval) {
+      clearInterval(btn._interval);
+      btn._interval = null;
+      btn.innerHTML = '<i class="fas fa-play"></i> Start Timer';
+      return;
+    }
+    var rem = seconds;
+    function tick() {
+      var m = Math.floor(rem / 60);
+      var s = rem % 60;
+      var display = m + ':' + (s < 10 ? '0' : '') + s;
+      btn.innerHTML = '<i class="fas fa-stop"></i> ' + display;
+      if (rem === 0) {
+        clearInterval(btn._interval);
+        btn._interval = null;
+        btn.innerHTML = '✅ Done! Well done!';
+        setTimeout(function() {
+          btn.innerHTML = '<i class="fas fa-redo"></i> Restart Timer';
+          btn.onclick = function() { startTimer(btn, seconds); };
+        }, 3000);
+        return;
+      }
+      rem--;
+    }
+    tick();
+    btn._interval = setInterval(tick, 1000);
+  }
+</script>
+
+</body>
+</html>
