@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wisdom & Knowledge Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0d0d0d;
+    --paper: #f5f0e8;
+    --gold: #c9a84c;
+    --gold-light: #e8d49a;
+    --deep-blue: #1a2744;
+    --crimson: #9b2335;
+    --sage: #4a6741;
+    --slate: #3d4b60;
+    --muted: #7a7060;
+    --border: #d9d0bc;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--deep-blue);
+    color: #fff;
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(201,168,76,0.18) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 20%, rgba(155,35,53,0.12) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+  }
+  .hero h1 span { color: var(--gold); }
+  .hero-sub {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.65);
+    max-width: 480px;
+    margin: 0 auto 2rem;
+    font-weight: 300;
+  }
+  .hero-divider {
+    width: 60px;
+    height: 2px;
+    background: var(--gold);
+    margin: 0 auto;
+  }
+
+  /* ── NAV PILLS ── */
+  .nav-strip {
+    background: var(--ink);
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-pill {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    text-decoration: none;
+    padding: 0.3rem 0.85rem;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .nav-pill:hover {
+    color: var(--gold);
+    border-color: var(--gold);
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    padding: 3.5rem 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .section + .section { border-top: 1px solid var(--border); }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  .section-title .accent { color: var(--gold); }
+  .section-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    margin-left: 1rem;
+  }
+
+  /* ── CARD GRID ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+  .card-grid.two-col { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
+
+  /* ── CARD ── */
+  .card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: #fff;
+    transition: transform 0.18s, box-shadow 0.18s;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.10);
+  }
+  .card-accent {
+    height: 4px;
+    width: 100%;
+  }
+  .card-body { padding: 1.25rem 1.4rem 1.4rem; flex: 1; }
+  .card-icon {
+    font-size: 1.6rem;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.3;
+    margin-bottom: 0.45rem;
+  }
+  .card-desc {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.5;
+    flex: 1;
+  }
+  .card-cta {
+    margin-top: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--deep-blue);
+    font-weight: 700;
+  }
+  .card-cta svg { transition: transform 0.15s; }
+  .card:hover .card-cta svg { transform: translateX(4px); }
+
+  /* Accent color variants */
+  .accent-gold   .card-accent { background: var(--gold); }
+  .accent-crimson .card-accent { background: var(--crimson); }
+  .accent-blue   .card-accent { background: var(--deep-blue); }
+  .accent-sage   .card-accent { background: var(--sage); }
+  .accent-slate  .card-accent { background: var(--slate); }
+
+  /* ── FEATURED (wide) CARD ── */
+  .card-featured {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: stretch;
+  }
+  .card-featured .card-accent {
+    width: 5px;
+    height: auto;
+  }
+  .card-featured .card-body { display: flex; flex-direction: column; }
+  @media (max-width: 600px) {
+    .card-featured { flex-direction: column; }
+    .card-featured .card-accent { width: 100%; height: 4px; }
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.8rem;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.06em;
+  }
+  footer span { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <p class="hero-eyebrow">Curated Learning Resources</p>
+  <h1>Wisdom &amp; <span>Knowledge</span> Portal</h1>
+  <p class="hero-sub">Inspiring minds through great thinkers, science, technology, and inner growth.</p>
+  <div class="hero-divider"></div>
+</header>
+
+<!-- NAV STRIP -->
+<nav class="nav-strip" aria-label="Jump to section">
+  <a class="nav-pill" href="#visionaries">Visionaries</a>
+  <a class="nav-pill" href="#science">Science</a>
+  <a class="nav-pill" href="#spirituality">Spirituality</a>
+  <a class="nav-pill" href="#ml">AI &amp; ML</a>
+  <a class="nav-pill" href="#programming">Programming</a>
+  <a class="nav-pill" href="#nlp">NLP</a>
+  <a class="nav-pill" href="#speeches">Speeches</a>
+</nav>
+
+<!-- ═══════════════════════════════════════ SECTION 1 -->
+<section class="section" id="visionaries">
+  <div class="section-header">
+    <span class="section-label">01</span>
+    <h2 class="section-title">Inspiring <span class="accent">Visionaries</span></h2>
+    <div class="section-rule"></div>
+  </div>
+  <div class="card-grid">
+
+    <a class="card accent-gold" href="https://www.youtube.com/results?search_query=Dr.+APJ+Kalam+videos+Tutorial" target="_blank" rel="noopener">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-icon">🚀</span>
+        <div class="card-title">Dr. APJ Abdul Kalam</div>
+        <p class="card-desc">Video tutorials featuring the Missile Man of India — scientist, president, and teacher of millions.</p>
+        <span class="card-cta">Watch on YouTube <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+    <a class="card accent-crimson" href="https://www.youtube.com/results?search_query=Elon+Musk+Video+Tutorial" target="_blank" rel="noopener">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-icon">⚡</span>
+        <div class="card-title">Elon Musk</div>
+        <p class="card-desc">Video tutorials on the mind behind Tesla, SpaceX, and the relentless pursuit of a multi-planetary future.</p>
+        <span class="card-cta">Watch on YouTube <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+    <a class="card accent-blue" href="https://www.youtube.com/results?search_query=Albert+Einstein+Video+Tutorial" target="_blank" rel="noopener">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-icon">🧠</span>
+        <div class="card-title">Albert Einstein</div>
+        <p class="card-desc">Explore the life and revolutionary theories of the physicist who redefined our understanding of space and time.</p>
+        <span class="card-cta">Watch on YouTube <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+    <a class="card accent-sage" href="https://www.youtube.com/results?search_query=Entrepreneurship+Video+Tutorial" target="_blank" rel="noopener">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-icon">💡</span>
+        <div class="card-title">Entrepreneurship</div>
+        <p class="card-desc">Build the mindset and skills of a founder — from idea to execution, told by those who've done it.</p>
+        <span class="card-cta">Watch on YouTube <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ SECTION 2 -->
+<section class="section" id="science">
+  <div class="section-header">
+    <span class="section-label">02</span>
+    <h2 class="section-title">Science &amp; <span class="accent">Mathematics</span></h2>
+    <div class="section-rule"></div>
+  </div>
+  <div class="card-grid">
+
+    <a class="card accent-blue" href="https://www.youtube.com/results?search_query=great+mathematician+story" target="_blank" rel="noopener">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-icon">📐</span>
+        <div class="card-title">Great Mathematician Stories</div>
+        <p class="card-desc">The human stories behind Euler, Ramanujan, Gauss and others who shaped the language of the universe.</p>
+        <span class="card-cta">Watch on YouTube <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+    <a class="card accent-gold" href="https://www.youtube.com/watch?v=kesaUCEoPbA" target="_blank" rel="noopener">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-icon">🔢</span>
+        <div class="card-title">Greatest Mathematicians &amp; Their Discoveries — Part 1</div>
+        <p class="card-desc">A guided tour through history's greatest mathematical minds and the breakthroughs that changed everything.</p>
+        <span class="card-cta">Watch on YouTube <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+    <a class="card accent-slate" href="https://www.youtube.com/results?search_query=discovery+of+quantum+physics" target="_blank" rel="noopener">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-icon">⚛️</span>
+        <div class="card-title">Discovery of Quantum Physics</div>
+        <p class="card-desc">From Planck's constant to Schrödinger's cat — the bizarre and beautiful world of quantum mechanics.</p>
+        <span class="card-cta">Watch on YouTube <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+    <a class="card accent-crimson" href="https://www.youtube.com/results?search_query=Discovery+of+Science+and+Technology" target="_blank" rel="noopener">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-icon">🔬</span>
+        <div class="card-title">Discovery of Science &amp; Technology</div>
+        <p class="card-desc">Landmark discoveries that transformed civilization — from fire to the internet and beyond.</p>
+        <span class="card-cta">Watch on YouTube <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+    <a class="card accent-sage" href="https://www.youtube.com/results?search_query=Brain+Science+Tutorial" target="_blank" rel="noopener">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-icon">🧬</span>
+        <div class="card-title">Brain Science Tutorial</div>
+        <p class="card-desc">Neuroscience made accessible — how memory, emotion, and consciousness arise from three pounds of tissue.</p>
+        <span class="card-cta">Watch on YouTube <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+    <a class="card accent-blue" href="https://www.youtube.com/watch?v=gNJNmPJqXJc&t=6s" target="_blank" rel="noopener">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-icon">🏛️</span>
+        <div class="card-title">Ancient India's Scientific Achievements</div>
+        <p class="card-desc">India's extraordinary contributions to Mathematics, Astronomy, Science, and Medicine across millennia.</p>
+        <span class="card-cta">Watch on YouTube <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ SECTION 3 -->
+<section class="section" id="spirituality">
+  <div class="section-header">
+    <span class="section-label">03</span>
+    <h2 class="section-title">Spiritual &amp; <span class="accent">Inner Journey</span></h2>
+    <div class="section-rule"></div>
+  </div>
+  <div class="card-grid">
+
+    <a class="card accent-gold" href="https://www.youtube.com/results?search_query=SWAMI+VIVEKANANDA%E2%80%99s+Video+Tutorial" target="_blank" rel="noopener">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-icon">🪔</span>
+        <div class="card-title">Swami Vivekananda</div>
+        <p class="card-desc">The roaring voice of Vedanta — teachings on strength, self-realisation, and the unity of all religions.</p>
+        <span class="card-cta">Watch on YouTube <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+    <a class="card accent-sage" href="https://www.youtube.com/results?search_query=Sadhguru+Spiritual+Journey" target="_blank" rel="noopener">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-icon">🌿</span>
+        <div class="card-title">Sadhguru — Spiritual Journey</div>
+        <p class="card-desc">Inner Engineering, mysticism, and the art of living joyfully — wisdom from one of the world's foremost yogis.</p>
+        <span class="card-cta">Watch on YouTube <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ SECTION 4 -->
+<section class="section" id="ml">
+  <div class="section-header">
+    <span class="section-label">04</span>
+    <h2 class="section-title">Artificial Intelligence <span class="accent">&amp; ML</span></h2>
+    <div class="section-rule"></div>
+  </div>
+  <div class="card-grid two-col">
+
+    <a class="card accent-slate" href="https://www.youtube.com/playlist?list=PLKnIA16_Rmvbr7zKYQuBfsVkjoLcJgxHH" target="_blank" rel="noopener">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-icon">📅</span>
+        <div class="card-title">100 Days of Machine Learning</div>
+        <p class="card-desc">A complete structured playlist — from numpy basics to neural networks, one day at a time.</p>
+        <span class="card-cta">Full Playlist <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+    <a class="card accent-crimson" href="https://www.youtube.com/playlist?list=PLEiEAq2VkUUIYQ-mMRAGilfOKyWKpHSip" target="_blank" rel="noopener">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-icon">🤖</span>
+        <div class="card-title">Deep Learning Video Tutorial</div>
+        <p class="card-desc">Convolutional networks, transformers, LSTMs, and the architectures powering modern AI — fully explained.</p>
+        <span class="card-cta">Full Playlist <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+    <a class="card accent-blue" href="https://www.youtube.com/playlist?list=PLTDARY42LDV67aWThoZxflLYGnD3Rh3VG" target="_blank" rel="noopener">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-icon">💬</span>
+        <div class="card-title">Natural Language Processing Playlist</div>
+        <p class="card-desc">Tokenisation, embeddings, BERT, and LLMs — the complete NLP journey from text to intelligence.</p>
+        <span class="card-cta">Full Playlist <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ SECTION 5 -->
+<section class="section" id="programming">
+  <div class="section-header">
+    <span class="section-label">05</span>
+    <h2 class="section-title">Python <span class="accent">Programming</span></h2>
+    <div class="section-rule"></div>
+  </div>
+  <div class="card-grid">
+
+    <a class="card accent-gold" href="https://www.youtube.com/results?search_query=Python+Programming+Platlist" target="_blank" rel="noopener">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-icon">🐍</span>
+        <div class="card-title">Python Programming Playlist</div>
+        <p class="card-desc">Curated Python tutorials for all levels — syntax, libraries, projects, and best practices.</p>
+        <span class="card-cta">Watch on YouTube <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+    <a class="card accent-slate" href="https://www.youtube.com/playlist?list=PLKnIA16_Rmvb1RYR-iTA_hzckhdONtSW4" target="_blank" rel="noopener">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-icon">📅</span>
+        <div class="card-title">100 Days of Python Programming</div>
+        <p class="card-desc">Build real projects every single day. The most thorough way to go from zero to Python fluency.</p>
+        <span class="card-cta">Full Playlist <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ SECTION 6 -->
+<section class="section" id="nlp">
+  <div class="section-header">
+    <span class="section-label">06</span>
+    <h2 class="section-title">Neuro-Linguistic <span class="accent">Programming</span></h2>
+    <div class="section-rule"></div>
+  </div>
+  <div class="card-grid">
+
+    <a class="card accent-crimson" href="https://www.youtube.com/playlist?list=PLSACNSVjDq9JHvSOK1AlFBXQ1rTAAPQY1" target="_blank" rel="noopener">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-icon">🧩</span>
+        <div class="card-title">Neuro-Linguistic Programming</div>
+        <p class="card-desc">Full NLP course covering mindset reprogramming, communication mastery, and behavioural change techniques.</p>
+        <span class="card-cta">Full Playlist <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+    <a class="card accent-sage" href="https://www.youtube.com/watch?v=MQiMFs2SIFk&t=364s" target="_blank" rel="noopener">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-icon">🌱</span>
+        <div class="card-title">Neuro-Linguistic Programming — Basics</div>
+        <p class="card-desc">Your first step into NLP: core concepts and foundational exercises to start rewiring your thinking.</p>
+        <span class="card-cta">Watch Video <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ SECTION 7 -->
+<section class="section" id="speeches">
+  <div class="section-header">
+    <span class="section-label">07</span>
+    <h2 class="section-title">Speeches That <span class="accent">Inspire</span></h2>
+    <div class="section-rule"></div>
+  </div>
+  <div class="card-grid two-col">
+
+    <a class="card accent-gold" href="https://www.youtube.com/watch?v=scuAHUry71g" target="_blank" rel="noopener">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-icon">🎤</span>
+        <div class="card-title">How to Succeed in Life — APJ Abdul Kalam</div>
+        <p class="card-desc">An English speech by the visionary president on dreams, discipline, and the secret to a life well-lived.</p>
+        <span class="card-cta">Watch Video <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+    <a class="card accent-slate" href="https://www.youtube.com/watch?v=cL4GjqO6Zt4" target="_blank" rel="noopener">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-icon">🌍</span>
+        <div class="card-title">Learn English — Best Entrepreneur Speeches</div>
+        <p class="card-desc">Improve your English while absorbing the wisdom of world-class entrepreneurs. Dual learning at its best.</p>
+        <span class="card-cta">Watch Video <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+    <a class="card accent-crimson" href="https://www.youtube.com/watch?v=mbzbvJ76DSg" target="_blank" rel="noopener">
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <span class="card-icon">✊</span>
+        <div class="card-title">"I Am Malala" — The Speech That Inspired Millions</div>
+        <p class="card-desc">Malala Yousafzai's UN address — one of the most powerful speeches of the 21st century on education and courage.</p>
+        <span class="card-cta">Watch Video <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<footer>
+  Wisdom &amp; Knowledge Portal &nbsp;·&nbsp; All links open on <span>YouTube</span> &nbsp;·&nbsp; Learn every day
+</footer>
+
+</body>
+</html>
