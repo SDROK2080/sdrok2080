@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Learning Programming - Learning Sequence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --secondary: #f59e0b;
+            --accent: #ec4899;
+            --success: #10b981;
+            --info: #0ea5e9;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --dark-light: #1e293b;
+            --dark-lighter: #334155;
+            --light: #f8fafc;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --glass: rgba(15, 23, 42, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        .bg-animation {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 25%, #312e81 50%, #1e1b4b 75%, #0f172a 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+        .bg-animation::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.08) 0%, transparent 50%);
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .particles {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            overflow: hidden; pointer-events: none;
+        }
+        .particle {
+            position: absolute; width: 4px; height: 4px;
+            background: rgba(99, 102, 241, 0.4); border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+        }
+        .header {
+            text-align: center; padding: 60px 20px 30px; position: relative;
+        }
+        .header-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 8px 20px; border-radius: 50px; font-size: 0.85rem; font-weight: 500;
+            color: var(--primary-light); margin-bottom: 24px; backdrop-filter: blur(10px);
+        }
+        .header h1 {
+            font-family: 'Outfit', sans-serif; font-size: 3.2rem; font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #818cf8 50%, #c084fc 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; margin-bottom: 16px; letter-spacing: -1px;
+        }
+        .header .subtitle {
+            font-size: 1.15rem; color: var(--text-muted); max-width: 700px;
+            margin: 0 auto 30px; line-height: 1.7;
+        }
+        .header .author-info {
+            display: flex; align-items: center; justify-content: center; gap: 12px;
+            margin-top: 20px; padding: 16px 28px; background: var(--glass);
+            border: 1px solid var(--glass-border); border-radius: 16px;
+            backdrop-filter: blur(20px); max-width: 600px; margin-left: auto; margin-right: auto;
+        }
+        .author-info .avatar {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; color: white;
+        }
+        .author-info .details { text-align: left; }
+        .author-info .name { font-weight: 600; font-size: 1rem; color: var(--text); }
+        .author-info .role { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+        .progress-section { max-width: 900px; margin: 0 auto 40px; padding: 0 20px; }
+        .progress-bar-container {
+            background: rgba(255,255,255,0.05); border-radius: 50px; padding: 4px; position: relative;
+        }
+        .progress-bar {
+            height: 8px; background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 50px; width: 0%; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); position: relative;
+        }
+        .progress-bar::after {
+            content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+            width: 16px; height: 16px; background: var(--accent); border-radius: 50%;
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.6);
+        }
+        .progress-text { text-align: center; margin-top: 12px; font-size: 0.9rem; color: var(--text-muted); }
+        .progress-text span { color: var(--primary-light); font-weight: 600; }
+        .tabs-container { max-width: 1200px; margin: 0 auto 30px; padding: 0 20px; }
+        .tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab-btn {
+            padding: 12px 24px; border: none; border-radius: 12px;
+            background: rgba(255,255,255,0.05); color: var(--text-muted);
+            font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 500;
+            cursor: pointer; transition: all 0.3s ease; white-space: nowrap;
+            position: relative; overflow: hidden;
+        }
+        .tab-btn::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--accent)); opacity: 0; transition: opacity 0.3s ease;
+        }
+        .tab-btn span { position: relative; z-index: 1; }
+        .tab-btn:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+        .tab-btn.active { color: white; box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3); }
+        .tab-btn.active::before { opacity: 1; }
+        .main-content { max-width: 1200px; margin: 0 auto; padding: 0 20px 60px; }
+        .tab-content { display: none; animation: fadeInUp 0.5s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .section-title {
+            font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 700;
+            margin-bottom: 30px; display: flex; align-items: center; gap: 12px;
+        }
+        .section-title .icon {
+            width: 44px; height: 44px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+        }
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+        .lib-card {
+            background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 28px; position: relative; overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; backdrop-filter: blur(20px);
+        }
+        .lib-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--card-color), transparent);
+        }
+        .lib-card:hover {
+            transform: translateY(-6px) scale(1.01); border-color: rgba(255,255,255,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 60px rgba(99, 102, 241, 0.1);
+        }
+        .lib-card .card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
+        .lib-card .card-icon {
+            width: 56px; height: 56px; border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem; position: relative;
+        }
+        .lib-card .card-icon::after {
+            content: ''; position: absolute; inset: -4px; border-radius: 20px;
+            background: inherit; opacity: 0.3; filter: blur(12px);
+        }
+        .lib-card .card-number {
+            font-family: 'Outfit', sans-serif; font-size: 0.75rem; font-weight: 700;
+            color: var(--text-muted); background: rgba(255,255,255,0.05);
+            padding: 4px 12px; border-radius: 20px;
+        }
+        .lib-card h3 { font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+        .lib-card .description { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
+        .lib-card .actions { display: flex; gap: 10px; }
+        .btn-action {
+            flex: 1; padding: 10px 16px; border: none; border-radius: 12px;
+            font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 600;
+            cursor: pointer; transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none;
+        }
+        .btn-video { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+        .btn-video:hover { transform: scale(1.05); box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4); }
+        .btn-pdf { background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; }
+        .btn-pdf:hover { transform: scale(1.05); box-shadow: 0 4px 20px rgba(14, 165, 233, 0.4); }
+        .btn-docs { background: rgba(255,255,255,0.08); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1); }
+        .btn-docs:hover { background: rgba(255,255,255,0.15); color: var(--text); }
+        .cat-card {
+            background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 28px; transition: all 0.4s ease; backdrop-filter: blur(20px);
+        }
+        .cat-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.2); }
+        .cat-card .cat-header {
+            display: flex; align-items: center; gap: 14px; margin-bottom: 20px;
+            padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .cat-card .cat-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+        .cat-card h3 { font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 700; }
+        .cat-card .cat-items { display: flex; flex-direction: column; gap: 8px; }
+        .cat-item {
+            display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+            background: rgba(255,255,255,0.03); border-radius: 10px;
+            font-size: 0.85rem; color: var(--text-muted); transition: all 0.3s ease;
+        }
+        .cat-item:hover { background: rgba(255,255,255,0.08); color: var(--text); transform: translateX(4px); }
+        .cat-item i { font-size: 0.7rem; opacity: 0.5; }
+        .timeline { position: relative; padding-left: 40px; }
+        .timeline::before {
+            content: ''; position: absolute; left: 15px; top: 0; bottom: 0; width: 2px;
+            background: linear-gradient(180deg, var(--primary), var(--accent), var(--secondary));
+        }
+        .timeline-item {
+            position: relative; margin-bottom: 24px; padding: 20px 24px;
+            background: var(--glass); border: 1px solid var(--glass-border);
+            border-radius: 16px; backdrop-filter: blur(20px); transition: all 0.3s ease;
+        }
+        .timeline-item:hover { transform: translateX(8px); border-color: rgba(255,255,255,0.2); }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -33px; top: 28px;
+            width: 12px; height: 12px; border-radius: 50%;
+            background: var(--item-color); box-shadow: 0 0 20px var(--item-color);
+        }
+        .timeline-item .step-num {
+            position: absolute; left: -50px; top: 24px;
+            font-family: 'Outfit', sans-serif; font-size: 0.75rem; font-weight: 700;
+            color: var(--text-muted); width: 24px; text-align: center;
+        }
+        .timeline-item h4 { font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 6px; }
+        .timeline-item p { font-size: 0.85rem; color: var(--text-muted); }
+        .ref-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+        .ref-card {
+            background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px;
+            padding: 20px; display: flex; align-items: center; gap: 14px;
+            transition: all 0.3s ease; text-decoration: none; color: inherit; backdrop-filter: blur(20px);
+        }
+        .ref-card:hover { transform: translateY(-4px); border-color: rgba(99, 102, 241, 0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .ref-card .ref-icon {
+            width: 44px; height: 44px; border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; color: white; flex-shrink: 0;
+        }
+        .ref-card .ref-info h4 { font-family: 'Outfit', sans-serif; font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; }
+        .ref-card .ref-info p { font-size: 0.75rem; color: var(--text-muted); }
+        .footer {
+            text-align: center; padding: 40px 20px;
+            border-top: 1px solid rgba(255,255,255,0.05); margin-top: 40px;
+        }
+        .footer .logo-text {
+            font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            margin-bottom: 12px;
+        }
+        .footer p { color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; }
+        .footer .social-links { display: flex; justify-content: center; gap: 16px; margin-top: 20px; }
+        .footer .social-links a {
+            width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.05);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-muted); text-decoration: none; transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .footer .social-links a:hover {
+            background: var(--primary); color: white; transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+        .check-btn {
+            width: 28px; height: 28px; border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2); background: transparent;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease; flex-shrink: 0;
+        }
+        .check-btn:hover { border-color: var(--success); }
+        .check-btn.completed { background: var(--success); border-color: var(--success); color: white; }
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000;
+            display: none; align-items: center; justify-content: center; padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: var(--dark-light); border: 1px solid var(--glass-border); border-radius: 24px;
+            max-width: 900px; width: 100%; max-height: 90vh; overflow: hidden;
+            animation: modalIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-header {
+            padding: 24px 28px; border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .modal-header h3 { font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 700; }
+        .modal-close {
+            width: 36px; height: 36px; border-radius: 10px; background: rgba(255,255,255,0.05);
+            border: none; color: var(--text-muted); cursor: pointer;
+            display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;
+        }
+        .modal-close:hover { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+        .modal-body { padding: 0; }
+        .modal-body iframe { width: 100%; aspect-ratio: 16/9; border: none; }
+        .modal-body .pdf-viewer { width: 100%; height: 70vh; border: none; }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .ref-grid { grid-template-columns: 1fr; }
+            .tabs { gap: 6px; }
+            .tab-btn { padding: 10px 16px; font-size: 0.8rem; }
+            .timeline { padding-left: 30px; }
+            .timeline-item::before { left: -23px; }
+            .timeline-item .step-num { left: -38px; font-size: 0.65rem; }
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--dark); }
+        ::-webkit-scrollbar-thumb { background: var(--dark-lighter); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+        .confetti {
+            position: fixed; width: 10px; height: 10px; pointer-events: none; z-index: 9999;
+        }
+        @keyframes confettiFall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="particles" id="particles"></div>
+
+    <header class="header">
+        <div class="header-badge"><i class="fas fa-graduation-cap"></i><span>Complete Learning Path</span></div>
+        <h1>Machine Learning Programming</h1>
+        <p class="subtitle">A comprehensive, structured learning journey from Python fundamentals to advanced AI deployment. Master data processing, classical ML, deep learning, NLP, computer vision, and AutoML.</p>
+        <div class="author-info">
+            <div class="avatar"><i class="fas fa-user-tie"></i></div>
+            <div class="details">
+                <div class="name">Mr. Bishnu Singh Rayamajhi</div>
+                <div class="role">Math Lecturer & Head of Humanity and Social Science | Kapilvastu Multiple Campus (KMC), Taulihawa</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="progress-section">
+        <div class="progress-bar-container"><div class="progress-bar" id="progressBar"></div></div>
+        <div class="progress-text">Learning Progress: <span id="progressText">0/26</span> Libraries Completed</div>
+    </div>
+
+    <div class="tabs-container">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('sequence')" data-tab="sequence"><span><i class="fas fa-list-ol"></i> Learning Sequence</span></button>
+            <button class="tab-btn" onclick="switchTab('categories')" data-tab="categories"><span><i class="fas fa-layer-group"></i> Categories</span></button>
+            <button class="tab-btn" onclick="switchTab('roadmap')" data-tab="roadmap"><span><i class="fas fa-route"></i> Research Stack</span></button>
+            <button class="tab-btn" onclick="switchTab('references')" data-tab="references"><span><i class="fas fa-book"></i> References</span></button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div id="sequence" class="tab-content active">
+            <h2 class="section-title"><div class="icon" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white;"><i class="fas fa-list-ol"></i></div>Machine Learning Learning Sequence</h2>
+            <div class="cards-grid" id="sequenceGrid"></div>
+        </div>
+        <div id="categories" class="tab-content">
+            <h2 class="section-title"><div class="icon" style="background: linear-gradient(135deg, #f59e0b, #f97316); color: white;"><i class="fas fa-layer-group"></i></div>Library Categories</h2>
+            <div class="cards-grid" id="categoriesGrid"></div>
+        </div>
+        <div id="roadmap" class="tab-content">
+            <h2 class="section-title"><div class="icon" style="background: linear-gradient(135deg, #10b981, #06b6d4); color: white;"><i class="fas fa-route"></i></div>Recommended Research-Oriented Stack</h2>
+            <p style="color: var(--text-muted); margin-bottom: 30px; font-size: 0.95rem; line-height: 1.7;">For university teaching, research, and AI application development, follow this practical progression:</p>
+            <div class="timeline" id="roadmapTimeline"></div>
+        </div>
+        <div id="references" class="tab-content">
+            <h2 class="section-title"><div class="icon" style="background: linear-gradient(135deg, #ec4899, #f43f5e); color: white;"><i class="fas fa-book"></i></div>Official Documentation & References</h2>
+            <div class="ref-grid" id="referencesGrid"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="logo-text">ML Programming Hub</div>
+        <p>Developed by Mr. Bishnu Singh Rayamajhi<br>Math Lecturer & Head of Humanity and Social Science<br>Kapilvastu Multiple Campus (KMC), Taulihawa</p>
+        <div class="social-links">
+            <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+            <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" title="Email"><i class="fas fa-envelope"></i></a>
+            <a href="#" title="Website"><i class="fas fa-globe"></i></a>
+        </div>
+        <p style="margin-top: 20px; font-size: 0.75rem; opacity: 0.5;">&copy; 2026 Machine Learning Programming. All resources are free and open-source.</p>
+    </footer>
+
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header"><h3 id="modalTitle">Video Tutorial</h3><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+<script>
+const libraries = [
+    { name: "NumPy", desc: "Fundamental package for scientific computing with Python. Arrays, matrices, and mathematical operations.", icon: "🔢", color: "#4d77cf", video: "https://www.youtube.com/watch?v=QUT1VHiLmmI", pdf: "https://numpy.org/doc/stable/numpy-ref.pdf", docs: "https://numpy.org/doc/stable/" },
+    { name: "Pandas", desc: "Powerful data manipulation and analysis library. DataFrames and Series for structured data.", icon: "🐼", color: "#150458", video: "https://www.youtube.com/watch?v=ZyhVh-qRZPA", pdf: "https://pandas.pydata.org/docs/pandas.pdf", docs: "https://pandas.pydata.org/docs/" },
+    { name: "Matplotlib", desc: "Comprehensive library for creating static, animated, and interactive visualizations.", icon: "📊", color: "#1f77b4", video: "https://www.youtube.com/watch?v=3Xc3CA655Y4", pdf: "https://matplotlib.org/stable/Matplotlib.pdf", docs: "https://matplotlib.org/stable/" },
+    { name: "SciPy", desc: "Library for mathematics, science, and engineering. Optimization, integration, and statistics.", icon: "🔬", color: "#8caaee", video: "https://www.youtube.com/watch?v=jmX4FOUEfgU", pdf: "https://docs.scipy.org/doc/scipy/scipy-ref.pdf", docs: "https://docs.scipy.org/doc/scipy/" },
+    { name: "Scikit-learn", desc: "Simple and efficient tools for predictive data analysis. Classification, regression, clustering.", icon: "🤖", color: "#f89939", video: "https://www.youtube.com/watch?v=0B5eIE_1pXk", pdf: "https://scikit-learn.org/stable/scikit-learn-docs.pdf", docs: "https://scikit-learn.org/stable/" },
+    { name: "Statsmodels", desc: "Statistical modeling and econometrics in Python. Estimation and inference.", icon: "📈", color: "#c44e52", video: "https://www.youtube.com/watch?v=0qG_3L+Z0", pdf: "https://www.statsmodels.org/stable/statsmodels.pdf", docs: "https://www.statsmodels.org/stable/" },
+    { name: "XGBoost", desc: "Optimized distributed gradient boosting library. Fast, accurate, and scalable.", icon: "⚡", color: "#ff6b6b", video: "https://www.youtube.com/watch?v=OtD8wGmfgWQ", pdf: "https://xgboost.readthedocs.io/en/stable/XGBoost.pdf", docs: "https://xgboost.readthedocs.io/en/stable/" },
+    { name: "LightGBM", desc: "Fast, distributed, high-performance gradient boosting framework by Microsoft.", icon: "💡", color: "#9acd32", video: "https://www.youtube.com/watch?v=n_ZMQj09S6w", pdf: "https://lightgbm.readthedocs.io/en/stable/LightGBM.pdf", docs: "https://lightgbm.readthedocs.io/en/stable/" },
+    { name: "CatBoost", desc: "High-performance gradient boosting on decision trees library with categorical features support.", icon: "🐱", color: "#ffcc00", video: "https://www.youtube.com/watch?v=Zd9D-0pDtU0", pdf: "https://catboost.ai/en/docs/concepts/about.html", docs: "https://catboost.ai/en/docs/" },
+    { name: "TensorFlow", desc: "End-to-end open-source platform for machine learning. Deep learning framework by Google.", icon: "🔷", color: "#ff6f00", video: "https://www.youtube.com/watch?v=Y__gyApx_7c", pdf: "https://www.tensorflow.org/guide/pdf", docs: "https://www.tensorflow.org/guide" },
+    { name: "Keras", desc: "High-level neural networks API, written in Python and capable of running on top of TensorFlow.", icon: "🧠", color: "#d00000", video: "https://www.youtube.com/watch?v=qFJeN9V1ZsI", pdf: "https://keras.io/getting_started/intro_to_keras_for_engineers/", docs: "https://keras.io/" },
+    { name: "PyTorch", desc: "Open-source machine learning framework that accelerates the path from research to production.", icon: "🔥", color: "#ee4c2c", video: "https://www.youtube.com/watch?v=Z_ikDlimN6A", pdf: "https://pytorch.org/docs/stable/pytorch.pdf", docs: "https://pytorch.org/docs/stable/index.html" },
+    { name: "JAX", desc: "High-performance numerical computing and machine learning research. Composable transformations.", icon: "⚙️", color: "#a8e6cf", video: "https://www.youtube.com/watch?v=SstuvS-tVj0", pdf: "https://jax.readthedocs.io/en/latest/jax.pdf", docs: "https://jax.readthedocs.io/en/latest/" },
+    { name: "FastAI", desc: "Deep learning library which provides practitioners with high-level components for modern ML.", icon: "🚀", color: "#00b4d8", video: "https://www.youtube.com/watch?v=8SF_h3xF3cE", pdf: "https://docs.fast.ai/", docs: "https://docs.fast.ai/" },
+    { name: "Hugging Face Transformers", desc: "State-of-the-art Natural Language Processing for PyTorch and TensorFlow 2.0.", icon: "🤗", color: "#ffbd59", video: "https://www.youtube.com/watch?v=QEaBAZQCtwE", pdf: "https://huggingface.co/docs/transformers/index", docs: "https://huggingface.co/docs/transformers/index" },
+    { name: "OpenCV", desc: "Open-source computer vision and machine learning software library with 2500+ algorithms.", icon: "👁️", color: "#5c3ee8", video: "https://www.youtube.com/watch?v=oXlwWbU8l2o", pdf: "https://docs.opencv.org/4.x/d9/df8/tutorial_root.html", docs: "https://docs.opencv.org/4.x/" },
+    { name: "NLTK", desc: "Natural Language Toolkit - leading platform for building Python programs to work with human language data.", icon: "📝", color: "#3498db", video: "https://www.youtube.com/watch?v=FLZvOKSCkxY", pdf: "https://www.nltk.org/book/", docs: "https://www.nltk.org/" },
+    { name: "spaCy", desc: "Industrial-strength Natural Language Processing in Python with deep learning integration.", icon: "🌿", color: "#09a3d5", video: "https://www.youtube.com/watch?v=pTTtWKN02mA", pdf: "https://spacy.io/usage", docs: "https://spacy.io/usage" },
+    { name: "Gensim", desc: "Topic modeling and document similarity analysis library for unstructured text processing.", icon: "📚", color: "#e74c3c", video: "https://www.youtube.com/watch?v=ZkAFJwi-G98", pdf: "https://radimrehurek.com/gensim/", docs: "https://radimrehurek.com/gensim/" },
+    { name: "MLflow", desc: "Open-source platform for managing the end-to-end machine learning lifecycle.", icon: "📦", color: "#0194e2", video: "https://www.youtube.com/watch?v=6zOjQHWR8qE", pdf: "https://mlflow.org/docs/latest/index.html", docs: "https://mlflow.org/docs/latest/index.html" },
+    { name: "Optuna", desc: "Automatic hyperparameter optimization software framework, particularly designed for machine learning.", icon: "🔍", color: "#2ecc71", video: "https://www.youtube.com/watch?v=J_aymk4YXhg", pdf: "https://optuna.readthedocs.io/en/stable/", docs: "https://optuna.readthedocs.io/en/stable/" },
+    { name: "Ray", desc: "Open-source unified framework for scaling AI and Python applications.", icon: "☀️", color: "#028cf0", video: "https://www.youtube.com/watch?v=I-BH-lxK9w8", pdf: "https://docs.ray.io/en/latest/", docs: "https://docs.ray.io/en/latest/" },
+    { name: "Dask-ML", desc: "Scalable machine learning with Dask. Parallel and distributed computing for ML workflows.", icon: "🔄", color: "#fda061", video: "https://www.youtube.com/watch?v=6qMnsd3jZGs", pdf: "https://ml.dask.org/", docs: "https://ml.dask.org/" },
+    { name: "PyCaret", desc: "Low-code machine learning library in Python that automates machine learning workflows.", icon: "🧪", color: "#f9ca24", video: "https://www.youtube.com/watch?v=GxWgEbP78x0", pdf: "https://pycaret.gitbook.io/docs/", docs: "https://pycaret.gitbook.io/docs/" },
+    { name: "AutoGluon", desc: "AutoML toolkit for deep learning from AWS. Achieves state-of-the-art in few lines of code.", icon: "🎯", color: "#00a4e4", video: "https://www.youtube.com/watch?v=1k-Yr8w0V3E", pdf: "https://auto.gluon.ai/stable/index.html", docs: "https://auto.gluon.ai/stable/index.html" },
+    { name: "ONNX Runtime", desc: "Cross-platform, high-performance scoring engine for Open Neural Network Exchange models.", icon: "🔗", color: "#005ced", video: "https://www.youtube.com/watch?v=4F4j7O5q3rM", pdf: "https://onnxruntime.ai/docs/", docs: "https://onnxruntime.ai/docs/" },
+    { name: "H2O.ai", desc: "Open-source distributed machine learning platform with AutoML capabilities.", icon: "💧", color: "#ff7f00", video: "https://www.youtube.com/watch?v=9G8aNqY3J3s", pdf: "https://docs.h2o.ai/", docs: "https://docs.h2o.ai/" }
+];
+
+const categories = [
+    {
+        name: "Data Processing",
+        icon: "🧮",
+        color: "#6366f1",
+        items: ["NumPy", "Pandas", "SciPy"],
+        desc: "Essential libraries for data manipulation, numerical computing, and scientific operations."
+    },
+    {
+        name: "Classical Machine Learning",
+        icon: "🤖",
+        color: "#f59e0b",
+        items: ["Scikit-learn", "Statsmodels", "XGBoost", "LightGBM", "CatBoost"],
+        desc: "Core libraries for traditional ML algorithms including classification, regression, and ensemble methods."
+    },
+    {
+        name: "Deep Learning",
+        icon: "🧠",
+        color: "#ec4899",
+        items: ["TensorFlow", "Keras", "PyTorch", "JAX", "FastAI", "MXNet"],
+        desc: "Frameworks for building and training neural networks and deep learning models."
+    },
+    {
+        name: "Natural Language Processing",
+        icon: "💬",
+        color: "#10b981",
+        items: ["NLTK", "spaCy", "Gensim", "Hugging Face Transformers"],
+        desc: "Tools for text processing, tokenization, sentiment analysis, and transformer-based NLP."
+    },
+    {
+        name: "Computer Vision",
+        icon: "👁️",
+        color: "#0ea5e9",
+        items: ["OpenCV"],
+        desc: "Open-source computer vision library with 2500+ algorithms for image and video processing."
+    },
+    {
+        name: "AutoML",
+        icon: "⚡",
+        color: "#8b5cf6",
+        items: ["PyCaret", "AutoGluon", "H2O.ai"],
+        desc: "Automated machine learning platforms that streamline model selection and hyperparameter tuning."
+    },
+    {
+        name: "Model Optimization & Deployment",
+        icon: "🚀",
+        color: "#f97316",
+        items: ["Optuna", "MLflow", "ONNX Runtime", "Ray", "Dask-ML"],
+        desc: "Tools for hyperparameter optimization, experiment tracking, model deployment, and distributed computing."
+    }
+];
+
+const roadmap = [
+    { step: 1, name: "Python", desc: "Master Python programming fundamentals, data structures, and object-oriented concepts.", color: "#6366f1" },
+    { step: 2, name: "NumPy", desc: "Learn array manipulation, broadcasting, vectorized operations, and linear algebra.", color: "#818cf8" },
+    { step: 3, name: "Pandas", desc: "Master DataFrames, data cleaning, aggregation, and time series analysis.", color: "#a78bfa" },
+    { step: 4, name: "Matplotlib", desc: "Create publication-quality visualizations: line plots, scatter plots, histograms, and subplots.", color: "#c084fc" },
+    { step: 5, name: "SciPy", desc: "Apply optimization, integration, signal processing, and statistical functions.", color: "#d8b4fe" },
+    { step: 6, name: "Scikit-learn", desc: "Build ML pipelines with preprocessing, models, cross-validation, and metrics.", color: "#f472b6" },
+    { step: 7, name: "XGBoost", desc: "Implement gradient boosting for tabular data with hyperparameter tuning.", color: "#fb7185" },
+    { step: 8, name: "TensorFlow", desc: "Build and train deep neural networks using Google's production-grade framework.", color: "#fca5a5" },
+    { step: 9, name: "Keras", desc: "Rapidly prototype deep learning models with the high-level Keras API.", color: "#fdba74" },
+    { step: 10, name: "PyTorch", desc: "Develop dynamic neural networks with PyTorch's flexible computation graph.", color: "#fcd34d" },
+    { step: 11, name: "Transformers", desc: "Fine-tune pre-trained models for NLP tasks like classification, NER, and Q&A.", color: "#bef264" },
+    { step: 12, name: "OpenCV", desc: "Process images and videos for computer vision applications.", color: "#86efac" },
+    { step: 13, name: "MLflow", desc: "Track experiments, package models, and deploy ML solutions.", color: "#67e8f9" },
+    { step: 14, name: "Optuna", desc: "Optimize hyperparameters automatically for better model performance.", color: "#93c5fd" },
+    { step: 15, name: "Ray", desc: "Scale ML training and serving across distributed clusters.", color: "#c4b5fd" }
+];
+
+const references = [
+    { name: "scikit-learn Documentation", icon: "🤖", url: "https://scikit-learn.org/stable/", desc: "Official docs for classical ML" },
+    { name: "TensorFlow Documentation", icon: "🔷", url: "https://www.tensorflow.org/guide", desc: "Google's deep learning framework" },
+    { name: "PyTorch Documentation", icon: "🔥", url: "https://pytorch.org/docs/stable/index.html", desc: "Facebook's dynamic DL framework" },
+    { name: "Hugging Face Transformers", icon: "🤗", url: "https://huggingface.co/docs/transformers/index", desc: "State-of-the-art NLP models" },
+    { name: "XGBoost Documentation", icon: "⚡", url: "https://xgboost.readthedocs.io/en/stable/", desc: "Gradient boosting library" },
+    { name: "LightGBM Documentation", icon: "💡", url: "https://lightgbm.readthedocs.io/en/stable/", desc: "Microsoft's fast boosting" },
+    { name: "CatBoost Documentation", icon: "🐱", url: "https://catboost.ai/en/docs/", desc: "Yandex's gradient boosting" },
+    { name: "MLflow Documentation", icon: "📦", url: "https://mlflow.org/docs/latest/index.html", desc: "ML lifecycle management" },
+    { name: "Optuna Documentation", icon: "🔍", url: "https://optuna.readthedocs.io/en/stable/", desc: "Hyperparameter optimization" },
+    { name: "OpenCV Documentation", icon: "👁️", url: "https://docs.opencv.org/4.x/", desc: "Computer vision library" }
+];
+
+let completed = new Set();
+
+function createParticles() {
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 30; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDelay = Math.random() * 20 + 's';
+        p.style.animationDuration = (15 + Math.random() * 10) + 's';
+        p.style.width = (2 + Math.random() * 4) + 'px';
+        p.style.height = p.style.width;
+        container.appendChild(p);
+    }
+}
+
+function renderSequence() {
+    const grid = document.getElementById('sequenceGrid');
+    grid.innerHTML = libraries.map((lib, i) => `
+        <div class="lib-card" style="--card-color: ${lib.color}">
+            <div class="card-header">
+                <div class="card-icon" style="background: ${lib.color}20; color: ${lib.color}">${lib.icon}</div>
+                <div class="card-number">#${String(i + 1).padStart(2, '0')}</div>
+            </div>
+            <h3>${lib.name}</h3>
+            <p class="description">${lib.desc}</p>
+            <div class="actions">
+                <button class="btn-action btn-video" onclick="openVideo('${lib.video}', '${lib.name}')">
+                    <i class="fab fa-youtube"></i> Video
+                </button>
+                <button class="btn-action btn-pdf" onclick="openPDF('${lib.pdf}', '${lib.name}')">
+                    <i class="fas fa-file-pdf"></i> PDF
+                </button>
+                <button class="btn-action btn-docs" onclick="window.open('${lib.docs}', '_blank')">
+                    <i class="fas fa-book"></i>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function renderCategories() {
+    const grid = document.getElementById('categoriesGrid');
+    grid.innerHTML = categories.map(cat => `
+        <div class="cat-card">
+            <div class="cat-header">
+                <div class="cat-icon" style="background: ${cat.color}20; color: ${cat.color}">${cat.icon}</div>
+                <h3 style="color: ${cat.color}">${cat.name}</h3>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px; line-height: 1.6;">${cat.desc}</p>
+            <div class="cat-items">
+                ${cat.items.map(item => `<div class="cat-item"><i class="fas fa-chevron-right" style="color: ${cat.color}"></i>${item}</div>`).join('')}
+            </div>
+        </div>
+    `).join('');
+}
+
+function renderRoadmap() {
+    const timeline = document.getElementById('roadmapTimeline');
+    timeline.innerHTML = roadmap.map(item => `
+        <div class="timeline-item" style="--item-color: ${item.color}">
+            <div class="step-num">${String(item.step).padStart(2, '0')}</div>
+            <h4 style="color: ${item.color}">${item.name}</h4>
+            <p>${item.desc}</p>
+        </div>
+    `).join('');
+}
+
+function renderReferences() {
+    const grid = document.getElementById('referencesGrid');
+    grid.innerHTML = references.map(ref => `
+        <a href="${ref.url}" target="_blank" class="ref-card">
+            <div class="ref-icon">${ref.icon}</div>
+            <div class="ref-info">
+                <h4>${ref.name}</h4>
+                <p>${ref.desc}</p>
+            </div>
+        </a>
+    `).join('');
+}
+
+function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+}
+
+function openVideo(url, title) {
+    const modal = document.getElementById('modalOverlay');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    modalTitle.textContent = `${title} - Video Tutorial`;
+    const videoId = url.split('v=')[1];
+    modalBody.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>`;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function openPDF(url, title) {
+    const modal = document.getElementById('modalOverlay');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    modalTitle.textContent = `${title} - Documentation`;
+    modalBody.innerHTML = `<iframe class="pdf-viewer" src="${url}"></iframe>`;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+    if (e && e.target !== e.currentTarget) return;
+    document.getElementById('modalOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+});
+
+window.addEventListener('load', () => {
+    createParticles();
+    renderSequence();
+    renderCategories();
+    renderRoadmap();
+    renderReferences();
+    setTimeout(() => {
+        document.getElementById('progressBar').style.width = '15%';
+    }, 500);
+});
+</script>
+</body>
+</html>
