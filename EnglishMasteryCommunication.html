@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Mastery Dashboard — Mr. Bishnu Singh Rayamajhi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-blue: #38bdf8;
+            --accent-purple: #a78bfa;
+            --accent-pink: #f472b6;
+            --accent-green: #34d399;
+            --accent-orange: #fb923c;
+            --accent-red: #f87171;
+            --accent-yellow: #fbbf24;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-primary) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            padding: 24px;
+            line-height: 1.6;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 40px 20px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(56,189,248,0.08) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .hero h1 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 1;
+            letter-spacing: -1px;
+        }
+
+        .hero .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
+            font-weight: 400;
+        }
+
+        .developer {
+            background: rgba(30,41,59,0.7);
+            border: 1px solid rgba(56,189,248,0.2);
+            border-radius: 16px;
+            padding: 18px 28px;
+            margin: 24px auto 0;
+            max-width: 750px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 1;
+        }
+
+        .developer p {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .developer .name {
+            color: var(--accent-blue);
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .developer .title {
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+
+        /* Search Box */
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto 28px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 20px 14px 48px;
+            border-radius: 14px;
+            border: 1px solid rgba(148,163,184,0.15);
+            background: rgba(30,41,59,0.6);
+            color: #f1f5f9;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .search-box input:focus {
+            border-color: rgba(56,189,248,0.4);
+            box-shadow: 0 0 0 3px rgba(56,189,248,0.1);
+        }
+
+        .search-box input::placeholder {
+            color: #64748b;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            pointer-events: none;
+        }
+
+        /* Daily Practice */
+        .daily-practice {
+            background: linear-gradient(135deg, rgba(56,189,248,0.12), rgba(139,92,246,0.12));
+            border: 1px solid rgba(56,189,248,0.2);
+            border-radius: 20px;
+            padding: 28px;
+            margin: 24px auto;
+            max-width: 950px;
+            backdrop-filter: blur(10px);
+        }
+
+        .daily-practice h2 {
+            color: var(--accent-blue);
+            font-size: 1.3rem;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .practice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px;
+        }
+
+        .practice-card {
+            background: rgba(15,23,42,0.6);
+            border-radius: 14px;
+            padding: 18px 14px;
+            text-align: center;
+            border: 1px solid rgba(148,163,184,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .practice-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(56,189,248,0.4);
+            box-shadow: 0 10px 30px rgba(56,189,248,0.12);
+        }
+
+        .practice-card .time {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent-yellow);
+        }
+
+        .practice-card .task {
+            font-size: 0.88rem;
+            color: #cbd5e1;
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        /* Section Grid */
+        .section-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 22px;
+            max-width: 1450px;
+            margin: 0 auto;
+            padding: 10px 0 50px;
+        }
+
+        .section-card {
+            background: rgba(30,41,59,0.55);
+            border: 1px solid rgba(148,163,184,0.08);
+            border-radius: 20px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: all 0.35s ease;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 24px 48px rgba(0,0,0,0.35);
+            border-color: rgba(56,189,248,0.2);
+        }
+
+        .section-header {
+            padding: 22px 26px 16px;
+            border-bottom: 1px solid rgba(148,163,184,0.08);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #f1f5f9;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: rgba(148,163,184,0.1);
+            margin: 0 24px 10px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-blue), #818cf8);
+            border-radius: 2px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0%;
+        }
+
+        .section-body {
+            padding: 14px 22px 22px;
+        }
+
+        .topic-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            margin: 7px 0;
+            border-radius: 12px;
+            background: rgba(15,23,42,0.45);
+            border: 1px solid rgba(148,163,184,0.06);
+            transition: all 0.25s ease;
+            gap: 10px;
+        }
+
+        .topic-item:hover {
+            background: rgba(56,189,248,0.07);
+            border-color: rgba(56,189,248,0.18);
+        }
+
+        .topic-item.done {
+            opacity: 0.55;
+            text-decoration: line-through;
+        }
+
+        .topic-item.done .topic-name {
+            color: #64748b;
+        }
+
+        .topic-name {
+            font-size: 0.92rem;
+            color: #e2e8f0;
+            font-weight: 500;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .topic-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .btn {
+            padding: 7px 15px;
+            border-radius: 9px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+        }
+
+        .btn-yt {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .btn-yt:hover {
+            transform: scale(1.06);
+            box-shadow: 0 5px 15px rgba(239,68,68,0.35);
+        }
+
+        .btn-pdf {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .btn-pdf:hover {
+            transform: scale(1.06);
+            box-shadow: 0 5px 15px rgba(245,158,11,0.35);
+        }
+
+        .btn-check {
+            background: rgba(52,211,153,0.15);
+            color: #34d399;
+            border: 1px solid rgba(52,211,153,0.3);
+            padding: 7px 12px;
+        }
+
+        .btn-check:hover {
+            background: rgba(52,211,153,0.25);
+        }
+
+        .btn-check.checked {
+            background: rgba(52,211,153,0.3);
+            color: #10b981;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.75);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(6px);
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 480px;
+            width: 100%;
+            border: 1px solid rgba(56,189,248,0.2);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            animation: modalIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.88) translateY(30px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal h3 {
+            color: var(--accent-blue);
+            margin-bottom: 14px;
+            font-size: 1.25rem;
+        }
+
+        .modal p {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .modal .close-btn {
+            background: rgba(56,189,248,0.12);
+            color: var(--accent-blue);
+            border: 1px solid rgba(56,189,248,0.25);
+            padding: 10px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .modal .close-btn:hover {
+            background: rgba(56,189,248,0.22);
+        }
+
+        /* Hidden / Highlight */
+        .hidden {
+            display: none !important;
+        }
+
+        .highlight {
+            background: rgba(251,191,36,0.15) !important;
+            border-color: rgba(251,191,36,0.35) !important;
+            animation: highlightFade 2.5s forwards;
+        }
+
+        @keyframes highlightFade {
+            0% { background: rgba(251,191,36,0.25); }
+            100% { background: rgba(15,23,42,0.45); }
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #475569;
+            font-size: 0.85rem;
+            max-width: 1450px;
+            margin: 0 auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.7rem; }
+            .section-grid { grid-template-columns: 1fr; }
+            .practice-grid { grid-template-columns: 1fr 1fr; }
+            .topic-item { flex-wrap: wrap; }
+            .topic-actions { width: 100%; justify-content: flex-end; margin-top: 6px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 14px; }
+            .hero h1 { font-size: 1.4rem; }
+            .daily-practice { padding: 18px; }
+            .section-header { padding: 18px 18px 14px; }
+            .section-body { padding: 12px 16px 18px; }
+            .btn { padding: 6px 11px; font-size: 0.72rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero -->
+    <div class="hero">
+        <h1>English Mastery Dashboard</h1>
+        <p class="subtitle">Your Complete Guide to Grammar, Vocabulary, Speaking & Professional Communication</p>
+        <div class="developer">
+            <p>
+                <span class="name">Mr. Bishnu Singh Rayamajhi</span><br>
+                <span class="title">Math Lecturer and Head of Humanity & Social Science</span><br>
+                Kapilvastu Multiple Campus (KMC), Taulihawa
+            </p>
+        </div>
+    </div>
+
+    <!-- Search -->
+    <div class="search-box">
+        <svg class="search-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="text" id="searchInput" placeholder="Search topics, skills, or sections..." onkeyup="filterTopics()">
+    </div>
+
+    <!-- Daily Practice -->
+    <div class="daily-practice">
+        <h2>⏱️ Daily Practice Routine (1 Hour)</h2>
+        <div class="practice-grid">
+            <div class="practice-card">
+                <div class="time">10 min</div>
+                <div class="task">Grammar</div>
+            </div>
+            <div class="practice-card">
+                <div class="time">10 min</div>
+                <div class="task">Vocabulary</div>
+            </div>
+            <div class="practice-card">
+                <div class="time">10 min</div>
+                <div class="task">Pronunciation</div>
+            </div>
+            <div class="practice-card">
+                <div class="time">15 min</div>
+                <div class="task">Listen to Academic Lecture / TED Talk</div>
+            </div>
+            <div class="practice-card">
+                <div class="time">15 min</div>
+                <div class="task">Give a Speech & Record Yourself</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sections Container -->
+    <div class="section-grid" id="sectionsContainer"></div>
+
+    <!-- Footer -->
+    <div class="footer">
+        Designed for students, researchers, and professionals. All YouTube and PDF links point to free educational resources.
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+        <div class="modal">
+            <h3 id="modalTitle">Coming Soon</h3>
+            <p id="modalBody">This resource is being curated. Please check back later!</p>
+            <button class="close-btn" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        const data = {
+            "A. Grammar": {
+                icon: "📚", color: "#38bdf8", bg: "rgba(56,189,248,0.15)",
+                topics: [
+                    {name:"Parts of Speech", yt:"https://www.youtube.com/results?search_query=parts+of+speech+english+grammar+free+tutorial", pdf:"https://www.englishgrammar.org/parts-of-speech/"},
+                    {name:"Sentence Structure", yt:"https://www.youtube.com/results?search_query=sentence+structure+english+grammar+tutorial", pdf:"https://www.englishclub.com/grammar/sentence-structure.htm"},
+                    {name:"All 12 Tenses", yt:"https://www.youtube.com/results?search_query=all+12+tenses+english+grammar+complete+tutorial", pdf:"https://www.englishpage.com/verbpage/verbtenseintro.html"},
+                    {name:"Conditional Sentences", yt:"https://www.youtube.com/results?search_query=conditional+sentences+english+grammar+tutorial", pdf:"https://www.englishclub.com/grammar/conditional.htm"},
+                    {name:"Active & Passive Voice", yt:"https://www.youtube.com/results?search_query=active+passive+voice+english+grammar+tutorial", pdf:"https://www.englishclub.com/grammar/passive-voice.htm"},
+                    {name:"Direct & Indirect Speech", yt:"https://www.youtube.com/results?search_query=direct+indirect+speech+reported+speech+tutorial", pdf:"https://www.englishclub.com/grammar/reported-speech.htm"},
+                    {name:"Modal Verbs", yt:"https://www.youtube.com/results?search_query=modal+verbs+english+grammar+tutorial", pdf:"https://www.englishclub.com/grammar/modals.htm"},
+                    {name:"Articles (a, an, the)", yt:"https://www.youtube.com/results?search_query=articles+a+an+the+english+grammar+tutorial", pdf:"https://www.englishclub.com/grammar/articles.htm"},
+                    {name:"Prepositions", yt:"https://www.youtube.com/results?search_query=prepositions+english+grammar+tutorial", pdf:"https://www.englishclub.com/grammar/prepositions.htm"},
+                    {name:"Subject–Verb Agreement", yt:"https://www.youtube.com/results?search_query=subject+verb+agreement+english+grammar+tutorial", pdf:"https://www.englishclub.com/grammar/subject-verb-agreement.htm"}
+                ]
+            },
+            "B. Vocabulary": {
+                icon: "📝", color: "#a78bfa", bg: "rgba(167,139,250,0.15)",
+                topics: [
+                    {name:"Academic Vocabulary", yt:"https://www.youtube.com/results?search_query=academic+vocabulary+english+ielts+toefl+tutorial", pdf:"https://www.oxfordlearnersdictionaries.com/wordlists/oxford3000-5000"},
+                    {name:"Research Vocabulary", yt:"https://www.youtube.com/results?search_query=research+vocabulary+academic+english+tutorial", pdf:"https://www.phrasebank.manchester.ac.uk/"},
+                    {name:"Business English", yt:"https://www.youtube.com/results?search_query=business+english+vocabulary+tutorial", pdf:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
+                    {name:"Presentation Vocabulary", yt:"https://www.youtube.com/results?search_query=presentation+vocabulary+english+tutorial", pdf:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
+                    {name:"Technical Vocabulary", yt:"https://www.youtube.com/results?search_query=technical+english+vocabulary+tutorial", pdf:"https://www.oxfordlearnersdictionaries.com/wordlists/oxford3000-5000"},
+                    {name:"Idioms and Phrasal Verbs", yt:"https://www.youtube.com/results?search_query=idioms+phrasal+verbs+english+tutorial", pdf:"https://www.englishclub.com/vocabulary/phrasal-verbs.htm"}
+                ]
+            },
+            "C. Speaking Skills": {
+                icon: "🎤", color: "#f472b6", bg: "rgba(244,114,182,0.15)",
+                topics: [
+                    {name:"Self-introduction", yt:"https://www.youtube.com/results?search_query=self+introduction+english+speaking+tutorial", pdf:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
+                    {name:"Conversation Skills", yt:"https://www.youtube.com/results?search_query=english+conversation+skills+tutorial", pdf:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
+                    {name:"Pronunciation", yt:"https://www.youtube.com/results?search_query=english+pronunciation+tutorial+british+council", pdf:"https://www.bbc.co.uk/learningenglish/english/features/pronunciation"},
+                    {name:"Fluency", yt:"https://www.youtube.com/results?search_query=english+fluency+speaking+tutorial", pdf:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
+                    {name:"Storytelling", yt:"https://www.youtube.com/results?search_query=storytelling+skills+english+tutorial", pdf:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
+                    {name:"Debate", yt:"https://www.youtube.com/results?search_query=debate+skills+english+tutorial", pdf:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
+                    {name:"Group Discussion", yt:"https://www.youtube.com/results?search_query=group+discussion+skills+english+tutorial", pdf:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"}
+                ]
+            },
+            "D. Academic Communication": {
+                icon: "🎓", color: "#34d399", bg: "rgba(52,211,153,0.15)",
+                topics: [
+                    {name:"Seminar Presentation", yt:"https://www.youtube.com/results?search_query=seminar+presentation+skills+academic+tutorial", pdf:"https://www.speakingaboutpresenting.com/presentation-skills/"},
+                    {name:"Conference Presentation", yt:"https://www.youtube.com/results?search_query=conference+presentation+skills+academic+tutorial", pdf:"https://www.speakingaboutpresenting.com/presentation-skills/"},
+                    {name:"Research Proposal Presentation", yt:"https://www.youtube.com/results?search_query=research+proposal+presentation+academic+tutorial", pdf:"https://gradschool.unc.edu/student-support/communication/"},
+                    {name:"Thesis Defense (Viva)", yt:"https://www.youtube.com/results?search_query=thesis+defense+viva+preparation+tutorial", pdf:"https://gradschool.unc.edu/student-support/communication/"},
+                    {name:"Poster Presentation", yt:"https://www.youtube.com/results?search_query=poster+presentation+academic+tutorial", pdf:"https://gradschool.unc.edu/student-support/communication/"},
+                    {name:"Classroom Teaching", yt:"https://www.youtube.com/results?search_query=classroom+teaching+skills+english+tutorial", pdf:"https://www.teachingenglish.org.uk/"},
+                    {name:"Workshop Facilitation", yt:"https://www.youtube.com/results?search_query=workshop+facilitation+skills+tutorial", pdf:"https://www.teachingenglish.org.uk/"}
+                ]
+            },
+            "E. Research Communication": {
+                icon: "🔬", color: "#fb923c", bg: "rgba(251,146,60,0.15)",
+                topics: [
+                    {name:"Literature Review Presentation", yt:"https://www.youtube.com/results?search_query=literature+review+presentation+academic+tutorial", pdf:"https://gradschool.unc.edu/student-support/communication/"},
+                    {name:"Explaining Research Methodology", yt:"https://www.youtube.com/results?search_query=research+methodology+explained+academic+tutorial", pdf:"https://gradschool.unc.edu/student-support/communication/"},
+                    {name:"Presenting Data and Results", yt:"https://www.youtube.com/results?search_query=presenting+data+results+academic+tutorial", pdf:"https://gradschool.unc.edu/student-support/communication/"},
+                    {name:"Answering Questions", yt:"https://www.youtube.com/results?search_query=answering+academic+questions+defense+tutorial", pdf:"https://gradschool.unc.edu/student-support/communication/"},
+                    {name:"Academic Discussion", yt:"https://www.youtube.com/results?search_query=academic+discussion+skills+tutorial", pdf:"https://gradschool.unc.edu/student-support/communication/"}
+                ]
+            },
+            "F. Interview Skills": {
+                icon: "💼", color: "#f87171", bg: "rgba(248,113,113,0.15)",
+                topics: [
+                    {name:"HR Interview", yt:"https://www.youtube.com/results?search_query=HR+interview+tips+english+tutorial", pdf:"https://www.indeed.com/career-advice/interviewing"},
+                    {name:"Faculty Interview", yt:"https://www.youtube.com/results?search_query=faculty+interview+preparation+academic+tutorial", pdf:"https://www.indeed.com/career-advice/interviewing"},
+                    {name:"PhD Interview", yt:"https://www.youtube.com/results?search_query=PhD+interview+preparation+tutorial", pdf:"https://www.indeed.com/career-advice/interviewing"},
+                    {name:"Scholarship Interview", yt:"https://www.youtube.com/results?search_query=scholarship+interview+tips+tutorial", pdf:"https://www.indeed.com/career-advice/interviewing"},
+                    {name:"Job Interview", yt:"https://www.youtube.com/results?search_query=job+interview+tips+english+tutorial", pdf:"https://www.indeed.com/career-advice/interviewing"},
+                    {name:"Research Fellowship Interview", yt:"https://www.youtube.com/results?search_query=research+fellowship+interview+preparation+tutorial", pdf:"https://www.indeed.com/career-advice/interviewing"}
+                ]
+            },
+            "G. Professional Skills": {
+                icon: "🌟", color: "#fbbf24", bg: "rgba(251,191,36,0.15)",
+                topics: [
+                    {name:"Public Speaking", yt:"https://www.youtube.com/results?search_query=public+speaking+skills+tutorial+TED", pdf:"https://www.toastmasters.org/resources/public-speaking-tips"},
+                    {name:"Leadership Communication", yt:"https://www.youtube.com/results?search_query=leadership+communication+skills+tutorial", pdf:"https://www.toastmasters.org/resources/public-speaking-tips"},
+                    {name:"Meeting Skills", yt:"https://www.youtube.com/results?search_query=business+meeting+skills+english+tutorial", pdf:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
+                    {name:"Negotiation", yt:"https://www.youtube.com/results?search_query=negotiation+skills+english+tutorial", pdf:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
+                    {name:"Networking", yt:"https://www.youtube.com/results?search_query=networking+skills+professional+english+tutorial", pdf:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
+                    {name:"Email Writing", yt:"https://www.youtube.com/results?search_query=professional+email+writing+english+tutorial", pdf:"https://www.grammarly.com/business/learn/professional-email-writing/"},
+                    {name:"Report Writing", yt:"https://www.youtube.com/results?search_query=report+writing+academic+professional+tutorial", pdf:"https://www.grammarly.com/business/learn/professional-email-writing/"}
+                ]
+            }
+        };
+
+        function renderSections() {
+            const container = document.getElementById('sectionsContainer');
+            let html = '';
+            for (const [sectionName, sectionData] of Object.entries(data)) {
+                html += `
+                    <div class="section-card" data-section="${sectionName}">
+                        <div class="section-header">
+                            <div class="section-icon" style="background:${sectionData.bg};color:${sectionData.color}">${sectionData.icon}</div>
+                            <div class="section-title">${sectionName}</div>
+                        </div>
+                        <div class="progress-bar"><div class="progress-fill" id="prog-${sectionName.replace(/[^a-zA-Z]/g,'')}"></div></div>
+                        <div class="section-body">
+                            ${sectionData.topics.map((t, i) => `
+                                <div class="topic-item" id="topic-${sectionName.replace(/[^a-zA-Z]/g,'')}-${i}" data-topic="${t.name.toLowerCase()}">
+                                    <span class="topic-name">${t.name}</span>
+                                    <div class="topic-actions">
+                                        <a class="btn btn-yt" href="${t.yt}" target="_blank" rel="noopener" onclick="trackVisit('${sectionName}', ${i})">▶ YouTube</a>
+                                        <a class="btn btn-pdf" href="${t.pdf}" target="_blank" rel="noopener" onclick="trackVisit('${sectionName}', ${i})">📄 PDF</a>
+                                        <button class="btn btn-check" id="check-${sectionName.replace(/[^a-zA-Z]/g,'')}-${i}" onclick="toggleDone('${sectionName}', ${i})">✓</button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        const visited = new Set();
+
+        function trackVisit(section, idx) {
+            const key = `${section}-${idx}`;
+            visited.add(key);
+            updateProgress(section);
+        }
+
+        function toggleDone(section, idx) {
+            const secId = section.replace(/[^a-zA-Z]/g, '');
+            const item = document.getElementById(`topic-${secId}-${idx}`);
+            const btn = document.getElementById(`check-${secId}-${idx}`);
+            item.classList.toggle('done');
+            if (item.classList.contains('done')) {
+                btn.classList.add('checked');
+                btn.textContent = '✓ Done';
+                trackVisit(section, idx);
+            } else {
+                btn.classList.remove('checked');
+                btn.textContent = '✓';
+            }
+            updateProgress(section);
+        }
+
+        function updateProgress(section) {
+            const secId = section.replace(/[^a-zA-Z]/g, '');
+            const total = data[section].topics.length;
+            let done = 0;
+            for (let i = 0; i < total; i++) {
+                const item = document.getElementById(`topic-${secId}-${i}`);
+                if (item && item.classList.contains('done')) done++;
+            }
+            const pct = (done / total) * 100;
+            const bar = document.getElementById(`prog-${secId}`);
+            if (bar) bar.style.width = pct + '%';
+        }
+
+        function filterTopics() {
+            const q = document.getElementById('searchInput').value.toLowerCase().trim();
+            document.querySelectorAll('.topic-item').forEach(item => {
+                const name = item.dataset.topic;
+                const section = item.closest('.section-card').dataset.section.toLowerCase();
+                if (!q || name.includes(q) || section.includes(q)) {
+                    item.classList.remove('hidden');
+                    if (q) {
+                        item.classList.add('highlight');
+                        setTimeout(() => item.classList.remove('highlight'), 2500);
+                    }
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+            document.querySelectorAll('.section-card').forEach(card => {
+                const visible = card.querySelectorAll('.topic-item:not(.hidden)').length;
+                card.style.display = visible > 0 ? '' : 'none';
+            });
+        }
+
+        function showModal(title, body) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').textContent = body;
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        renderSections();
+    </script>
+</body>
+</html>
