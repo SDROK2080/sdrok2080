@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic AI Roadmap - SMART Learning Platform</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --dark-bg: #0f0f1e;
+            --card-bg: #1a1a2e;
+            --text-light: #e0e0e0;
+            --accent: #00d4ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(to bottom right, var(--dark-bg), #1a0033);
+            color: var(--text-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header & Navigation */
+        .header {
+            background: var(--primary-gradient);
+            padding: 20px 0;
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            letter-spacing: 1px;
+        }
+
+        .lang-toggle {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .lang-toggle:hover {
+            background: rgba(255,255,255,0.4);
+            transform: scale(1.05);
+        }
+
+        .lang-toggle.active {
+            background: white;
+            color: #667eea;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 4px solid var(--accent);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1);
+        }
+
+        .progress-stat {
+            text-align: center;
+            padding: 15px;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 800;
+            background: var(--success-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #999;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        /* Stage Cards */
+        .stage-container {
+            margin-bottom: 20px;
+        }
+
+        .stage-header {
+            background: var(--secondary-gradient);
+            padding: 18px;
+            border-radius: 10px 10px 0 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.2);
+        }
+
+        .stage-header:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 25px rgba(245, 87, 108, 0.35);
+        }
+
+        .stage-number {
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+            margin-right: 15px;
+        }
+
+        .stage-title {
+            font-size: 18px;
+            font-weight: 700;
+            flex-grow: 1;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .expand-icon {
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .stage-header.collapsed .expand-icon {
+            transform: rotate(-90deg);
+        }
+
+        .stage-content {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 0 0 10px 10px;
+            border-top: 2px solid rgba(245, 87, 108, 0.3);
+            max-height: none;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.4s ease;
+        }
+
+        .stage-content.collapsed {
+            max-height: 0;
+            padding: 0 25px;
+            opacity: 0;
+        }
+
+        /* Topic Section */
+        .topic-section {
+            background: rgba(26, 26, 46, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .topic-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .topic-title i {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+
+        .topic-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .topic-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .topic-item:hover {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: rgba(102, 126, 234, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .topic-item input[type="checkbox"] {
+            cursor: pointer;
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+        }
+
+        .topic-item input[type="checkbox"]:checked + label {
+            color: var(--accent);
+            text-decoration: line-through;
+        }
+
+        .topic-item label {
+            cursor: pointer;
+            margin: 0;
+            flex-grow: 1;
+            font-size: 13px;
+        }
+
+        /* Resources */
+        .resources-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 212, 255, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .resource-btn {
+            display: inline-flex;
+            align-items: center;
+            margin: 8px 8px 8px 0;
+            padding: 8px 14px;
+            background: var(--primary-gradient);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .resource-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        .resource-btn i {
+            margin-right: 6px;
+            font-size: 14px;
+        }
+
+        .resource-btn.video {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+        }
+
+        .resource-btn.pdf {
+            background: linear-gradient(135deg, #f5576c 0%, #f93a5a 100%);
+        }
+
+        .resource-btn.docs {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary-gradient);
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: 50px;
+            border-top: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .footer-text {
+            font-size: 12px;
+            margin: 5px 0;
+        }
+
+        .developer-info {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: inline-block;
+        }
+
+        .developer-name {
+            font-weight: 700;
+            color: #00ff88;
+            font-size: 14px;
+        }
+
+        .developer-role {
+            font-size: 12px;
+            color: #ddd;
+            margin-top: 5px;
+        }
+
+        /* Search Bar */
+        .search-section {
+            margin: 20px 0;
+        }
+
+        .search-box {
+            background: var(--card-bg);
+            border: 2px solid var(--accent);
+            padding: 12px 18px;
+            border-radius: 25px;
+            color: var(--text-light);
+            font-size: 14px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+            border-color: var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 20px;
+            }
+
+            .topic-items {
+                grid-template-columns: 1fr;
+            }
+
+            .stage-header {
+                padding: 15px;
+            }
+
+            .stat-number {
+                font-size: 24px;
+            }
+
+            .stage-title {
+                font-size: 16px;
+            }
+        }
+
+        /* Hidden elements */
+        .hidden {
+            display: none;
+        }
+
+        /* Badge */
+        .completion-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #00ff88 0%, #00cc70 100%);
+            color: #000;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-left: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="container-lg">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h1 class="header-title" id="mainTitle">AGENTIC AI ROADMAP</h1>
+                    <small style="color: rgba(255,255,255,0.8);" id="subtitle">SMART Learning Platform</small>
+                </div>
+                <button class="lang-toggle active" onclick="toggleLanguage()" id="langBtn">English / नेपाली</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container-lg py-4">
+        <!-- Progress Section -->
+        <div class="progress-section">
+            <div class="row">
+                <div class="col-md-4 col-sm-6 col-12">
+                    <div class="progress-stat">
+                        <div class="stat-number" id="totalTopics">120+</div>
+                        <div class="stat-label" id="labelTopics">Topics to Learn</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-12">
+                    <div class="progress-stat">
+                        <div class="stat-number" id="completedCount">0</div>
+                        <div class="stat-label" id="labelCompleted">Completed</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-12">
+                    <div class="progress-stat">
+                        <div class="stat-number"><span id="progressPercent">0</span>%</div>
+                        <div class="stat-label" id="labelProgress">Overall Progress</div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3">
+                <div class="progress" style="height: 10px; border-radius: 10px; background: rgba(102, 126, 234, 0.2);">
+                    <div class="progress-bar" id="progressBar" style="background: var(--success-gradient); width: 0%; border-radius: 10px; transition: width 0.3s ease;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-section">
+            <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search topics..." onkeyup="searchTopics()">
+        </div>
+
+        <!-- Stages Content -->
+        <div id="stagesContainer"></div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="footer-text">
+            <strong id="footerTitle">AGENTIC AI ROADMAP - SMART LEARNING PLATFORM</strong>
+        </div>
+        <div class="developer-info">
+            <div class="developer-name" id="devName">Developed By: Mr. Bishnu Singh Rayamajhi</div>
+            <div class="developer-role" id="devRole">Mathematics Lecturer & Head of Humanities & Social Sciences Department<br>Kapilvastu Multiple Campus (KMC), Taulihawa, Nepal</div>
+            <div style="margin-top: 10px; font-size: 11px; color: #00ff88;">🎓 UCDL Academy | Empowering Nepali Learners</div>
+        </div>
+        <div class="footer-text" style="margin-top: 15px;">
+            <small id="footerNote">© 2026 | Building Tomorrow's AI Leaders | Free & Open Learning</small>
+        </div>
+    </div>
+
+    <script>
+        // Data Structure
+        const roadmapData = [
+            {
+                title: "PROGRAMMING & PROMPTING",
+                icon: "fa-code",
+                topics: {
+                    "Programming Languages": ["Python", "JavaScript", "TypeScript", "Shell / Bash"],
+                    "Scripting & Automation": ["API Requests (HTTP/JSON)", "File Handling", "Async Programming", "Web Scraping"],
+                    "Prompting Concepts": ["Prompt Engineering", "Context Management", "Chain-of-Thought Prompts", "Multi-Agent Prompts", "Goal-Oriented Prompting", "Self-Critique & Retry Loops", "Reflection Looping", "Task Planning Prompts", "Role Prompting"]
+                },
+                resources: [
+                    { type: "video", text: "Python Basics for AI", url: "https://youtube.com/results?search_query=python+basics+AI" },
+                    { type: "video", text: "Prompt Engineering 101", url: "https://youtube.com/results?search_query=prompt+engineering+tutorial" },
+                    { type: "docs", text: "OpenAI Prompt Guide", url: "https://platform.openai.com/docs/guides/prompt-engineering" }
+                ]
+            },
+            {
+                title: "BASICS OF AI AGENTS",
+                icon: "fa-robot",
+                topics: {
+                    "Agent Fundamentals": ["What are AI Agents?", "Autonomous vs. Semi-Autonomous Agents", "Agent Architectures (ReAct, CAMEL, AutoGPT, BabyAGI)", "Model Context Protocol (MCP)", "A2A Protocol (Agent-to-Agent)"],
+                    "Agent Planning & Decision": ["Goal Decomposition", "Task Planning Algorithms", "Decision-Making Policies", "Action Planning Loops", "Multi-Agent Collaboration", "Self-Reflection / Feedback Loops"]
+                },
+                resources: [
+                    { type: "video", text: "Introduction to AI Agents", url: "https://youtube.com/results?search_query=AI+agents+explained" },
+                    { type: "video", text: "ReAct Framework Deep Dive", url: "https://youtube.com/results?search_query=ReAct+prompt+framework" },
+                    { type: "docs", text: "Agent Architectures Guide", url: "https://docs.anthropic.com" }
+                ]
+            },
+            {
+                title: "LLMs & APIs",
+                icon: "fa-brain",
+                topics: {
+                    "Available Models": ["OpenAI (GPT-4o, GPT-4o mini)", "Claude", "Gemini", "Mistral", "Open Source LLMs (Llama 3, Mixtral, Qwen, DeepSeek)"],
+                    "API Essentials": ["API Authentication", "Rate Limiting", "Toolformer / Function Calling", "Tool Invocation & Output Parsing", "Prompt Chaining via APIs", "Structured Outputs (JSON)"]
+                },
+                resources: [
+                    { type: "video", text: "LLM APIs Comparison", url: "https://youtube.com/results?search_query=LLM+APIs+comparison+OpenAI+Claude" },
+                    { type: "docs", text: "Claude API Docs", url: "https://docs.anthropic.com" },
+                    { type: "docs", text: "OpenAI API Reference", url: "https://platform.openai.com/docs/api-reference" }
+                ]
+            },
+            {
+                title: "TOOL USE & INTEGRATION",
+                icon: "fa-tools",
+                topics: {
+                    "Tool Utilization": ["Tool Use System", "Memory Integration", "External API Calling", "File Reader / Writer Tools", "Python Execution Tools", "Search & Retrieval Tools", "Calculator & Code Interpreter", "Web Browsing Tools", "Database Interaction (SQL/NoSQL)"]
+                },
+                resources: [
+                    { type: "video", text: "Tool Use in LLMs", url: "https://youtube.com/results?search_query=LLM+tool+use+function+calling" },
+                    { type: "docs", text: "Anthropic Tool Use Guide", url: "https://docs.anthropic.com/en/docs/build-with-claude/tool-use" }
+                ]
+            },
+            {
+                title: "AGENT FRAMEWORKS",
+                icon: "fa-network-wired",
+                topics: {
+                    "Popular Frameworks": ["LangChain", "LangGraph", "AutoGen", "CrewAI", "Flowise", "AgentOps", "Haystack", "Semantic Kernel", "Superagent", "LlamaIndex", "Relevance AI"]
+                },
+                resources: [
+                    { type: "video", text: "LangChain Tutorial Series", url: "https://youtube.com/results?search_query=LangChain+tutorial" },
+                    { type: "video", text: "CrewAI Multi-Agent Framework", url: "https://youtube.com/results?search_query=CrewAI+framework" },
+                    { type: "docs", text: "LangChain Documentation", url: "https://python.langchain.com" }
+                ]
+            },
+            {
+                title: "ORCHESTRATION & AUTOMATION",
+                icon: "fa-cogs",
+                topics: {
+                    "Workflow Management": ["n8n", "Make.com", "Zapier", "LangGraph", "DAG Management", "Event-Driven Architectures", "Guardrails & Validations", "Looping & Conditional Workflows", "Scheduling & Triggers", "Human-in-the-Loop Workflows"]
+                },
+                resources: [
+                    { type: "video", text: "n8n AI Workflow Tutorial", url: "https://youtube.com/results?search_query=n8n+automation+workflow" },
+                    { type: "video", text: "LangGraph for Orchestration", url: "https://youtube.com/results?search_query=LangGraph+workflow" },
+                    { type: "docs", text: "n8n Documentation", url: "https://docs.n8n.io" }
+                ]
+            },
+            {
+                title: "MEMORY MANAGEMENT",
+                icon: "fa-database",
+                topics: {
+                    "Memory Types": ["Short-Term Memory", "Long-Term Memory", "Episodic Memory", "Vector Stores", "Pinecone", "Weaviate", "Chroma", "Qdrant", "FAISS"]
+                },
+                resources: [
+                    { type: "video", text: "Vector Databases Explained", url: "https://youtube.com/results?search_query=vector+database+tutorial" },
+                    { type: "docs", text: "Pinecone Documentation", url: "https://docs.pinecone.io" }
+                ]
+            },
+            {
+                title: "KNOWLEDGE & RAG",
+                icon: "fa-book",
+                topics: {
+                    "RAG Systems": ["RAG (Retrieval-Augmented Generation)", "Embedding Models", "Custom Data Loaders", "Document Indexing", "Hybrid Search (BM25 + Vector)", "LangChain RAG", "LlamaIndex RAG", "GraphRAG"]
+                },
+                resources: [
+                    { type: "video", text: "RAG System Implementation", url: "https://youtube.com/results?search_query=RAG+retrieval+augmented+generation" },
+                    { type: "docs", text: "LlamaIndex RAG Guide", url: "https://docs.llamaindex.ai" }
+                ]
+            },
+            {
+                title: "DEPLOYMENT",
+                icon: "fa-rocket",
+                topics: {
+                    "Deployment Options": ["API Deployment", "Serverless Functions", "FastAPI / Streamlit / Gradio", "Docker", "Kubernetes", "Vector DB Hosting", "Agent Hosting Services (Replit, Modal, Railway, etc.)"]
+                },
+                resources: [
+                    { type: "video", text: "Deploy LLM Apps with Docker", url: "https://youtube.com/results?search_query=deploy+LLM+docker+kubernetes" },
+                    { type: "docs", text: "Streamlit Deployment", url: "https://docs.streamlit.io/deploy" }
+                ]
+            },
+            {
+                title: "MONITORING & EVALUATION",
+                icon: "fa-chart-line",
+                topics: {
+                    "Evaluation Methods": ["Agent Evaluation Metrics", "Human-in-the-Loop Feedback", "LangSmith / AgentOps", "Logging / Tracing", "Auto-Evaluation Loops", "OpenTelemetry", "Prometheus / Grafana", "Custom Dashboards & Alerts"]
+                },
+                resources: [
+                    { type: "video", text: "LLM Evaluation Techniques", url: "https://youtube.com/results?search_query=LLM+evaluation+metrics" },
+                    { type: "docs", text: "LangSmith Documentation", url: "https://docs.smith.langchain.com" }
+                ]
+            },
+            {
+                title: "SECURITY & GOVERNANCE",
+                icon: "fa-shield",
+                topics: {
+                    "Security Measures": ["Prompt Injection Protection", "API Key Management", "User Authentication", "Role-Based Access Control (RBAC)", "Output Filtering", "Red Teaming", "Data Privacy & Compliance (GDPR, SOC2)", "Model Safety & Guardrails"]
+                },
+                resources: [
+                    { type: "video", text: "LLM Security Best Practices", url: "https://youtube.com/results?search_query=LLM+security+prompt+injection" },
+                    { type: "docs", text: "OWASP LLM Security Guide", url: "https://owasp.org" }
+                ]
+            }
+        ];
+
+        let currentLanguage = 'en';
+        const translations = {
+            en: {
+                mainTitle: "AGENTIC AI ROADMAP",
+                subtitle: "SMART Learning Platform",
+                labelTopics: "Topics to Learn",
+                labelCompleted: "Completed",
+                labelProgress: "Overall Progress",
+                footerTitle: "AGENTIC AI ROADMAP - SMART LEARNING PLATFORM",
+                devName: "Developed By: Mr. Bishnu Singh Rayamajhi",
+                devRole: "Mathematics Lecturer & Head of Humanities & Social Sciences Department<br>Kapilvastu Multiple Campus (KMC), Taulihawa, Nepal",
+                footerNote: "© 2026 | Building Tomorrow's AI Leaders | Free & Open Learning"
+            },
+            ne: {
+                mainTitle: "एजेंटिक AI रोडम्याप",
+                subtitle: "SMART शिक्षण प्ल्याटफर्म",
+                labelTopics: "सिक्न को विषय",
+                labelCompleted: "पूरा भएको",
+                labelProgress: "सम्पूर्ण प्रगति",
+                footerTitle: "एजेंटिक AI रोडम्याप - SMART शिक्षण प्ल्याटफर्म",
+                devName: "विकसित गरेको: श्री विष्णु सिंह रायमाझी",
+                devRole: "गणित व्याख्याता र मानविकी तथा सामाजिक विज्ञान विभागको प्रमुख<br>कपिलवस्तु बहुविषयक क्याम्पस (KMC), तौलिहवा, नेपाल",
+                footerNote: "© २०२६ | आगामीको एआई नेता बनाउँदै | निःशुल्क र खुला शिक्षा"
+            }
+        };
+
+        // Initialize
+        function init() {
+            renderStages();
+            updateProgress();
+        }
+
+        // Render Stages
+        function renderStages() {
+            const container = document.getElementById('stagesContainer');
+            container.innerHTML = '';
+
+            roadmapData.forEach((stage, index) => {
+                const stageHTML = `
+                    <div class="stage-container" data-stage="${index}">
+                        <div class="stage-header" onclick="toggleStage(${index})">
+                            <div class="stage-number">${index + 1}</div>
+                            <div class="stage-title">${stage.title}</div>
+                            <i class="fas fa-chevron-down expand-icon"></i>
+                        </div>
+                        <div class="stage-content">
+                            ${renderTopics(stage, index)}
+                            ${renderResources(stage)}
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += stageHTML;
+            });
+        }
+
+        // Render Topics
+        function renderTopics(stage, stageIndex) {
+            let html = '';
+            for (const [category, items] of Object.entries(stage.topics)) {
+                html += `
+                    <div class="topic-section">
+                        <div class="topic-title">
+                            <i class="fas ${stage.icon}"></i>
+                            ${category}
+                        </div>
+                        <div class="topic-items">
+                `;
+                items.forEach((item, itemIndex) => {
+                    const id = `topic-${stageIndex}-${itemIndex}`;
+                    const isChecked = localStorage.getItem(id) === 'true';
+                    html += `
+                        <div class="topic-item">
+                            <input type="checkbox" id="${id}" ${isChecked ? 'checked' : ''} onchange="updateProgress()">
+                            <label for="${id}">${item}</label>
+                        </div>
+                    `;
+                });
+                html += `</div></div>`;
+            }
+            return html;
+        }
+
+        // Render Resources
+        function renderResources(stage) {
+            let html = '<div class="resources-section"><strong style="color: var(--accent);">📚 Learning Resources:</strong><div>';
+            stage.resources.forEach(resource => {
+                const btnClass = `resource-btn ${resource.type}`;
+                const icon = resource.type === 'video' ? 'fa-play-circle' : resource.type === 'pdf' ? 'fa-file-pdf' : 'fa-file-alt';
+                html += `<a href="${resource.url}" target="_blank" class="${btnClass}"><i class="fas ${icon}"></i>${resource.text}</a>`;
+            });
+            html += '</div></div>';
+            return html;
+        }
+
+        // Toggle Stage
+        function toggleStage(index) {
+            const header = document.querySelector(`[data-stage="${index}"] .stage-header`);
+            const content = document.querySelector(`[data-stage="${index}"] .stage-content`);
+            header.classList.toggle('collapsed');
+            content.classList.toggle('collapsed');
+        }
+
+        // Update Progress
+        function updateProgress() {
+            let total = 0, completed = 0;
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                total++;
+                if (checkbox.checked) {
+                    completed++;
+                    localStorage.setItem(checkbox.id, 'true');
+                } else {
+                    localStorage.removeItem(checkbox.id);
+                }
+            });
+            const percent = Math.round((completed / total) * 100);
+            document.getElementById('completedCount').textContent = completed;
+            document.getElementById('progressPercent').textContent = percent;
+            document.getElementById('progressBar').style.width = percent + '%';
+        }
+
+        // Search Topics
+        function searchTopics() {
+            const query = document.getElementById('searchBox').value.toLowerCase();
+            document.querySelectorAll('.stage-container').forEach(stage => {
+                let hasMatch = false;
+                stage.querySelectorAll('.topic-item').forEach(item => {
+                    const text = item.innerText.toLowerCase();
+                    const matches = text.includes(query);
+                    item.style.display = matches ? '' : 'none';
+                    if (matches) hasMatch = true;
+                });
+                stage.style.display = hasMatch || query === '' ? '' : 'none';
+            });
+        }
+
+        // Toggle Language
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'ne' : 'en';
+            const t = translations[currentLanguage];
+            document.getElementById('mainTitle').textContent = t.mainTitle;
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.getElementById('labelTopics').textContent = t.labelTopics;
+            document.getElementById('labelCompleted').textContent = t.labelCompleted;
+            document.getElementById('labelProgress').textContent = t.labelProgress;
+            document.getElementById('footerTitle').textContent = t.footerTitle;
+            document.getElementById('devName').textContent = t.devName;
+            document.getElementById('devRole').innerHTML = t.devRole;
+            document.getElementById('footerNote').textContent = t.footerNote;
+            document.getElementById('langBtn').textContent = currentLanguage === 'en' ? 'English / नेपाली' : 'नेपाली / English';
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
