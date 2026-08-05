@@ -1,0 +1,1860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI for Research Masterclass</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #06b6d4;
+            --accent: #f59e0b;
+            --bg: #0f172a;
+            --bg-card: #1e293b;
+            --bg-light: #334155;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #475569;
+            --success: #10b981;
+            --danger: #ef4444;
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #06b6d4 100%);
+            --gradient-2: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 5px; }
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+        }
+        .nav-links a:hover { color: var(--text); }
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: var(--gradient-1);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+        .stat { text-align: center; }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.6);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+        section {
+            padding: 6rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .audience-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .audience-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .audience-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+        .audience-card:hover::before { transform: scaleX(1); }
+        .audience-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary);
+        }
+        .audience-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .audience-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+        .audience-card .pain {
+            color: var(--danger);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        .audience-card .gain {
+            color: var(--success);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .module-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .module {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .module:hover { border-color: var(--primary); }
+        .module-header {
+            padding: 1.5rem 2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(90deg, rgba(99, 102, 241, 0.1) 0%, transparent 100%);
+            transition: background 0.3s;
+        }
+        .module-header:hover {
+            background: linear-gradient(90deg, rgba(99, 102, 241, 0.2) 0%, transparent 100%);
+        }
+        .module-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .module-number {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        .module-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.2rem;
+        }
+        .module-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .module-toggle {
+            font-size: 1.5rem;
+            color: var(--primary);
+            transition: transform 0.3s;
+        }
+        .module.active .module-toggle { transform: rotate(180deg); }
+        .module-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .module.active .module-content {
+            max-height: 3000px;
+            transition: max-height 0.8s ease-in;
+        }
+        .module-body { padding: 0 2rem 2rem; }
+        .content-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 0.5rem 1.2rem;
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .tab-btn:hover:not(.active) {
+            border-color: var(--primary);
+            color: var(--text);
+        }
+        .tab-content { display: none; }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        .resource-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.2rem;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .resource-card:hover {
+            border-color: var(--secondary);
+            transform: translateX(5px);
+        }
+        .resource-type {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            width: fit-content;
+        }
+        .type-video {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+        .type-pdf {
+            background: rgba(16, 185, 129, 0.2);
+            color: #6ee7b7;
+        }
+        .resource-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text);
+            line-height: 1.4;
+        }
+        .resource-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .resource-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .resource-link {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-top: 0.5rem;
+            transition: color 0.3s;
+        }
+        .resource-link:hover { color: var(--primary); }
+        .prompt-box {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .prompt-box::before {
+            content: 'PROMPT';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--gradient-2);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 0.3rem 0.8rem;
+            border-bottom-left-radius: 8px;
+        }
+        .prompt-box pre {
+            color: #e6edf3;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .copy-btn {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .copy-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--gradient-1);
+            border-radius: 3px;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -3.4rem;
+            top: 1.5rem;
+            width: 16px;
+            height: 16px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 3px solid var(--bg);
+            box-shadow: 0 0 0 3px var(--primary);
+        }
+        .timeline-week {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.3rem;
+        }
+        .timeline-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+        .timeline-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .tool-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .tool-card:hover {
+            border-color: var(--secondary);
+            transform: translateY(-3px);
+        }
+        .tool-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .tool-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+        .tool-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .ethics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .ethics-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .ethics-number {
+            font-size: 4rem;
+            font-weight: 900;
+            color: rgba(99, 102, 241, 0.1);
+            position: absolute;
+            top: 0.5rem;
+            right: 1rem;
+            line-height: 1;
+        }
+        .ethics-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        .ethics-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .capstone-box {
+            background: var(--gradient-1);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .capstone-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .capstone-content {
+            position: relative;
+            z-index: 1;
+        }
+        .capstone-box h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .capstone-box p {
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero-stats { gap: 1.5rem; }
+            .timeline { padding-left: 2rem; }
+            .timeline-item::before { left: -2.4rem; }
+            section { padding: 4rem 1rem; }
+        }
+        html { scroll-behavior: smooth; }
+    </style>
+<base target="_blank">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">🤖 AI Research Masterclass</div>
+            <ul class="nav-links">
+                <li><a href="#audience">Audience</a></li>
+                <li><a href="#modules">Modules</a></li>
+                <li><a href="#schedule">Schedule</a></li>
+                <li><a href="#tools">Tools</a></li>
+                <li><a href="#ethics">Ethics</a></li>
+                <li><a href="#capstone">Capstone</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">2026 Edition</div>
+            <h1>AI for Research Masterclass</h1>
+            <p class="hero-subtitle">Accelerating Academic Excellence with Artificial Intelligence</p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Weeks</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">40</div>
+                    <div class="stat-label">Hours</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">Modules</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">30+</div>
+                    <div class="stat-label">Resources</div>
+                </div>
+            </div>
+            <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto; font-size: 1.05rem;">
+                Transform your research workflow from months to days. Master AI-powered literature review, 
+                data analysis, prompt engineering, grant writing, and publication support.
+            </p>
+            <div class="cta-group">
+                <a href="#modules" class="btn btn-primary">📚 Explore Modules</a>
+                <a href="#schedule" class="btn btn-secondary">📅 View Schedule</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Target Audience -->
+    <section id="audience">
+        <div class="section-header">
+            <h2>🎯 Who Is This For?</h2>
+            <p>Designed for the modern researcher ready to leverage AI responsibly and effectively</p>
+        </div>
+        <div class="audience-grid">
+            <div class="audience-card">
+                <div class="audience-icon">🔬</div>
+                <h3>Researchers & Scientists</h3>
+                <div class="pain">Pain: Information overload, slow analysis cycles</div>
+                <div class="gain">Gain: 10x faster literature synthesis & data processing</div>
+            </div>
+            <div class="audience-card">
+                <div class="audience-icon">🎓</div>
+                <h3>PhD & Master's Students</h3>
+                <div class="pain">Pain: Writer's block, methodology gaps</div>
+                <div class="gain">Gain: Structured AI-assisted thesis workflow</div>
+            </div>
+            <div class="audience-card">
+                <div class="audience-icon">👨‍🏫</div>
+                <h3>University Faculty</h3>
+                <div class="pain">Pain: Grant deadlines, publication pressure</div>
+                <div class="gain">Gain: Automated drafting & review systems</div>
+            </div>
+            <div class="audience-card">
+                <div class="audience-icon">🏛️</div>
+                <h3>Principal Investigators</h3>
+                <div class="pain">Pain: Team coordination, funding acquisition</div>
+                <div class="gain">Gain: AI-driven project management & grant optimization</div>
+            </div>
+            <div class="audience-card">
+                <div class="audience-icon">🏢</div>
+                <h3>R&D Professionals</h3>
+                <div class="pain">Pain: Industry-academia gap, IP concerns</div>
+                <div class="gain">Gain: Ethical AI integration for proprietary research</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Learning Outcomes -->
+    <section>
+        <div class="section-header">
+            <h2>🎓 Learning Outcomes</h2>
+            <p>By the end of this masterclass, you will be able to:</p>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+            <div class="audience-card" style="border-left: 4px solid var(--success);">
+                <h3 style="color: var(--success);">⚡ Speed</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Conduct comprehensive AI-powered literature reviews in <strong style="color: var(--text);">&lt; 48 hours</strong></p>
+            </div>
+            <div class="audience-card" style="border-left: 4px solid var(--primary);">
+                <h3 style="color: var(--primary);">🛠️ Engineering</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Build custom GPT prompts for <strong style="color: var(--text);">domain-specific research tasks</strong></p>
+            </div>
+            <div class="audience-card" style="border-left: 4px solid var(--secondary);">
+                <h3 style="color: var(--secondary);">📊 Analysis</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Automate data cleaning, analysis, and <strong style="color: var(--text);">publication-ready visualization</strong></p>
+            </div>
+            <div class="audience-card" style="border-left: 4px solid var(--accent);">
+                <h3 style="color: var(--accent);">💰 Funding</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Draft competitive grant proposals with <strong style="color: var(--text);">AI-assisted narrative optimization</strong></p>
+            </div>
+            <div class="audience-card" style="border-left: 4px solid #ec4899;">
+                <h3 style="color: #ec4899;">🔄 Workflow</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Establish reproducible AI research workflows with <strong style="color: var(--text);">academic integrity standards</strong></p>
+            </div>
+            <div class="audience-card" style="border-left: 4px solid var(--danger);">
+                <h3 style="color: var(--danger);">🛡️ Ethics</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Evaluate AI outputs for <strong style="color: var(--text);">hallucinations, bias, and ethical concerns</strong></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modules -->
+    <section id="modules">
+        <div class="section-header">
+            <h2>📚 Curriculum Modules</h2>
+            <p>6 comprehensive modules with video tutorials, PDF guides, and hands-on labs</p>
+        </div>
+
+        <div class="module-container">
+
+            <!-- Module 1 -->
+            <div class="module" onclick="toggleModule(this)">
+                <div class="module-header">
+                    <div class="module-title">
+                        <div class="module-number">1</div>
+                        <div class="module-info">
+                            <h3>The AI-Enabled Researcher</h3>
+                            <div class="module-meta">Week 1 • 4 Hours • Foundation</div>
+                        </div>
+                    </div>
+                    <div class="module-toggle">▼</div>
+                </div>
+                <div class="module-content">
+                    <div class="module-body">
+                        <div class="content-tabs">
+                            <button class="tab-btn active" onclick="switchTab(event, 'm1-overview')">Overview</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'm1-videos')">🎥 Videos</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'm1-pdfs')">📄 PDFs</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'm1-lab')">🛠️ Lab</button>
+                        </div>
+
+                        <div id="m1-overview" class="tab-content active">
+                            <h4 style="color: var(--primary); margin-bottom: 1rem;">Core Concepts</h4>
+                            <ul style="color: var(--text-muted); padding-left: 1.5rem; line-height: 2;">
+                                <li>The evolution of academic research: From library cards to LLMs</li>
+                                <li>Understanding AI capabilities vs. limitations in research contexts</li>
+                                <li>Academic integrity in the AI era: What's allowed, what's not</li>
+                                <li>Tool stack overview: ChatGPT, Claude, Perplexity, Elicit, Consensus, Scite</li>
+                            </ul>
+                        </div>
+
+                        <div id="m1-videos" class="tab-content">
+                            <div class="resource-grid">
+                                <div class="resource-card">
+                                    <span class="resource-type type-video">▶️ Video</span>
+                                    <div class="resource-title">8 Zotero Integrations That Will Make Your Research Faster</div>
+                                    <div class="resource-desc">Essential Zotero + AI tool integrations for researchers</div>
+                                    <div class="resource-meta">⏱️ ~15 min</div>
+                                    <a href="https://www.youtube.com/watch?v=E2_lcY7-bSs" class="resource-link" target="_blank">Watch on YouTube →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-video">▶️ Video</span>
+                                    <div class="resource-title">How to Use Claude + Zotero for PhD Research</div>
+                                    <div class="resource-desc">5-step setup for Beaver plugin to chat with your Zotero library</div>
+                                    <div class="resource-meta">⏱️ ~8 min</div>
+                                    <a href="https://www.youtube.com/watch?v=GVCVD4l8b9o" class="resource-link" target="_blank">Watch on YouTube →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-video">▶️ Video</span>
+                                    <div class="resource-title">5 Powerful Ways to Use ChatGPT for Academic Research</div>
+                                    <div class="resource-desc">Game-changing AI research methods by Prof. David Stuckler</div>
+                                    <div class="resource-meta">⏱️ ~20 min</div>
+                                    <a href="https://www.youtube.com/watch?v=3dr7EwptbsY" class="resource-link" target="_blank">Watch on YouTube →</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="m1-pdfs" class="tab-content">
+                            <div class="resource-grid">
+                                <div class="resource-card">
+                                    <span class="resource-type type-pdf">📄 PDF</span>
+                                    <div class="resource-title">ETHICAL Principles AI Framework for Higher Education</div>
+                                    <div class="resource-desc">Institutional framework for ethical AI use in academia</div>
+                                    <a href="https://fdc.fullerton.edu/_resources/pdfs/teaching/ethical-principles-ai-framework-for-higher-education-february-2025.pdf" class="resource-link" target="_blank">Download PDF →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-pdf">📄 PDF</span>
+                                    <div class="resource-title">Responsible Use of Generative AI in Research (EU Guidelines)</div>
+                                    <div class="resource-desc">European Commission guidelines on AI in research</div>
+                                    <a href="https://research-and-innovation.ec.europa.eu/document/download/2b6cf7e5-36ac-41cb-aab5-0d32050143dc_en?filename=ec_rtd_ai-guidelines.pdf" class="resource-link" target="_blank">Download PDF →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-pdf">📄 PDF</span>
+                                    <div class="resource-title">Guidelines on Ethical Use of AI in Education & Research</div>
+                                    <div class="resource-desc">Comprehensive ethics guidelines for researchers</div>
+                                    <a href="https://etikostarnyba.lt/wp-content/uploads/2024/08/Guidelines-on-the-ethical-use-of-artificial-intelligence-in-education-and-research.pdf" class="resource-link" target="_blank">Download PDF →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-pdf">📄 PDF</span>
+                                    <div class="resource-title">Statement on Research Ethics in AI</div>
+                                    <div class="resource-desc">Norwegian research ethics committee guidelines</div>
+                                    <a href="https://www.forskningsetikk.no/globalassets/dokumenter/4-publikasjoner-som-pdf/statement-on-research-ethics-in-artificial-intelligence.pdf" class="resource-link" target="_blank">Download PDF →</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="m1-lab" class="tab-content">
+                            <h4 style="color: var(--secondary); margin-bottom: 1rem;">🛠️ Hands-On Lab: Setting Up Your AI Research Environment</h4>
+                            <ul style="color: var(--text-muted); padding-left: 1.5rem; line-height: 2;">
+                                <li>Configure Zotero + AI plugins (ZoteroGPT, Beaver for Claude)</li>
+                                <li>Set up Perplexity Pro for academic search</li>
+                                <li>Build a personal prompt library in Notion/Obsidian</li>
+                            </ul>
+                            <div style="margin-top: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px; border-left: 4px solid var(--success);">
+                                <strong style="color: var(--success);">📋 Deliverable:</strong> <span style="color: var(--text-muted);">Personal AI Research Toolkit Document</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module 2 -->
+            <div class="module" onclick="toggleModule(this)">
+                <div class="module-header">
+                    <div class="module-title">
+                        <div class="module-number">2</div>
+                        <div class="module-info">
+                            <h3>AI-Powered Literature Review</h3>
+                            <div class="module-meta">Week 2 • 6 Hours • Core Skill</div>
+                        </div>
+                    </div>
+                    <div class="module-toggle">▼</div>
+                </div>
+                <div class="module-content">
+                    <div class="module-body">
+                        <div class="content-tabs">
+                            <button class="tab-btn active" onclick="switchTab(event, 'm2-overview')">Overview</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'm2-videos')">🎥 Videos</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'm2-pdfs')">📄 PDFs</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'm2-lab')">🛠️ Lab</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'm2-prompt')">💬 Prompt</button>
+                        </div>
+
+                        <div id="m2-overview" class="tab-content active">
+                            <h4 style="color: var(--primary); margin-bottom: 1rem;">Core Concepts</h4>
+                            <ul style="color: var(--text-muted); padding-left: 1.5rem; line-height: 2;">
+                                <li>Systematic review automation: From PRISMA to AI-PRISMA</li>
+                                <li>Citation mapping with Connected Papers + Litmaps</li>
+                                <li>Semantic search: Moving beyond keyword matching</li>
+                                <li>Synthesis frameworks: Thematic analysis with AI assistance</li>
+                            </ul>
+                        </div>
+
+                        <div id="m2-videos" class="tab-content">
+                            <div class="resource-grid">
+                                <div class="resource-card">
+                                    <span class="resource-type type-video">▶️ Video</span>
+                                    <div class="resource-title">How To Do A Literature Review (STRESS-FREE!)</div>
+                                    <div class="resource-desc">Step-by-step AI workflow using Elicit, SciSpace, Consensus</div>
+                                    <div class="resource-meta">⏱️ ~18 min</div>
+                                    <a href="https://www.youtube.com/watch?v=jJntl74QNWo" class="resource-link" target="_blank">Watch on YouTube →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-video">▶️ Video</span>
+                                    <div class="resource-title">How to do Literature Review using AI Tool | Step-by-step Demo</div>
+                                    <div class="resource-desc">2026 literature review workflow for finding research gaps</div>
+                                    <div class="resource-meta">⏱️ ~15 min</div>
+                                    <a href="https://www.youtube.com/watch?v=Vu9pqLD-yHs" class="resource-link" target="_blank">Watch on YouTube →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-video">▶️ Video</span>
+                                    <div class="resource-title">Consensus AI: The Ultimate Academic Research Engine</div>
+                                    <div class="resource-desc">Complete Consensus AI tutorial with Deep Search & citation tools</div>
+                                    <div class="resource-meta">⏱️ ~12 min</div>
+                                    <a href="https://www.youtube.com/watch?v=oRNUab4JM88" class="resource-link" target="_blank">Watch on YouTube →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-video">▶️ Video</span>
+                                    <div class="resource-title">Consensus AI Step-By-Step: Fastest Way To Do Evidence-Based Research</div>
+                                    <div class="resource-desc">Evidence-based research methodology with Consensus</div>
+                                    <div class="resource-meta">⏱️ ~18 min</div>
+                                    <a href="https://www.youtube.com/watch?v=UMxAlp0TPVg" class="resource-link" target="_blank">Watch on YouTube →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-video">▶️ Video</span>
+                                    <div class="resource-title">Master Literature Reviews with Consensus AI</div>
+                                    <div class="resource-desc">Live tutorial for educators and researchers</div>
+                                    <div class="resource-meta">⏱️ ~10 min</div>
+                                    <a href="https://www.youtube.com/watch?v=fe5PlLmjIUw" class="resource-link" target="_blank">Watch on YouTube →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-video">▶️ Video</span>
+                                    <div class="resource-title">The MOST Popular AI Tool for Literature Review - CONSENSUS AI Full Tutorial</div>
+                                    <div class="resource-desc">Comprehensive Consensus AI features walkthrough</div>
+                                    <div class="resource-meta">⏱️ ~16 min</div>
+                                    <a href="https://www.youtube.com/watch?v=Aq4JGXN0MRk" class="resource-link" target="_blank">Watch on YouTube →</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="m2-pdfs" class="tab-content">
+                            <div class="resource-grid">
+                                <div class="resource-card">
+                                    <span class="resource-type type-pdf">📄 PDF</span>
+                                    <div class="resource-title">AI in Academic Research: Mastering GPT-4 & Claude</div>
+                                    <div class="resource-desc">Workshop curriculum with prompt engineering for literature review</div>
+                                    <a href="https://rayuzwyshyn.net/AIWorkshopMaterialsCertifications/IntermediateAdvancedAICourse/IntermediateAdvanacedSessionCurriculumandDescriptionsR3.pdf" class="resource-link" target="_blank">Download PDF →</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="m2-lab" class="tab-content">
+                            <h4 style="color: var(--secondary); margin-bottom: 1rem;">🛠️ Hands-On Lab: The 48-Hour Literature Review</h4>
+                            <ul style="color: var(--text-muted); padding-left: 1.5rem; line-height: 2;">
+                                <li><strong>Exercise 1:</strong> Use Elicit to extract findings from 50 papers in your domain</li>
+                                <li><strong>Exercise 2:</strong> Build a research matrix using AI-generated summaries</li>
+                                <li><strong>Exercise 3:</strong> Identify research gaps using cross-referencing prompts</li>
+                                <li><strong>Exercise 4:</strong> Generate a structured literature review draft</li>
+                                <li><strong>Case Study:</strong> Replicating a 6-month review process for a Nature paper in 2 days</li>
+                            </ul>
+                            <div style="margin-top: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px; border-left: 4px solid var(--success);">
+                                <strong style="color: var(--success);">📋 Deliverable:</strong> <span style="color: var(--text-muted);">Complete literature review chapter (2,000–3,000 words)</span>
+                            </div>
+                        </div>
+
+                        <div id="m2-prompt" class="tab-content">
+                            <div class="prompt-box">
+                                <pre>You are a [DOMAIN] research assistant. Analyze these [N] papers and:
+1. Group findings by methodology
+2. Identify contradictory results
+3. Highlight underexplored variables
+4. Suggest 3 novel research questions
+Format as a markdown table.</pre>
+                                <button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module 3 -->
+            <div class="module" onclick="toggleModule(this)">
+                <div class="module-header">
+                    <div class="module-title">
+                        <div class="module-number">3</div>
+                        <div class="module-info">
+                            <h3>Data Analysis & Visualization</h3>
+                            <div class="module-meta">Week 3–4 • 8 Hours • Technical</div>
+                        </div>
+                    </div>
+                    <div class="module-toggle">▼</div>
+                </div>
+                <div class="module-content">
+                    <div class="module-body">
+                        <div class="content-tabs">
+                            <button class="tab-btn active" onclick="switchTab(event, 'm3-overview')">Overview</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'm3-videos')">🎥 Videos</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'm3-pdfs')">📄 PDFs</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'm3-lab')">🛠️ Lab</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'm3-prompt')">💬 Prompt</button>
+                        </div>
+
+                        <div id="m3-overview" class="tab-content active">
+                            <h4 style="color: var(--primary); margin-bottom: 1rem;">Core Concepts</h4>
+                            <ul style="color: var(--text-muted); padding-left: 1.5rem; line-height: 2;">
+                                <li>AI-assisted data cleaning: Handling missing values, outliers, normalization</li>
+                                <li>Statistical analysis automation: From descriptive to inferential stats</li>
+                                <li>Code generation: Python (Pandas, Matplotlib, Seaborn, Plotly) via AI</li>
+                                <li>Reproducibility: Documenting AI-assisted analysis pipelines</li>
+                            </ul>
+                        </div>
+
+                        <div id="m3-videos" class="tab-content">
+                            <div class="resource-grid">
+                                <div class="resource-card">
+                                    <span class="resource-type type-video">▶️ Video</span>
+                                    <div class="resource-title">Introduction to Data Visualization using Matplotlib, Seaborn & Plotly</div>
+                                    <div class="resource-desc">Three popular Python data viz tools explained</div>
+                                    <div class="resource-meta">⏱️ ~23 min</div>
+                                    <a href="https://www.youtube.com/watch?v=3axA7-hy0kw" class="resource-link" target="_blank">Watch on YouTube →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-video">▶️ Video</span>
+                                    <div class="resource-title">Data Visualization using Matplotlib and Seaborn</div>
+                                    <div class="resource-desc">Full course on Python data visualization</div>
+                                    <div class="resource-meta">⏱️ ~3.5 hours</div>
+                                    <a href="https://www.youtube.com/watch?v=FN78JowwpSY" class="resource-link" target="_blank">Watch on YouTube →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-video">▶️ Video</span>
+                                    <div class="resource-title">Seaborn Tutorial: Seaborn Full Course</div>
+                                    <div class="resource-desc">Complete Seaborn tutorial for statistical visualization</div>
+                                    <div class="resource-meta">⏱️ ~1.5 hours</div>
+                                    <a href="https://www.youtube.com/watch?v=DcV9EyxEUg4" class="resource-link" target="_blank">Watch on YouTube →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-video">▶️ Video</span>
+                                    <div class="resource-title">Seaborn Full Course | Python Seaborn One Shot</div>
+                                    <div class="resource-desc">One-shot Seaborn tutorial with all plot types</div>
+                                    <div class="resource-meta">⏱️ ~50 min</div>
+                                    <a href="https://www.youtube.com/watch?v=39cge_JhVjI" class="resource-link" target="_blank">Watch on YouTube →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-video">▶️ Video</span>
+                                    <div class="resource-title">Python Seaborn Data Visualization Tutorial</div>
+                                    <div class="resource-desc">Creating useful data visuals with seaborn and matplotlib</div>
+                                    <div class="resource-meta">⏱️ ~20 min</div>
+                                    <a href="https://www.youtube.com/watch?v=I1Hsa9TSO5U" class="resource-link" target="_blank">Watch on YouTube →</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="m3-pdfs" class="tab-content">
+                            <div class="resource-grid">
+                                <div class="resource-card">
+                                    <span class="resource-type type-pdf">📄 PDF</span>
+                                    <div class="resource-title">Python Data Visualization With Seaborn & Matplotlib</div>
+                                    <div class="resource-desc">Comprehensive tutorial with code examples for research plots</div>
+                                    <a href="https://builtin.com/data-science/data-visualization-tutorial" class="resource-link" target="_blank">Read Guide →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-pdf">📄 PDF</span>
+                                    <div class="resource-title">Mastering Data Visualization in Python</div>
+                                    <div class="resource-desc">Key techniques for publication-quality figures</div>
+                                    <a href="https://medium.com/@taneeshaiyenshi/mastering-data-visualization-in-python-key-matplotlib-and-seaborn-techniques-for-data-scientists-6142d100c7da" class="resource-link" target="_blank">Read Article →</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="m3-lab" class="tab-content">
+                            <h4 style="color: var(--secondary); margin-bottom: 1rem;">🛠️ Hands-On Lab: From Raw Data to Publication Figure</h4>
+                            <ul style="color: var(--text-muted); padding-left: 1.5rem; line-height: 2;">
+                                <li><strong>Exercise 1:</strong> Upload messy dataset → AI-generated cleaning script</li>
+                                <li><strong>Exercise 2:</strong> Natural language to complex visualization</li>
+                                <li><strong>Exercise 3:</strong> Automated statistical reporting (APA format)</li>
+                                <li><strong>Exercise 4:</strong> Interactive dashboard creation with Streamlit + AI</li>
+                            </ul>
+                            <p style="color: var(--text-muted); margin-top: 1rem; font-size: 0.9rem;"><strong>Tools:</strong> ChatGPT Code Interpreter, Claude Artifacts, GitHub Copilot, Julius AI</p>
+                            <div style="margin-top: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px; border-left: 4px solid var(--success);">
+                                <strong style="color: var(--success);">📋 Deliverable:</strong> <span style="color: var(--text-muted);">Publication-ready figure set + reproducible analysis notebook</span>
+                            </div>
+                        </div>
+
+                        <div id="m3-prompt" class="tab-content">
+                            <div class="prompt-box">
+                                <pre>Generate Python code for a [CHART TYPE] using [DATASET] with:
+- Color palette: [JOURNAL] style
+- Font: Arial, size 8
+- Error bars: 95% CI
+- Save as 300 DPI PNG, 8cm width
+Include complete, runnable code.</pre>
+                                <button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module 4 -->
+            <div class="module" onclick="toggleModule(this)">
+                <div class="module-header">
+                    <div class="module-title">
+                        <div class="module-number">4</div>
+                        <div class="module-info">
+                            <h3>AI Prompt Engineering for Research</h3>
+                            <div class="module-meta">Week 5 • 4 Hours • Critical Skill</div>
+                        </div>
+                    </div>
+                    <div class="module-toggle">▼</div>
+                </div>
+                <div class="module-content">
+                    <div class="module-body">
+                        <div class="content-tabs">
+                            <button class="tab-btn active" onclick="switchTab(event, 'm4-overview')">Overview</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'm4-videos')">🎥 Videos</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'm4-pdfs')">📄 PDFs</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'm4-lab')">🛠️ Lab</button>
+                        </div>
+
+                        <div id="m4-overview" class="tab-content active">
+                            <h4 style="color: var(--primary); margin-bottom: 1rem;">Core Concepts</h4>
+                            <ul style="color: var(--text-muted); padding-left: 1.5rem; line-height: 2;">
+                                <li>The anatomy of a research-grade prompt: Context, Role, Task, Constraints, Format</li>
+                                <li>Chain-of-thought prompting for complex reasoning</li>
+                                <li>Few-shot learning with academic examples</li>
+                                <li>Iterative refinement: The feedback loop</li>
+                                <li>Domain-specific prompt libraries</li>
+                            </ul>
+                            <div style="margin-top: 1.5rem; padding: 1.5rem; background: var(--bg); border-radius: 12px; border: 1px solid var(--border);">
+                                <h4 style="color: var(--accent); margin-bottom: 1rem;">🧠 The CRISPE Method for Research Prompts</h4>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 1.5rem; font-weight: 900; color: var(--primary);">C</div>
+                                        <div style="font-size: 0.8rem; color: var(--text-muted);">Context</div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 1.5rem; font-weight: 900; color: var(--primary);">R</div>
+                                        <div style="font-size: 0.8rem; color: var(--text-muted);">Role</div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 1.5rem; font-weight: 900; color: var(--primary);">I</div>
+                                        <div style="font-size: 0.8rem; color: var(--text-muted);">Intent</div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 1.5rem; font-weight: 900; color: var(--primary);">S</div>
+                                        <div style="font-size: 0.8rem; color: var(--text-muted);">Specifics</div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 1.5rem; font-weight: 900; color: var(--primary);">P</div>
+                                        <div style="font-size: 0.8rem; color: var(--text-muted);">Preferences</div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 1.5rem; font-weight: 900; color: var(--primary);">E</div>
+                                        <div style="font-size: 0.8rem; color: var(--text-muted);">Evaluation</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="m4-videos" class="tab-content">
+                            <div class="resource-grid">
+                                <div class="resource-card">
+                                    <span class="resource-type type-video">▶️ Playlist</span>
+                                    <div class="resource-title">ChatGPT for Academic Researchers - Full Training Course</div>
+                                    <div class="resource-desc">6-video complete training course by Ref-n-Write</div>
+                                    <div class="resource-meta">⏱️ ~2 hours</div>
+                                    <a href="https://www.youtube.com/playlist?list=PL-W1Hxv8i_LdHi8hjFOEoKn3hUKWIXBdV" class="resource-link" target="_blank">Watch Playlist →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-video">▶️ Video</span>
+                                    <div class="resource-title">How to Write a Complete Research Paper using ChatGPT?</div>
+                                    <div class="resource-desc">Step-by-step research paper writing with ChatGPT</div>
+                                    <div class="resource-meta">⏱️ ~12 min</div>
+                                    <a href="https://www.youtube.com/watch?v=du-_Ij4AXI0" class="resource-link" target="_blank">Watch on YouTube →</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="m4-pdfs" class="tab-content">
+                            <div class="resource-grid">
+                                <div class="resource-card">
+                                    <span class="resource-type type-pdf">📄 PDF</span>
+                                    <div class="resource-title">AI Prompt Engineering Absolute Beginner's Guide</div>
+                                    <div class="resource-desc">Comprehensive 23-chapter guide on prompt engineering strategies</div>
+                                    <a href="https://ptgmedia.pearsoncmg.com/images/9780135570463/samplepages/9780135570463_Sample.pdf" class="resource-link" target="_blank">Download PDF →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-pdf">📄 PDF</span>
+                                    <div class="resource-title">Prompt Engineering Guide (DAIR.AI)</div>
+                                    <div class="resource-desc">The most comprehensive open-source prompt engineering resource</div>
+                                    <a href="https://github.com/dair-ai/prompt-engineering-guide" class="resource-link" target="_blank">Access Guide →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-pdf">📄 PDF</span>
+                                    <div class="resource-title">Guide to Prompt Engineering for Academics</div>
+                                    <div class="resource-desc">Academic-focused prompt engineering strategies</div>
+                                    <a href="https://www.scribd.com/document/783213053/s10439-023-03272-4" class="resource-link" target="_blank">Read PDF →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-pdf">📄 PDF</span>
+                                    <div class="resource-title">AI in Academic Research: GPT-4 & Claude Workshop Handout</div>
+                                    <div class="resource-desc">Workshop handout with prompt crafting exercises</div>
+                                    <a href="https://rayuzwyshyn.net/AIWorkshopMaterialsCertifications/IntermediateAdvancedAICourse/IntermediateAdvanacedSessionCurriculumandDescriptionsR3.pdf" class="resource-link" target="_blank">Download PDF →</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="m4-lab" class="tab-content">
+                            <h4 style="color: var(--secondary); margin-bottom: 1rem;">🛠️ Hands-On Lab: Building Your Research Prompt Arsenal</h4>
+                            <ul style="color: var(--text-muted); padding-left: 1.5rem; line-height: 2;">
+                                <li><strong>Exercise 1:</strong> Design 10 role-based prompts for your field</li>
+                                <li><strong>Exercise 2:</strong> Create a multi-step chain for hypothesis generation</li>
+                                <li><strong>Exercise 3:</strong> Build a critique prompt that challenges your arguments</li>
+                                <li><strong>Exercise 4:</strong> Develop a peer-review simulation prompt</li>
+                            </ul>
+                            <div style="margin-top: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px; border-left: 4px solid var(--success);">
+                                <strong style="color: var(--success);">📋 Deliverable:</strong> <span style="color: var(--text-muted);">Personal Prompt Library (25+ validated prompts)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module 5 -->
+            <div class="module" onclick="toggleModule(this)">
+                <div class="module-header">
+                    <div class="module-title">
+                        <div class="module-number">5</div>
+                        <div class="module-info">
+                            <h3>Grant Writing & Academic Writing</h3>
+                            <div class="module-meta">Week 6 • 6 Hours • High-Impact</div>
+                        </div>
+                    </div>
+                    <div class="module-toggle">▼</div>
+                </div>
+                <div class="module-content">
+                    <div class="module-body">
+                        <div class="content-tabs">
+                            <button class="tab-btn active" onclick="switchTab(event, 'm5-overview')">Overview</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'm5-videos')">🎥 Videos</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'm5-pdfs')">📄 PDFs</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'm5-lab')">🛠️ Lab</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'm5-prompt')">💬 Prompt</button>
+                        </div>
+
+                        <div id="m5-overview" class="tab-content active">
+                            <h4 style="color: var(--primary); margin-bottom: 1rem;">Core Concepts</h4>
+                            <ul style="color: var(--text-muted); padding-left: 1.5rem; line-height: 2;">
+                                <li>AI as a writing partner, not a ghostwriter</li>
+                                <li>Narrative optimization: The "So What?" test</li>
+                                <li>Funder-specific language modeling (NSF, NIH, ERC, Horizon Europe)</li>
+                                <li>Budget justification automation</li>
+                                <li>The ethics of AI in academic writing: COPE guidelines</li>
+                            </ul>
+                        </div>
+
+                        <div id="m5-videos" class="tab-content">
+                            <div class="resource-grid">
+                                <div class="resource-card">
+                                    <span class="resource-type type-video">▶️ Video</span>
+                                    <div class="resource-title">Grant Writing Is Broken - AI Just Exposed the Shortcut</div>
+                                    <div class="resource-desc">AI as a workflow for grant writing, not a shortcut</div>
+                                    <div class="resource-meta">⏱️ ~14 min</div>
+                                    <a href="https://www.youtube.com/watch?v=bpYW_4rVcMU" class="resource-link" target="_blank">Watch on YouTube →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-video">▶️ Video</span>
+                                    <div class="resource-title">How to Write a Full Research Paper in 24 Hours (AI-Enhanced)</div>
+                                    <div class="resource-desc">Prof. Stuckler's complete AI-enhanced paper writing workflow</div>
+                                    <div class="resource-meta">⏱️ ~25 min</div>
+                                    <a href="https://www.youtube.com/watch?v=YdpFu6Fkr58" class="resource-link" target="_blank">Watch on YouTube →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-video">▶️ Video</span>
+                                    <div class="resource-title">I let AI write & submit a research paper… now we wait</div>
+                                    <div class="resource-desc">Transparent experiment on AI in academic writing</div>
+                                    <div class="resource-meta">⏱️ ~15 min</div>
+                                    <a href="https://www.youtube.com/watch?v=44anQIn2cJw" class="resource-link" target="_blank">Watch on YouTube →</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="m5-pdfs" class="tab-content">
+                            <div class="resource-grid">
+                                <div class="resource-card">
+                                    <span class="resource-type type-pdf">📄 PDF</span>
+                                    <div class="resource-title">Guide to Grant Writing with AI (CIRCL)</div>
+                                    <div class="resource-desc">Practical guide for using GenAI in grant applications</div>
+                                    <a href="https://circl.community/wp-content/uploads/2024/10/Guide-to-Grant-Writing-with-AI_Oct2024.pdf" class="resource-link" target="_blank">Download PDF →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-pdf">📄 PDF</span>
+                                    <div class="resource-title">How to Write a Grant Proposal with AI: A Modern Guide</div>
+                                    <div class="resource-desc">Modern AI approaches for startup and research grants</div>
+                                    <a href="https://deeprfp.com/blog/how-to-write-a-grant-proposal-with-ai/" class="resource-link" target="_blank">Read Guide →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-pdf">📄 PDF</span>
+                                    <div class="resource-title">Grant Writing in the Age of AI (NTEN Course)</div>
+                                    <div class="resource-desc">60-minute course on AI-powered grant writing</div>
+                                    <a href="https://www.nten.org/learn/courses/grant-writing-in-the-age-of-ai" class="resource-link" target="_blank">Access Course →</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="m5-lab" class="tab-content">
+                            <h4 style="color: var(--secondary); margin-bottom: 1rem;">🛠️ Hands-On Lab: The Winning Grant Proposal</h4>
+                            <ul style="color: var(--text-muted); padding-left: 1.5rem; line-height: 2;">
+                                <li><strong>Exercise 1:</strong> AI-assisted specific aims page (NIH-style)</li>
+                                <li><strong>Exercise 2:</strong> Literature justification generation with citation mapping</li>
+                                <li><strong>Exercise 3:</strong> Methodology section from bullet points to polished prose</li>
+                                <li><strong>Exercise 4:</strong> Significance and innovation statement optimization</li>
+                                <li><strong>Exercise 5:</strong> Peer review simulation and revision</li>
+                                <li><strong>Case Study:</strong> Transforming a rejected proposal to funded (before/after)</li>
+                            </ul>
+                            <p style="color: var(--text-muted); margin-top: 1rem; font-size: 0.9rem;"><strong>Tools:</strong> GrammarlyGO, ChatGPT, Claude, Jasper, PaperPal</p>
+                            <div style="margin-top: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px; border-left: 4px solid var(--success);">
+                                <strong style="color: var(--success);">📋 Deliverable:</strong> <span style="color: var(--text-muted);">Complete grant proposal specific aims page + 3-page narrative</span>
+                            </div>
+                        </div>
+
+                        <div id="m5-prompt" class="tab-content">
+                            <div class="prompt-box">
+                                <pre>You are an NSF program officer. Review this specific aims page and:
+1. Score it 1-5 on: Innovation, Feasibility, Significance, Investigator
+2. Identify 3 weaknesses that would trigger rejection
+3. Suggest concrete revisions
+4. Flag any 'red flag' language</pre>
+                                <button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module 6 -->
+            <div class="module" onclick="toggleModule(this)">
+                <div class="module-header">
+                    <div class="module-title">
+                        <div class="module-number">6</div>
+                        <div class="module-info">
+                            <h3>Publication Support & AI Research Workflow</h3>
+                            <div class="module-meta">Week 7–8 • 8 Hours • Integration</div>
+                        </div>
+                    </div>
+                    <div class="module-toggle">▼</div>
+                </div>
+                <div class="module-content">
+                    <div class="module-body">
+                        <div class="content-tabs">
+                            <button class="tab-btn active" onclick="switchTab(event, 'm6-overview')">Overview</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'm6-videos')">🎥 Videos</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'm6-pdfs')">📄 PDFs</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'm6-lab')">🛠️ Lab</button>
+                        </div>
+
+                        <div id="m6-overview" class="tab-content active">
+                            <h4 style="color: var(--primary); margin-bottom: 1rem;">Core Concepts</h4>
+                            <ul style="color: var(--text-muted); padding-left: 1.5rem; line-height: 2;">
+                                <li>End-to-end AI research pipeline design</li>
+                                <li>Journal selection with AI matchmaking (Journal Finder, Jane)</li>
+                                <li>Cover letter and response-to-reviewers automation</li>
+                                <li>Figure and table optimization</li>
+                                <li>Reference management and formatting automation</li>
+                                <li>Reproducibility and version control (Git + AI)</li>
+                            </ul>
+                        </div>
+
+                        <div id="m6-videos" class="tab-content">
+                            <div class="resource-grid">
+                                <div class="resource-card">
+                                    <span class="resource-type type-video">▶️ Article</span>
+                                    <div class="resource-title">Research Paper to Video with AI - Complete Guide 2026</div>
+                                    <div class="resource-desc">Converting papers to conference videos and video abstracts</div>
+                                    <a href="https://www.x-pilot.ai/blog/research-paper-to-video-ai-complete-guide-2026" class="resource-link" target="_blank">Read Guide →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-video">▶️ Course</span>
+                                    <div class="resource-title">How to Use AI Tools to Prepare Your Manuscript for Submission</div>
+                                    <div class="resource-desc">3 leading AI platforms for manuscript preparation</div>
+                                    <a href="https://www.publicationacademy.org/course/ai-manuscript-submission/" class="resource-link" target="_blank">Access Course →</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="m6-pdfs" class="tab-content">
+                            <div class="resource-grid">
+                                <div class="resource-card">
+                                    <span class="resource-type type-pdf">📄 PDF</span>
+                                    <div class="resource-title">Elsevier Artificial Intelligence - Guide for Authors</div>
+                                    <div class="resource-desc">Official journal submission guidelines with AI policies</div>
+                                    <a href="https://www.sciencedirect.com/journal/artificial-intelligence/publish/guide-for-authors" class="resource-link" target="_blank">Read Guide →</a>
+                                </div>
+                                <div class="resource-card">
+                                    <span class="resource-type type-pdf">📄 PDF</span>
+                                    <div class="resource-title">How to Use ChatGPT to Write a Research Paper</div>
+                                    <div class="resource-desc">Step-by-step guide with 50+ academic prompts</div>
+                                    <a href="https://audemic.io/blog/academic-writing/write-research-paper-using-chatgpt/" class="resource-link" target="_blank">Read Guide →</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="m6-lab" class="tab-content">
+                            <h4 style="color: var(--secondary); margin-bottom: 1rem;">🛠️ Hands-On Lab: The 30-Day Paper Pipeline</h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                                <div style="background: var(--bg); padding: 1rem; border-radius: 8px; border: 1px solid var(--border);">
+                                    <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.3rem;">Days 1–3</div>
+                                    <div style="font-size: 0.85rem; color: var(--text-muted);">AI-assisted outline and draft generation</div>
+                                </div>
+                                <div style="background: var(--bg); padding: 1rem; border-radius: 8px; border: 1px solid var(--border);">
+                                    <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.3rem;">Days 4–7</div>
+                                    <div style="font-size: 0.85rem; color: var(--text-muted);">Iterative refinement with AI critique</div>
+                                </div>
+                                <div style="background: var(--bg); padding: 1rem; border-radius: 8px; border: 1px solid var(--border);">
+                                    <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.3rem;">Days 8–10</div>
+                                    <div style="font-size: 0.85rem; color: var(--text-muted);">Figure and table optimization</div>
+                                </div>
+                                <div style="background: var(--bg); padding: 1rem; border-radius: 8px; border: 1px solid var(--border);">
+                                    <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.3rem;">Days 11–14</div>
+                                    <div style="font-size: 0.85rem; color: var(--text-muted);">Citation formatting and cross-checking</div>
+                                </div>
+                                <div style="background: var(--bg); padding: 1rem; border-radius: 8px; border: 1px solid var(--border);">
+                                    <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.3rem;">Days 15–20</div>
+                                    <div style="font-size: 0.85rem; color: var(--text-muted);">Self-editing with AI + human review</div>
+                                </div>
+                                <div style="background: var(--bg); padding: 1rem; border-radius: 8px; border: 1px solid var(--border);">
+                                    <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.3rem;">Days 21–25</div>
+                                    <div style="font-size: 0.85rem; color: var(--text-muted);">Journal formatting and submission prep</div>
+                                </div>
+                                <div style="background: var(--bg); padding: 1rem; border-radius: 8px; border: 1px solid var(--border); grid-column: 1 / -1;">
+                                    <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.3rem;">Days 26–30</div>
+                                    <div style="font-size: 0.85rem; color: var(--text-muted);">Response to reviewers template generation</div>
+                                </div>
+                            </div>
+                            <p style="color: var(--text-muted); font-size: 0.9rem;"><strong>Exercise:</strong> Build a custom GPT for your research domain</p>
+                            <div style="margin-top: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px; border-left: 4px solid var(--success);">
+                                <strong style="color: var(--success);">📋 Deliverable:</strong> <span style="color: var(--text-muted);">Submission-ready manuscript draft + custom research GPT</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schedule -->
+    <section id="schedule">
+        <div class="section-header">
+            <h2>📅 Schedule at a Glance</h2>
+            <p>8-week structured journey from AI novice to research power user</p>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-week">Week 1</div>
+                <div class="timeline-title">The AI-Enabled Researcher</div>
+                <div class="timeline-meta">4 Hours • Foundation • Deliverable: AI Research Toolkit</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-week">Week 2</div>
+                <div class="timeline-title">AI-Powered Literature Review</div>
+                <div class="timeline-meta">6 Hours • Core Skill • Deliverable: Lit Review Chapter (2,000–3,000 words)</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-week">Week 3–4</div>
+                <div class="timeline-title">Data Analysis & Visualization</div>
+                <div class="timeline-meta">8 Hours • Technical • Deliverable: Publication Figures + Notebook</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-week">Week 5</div>
+                <div class="timeline-title">AI Prompt Engineering for Research</div>
+                <div class="timeline-meta">4 Hours • Critical Skill • Deliverable: Prompt Library (25+ prompts)</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-week">Week 6</div>
+                <div class="timeline-title">Grant Writing & Academic Writing</div>
+                <div class="timeline-meta">6 Hours • High-Impact • Deliverable: Grant Proposal Draft</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-week">Week 7–8</div>
+                <div class="timeline-title">Publication Support & AI Research Workflow</div>
+                <div class="timeline-meta">8 Hours • Integration • Deliverable: Submission-Ready Paper</div>
+            </div>
+            <div class="timeline-item" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(6, 182, 212, 0.2) 100%); border-color: var(--primary);">
+                <div class="timeline-week">Week 8</div>
+                <div class="timeline-title">🎓 Capstone: The AI Research Sprint</div>
+                <div class="timeline-meta">4 Hours • Defense • Deliverable: Complete Mini-Research Project</div>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 2rem; padding: 1.5rem; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border);">
+            <div style="font-size: 1.2rem; font-weight: 800; color: var(--primary);">Total: 40 Hours</div>
+            <div style="color: var(--text-muted); font-size: 0.9rem;">32 Instruction Hours + 8 Capstone Hours</div>
+        </div>
+    </section>
+
+    <!-- Tools -->
+    <section id="tools">
+        <div class="section-header">
+            <h2>🛠️ Tools & Technologies</h2>
+            <p>Master the complete AI research stack</p>
+        </div>
+        <div class="tools-grid">
+            <div class="tool-card">
+                <div class="tool-icon">🔍</div>
+                <div class="tool-name">Perplexity</div>
+                <div class="tool-desc">AI-powered academic search</div>
+            </div>
+            <div class="tool-card">
+                <div class="tool-icon">📑</div>
+                <div class="tool-name">Elicit</div>
+                <div class="tool-desc">Systematic review automation</div>
+            </div>
+            <div class="tool-card">
+                <div class="tool-icon">🤝</div>
+                <div class="tool-name">Consensus</div>
+                <div class="tool-desc">Evidence-based research engine</div>
+            </div>
+            <div class="tool-card">
+                <div class="tool-icon">📊</div>
+                <div class="tool-name">Scite</div>
+                <div class="tool-desc">Smart citation analysis</div>
+            </div>
+            <div class="tool-card">
+                <div class="tool-icon">💬</div>
+                <div class="tool-name">ChatGPT</div>
+                <div class="tool-desc">General-purpose research assistant</div>
+            </div>
+            <div class="tool-card">
+                <div class="tool-icon">🧠</div>
+                <div class="tool-name">Claude</div>
+                <div class="tool-desc">Long-context analysis & writing</div>
+            </div>
+            <div class="tool-card">
+                <div class="tool-icon">🐍</div>
+                <div class="tool-name">Code Interpreter</div>
+                <div class="tool-desc">Data analysis & visualization</div>
+            </div>
+            <div class="tool-card">
+                <div class="tool-icon">📚</div>
+                <div class="tool-name">Zotero + AI</div>
+                <div class="tool-desc">Reference management with AI</div>
+            </div>
+            <div class="tool-card">
+                <div class="tool-icon">✍️</div>
+                <div class="tool-name">GrammarlyGO</div>
+                <div class="tool-desc">AI writing enhancement</div>
+            </div>
+            <div class="tool-card">
+                <div class="tool-icon">🎨</div>
+                <div class="tool-name">Streamlit</div>
+                <div class="tool-desc">Interactive research dashboards</div>
+            </div>
+            <div class="tool-card">
+                <div class="tool-icon">⚡</div>
+                <div class="tool-name">GitHub Copilot</div>
+                <div class="tool-desc">AI code generation</div>
+            </div>
+            <div class="tool-card">
+                <div class="tool-icon">🤖</div>
+                <div class="tool-name">Custom GPTs</div>
+                <div class="tool-desc">Domain-specific AI agents</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ethics -->
+    <section id="ethics">
+        <div class="section-header">
+            <h2>⚖️ Ethics & Integrity Framework</h2>
+            <p>Responsible AI use is non-negotiable in academic research</p>
+        </div>
+        <div class="ethics-grid">
+            <div class="ethics-card">
+                <div class="ethics-number">1</div>
+                <h3>🔍 Transparency</h3>
+                <p>Always disclose AI usage in methods and acknowledgments. Your readers deserve to know how research was conducted.</p>
+            </div>
+            <div class="ethics-card">
+                <div class="ethics-number">2</div>
+                <h3>✅ Verification</h3>
+                <p>Never submit AI output without human validation. AI assists; humans verify. Every claim must be checked.</p>
+            </div>
+            <div class="ethics-card">
+                <div class="ethics-number">3</div>
+                <h3>💡 Originality</h3>
+                <p>AI assists; humans create. You are the author. AI is your research assistant, not your ghostwriter.</p>
+            </div>
+            <div class="ethics-card">
+                <div class="ethics-number">4</div>
+                <h3>🔒 Privacy</h3>
+                <p>Never upload sensitive or proprietary data to public AI tools. Use institutional or private instances for confidential research.</p>
+            </div>
+            <div class="ethics-card">
+                <div class="ethics-number">5</div>
+                <h3>👤 Accountability</h3>
+                <p>The researcher is responsible for all outputs. You own the results, the analysis, and the conclusions.</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 3rem;">
+            <h3 style="text-align: center; margin-bottom: 1.5rem; color: var(--primary);">📄 Key Ethics Resources</h3>
+            <div class="resource-grid">
+                <div class="resource-card">
+                    <span class="resource-type type-pdf">📄 PDF</span>
+                    <div class="resource-title">EU Guidelines on Responsible AI in Research</div>
+                    <div class="resource-desc">European Commission official guidelines</div>
+                    <a href="https://research-and-innovation.ec.europa.eu/document/download/2b6cf7e5-36ac-41cb-aab5-0d32050143dc_en?filename=ec_rtd_ai-guidelines.pdf" class="resource-link" target="_blank">Download PDF →</a>
+                </div>
+                <div class="resource-card">
+                    <span class="resource-type type-pdf">📄 PDF</span>
+                    <div class="resource-title">The Ethics of Using AI in Scientific Research</div>
+                    <div class="resource-desc">9 evidence-based recommendations (PubMed Central)</div>
+                    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12057767/" class="resource-link" target="_blank">Read Article →</a>
+                </div>
+                <div class="resource-card">
+                    <span class="resource-type type-pdf">📄 PDF</span>
+                    <div class="resource-title">Ethical Principles AI Framework for Higher Education</div>
+                    <div class="resource-desc">Institutional compliance framework</div>
+                    <a href="https://fdc.fullerton.edu/_resources/pdfs/teaching/ethical-principles-ai-framework-for-higher-education-february-2025.pdf" class="resource-link" target="_blank">Download PDF →</a>
+                </div>
+                <div class="resource-card">
+                    <span class="resource-type type-pdf">📄 PDF</span>
+                    <div class="resource-title">Guidelines on Ethical Use of AI in Education & Research</div>
+                    <div class="resource-desc">Comprehensive international guidelines</div>
+                    <a href="https://etikostarnyba.lt/wp-content/uploads/2024/08/Guidelines-on-the-ethical-use-of-artificial-intelligence-in-education-and-research.pdf" class="resource-link" target="_blank">Download PDF →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Capstone -->
+    <section id="capstone">
+        <div class="capstone-box">
+            <div class="capstone-content">
+                <div class="badge" style="background: rgba(255,255,255,0.2); color: white; margin-bottom: 1.5rem;">Final Project</div>
+                <h2>🧪 The AI Research Sprint</h2>
+                <p>Execute a complete mini-research project in 4 weeks. From literature review to submission-ready manuscript — all powered by AI-human collaboration.</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; text-align: left;">
+                    <div style="background: rgba(255,255,255,0.1); padding: 1.2rem; border-radius: 12px;">
+                        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📚</div>
+                        <div style="font-weight: 700; margin-bottom: 0.3rem;">Literature Review</div>
+                        <div style="font-size: 0.85rem; opacity: 0.8;">48-hour automated synthesis</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 1.2rem; border-radius: 12px;">
+                        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📊</div>
+                        <div style="font-weight: 700; margin-bottom: 0.3rem;">Data Analysis</div>
+                        <div style="font-size: 0.85rem; opacity: 0.8;">AI-assisted analysis of provided dataset</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 1.2rem; border-radius: 12px;">
+                        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📝</div>
+                        <div style="font-weight: 700; margin-bottom: 0.3rem;">Writing</div>
+                        <div style="font-size: 0.85rem; opacity: 0.8;">Draft a 3,000-word research article</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 1.2rem; border-radius: 12px;">
+                        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🎯</div>
+                        <div style="font-weight: 700; margin-bottom: 0.3rem;">Defense</div>
+                        <div style="font-size: 0.85rem; opacity: 0.8;">10-minute methodology presentation</div>
+                    </div>
+                </div>
+                <div style="background: rgba(255,255,255,0.15); padding: 1.5rem; border-radius: 12px; margin-top: 1rem;">
+                    <div style="font-weight: 700; margin-bottom: 0.5rem;">📋 Evaluation Criteria</div>
+                    <div style="font-size: 0.9rem; opacity: 0.9; line-height: 1.8;">
+                        • Quality of AI-human collaboration (not just AI output)<br>
+                        • Methodological rigor and reproducibility<br>
+                        • Ethical AI usage documentation<br>
+                        • Innovation in workflow design
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certification -->
+    <section>
+        <div class="section-header">
+            <h2>📜 Certification & Credentials</h2>
+            <p>Validate your expertise with recognized credentials</p>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+            <div class="audience-card" style="text-align: center;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🏆</div>
+                <h3>Certificate of Completion</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">AI for Research Masterclass — verified digital credential</p>
+            </div>
+            <div class="audience-card" style="text-align: center;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🎖️</div>
+                <h3>Digital Badge</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Verified AI-Enabled Researcher — shareable on LinkedIn</p>
+            </div>
+            <div class="audience-card" style="text-align: center;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">📂</div>
+                <h3>Portfolio</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">5 publishable deliverables from the program</p>
+            </div>
+            <div class="audience-card" style="text-align: center;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🌐</div>
+                <h3>Community Access</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Alumni network of AI-powered researchers</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROI -->
+    <section>
+        <div class="section-header">
+            <h2>💡 Expected ROI</h2>
+            <p>Measurable impact on your research productivity</p>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+            <div class="audience-card" style="border-top: 4px solid var(--success);">
+                <div style="font-size: 2.5rem; font-weight: 900; color: var(--success); margin-bottom: 0.5rem;">60–80%</div>
+                <h3>Time Savings</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Reduction in literature review time</p>
+            </div>
+            <div class="audience-card" style="border-top: 4px solid var(--primary);">
+                <div style="font-size: 2.5rem; font-weight: 900; color: var(--primary); margin-bottom: 0.5rem;">50%</div>
+                <h3>Faster Publication</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">From draft to submission</p>
+            </div>
+            <div class="audience-card" style="border-top: 4px solid var(--accent);">
+                <div style="font-size: 2.5rem; font-weight: 900; color: var(--accent); margin-bottom: 0.5rem;">35%</div>
+                <h3>Higher Grant Scoring</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">AI-optimized proposals</p>
+            </div>
+            <div class="audience-card" style="border-top: 4px solid var(--secondary);">
+                <div style="font-size: 2.5rem; font-weight: 900; color: var(--secondary); margin-bottom: 0.5rem;">3x</div>
+                <h3>More Publications</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Annual output increase</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div style="margin-bottom: 1rem;">
+            <div class="logo" style="justify-content: center; margin-bottom: 1rem;">🤖 AI Research Masterclass</div>
+            <p style="max-width: 500px; margin: 0 auto;">Transforming academic research through responsible AI adoption. Join the next generation of AI-powered researchers.</p>
+        </div>
+        <div style="border-top: 1px solid var(--border); padding-top: 1.5rem; margin-top: 1.5rem;">
+            <p>© 2026 AI for Research Masterclass. All rights reserved. | Version 2.0 | August 2026</p>
+            <p style="margin-top: 0.5rem; font-size: 0.8rem;">All video and PDF links verified as of August 2026</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Module Accordion
+        function toggleModule(module) {
+            // Close other modules
+            document.querySelectorAll('.module').forEach(m => {
+                if (m !== module) m.classList.remove('active');
+            });
+            // Toggle current
+            module.classList.toggle('active');
+        }
+
+        // Tab Switching
+        function switchTab(event, tabId) {
+            event.stopPropagation();
+
+            // Get parent module
+            const module = event.target.closest('.module');
+
+            // Deactivate all tabs in this module
+            module.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            module.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            // Activate clicked tab
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // Copy Prompt
+        function copyPrompt(btn) {
+            const promptBox = btn.closest('.prompt-box');
+            const pre = promptBox.querySelector('pre');
+            const text = pre.innerText;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = '✅ Copied!';
+                btn.style.background = 'var(--success)';
+                btn.style.color = 'white';
+
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.background = '';
+                    btn.style.color = '';
+                }, 2000);
+            });
+        }
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.background = 'rgba(15, 23, 42, 0.98)';
+            } else {
+                nav.style.background = 'rgba(15, 23, 42, 0.95)';
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe cards
+        document.querySelectorAll('.audience-card, .resource-card, .tool-card, .ethics-card, .timeline-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
