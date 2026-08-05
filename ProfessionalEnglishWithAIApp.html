@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional English with AI - Free Learning App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb; --primary-dark: #1d4ed8; --primary-light: #dbeafe;
+            --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --text-light: #64748b;
+            --border: #e2e8f0; --green: #10b981; --green-light: #d1fae5;
+            --amber: #f59e0b; --amber-light: #fef3c7; --violet: #8b5cf6;
+            --violet-light: #ede9fe; --rose: #f43f5e; --rose-light: #ffe4e6;
+            --cyan: #06b6d4; --cyan-light: #cffafe;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+        .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+        .logo-area { display: flex; align-items: center; gap: 14px; }
+        .logo { width: 52px; height: 52px; background: var(--primary); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: white; font-size: 26px; font-weight: 800; box-shadow: 0 4px 14px rgba(37,99,235,0.3); }
+        .logo-text h1 { font-size: 22px; font-weight: 800; }
+        .logo-text p { font-size: 13px; color: var(--text-light); }
+        .user-area { display: flex; align-items: center; gap: 20px; }
+        .streak { text-align: right; }
+        .streak-label { font-size: 11px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; }
+        .streak-value { font-size: 20px; font-weight: 800; color: #f97316; }
+        .avatar { width: 44px; height: 44px; background: var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .progress-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .progress-card { background: var(--card); border-radius: 16px; padding: 20px; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+        .progress-card-label { font-size: 12px; color: var(--text-light); margin-bottom: 4px; }
+        .progress-card-value { font-size: 28px; font-weight: 800; }
+        .progress-card-value.blue { color: var(--primary); }
+        .progress-card-value.green { color: var(--green); }
+        .progress-card-value.violet { color: var(--violet); }
+        .progress-card-value.amber { color: #f59e0b; }
+        .progress-bar-bg { width: 100%; height: 6px; background: var(--bg); border-radius: 999px; margin-top: 10px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; border-radius: 999px; transition: width 0.5s ease; }
+        .progress-bar-fill.blue { background: var(--primary); }
+        .progress-bar-fill.green { background: var(--green); }
+        .progress-bar-fill.violet { background: var(--violet); }
+        .progress-bar-fill.amber { background: #f59e0b; }
+        .tabs { display: flex; gap: 4px; background: var(--card); border-radius: 14px 14px 0 0; padding: 0 8px; border: 1px solid var(--border); border-bottom: none; overflow-x: auto; }
+        .tab { padding: 16px 20px; font-size: 14px; font-weight: 500; color: var(--text-light); cursor: pointer; border: none; background: none; border-bottom: 3px solid transparent; white-space: nowrap; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+        .tab:hover { color: var(--text); }
+        .tab.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
+        .content-area { background: var(--card); border: 1px solid var(--border); border-radius: 0 0 14px 14px; padding: 24px; min-height: 500px; }
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; transition: all 0.2s ease; }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08); }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .video-card { overflow: hidden; padding: 0; }
+        .video-thumb { position: relative; aspect-ratio: 16/9; overflow: hidden; background: var(--bg); }
+        .video-thumb .thumb-bg { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 48px; color: white; }
+        .video-thumb .play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.35); opacity: 0; transition: opacity 0.2s; }
+        .video-card:hover .play-overlay { opacity: 1; }
+        .play-btn { width: 56px; height: 56px; background: rgba(255,255,255,0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--primary); cursor: pointer; }
+        .video-duration { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.7); color: white; font-size: 11px; padding: 2px 8px; border-radius: 4px; }
+        .video-info { padding: 16px; }
+        .badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.3px; }
+        .badge.beginner { background: var(--green-light); color: #047857; }
+        .badge.intermediate { background: var(--primary-light); color: var(--primary-dark); }
+        .badge.advanced { background: var(--violet-light); color: #6d28d9; }
+        .badge.grammar { background: #fee2e2; color: #b91c1c; }
+        .badge.vocabulary { background: var(--green-light); color: #047857; }
+        .badge.templates { background: var(--amber-light); color: #b45309; }
+        .badge.exercises { background: var(--violet-light); color: #6d28d9; }
+        .video-title { font-size: 15px; font-weight: 700; color: var(--text); margin: 8px 0 4px; }
+        .video-desc { font-size: 12px; color: var(--text-light); margin-bottom: 12px; }
+        .video-footer { display: flex; align-items: center; justify-content: space-between; }
+        .video-progress { display: flex; align-items: center; gap: 8px; }
+        .video-progress-bar { width: 60px; height: 4px; background: var(--bg); border-radius: 999px; }
+        .video-progress-fill { height: 100%; border-radius: 999px; background: var(--primary); }
+        .video-progress-text { font-size: 11px; color: var(--text-light); }
+        .video-action { font-size: 13px; font-weight: 600; color: var(--primary); cursor: pointer; background: none; border: none; }
+        .video-action:hover { text-decoration: underline; }
+        .pdf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+        .pdf-card-inner { display: flex; gap: 14px; align-items: flex-start; }
+        .pdf-icon { width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+        .pdf-icon.red { background: #fee2e2; } .pdf-icon.green { background: var(--green-light); }
+        .pdf-icon.amber { background: var(--amber-light); } .pdf-icon.violet { background: var(--violet-light); }
+        .pdf-icon.cyan { background: var(--cyan-light); } .pdf-icon.rose { background: var(--rose-light); }
+        .pdf-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .pdf-desc { font-size: 12px; color: var(--text-light); margin-bottom: 8px; }
+        .pdf-meta { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+        .pdf-pages { font-size: 11px; color: var(--text-light); }
+        .pdf-actions { display: flex; gap: 8px; }
+        .btn { padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-secondary { background: var(--bg); color: var(--text); }
+        .btn-secondary:hover { background: var(--border); }
+        .chat-container { display: flex; flex-direction: column; height: 580px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+        .chat-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+        .chat-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), #4f46e5); display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; }
+        .chat-header-info h3 { font-size: 15px; font-weight: 700; }
+        .chat-header-info p { font-size: 12px; color: var(--text-light); }
+        .online-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--green-light); color: #047857; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+        .msg { display: flex; gap: 10px; max-width: 85%; }
+        .msg.ai { align-self: flex-start; }
+        .msg.user { align-self: flex-end; flex-direction: row-reverse; }
+        .msg-bubble { padding: 12px 16px; border-radius: 18px; font-size: 13px; line-height: 1.6; }
+        .msg.ai .msg-bubble { background: var(--bg); border-top-left-radius: 4px; color: var(--text); }
+        .msg.user .msg-bubble { background: var(--primary); color: white; border-top-right-radius: 4px; }
+        .msg-avatar { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        .msg.ai .msg-avatar { background: linear-gradient(135deg, var(--primary), #4f46e5); color: white; }
+        .msg.user .msg-avatar { background: var(--border); }
+        .chat-input-area { padding: 16px 20px; border-top: 1px solid var(--border); }
+        .chat-presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+        .preset-btn { padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
+        .preset-btn.blue { background: var(--primary-light); color: var(--primary-dark); }
+        .preset-btn.green { background: var(--green-light); color: #047857; }
+        .preset-btn.amber { background: var(--amber-light); color: #b45309; }
+        .preset-btn.violet { background: var(--violet-light); color: #6d28d9; }
+        .preset-btn:hover { filter: brightness(0.95); }
+        .chat-input-row { display: flex; gap: 10px; }
+        .chat-input { flex: 1; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); font-size: 14px; outline: none; font-family: inherit; }
+        .chat-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+        .resource-list { display: flex; flex-direction: column; gap: 10px; }
+        .resource-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: var(--bg); border-radius: 12px; text-decoration: none; color: inherit; transition: all 0.2s; border: 1px solid transparent; }
+        .resource-item:hover { background: var(--primary-light); border-color: var(--primary-light); }
+        .resource-item:hover .resource-title { color: var(--primary-dark); }
+        .resource-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+        .resource-info { flex: 1; min-width: 0; }
+        .resource-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .resource-desc { font-size: 12px; color: var(--text-light); }
+        .resource-tag { font-size: 11px; color: var(--text-light); flex-shrink: 0; }
+        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
+        @media (max-width: 900px) { .dashboard-grid { grid-template-columns: 1fr; } }
+        .section-title { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 16px; }
+        .continue-card { display: flex; gap: 16px; padding: 20px; background: linear-gradient(135deg, var(--primary-light), #eff6ff); border: 1px solid #bfdbfe; border-radius: 14px; }
+        .continue-icon { width: 72px; height: 72px; background: var(--primary); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; flex-shrink: 0; }
+        .continue-info h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+        .continue-info p { font-size: 13px; color: var(--text-light); margin-bottom: 12px; }
+        .continue-progress { display: flex; align-items: center; gap: 10px; }
+        .continue-progress-bar { flex: 1; height: 6px; background: white; border-radius: 999px; }
+        .continue-progress-fill { height: 100%; background: var(--primary); border-radius: 999px; }
+        .continue-progress-text { font-size: 12px; color: var(--text-light); font-weight: 600; }
+        .recommendation-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+        .rec-card { padding: 16px; border-radius: 12px; cursor: pointer; border: 1px solid var(--border); transition: all 0.2s; }
+        .rec-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px -4px rgba(0,0,0,0.08); }
+        .rec-card.green { background: linear-gradient(135deg, #f0fdf4, white); border-color: #bbf7d0; }
+        .rec-card.violet { background: linear-gradient(135deg, #faf5ff, white); border-color: #e9d5ff; }
+        .rec-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .rec-header span { font-size: 24px; }
+        .rec-header div { font-size: 13px; font-weight: 700; }
+        .rec-header div small { display: block; font-size: 11px; color: var(--text-light); font-weight: 400; }
+        .rec-desc { font-size: 12px; color: var(--text-light); }
+        .schedule-list { display: flex; flex-direction: column; gap: 10px; }
+        .schedule-item { display: flex; align-items: center; gap: 14px; padding: 14px; background: var(--bg); border-radius: 12px; }
+        .schedule-item.active { background: var(--primary-light); border: 1px solid #bfdbfe; }
+        .schedule-day { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
+        .schedule-day.done { background: var(--green-light); color: #047857; }
+        .schedule-day.active { background: var(--primary-light); color: var(--primary-dark); }
+        .schedule-day.upcoming { background: var(--bg); color: var(--text-light); border: 1px solid var(--border); }
+        .schedule-info h4 { font-size: 14px; font-weight: 600; }
+        .schedule-info p { font-size: 12px; color: var(--text-light); }
+        .schedule-status { margin-left: auto; font-size: 16px; }
+        .sidebar-card { margin-bottom: 20px; }
+        .ai-practice-card { background: linear-gradient(135deg, #4f46e5, var(--primary)); color: white; padding: 24px; border-radius: 16px; }
+        .ai-practice-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+        .ai-practice-card p { font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 16px; }
+        .ai-scenario-btn { width: 100%; padding: 10px 14px; margin-bottom: 8px; background: rgba(255,255,255,0.15); border: none; border-radius: 10px; color: white; font-size: 13px; text-align: left; cursor: pointer; backdrop-filter: blur(4px); transition: all 0.2s; font-family: inherit; }
+        .ai-scenario-btn:hover { background: rgba(255,255,255,0.25); }
+        .ai-start-btn { width: 100%; padding: 12px; margin-top: 8px; background: white; color: var(--primary); border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+        .ai-start-btn:hover { background: #f1f5f9; }
+        .achievement-list { display: flex; flex-direction: column; gap: 12px; }
+        .achievement-item { display: flex; align-items: center; gap: 12px; }
+        .achievement-icon { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .achievement-icon.gold { background: #fef3c7; } .achievement-icon.fire { background: #ffedd5; } .achievement-icon.locked { background: var(--bg); opacity: 0.5; }
+        .achievement-info h4 { font-size: 14px; font-weight: 600; }
+        .achievement-info p { font-size: 12px; color: var(--text-light); }
+        .leaderboard-list { display: flex; flex-direction: column; gap: 8px; }
+        .leaderboard-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; }
+        .leaderboard-item.you { background: #fef3c7; }
+        .leaderboard-rank { width: 24px; text-align: center; font-size: 13px; font-weight: 800; color: var(--text-light); }
+        .leaderboard-item.you .leaderboard-rank { color: #b45309; }
+        .leaderboard-name { flex: 1; font-size: 13px; }
+        .leaderboard-score { font-size: 12px; font-weight: 700; color: var(--text-light); }
+        .leaderboard-item.you .leaderboard-score { color: #b45309; }
+        .stat-row { margin-bottom: 16px; }
+        .stat-header { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; }
+        .stat-label { color: var(--text-light); }
+        .stat-value { font-weight: 700; }
+        .stat-bar { width: 100%; height: 6px; background: var(--bg); border-radius: 999px; overflow: hidden; }
+        .stat-fill { height: 100%; border-radius: 999px; }
+        .filter-bar { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+        .filter-btn { padding: 8px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; font-family: inherit; }
+        .filter-btn.active { background: var(--primary); color: white; }
+        .filter-btn:not(.active) { background: var(--bg); color: var(--text-light); }
+        .filter-btn:not(.active):hover { background: var(--border); }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: var(--card); border-radius: 20px; max-width: 700px; width: 100%; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; }
+        .modal-header { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+        .modal-header h3 { font-size: 16px; font-weight: 700; }
+        .modal-close { width: 32px; height: 32px; border-radius: 50%; background: var(--bg); border: none; cursor: pointer; font-size: 16px; color: var(--text-light); display: flex; align-items: center; justify-content: center; }
+        .modal-close:hover { background: var(--border); }
+        .modal-player { aspect-ratio: 16/9; background: #0f172a; display: flex; align-items: center; justify-content: center; color: white; font-size: 60px; }
+        .modal-body { padding: 24px; overflow-y: auto; }
+        .modal-actions { display: flex; gap: 10px; margin-bottom: 20px; }
+        .vocab-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .vocab-tag { padding: 6px 14px; background: var(--primary-light); color: var(--primary-dark); border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .external-link { color: var(--primary); text-decoration: none; }
+        .external-link:hover { text-decoration: underline; }
+        @media (max-width: 768px) {
+            .container { padding: 16px; }
+            .header { flex-direction: column; align-items: flex-start; }
+            .tabs { border-radius: 12px 12px 0 0; }
+            .video-grid, .pdf-grid { grid-template-columns: 1fr; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .chat-container { height: 500px; }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-area">
+                <div class="logo">E</div>
+                <div class="logo-text">
+                    <h1>Professional English with AI</h1>
+                    <p>Master business communication - 100% Free & Open Source</p>
+                </div>
+            </div>
+            <div class="user-area">
+                <div class="streak">
+                    <div class="streak-label">Daily Streak</div>
+                    <div class="streak-value">🔥 3 days</div>
+                </div>
+                <div class="avatar">👤</div>
+            </div>
+        </div>
+
+        <div class="progress-grid">
+            <div class="progress-card">
+                <div class="progress-card-label">Overall Progress</div>
+                <div class="progress-card-value blue">24%</div>
+                <div class="progress-bar-bg"><div class="progress-bar-fill blue" style="width:24%"></div></div>
+            </div>
+            <div class="progress-card">
+                <div class="progress-card-label">Videos Watched</div>
+                <div class="progress-card-value green">6 / 25</div>
+                <div class="progress-bar-bg"><div class="progress-bar-fill green" style="width:24%"></div></div>
+            </div>
+            <div class="progress-card">
+                <div class="progress-card-label">PDFs Studied</div>
+                <div class="progress-card-value violet">4 / 18</div>
+                <div class="progress-bar-bg"><div class="progress-bar-fill violet" style="width:22%"></div></div>
+            </div>
+            <div class="progress-card">
+                <div class="progress-card-label">AI Practice Sessions</div>
+                <div class="progress-card-value amber">12</div>
+                <div style="font-size:11px;color:var(--text-light);margin-top:6px;">+3 this week</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('dashboard')">📊 Dashboard</button>
+            <button class="tab" onclick="switchTab('videos')">🎬 Video Lessons</button>
+            <button class="tab" onclick="switchTab('pdfs')">📄 PDF Materials</button>
+            <button class="tab" onclick="switchTab('ai-practice')">🤖 AI Practice</button>
+            <button class="tab" onclick="switchTab('resources')">🔗 Free Resources</button>
+        </div>
+
+        <div class="content-area">
+
+            <!-- DASHBOARD -->
+            <div id="tab-dashboard" class="tab-content active">
+                <div class="dashboard-grid">
+                    <div>
+                        <div class="card" style="margin-bottom:20px;">
+                            <h2 class="section-title">🎯 Continue Where You Left Off</h2>
+                            <div class="continue-card">
+                                <div class="continue-icon">📧</div>
+                                <div class="continue-info" style="flex:1;">
+                                    <div style="display:flex;gap:8px;margin-bottom:6px;">
+                                        <span class="badge intermediate">Module 2</span>
+                                        <span style="font-size:11px;color:var(--text-light);">Business Emails</span>
+                                    </div>
+                                    <h3>Writing Professional Emails</h3>
+                                    <p>Learn formal vs. informal email structures, subject lines, and closing phrases.</p>
+                                    <div class="continue-progress">
+                                        <div class="continue-progress-bar"><div class="continue-progress-fill" style="width:65%"></div></div>
+                                        <span class="continue-progress-text">65%</span>
+                                        <button class="btn btn-primary" onclick="switchTab('videos')">Resume</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card" style="margin-bottom:20px;">
+                            <h2 class="section-title">⭐ Today's AI Recommendation</h2>
+                            <div class="recommendation-grid">
+                                <div class="rec-card green" onclick="switchTab('videos')">
+                                    <div class="rec-header">
+                                        <span>🎥</span>
+                                        <div>Video: Phone Call Etiquette<small>15 min • Intermediate</small></div>
+                                    </div>
+                                    <p class="rec-desc">Based on your recent progress in business communication.</p>
+                                </div>
+                                <div class="rec-card violet" onclick="switchTab('pdfs')">
+                                    <div class="rec-header">
+                                        <span>📄</span>
+                                        <div>PDF: Meeting Vocabulary<small>12 pages • Reference</small></div>
+                                    </div>
+                                    <p class="rec-desc">Key phrases for chairing and participating in meetings.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h2 class="section-title">📅 This Week's Learning Plan</h2>
+                            <div class="schedule-list">
+                                <div class="schedule-item">
+                                    <div class="schedule-day done">Mon</div>
+                                    <div class="schedule-info"><h4>Business Email Writing</h4><p>2 videos + 1 PDF • ✓ Completed</p></div>
+                                    <span class="schedule-status" style="color:var(--green);">✓</span>
+                                </div>
+                                <div class="schedule-item active">
+                                    <div class="schedule-day active">Tue</div>
+                                    <div class="schedule-info"><h4>Professional Phone Calls</h4><p>1 video + AI Practice • In Progress</p></div>
+                                    <span class="schedule-status" style="color:var(--primary);">→</span>
+                                </div>
+                                <div class="schedule-item">
+                                    <div class="schedule-day upcoming">Wed</div>
+                                    <div class="schedule-info"><h4>Meeting & Presentation Skills</h4><p>2 videos + 1 PDF • Upcoming</p></div>
+                                </div>
+                                <div class="schedule-item">
+                                    <div class="schedule-day upcoming">Thu</div>
+                                    <div class="schedule-info"><h4>Negotiation Language</h4><p>1 video + AI Roleplay • Upcoming</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="sidebar-card ai-practice-card">
+                            <h3>🤖 AI Conversation Partner</h3>
+                            <p>Practice real business scenarios with AI. Get instant feedback on grammar, tone, and vocabulary.</p>
+                            <button class="ai-scenario-btn" onclick="startAIChat('interview')">💼 Job Interview Practice</button>
+                            <button class="ai-scenario-btn" onclick="startAIChat('meeting')">📊 Business Meeting Simulation</button>
+                            <button class="ai-scenario-btn" onclick="startAIChat('email')">📧 Email Draft Review</button>
+                            <button class="ai-start-btn" onclick="switchTab('ai-practice')">Start Practice Session</button>
+                        </div>
+
+                        <div class="card sidebar-card">
+                            <h2 class="section-title">🏆 Achievements</h2>
+                            <div class="achievement-list">
+                                <div class="achievement-item">
+                                    <div class="achievement-icon gold">🌟</div>
+                                    <div class="achievement-info"><h4>First Steps</h4><p>Completed first lesson</p></div>
+                                </div>
+                                <div class="achievement-item">
+                                    <div class="achievement-icon fire">🔥</div>
+                                    <div class="achievement-info"><h4>3-Day Streak</h4><p>Learning every day</p></div>
+                                </div>
+                                <div class="achievement-item">
+                                    <div class="achievement-icon locked">🔒</div>
+                                    <div class="achievement-info"><h4>Email Master</h4><p>Complete all email modules</p></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card sidebar-card">
+                            <h2 class="section-title">🏅 Top Learners</h2>
+                            <div class="leaderboard-list">
+                                <div class="leaderboard-item you">
+                                    <span class="leaderboard-rank">1</span>
+                                    <span class="leaderboard-name">You</span>
+                                    <span class="leaderboard-score">1,240 pts</span>
+                                </div>
+                                <div class="leaderboard-item">
+                                    <span class="leaderboard-rank">2</span>
+                                    <span class="leaderboard-name">Sarah K.</span>
+                                    <span class="leaderboard-score">1,180 pts</span>
+                                </div>
+                                <div class="leaderboard-item">
+                                    <span class="leaderboard-rank">3</span>
+                                    <span class="leaderboard-name">Mike T.</span>
+                                    <span class="leaderboard-score">1,050 pts</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIDEOS -->
+            <div id="tab-videos" class="tab-content">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+                    <h2 class="section-title" style="margin:0;">🎬 Video Lessons</h2>
+                    <div class="filter-bar" style="margin:0;">
+                        <button class="filter-btn active" onclick="filterVideos('all')" id="vf-all">All</button>
+                        <button class="filter-btn" onclick="filterVideos('beginner')" id="vf-beginner">Beginner</button>
+                        <button class="filter-btn" onclick="filterVideos('intermediate')" id="vf-intermediate">Intermediate</button>
+                        <button class="filter-btn" onclick="filterVideos('advanced')" id="vf-advanced">Advanced</button>
+                    </div>
+                </div>
+                <div class="video-grid" id="video-grid">
+                    <!-- Video 1: BBC English at Work -->
+                    <div class="card video-card" data-level="beginner">
+                        <div class="video-thumb">
+                            <div class="thumb-bg" style="background:linear-gradient(135deg,#60a5fa,#2563eb);">📧</div>
+                            <div class="play-overlay"><a href="https://www.youtube.com/playlist?list=PLD6t6ckHsrubT2z6Pcnn2AsG6L8jH4XfZ" target="_blank" class="play-btn">▶</a></div>
+                            <span class="video-duration">Series</span>
+                        </div>
+                        <div class="video-info">
+                            <div style="display:flex;gap:8px;margin-bottom:6px;">
+                                <span class="badge beginner">Beginner</span>
+                                <span style="font-size:11px;color:var(--text-light);">BBC Learning English</span>
+                            </div>
+                            <h3 class="video-title">English at Work (Animated Series)</h3>
+                            <p class="video-desc">BBC's animated drama focusing on English communication in the office. Follow Anna's journey from her first day at work.</p>
+                            <div class="video-footer">
+                                <div class="video-progress">
+                                    <div class="video-progress-bar"><div class="video-progress-fill" style="width:100%"></div></div>
+                                    <span class="video-progress-text">Done</span>
+                                </div>
+                                <a href="https://www.youtube.com/playlist?list=PLD6t6ckHsrubT2z6Pcnn2AsG6L8jH4XfZ" target="_blank" class="video-action">Watch →</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video 2: Business English Pod - Emails -->
+                    <div class="card video-card" data-level="beginner">
+                        <div class="video-thumb">
+                            <div class="thumb-bg" style="background:linear-gradient(135deg,#34d399,#059669);">✍️</div>
+                            <div class="play-overlay"><a href="https://www.youtube.com/playlist?list=PLD6t6ckHsrubT2z6Pcnn2AsG6L8jH4XfZ" target="_blank" class="play-btn">▶</a></div>
+                            <span class="video-duration">18:22</span>
+                        </div>
+                        <div class="video-info">
+                            <div style="display:flex;gap:8px;margin-bottom:6px;">
+                                <span class="badge beginner">Beginner</span>
+                                <span style="font-size:11px;color:var(--text-light);">Business English Pod</span>
+                            </div>
+                            <h3 class="video-title">Writing Professional Emails</h3>
+                            <p class="video-desc">Structure, tone, and phrases for effective business emails. Learn formal openings, closings, and request language.</p>
+                            <div class="video-footer">
+                                <div class="video-progress">
+                                    <div class="video-progress-bar"><div class="video-progress-fill" style="width:65%"></div></div>
+                                    <span class="video-progress-text">65%</span>
+                                </div>
+                                <a href="https://www.youtube.com/playlist?list=PLD6t6ckHsrubT2z6Pcnn2AsG6L8jH4XfZ" target="_blank" class="video-action">Resume →</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video 3: BBC Phone Calls -->
+                    <div class="card video-card" data-level="intermediate">
+                        <div class="video-thumb">
+                            <div class="thumb-bg" style="background:linear-gradient(135deg,#a78bfa,#7c3aed);">📞</div>
+                            <div class="play-overlay"><a href="https://www.youtube.com/watch?v=ENO6de-yFMc" target="_blank" class="play-btn">▶</a></div>
+                            <span class="video-duration">1:00:00</span>
+                        </div>
+                        <div class="video-info">
+                            <div style="display:flex;gap:8px;margin-bottom:6px;">
+                                <span class="badge intermediate">Intermediate</span>
+                                <span style="font-size:11px;color:var(--text-light);">English for Professionals</span>
+                            </div>
+                            <h3 class="video-title">Business English Practice (1 Hour)</h3>
+                            <p class="video-desc">1 hour of essential business English on meetings, decision-making, teamwork and more. Vocabulary, phrases & tips.</p>
+                            <div class="video-footer">
+                                <div class="video-progress">
+                                    <div class="video-progress-bar"><div class="video-progress-fill" style="width:0%"></div></div>
+                                    <span class="video-progress-text">New</span>
+                                </div>
+                                <a href="https://www.youtube.com/watch?v=ENO6de-yFMc" target="_blank" class="video-action">Start →</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video 4: BBC Meetings -->
+                    <div class="card video-card" data-level="intermediate">
+                        <div class="video-thumb">
+                            <div class="thumb-bg" style="background:linear-gradient(135deg,#fbbf24,#d97706);">📊</div>
+                            <div class="play-overlay"><a href="https://www.bbc.co.uk/learningenglish/business-english" target="_blank" class="play-btn">▶</a></div>
+                            <span class="video-duration">Series</span>
+                        </div>
+                        <div class="video-info">
+                            <div style="display:flex;gap:8px;margin-bottom:6px;">
+                                <span class="badge intermediate">Intermediate</span>
+                                <span style="font-size:11px;color:var(--text-light);">BBC Learning English</span>
+                            </div>
+                            <h3 class="video-title">Meetings & Presentations</h3>
+                            <p class="video-desc">BBC's business English series covering chairing meetings, giving updates, and presenting data clearly.</p>
+                            <div class="video-footer">
+                                <div class="video-progress">
+                                    <div class="video-progress-bar"><div class="video-progress-fill" style="width:0%"></div></div>
+                                    <span class="video-progress-text">New</span>
+                                </div>
+                                <a href="https://www.bbc.co.uk/learningenglish/business-english" target="_blank" class="video-action">Start →</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video 5: Business English Masterclass -->
+                    <div class="card video-card" data-level="advanced">
+                        <div class="video-thumb">
+                            <div class="thumb-bg" style="background:linear-gradient(135deg,#fb7185,#e11d48);">🤝</div>
+                            <div class="play-overlay"><a href="https://www.youtube.com/watch?v=VeaRvByUCnc" target="_blank" class="play-btn">▶</a></div>
+                            <span class="video-duration">1:00:00</span>
+                        </div>
+                        <div class="video-info">
+                            <div style="display:flex;gap:8px;margin-bottom:6px;">
+                                <span class="badge advanced">Advanced</span>
+                                <span style="font-size:11px;color:var(--text-light);">LearningEnglishPRO</span>
+                            </div>
+                            <h3 class="video-title">The ULTIMATE Business English MASTERCLASS</h3>
+                            <p class="video-desc">1-hour masterclass covering essential words, phrases, and expressions for corporate meetings and executive communication.</p>
+                            <div class="video-footer">
+                                <div class="video-progress">
+                                    <div class="video-progress-bar"><div class="video-progress-fill" style="width:0%"></div></div>
+                                    <span class="video-progress-text">New</span>
+                                </div>
+                                <a href="https://www.youtube.com/watch?v=VeaRvByUCnc" target="_blank" class="video-action">Start →</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video 6: 100 Business Phrases -->
+                    <div class="card video-card" data-level="advanced">
+                        <div class="video-thumb">
+                            <div class="thumb-bg" style="background:linear-gradient(135deg,#22d3ee,#0891b2);">🎤</div>
+                            <div class="play-overlay"><a href="https://www.youtube.com/watch?v=PWjC87DvIu4" target="_blank" class="play-btn">▶</a></div>
+                            <span class="video-duration">1:00:00</span>
+                        </div>
+                        <div class="video-info">
+                            <div style="display:flex;gap:8px;margin-bottom:6px;">
+                                <span class="badge advanced">Advanced</span>
+                                <span style="font-size:11px;color:var(--text-light);">LearningEnglishPRO</span>
+                            </div>
+                            <h3 class="video-title">100 Business English Phrases Masterclass 2026</h3>
+                            <p class="video-desc">100 modern Business English phrases for meetings, presentations, strategy discussions and performance reviews.</p>
+                            <div class="video-footer">
+                                <div class="video-progress">
+                                    <div class="video-progress-bar"><div class="video-progress-fill" style="width:0%"></div></div>
+                                    <span class="video-progress-text">New</span>
+                                </div>
+                                <a href="https://www.youtube.com/watch?v=PWjC87DvIu4" target="_blank" class="video-action">Start →</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PDFS -->
+            <div id="tab-pdfs" class="tab-content">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+                    <h2 class="section-title" style="margin:0;">📄 PDF Study Materials</h2>
+                    <select class="chat-input" style="width:auto;padding:8px 16px;" onchange="filterPDFs(this.value)">
+                        <option value="all">All Categories</option>
+                        <option value="grammar">Grammar</option>
+                        <option value="vocabulary">Vocabulary</option>
+                        <option value="templates">Templates</option>
+                        <option value="exercises">Exercises</option>
+                    </select>
+                </div>
+                <div class="pdf-grid" id="pdf-grid">
+                    <!-- PDF 1: British Council Business English -->
+                    <div class="card pdf-card" data-cat="grammar">
+                        <div class="pdf-card-inner">
+                            <div class="pdf-icon red">📕</div>
+                            <div style="flex:1;min-width:0;">
+                                <h3 class="pdf-title">Business Grammar Guide</h3>
+                                <p class="pdf-desc">Essential grammar rules for professional writing from British Council.</p>
+                                <div class="pdf-meta"><span class="badge grammar">Grammar</span><span class="pdf-pages">British Council</span></div>
+                                <div class="pdf-actions">
+                                    <a href="https://learnenglish.britishcouncil.org/business-english" target="_blank" class="btn btn-primary">📖 Read</a>
+                                    <a href="https://learnenglish.britishcouncil.org/sites/default/files/2021-11/BC_Business_Email_Writing.pdf" target="_blank" class="btn btn-secondary">⬇ Download</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PDF 2: AmeriLingua Business Vocabulary -->
+                    <div class="card pdf-card" data-cat="vocabulary">
+                        <div class="pdf-card-inner">
+                            <div class="pdf-icon green">📗</div>
+                            <div style="flex:1;min-width:0;">
+                                <h3 class="pdf-title">500 Business Words & Phrases</h3>
+                                <p class="pdf-desc">High-frequency vocabulary for the workplace. Free ESL lesson plans with PDF worksheets.</p>
+                                <div class="pdf-meta"><span class="badge vocabulary">Vocabulary</span><span class="pdf-pages">AmeriLingua</span></div>
+                                <div class="pdf-actions">
+                                    <a href="https://www.amerilingua.com/free-esl-lesson-plans" target="_blank" class="btn btn-primary">📖 Read</a>
+                                    <a href="https://www.amerilingua.com/free-esl-lesson-plans" target="_blank" class="btn btn-secondary">⬇ Download</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PDF 3: Teach-This Email Templates -->
+                    <div class="card pdf-card" data-cat="templates">
+                        <div class="pdf-card-inner">
+                            <div class="pdf-icon amber">📘</div>
+                            <div style="flex:1;min-width:0;">
+                                <h3 class="pdf-title">Email Templates Collection</h3>
+                                <p class="pdf-desc">Ready-to-use email templates and business communication worksheets. No registration required.</p>
+                                <div class="pdf-meta"><span class="badge templates">Templates</span><span class="pdf-pages">Teach-This</span></div>
+                                <div class="pdf-actions">
+                                    <a href="https://www.teach-this.com/most-popular-free-resources" target="_blank" class="btn btn-primary">📖 Read</a>
+                                    <a href="https://www.teach-this.com/most-popular-free-resources" target="_blank" class="btn btn-secondary">⬇ Download</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PDF 4: Quick & Easy English Business Emails -->
+                    <div class="card pdf-card" data-cat="exercises">
+                        <div class="pdf-card-inner">
+                            <div class="pdf-icon violet">📙</div>
+                            <div style="flex:1;min-width:0;">
+                                <h3 class="pdf-title">Business Emails Workbook</h3>
+                                <p class="pdf-desc">Practice exercises for writing professional business emails. Intermediate level PDF worksheet.</p>
+                                <div class="pdf-meta"><span class="badge exercises">Exercises</span><span class="pdf-pages">Quick & Easy English</span></div>
+                                <div class="pdf-actions">
+                                    <a href="https://quick-and-easy-english.com/free-worksheets/" target="_blank" class="btn btn-primary">📖 Read</a>
+                                    <a href="https://quick-and-easy-english.com/free-worksheets/" target="_blank" class="btn btn-secondary">⬇ Download</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PDF 5: Mozerton Phrasal Verbs -->
+                    <div class="card pdf-card" data-cat="vocabulary">
+                        <div class="pdf-card-inner">
+                            <div class="pdf-icon cyan">📓</div>
+                            <div style="flex:1;min-width:0;">
+                                <h3 class="pdf-title">Idioms & Phrasal Verbs at Work</h3>
+                                <p class="pdf-desc">Common phrasal verbs and idioms used in professional settings. Free PDF downloads.</p>
+                                <div class="pdf-meta"><span class="badge vocabulary">Vocabulary</span><span class="pdf-pages">Mozerton</span></div>
+                                <div class="pdf-actions">
+                                    <a href="https://mozerton.com/english-materials/" target="_blank" class="btn btn-primary">📖 Read</a>
+                                    <a href="https://mozerton.com/english-materials/" target="_blank" class="btn btn-secondary">⬇ Download</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PDF 6: Excellent ESL 4U -->
+                    <div class="card pdf-card" data-cat="templates">
+                        <div class="pdf-card-inner">
+                            <div class="pdf-icon rose">📔</div>
+                            <div style="flex:1;min-width:0;">
+                                <h3 class="pdf-title">CV & Cover Letter Guide</h3>
+                                <p class="pdf-desc">Write compelling resumes and cover letters. Free ESL worksheets with vocabulary, reading, writing & listening.</p>
+                                <div class="pdf-meta"><span class="badge templates">Templates</span><span class="pdf-pages">Excellent ESL 4U</span></div>
+                                <div class="pdf-actions">
+                                    <a href="https://www.excellentesl4u.com/free-esl-worksheets.html" target="_blank" class="btn btn-primary">📖 Read</a>
+                                    <a href="https://www.excellentesl4u.com/free-esl-worksheets.html" target="_blank" class="btn btn-secondary">⬇ Download</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI PRACTICE -->
+            <div id="tab-ai-practice" class="tab-content">
+                <div class="dashboard-grid">
+                    <div class="chat-container">
+                        <div class="chat-header">
+                            <div class="chat-avatar">🤖</div>
+                            <div class="chat-header-info">
+                                <h3>AI English Tutor</h3>
+                                <p>Practice professional English with real-time feedback</p>
+                            </div>
+                            <span class="online-badge">● Online</span>
+                        </div>
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="msg ai">
+                                <div class="msg-avatar">🤖</div>
+                                <div class="msg-bubble">Hello! I am your AI English tutor. Choose a scenario below or type your own message to start practicing professional English. I will correct your grammar, suggest better vocabulary, and help you sound more confident!</div>
+                            </div>
+                        </div>
+                        <div class="chat-input-area">
+                            <div class="chat-presets">
+                                <button class="preset-btn blue" onclick="sendPreset('Can you help me practice a job interview?')">💼 Job Interview</button>
+                                <button class="preset-btn green" onclick="sendPreset('Let us practice a business meeting scenario.')">📊 Meeting</button>
+                                <button class="preset-btn amber" onclick="sendPreset('Help me write a professional email to my manager.')">📧 Write Email</button>
+                                <button class="preset-btn violet" onclick="sendPreset('Can we do a negotiation roleplay?')">🤝 Negotiation</button>
+                            </div>
+                            <div class="chat-input-row">
+                                <input type="text" id="chat-input" class="chat-input" placeholder="Type your message..." onkeypress="if(event.key==='Enter') sendMessage()">
+                                <button class="btn btn-primary" onclick="sendMessage()">Send</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="card" style="margin-bottom:20px;">
+                            <h2 class="section-title">🎯 Practice Scenarios</h2>
+                            <div class="schedule-list">
+                                <button class="schedule-item" style="width:100%;border:none;cursor:pointer;text-align:left;" onclick="startAIChat('interview')">
+                                    <div class="schedule-day active">💼</div>
+                                    <div class="schedule-info"><h4>Job Interview</h4><p>Common questions & answers</p></div>
+                                </button>
+                                <button class="schedule-item" style="width:100%;border:none;cursor:pointer;text-align:left;" onclick="startAIChat('meeting')">
+                                    <div class="schedule-day active" style="background:#d1fae5;color:#047857;">📊</div>
+                                    <div class="schedule-info"><h4>Team Meeting</h4><p>Updates & discussions</p></div>
+                                </button>
+                                <button class="schedule-item" style="width:100%;border:none;cursor:pointer;text-align:left;" onclick="startAIChat('presentation')">
+                                    <div class="schedule-day active" style="background:#fef3c7;color:#b45309;">🎤</div>
+                                    <div class="schedule-info"><h4>Presentation</h4><p>Opening, data, closing</p></div>
+                                </button>
+                                <button class="schedule-item" style="width:100%;border:none;cursor:pointer;text-align:left;" onclick="startAIChat('complaint')">
+                                    <div class="schedule-day active" style="background:#ffe4e6;color:#e11d48;">📞</div>
+                                    <div class="schedule-info"><h4>Handling Complaints</h4><p>Professional responses</p></div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h2 class="section-title">📈 Your Progress</h2>
+                            <div class="stat-row">
+                                <div class="stat-header"><span class="stat-label">Grammar Accuracy</span><span class="stat-value" style="color:var(--primary);">87%</span></div>
+                                <div class="stat-bar"><div class="stat-fill" style="width:87%;background:var(--primary);"></div></div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-header"><span class="stat-label">Vocabulary Range</span><span class="stat-value" style="color:var(--green);">72%</span></div>
+                                <div class="stat-bar"><div class="stat-fill" style="width:72%;background:var(--green);"></div></div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-header"><span class="stat-label">Professional Tone</span><span class="stat-value" style="color:var(--violet);">91%</span></div>
+                                <div class="stat-bar"><div class="stat-fill" style="width:91%;background:var(--violet);"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESOURCES -->
+            <div id="tab-resources" class="tab-content">
+                <div class="dashboard-grid">
+                    <div>
+                        <div class="card" style="margin-bottom:20px;">
+                            <h2 class="section-title">🎬 Free Video Resources</h2>
+                            <div class="resource-list">
+                                <a href="https://www.youtube.com/watch?v=ENO6de-yFMc" target="_blank" class="resource-item">
+                                    <div class="resource-icon" style="background:#fee2e2;">▶️</div>
+                                    <div class="resource-info"><div class="resource-title">Business English Practice (1 Hour)</div><div class="resource-desc">English for Professionals • YouTube</div></div>
+                                    <span class="resource-tag">1:00:00</span>
+                                </a>
+                                <a href="https://www.bbc.co.uk/learningenglish/business-english" target="_blank" class="resource-item">
+                                    <div class="resource-icon" style="background:#dbeafe;">📺</div>
+                                    <div class="resource-info"><div class="resource-title">BBC Learning English - Business</div><div class="resource-desc">BBC • Free lessons, videos, podcasts & animated series</div></div>
+                                    <span class="resource-tag">Free</span>
+                                </a>
+                                <a href="https://www.youtube.com/playlist?list=PLD6t6ckHsrubT2z6Pcnn2AsG6L8jH4XfZ" target="_blank" class="resource-item">
+                                    <div class="resource-icon" style="background:#d1fae5;">🎓</div>
+                                    <div class="resource-info"><div class="resource-title">Business English Pod - 600+ Lessons</div><div class="resource-desc">Meetings, presentations, interviews, telephoning & negotiations</div></div>
+                                    <span class="resource-tag">Free</span>
+                                </a>
+                                <a href="https://www.youtube.com/watch?v=PWjC87DvIu4" target="_blank" class="resource-item">
+                                    <div class="resource-icon" style="background:#ede9fe;">🎧</div>
+                                    <div class="resource-info"><div class="resource-title">100 Business English Phrases Masterclass</div><div class="resource-desc">LearningEnglishPRO • Corporate meetings & executive communication</div></div>
+                                    <span class="resource-tag">Free</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h2 class="section-title">📄 Free PDF & Text Resources</h2>
+                            <div class="resource-list">
+                                <a href="https://learnenglish.britishcouncil.org/business-english" target="_blank" class="resource-item">
+                                    <div class="resource-icon" style="background:#d1fae5;">📚</div>
+                                    <div class="resource-info"><div class="resource-title">British Council Business English</div><div class="resource-desc">Free PDFs, videos & podcasts for professional communication</div></div>
+                                    <span class="resource-tag">Free</span>
+                                </a>
+                                <a href="https://www.amerilingua.com/free-esl-lesson-plans" target="_blank" class="resource-item">
+                                    <div class="resource-icon" style="background:#fef3c7;">🌍</div>
+                                    <div class="resource-info"><div class="resource-title">AmeriLingua Free ESL Lessons</div><div class="resource-desc">Business English, job interviews, HR & entrepreneurship PDFs</div></div>
+                                    <span class="resource-tag">Free</span>
+                                </a>
+                                <a href="https://www.teach-this.com/most-popular-free-resources" target="_blank" class="resource-item">
+                                    <div class="resource-icon" style="background:#dbeafe;">📝</div>
+                                    <div class="resource-info"><div class="resource-title">Teach-This Free Worksheets</div><div class="resource-desc">Business English worksheets, games & activities • No signup</div></div>
+                                    <span class="resource-tag">Free</span>
+                                </a>
+                                <a href="https://quick-and-easy-english.com/free-worksheets/" target="_blank" class="resource-item">
+                                    <div class="resource-icon" style="background:#ede9fe;">🏫</div>
+                                    <div class="resource-info"><div class="resource-title">Quick & Easy English Worksheets</div><div class="resource-desc">Business emails, fact or fiction & more • Free samples</div></div>
+                                    <span class="resource-tag">Free</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="card" style="margin-bottom:20px;">
+                            <h2 class="section-title">🛠️ Additional Free Tools</h2>
+                            <div class="resource-list">
+                                <a href="https://www.grammarly.com/" target="_blank" class="resource-item">
+                                    <div class="resource-icon" style="background:#dbeafe;">✅</div>
+                                    <div class="resource-info"><div class="resource-title">Grammarly</div><div class="resource-desc">Free grammar & spelling checker</div></div>
+                                    <span class="resource-tag">Free</span>
+                                </a>
+                                <a href="https://www.thesaurus.com/" target="_blank" class="resource-item">
+                                    <div class="resource-icon" style="background:#fef3c7;">📖</div>
+                                    <div class="resource-info"><div class="resource-title">Thesaurus.com</div><div class="resource-desc">Find better words & synonyms</div></div>
+                                    <span class="resource-tag">Free</span>
+                                </a>
+                                <a href="https://www.merriam-webster.com/" target="_blank" class="resource-item">
+                                    <div class="resource-icon" style="background:#d1fae5;">🔍</div>
+                                    <div class="resource-info"><div class="resource-title">Merriam-Webster Dictionary</div><div class="resource-desc">Definitions, pronunciation & examples</div></div>
+                                    <span class="resource-tag">Free</span>
+                                </a>
+                                <a href="https://www.ted.com/" target="_blank" class="resource-item">
+                                    <div class="resource-icon" style="background:#fee2e2;">🎙️</div>
+                                    <div class="resource-info"><div class="resource-title">TED Talks</div><div class="resource-desc">Inspiring talks with subtitles</div></div>
+                                    <span class="resource-tag">Free</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h2 class="section-title">💡 Study Tips</h2>
+                            <div style="display:flex;flex-direction:column;gap:12px;">
+                                <div style="padding:14px;background:var(--bg);border-radius:10px;">
+                                    <div style="font-weight:700;font-size:14px;margin-bottom:4px;">🎯 Set Daily Goals</div>
+                                    <div style="font-size:12px;color:var(--text-light);">Even 15 minutes of practice daily builds strong habits.</div>
+                                </div>
+                                <div style="padding:14px;background:var(--bg);border-radius:10px;">
+                                    <div style="font-weight:700;font-size:14px;margin-bottom:4px;">📝 Keep a Vocabulary Journal</div>
+                                    <div style="font-size:12px;color:var(--text-light);">Write down new words with example sentences.</div>
+                                </div>
+                                <div style="padding:14px;background:var(--bg);border-radius:10px;">
+                                    <div style="font-weight:700;font-size:14px;margin-bottom:4px;">🗣️ Practice Out Loud</div>
+                                    <div style="font-size:12px;color:var(--text-light);">Speaking practice improves fluency faster than reading alone.</div>
+                                </div>
+                                <div style="padding:14px;background:var(--bg);border-radius:10px;">
+                                    <div style="font-weight:700;font-size:14px;margin-bottom:4px;">📺 Watch with Subtitles</div>
+                                    <div style="font-size:12px;color:var(--text-light);">Start with subtitles, then turn them off as you improve.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('tab-' + tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function filterVideos(level) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('vf-' + level).classList.add('active');
+            document.querySelectorAll('.video-card').forEach(card => {
+                card.style.display = (level === 'all' || card.dataset.level === level) ? 'block' : 'none';
+            });
+        }
+
+        function filterPDFs(cat) {
+            document.querySelectorAll('.pdf-card').forEach(card => {
+                card.style.display = (cat === 'all' || card.dataset.cat === cat) ? 'block' : 'none';
+            });
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+            addMessage(text, 'user');
+            input.value = '';
+            setTimeout(() => {
+                const responses = [
+                    "Great effort! Here is a more professional way to say that: 'I would like to schedule a meeting to discuss the project timeline.'",
+                    "Excellent vocabulary choice! You might also consider using 'endeavor' instead of 'try' for a more formal tone.",
+                    "Good structure. To sound more confident, try starting with 'I am confident that...' instead of 'I think that...'.",
+                    "Well done! Your grammar is correct. For extra polish, consider: 'I would appreciate it if you could review the attached document at your earliest convenience.'"
+                ];
+                addMessage(responses[Math.floor(Math.random() * responses.length)], 'ai');
+            }, 800);
+        }
+
+        function sendPreset(text) {
+            document.getElementById('chat-input').value = text;
+            sendMessage();
+        }
+
+        function addMessage(text, sender) {
+            const container = document.getElementById('chat-messages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'msg ' + sender;
+            msgDiv.innerHTML = '<div class="msg-avatar">' + (sender === 'ai' ? '🤖' : '👤') + '</div><div class="msg-bubble">' + text + '</div>';
+            container.appendChild(msgDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function startAIChat(scenario) {
+            switchTab('ai-practice');
+            const messages = {
+                interview: "Let's practice a job interview! I will be the interviewer. Tell me about yourself and your professional background.",
+                meeting: "Welcome to the team meeting simulation. Please give a brief update on your current project status.",
+                email: "I will help you draft a professional email. What is the purpose of your email and who is the recipient?",
+                presentation: "Let's practice your presentation opening. Start with a strong hook to engage your audience.",
+                complaint: "A customer has called with a complaint about a delayed delivery. How would you professionally handle this situation?"
+            };
+            setTimeout(() => {
+                addMessage(messages[scenario] || "Let's start practicing! What would you like to work on today?", 'ai');
+            }, 300);
+        }
+    </script>
+</body>
+</html>
