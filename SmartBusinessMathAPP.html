@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMART Business Mathematics – I | MTH-201</title>
+<style>
+  :root {
+    --bg: #fafafa;
+    --surface: #ffffff;
+    --surface-muted: #f3f4f6;
+    --surface-raised: #ffffff;
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+    --text-tertiary: #6b7280;
+    --text-quaternary: #9ca3af;
+    --border: #e5e7eb;
+    --accent-blue: #2563eb;
+    --accent-red: #dc2626;
+    --accent-green: #16a34a;
+    --accent-purple: #7c3aed;
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 10px;
+    --radius-xl: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08);
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --transition: 0.2s ease-out;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f0f11;
+      --surface: #1a1a1e;
+      --surface-muted: #232329;
+      --surface-raised: #1e1e24;
+      --text-primary: #f3f4f6;
+      --text-secondary: #d1d5db;
+      --text-tertiary: #9ca3af;
+      --text-quaternary: #6b7280;
+      --border: #2e2e36;
+      --accent-blue: #60a5fa;
+      --accent-red: #f87171;
+      --accent-green: #4ade80;
+      --accent-purple: #a78bfa;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.5;
+    padding: 24px 16px;
+    min-height: 100vh;
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+  .app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .app-title { font-size: 22px; font-weight: 600; letter-spacing: -0.3px; }
+  .app-subtitle { font-size: 13px; color: var(--text-tertiary); margin-top: 2px; }
+  .search-wrap { position: relative; flex: 1; max-width: 300px; min-width: 200px; }
+  .search-wrap svg {
+    position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+    width: 16px; height: 16px; color: var(--text-quaternary); pointer-events: none;
+  }
+  .search-wrap input {
+    width: 100%; padding: 9px 12px 9px 34px;
+    border: 1px solid var(--border); border-radius: var(--radius-lg);
+    font-size: 14px; background: var(--surface-muted); color: var(--text-primary);
+    outline: none; transition: border-color var(--transition);
+  }
+  .search-wrap input:focus { border-color: var(--text-primary); }
+  .stats-row { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .stat-pill {
+    padding: 6px 12px; border-radius: var(--radius-md);
+    background: var(--surface-muted); font-size: 12px; color: var(--text-secondary);
+    border: 1px solid var(--border);
+  }
+  .stat-pill strong { color: var(--text-primary); font-weight: 600; }
+  .progress-label {
+    font-size: 12px; color: var(--text-tertiary); margin-bottom: 6px;
+    display: flex; justify-content: space-between;
+  }
+  .progress-bar {
+    height: 5px; background: var(--surface-muted); border-radius: 3px;
+    margin-bottom: 18px; overflow: hidden; border: 1px solid var(--border);
+  }
+  .progress-fill {
+    height: 100%; background: var(--text-primary); border-radius: 3px;
+    transition: width 0.4s ease-out; width: 0%;
+  }
+  .unit-tabs {
+    display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 14px;
+    scrollbar-width: none;
+  }
+  .unit-tabs::-webkit-scrollbar { display: none; }
+  .unit-tab {
+    flex-shrink: 0; padding: 8px 14px; border-radius: var(--radius-md);
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    border: 1px solid transparent; background: transparent;
+    color: var(--text-secondary); transition: all var(--transition);
+    white-space: nowrap; user-select: none;
+  }
+  .unit-tab:hover { background: var(--surface-muted); color: var(--text-primary); }
+  .unit-tab.active { background: var(--text-primary); color: var(--bg); border-color: var(--text-primary); }
+  .topic-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    margin-bottom: 10px; overflow: hidden; box-shadow: var(--shadow);
+    transition: border-color var(--transition);
+  }
+  .topic-card:hover { border-color: var(--text-quaternary); }
+  .topic-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px; cursor: pointer; background: var(--surface);
+    transition: background var(--transition);
+  }
+  .topic-header:hover { background: var(--surface-muted); }
+  .topic-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+  .topic-check {
+    width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 5px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: all var(--transition); flex-shrink: 0; background: var(--surface);
+  }
+  .topic-check.checked { background: var(--text-primary); border-color: var(--text-primary); }
+  .topic-check.checked svg { display: block; }
+  .topic-check svg { display: none; width: 12px; height: 12px; color: var(--bg); }
+  .topic-name { font-size: 14.5px; font-weight: 600; color: var(--text-primary); word-break: break-word; }
+  .topic-meta { font-size: 12px; color: var(--text-tertiary); margin-top: 2px; }
+  .topic-toggle { width: 20px; height: 20px; color: var(--text-tertiary); transition: transform var(--transition); flex-shrink: 0; }
+  .topic-card.open .topic-toggle { transform: rotate(180deg); }
+  .topic-body { max-height: 0; overflow: hidden; transition: max-height 0.35s ease-out; }
+  .topic-card.open .topic-body { max-height: 900px; }
+  .topic-content { padding: 0 16px 16px 52px; }
+  .subtopic-list { margin-top: 4px; }
+  .subtopic-item {
+    padding: 6px 0; font-size: 13px; color: var(--text-secondary);
+    border-bottom: 1px dashed var(--border); display: flex; align-items: center; gap: 8px;
+  }
+  .subtopic-item:last-child { border-bottom: none; }
+  .subtopic-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-quaternary); flex-shrink: 0; }
+  .tip-box {
+    margin-top: 10px; padding: 12px; background: var(--surface-muted);
+    border-radius: var(--radius-md); font-size: 13px; color: var(--text-secondary);
+    line-height: 1.6; border-left: 3px solid var(--text-quaternary);
+  }
+  .tip-box strong { color: var(--text-primary); }
+  .resource-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px;
+  }
+  .resource-btn {
+    display: flex; align-items: center; gap: 8px; padding: 10px 12px;
+    border-radius: var(--radius-md); border: 1px solid var(--border);
+    background: var(--surface); cursor: pointer; font-size: 13px;
+    color: var(--text-primary); text-decoration: none; font-weight: 500;
+    transition: all var(--transition);
+  }
+  .resource-btn:hover { background: var(--surface-muted); border-color: var(--text-secondary); transform: translateY(-1px); }
+  .resource-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+  .resource-btn.video svg { color: var(--accent-blue); }
+  .resource-btn.pdf svg { color: var(--accent-red); }
+  .resource-btn.notes svg { color: var(--accent-purple); }
+  .resource-btn.practice svg { color: var(--accent-green); }
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 600; margin-left: 8px; vertical-align: middle;
+  }
+  .badge.core { background: color-mix(in srgb, var(--accent-blue) 12%, transparent); color: var(--accent-blue); }
+  .badge.econ { background: color-mix(in srgb, var(--accent-green) 14%, transparent); color: var(--accent-green); }
+  .badge.lab { background: color-mix(in srgb, var(--accent-purple) 12%, transparent); color: var(--accent-purple); }
+  .empty-state { text-align: center; padding: 48px 20px; color: var(--text-tertiary); }
+  .empty-state svg { width: 48px; height: 48px; margin-bottom: 12px; color: var(--text-quaternary); }
+  .empty-state p { font-size: 14px; }
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+    display: none; align-items: center; justify-content: center; z-index: 100;
+    padding: 16px;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-xl); max-width: 480px; width: 100%;
+    padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  }
+  .modal-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+  .modal-text { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px; }
+  .modal-text code {
+    background: var(--surface-muted); padding: 2px 6px; border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 12px;
+  }
+  .modal-close {
+    padding: 8px 16px; border-radius: var(--radius-md); border: 1px solid var(--border);
+    background: var(--text-primary); color: var(--bg); font-size: 13px; font-weight: 500;
+    cursor: pointer; float: right;
+  }
+  .modal-close:hover { opacity: 0.9; }
+  @media (max-width: 640px) {
+    .app-header { flex-direction: column; align-items: flex-start; }
+    .search-wrap { max-width: 100%; width: 100%; margin-left: 0; }
+    .resource-grid { grid-template-columns: 1fr; }
+    .topic-content { padding-left: 16px; }
+    .app-title { font-size: 18px; }
+  }
+</style>
+<base target="_blank">
+</head>
+<body>
+<div class="container">
+  <div class="app-header">
+    <div>
+      <div class="app-title">Business Mathematics – I</div>
+      <div class="app-subtitle">MTH-201 (BBA & BBM) &middot; SMART Learning App</div>
+    </div>
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M11.5 3C16.1944 3 20 6.80558 20 11.5C20 13.523 19.2933 15.381 18.1132 16.8404L21.1364 19.8636C21.4879 20.2151 21.4879 20.7849 21.1364 21.1364C20.7849 21.4879 20.2151 21.4879 19.8636 21.1364L16.8404 18.1132C15.381 19.2933 13.523 20 11.5 20C6.80558 20 3 16.1944 3 11.5C3 6.80558 6.80558 3 11.5 3ZM11.5 18.2C15.2003 18.2 18.2 15.2003 18.2 11.5C18.2 7.79969 15.2003 4.8 11.5 4.8C7.79969 4.8 4.8 7.79969 4.8 11.5C4.8 15.2003 7.79969 18.2 11.5 18.2Z" fill="currentColor"/></svg>
+      <input type="text" id="searchInput" placeholder="Search topics..." oninput="filterTopics()">
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-pill">Topics: <strong id="totalTopics">0</strong></div>
+    <div class="stat-pill">Completed: <strong id="completedTopics">0</strong></div>
+    <div class="stat-pill">Progress: <strong id="progressPercent">0%</strong></div>
+  </div>
+
+  <div class="progress-label"><span>Overall course progress</span><span id="progressText">0%</span></div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+  <div class="unit-tabs" id="unitTabs"></div>
+  <div id="topicsContainer"></div>
+</div>
+
+<!-- Modal for Ask AI / Practice -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <div class="modal-title" id="modalTitle">Ask AI</div>
+    <div class="modal-text" id="modalText">Content</div>
+    <button class="modal-close" onclick="closeModal()">Close</button>
+    <div style="clear:both"></div>
+  </div>
+</div>
+
+<script>
+const syllabus = [
+  {
+    unit: 1, title: "Straight Lines and Functions", hours: "6 LHs", pages: "1-48",
+    topics: [
+      { id: "u1t1", name: "Straight Lines", type: "core", sub: ["Slope or Gradient of a Straight Line","Intercepts of a Straight Line","The Equation of a Straight Line","Linear Functions and their Graphs"], video: "https://www.youtube.com/watch?v=XV7z6vC8qZo", pdf: "https://www.mathsisfun.com/algebra/line-equation-2points.html", notes: "Master y = mx + c. Practice finding slope from two points and converting between forms." },
+      { id: "u1t2", name: "Linear Functions", type: "core", sub: ["Functions","Some Basic Terminologies","Inverse Function"], video: "https://www.youtube.com/watch?v=52tpYl2tTqk", pdf: "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:functions", notes: "Domain, codomain, range. Inverse function: swap x and y, then solve for y." },
+      { id: "u1t3", name: "Economic Applications of Functions", type: "econ", sub: ["Demand, Supply, Cost, Revenue and Profit Functions"], video: "https://www.youtube.com/watch?v=0m7y2iB4b3U", pdf: "https://www.khanacademy.org/economics-finance-domain/microeconomics/supply-demand-equilibrium", notes: "Qd = a – bP, Qs = c + dP. Profit = TR – TC. Sketch all four on one graph." },
+      { id: "u1t4", name: "Elasticity of Demand, Supply & Income", type: "econ", sub: ["Price Elasticity of Demand","Price Elasticity of Supply","Income Elasticity of Demand"], video: "https://www.youtube.com/watch?v=Kgrt6d8dnHo", pdf: "https://www.khanacademy.org/economics-finance-domain/microeconomics/elasticity", notes: "Ed = (dQ/dP)·(P/Q). Remember the five categories: perfectly elastic, elastic, unitary, inelastic, perfectly inelastic." },
+      { id: "u1t5", name: "Budget and Cost Constraints", type: "econ", sub: ["Budget Constraint","Cost Constraint"], video: "https://www.youtube.com/watch?v=Mz1Xx6G3eA4", pdf: "https://www.khanacademy.org/economics-finance-domain/microeconomics/consumer-producer-surplus", notes: "Budget line: M = Px·X + Py·Y. Slope = –Px/Py. Cost constraint works similarly for production." },
+      { id: "u1t6", name: "Least Squares Method & Line of Best Fit", type: "core", sub: ["Two-variable regression","Time Series Analysis"], video: "https://www.youtube.com/watch?v=PaFPbb66DxQ", pdf: "https://www.statisticshowto.com/probability-and-statistics/regression-analysis/find-a-linear-regression-equation/", notes: "b = Σ(x–x̄)(y–ȳ) / Σ(x–x̄)²,  a = ȳ – bx̄. For time series, treat period numbers as x." }
+    ]
+  },
+  {
+    unit: 2, title: "Simultaneous Equations", hours: "5 LHs", pages: "49-76",
+    topics: [
+      { id: "u2t1", name: "Simultaneous Linear Equations", type: "core", sub: ["System of Linear Equations in Two Variables","Simultaneous Linear Equations in Three Variables"], video: "https://www.youtube.com/watch?v=0Bs9X0yFCJU", pdf: "https://www.mathsisfun.com/algebra/systems-linear-equations.html", notes: "Methods: Substitution, Elimination, Cramer’s Rule, Matrix Inverse. Always verify by plugging back in." },
+      { id: "u2t2", name: "Supply and Demand Analysis", type: "econ", sub: ["Market Equilibrium via Simultaneous Equations"], video: "https://www.youtube.com/watch?v=I3dMCTzXUQc", pdf: "https://www.khanacademy.org/economics-finance-domain/microeconomics/supply-demand-equilibrium", notes: "Set Qd = Qs to solve for equilibrium P and Q. Draw the graph and label the equilibrium point." },
+      { id: "u2t3", name: "Break-Even Analysis", type: "econ", sub: ["Cost-Volume-Profit Analysis"], video: "https://www.youtube.com/watch?v=7p2ms5mZgHE", pdf: "https://www.accountingcoach.com/break-even-point/explanation", notes: "Break-even: TR = TC or Q = FC / (P – AVC). Know how to draw the break-even chart." },
+      { id: "u2t4", name: "Consumer and Producer Surplus", type: "econ", sub: ["Calculating Surplus Areas"], video: "https://www.youtube.com/watch?v=Rb5DkR8U5pQ", pdf: "https://www.khanacademy.org/economics-finance-domain/microeconomics/consumer-producer-surplus", notes: "CS = ∫Demand dp – P·Q. PS = P·Q – ∫Supply dp. For linear curves, use triangle area formula." },
+      { id: "u2t5", name: "National Income Determination", type: "econ", sub: ["IS-LM Model Basics","National Income Equations"], video: "https://www.youtube.com/watch?v=J9jQ0gOOoxk", pdf: "https://www.khanacademy.org/economics-finance-domain/macroeconomics", notes: "Y = C + I + G + (X–M). Multiplier k = 1/(1–MPC). Understand the 45° line diagram." }
+    ]
+  },
+  {
+    unit: 3, title: "Quadratic Equations", hours: "5 LHs", pages: "77-94",
+    topics: [
+      { id: "u3t1", name: "Quadratic Functions and Equations", type: "core", sub: ["Quadratic Equations","Nature of the Roots","Relation between Roots and Coefficients","Formation of a Quadratic Equation"], video: "https://www.youtube.com/watch?v=IKyUuvulIbk", pdf: "https://www.mathsisfun.com/algebra/quadratic-equation.html", notes: "Discriminant D = b² – 4ac. Roots = [–b ± √D]/2a. Sum = –b/a, Product = c/a." },
+      { id: "u3t2", name: "Graphs of Quadratic Functions", type: "core", sub: ["Main Characteristics (Features) of Parabolas","Sketching the Graph"], video: "https://www.youtube.com/watch?v=qn7x0qhJKjw", pdf: "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:quadratic-functions-equations", notes: "Vertex form: y = a(x–h)² + k. Vertex (h,k). Axis of symmetry x = h. Direction depends on sign of a." },
+      { id: "u3t3", name: "Economic Applications of Quadratic Functions", type: "econ", sub: ["Supply & Demand Analysis","Break-Even Analysis","Optimization of a Quadratic Function"], video: "https://www.youtube.com/watch?v=3Lq0gGq1LgE", pdf: "https://www.khanacademy.org/economics-finance-domain/microeconomics/supply-demand-equilibrium", notes: "Profit max = vertex of downward parabola. If P(x) = –ax² + bx + c, max at x = –b/(2a)." }
+    ]
+  },
+  {
+    unit: 4, title: "Non-Linear Functions, Graphs & Applications", hours: "10 LHs", pages: "95-116",
+    topics: [
+      { id: "u4t1", name: "Polynomial Functions", type: "core", sub: ["Polynomial Equation","Transformation of Graphs","Graph of a Cubic Function"], video: "https://www.youtube.com/watch?v=ffLLmV4mZwU", pdf: "https://www.mathsisfun.com/algebra/polynomials.html", notes: "Degree = highest power. Turning points ≤ degree – 1. End behavior: odd degree → opposite ends, even → same ends." },
+      { id: "u4t2", name: "Hyperbolic Functions", type: "core", sub: ["y = a/(bx+c)","Asymptotes (Vertical & Horizontal)"], video: "https://www.youtube.com/watch?v=4EhukHKFIY0", pdf: "https://www.mathsisfun.com/definitions/asymptote.html", notes: "Vertical asymptote: bx + c = 0. Horizontal asymptote: y = 0 (x-axis). Sketch both branches." },
+      { id: "u4t3", name: "Exponential and Logarithmic Functions", type: "core", sub: ["Exponential Functions","Logarithm of a Number","Logarithmic Functions","Properties (Laws) of Logarithms","Natural and Common Logarithms","Exponential and Logarithmic Equations"], video: "https://www.youtube.com/watch?v=6WMZ7J0wwMI", pdf: "https://www.khanacademy.org/math/algebra2/x2ec2f6f830c9fb89:logs", notes: "Key laws: log(ab)=loga+logb, log(a/b)=loga–logb, log(aⁿ)=n·loga. ln and log₁₀ conversions." },
+      { id: "u4t4", name: "Graphs of Exponential & Logarithmic Functions", type: "core", sub: ["Characteristics and Sketching","Properties of Logarithmic Functions"], video: "https://www.youtube.com/watch?v=8wt8ItV3P8c", pdf: "https://www.khanacademy.org/math/algebra2/x2ec2f6f830c9fb89:logs", notes: "Exponential always passes (0,1). Logarithmic always passes (1,0). They are inverse functions." },
+      { id: "u4t5", name: "Applications in Economics & Management", type: "econ", sub: ["Growth models","Decay models","Compound interest connections"], video: "https://www.youtube.com/watch?v=nty0bQ-0b2k", pdf: "https://www.khanacademy.org/economics-finance-domain/macroeconomics", notes: "Exponential growth: P(t)=P₀e^(rt). Doubling time = ln(2)/r. Half-life = ln(2)/k for decay." }
+    ]
+  },
+  {
+    unit: 5, title: "Financial Mathematics", hours: "10 LHs", pages: "117-172",
+    topics: [
+      { id: "u5t1", name: "Arithmetic & Geometric Progressions", type: "core", sub: ["Sequences & Series","nth term of AP & GP","Sum of n terms","Infinite GP"], video: "https://www.youtube.com/watch?v=KfSyoWfXxMQ", pdf: "https://www.mathsisfun.com/algebra/sequences-sums.html", notes: "AP: Tₙ=a+(n–1)d, Sₙ=n/2[2a+(n–1)d]. GP: Tₙ=ar^(n–1), Sₙ=a(1–rⁿ)/(1–r), S∞=a/(1–r) if |r|<1." },
+      { id: "u5t2", name: "Simple & Compound Interest", type: "core", sub: ["Simple Interest","Compound Interest"], video: "https://www.youtube.com/watch?v=GtaoP0skPWc", pdf: "https://www.khanacademy.org/economics-finance-domain/core-finance/interest-tutorial", notes: "SI = PRT/100. CI = P(1+r/n)^(nt) – P. For annual compounding: A = P(1+r)^t." },
+      { id: "u5t3", name: "Nominal & Effective Rate of Interest", type: "core", sub: ["Annual Percentage Rate (APR)","Effective Annual Rate (EAR)"], video: "https://www.youtube.com/watch?v=3S4cNflVlgw", pdf: "https://www.investopedia.com/terms/e/effectiveinterest.asp", notes: "EAR = (1 + r/n)ⁿ – 1. Compare nominal vs effective to judge true cost of loans." },
+      { id: "u5t4", name: "Depreciation", type: "core", sub: ["Straight-line method","Reducing balance method"], video: "https://www.youtube.com/watch?v=4Fe-2w7x9aU", pdf: "https://www.accountingcoach.com/depreciation/explanation", notes: "Straight-line: (Cost – Salvage)/Life. Reducing balance: Book Value × Rate. Compare yearly values." },
+      { id: "u5t5", name: "Annuity", type: "core", sub: ["Types of Annuity","Amount & Present Value","Sinking Funds","Debt Repayments","Standard Formulae"], video: "https://www.youtube.com/watch?v=7i1w4N29C9I", pdf: "https://www.khanacademy.org/economics-finance-domain/core-finance/interest-tutorial/present-value", notes: "PV ordinary annuity = PMT·[1–(1+r)^(–n)]/r. FV = PMT·[(1+r)ⁿ–1]/r. Due annuity: multiply by (1+r)." },
+      { id: "u5t6", name: "NPV and Internal Rate of Return", type: "econ", sub: ["Net Present Value (NPV)","Internal Rate of Return (IRR)"], video: "https://www.youtube.com/watch?v=HFFkFMfotT0", pdf: "https://www.investopedia.com/terms/n/npv.asp", notes: "NPV = Σ(CFₜ/(1+r)ᵗ) – Initial Investment. IRR is the discount rate where NPV = 0. Accept if NPV > 0." }
+    ]
+  },
+  {
+    unit: 6, title: "Limit and Differentiation", hours: "12 LHs", pages: "173-238",
+    topics: [
+      { id: "u6t1", name: "Limits", type: "core", sub: ["Meaning of x→a","Idea of Limit","Limit of Algebraic Functions","General Theorems on Limits","Working Rules","Limit at Infinity"], video: "https://www.youtube.com/watch?v=riXcZT2ICjA", pdf: "https://www.khanacademy.org/math/ap-calculus-ab/ab-limits-new", notes: "Key limits: lim(x→0) sinx/x = 1, lim(x→∞) 1/x = 0. Factor/cancel for 0/0 forms. L'Hôpital for indeterminate forms." },
+      { id: "u6t2", name: "Slope of a Curve & Differentiation", type: "core", sub: ["Increments","Derivative & Meaning","Geometrical Interpretation","First Principle Method","Derivatives of Algebraic/Log/Exp functions","Rules of Differentiation","Parametric & Implicit Functions","Higher Order Derivatives"], video: "https://www.youtube.com/watch?v=ANyVpMS3HL4", pdf: "https://www.khanacademy.org/math/ap-calculus-ab/ab-differentiation-1-new", notes: "Power rule: d/dx(xⁿ)=nxⁿ⁻¹. Product, Quotient, Chain rules essential. Implicit: differentiate both sides, solve for dy/dx." },
+      { id: "u6t3", name: "Economic Applications of Derivatives", type: "econ", sub: ["Marginal Value","Marginal Cost","Marginal Revenue","Marginal Profit","Relation between MC and AC","Monotonic Functions","Increasing/Decreasing Functions","Stationary Point","Point of Inflexion"], video: "https://www.youtube.com/watch?v=0d_2h2U4H3k", pdf: "https://www.khanacademy.org/economics-finance-domain/microeconomics", notes: "MC = dTC/dQ, MR = dTR/dQ. Profit max where MR = MC. Stationary point: dy/dx = 0." },
+      { id: "u6t4", name: "Maxima and Minima", type: "core", sub: ["Criterion for Maxima & Minima","Economic Applications"], video: "https://www.youtube.com/watch?v=UvJrB2m7d6E", pdf: "https://www.khanacademy.org/math/ap-calculus-ab/ab-diff-analytical-applications-new", notes: "First derivative = 0 for critical points. Second derivative > 0 → local minimum, < 0 → local maximum." },
+      { id: "u6t5", name: "Second Derivative & Curvature", type: "core", sub: ["Point of Inflexion","Concavity/Convexity"], video: "https://www.youtube.com/watch?v=JhZkV6T95ss", pdf: "https://www.khanacademy.org/math/ap-calculus-ab/ab-diff-analytical-applications-new", notes: "f''(x) = 0 and changes sign → point of inflexion. f'' > 0 concave up (convex), f'' < 0 concave down." },
+      { id: "u6t6", name: "Elasticity of Demand & Derivatives", type: "econ", sub: ["Relation between MR, AR and Elasticity (Ed)"], video: "https://www.youtube.com/watch?v=Kgrt6d8dnHo", pdf: "https://www.khanacademy.org/economics-finance-domain/microeconomics/elasticity", notes: "MR = P(1 – 1/|Ed|). Elastic when |Ed|>1, inelastic when |Ed|<1, unitary when |Ed|=1." },
+      { id: "u6t7", name: "Bisection Method", type: "core", sub: ["Root-finding Algorithm","Iteration Process"], video: "https://www.youtube.com/watch?v=3jO_yF4dLNU", pdf: "https://mathworld.wolfram.com/Bisection.html", notes: "Requires f(a)·f(b) < 0. Root approximated by midpoint c=(a+b)/2. Error halves each iteration." },
+      { id: "u6t8", name: "Newton-Raphson Method", type: "core", sub: ["Iterative Root Finding","Convergence Criteria"], video: "https://www.youtube.com/watch?v=-5e2cULI3H0", pdf: "https://mathworld.wolfram.com/NewtonsMethod.html", notes: "xₙ₊₁ = xₙ – f(xₙ)/f'(xₙ). Fast quadratic convergence but needs good initial guess near root." }
+    ]
+  }
+];
+
+let activeUnit = 1;
+let completed = new Set(JSON.parse(localStorage.getItem('smartMathCompleted') || '[]'));
+
+const icons = {
+  check: '<svg viewBox="0 0 24 24" fill="none"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/></svg>',
+  play: '<svg viewBox="0 0 24 24" fill="none"><path d="M7.76253 3.10547C8.25778 3.10552 8.74424 3.23849 9.17073 3.49023L19.533 9.60742C20.8536 10.3869 21.2923 12.0901 20.5174 13.4121C20.2785 13.8195 19.9398 14.1604 19.533 14.4004L9.16975 20.5156C7.84722 21.2958 6.14596 20.8511 5.36995 19.5273C5.11962 19.1003 4.9872 18.6142 4.98714 18.1191V5.88672C4.98717 4.3537 6.22731 3.10547 7.76253 3.10547Z" fill="currentColor"/></svg>',
+  folder: '<svg viewBox="0 0 24 24" fill="none"><path d="M18.3623 9.99976L18.209 8.48999C18.2031 8.43161 18.2004 8.37289 18.2002 8.31421C18.1988 8.31196 18.1956 8.30842 18.1904 8.30347C18.1718 8.28559 18.1302 8.26245 18.0713 8.26245H11C10.261 8.26245 9.59753 7.81016 9.32617 7.1228L8.9082 6.06421C8.88101 5.9953 8.85737 5.92501 8.83887 5.85327C8.83778 5.85099 8.833 5.84268 8.81836 5.83179C8.79454 5.81475 8.7549 5.79939 8.70605 5.80054H3.92871C3.86986 5.80054 3.82825 5.82368 3.80957 5.84155C3.80816 5.8429 3.80675 5.84428 3.80566 5.84546L4.47559 14.0955L3.62109 17.5154L5.12109 11.5154C5.34367 10.6251 6.1438 9.99977 7.06152 9.99976H18.3623ZM7.06152 11.7996C6.96976 11.7996 6.88944 11.8629 6.86719 11.9519L5.36719 17.9519C5.33598 18.078 5.43158 18.1999 5.56152 18.2H19.4385C19.5302 18.1999 19.6106 18.1376 19.6328 18.0486L21.1328 12.0486C21.1644 11.9224 21.0686 11.7996 20.9385 11.7996H7.06152ZM20.9385 9.99976C22.2396 9.99977 23.1945 11.2228 22.8789 12.4851L21.3789 18.4851C21.1563 19.3754 20.3562 19.9997 19.4385 19.9998H4.92871C4.41722 19.9998 3.92613 19.8059 3.56445 19.4597C3.20281 19.1135 3.00004 18.6436 3 18.1541L2 5.84644C2.00006 5.35711 2.20311 4.88786 2.56445 4.54175C2.92613 4.19554 3.41722 4.00073 3.92871 4.00073H8.66406C9.10133 3.99051 9.5296 4.1225 9.87793 4.37573C10.2285 4.63118 10.4767 4.99457 10.582 5.40405L11 6.46167H18.0713C18.5828 6.46167 19.0739 6.65648 19.4355 7.00269C19.7971 7.34888 20 7.81883 20 8.30835L20.1719 9.99976H20.9385Z" fill="currentColor"/></svg>',
+  notes: '<svg viewBox="0 0 24 24" fill="none"><path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM19 19H5V5H19V19ZM17 12H7V10H17V12ZM17 8H7V6H17V8ZM12 16H7V14H12V16Z" fill="currentColor"/></svg>',
+  math: '<svg viewBox="0 0 24 24" fill="none"><path d="M10.2414 6.20491C10.7108 3.80117 13.895 3.23962 15.1584 5.33772C15.4147 5.76355 15.2776 6.31672 14.8518 6.57307C14.426 6.82914 13.8728 6.69208 13.6164 6.26643C13.2032 5.57996 12.1618 5.76338 12.008 6.54964L11.6243 8.51546H13.3332C13.8302 8.51552 14.2336 8.91883 14.2336 9.41585C14.2336 9.91286 13.8302 10.3162 13.3332 10.3162H11.2727L9.85375 17.5858C9.25329 20.6612 4.9101 20.8166 4.09203 17.7918C3.96234 17.312 4.24705 16.8171 4.7268 16.6873C5.20646 16.558 5.70066 16.8424 5.83031 17.3221C6.15107 18.5066 7.85185 18.4457 8.08715 17.241L9.43871 10.3162H7.70434C7.20728 10.3162 6.80395 9.9129 6.80395 9.41585C6.80395 8.91879 7.20728 8.51546 7.70434 8.51546H9.79027L10.2414 6.20491Z" fill="currentColor"/><path d="M17.2221 12.7502C17.5736 12.3988 18.1441 12.3989 18.4956 12.7502C18.8471 13.1017 18.847 13.6722 18.4956 14.0236L16.8696 15.6496L18.4956 17.2756C18.847 17.627 18.847 18.1976 18.4956 18.549C18.1441 18.9005 17.5736 18.9005 17.2221 18.549L15.5962 16.9231L13.9702 18.549C13.6187 18.9005 13.0482 18.9005 12.6968 18.549C12.3454 18.1976 12.3453 17.627 12.6968 17.2756L14.3227 15.6496L12.6968 14.0236C12.3453 13.6722 12.3453 13.1017 12.6968 12.7502C13.0482 12.3988 13.6187 12.3988 13.9702 12.7502L15.5962 14.3762L17.2221 12.7502Z" fill="currentColor"/></svg>',
+  chevron: '<svg viewBox="0 0 24 24" fill="none"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" fill="currentColor"/></svg>',
+  searchEmpty: '<svg viewBox="0 0 24 24" fill="none"><path d="M11.5 3C16.1944 3 20 6.80558 20 11.5C20 13.523 19.2933 15.381 18.1132 16.8404L21.1364 19.8636C21.4879 20.2151 21.4879 20.7849 21.1364 21.1364C20.7849 21.4879 20.2151 21.4879 19.8636 21.1364L16.8404 18.1132C15.381 19.2933 13.523 20 11.5 20C6.80558 20 3 16.1944 3 11.5C3 6.80558 6.80558 3 11.5 3ZM11.5 18.2C15.2003 18.2 18.2 15.2003 18.2 11.5C18.2 7.79969 15.2003 4.8 11.5 4.8C7.79969 4.8 4.8 7.79969 4.8 11.5C4.8 15.2003 7.79969 18.2 11.5 18.2Z" fill="currentColor"/></svg>'
+};
+
+function saveProgress() {
+  localStorage.setItem('smartMathCompleted', JSON.stringify([...completed]));
+  updateProgress();
+}
+
+function updateProgress() {
+  let total = 0;
+  syllabus.forEach(u => total += u.topics.length);
+  document.getElementById('totalTopics').textContent = total;
+  document.getElementById('completedTopics').textContent = completed.size;
+  const pct = Math.round((completed.size / total) * 100);
+  document.getElementById('progressPercent').textContent = pct + '%';
+  document.getElementById('progressText').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+function toggleComplete(e, id) {
+  e.stopPropagation();
+  if (completed.has(id)) completed.delete(id);
+  else completed.add(id);
+  saveProgress();
+  render();
+}
+
+function toggleTopic(card) {
+  card.classList.toggle('open');
+}
+
+function showModal(title, text) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalText').innerHTML = text;
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('show');
+}
+
+function askAINotes(topicName) {
+  const prompt = `Explain <b>${topicName}</b> with solved examples for MTH-201 Business Mathematics.`;
+  showModal('Ask AI for Notes', `<p>Copy this prompt and paste it into Kimi Chat or any AI assistant:</p><code>${prompt}</code><p style="margin-top:10px">Or simply ask: <em>"Explain ${topicName} with solved examples for MTH-201."</em></p>`);
+}
+
+function askPractice(topicName) {
+  const prompt = `Give me practice problems on <b>${topicName}</b> with step-by-step solutions for MTH-201 Business Mathematics.`;
+  showModal('Practice Problems', `<p>Copy this prompt and paste it into Kimi Chat or any AI assistant:</p><code>${prompt}</code><p style="margin-top:10px">Or simply ask: <em>"Give me practice problems on ${topicName} with solutions."</em></p>`);
+}
+
+function renderTabs() {
+  const container = document.getElementById('unitTabs');
+  container.innerHTML = syllabus.map(u => {
+    const isActive = u.unit === activeUnit;
+    return `<div class="unit-tab ${isActive ? 'active' : ''}" onclick="activeUnit=${u.unit};render();">Unit ${u.unit}</div>`;
+  }).join('');
+}
+
+function buildTopicCard(t, unit, isSearchResult) {
+  const isDone = completed.has(t.id);
+  const badgeClass = t.type === 'econ' ? 'econ' : (t.type === 'lab' ? 'lab' : 'core');
+  const badgeText = t.type === 'econ' ? 'Economics' : (t.type === 'lab' ? 'Lab' : 'Math');
+  const unitLabel = isSearchResult ? `<span style="font-size:11px;color:var(--text-quaternary);margin-left:6px;">Unit ${unit.unit}</span>` : '';
+  return `
+    <div class="topic-card" id="card-${t.id}">
+      <div class="topic-header" onclick="toggleTopic(document.getElementById('card-${t.id}'))">
+        <div class="topic-left">
+          <div class="topic-check ${isDone ? 'checked' : ''}" onclick="toggleComplete(event, '${t.id}')">${icons.check}</div>
+          <div>
+            <div class="topic-name">${t.name} <span class="badge ${badgeClass}">${badgeText}</span>${unitLabel}</div>
+            <div class="topic-meta">${t.sub.length} subtopics &middot; ${unit.hours}${isSearchResult ? ' &middot; ' + unit.title : ''}</div>
+          </div>
+        </div>
+        <div class="topic-toggle">${icons.chevron}</div>
+      </div>
+      <div class="topic-body">
+        <div class="topic-content">
+          <div class="subtopic-list">${t.sub.map(s => `<div class="subtopic-item"><div class="subtopic-dot"></div>${s}</div>`).join('')}</div>
+          <div class="tip-box"><strong>Study tip:</strong> ${t.notes}</div>
+          <div class="resource-grid">
+            <a class="resource-btn video" href="${t.video}" target="_blank" rel="noopener">${icons.play} Watch video lecture</a>
+            <a class="resource-btn pdf" href="${t.pdf}" target="_blank" rel="noopener">${icons.folder} Read reference material</a>
+            <button class="resource-btn notes" onclick="askAINotes('${t.name.replace(/'/g, "\'")}')">${icons.notes} Ask AI for notes</button>
+            <button class="resource-btn practice" onclick="askPractice('${t.name.replace(/'/g, "\'")}')">${icons.math} Practice problems</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderTopics(filterText) {
+  const container = document.getElementById('topicsContainer');
+  if (filterText) {
+    const q = filterText.toLowerCase();
+    let results = [];
+    syllabus.forEach(u => {
+      u.topics.forEach(t => {
+        if (t.name.toLowerCase().includes(q) || t.sub.some(s => s.toLowerCase().includes(q)) || t.notes.toLowerCase().includes(q)) {
+          results.push({t, u});
+        }
+      });
+    });
+    if (results.length === 0) {
+      container.innerHTML = `<div class="empty-state">${icons.searchEmpty}<p>No topics match "${escapeHtml(filterText)}"</p></div>`;
+      return;
+    }
+    container.innerHTML = results.map(r => buildTopicCard(r.t, r.u, true)).join('');
+  } else {
+    const unit = syllabus.find(u => u.unit === activeUnit);
+    if (!unit) return;
+    container.innerHTML = unit.topics.map(t => buildTopicCard(t, unit, false)).join('');
+  }
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function filterTopics() {
+  renderTopics(document.getElementById('searchInput').value.trim());
+}
+
+function render() {
+  renderTabs();
+  filterTopics();
+  updateProgress();
+}
+
+render();
+</script>
+</body>
+</html>
