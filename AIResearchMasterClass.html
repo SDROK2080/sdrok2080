@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI for Research Masterclass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue-50: #E6F1FB; --blue-100: #B5D4F4; --blue-400: #378ADD;
+    --blue-600: #185FA5; --blue-800: #0C447C; --blue-900: #042C53;
+    --teal-50: #E1F5EE; --teal-400: #1D9E75; --teal-800: #085041;
+    --amber-50: #FAEEDA; --amber-400: #BA7517; --amber-800: #633806;
+    --purple-50: #EEEDFE; --purple-400: #7F77DD; --purple-800: #3C3489;
+    --coral-50: #FAECE7; --coral-400: #D85A30; --coral-800: #712B13;
+    --green-50: #EAF3DE; --green-400: #639922; --green-800: #27500A;
+    --gray-50: #F8F7F4; --gray-100: #F1EFE8; --gray-200: #E4E2DA;
+    --gray-400: #888780; --gray-600: #5F5E5A; --gray-900: #1A1A18;
+    --text-primary: #1A1A18; --text-secondary: #5F5E5A; --text-muted: #888780;
+    --surface-0: #F8F7F4; --surface-1: #F1EFE8; --surface-2: #FFFFFF;
+    --border: rgba(0,0,0,0.09); --border-strong: rgba(0,0,0,0.16);
+    --radius: 8px;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; line-height: 1.6; color: var(--text-primary); background: var(--surface-0); }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(248,247,244,0.94); backdrop-filter: blur(14px);
+    border-bottom: 0.5px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem; height: 60px;
+  }
+  .nav-brand { display: flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 600; color: var(--text-primary); text-decoration: none; }
+  .nav-brand-icon { width: 30px; height: 30px; background: var(--blue-400); border-radius: 7px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 15px; }
+  .nav-links { display: flex; align-items: center; gap: 1.5rem; list-style: none; }
+  .nav-links a { text-decoration: none; font-size: 14px; color: var(--text-secondary); transition: color 0.15s; }
+  .nav-links a:hover { color: var(--text-primary); }
+  .nav-cta { background: var(--blue-400) !important; color: #fff !important; padding: 8px 18px; border-radius: var(--radius); font-weight: 500 !important; transition: background 0.15s !important; }
+  .nav-cta:hover { background: var(--blue-600) !important; }
+  .nav-hamburger { display: none; background: none; border: none; font-size: 22px; color: var(--text-primary); cursor: pointer; }
+
+  /* HERO */
+  .hero { padding: 5rem 2rem 4rem; text-align: center; border-bottom: 0.5px solid var(--border); max-width: 860px; margin: 0 auto; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue-600); background: var(--blue-50); border: 0.5px solid var(--blue-100); border-radius: 999px; padding: 5px 16px; margin-bottom: 1.75rem; }
+  h1.hero-title { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(2.4rem, 5.5vw, 3.8rem); font-weight: 400; line-height: 1.1; color: var(--text-primary); margin-bottom: 1.25rem; letter-spacing: -0.01em; }
+  h1.hero-title em { font-style: italic; color: var(--blue-600); }
+  .hero-sub { font-size: 17px; color: var(--text-secondary); max-width: 520px; margin: 0 auto 2.25rem; line-height: 1.75; }
+  .hero-cta-row { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 3rem; }
+  .btn-primary { background: var(--blue-400); color: #fff; border: none; border-radius: var(--radius); padding: 13px 28px; font-size: 15px; font-family: 'Inter', sans-serif; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; transition: background 0.15s; }
+  .btn-primary:hover { background: var(--blue-600); }
+  .btn-ghost { background: transparent; color: var(--text-primary); border: 0.5px solid var(--border-strong); border-radius: var(--radius); padding: 13px 24px; font-size: 15px; font-family: 'Inter', sans-serif; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; transition: background 0.15s; }
+  .btn-ghost:hover { background: var(--surface-1); }
+  .stat-row { display: flex; align-items: center; justify-content: center; gap: 2.5rem; flex-wrap: wrap; }
+  .stat-item { text-align: center; }
+  .stat-num { font-family: 'DM Serif Display', serif; font-size: 1.9rem; font-weight: 400; color: var(--text-primary); line-height: 1.1; }
+  .stat-lbl { font-size: 12px; color: var(--text-muted); letter-spacing: 0.04em; margin-top: 2px; }
+  .stat-divider { width: 0.5px; height: 36px; background: var(--border-strong); }
+
+  /* AUDIENCE STRIP */
+  .audience-strip { background: var(--surface-1); border-bottom: 0.5px solid var(--border); padding: 1.1rem 2rem; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
+  .aud-label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-right: 6px; }
+  .aud-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; color: var(--text-primary); background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 999px; padding: 5px 13px; }
+  .aud-pill i { font-size: 13px; color: var(--blue-400); }
+
+  /* SECTIONS */
+  .section { padding: 4.5rem 2rem; border-bottom: 0.5px solid var(--border); }
+  .section-inner { max-width: 980px; margin: 0 auto; }
+  .section-header { text-align: center; margin-bottom: 2.5rem; }
+  .section-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem; }
+  .section-title { font-family: 'DM Serif Display', serif; font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 400; color: var(--text-primary); line-height: 1.2; }
+  .section-sub { font-size: 15px; color: var(--text-secondary); margin-top: 0.5rem; }
+
+  /* MODULE CARDS */
+  .module-card {
+    background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px;
+    padding: 0; overflow: hidden; position: relative;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    display: flex; flex-direction: column;
+  }
+  .module-card:hover { border-color: var(--blue-100); box-shadow: 0 4px 20px rgba(55,138,221,0.10); }
+
+  .module-head { padding: 1.4rem 1.3rem 1rem; flex: 1; }
+  .module-icon { width: 42px; height: 42px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 0.85rem; }
+  .module-num { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 3px; }
+  .module-name { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; line-height: 1.3; padding-right: 60px; }
+  .module-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 14px; }
+  .module-topics { list-style: none; display: flex; flex-direction: column; gap: 4px; margin-bottom: 1rem; }
+  .module-topics li { font-size: 12.5px; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 7px; }
+  .module-topics li i { font-size: 13px; color: var(--teal-400); margin-top: 1px; flex-shrink: 0; }
+  .duration-badge { position: absolute; top: 1rem; right: 1rem; font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 3px; background: var(--surface-1); padding: 3px 8px; border-radius: 999px; border: 0.5px solid var(--border); }
+
+  /* RESOURCES PANEL */
+  .resources-panel { border-top: 0.5px solid var(--border); background: var(--surface-0); padding: 1rem 1.3rem; }
+  .resources-title { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.6rem; }
+  .resource-links { display: flex; flex-direction: column; gap: 6px; }
+  .resource-link {
+    display: flex; align-items: flex-start; gap: 9px; text-decoration: none;
+    background: var(--surface-2); border: 0.5px solid var(--border); border-radius: var(--radius);
+    padding: 8px 10px; transition: border-color 0.15s, background 0.15s;
+  }
+  .resource-link:hover { border-color: var(--blue-100); background: var(--blue-50); }
+  .resource-link-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .resource-link-icon.video { background: #FEE2E2; color: #DC2626; }
+  .resource-link-icon.pdf { background: #FEF3C7; color: #D97706; }
+  .resource-link-icon.guide { background: var(--blue-50); color: var(--blue-600); }
+  .resource-link-text { flex: 1; min-width: 0; }
+  .resource-link-label { font-size: 12px; font-weight: 500; color: var(--text-primary); line-height: 1.3; display: block; }
+  .resource-link-meta { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; margin-top: 1px; }
+  .resource-type-badge { display: inline-block; font-size: 10px; font-weight: 500; padding: 1px 6px; border-radius: 4px; }
+  .badge-video { background: #FEE2E2; color: #DC2626; }
+  .badge-pdf { background: #FEF3C7; color: #D97706; }
+  .badge-guide { background: var(--blue-50); color: var(--blue-600); }
+
+  /* MODULE GRID */
+  .module-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 16px; }
+
+  /* TOOLS STRIP */
+  .tools-strip { background: var(--surface-1); border-bottom: 0.5px solid var(--border); padding: 1.4rem 2rem; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
+  .tool-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--text-primary); background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 999px; padding: 6px 14px; }
+  .tool-pill i { font-size: 14px; color: var(--blue-400); }
+
+  /* OUTCOMES */
+  .outcomes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+  .outcome-card { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 1.3rem 1rem; text-align: center; }
+  .outcome-icon { font-size: 26px; color: var(--blue-400); margin-bottom: 10px; display: block; }
+  .outcome-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 5px; }
+  .outcome-desc { font-size: 12.5px; color: var(--text-secondary); line-height: 1.55; }
+
+  /* FORMAT */
+  .format-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+  .format-card { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 1.4rem 1rem; text-align: center; }
+  .format-card i { font-size: 30px; color: var(--blue-400); margin-bottom: 10px; display: block; }
+  .format-label { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 5px; }
+  .format-val { font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; }
+
+  /* TESTIMONIALS */
+  .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .testimonial-card { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 1.4rem 1.3rem; }
+  .testimonial-stars { color: #F59E0B; font-size: 14px; margin-bottom: 10px; }
+  .testimonial-text { font-size: 13.5px; color: var(--text-secondary); line-height: 1.65; margin-bottom: 14px; font-style: italic; }
+  .testimonial-author { display: flex; align-items: center; gap: 10px; }
+  .t-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+  .t-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+  .t-role { font-size: 11.5px; color: var(--text-muted); }
+
+  /* FAQ */
+  .faq-list { display: flex; flex-direction: column; gap: 10px; max-width: 700px; margin: 0 auto; }
+  .faq-item { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .faq-q { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.2rem; font-size: 14px; font-weight: 500; color: var(--text-primary); background: none; border: none; cursor: pointer; text-align: left; font-family: 'Inter', sans-serif; gap: 12px; transition: background 0.15s; }
+  .faq-q:hover { background: var(--surface-1); }
+  .faq-q i { font-size: 16px; color: var(--text-muted); flex-shrink: 0; transition: transform 0.2s; }
+  .faq-item.open .faq-q i { transform: rotate(180deg); }
+  .faq-a { display: none; font-size: 13.5px; color: var(--text-secondary); line-height: 1.7; padding: 0 1.2rem 1rem; border-top: 0.5px solid var(--border); }
+  .faq-item.open .faq-a { display: block; }
+
+  /* CTA FOOTER */
+  .cta-footer { background: var(--blue-900); color: #fff; padding: 5rem 2rem; text-align: center; }
+  .cta-footer-title { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 400; margin-bottom: 0.75rem; line-height: 1.2; }
+  .cta-footer-sub { font-size: 16px; color: rgba(255,255,255,0.7); margin-bottom: 2.25rem; max-width: 480px; margin-left: auto; margin-right: auto; }
+  .enroll-btn { background: #fff; color: var(--blue-900); border: none; border-radius: var(--radius); padding: 15px 38px; font-size: 16px; font-family: 'Inter', sans-serif; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; transition: opacity 0.15s; }
+  .enroll-btn:hover { opacity: 0.92; }
+  .seats-note { margin-top: 1.25rem; font-size: 13px; color: rgba(255,255,255,0.5); display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .seats-note i { color: #FBBF24; font-size: 15px; }
+
+  /* FOOTER */
+  footer { background: var(--gray-900); color: rgba(255,255,255,0.5); padding: 2rem; text-align: center; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+  footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+  footer a:hover { color: rgba(255,255,255,0.8); }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+    .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 60px; left: 0; right: 0; background: var(--surface-0); border-bottom: 0.5px solid var(--border); padding: 1rem 2rem; gap: 1rem; z-index: 99; }
+    .hero { padding: 3rem 1.25rem 2.5rem; }
+    .stat-divider { display: none; }
+    .stat-row { gap: 1.25rem; }
+    .section { padding: 3rem 1.25rem; }
+    .cta-footer { padding: 3.5rem 1.25rem; }
+    .module-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+  .hero > * { animation: fadeUp 0.5s ease both; }
+  .hero > *:nth-child(1) { animation-delay: 0.05s; }
+  .hero > *:nth-child(2) { animation-delay: 0.15s; }
+  .hero > *:nth-child(3) { animation-delay: 0.25s; }
+  .hero > *:nth-child(4) { animation-delay: 0.35s; }
+  .hero > *:nth-child(5) { animation-delay: 0.45s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#">
+    <span class="nav-brand-icon"><i class="ti ti-flask" aria-hidden="true"></i></span>
+    AI Research Masterclass
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#modules">Modules</a></li>
+    <li><a href="#resources">Resources</a></li>
+    <li><a href="#outcomes">Outcomes</a></li>
+    <li><a href="#format">Format</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#enroll" class="nav-cta">Enroll now</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+    <i class="ti ti-menu-2"></i>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section style="background: var(--surface-0);">
+  <div class="hero">
+    <div class="eyebrow">
+      <i class="ti ti-microscope" aria-hidden="true"></i>
+      Masterclass · Research Edition
+    </div>
+    <h1 class="hero-title">
+      Research faster.<br><em>Think deeper.</em><br>Publish better.
+    </h1>
+    <p class="hero-sub">
+      A practical, hands-on masterclass that teaches researchers, PhD students, and faculty to harness AI across the full research lifecycle — from first search to final publication.
+    </p>
+    <div class="hero-cta-row">
+      <a href="#enroll" class="btn-primary">
+        <i class="ti ti-calendar-event" aria-hidden="true"></i> Reserve your seat
+      </a>
+      <a href="#modules" class="btn-ghost">
+        <i class="ti ti-layout-list" aria-hidden="true"></i> View curriculum
+      </a>
+    </div>
+    <div class="stat-row">
+      <div class="stat-item"><div class="stat-num">5</div><div class="stat-lbl">Core modules</div></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><div class="stat-num">16 hrs</div><div class="stat-lbl">Live training</div></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><div class="stat-num">100%</div><div class="stat-lbl">Hands-on</div></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><div class="stat-num">Certificate</div><div class="stat-lbl">On completion</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- AUDIENCE STRIP -->
+<div class="audience-strip">
+  <span class="aud-label">Designed for</span>
+  <span class="aud-pill"><i class="ti ti-microscope" aria-hidden="true"></i> Researchers &amp; Scientists</span>
+  <span class="aud-pill"><i class="ti ti-school" aria-hidden="true"></i> PhD &amp; Master's Students</span>
+  <span class="aud-pill"><i class="ti ti-building-community" aria-hidden="true"></i> University Faculty</span>
+  <span class="aud-pill"><i class="ti ti-chart-dots" aria-hidden="true"></i> Principal Investigators</span>
+  <span class="aud-pill"><i class="ti ti-settings-code" aria-hidden="true"></i> R&amp;D Professionals</span>
+</div>
+
+<!-- MODULES + RESOURCES -->
+<section class="section" id="modules">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-eyebrow">Curriculum &amp; Learning Resources</div>
+      <h2 class="section-title">Five modules. Curated videos &amp; PDFs per topic.</h2>
+      <p class="section-sub">Every module includes hand-picked YouTube tutorials and free PDF guides — ready to study before, during, or after class.</p>
+    </div>
+    <div class="module-grid" id="resources">
+
+      <!-- MODULE 1 -->
+      <div class="module-card">
+        <div class="module-head">
+          <span class="duration-badge"><i class="ti ti-clock" aria-hidden="true"></i> 3 hrs</span>
+          <div class="module-icon" style="background:var(--blue-50);"><i class="ti ti-books" style="color:var(--blue-400)" aria-hidden="true"></i></div>
+          <div class="module-num">Module 01</div>
+          <div class="module-name">AI-Powered Literature Review</div>
+          <p class="module-desc">Map entire research fields in hours, not weeks. Find gaps, trace citations, and synthesize evidence at scale using Elicit, Consensus, and Semantic Scholar.</p>
+          <ul class="module-topics">
+            <li><i class="ti ti-check" aria-hidden="true"></i> Semantic Scholar, Elicit &amp; Consensus</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Automated research gap analysis</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Citation network mapping</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Systematic review workflows</li>
+          </ul>
+        </div>
+        <div class="resources-panel">
+          <div class="resources-title"><i class="ti ti-books" style="font-size:12px;margin-right:4px" aria-hidden="true"></i>Learning Resources</div>
+          <div class="resource-links">
+            <a class="resource-link" href="https://www.youtube.com/watch?v=1RsVz2rzQ_U" target="_blank" rel="noopener">
+              <span class="resource-link-icon video"><i class="ti ti-player-play" aria-hidden="true"></i></span>
+              <span class="resource-link-text">
+                <span class="resource-link-label">AI in Research: Using AI For Literature Reviews</span>
+                <span class="resource-link-meta"><span class="resource-type-badge badge-video">Video</span> Workshop · 4-stage lit review framework</span>
+              </span>
+            </a>
+            <a class="resource-link" href="https://www.youtube.com/watch?v=blBJbhZT8gQ" target="_blank" rel="noopener">
+              <span class="resource-link-icon video"><i class="ti ti-player-play" aria-hidden="true"></i></span>
+              <span class="resource-link-text">
+                <span class="resource-link-label">This AI Tool Finds Research Papers 100× Faster</span>
+                <span class="resource-link-meta"><span class="resource-type-badge badge-video">Video</span> Academia Insider · Elicit &amp; Semantic Scholar</span>
+              </span>
+            </a>
+            <a class="resource-link" href="https://arxiv.org/pdf/2402.08565" target="_blank" rel="noopener">
+              <span class="resource-link-icon pdf"><i class="ti ti-file-type-pdf" aria-hidden="true"></i></span>
+              <span class="resource-link-text">
+                <span class="resource-link-label">AI for Literature Reviews: Opportunities &amp; Challenges</span>
+                <span class="resource-link-meta"><span class="resource-type-badge badge-pdf">PDF</span> arXiv · peer-reviewed survey paper</span>
+              </span>
+            </a>
+            <a class="resource-link" href="https://arxiv.org/pdf/2408.06872" target="_blank" rel="noopener">
+              <span class="resource-link-icon pdf"><i class="ti ti-file-type-pdf" aria-hidden="true"></i></span>
+              <span class="resource-link-text">
+                <span class="resource-link-label">Generative AI Tools in Academic Research</span>
+                <span class="resource-link-meta"><span class="resource-type-badge badge-pdf">PDF</span> arXiv · practical guide for researchers</span>
+              </span>
+            </a>
+            <a class="resource-link" href="https://tamu.libguides.com/c.php?g=1289555" target="_blank" rel="noopener">
+              <span class="resource-link-icon guide"><i class="ti ti-external-link" aria-hidden="true"></i></span>
+              <span class="resource-link-text">
+                <span class="resource-link-label">AI-Based Literature Review Tools Guide</span>
+                <span class="resource-link-meta"><span class="resource-type-badge badge-guide">Guide</span> Texas A&amp;M University Library</span>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODULE 2 -->
+      <div class="module-card">
+        <div class="module-head">
+          <span class="duration-badge"><i class="ti ti-clock" aria-hidden="true"></i> 3.5 hrs</span>
+          <div class="module-icon" style="background:var(--teal-50);"><i class="ti ti-chart-histogram" style="color:var(--teal-400)" aria-hidden="true"></i></div>
+          <div class="module-num">Module 02</div>
+          <div class="module-name">Data Analysis &amp; Visualization</div>
+          <p class="module-desc">Run statistical analysis, build reproducible pipelines, and craft publication-ready figures using AI-assisted Python, R, and visualization tools.</p>
+          <ul class="module-topics">
+            <li><i class="ti ti-check" aria-hidden="true"></i> Python &amp; R with AI assistance</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Statistical interpretation</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Figure design for publications</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Open data &amp; reproducibility</li>
+          </ul>
+        </div>
+        <div class="resources-panel">
+          <div class="resources-title"><i class="ti ti-books" style="font-size:12px;margin-right:4px" aria-hidden="true"></i>Learning Resources</div>
+          <div class="resource-links">
+            <a class="resource-link" href="https://www.youtube.com/watch?v=AZqv3hOlMXA" target="_blank" rel="noopener">
+              <span class="resource-link-icon video"><i class="ti ti-player-play" aria-hidden="true"></i></span>
+              <span class="resource-link-text">
+                <span class="resource-link-label">AI-Assisted Data Visualization &amp; Dashboards</span>
+                <span class="resource-link-meta"><span class="resource-type-badge badge-video">Video</span> UC Love Data Week 2026 Workshop</span>
+              </span>
+            </a>
+            <a class="resource-link" href="https://www.youtube.com/watch?v=QPbSc_IfYTo" target="_blank" rel="noopener">
+              <span class="resource-link-icon video"><i class="ti ti-player-play" aria-hidden="true"></i></span>
+              <span class="resource-link-text">
+                <span class="resource-link-label">Data Visualization Full Course 2026 — Free</span>
+                <span class="resource-link-meta"><span class="resource-type-badge badge-video">Video</span> Simplilearn · beginner to advanced</span>
+              </span>
+            </a>
+            <a class="resource-link" href="https://www.youtube.com/watch?v=UkIdRsKagaI" target="_blank" rel="noopener">
+              <span class="resource-link-icon video"><i class="ti ti-player-play" aria-hidden="true"></i></span>
+              <span class="resource-link-text">
+                <span class="resource-link-label">How to Learn AI for Data Analytics (2025 Guide)</span>
+                <span class="resource-link-meta"><span class="resource-type-badge badge-video">Video</span> Essential AI tools for data analysts</span>
+              </span>
+            </a>
+            <a class="resource-link" href="https://www.youtube.com/playlist?list=PLSOjmgd2Fg_kGqORhMU4etmSNXY7VcEo6" target="_blank" rel="noopener">
+              <span class="resource-link-icon video"><i class="ti ti-player-play" aria-hidden="true"></i></span>
+              <span class="resource-link-text">
+                <span class="resource-link-label">Using AI Tools for Research &amp; Evaluation (Playlist)</span>
+                <span class="resource-link-meta"><span class="resource-type-badge badge-video">Playlist</span> Tutorials, case studies &amp; expert talks</span>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODULE 3 -->
+      <div class="module-card">
+        <div class="module-head">
+          <span class="duration-badge"><i class="ti ti-clock" aria-hidden="true"></i> 2.5 hrs</span>
+          <div class="module-icon" style="background:var(--purple-50);"><i class="ti ti-terminal-2" style="color:var(--purple-400)" aria-hidden="true"></i></div>
+          <div class="module-num">Module 03</div>
+          <div class="module-name">AI Prompt Engineering</div>
+          <p class="module-desc">Move beyond basic prompting. Design reliable, context-rich prompts that produce expert-level research outputs — chain-of-thought, role framing, and hallucination control.</p>
+          <ul class="module-topics">
+            <li><i class="ti ti-check" aria-hidden="true"></i> Chain-of-thought prompting</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Role &amp; persona framing</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Output formatting strategies</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Hallucination control</li>
+          </ul>
+        </div>
+        <div class="resources-panel">
+          <div class="resources-title"><i class="ti ti-books" style="font-size:12px;margin-right:4px" aria-hidden="true"></i>Learning Resources</div>
+          <div class="resource-links">
+            <a class="resource-link" href="https://www.youtube.com/watch?v=I1MEiaG0vW4" target="_blank" rel="noopener">
+              <span class="resource-link-icon video"><i class="ti ti-player-play" aria-hidden="true"></i></span>
+              <span class="resource-link-text">
+                <span class="resource-link-label">Prompt Engineering Full Course 2026 — Free</span>
+                <span class="resource-link-meta"><span class="resource-type-badge badge-video">Video</span> Simplilearn · beginner to advanced</span>
+              </span>
+            </a>
+            <a class="resource-link" href="https://youtube.com/playlist?list=PLunlGNVWDAaYrETNWxX8wK2O_2avSJv7l" target="_blank" rel="noopener">
+              <span class="resource-link-icon video"><i class="ti ti-player-play" aria-hidden="true"></i></span>
+              <span class="resource-link-text">
+                <span class="resource-link-label">Prompt Engineering Full Course for Everyone (Playlist)</span>
+                <span class="resource-link-meta"><span class="resource-type-badge badge-video">Playlist</span> ChatGPT, Claude, Gemini prompts mastery</span>
+              </span>
+            </a>
+            <a class="resource-link" href="https://www.promptingguide.ai/" target="_blank" rel="noopener">
+              <span class="resource-link-icon guide"><i class="ti ti-external-link" aria-hidden="true"></i></span>
+              <span class="resource-link-text">
+                <span class="resource-link-label">Prompt Engineering Guide — promptingguide.ai</span>
+                <span class="resource-link-meta"><span class="resource-type-badge badge-guide">Guide</span> Free · comprehensive LLM prompting reference</span>
+              </span>
+            </a>
+            <a class="resource-link" href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview" target="_blank" rel="noopener">
+              <span class="resource-link-icon guide"><i class="ti ti-external-link" aria-hidden="true"></i></span>
+              <span class="resource-link-text">
+                <span class="resource-link-label">Anthropic Official Prompt Engineering Docs</span>
+                <span class="resource-link-meta"><span class="resource-type-badge badge-guide">Guide</span> Anthropic · Claude-specific best practices</span>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODULE 4 -->
+      <div class="module-card">
+        <div class="module-head">
+          <span class="duration-badge"><i class="ti ti-clock" aria-hidden="true"></i> 3.5 hrs</span>
+          <div class="module-icon" style="background:var(--amber-50);"><i class="ti ti-file-pencil" style="color:var(--amber-400)" aria-hidden="true"></i></div>
+          <div class="module-num">Module 04</div>
+          <div class="module-name">Grant Writing &amp; Academic Writing</div>
+          <p class="module-desc">Craft compelling grant narratives, specific aims, and academic prose that reviewers fund and journals accept — NIH, NSF, and EU Horizon ready.</p>
+          <ul class="module-topics">
+            <li><i class="ti ti-check" aria-hidden="true"></i> NIH / NSF / EU Horizon formats</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Specific aims &amp; significance</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Budget justification writing</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Reviewer-aligned framing</li>
+          </ul>
+        </div>
+        <div class="resources-panel">
+          <div class="resources-title"><i class="ti ti-books" style="font-size:12px;margin-right:4px" aria-hidden="true"></i>Learning Resources</div>
+          <div class="resource-links">
+            <a class="resource-link" href="https://www.youtube.com/watch?v=hMCmcIMkI8U" target="_blank" rel="noopener">
+              <span class="resource-link-icon video"><i class="ti ti-player-play" aria-hidden="true"></i></span>
+              <span class="resource-link-text">
+                <span class="resource-link-label">Using AI to Write Grants — What to Know 2025</span>
+                <span class="resource-link-meta"><span class="resource-type-badge badge-video">Video</span> From 100+ hrs per grant to 4–6 hrs</span>
+              </span>
+            </a>
+            <a class="resource-link" href="https://www.youtube.com/watch?v=bpYW_4rVcMU" target="_blank" rel="noopener">
+              <span class="resource-link-icon video"><i class="ti ti-player-play" aria-hidden="true"></i></span>
+              <span class="resource-link-text">
+                <span class="resource-link-label">Grant Writing Is Broken — AI Just Exposed the Shortcut</span>
+                <span class="resource-link-meta"><span class="resource-type-badge badge-video">Video</span> Academia Insider · reviewer framing strategy</span>
+              </span>
+            </a>
+            <a class="resource-link" href="https://www.youtube.com/watch?v=P6gWENenXg8" target="_blank" rel="noopener">
+              <span class="resource-link-icon video"><i class="ti ti-player-play" aria-hidden="true"></i></span>
+              <span class="resource-link-text">
+                <span class="resource-link-label">This AI Makes Winning Research Grants Stupidly Easy</span>
+                <span class="resource-link-meta"><span class="resource-type-badge badge-video">Video</span> Step-by-step AI grant writing walkthrough</span>
+              </span>
+            </a>
+            <a class="resource-link" href="https://guides.library.ttu.edu/grant" target="_blank" rel="noopener">
+              <span class="resource-link-icon guide"><i class="ti ti-external-link" aria-hidden="true"></i></span>
+              <span class="resource-link-text">
+                <span class="resource-link-label">AI &amp; Grant Preparation — Texas Tech University</span>
+                <span class="resource-link-meta"><span class="resource-type-badge badge-guide">Guide</span> Includes NotebookLM grant-writing resource</span>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODULE 5 -->
+      <div class="module-card">
+        <div class="module-head">
+          <span class="duration-badge"><i class="ti ti-clock" aria-hidden="true"></i> 3.5 hrs</span>
+          <div class="module-icon" style="background:var(--coral-50);"><i class="ti ti-certificate" style="color:var(--coral-400)" aria-hidden="true"></i></div>
+          <div class="module-num">Module 05</div>
+          <div class="module-name">Publication Support &amp; AI Research Workflow</div>
+          <p class="module-desc">Build an end-to-end AI-assisted research workflow — from idea to published paper — that scales across your entire lab team.</p>
+          <ul class="module-topics">
+            <li><i class="ti ti-check" aria-hidden="true"></i> Manuscript drafting &amp; revision</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Peer review response letters</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Journal selection strategy</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Lab-wide AI adoption playbook</li>
+          </ul>
+        </div>
+        <div class="resources-panel">
+          <div class="resources-title"><i class="ti ti-books" style="font-size:12px;margin-right:4px" aria-hidden="true"></i>Learning Resources</div>
+          <div class="resource-links">
+            <a class="resource-link" href="https://www.youtube.com/watch?v=tr46Qmoe6yM" target="_blank" rel="noopener">
+              <span class="resource-link-icon video"><i class="ti ti-player-play" aria-hidden="true"></i></span>
+              <span class="resource-link-text">
+                <span class="resource-link-label">Best AI Tools for Entire Research Workflow 2026</span>
+                <span class="resource-link-meta"><span class="resource-type-badge badge-video">Video</span> Top 10 tools: lit review to publication</span>
+              </span>
+            </a>
+            <a class="resource-link" href="https://www.youtube.com/watch?v=VY2WvR9B8wU" target="_blank" rel="noopener">
+              <span class="resource-link-icon video"><i class="ti ti-player-play" aria-hidden="true"></i></span>
+              <span class="resource-link-text">
+                <span class="resource-link-label">How to Use AI for Academic Research &amp; Writing (Webinar)</span>
+                <span class="resource-link-meta"><span class="resource-type-badge badge-video">Video</span> SciSpace · idea to peer review full workflow</span>
+              </span>
+            </a>
+            <a class="resource-link" href="https://www.youtube.com/watch?v=pDOPL53tcwQ" target="_blank" rel="noopener">
+              <span class="resource-link-icon video"><i class="ti ti-player-play" aria-hidden="true"></i></span>
+              <span class="resource-link-text">
+                <span class="resource-link-label">The Ultimate AI Toolkit Every Researcher Should Use</span>
+                <span class="resource-link-meta"><span class="resource-type-badge badge-video">Video</span> Academia Insider · complete 2026 stack</span>
+              </span>
+            </a>
+            <a class="resource-link" href="https://www.sciencedirect.com/science/article/pii/S2666990024000120" target="_blank" rel="noopener">
+              <span class="resource-link-icon guide"><i class="ti ti-external-link" aria-hidden="true"></i></span>
+              <span class="resource-link-text">
+                <span class="resource-link-label">AI in Academic Writing &amp; Research — ScienceDirect</span>
+                <span class="resource-link-meta"><span class="resource-type-badge badge-guide">Paper</span> Systematic review · publishing workflow</span>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS STRIP -->
+<div class="tools-strip">
+  <span class="aud-label">Tools covered</span>
+  <span class="tool-pill"><i class="ti ti-brand-openai" aria-hidden="true"></i> ChatGPT / Claude</span>
+  <span class="tool-pill"><i class="ti ti-search" aria-hidden="true"></i> Elicit &amp; Consensus</span>
+  <span class="tool-pill"><i class="ti ti-brand-python" aria-hidden="true"></i> Python &amp; R</span>
+  <span class="tool-pill"><i class="ti ti-file-spreadsheet" aria-hidden="true"></i> Zotero + AI</span>
+  <span class="tool-pill"><i class="ti ti-chart-bar" aria-hidden="true"></i> Tableau / Plotly</span>
+  <span class="tool-pill"><i class="ti ti-markdown" aria-hidden="true"></i> Overleaf + LLM</span>
+  <span class="tool-pill"><i class="ti ti-brain" aria-hidden="true"></i> NotebookLM</span>
+  <span class="tool-pill"><i class="ti ti-zoom-question" aria-hidden="true"></i> Perplexity AI</span>
+</div>
+
+<!-- OUTCOMES -->
+<section class="section" id="outcomes" style="background: var(--surface-1);">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-eyebrow">Outcomes</div>
+      <h2 class="section-title">Leave with real skills, not slides.</h2>
+    </div>
+    <div class="outcomes-grid">
+      <div class="outcome-card"><i class="ti ti-rocket outcome-icon" aria-hidden="true"></i><div class="outcome-title">10× literature speed</div><p class="outcome-desc">Survey a new field in a day, not a semester.</p></div>
+      <div class="outcome-card"><i class="ti ti-target-arrow outcome-icon" aria-hidden="true"></i><div class="outcome-title">Grant-ready writing</div><p class="outcome-desc">Narrative frameworks reviewers actually score highly.</p></div>
+      <div class="outcome-card"><i class="ti ti-code outcome-icon" aria-hidden="true"></i><div class="outcome-title">Reproducible pipelines</div><p class="outcome-desc">Documented, reusable analysis with AI-assisted code.</p></div>
+      <div class="outcome-card"><i class="ti ti-users outcome-icon" aria-hidden="true"></i><div class="outcome-title">Lab AI playbook</div><p class="outcome-desc">A workflow template your whole team can adopt immediately.</p></div>
+      <div class="outcome-card"><i class="ti ti-award outcome-icon" aria-hidden="true"></i><div class="outcome-title">Completion certificate</div><p class="outcome-desc">Shareable credential for your academic profile.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMAT -->
+<section class="section" id="format">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-eyebrow">Format</div>
+      <h2 class="section-title">How the masterclass runs</h2>
+    </div>
+    <div class="format-grid">
+      <div class="format-card"><i class="ti ti-video" aria-hidden="true"></i><div class="format-label">Live sessions</div><p class="format-val">Online via Zoom, 2–3 hr cohort sessions with real-time Q&amp;A</p></div>
+      <div class="format-card"><i class="ti ti-device-laptop" aria-hidden="true"></i><div class="format-label">Hands-on labs</div><p class="format-val">Real datasets, real tools, real research use cases</p></div>
+      <div class="format-card"><i class="ti ti-message-circle" aria-hidden="true"></i><div class="format-label">Expert mentorship</div><p class="format-val">Ask questions specific to your own research problems</p></div>
+      <div class="format-card"><i class="ti ti-clock-24" aria-hidden="true"></i><div class="format-label">Session recordings</div><p class="format-val">All sessions recorded with 60-day replay access</p></div>
+      <div class="format-card"><i class="ti ti-users-group" aria-hidden="true"></i><div class="format-label">Small cohorts</div><p class="format-val">Limited to 40 participants for high-touch learning</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section" style="background: var(--surface-1);">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-eyebrow">Testimonials</div>
+      <h2 class="section-title">Researchers who transformed their practice</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"This masterclass completely changed how I approach literature reviews. What used to take me 3 weeks now takes 2 days. The prompt engineering module alone was worth the price."</p>
+        <div class="testimonial-author">
+          <div class="t-avatar" style="background:var(--blue-50); color:var(--blue-800);">DR</div>
+          <div><div class="t-name">Dr. Ritu Sharma</div><div class="t-role">Postdoctoral Researcher, IIT Delhi</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"The grant writing module helped me restructure my NIH R01 specific aims. My program officer said it was the clearest proposal she had reviewed that cycle."</p>
+        <div class="testimonial-author">
+          <div class="t-avatar" style="background:var(--teal-50); color:var(--teal-800);">MK</div>
+          <div><div class="t-name">Prof. Marco Kessler</div><div class="t-role">Associate Professor, University of Zurich</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"As a PI managing 8 lab members, the AI workflow module gave me a scalable system I rolled out to my entire group. Our publication rate increased noticeably within one semester."</p>
+        <div class="testimonial-author">
+          <div class="t-avatar" style="background:var(--purple-50); color:var(--purple-800);">AN</div>
+          <div><div class="t-name">Dr. Anika Nguyen</div><div class="t-role">Principal Investigator, Stanford Medicine</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-eyebrow">FAQ</div>
+      <h2 class="section-title">Common questions</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Do I need a technical background to join?<i class="ti ti-chevron-down" aria-hidden="true"></i></button>
+        <div class="faq-a">No coding experience is required. The masterclass is designed for researchers of all technical levels. We cover tools usable without programming, and provide beginner-friendly Python/R guidance for those who want to go deeper.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Will this work for my research discipline?<i class="ti ti-chevron-down" aria-hidden="true"></i></button>
+        <div class="faq-a">Yes. The content is discipline-agnostic and has been used by researchers in life sciences, social sciences, engineering, humanities, and medicine. All hands-on labs allow you to work with datasets and topics from your own field.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Can I attend if I'm in a different time zone?<i class="ti ti-chevron-down" aria-hidden="true"></i></button>
+        <div class="faq-a">All sessions are recorded and available for 60 days after each module. We run cohorts across multiple time zones — check the schedule for a cohort that suits your region.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Is there institutional pricing for universities?<i class="ti ti-chevron-down" aria-hidden="true"></i></button>
+        <div class="faq-a">Yes. We offer group rates for departments and institutions registering 5 or more participants. Contact us at research@aimasterclass.com for a custom quote and invoice.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">What certificate will I receive?<i class="ti ti-chevron-down" aria-hidden="true"></i></button>
+        <div class="faq-a">Participants who complete all five modules receive a digital certificate of completion, suitable for sharing on LinkedIn or adding to your academic CV. A PDF version is also provided.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ENROLL CTA -->
+<section class="cta-footer" id="enroll">
+  <div style="max-width: 600px; margin: 0 auto;">
+    <h2 class="cta-footer-title">Ready to transform your research?</h2>
+    <p class="cta-footer-sub">Join the next cohort and build an AI-powered research practice from day one. Seats fill fast.</p>
+    <a href="mailto:research@aimasterclass.com" class="enroll-btn">
+      <i class="ti ti-calendar-plus" aria-hidden="true"></i> Enroll in the next cohort
+    </a>
+    <div class="seats-note">
+      <i class="ti ti-flame" aria-hidden="true"></i>
+      Seats are limited to 40 per cohort — early registration recommended
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 AI Research Masterclass</span>
+  <span>·</span><a href="#">Privacy policy</a>
+  <span>·</span><a href="#">Terms</a>
+  <span>·</span><a href="mailto:research@aimasterclass.com">Contact us</a>
+</footer>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.module-card, .outcome-card, .format-card, .testimonial-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(16px)';
+    el.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
