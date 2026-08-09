@@ -1,1366 +1,564 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KMC Humanities & Social Science - Complete Academic Portal</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #1e3a5f;
-            --primary-dark: #152a45;
-            --accent: #c9a227;
-            --accent-light: #e8d5a3;
-            --text: #2d3748;
-            --text-light: #718096;
-            --bg: #f7fafc;
-            --white: #ffffff;
-            --border: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-            --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Inter', 'Noto Sans Devanagari', sans-serif; color: var(--text); line-height: 1.6; background: var(--bg); }
-        nav { background: var(--primary); position: sticky; top: 0; z-index: 1000; box-shadow: var(--shadow); }
-        .nav-container { max-width: 1400px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; height: 70px; }
-        .logo { color: var(--white); font-size: 1.1rem; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; white-space: nowrap; }
-        .logo span { color: var(--accent); }
-        .nav-links { display: flex; list-style: none; gap: 1.5rem; overflow-x: auto; }
-        .nav-links a { color: rgba(255,255,255,0.9); text-decoration: none; font-weight: 500; font-size: 0.9rem; transition: color 0.3s; position: relative; white-space: nowrap; cursor: pointer; }
-        .nav-links a:hover { color: var(--accent); }
-        .nav-links a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--accent); transition: width 0.3s; }
-        .nav-links a:hover::after { width: 100%; }
-        .mobile-menu-btn { display: none; background: none; border: none; color: var(--white); font-size: 1.5rem; cursor: pointer; }
-        .hero { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: var(--white); padding: 3rem 2rem; text-align: center; position: relative; overflow: hidden; }
-        .hero::before { content: ''; position: absolute; top: -50%; right: -10%; width: 600px; height: 600px; background: rgba(201, 162, 39, 0.1); border-radius: 50%; }
-        .hero-content { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
-        .hero h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 0.75rem; line-height: 1.2; }
-        .hero h1 span { color: var(--accent); }
-        .hero-subtitle { font-size: 1.15rem; color: rgba(255,255,255,0.9); margin-bottom: 0.5rem; font-weight: 500; }
-        .hero-location { color: var(--accent-light); font-size: 0.95rem; margin-bottom: 1.5rem; }
-        .hero-badge { display: inline-block; background: rgba(201, 162, 39, 0.2); border: 1px solid var(--accent); color: var(--accent-light); padding: 0.5rem 1.5rem; border-radius: 50px; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.5px; }
-        section { padding: 3rem 2rem; max-width: 1400px; margin: 0 auto; }
-        .section-header { text-align: center; margin-bottom: 2.5rem; }
-        .section-header h2 { font-size: 2rem; color: var(--primary); margin-bottom: 0.75rem; font-weight: 700; }
-        .section-header p { color: var(--text-light); max-width: 600px; margin: 0 auto; }
-        .divider { width: 60px; height: 4px; background: var(--accent); margin: 0.75rem auto; border-radius: 2px; }
-        .about { background: var(--white); border-radius: 16px; padding: 3rem; box-shadow: var(--shadow); margin-top: -2rem; position: relative; z-index: 2; border: 1px solid var(--border); }
-        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
-        .about-text h3 { font-size: 1.5rem; color: var(--primary); margin-bottom: 1rem; }
-        .about-text p { color: var(--text-light); margin-bottom: 1rem; }
-        .about-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
-        .stat-card { background: var(--bg); padding: 1.5rem; border-radius: 12px; text-align: center; border-left: 4px solid var(--accent); }
-        .stat-number { font-size: 2rem; font-weight: 800; color: var(--primary); display: block; }
-        .stat-label { font-size: 0.875rem; color: var(--text-light); font-weight: 500; }
-        .tabs-container { display: flex; gap: 0; margin-bottom: 2rem; border-bottom: 2px solid var(--border); overflow-x: auto; }
-        .tab-button { background: none; border: none; padding: 1rem 1.5rem; font-size: 1rem; font-weight: 600; color: var(--text-light); cursor: pointer; transition: all 0.3s; position: relative; border-bottom: 3px solid transparent; white-space: nowrap; }
-        .tab-button:hover { color: var(--primary); }
-        .tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .curriculum { background: var(--white); margin-top: 1.5rem; border-radius: 16px; padding: 2.5rem; box-shadow: var(--shadow); border: 1px solid var(--border); }
-        .curriculum-intro { background: linear-gradient(to right, rgba(30,58,95,0.05), transparent); border-left: 4px solid var(--primary); padding: 1.5rem; border-radius: 0 12px 12px 0; margin-bottom: 2rem; }
-        .curriculum-intro h3 { color: var(--primary); font-size: 1.25rem; margin-bottom: 0.5rem; }
-        .curriculum-intro p { color: var(--text-light); font-size: 0.95rem; }
-        .subject-category { margin-bottom: 2.5rem; }
-        .category-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
-        .category-icon { width: 40px; height: 40px; background: var(--primary); color: var(--white); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; }
-        .category-title { font-size: 1.2rem; font-weight: 700; color: var(--primary); }
-        .category-badge { margin-left: auto; background: var(--accent); color: var(--primary-dark); padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-        .subjects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; }
-        .subject-card { background: var(--bg); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border); transition: all 0.3s ease; position: relative; overflow: hidden; cursor: pointer; }
-        .subject-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--accent); transform: scaleX(0); transition: transform 0.3s ease; }
-        .subject-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
-        .subject-card:hover::before { transform: scaleX(1); }
-        .subject-code { display: inline-block; background: var(--primary); color: var(--white); padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: monospace; margin-bottom: 0.75rem; }
-        .subject-name { font-size: 1.1rem; font-weight: 600; color: var(--text); margin-bottom: 0.5rem; line-height: 1.4; }
-        .subject-marks { display: flex; align-items: center; gap: 0.5rem; color: var(--text-light); font-size: 0.875rem; font-weight: 500; }
-        .marks-badge { background: rgba(201, 162, 39, 0.15); color: var(--primary-dark); padding: 0.2rem 0.6rem; border-radius: 4px; font-weight: 700; font-size: 0.8rem; }
-        .subject-links { margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
-        .subject-link { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.5rem 1rem; background: var(--primary); color: var(--white); text-decoration: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600; transition: all 0.3s; border: none; cursor: pointer; }
-        .subject-link:hover { background: var(--accent); color: var(--primary-dark); transform: translateY(-1px); }
-        .nepali-card .subject-name { font-family: 'Noto Sans Devanagari', sans-serif; font-weight: 600; line-height: 1.6; }
-        .nepali-card .subject-code { background: #8b4513; }
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; padding: 1rem; overflow-y: auto; }
-        .modal-overlay.active { display: flex; }
-        .modal-content { background: var(--white); border-radius: 20px; max-width: 1000px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; animation: modalSlide 0.4s ease; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
-        @keyframes modalSlide { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        .modal-header { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: var(--white); padding: 2rem; position: sticky; top: 0; z-index: 10; }
-        .modal-close { position: absolute; top: 1.5rem; right: 1.5rem; background: rgba(255,255,255,0.2); border: none; color: var(--white); width: 40px; height: 40px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
-        .modal-close:hover { background: rgba(255,255,255,0.3); transform: rotate(90deg); }
-        .modal-header h2 { font-size: 1.75rem; margin-bottom: 0.5rem; }
-        .modal-header .modal-meta { display: flex; gap: 1rem; flex-wrap: wrap; font-size: 0.9rem; opacity: 0.9; }
-        .modal-meta span { background: rgba(255,255,255,0.15); padding: 0.25rem 0.75rem; border-radius: 6px; }
-        .modal-body { padding: 2rem; }
-        .material-section { margin-bottom: 2.5rem; }
-        .material-section h3 { color: var(--primary); font-size: 1.25rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border); }
-        .material-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
-        .material-item { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; transition: all 0.3s; display: flex; flex-direction: column; gap: 0.75rem; }
-        .material-item:hover { border-color: var(--accent); box-shadow: var(--shadow); transform: translateY(-2px); }
-        .material-icon { font-size: 2rem; margin-bottom: 0.25rem; }
-        .material-title { font-weight: 600; color: var(--primary); font-size: 0.95rem; }
-        .material-desc { font-size: 0.85rem; color: var(--text-light); flex-grow: 1; }
-        .material-btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0.6rem 1rem; background: var(--primary); color: var(--white); text-decoration: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600; transition: all 0.3s; border: none; cursor: pointer; text-align: center; }
-        .material-btn:hover { background: var(--accent); color: var(--primary-dark); }
-        .material-btn.pdf { background: #c53030; }
-        .material-btn.pdf:hover { background: #9b2c2c; color: var(--white); }
-        .material-btn.video { background: #2b6cb0; }
-        .material-btn.video:hover { background: #2c5282; color: var(--white); }
-        .material-btn.ppt { background: #c05621; }
-        .material-btn.ppt:hover { background: #9c4221; color: var(--white); }
-        .material-btn.doc { background: #2f855a; }
-        .material-btn.doc:hover { background: #276749; color: var(--white); }
-        .material-btn.link { background: #6b46c1; }
-        .material-btn.link:hover { background: #553c9a; color: var(--white); }
-        .syllabus-hub { background: var(--white); border-radius: 16px; padding: 2.5rem; box-shadow: var(--shadow); border: 1px solid var(--border); }
-        .syllabus-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-        .syllabus-card { background: linear-gradient(135deg, var(--white), #f8fafc); border: 2px solid var(--border); border-radius: 16px; padding: 2rem; text-align: center; transition: all 0.3s; }
-        .syllabus-card:hover { border-color: var(--accent); box-shadow: var(--shadow-lg); transform: translateY(-5px); }
-        .syllabus-icon { width: 60px; height: 60px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 1rem; }
-        .syllabus-card h3 { color: var(--primary); margin-bottom: 0.5rem; font-size: 1.2rem; }
-        .syllabus-card p { color: var(--text-light); font-size: 0.85rem; margin-bottom: 1.25rem; }
-        .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.25rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: all 0.3s; cursor: pointer; border: none; }
-        .btn-primary { background: var(--primary); color: var(--white); }
-        .btn-primary:hover { background: var(--primary-dark); box-shadow: 0 4px 12px rgba(30,58,95,0.3); }
-        .btn-accent { background: var(--accent); color: var(--primary-dark); }
-        .btn-accent:hover { background: #b8941f; box-shadow: 0 4px 12px rgba(201,162,39,0.3); }
-        .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
-        .btn-outline:hover { background: var(--primary); color: var(--white); }
-        .faculty-section { text-align: center; }
-        .faculty-card { background: var(--white); border-radius: 16px; padding: 2.5rem 2rem; box-shadow: var(--shadow); border: 1px solid var(--border); max-width: 500px; margin: 0 auto; position: relative; overflow: hidden; }
-        .faculty-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(to right, var(--primary), var(--accent)); }
-        .faculty-avatar { width: 110px; height: 110px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 50%; margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; color: var(--white); font-size: 2.75rem; font-weight: 700; border: 4px solid var(--accent); }
-        .faculty-name { font-size: 1.4rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; }
-        .faculty-role { color: var(--accent); font-weight: 600; font-size: 0.95rem; margin-bottom: 0.25rem; }
-        .faculty-dept { color: var(--text-light); font-size: 0.9rem; margin-bottom: 1rem; }
-        .developer-info { background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); color: var(--white); padding: 3rem 2rem; margin-top: 3rem; border-radius: 16px; text-align: center; }
-        .developer-info h3 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--accent); }
-        .developer-info p { font-size: 1.05rem; margin: 0.5rem 0; }
-        .developer-badge { display: inline-block; background: rgba(201, 162, 39, 0.2); border: 2px solid var(--accent); color: var(--accent-light); padding: 0.75rem 1.5rem; border-radius: 50px; font-size: 0.9rem; font-weight: 600; margin-top: 1rem; }
-        footer { background: var(--primary-dark); color: rgba(255,255,255,0.8); padding: 3rem 2rem 2rem; margin-top: 3rem; }
-        .footer-content { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 3rem; }
-        .footer-brand h3 { color: var(--white); font-size: 1.25rem; margin-bottom: 1rem; }
-        .footer-brand p { font-size: 0.9rem; line-height: 1.7; color: rgba(255,255,255,0.7); }
-        .footer-links h4 { color: var(--accent); font-size: 1rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px; }
-        .footer-links ul { list-style: none; }
-        .footer-links li { margin-bottom: 0.5rem; }
-        .footer-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; transition: color 0.3s; }
-        .footer-links a:hover { color: var(--accent); }
-        .footer-bottom { max-width: 1400px; margin: 2rem auto 0; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 0.85rem; color: rgba(255,255,255,0.5); }
-        .developer-credit { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); font-size: 0.9rem; }
-        .developer-credit a { color: var(--accent); text-decoration: none; }
-        .developer-credit a:hover { text-decoration: underline; }
-        @media (max-width: 768px) {
-            .nav-links { display: none; position: absolute; top: 70px; left: 0; right: 0; background: var(--primary); flex-direction: column; padding: 1rem 2rem; gap: 1rem; box-shadow: var(--shadow-lg); }
-            .nav-links.active { display: flex; }
-            .mobile-menu-btn { display: block; }
-            .hero h1 { font-size: 2rem; }
-            .about-grid { grid-template-columns: 1fr; }
-            .footer-content { grid-template-columns: 1fr; gap: 2rem; }
-            section { padding: 2rem 1rem; }
-            .about, .curriculum { padding: 1.5rem; margin-top: -1rem; }
-            .logo { font-size: 0.9rem; }
-            .tabs-container { overflow-x: auto; }
-            .subjects-grid { grid-template-columns: 1fr; }
-            .material-grid { grid-template-columns: 1fr; }
-            .modal-content { max-height: 95vh; border-radius: 12px; }
-            .modal-header { padding: 1.5rem; }
-            .modal-header h2 { font-size: 1.4rem; }
-            .modal-body { padding: 1.5rem; }
-        }
-        .year-label { display: inline-block; background: var(--accent); color: var(--primary-dark); padding: 0.3rem 0.8rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; margin-bottom: 1rem; }
-        .notice-box { background: #fffbeb; border: 1px solid #f6e05e; border-radius: 10px; padding: 1rem 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; color: #744210; font-size: 0.9rem; }
-        .notice-box strong { color: #975a16; }
-        .empty-state { text-align: center; padding: 3rem 2rem; color: var(--text-light); }
-        .empty-state-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
-        .empty-state h4 { color: var(--primary); margin-bottom: 0.5rem; }
-    </style>
-<base target="_blank">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KMC Humanities & Social Science - Academic Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#1e3a5f;--primary-dark:#152a45;--accent:#c9a227;--accent-light:#e8d5a3;--text:#2d3748;--text-light:#718096;--bg:#f7fafc;--white:#ffffff;--border:#e2e8f0;--shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -1px rgba(0,0,0,.06);--shadow-lg:0 20px 25px -5px rgba(0,0,0,.15),0 10px 10px -5px rgba(0,0,0,.06);--radius:14px;}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{font-family:'Inter','Noto Sans Devanagari',sans-serif;color:var(--text);line-height:1.6;background:var(--bg);}
+nav{background:var(--primary);position:sticky;top:0;z-index:900;box-shadow:var(--shadow);}
+.nav-container{max-width:1400px;margin:0 auto;padding:0 2rem;display:flex;justify-content:space-between;align-items:center;height:66px;}
+.logo{color:#fff;font-size:1.05rem;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:.5rem;}
+.logo span{color:var(--accent);}
+.nav-links{display:flex;list-style:none;gap:1.5rem;}
+.nav-links a{color:rgba(255,255,255,.9);text-decoration:none;font-weight:500;font-size:.875rem;transition:color .2s;}
+.nav-links a:hover{color:var(--accent);}
+.mobile-btn{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;}
+@media(max-width:768px){.nav-links{display:none;position:absolute;top:66px;left:0;right:0;background:var(--primary);flex-direction:column;padding:1rem 2rem;gap:1rem;box-shadow:var(--shadow-lg);}.nav-links.open{display:flex;}.mobile-btn{display:block;}}
+.hero{background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);color:#fff;padding:3.5rem 2rem;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-40%;right:-8%;width:560px;height:560px;background:rgba(201,162,39,.09);border-radius:50%;}
+.hero-inner{max-width:860px;margin:0 auto;position:relative;z-index:1;}
+.hero-badge{display:inline-block;background:rgba(201,162,39,.18);border:1px solid var(--accent);color:var(--accent-light);padding:.45rem 1.4rem;border-radius:50px;font-size:.82rem;font-weight:600;letter-spacing:.5px;margin-bottom:1.2rem;}
+.hero h1{font-size:2.6rem;font-weight:800;line-height:1.2;margin-bottom:.6rem;}
+.hero h1 span{color:var(--accent);}
+.hero-sub{font-size:1.1rem;color:rgba(255,255,255,.85);font-weight:500;margin-bottom:.3rem;}
+.hero-loc{color:var(--accent-light);font-size:.9rem;margin-bottom:1.2rem;}
+.section{padding:3rem 2rem;max-width:1400px;margin:0 auto;}
+.section-header{text-align:center;margin-bottom:2.5rem;}
+.section-header h2{font-size:1.9rem;color:var(--primary);font-weight:700;margin-bottom:.6rem;}
+.divider{width:56px;height:4px;background:var(--accent);margin:.6rem auto;border-radius:2px;}
+.section-header p{color:var(--text-light);max-width:580px;margin:0 auto;}
+.about-box{background:#fff;border-radius:var(--radius);padding:2.5rem;box-shadow:var(--shadow);border:1px solid var(--border);margin-top:-1.5rem;position:relative;z-index:2;}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center;}
+.about-text h3{font-size:1.4rem;color:var(--primary);margin-bottom:.9rem;}
+.about-text p{color:var(--text-light);margin-bottom:.9rem;}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;}
+.stat{background:var(--bg);border-radius:12px;padding:1.4rem;text-align:center;border-left:4px solid var(--accent);}
+.stat b{display:block;font-size:2rem;font-weight:800;color:var(--primary);}
+.stat span{font-size:.8rem;color:var(--text-light);font-weight:500;}
+@media(max-width:768px){.about-grid{grid-template-columns:1fr;}.hero h1{font-size:2rem;}.section{padding:2rem 1rem;}.about-box{padding:1.5rem;margin-top:-1rem;}}
+.tabs-wrap{background:#fff;border-radius:var(--radius);padding:2rem 2rem 2.5rem;box-shadow:var(--shadow);border:1px solid var(--border);margin-top:1.5rem;}
+.tabs-nav{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:2rem;overflow-x:auto;}
+.tab-btn{background:none;border:none;border-bottom:3px solid transparent;padding:.85rem 1.4rem;font-size:.95rem;font-weight:600;color:var(--text-light);cursor:pointer;transition:all .2s;white-space:nowrap;font-family:inherit;}
+.tab-btn:hover{color:var(--primary);}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+.tab-pane{display:none;}.tab-pane.active{display:block;}
+.year-pill{display:inline-block;background:var(--accent);color:var(--primary-dark);padding:.25rem .8rem;border-radius:6px;font-size:.78rem;font-weight:700;margin-bottom:1rem;}
+.intro-box{background:linear-gradient(to right,rgba(30,58,95,.06),transparent);border-left:4px solid var(--primary);padding:1.25rem 1.5rem;border-radius:0 12px 12px 0;margin-bottom:2rem;}
+.intro-box h3{color:var(--primary);font-size:1.1rem;margin-bottom:.3rem;}
+.intro-box p{color:var(--text-light);font-size:.9rem;}
+.cat-section{margin-bottom:2.5rem;}
+.cat-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;padding-bottom:.65rem;border-bottom:2px solid var(--border);}
+.cat-icon{width:38px;height:38px;background:var(--primary);color:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.cat-title{font-size:1.15rem;font-weight:700;color:var(--primary);}
+.cat-badge{margin-left:auto;background:var(--accent);color:var(--primary-dark);padding:.2rem .7rem;border-radius:50px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.sub-heading{color:var(--primary);margin:1.75rem 0 .9rem;font-size:1rem;display:flex;align-items:center;gap:.5rem;font-weight:600;}
+.sub-heading .dot{width:8px;height:8px;background:var(--accent);border-radius:50%;flex-shrink:0;}
+.subjects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.1rem;}
+.subj-card{background:var(--bg);border-radius:12px;padding:1.4rem;border:1px solid var(--border);transition:all .25s ease;position:relative;overflow:hidden;}
+.subj-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:var(--accent);transform:scaleX(0);transition:transform .3s;}
+.subj-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px);}
+.subj-card:hover::before{transform:scaleX(1);}
+.subj-code{display:inline-block;background:var(--primary);color:#fff;padding:.22rem .7rem;border-radius:6px;font-size:.76rem;font-weight:700;font-family:monospace;margin-bottom:.65rem;}
+.nepali-card .subj-code{background:#7b3f00;}
+.subj-name{font-size:1rem;font-weight:600;color:var(--text);margin-bottom:.5rem;line-height:1.4;}
+.nepali-card .subj-name{font-family:'Noto Sans Devanagari',sans-serif;font-size:.95rem;line-height:1.7;}
+.subj-marks{display:flex;align-items:center;gap:.5rem;color:var(--text-light);font-size:.82rem;font-weight:500;margin-bottom:.9rem;}
+.marks-pill{background:rgba(201,162,39,.15);color:var(--primary-dark);padding:.18rem .55rem;border-radius:4px;font-weight:700;font-size:.77rem;}
+.subj-actions{display:flex;gap:.45rem;flex-wrap:wrap;}
+.btn-content{display:inline-flex;align-items:center;gap:.3rem;padding:.38rem .8rem;background:rgba(30,58,95,.09);color:var(--primary);border:1px solid var(--border);border-radius:7px;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .22s;font-family:inherit;}
+.btn-content:hover{background:var(--primary);color:#fff;border-color:var(--primary);}
+.btn-notes:hover{background:#276749 !important;}
+.btn-video:hover{background:#742a2a !important;}
+.btn-questions:hover{background:#553c9a !important;}
+/* PANEL */
+.panel-overlay{position:fixed;inset:0;background:rgba(15,30,55,.55);z-index:1000;opacity:0;pointer-events:none;transition:opacity .3s;}
+.panel-overlay.open{opacity:1;pointer-events:all;}
+.content-panel{position:fixed;top:0;right:0;bottom:0;width:min(700px,100%);background:#fff;z-index:1001;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 40px rgba(0,0,0,.18);}
+.content-panel.open{transform:translateX(0);}
+.panel-header{background:var(--primary);color:#fff;padding:1.4rem 1.6rem;display:flex;justify-content:space-between;align-items:flex-start;flex-shrink:0;}
+.panel-code{display:inline-block;background:var(--accent);color:var(--primary-dark);padding:.18rem .65rem;border-radius:5px;font-size:.75rem;font-weight:700;font-family:monospace;margin-bottom:.5rem;}
+.panel-header h3{font-size:1.1rem;font-weight:700;line-height:1.35;margin-bottom:.2rem;}
+.panel-marks-text{color:rgba(255,255,255,.7);font-size:.82rem;}
+.panel-close{background:rgba(255,255,255,.15);border:none;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s;font-family:inherit;}
+.panel-close:hover{background:rgba(255,255,255,.3);}
+.panel-tabs{display:flex;border-bottom:2px solid var(--border);flex-shrink:0;background:#fff;overflow-x:auto;}
+.ptab{background:none;border:none;border-bottom:3px solid transparent;padding:.75rem 1.1rem;font-size:.85rem;font-weight:600;color:var(--text-light);cursor:pointer;transition:all .2s;font-family:inherit;white-space:nowrap;}
+.ptab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.panel-body{flex:1;overflow-y:auto;padding:1.6rem;}
+.panel-section{display:none;}.panel-section.active{display:block;}
+.syl-unit{margin-bottom:1.6rem;}
+.unit-hd{font-size:.92rem;font-weight:700;color:var(--primary);margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem;}
+.u-num{background:var(--primary);color:#fff;width:22px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;}
+.topic-list{list-style:none;padding-left:.3rem;}
+.topic-list li{padding:.32rem 0;color:var(--text-light);font-size:.87rem;border-bottom:1px dashed var(--border);display:flex;align-items:flex-start;gap:.5rem;}
+.topic-list li::before{content:'▸';color:var(--accent);font-size:.7rem;margin-top:.22rem;flex-shrink:0;}
+.note-card{background:linear-gradient(135deg,#f0f7ff,#e8f4fd);border:1px solid #bee3f8;border-radius:10px;padding:1.2rem 1.4rem;margin-bottom:1.2rem;}
+.note-card h4{color:#2b6cb0;font-size:.88rem;margin-bottom:.6rem;display:flex;align-items:center;gap:.4rem;}
+.note-card .note-body{color:#2d3748;font-size:.87rem;line-height:1.7;white-space:pre-line;}
+.note-card ul{margin-top:.65rem;padding-left:1rem;}
+.note-card ul li{color:#2d3748;font-size:.86rem;margin-bottom:.3rem;line-height:1.6;}
+.vid-item{display:flex;align-items:center;gap:.9rem;padding:1rem;background:var(--bg);border:1px solid var(--border);border-radius:10px;margin-bottom:.75rem;}
+.vid-thumb{width:48px;height:48px;background:linear-gradient(135deg,#742a2a,#c53030);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;}
+.vid-info h5{font-size:.87rem;font-weight:600;color:var(--text);}
+.vid-info p{font-size:.77rem;color:var(--text-light);margin-top:.1rem;}
+.vid-btn{margin-left:auto;background:var(--primary);color:#fff;padding:.32rem .8rem;border-radius:6px;font-size:.77rem;font-weight:600;text-decoration:none;border:none;cursor:pointer;font-family:inherit;transition:background .2s;flex-shrink:0;}
+.vid-btn:hover{background:var(--accent);color:var(--primary-dark);}
+.q-row{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1rem;background:var(--bg);border:1px solid var(--border);border-radius:9px;margin-bottom:.6rem;}
+.q-left{display:flex;align-items:center;gap:.7rem;}
+.q-icon{font-size:1.4rem;}
+.q-title{font-size:.87rem;font-weight:600;color:var(--text);}
+.q-meta{font-size:.75rem;color:var(--text-light);}
+.q-dl{background:var(--primary);color:#fff;padding:.3rem .78rem;border-radius:6px;font-size:.76rem;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:background .2s;}
+.q-dl:hover{background:var(--accent);color:var(--primary-dark);}
+.panel-note-info{background:var(--bg);border-radius:8px;border:1px dashed var(--border);padding:.9rem 1rem;font-size:.81rem;color:var(--text-light);text-align:center;margin-top:.75rem;}
+.coming-soon-panel{text-align:center;padding:2.5rem 1rem;color:var(--text-light);}
+.coming-soon-panel .cs-icon{font-size:2.5rem;margin-bottom:.75rem;}
+.coming-soon-panel h4{color:var(--primary);font-size:1rem;margin-bottom:.45rem;}
+.coming-soon-panel p{font-size:.87rem;}
+.empty-info{background:var(--bg);border-radius:10px;border:1px dashed var(--border);padding:1.5rem;text-align:center;color:var(--text-light);font-size:.9rem;}
+/* Resources */
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin-top:1.5rem;}
+.res-card{background:#fff;border-radius:var(--radius);padding:1.75rem;box-shadow:var(--shadow);border:1px solid var(--border);transition:all .25s;}
+.res-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+.res-icon{font-size:2.2rem;margin-bottom:.9rem;}
+.res-card h3{color:var(--primary);font-size:1.05rem;margin-bottom:.5rem;}
+.res-card p{color:var(--text-light);font-size:.88rem;margin-bottom:1.25rem;}
+.res-btn{display:inline-block;background:var(--primary);color:#fff;padding:.65rem 1.3rem;border-radius:8px;text-decoration:none;font-weight:600;font-size:.85rem;border:none;cursor:pointer;font-family:inherit;transition:all .2s;}
+.res-btn:hover{background:var(--accent);color:var(--primary-dark);}
+/* Faculty */
+.fac-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;margin-top:2rem;}
+.fac-card{background:#fff;border-radius:var(--radius);padding:2.25rem 2rem;box-shadow:var(--shadow);border:1px solid var(--border);text-align:center;position:relative;overflow:hidden;}
+.fac-card::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(to right,var(--primary),var(--accent));}
+.fac-avatar{width:90px;height:90px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:50%;margin:0 auto 1.25rem;display:flex;align-items:center;justify-content:center;color:#fff;font-size:2rem;font-weight:700;border:4px solid var(--accent);}
+.fac-name{font-size:1.25rem;font-weight:700;color:var(--primary);margin-bottom:.3rem;}
+.fac-role{color:var(--accent);font-weight:600;font-size:.9rem;margin-bottom:.2rem;}
+.fac-dept{color:var(--text-light);font-size:.85rem;margin-bottom:.9rem;}
+.fac-contact{margin-top:.9rem;padding-top:.9rem;border-top:1px solid var(--border);font-size:.82rem;color:var(--text-light);text-align:left;}
+.fac-contact p{margin:.28rem 0;}
+.dev-banner{background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:#fff;padding:2.5rem 2rem;border-radius:var(--radius);text-align:center;margin-top:2.5rem;}
+.dev-banner h3{color:var(--accent);font-size:1.35rem;margin-bottom:.75rem;}
+.dev-banner p{color:rgba(255,255,255,.85);margin:.4rem 0;}
+.dev-badge{display:inline-block;background:rgba(201,162,39,.2);border:2px solid var(--accent);color:var(--accent-light);padding:.6rem 1.4rem;border-radius:50px;font-size:.85rem;font-weight:600;margin-top:.9rem;}
+footer{background:var(--primary-dark);color:rgba(255,255,255,.8);padding:3rem 2rem 2rem;margin-top:3rem;}
+.footer-grid{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:2.5rem;}
+.footer-brand h3{color:#fff;margin-bottom:.9rem;}
+.footer-brand p{font-size:.88rem;line-height:1.7;color:rgba(255,255,255,.65);}
+.footer-links h4{color:var(--accent);font-size:.85rem;margin-bottom:.9rem;text-transform:uppercase;letter-spacing:1px;}
+.footer-links ul{list-style:none;}
+.footer-links li{margin-bottom:.45rem;}
+.footer-links a{color:rgba(255,255,255,.65);text-decoration:none;font-size:.88rem;transition:color .2s;}
+.footer-links a:hover{color:var(--accent);}
+.footer-bottom{max-width:1400px;margin:2rem auto 0;padding-top:1.75rem;border-top:1px solid rgba(255,255,255,.1);text-align:center;font-size:.82rem;color:rgba(255,255,255,.45);}
+.footer-bottom a{color:var(--accent);text-decoration:none;}
+@media(max-width:768px){.footer-grid{grid-template-columns:1fr;gap:1.75rem;}}
+</style>
 </head>
 <body>
 
-    <!-- Navigation -->
-    <nav>
-        <div class="nav-container">
-            <a href="#" class="logo" onclick="closeModal(); window.scrollTo(0,0)">
-                <span>📚</span><span>KMC-HSSD, Taulihawa</span>
-            </a>
-            <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
-            <ul class="nav-links" id="navLinks">
-                <li><a onclick="closeModal(); scrollToSection('home')">Home</a></li>
-                <li><a onclick="closeModal(); scrollToSection('about')">About</a></li>
-                <li><a onclick="closeModal(); scrollToSection('curriculum')">Curriculum</a></li>
-                <li><a onclick="closeModal(); scrollToSection('syllabus')">Syllabus</a></li>
-                <li><a onclick="closeModal(); scrollToSection('faculty')">Faculty</a></li>
-                <li><a onclick="closeModal(); scrollToSection('contact')">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
+<nav>
+  <div class="nav-container">
+    <a href="#" class="logo"><span>📚</span><span>KMC-HSSD, Taulihawa</span></a>
+    <button class="mobile-btn" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Home</a></li><li><a href="#about">About</a></li><li><a href="#curriculum">Curriculum</a></li>
+      <li><a href="#materials">Materials</a></li><li><a href="#syllabus">Syllabus</a></li><li><a href="#faculty">Faculty</a></li><li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <div class="hero-badge">Kapilvastu Multiple Campus (KMC), Affiliated with Tribhuvan University</div>
-            <h1>Humanity & <span>Social Science</span></h1>
-            <p class="hero-subtitle">Kapilvastu Multiple Campus (KMC)</p>
-            <p class="hero-location">📍 Taulihawa, Kapilvastu, Lumbini Province, Nepal</p>
-            <p style="font-size: 1rem; color: rgba(255,255,255,0.8); margin-top: 1rem;">Complete Academic Portal for B.A. Programs — All Years</p>
-        </div>
-    </section>
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div class="hero-badge">Kapilvastu Multiple Campus (KMC) · Affiliated with Tribhuvan University</div>
+    <h1>Humanity &amp; <span>Social Science</span></h1>
+    <p class="hero-sub">Kapilvastu Multiple Campus (KMC)</p>
+    <p class="hero-loc">📍 Taulihawa, Kapilvastu, Lumbini Province, Nepal</p>
+    <p style="font-size:.95rem;color:rgba(255,255,255,.75);">Complete Academic Portal for B.A. Programs — Click any subject button to open its learning content</p>
+  </div>
+</section>
 
-    <!-- About Section -->
-    <section id="about">
-        <div class="about">
-            <div class="about-grid">
-                <div class="about-text">
-                    <h3>About The Department</h3>
-                    <p>The Department of Humanity & Social Science at Kapilvastu Multiple Campus is committed to academic excellence and the holistic development of students. Located in the historic region of Taulihawa, Kapilvastu — the birthplace of Lord Buddha.</p>
-                    <p>We offer comprehensive Bachelor of Arts (B.A.) programs across four years, designed to foster critical thinking, research skills, and a deep understanding of human society, culture, and development.</p>
-                </div>
-                <div class="about-stats">
-                    <div class="stat-card"><span class="stat-number">8+</span><span class="stat-label">Major Subjects</span></div>
-                    <div class="stat-card"><span class="stat-number">4</span><span class="stat-label">Years Program</span></div>
-                    <div class="stat-card"><span class="stat-number">100+</span><span class="stat-label">Total Courses</span></div>
-                    <div class="stat-card"><span class="stat-number">TU</span><span class="stat-label">Affiliated</span></div>
-                </div>
-            </div>
-        </div>
-    </section>
+<section class="section" id="about">
+  <div class="about-box">
+    <div class="about-grid">
+      <div class="about-text">
+        <h3>About The Department</h3>
+        <p>The Department of Humanity &amp; Social Science at Kapilvastu Multiple Campus is committed to academic excellence and holistic student development. Located in the historic region of Taulihawa, Kapilvastu — the birthplace of Lord Buddha — our department offers a rich academic environment.</p>
+        <p>We offer comprehensive Bachelor of Arts (B.A.) programs across four years, designed to foster critical thinking, research skills, and a deep understanding of human society, culture, and development.</p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat"><b>8+</b><span>Major Subjects</span></div>
+        <div class="stat"><b>4</b><span>Years Program</span></div>
+        <div class="stat"><b>100+</b><span>Total Courses</span></div>
+        <div class="stat"><b>TU</b><span>Affiliated</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- Curriculum Section -->
-    <section id="curriculum">
-        <div class="section-header">
-            <h2>Complete B.A. Curriculum</h2>
-            <div class="divider"></div>
-            <p>Click any subject to access its complete Teaching & Learning Materials</p>
-        </div>
-
-        <div class="curriculum">
-            <div class="tabs-container" id="yearTabs">
-                <button class="tab-button active" onclick="switchTab('year1')">B.A. First Year</button>
-                <button class="tab-button" onclick="switchTab('year2')">B.A. Second Year</button>
-                <button class="tab-button" onclick="switchTab('year3')">B.A. Third Year</button>
-                <button class="tab-button" onclick="switchTab('year4')">B.A. Fourth Year</button>
-            </div>
-
-            <!-- B.A. FIRST YEAR -->
-            <div id="year1" class="tab-content active">
-                <div class="year-label">Bachelor of Arts | First Year | 500 Marks</div>
-                <div class="curriculum-intro">
-                    <h3>📖 First Year Academic Structure</h3>
-                    <p>One compulsory subject (English) + Major subjects (Papers I & II). Click any subject card to view and download Teaching & Learning Materials.</p>
-                </div>
-
-                <div class="subject-category">
-                    <div class="category-header">
-                        <div class="category-icon">📝</div>
-                        <div class="category-title">A. Compulsory Subject</div>
-                        <div class="category-badge">Required</div>
-                    </div>
-                    <div class="subjects-grid">
-                        <div class="subject-card" onclick="openSubjectModal('ceng401')">
-                            <div class="subject-code">C.Eng.401</div>
-                            <div class="subject-name">Reading & Writing in English</div>
-                            <div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Marks (Theory + Internal)</span></div>
-                            <div class=""><span class="subject-link">📚 View Materials →</span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="subject-category">
-                    <div class="category-header">
-                        <div class="category-icon">🎓</div>
-                        <div class="category-title">B. Major Subjects</div>
-                        <div class="category-badge">Choose Any</div>
-                    </div>
-
-                    <h4 style="color: var(--primary); margin: 1.5rem 0 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;"><span style="width: 8px; height: 8px; background: var(--accent); border-radius: 50%;"></span>1. Sociology</h4>
-                    <div class="subjects-grid">
-                        <div class="subject-card" onclick="openSubjectModal('so421')"><div class="subject-code">So.421</div><div class="subject-name">Introduction to Sociology</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('so422')"><div class="subject-code">So.422</div><div class="subject-name">Dynamics of Nepali Society</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                    </div>
-
-                    <h4 style="color: var(--primary); margin: 1.5rem 0 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;"><span style="width: 8px; height: 8px; background: var(--accent); border-radius: 50%;"></span>2. Rural Development</h4>
-                    <div class="subjects-grid">
-                        <div class="subject-card" onclick="openSubjectModal('rds421')"><div class="subject-code">RDS421</div><div class="subject-name">Theories of Development</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('rds422')"><div class="subject-code">RDS422</div><div class="subject-name">Basic Research Methods</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                    </div>
-
-                    <h4 style="color: var(--primary); margin: 1.5rem 0 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;"><span style="width: 8px; height: 8px; background: var(--accent); border-radius: 50%;"></span>3. English</h4>
-                    <div class="subjects-grid">
-                        <div class="subject-card" onclick="openSubjectModal('eng421')"><div class="subject-code">ENG421</div><div class="subject-name">Reading, Writing & Thinking</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('eng422')"><div class="subject-code">ENG422</div><div class="subject-name">History of English Literature & Criticism</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                    </div>
-
-                    <h4 style="color: var(--primary); margin: 1.5rem 0 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;"><span style="width: 8px; height: 8px; background: var(--accent); border-radius: 50%;"></span>4. नेपाली</h4>
-                    <div class="subjects-grid">
-                        <div class="subject-card nepali-card" onclick="openSubjectModal('nep421')"><div class="subject-code">नेपाली ४२१</div><div class="subject-name nepali-text">नेपाली कथा (३५) | नेपाली उपन्यास (३०) | नेपाली नाटक (३५)</div><div class="subject-marks"><span class="marks-badge">100</span><span>पूर्णाङ्क</span></div><div class="subject-links"><span class="subject-link">📚 सामग्री हेर्नुहोस् →</span></div></div>
-                        <div class="subject-card nepali-card" onclick="openSubjectModal('nep422')"><div class="subject-code">नेपाली ४२२</div><div class="subject-name nepali-text">नेपाली फुटकर कविता (५०) | नेपाली खण्डकाव्य र महाकाब्य (५०)</div><div class="subject-marks"><span class="marks-badge">100</span><span>पूर्णाङ्क</span></div><div class="subject-links"><span class="subject-link">📚 सामग्री हेर्नुहोस् →</span></div></div>
-                    </div>
-
-                    <h4 style="color: var(--primary); margin: 1.5rem 0 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;"><span style="width: 8px; height: 8px; background: var(--accent); border-radius: 50%;"></span>5. Anthropology</h4>
-                    <div class="subjects-grid">
-                        <div class="subject-card" onclick="openSubjectModal('an421')"><div class="subject-code">AN.421</div><div class="subject-name">Introduction to Anthropology</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('an422')"><div class="subject-code">AN.422</div><div class="subject-name">Theoretical Perspectives in Anthropology</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                    </div>
-
-                    <h4 style="color: var(--primary); margin: 1.5rem 0 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;"><span style="width: 8px; height: 8px; background: var(--accent); border-radius: 50%;"></span>6. Economics</h4>
-                    <div class="subjects-grid">
-                        <div class="subject-card" onclick="openSubjectModal('econ421')"><div class="subject-code">Econ.421</div><div class="subject-name">Microeconomics</div><div class="subject-marks"><span class="marks-badge">100</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('econ422')"><div class="subject-code">Econ.422</div><div class="subject-name">Mathematics & Statistics for Economics</div><div class="subject-marks"><span class="marks-badge">100</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                    </div>
-
-                    <h4 style="color: var(--primary); margin: 1.5rem 0 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;"><span style="width: 8px; height: 8px; background: var(--accent); border-radius: 50%;"></span>7. History</h4>
-                    <div class="subjects-grid">
-                        <div class="subject-card" onclick="openSubjectModal('hist421')"><div class="subject-code">Hist.421</div><div class="subject-name">History of Ancient & Medieval Nepal</div><div class="subject-marks"><span class="marks-badge">100</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('hist422')"><div class="subject-code">Hist.422</div><div class="subject-name">International History [1774-1990]</div><div class="subject-marks"><span class="marks-badge">100</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                    </div>
-
-                    <h4 style="color: var(--primary); margin: 1.5rem 0 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;"><span style="width: 8px; height: 8px; background: var(--accent); border-radius: 50%;"></span>8. Political Science</h4>
-                    <div class="subjects-grid">
-                        <div class="subject-card" onclick="openSubjectModal('pol421')"><div class="subject-code">Pol.Sc.421</div><div class="subject-name">Political Theory</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('pol422')"><div class="subject-code">Pol.Sc.422</div><div class="subject-name">Political Thought</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- B.A. SECOND YEAR -->
-            <div id="year2" class="tab-content">
-                <div class="year-label">Bachelor of Arts | Second Year | 500 Marks</div>
-                <div class="curriculum-intro">
-                    <h3>📖 Second Year Academic Structure</h3>
-                    <p>Compulsory Nepali + Major Subject Papers III & IV + Electives. Advanced study in chosen major subjects.</p>
-                </div>
-
-                <div class="subject-category">
-                    <div class="category-header">
-                        <div class="category-icon">📝</div>
-                        <div class="category-title">A. Compulsory Subject</div>
-                        <div class="category-badge">Required</div>
-                    </div>
-                    <div class="subjects-grid">
-                        <div class="subject-card nepali-card" onclick="openSubjectModal('nep401')">
-                            <div class="subject-code">Nep.401</div>
-                            <div class="subject-name nepali-text">नेपाली (दोस्रो वर्ष अनिवार्य)</div>
-                            <div class="subject-marks"><span class="marks-badge">70 + 30</span><span>पूर्णाङ्क</span></div>
-                            <div class="subject-links"><span class="subject-link">📚 सामग्री हेर्नुहोस् →</span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="subject-category">
-                    <div class="category-header">
-                        <div class="category-icon">🎓</div>
-                        <div class="category-title">B. Major Subjects — Paper III & IV</div>
-                        <div class="category-badge">Continuation</div>
-                    </div>
-                    <div class="subjects-grid">
-                        <div class="subject-card" onclick="openSubjectModal('so423')"><div class="subject-code">So.423</div><div class="subject-name">Sociology of Nepal</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('so424')"><div class="subject-code">So.424</div><div class="subject-name">Social Change & Development</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('rds423')"><div class="subject-code">RDS423</div><div class="subject-name">Rural Development in Nepal</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('rds424')"><div class="subject-code">RDS424</div><div class="subject-name">Development Planning & Policy</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('eng423')"><div class="subject-code">ENG423</div><div class="subject-name">Prose, Drama & Poetry</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('eng424')"><div class="subject-code">ENG424</div><div class="subject-name">Phonetics & Linguistics</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card nepali-card" onclick="openSubjectModal('nep423')"><div class="subject-code">नेपाली ४२३</div><div class="subject-name nepali-text">नेपाली निबन्ध र एकाङ्की</div><div class="subject-marks"><span class="marks-badge">100</span><span>पूर्णाङ्क</span></div><div class="subject-links"><span class="subject-link">📚 सामग्री हेर्नुहोस् →</span></div></div>
-                        <div class="subject-card nepali-card" onclick="openSubjectModal('nep424')"><div class="subject-code">नेपाली ४२४</div><div class="subject-name nepali-text">नेपाली आख्यान र नाटक</div><div class="subject-marks"><span class="marks-badge">100</span><span>पूर्णाङ्क</span></div><div class="subject-links"><span class="subject-link">📚 सामग्री हेर्नुहोस् →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('an423')"><div class="subject-code">AN.423</div><div class="subject-name">Anthropology of Nepal</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('an424')"><div class="subject-code">AN.424</div><div class="subject-name">Research Methods in Anthropology</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('econ423')"><div class="subject-code">Econ.423</div><div class="subject-name">Macroeconomics</div><div class="subject-marks"><span class="marks-badge">100</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('econ424')"><div class="subject-code">Econ.424</div><div class="subject-name">Indian Economy & Economic Development</div><div class="subject-marks"><span class="marks-badge">100</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('hist423')"><div class="subject-code">Hist.423</div><div class="subject-name">History of Modern Nepal (1742-1846)</div><div class="subject-marks"><span class="marks-badge">100</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('hist424')"><div class="subject-code">Hist.424</div><div class="subject-name">History of Europe (1789-1945)</div><div class="subject-marks"><span class="marks-badge">100</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('pol423')"><div class="subject-code">Pol.Sc.423</div><div class="subject-name">International Relations</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('pol424')"><div class="subject-code">Pol.Sc.424</div><div class="subject-name">Comparative Politics</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- B.A. THIRD YEAR -->
-            <div id="year3" class="tab-content">
-                <div class="year-label">Bachelor of Arts | Third Year | 500 Marks</div>
-                <div class="curriculum-intro">
-                    <h3>📖 Third Year Academic Structure</h3>
-                    <p>Compulsory English + Major Subject Papers V & VI + Electives. Research methodologies and seminars introduced.</p>
-                </div>
-
-                <div class="subject-category">
-                    <div class="category-header">
-                        <div class="category-icon">📝</div>
-                        <div class="category-title">A. Compulsory Subject</div>
-                        <div class="category-badge">Required</div>
-                    </div>
-                    <div class="subjects-grid">
-                        <div class="subject-card" onclick="openSubjectModal('ceng601')">
-                            <div class="subject-code">C.Eng.601</div>
-                            <div class="subject-name">Advanced English Communication</div>
-                            <div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div>
-                            <div class="subject-links"><span class="subject-link">📚 View Materials →</span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="subject-category">
-                    <div class="category-header">
-                        <div class="category-icon">🎓</div>
-                        <div class="category-title">B. Major Subjects — Paper V & VI</div>
-                        <div class="category-badge">Specialized</div>
-                    </div>
-                    <div class="subjects-grid">
-                        <div class="subject-card" onclick="openSubjectModal('so625')"><div class="subject-code">So.625</div><div class="subject-name">Classical Sociological Theory</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('so626')"><div class="subject-code">So.626</div><div class="subject-name">Research Methods in Sociology</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('rds625')"><div class="subject-code">RDS625</div><div class="subject-name">Agricultural & Rural Development</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('rds626')"><div class="subject-code">RDS626</div><div class="subject-name">Gender & Development</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('eng625')"><div class="subject-code">ENG625</div><div class="subject-name">American Literature</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('eng626')"><div class="subject-code">ENG626</div><div class="subject-name">Literary Criticism & Theory</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card nepali-card" onclick="openSubjectModal('nep625')"><div class="subject-code">नेपाली ६२५</div><div class="subject-name nepali-text">नेपाली भाषाको इतिहास र विकास</div><div class="subject-marks"><span class="marks-badge">100</span><span>पूर्णाङ्क</span></div><div class="subject-links"><span class="subject-link">📚 सामग्री हेर्नुहोस् →</span></div></div>
-                        <div class="subject-card nepali-card" onclick="openSubjectModal('nep626')"><div class="subject-code">नेपाली ६२६</div><div class="subject-name nepali-text">नेपाली साहित्यको इतिहास (आधुनिक काल)</div><div class="subject-marks"><span class="marks-badge">100</span><span>पूर्णाङ्क</span></div><div class="subject-links"><span class="subject-link">📚 सामग्री हेर्नुहोस् →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('an625')"><div class="subject-code">AN.625</div><div class="subject-name">Kinship, Family & Marriage</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('an626')"><div class="subject-code">AN.626</div><div class="subject-name">Economic Anthropology</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('econ625')"><div class="subject-code">Econ.625</div><div class="subject-name">Public Finance & International Economics</div><div class="subject-marks"><span class="marks-badge">100</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('econ626')"><div class="subject-code">Econ.626</div><div class="subject-name">Development Economics</div><div class="subject-marks"><span class="marks-badge">100</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('hist625')"><div class="subject-code">Hist.625</div><div class="subject-name">History of Nepal (1846-1951)</div><div class="subject-marks"><span class="marks-badge">100</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('hist626')"><div class="subject-code">Hist.626</div><div class="subject-name">History of Asia (1850-1950)</div><div class="subject-marks"><span class="marks-badge">100</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('pol625')"><div class="subject-code">Pol.Sc.625</div><div class="subject-name">Nepalese Politics & Governance</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('pol626')"><div class="subject-code">Pol.Sc.626</div><div class="subject-name">Public Administration</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- B.A. FOURTH YEAR -->
-            <div id="year4" class="tab-content">
-                <div class="year-label">Bachelor of Arts | Fourth Year | 500 Marks</div>
-                <div class="curriculum-intro">
-                    <h3>📖 Fourth Year Academic Structure</h3>
-                    <p>Compulsory Nepal Studies + Major Subject Papers VII & VIII + Thesis. Final year with comprehensive examinations.</p>
-                </div>
-
-                <div class="subject-category">
-                    <div class="category-header">
-                        <div class="category-icon">📝</div>
-                        <div class="category-title">A. Compulsory Subject</div>
-                        <div class="category-badge">Required</div>
-                    </div>
-                    <div class="subjects-grid">
-                        <div class="subject-card" onclick="openSubjectModal('nepstud401')">
-                            <div class="subject-code">Nep.Stud.401</div>
-                            <div class="subject-name">Nepal Studies</div>
-                            <div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div>
-                            <div class="subject-links"><span class="subject-link">📚 View Materials →</span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="subject-category">
-                    <div class="category-header">
-                        <div class="category-icon">🎓</div>
-                        <div class="category-title">B. Major Subjects — Paper VII & VIII</div>
-                        <div class="category-badge">Final Year</div>
-                    </div>
-                    <div class="subjects-grid">
-                        <div class="subject-card" onclick="openSubjectModal('so727')"><div class="subject-code">So.727</div><div class="subject-name">Contemporary Sociological Theory</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('so728')"><div class="subject-code">So.728</div><div class="subject-name">Sociology of Development & Change</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('rds727')"><div class="subject-code">RDS727</div><div class="subject-name">Project Planning & Management</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('rds728')"><div class="subject-code">RDS728</div><div class="subject-name">Environment & Sustainable Development</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('eng727')"><div class="subject-code">ENG727</div><div class="subject-name">Commonwealth & Post-Colonial Literature</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('eng728')"><div class="subject-code">ENG728</div><div class="subject-name">Applied Linguistics & ELT</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card nepali-card" onclick="openSubjectModal('nep727')"><div class="subject-code">नेपाली ७२७</div><div class="subject-name nepali-text">नेपाली भाषा: व्याकरण र प्रयोग</div><div class="subject-marks"><span class="marks-badge">100</span><span>पूर्णाङ्क</span></div><div class="subject-links"><span class="subject-link">📚 सामग्री हेर्नुहोस् →</span></div></div>
-                        <div class="subject-card nepali-card" onclick="openSubjectModal('nep728')"><div class="subject-code">नेपाली ७२८</div><div class="subject-name nepali-text">नेपाली साहित्य: समकालीन प्रवृत्ति</div><div class="subject-marks"><span class="marks-badge">100</span><span>पूर्णाङ्क</span></div><div class="subject-links"><span class="subject-link">📚 सामग्री हेर्नुहोस् →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('an727')"><div class="subject-code">AN.727</div><div class="subject-name">Political Anthropology</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('an728')"><div class="subject-code">AN.728</div><div class="subject-name">Religion, Ritual & Symbolism</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('econ727')"><div class="subject-code">Econ.727</div><div class="subject-name">Monetary Economics & Banking</div><div class="subject-marks"><span class="marks-badge">100</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('econ728')"><div class="subject-code">Econ.728</div><div class="subject-name">Econometrics</div><div class="subject-marks"><span class="marks-badge">100</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('hist727')"><div class="subject-code">Hist.727</div><div class="subject-name">History of Nepal (1951-Present)</div><div class="subject-marks"><span class="marks-badge">100</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('hist728')"><div class="subject-code">Hist.728</div><div class="subject-name">History of the World (1945-Present)</div><div class="subject-marks"><span class="marks-badge">100</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('pol727')"><div class="subject-code">Pol.Sc.727</div><div class="subject-name">Foreign Policy of Major Powers</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                        <div class="subject-card" onclick="openSubjectModal('pol728')"><div class="subject-code">Pol.Sc.728</div><div class="subject-name">Political Sociology & Social Movements</div><div class="subject-marks"><span class="marks-badge">70 + 30</span><span>Full Marks</span></div><div class="subject-links"><span class="subject-link">📚 View Materials →</span></div></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Syllabus Section -->
-    <section id="syllabus">
-        <div class="section-header">
-            <h2>📋 Official TU Syllabus Hub</h2>
-            <div class="divider"></div>
-            <p>Download complete BA syllabi for all four years from Tribhuvan University</p>
-        </div>
-        <div class="syllabus-hub">
-            <div class="syllabus-grid">
-                <div class="syllabus-card">
-                    <div class="syllabus-icon">📄</div>
-                    <h3>BA First Year Syllabus</h3>
-                    <p>Complete syllabus for BA First Year as prescribed by TU. Includes all compulsory and major subjects.</p>
-                    <a href="syllabus/BA-1st-Year-Syllabus.pdf" class="btn btn-primary" download>Download PDF</a>
-                </div>
-                <div class="syllabus-card">
-                    <div class="syllabus-icon">📄</div>
-                    <h3>BA Second Year Syllabus</h3>
-                    <p>Advanced curriculum for BA Second Year with detailed course descriptions and learning outcomes.</p>
-                    <a href="syllabus/BA-2nd-Year-Syllabus.pdf" class="btn btn-primary" download>Download PDF</a>
-                </div>
-                <div class="syllabus-card">
-                    <div class="syllabus-icon">📄</div>
-                    <h3>BA Third Year Syllabus</h3>
-                    <p>Specialized curriculum for BA Third Year including seminars and research methodologies.</p>
-                    <a href="syllabus/BA-3rd-Year-Syllabus.pdf" class="btn btn-primary" download>Download PDF</a>
-                </div>
-                <div class="syllabus-card">
-                    <div class="syllabus-icon">📄</div>
-                    <h3>BA Fourth Year Syllabus</h3>
-                    <p>Final year curriculum with thesis guidelines and comprehensive examination details.</p>
-                    <a href="syllabus/BA-4th-Year-Syllabus.pdf" class="btn btn-primary" download>Download PDF</a>
-                </div>
-                <div class="syllabus-card">
-                    <div class="syllabus-icon">📚</div>
-                    <h3>Complete BA Syllabus</h3>
-                    <p>Consolidated 4-Year BA Program Syllabus (All Subjects) in single document.</p>
-                    <a href="syllabus/BA-Complete-Syllabus.pdf" class="btn btn-accent" download>Download All</a>
-                </div>
-                <div class="syllabus-card">
-                    <div class="syllabus-icon">🌐</div>
-                    <h3>TU Official Portal</h3>
-                    <p>Faculty of Humanities & Social Sciences — Official Downloads from TU.</p>
-                    <a href="https://fohss.tu.edu.np/downloads?category=14" target="_blank" class="btn btn-outline">Visit TU Site</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Faculty Section -->
-    <section id="faculty" class="faculty-section">
-        <div class="section-header">
-            <h2>Department Leadership</h2>
-            <div class="divider"></div>
-            <p>Meet the dedicated faculty members of Humanity & Social Science</p>
-        </div>
-        <div class="faculty-card">
-            <div class="faculty-avatar">BR</div>
-            <div class="faculty-name">Mr. Bishnu Singh Rayamajhi</div>
-            <div class="faculty-role">Head of Department & Math Lecturer</div>
-            <div class="faculty-dept">
-                Humanity & Social Science<br>
-                <strong style="color: var(--primary);">Kapilvastu Multiple Campus, Taulihawa</strong>
-            </div>
-        </div>
-
-        <div class="developer-info">
-            <h3>🎯 Portal Developer & Maintainer</h3>
-            <p><strong>Mr. Bishnu Singh Rayamajhi</strong></p>
-            <p>Math Lecturer and Head of Humanity & Social Science Department, Taulihawa</p>
-            <div class="developer-badge">Developed & Maintained by Department Head</div>
-            <p style="margin-top: 1.5rem; font-size: 0.95rem; color: rgba(255,255,255,0.8);">This comprehensive academic portal provides students with centralized access to curriculum, teaching materials, and syllabus resources for all BA programs at Kapilvastu Multiple Campus.</p>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer id="contact">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <h3>KMC | Humanity & Social Science</h3>
-                <p>Kapilvastu Multiple Campus is a leading academic institution in the Lumbini Province, dedicated to providing quality higher education in Humanities and Social Sciences under Tribhuvan University affiliation.</p>
-                <p style="margin-top: 1rem;"><strong>Location:</strong> Taulihawa, Kapilvastu, Lumbini Province, Nepal</p>
-            </div>
-            <div class="footer-links">
-                <h4>Navigation</h4>
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#curriculum">Curriculum</a></li>
-                    <li><a href="#syllabus">Syllabus</a></li>
-                    <li><a href="#faculty">Faculty</a></li>
-                </ul>
-            </div>
-            <div class="footer-links">
-                <h4>Resources</h4>
-                <ul>
-                    <li><a href="https://www.tribhuvan-university.edu.np/" target="_blank">TU Official Portal</a></li>
-                    <li><a href="#">Research Guidelines</a></li>
-                    <li><a href="#">Exam Schedule</a></li>
-                    <li><a href="#">Contact Office</a></li>
-                    <li><a href="#">Admission Info</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 Kapilvastu Multiple Campus (KMC), Taulihawa. All Rights Reserved. | Tribhuvan University Affiliated</p>
-            <div class="developer-credit">
-                <p>Developed & Maintained by: <strong><a href="#">Mr. Bishnu Singh Rayamajhi</a></strong> | Math Lecturer & Head of Humanity & Social Science Department</p>
-                <p>Portal Last Updated: August 2026</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Subject Materials Modal -->
-    <div class="modal-overlay" id="subjectModal" onclick="closeModalOnOverlay(event)">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <button class="modal-close" onclick="closeModal()">&times;</button>
-                <h2 id="modalTitle">Subject Title</h2>
-                <div class="modal-meta">
-                    <span id="modalCode">Code</span>
-                    <span id="modalMarks">Marks</span>
-                    <span id="modalYear">Year</span>
-                </div>
-            </div>
-            <div class="modal-body" id="modalBody">
-                <!-- Dynamic content will be loaded here -->
-            </div>
-        </div>
+<section class="section" id="curriculum">
+  <div class="section-header">
+    <h2>Complete B.A. Curriculum</h2>
+    <div class="divider"></div>
+    <p>All four years of the B.A. program — click <strong>Syllabus</strong>, <strong>Notes</strong>, <strong>Videos</strong>, or <strong>Q. Papers</strong> on any subject to open its full learning content</p>
+  </div>
+  <div class="tabs-wrap">
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="switchTab(event,'year1')">B.A. I</button>
+      <button class="tab-btn" onclick="switchTab(event,'year2')">B.A. II</button>
+      <button class="tab-btn" onclick="switchTab(event,'year3')">B.A. III</button>
+      <button class="tab-btn" onclick="switchTab(event,'year4')">B.A. IV</button>
     </div>
 
-    <script>
-        // Subject data for all 4 years
-        const subjectData = {
-            // BA First Year
-            'ceng401': {
-                title: 'Reading & Writing in English',
-                code: 'C.Eng.401',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA First Year | Compulsory',
-                path: '1st-year/english-compulsory',
-                nepali: false
-            },
-            'so421': {
-                title: 'Introduction to Sociology',
-                code: 'So.421',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA First Year | Sociology',
-                path: '1st-year/sociology',
-                nepali: false
-            },
-            'so422': {
-                title: 'Dynamics of Nepali Society',
-                code: 'So.422',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA First Year | Sociology',
-                path: '1st-year/sociology',
-                nepali: false
-            },
-            'rds421': {
-                title: 'Theories of Development',
-                code: 'RDS421',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA First Year | Rural Development',
-                path: '1st-year/rural-dev',
-                nepali: false
-            },
-            'rds422': {
-                title: 'Basic Research Methods',
-                code: 'RDS422',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA First Year | Rural Development',
-                path: '1st-year/rural-dev',
-                nepali: false
-            },
-            'eng421': {
-                title: 'Reading, Writing & Thinking',
-                code: 'ENG421',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA First Year | English',
-                path: '1st-year/english-major',
-                nepali: false
-            },
-            'eng422': {
-                title: 'History of English Literature & Criticism',
-                code: 'ENG422',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA First Year | English',
-                path: '1st-year/english-major',
-                nepali: false
-            },
-            'nep421': {
-                title: 'नेपाली कथा, उपन्यास र नाटक',
-                code: 'नेपाली ४२१',
-                marks: '100 Marks (कथा ३५ + उपन्यास ३० + नाटक ३५)',
-                year: 'बीए पहिलो वर्ष | नेपाली',
-                path: '1st-year/nepali',
-                nepali: true
-            },
-            'nep422': {
-                title: 'नेपाली फुटकर कविता र खण्डकाव्य/महाकाब्य',
-                code: 'नेपाली ४२२',
-                marks: '100 Marks (फुटकर कविता ५० + खण्डकाव्य/महाकाब्य ५०)',
-                year: 'बीए पहिलो वर्ष | नेपाली',
-                path: '1st-year/nepali',
-                nepali: true
-            },
-            'an421': {
-                title: 'Introduction to Anthropology',
-                code: 'AN.421',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA First Year | Anthropology',
-                path: '1st-year/anthropology',
-                nepali: false
-            },
-            'an422': {
-                title: 'Theoretical Perspectives in Anthropology',
-                code: 'AN.422',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA First Year | Anthropology',
-                path: '1st-year/anthropology',
-                nepali: false
-            },
-            'econ421': {
-                title: 'Microeconomics',
-                code: 'Econ.421',
-                marks: '100 Marks',
-                year: 'BA First Year | Economics',
-                path: '1st-year/economics',
-                nepali: false
-            },
-            'econ422': {
-                title: 'Mathematics & Statistics for Economics',
-                code: 'Econ.422',
-                marks: '100 Marks',
-                year: 'BA First Year | Economics',
-                path: '1st-year/economics',
-                nepali: false
-            },
-            'hist421': {
-                title: 'History of Ancient & Medieval Nepal',
-                code: 'Hist.421',
-                marks: '100 Marks',
-                year: 'BA First Year | History',
-                path: '1st-year/history',
-                nepali: false
-            },
-            'hist422': {
-                title: 'International History [1774-1990]',
-                code: 'Hist.422',
-                marks: '100 Marks',
-                year: 'BA First Year | History',
-                path: '1st-year/history',
-                nepali: false
-            },
-            'pol421': {
-                title: 'Political Theory',
-                code: 'Pol.Sc.421',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA First Year | Political Science',
-                path: '1st-year/political-science',
-                nepali: false
-            },
-            'pol422': {
-                title: 'Political Thought',
-                code: 'Pol.Sc.422',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA First Year | Political Science',
-                path: '1st-year/political-science',
-                nepali: false
-            },
-            // BA Second Year
-            'nep401': {
-                title: 'नेपाली (दोस्रो वर्ष अनिवार्य)',
-                code: 'Nep.401',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'बीए दोस्रो वर्ष | अनिवार्य',
-                path: '2nd-year/nepali-compulsory',
-                nepali: true
-            },
-            'so423': {
-                title: 'Sociology of Nepal',
-                code: 'So.423',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Second Year | Sociology',
-                path: '2nd-year/sociology',
-                nepali: false
-            },
-            'so424': {
-                title: 'Social Change & Development',
-                code: 'So.424',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Second Year | Sociology',
-                path: '2nd-year/sociology',
-                nepali: false
-            },
-            'rds423': {
-                title: 'Rural Development in Nepal',
-                code: 'RDS423',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Second Year | Rural Development',
-                path: '2nd-year/rural-dev',
-                nepali: false
-            },
-            'rds424': {
-                title: 'Development Planning & Policy',
-                code: 'RDS424',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Second Year | Rural Development',
-                path: '2nd-year/rural-dev',
-                nepali: false
-            },
-            'eng423': {
-                title: 'Prose, Drama & Poetry',
-                code: 'ENG423',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Second Year | English',
-                path: '2nd-year/english-major',
-                nepali: false
-            },
-            'eng424': {
-                title: 'Phonetics & Linguistics',
-                code: 'ENG424',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Second Year | English',
-                path: '2nd-year/english-major',
-                nepali: false
-            },
-            'nep423': {
-                title: 'नेपाली निबन्ध र एकाङ्की',
-                code: 'नेपाली ४२३',
-                marks: '100 Marks',
-                year: 'बीए दोस्रो वर्ष | नेपाली',
-                path: '2nd-year/nepali',
-                nepali: true
-            },
-            'nep424': {
-                title: 'नेपाली आख्यान र नाटक',
-                code: 'नेपाली ४२४',
-                marks: '100 Marks',
-                year: 'बीए दोस्रो वर्ष | नेपाली',
-                path: '2nd-year/nepali',
-                nepali: true
-            },
-            'an423': {
-                title: 'Anthropology of Nepal',
-                code: 'AN.423',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Second Year | Anthropology',
-                path: '2nd-year/anthropology',
-                nepali: false
-            },
-            'an424': {
-                title: 'Research Methods in Anthropology',
-                code: 'AN.424',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Second Year | Anthropology',
-                path: '2nd-year/anthropology',
-                nepali: false
-            },
-            'econ423': {
-                title: 'Macroeconomics',
-                code: 'Econ.423',
-                marks: '100 Marks',
-                year: 'BA Second Year | Economics',
-                path: '2nd-year/economics',
-                nepali: false
-            },
-            'econ424': {
-                title: 'Indian Economy & Economic Development',
-                code: 'Econ.424',
-                marks: '100 Marks',
-                year: 'BA Second Year | Economics',
-                path: '2nd-year/economics',
-                nepali: false
-            },
-            'hist423': {
-                title: 'History of Modern Nepal (1742-1846)',
-                code: 'Hist.423',
-                marks: '100 Marks',
-                year: 'BA Second Year | History',
-                path: '2nd-year/history',
-                nepali: false
-            },
-            'hist424': {
-                title: 'History of Europe (1789-1945)',
-                code: 'Hist.424',
-                marks: '100 Marks',
-                year: 'BA Second Year | History',
-                path: '2nd-year/history',
-                nepali: false
-            },
-            'pol423': {
-                title: 'International Relations',
-                code: 'Pol.Sc.423',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Second Year | Political Science',
-                path: '2nd-year/political-science',
-                nepali: false
-            },
-            'pol424': {
-                title: 'Comparative Politics',
-                code: 'Pol.Sc.424',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Second Year | Political Science',
-                path: '2nd-year/political-science',
-                nepali: false
-            },
-            // BA Third Year
-            'ceng601': {
-                title: 'Advanced English Communication',
-                code: 'C.Eng.601',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Third Year | Compulsory',
-                path: '3rd-year/english-compulsory',
-                nepali: false
-            },
-            'so625': {
-                title: 'Classical Sociological Theory',
-                code: 'So.625',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Third Year | Sociology',
-                path: '3rd-year/sociology',
-                nepali: false
-            },
-            'so626': {
-                title: 'Research Methods in Sociology',
-                code: 'So.626',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Third Year | Sociology',
-                path: '3rd-year/sociology',
-                nepali: false
-            },
-            'rds625': {
-                title: 'Agricultural & Rural Development',
-                code: 'RDS625',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Third Year | Rural Development',
-                path: '3rd-year/rural-dev',
-                nepali: false
-            },
-            'rds626': {
-                title: 'Gender & Development',
-                code: 'RDS626',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Third Year | Rural Development',
-                path: '3rd-year/rural-dev',
-                nepali: false
-            },
-            'eng625': {
-                title: 'American Literature',
-                code: 'ENG625',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Third Year | English',
-                path: '3rd-year/english-major',
-                nepali: false
-            },
-            'eng626': {
-                title: 'Literary Criticism & Theory',
-                code: 'ENG626',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Third Year | English',
-                path: '3rd-year/english-major',
-                nepali: false
-            },
-            'nep625': {
-                title: 'नेपाली भाषाको इतिहास र विकास',
-                code: 'नेपाली ६२५',
-                marks: '100 Marks',
-                year: 'बीए तेस्रो वर्ष | नेपाली',
-                path: '3rd-year/nepali',
-                nepali: true
-            },
-            'nep626': {
-                title: 'नेपाली साहित्यको इतिहास (आधुनिक काल)',
-                code: 'नेपाली ६२६',
-                marks: '100 Marks',
-                year: 'बीए तेस्रो वर्ष | नेपाली',
-                path: '3rd-year/nepali',
-                nepali: true
-            },
-            'an625': {
-                title: 'Kinship, Family & Marriage',
-                code: 'AN.625',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Third Year | Anthropology',
-                path: '3rd-year/anthropology',
-                nepali: false
-            },
-            'an626': {
-                title: 'Economic Anthropology',
-                code: 'AN.626',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Third Year | Anthropology',
-                path: '3rd-year/anthropology',
-                nepali: false
-            },
-            'econ625': {
-                title: 'Public Finance & International Economics',
-                code: 'Econ.625',
-                marks: '100 Marks',
-                year: 'BA Third Year | Economics',
-                path: '3rd-year/economics',
-                nepali: false
-            },
-            'econ626': {
-                title: 'Development Economics',
-                code: 'Econ.626',
-                marks: '100 Marks',
-                year: 'BA Third Year | Economics',
-                path: '3rd-year/economics',
-                nepali: false
-            },
-            'hist625': {
-                title: 'History of Nepal (1846-1951)',
-                code: 'Hist.625',
-                marks: '100 Marks',
-                year: 'BA Third Year | History',
-                path: '3rd-year/history',
-                nepali: false
-            },
-            'hist626': {
-                title: 'History of Asia (1850-1950)',
-                code: 'Hist.626',
-                marks: '100 Marks',
-                year: 'BA Third Year | History',
-                path: '3rd-year/history',
-                nepali: false
-            },
-            'pol625': {
-                title: 'Nepalese Politics & Governance',
-                code: 'Pol.Sc.625',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Third Year | Political Science',
-                path: '3rd-year/political-science',
-                nepali: false
-            },
-            'pol626': {
-                title: 'Public Administration',
-                code: 'Pol.Sc.626',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Third Year | Political Science',
-                path: '3rd-year/political-science',
-                nepali: false
-            },
-            // BA Fourth Year
-            'nepstud401': {
-                title: 'Nepal Studies',
-                code: 'Nep.Stud.401',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Fourth Year | Compulsory',
-                path: '4th-year/nepal-studies',
-                nepali: false
-            },
-            'so727': {
-                title: 'Contemporary Sociological Theory',
-                code: 'So.727',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Fourth Year | Sociology',
-                path: '4th-year/sociology',
-                nepali: false
-            },
-            'so728': {
-                title: 'Sociology of Development & Change',
-                code: 'So.728',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Fourth Year | Sociology',
-                path: '4th-year/sociology',
-                nepali: false
-            },
-            'rds727': {
-                title: 'Project Planning & Management',
-                code: 'RDS727',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Fourth Year | Rural Development',
-                path: '4th-year/rural-dev',
-                nepali: false
-            },
-            'rds728': {
-                title: 'Environment & Sustainable Development',
-                code: 'RDS728',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Fourth Year | Rural Development',
-                path: '4th-year/rural-dev',
-                nepali: false
-            },
-            'eng727': {
-                title: 'Commonwealth & Post-Colonial Literature',
-                code: 'ENG727',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Fourth Year | English',
-                path: '4th-year/english-major',
-                nepali: false
-            },
-            'eng728': {
-                title: 'Applied Linguistics & ELT',
-                code: 'ENG728',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Fourth Year | English',
-                path: '4th-year/english-major',
-                nepali: false
-            },
-            'nep727': {
-                title: 'नेपाली भाषा: व्याकरण र प्रयोग',
-                code: 'नेपाली ७२७',
-                marks: '100 Marks',
-                year: 'बीए चौथो वर्ष | नेपाली',
-                path: '4th-year/nepali',
-                nepali: true
-            },
-            'nep728': {
-                title: 'नेपाली साहित्य: समकालीन प्रवृत्ति',
-                code: 'नेपाली ७२८',
-                marks: '100 Marks',
-                year: 'बीए चौथो वर्ष | नेपाली',
-                path: '4th-year/nepali',
-                nepali: true
-            },
-            'an727': {
-                title: 'Political Anthropology',
-                code: 'AN.727',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Fourth Year | Anthropology',
-                path: '4th-year/anthropology',
-                nepali: false
-            },
-            'an728': {
-                title: 'Religion, Ritual & Symbolism',
-                code: 'AN.728',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Fourth Year | Anthropology',
-                path: '4th-year/anthropology',
-                nepali: false
-            },
-            'econ727': {
-                title: 'Monetary Economics & Banking',
-                code: 'Econ.727',
-                marks: '100 Marks',
-                year: 'BA Fourth Year | Economics',
-                path: '4th-year/economics',
-                nepali: false
-            },
-            'econ728': {
-                title: 'Econometrics',
-                code: 'Econ.728',
-                marks: '100 Marks',
-                year: 'BA Fourth Year | Economics',
-                path: '4th-year/economics',
-                nepali: false
-            },
-            'hist727': {
-                title: 'History of Nepal (1951-Present)',
-                code: 'Hist.727',
-                marks: '100 Marks',
-                year: 'BA Fourth Year | History',
-                path: '4th-year/history',
-                nepali: false
-            },
-            'hist728': {
-                title: 'History of the World (1945-Present)',
-                code: 'Hist.728',
-                marks: '100 Marks',
-                year: 'BA Fourth Year | History',
-                path: '4th-year/history',
-                nepali: false
-            },
-            'pol727': {
-                title: 'Foreign Policy of Major Powers',
-                code: 'Pol.Sc.727',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Fourth Year | Political Science',
-                path: '4th-year/political-science',
-                nepali: false
-            },
-            'pol728': {
-                title: 'Political Sociology & Social Movements',
-                code: 'Pol.Sc.728',
-                marks: '70 + 30 (Theory + Internal)',
-                year: 'BA Fourth Year | Political Science',
-                path: '4th-year/political-science',
-                nepali: false
-            }
-        };
+    <div id="year1" class="tab-pane active">
+      <div class="year-pill">Bachelor of Arts · First Year</div>
+      <div class="intro-box"><h3>📖 First Year Academic Structure</h3><p>One compulsory subject plus a choice of major subjects. Click any button below to open subject content in a side panel.</p></div>
 
-        function openSubjectModal(subjectId) {
-            const subject = subjectData[subjectId];
-            if (!subject) return;
+      <div class="cat-section">
+        <div class="cat-header"><div class="cat-icon">📝</div><div class="cat-title">A. Compulsory Subject</div><div class="cat-badge">Required</div></div>
+        <div class="subjects-grid">
+          <div class="subj-card">
+            <div class="subj-code">C.Eng.401</div><div class="subj-name">Reading &amp; Writing in English</div>
+            <div class="subj-marks"><span class="marks-pill">70 + 30</span><span>Full Marks</span></div>
+            <div class="subj-actions">
+              <button class="btn-content" onclick="openPanel('C.Eng.401','Reading & Writing in English','70+30','ceng401','syllabus')">📄 Syllabus</button>
+              <button class="btn-content btn-notes" onclick="openPanel('C.Eng.401','Reading & Writing in English','70+30','ceng401','notes')">📖 Notes</button>
+              <button class="btn-content btn-video" onclick="openPanel('C.Eng.401','Reading & Writing in English','70+30','ceng401','videos')">🎥 Videos</button>
+              <button class="btn-content btn-questions" onclick="openPanel('C.Eng.401','Reading & Writing in English','70+30','ceng401','questions')">📊 Q.Papers</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-            const path = subject.path;
-            const isNepali = subject.nepali;
+      <div class="cat-section">
+        <div class="cat-header"><div class="cat-icon">🎓</div><div class="cat-title">B. Major Subjects (Choose 3–4)</div><div class="cat-badge">Optional</div></div>
 
-            document.getElementById('modalTitle').textContent = subject.title;
-            document.getElementById('modalCode').textContent = 'Code: ' + subject.code;
-            document.getElementById('modalMarks').textContent = subject.marks;
-            document.getElementById('modalYear').textContent = subject.year;
+        <div class="sub-heading"><span class="dot"></span>1. Sociology</div>
+        <div class="subjects-grid">
+          <div class="subj-card"><div class="subj-code">So.421</div><div class="subj-name">Introduction to Sociology</div><div class="subj-marks"><span class="marks-pill">70 + 30</span><span>Full Marks</span></div><div class="subj-actions"><button class="btn-content" onclick="openPanel('So.421','Introduction to Sociology','70+30','so421','syllabus')">📄 Syllabus</button><button class="btn-content btn-notes" onclick="openPanel('So.421','Introduction to Sociology','70+30','so421','notes')">📖 Notes</button><button class="btn-content btn-video" onclick="openPanel('So.421','Introduction to Sociology','70+30','so421','videos')">🎥 Videos</button><button class="btn-content btn-questions" onclick="openPanel('So.421','Introduction to Sociology','70+30','so421','questions')">📊 Q.Papers</button></div></div>
+          <div class="subj-card"><div class="subj-code">So.422</div><div class="subj-name">Dynamics of Nepali Society</div><div class="subj-marks"><span class="marks-pill">70 + 30</span><span>Full Marks</span></div><div class="subj-actions"><button class="btn-content" onclick="openPanel('So.422','Dynamics of Nepali Society','70+30','so422','syllabus')">📄 Syllabus</button><button class="btn-content btn-notes" onclick="openPanel('So.422','Dynamics of Nepali Society','70+30','so422','notes')">📖 Notes</button><button class="btn-content btn-video" onclick="openPanel('So.422','Dynamics of Nepali Society','70+30','so422','videos')">🎥 Videos</button><button class="btn-content btn-questions" onclick="openPanel('So.422','Dynamics of Nepali Society','70+30','so422','questions')">📊 Q.Papers</button></div></div>
+        </div>
 
-            const viewText = isNepali ? 'हेर्नुहोस्' : 'View';
-            const downloadText = isNepali ? 'डाउनलोड' : 'Download';
-            const notesText = isNepali ? 'नोट्स' : 'Notes';
-            const questionsText = isNepali ? 'पुराना प्रश्नहरू' : 'Past Questions';
-            const syllabusText = isNepali ? 'पाठ्यक्रम' : 'Syllabus';
-            const tlmText = isNepali ? 'शिक्षण सामग्री' : 'Teaching Materials';
-            const videoText = isNepali ? 'भिडियोहरू' : 'Video Lectures';
-            const assignmentText = isNepali ? 'अभ्यास कार्य' : 'Assignments';
-            const modelText = isNepali ? 'नमुना उत्तरहरू' : 'Model Answers';
-            const refText = isNepali ? 'सन्दर्भ सामग्री' : 'Reference Materials';
+        <div class="sub-heading"><span class="dot"></span>2. Economics</div>
+        <div class="subjects-grid">
+          <div class="subj-card"><div class="subj-code">Econ.421</div><div class="subj-name">Microeconomics</div><div class="subj-marks"><span class="marks-pill">100</span><span>Full Marks</span></div><div class="subj-actions"><button class="btn-content" onclick="openPanel('Econ.421','Microeconomics','100','econ421','syllabus')">📄 Syllabus</button><button class="btn-content btn-notes" onclick="openPanel('Econ.421','Microeconomics','100','econ421','notes')">📖 Notes</button><button class="btn-content btn-video" onclick="openPanel('Econ.421','Microeconomics','100','econ421','videos')">🎥 Videos</button><button class="btn-content btn-questions" onclick="openPanel('Econ.421','Microeconomics','100','econ421','questions')">📊 Q.Papers</button></div></div>
+          <div class="subj-card"><div class="subj-code">Econ.422</div><div class="subj-name">Math &amp; Statistics for Economics</div><div class="subj-marks"><span class="marks-pill">100</span><span>Full Marks</span></div><div class="subj-actions"><button class="btn-content" onclick="openPanel('Econ.422','Math & Statistics for Economics','100','econ422','syllabus')">📄 Syllabus</button><button class="btn-content btn-notes" onclick="openPanel('Econ.422','Math & Statistics for Economics','100','econ422','notes')">📖 Notes</button><button class="btn-content btn-video" onclick="openPanel('Econ.422','Math & Statistics for Economics','100','econ422','videos')">🎥 Videos</button><button class="btn-content btn-questions" onclick="openPanel('Econ.422','Math & Statistics for Economics','100','econ422','questions')">📊 Q.Papers</button></div></div>
+        </div>
 
-            document.getElementById('modalBody').innerHTML = `
-                <div class="notice-box">
-                    <span>💡</span>
-                    <div><strong>How to use:</strong> Click any button below to access the material. To add your own files, upload PDFs to the <code>materials/${path}/</code> folder in your repository.</div>
-                </div>
+        <div class="sub-heading"><span class="dot"></span>3. History</div>
+        <div class="subjects-grid">
+          <div class="subj-card"><div class="subj-code">Hist.421</div><div class="subj-name">History of Ancient &amp; Medieval Nepal</div><div class="subj-marks"><span class="marks-pill">100</span><span>Full Marks</span></div><div class="subj-actions"><button class="btn-content" onclick="openPanel('Hist.421','History of Ancient & Medieval Nepal','100','hist421','syllabus')">📄 Syllabus</button><button class="btn-content btn-notes" onclick="openPanel('Hist.421','History of Ancient & Medieval Nepal','100','hist421','notes')">📖 Notes</button><button class="btn-content btn-video" onclick="openPanel('Hist.421','History of Ancient & Medieval Nepal','100','hist421','videos')">🎥 Videos</button><button class="btn-content btn-questions" onclick="openPanel('Hist.421','History of Ancient & Medieval Nepal','100','hist421','questions')">📊 Q.Papers</button></div></div>
+          <div class="subj-card"><div class="subj-code">Hist.422</div><div class="subj-name">International History [1774–1990]</div><div class="subj-marks"><span class="marks-pill">100</span><span>Full Marks</span></div><div class="subj-actions"><button class="btn-content" onclick="openPanel('Hist.422','International History [1774-1990]','100','hist422','syllabus')">📄 Syllabus</button><button class="btn-content btn-notes" onclick="openPanel('Hist.422','International History [1774-1990]','100','hist422','notes')">📖 Notes</button><button class="btn-content btn-video" onclick="openPanel('Hist.422','International History [1774-1990]','100','hist422','videos')">🎥 Videos</button><button class="btn-content btn-questions" onclick="openPanel('Hist.422','International History [1774-1990]','100','hist422','questions')">📊 Q.Papers</button></div></div>
+        </div>
 
-                <div class="material-section">
-                    <h3>📄 ${syllabusText} & Course Outline</h3>
-                    <div class="material-grid">
-                        <div class="material-item">
-                            <div class="material-icon">📋</div>
-                            <div class="material-title">Official Syllabus</div>
-                            <div class="material-desc">TU prescribed syllabus with course objectives and unit-wise breakdown.</div>
-                            <a href="materials/${path}/syllabus.pdf" class="material-btn pdf" download>📥 ${downloadText} Syllabus</a>
-                        </div>
-                        <div class="material-item">
-                            <div class="material-icon">📊</div>
-                            <div class="material-title">Course Outline</div>
-                            <div class="material-desc">Detailed chapter-wise course outline prepared by KMC faculty.</div>
-                            <a href="materials/${path}/course-outline.pdf" class="material-btn doc" download>📥 ${downloadText} Outline</a>
-                        </div>
-                        <div class="material-item">
-                            <div class="material-icon">🎯</div>
-                            <div class="material-title">Learning Objectives</div>
-                            <div class="material-desc">Unit-wise learning outcomes and assessment criteria.</div>
-                            <a href="materials/${path}/learning-objectives.pdf" class="material-btn doc" download>📥 ${downloadText} Objectives</a>
-                        </div>
-                    </div>
-                </div>
+        <div class="sub-heading"><span class="dot"></span>4. Political Science</div>
+        <div class="subjects-grid">
+          <div class="subj-card"><div class="subj-code">Pol.Sc.421</div><div class="subj-name">Political Theory</div><div class="subj-marks"><span class="marks-pill">70 + 30</span><span>Full Marks</span></div><div class="subj-actions"><button class="btn-content" onclick="openPanel('Pol.Sc.421','Political Theory','70+30','polsc421','syllabus')">📄 Syllabus</button><button class="btn-content btn-notes" onclick="openPanel('Pol.Sc.421','Political Theory','70+30','polsc421','notes')">📖 Notes</button><button class="btn-content btn-video" onclick="openPanel('Pol.Sc.421','Political Theory','70+30','polsc421','videos')">🎥 Videos</button><button class="btn-content btn-questions" onclick="openPanel('Pol.Sc.421','Political Theory','70+30','polsc421','questions')">📊 Q.Papers</button></div></div>
+          <div class="subj-card"><div class="subj-code">Pol.Sc.422</div><div class="subj-name">Political Thought</div><div class="subj-marks"><span class="marks-pill">70 + 30</span><span>Full Marks</span></div><div class="subj-actions"><button class="btn-content" onclick="openPanel('Pol.Sc.422','Political Thought','70+30','polsc422','syllabus')">📄 Syllabus</button><button class="btn-content btn-notes" onclick="openPanel('Pol.Sc.422','Political Thought','70+30','polsc422','notes')">📖 Notes</button><button class="btn-content btn-video" onclick="openPanel('Pol.Sc.422','Political Thought','70+30','polsc422','videos')">🎥 Videos</button><button class="btn-content btn-questions" onclick="openPanel('Pol.Sc.422','Political Thought','70+30','polsc422','questions')">📊 Q.Papers</button></div></div>
+        </div>
 
-                <div class="material-section">
-                    <h3>📚 ${tlmText}</h3>
-                    <div class="material-grid">
-                        <div class="material-item">
-                            <div class="material-icon">📖</div>
-                            <div class="material-title">Chapter-wise ${notesText}</div>
-                            <div class="material-desc">Comprehensive notes covering all units and topics.</div>
-                            <a href="materials/${path}/notes.pdf" class="material-btn doc" download>📥 ${downloadText} ${notesText}</a>
-                        </div>
-                        <div class="material-item">
-                            <div class="material-icon">📑</div>
-                            <div class="material-title">Lecture Presentations</div>
-                            <div class="material-desc">PowerPoint/Slide presentations for classroom teaching.</div>
-                            <a href="materials/${path}/presentations.pdf" class="material-btn ppt" download>📥 ${downloadText} PPTs</a>
-                        </div>
-                        <div class="material-item">
-                            <div class="material-icon">📰</div>
-                            <div class="material-title">Handouts & Summaries</div>
-                            <div class="material-desc">Quick revision handouts and topic summaries.</div>
-                            <a href="materials/${path}/handouts.pdf" class="material-btn doc" download>📥 ${downloadText} Handouts</a>
-                        </div>
-                        <div class="material-item">
-                            <div class="material-icon">🎥</div>
-                            <div class="material-title">${videoText}</div>
-                            <div class="material-desc">Recorded lectures and tutorial videos.</div>
-                            <a href="materials/${path}/videos.html" class="material-btn video">▶️ ${viewText} Videos</a>
-                        </div>
-                    </div>
-                </div>
+        <div class="sub-heading"><span class="dot"></span>5. English</div>
+        <div class="subjects-grid">
+          <div class="subj-card"><div class="subj-code">ENG421</div><div class="subj-name">Reading, Writing &amp; Thinking</div><div class="subj-marks"><span class="marks-pill">70 + 30</span><span>Full Marks</span></div><div class="subj-actions"><button class="btn-content" onclick="openPanel('ENG421','Reading, Writing & Thinking','70+30','eng421','syllabus')">📄 Syllabus</button><button class="btn-content btn-notes" onclick="openPanel('ENG421','Reading, Writing & Thinking','70+30','eng421','notes')">📖 Notes</button><button class="btn-content btn-video" onclick="openPanel('ENG421','Reading, Writing & Thinking','70+30','eng421','videos')">🎥 Videos</button><button class="btn-content btn-questions" onclick="openPanel('ENG421','Reading, Writing & Thinking','70+30','eng421','questions')">📊 Q.Papers</button></div></div>
+          <div class="subj-card"><div class="subj-code">ENG422</div><div class="subj-name">History of English Literature &amp; Criticism</div><div class="subj-marks"><span class="marks-pill">70 + 30</span><span>Full Marks</span></div><div class="subj-actions"><button class="btn-content" onclick="openPanel('ENG422','History of English Literature & Criticism','70+30','eng422','syllabus')">📄 Syllabus</button><button class="btn-content btn-notes" onclick="openPanel('ENG422','History of English Literature & Criticism','70+30','eng422','notes')">📖 Notes</button><button class="btn-content btn-video" onclick="openPanel('ENG422','History of English Literature & Criticism','70+30','eng422','videos')">🎥 Videos</button><button class="btn-content btn-questions" onclick="openPanel('ENG422','History of English Literature & Criticism','70+30','eng422','questions')">📊 Q.Papers</button></div></div>
+        </div>
 
-                <div class="material-section">
-                    <h3>📝 ${assignmentText} & Assessment</h3>
-                    <div class="material-grid">
-                        <div class="material-item">
-                            <div class="material-icon">✏️</div>
-                            <div class="material-title">${assignmentText}</div>
-                            <div class="material-desc">Practice assignments and homework questions with solutions.</div>
-                            <a href="materials/${path}/assignments.pdf" class="material-btn doc" download>📥 ${downloadText} ${assignmentText}</a>
-                        </div>
-                        <div class="material-item">
-                            <div class="material-icon">❓</div>
-                            <div class="material-title">${questionsText}</div>
-                            <div class="material-desc">Previous years examination papers with marking schemes.</div>
-                            <a href="materials/${path}/past-questions.pdf" class="material-btn pdf" download>📥 ${downloadText} ${questionsText}</a>
-                        </div>
-                        <div class="material-item">
-                            <div class="material-icon">✅</div>
-                            <div class="material-title">${modelText}</div>
-                            <div class="material-desc">Model answers and expected solutions for exam preparation.</div>
-                            <a href="materials/${path}/model-answers.pdf" class="material-btn doc" download>📥 ${downloadText} ${modelText}</a>
-                        </div>
-                        <div class="material-item">
-                            <div class="material-icon">🧪</div>
-                            <div class="material-title">Internal Assessment</div>
-                            <div class="material-desc">Internal exam papers, practicals, and project guidelines.</div>
-                            <a href="materials/${path}/internal-assessment.pdf" class="material-btn doc" download>📥 ${downloadText} Internal</a>
-                        </div>
-                    </div>
-                </div>
+        <div class="sub-heading"><span class="dot"></span>6. नेपाली</div>
+        <div class="subjects-grid">
+          <div class="subj-card nepali-card"><div class="subj-code">नेपाली ४२१</div><div class="subj-name">नेपाली कथा (३५) | नेपाली उपन्यास (३०) | नेपाली नाटक (३५)</div><div class="subj-marks"><span class="marks-pill">100</span><span>पूर्णाङ्क</span></div><div class="subj-actions"><button class="btn-content" onclick="openPanel('नेपाली ४२१','नेपाली कथा, उपन्यास र नाटक','100','nep421','syllabus')">📄 पाठ्यक्रम</button><button class="btn-content btn-notes" onclick="openPanel('नेपाली ४२१','नेपाली कथा, उपन्यास र नाटक','100','nep421','notes')">📖 नोट्स</button><button class="btn-content btn-video" onclick="openPanel('नेपाली ४२१','नेपाली कथा, उपन्यास र नाटक','100','nep421','videos')">🎥 भिडियो</button><button class="btn-content btn-questions" onclick="openPanel('नेपाली ४२१','नेपाली कथा, उपन्यास र नाटक','100','nep421','questions')">📊 प्रश्नपत्र</button></div></div>
+          <div class="subj-card nepali-card"><div class="subj-code">नेपाली ४२२</div><div class="subj-name">नेपाली फुटकर कविता (५०) | नेपाली खण्डकाव्य र महाकाब्य (५०)</div><div class="subj-marks"><span class="marks-pill">100</span><span>पूर्णाङ्क</span></div><div class="subj-actions"><button class="btn-content" onclick="openPanel('नेपाली ४२२','नेपाली कविता, खण्डकाव्य र महाकाब्य','100','nep422','syllabus')">📄 पाठ्यक्रम</button><button class="btn-content btn-notes" onclick="openPanel('नेपाली ४२२','नेपाली कविता, खण्डकाव्य र महाकाब्य','100','nep422','notes')">📖 नोट्स</button><button class="btn-content btn-video" onclick="openPanel('नेपाली ४२२','नेपाली कविता, खण्डकाव्य र महाकाब्य','100','nep422','videos')">🎥 भिडियो</button><button class="btn-content btn-questions" onclick="openPanel('नेपाली ४२२','नेपाली कविता, खण्डकाव्य र महाकाब्य','100','nep422','questions')">📊 प्रश्नपत्र</button></div></div>
+        </div>
 
-                <div class="material-section">
-                    <h3>🔗 ${refText}</h3>
-                    <div class="material-grid">
-                        <div class="material-item">
-                            <div class="material-icon">📚</div>
-                            <div class="material-title">Reference Books</div>
-                            <div class="material-desc">List of recommended textbooks and reference materials.</div>
-                            <a href="materials/${path}/reference-books.pdf" class="material-btn doc" download>📥 ${downloadText} Book List</a>
-                        </div>
-                        <div class="material-item">
-                            <div class="material-icon">📰</div>
-                            <div class="material-title">Articles & Journals</div>
-                            <div class="material-desc">Important research articles and journal papers.</div>
-                            <a href="materials/${path}/articles.html" class="material-btn link">🔗 ${viewText} Articles</a>
-                        </div>
-                        <div class="material-item">
-                            <div class="material-icon">🌐</div>
-                            <div class="material-title">Online Resources</div>
-                            <div class="material-desc">Links to e-books, databases, and digital libraries.</div>
-                            <a href="materials/${path}/online-resources.html" class="material-btn link">🔗 ${viewText} Resources</a>
-                        </div>
-                        <div class="material-item">
-                            <div class="material-icon">📊</div>
-                            <div class="material-title">Maps / Diagrams / Charts</div>
-                            <div class="material-desc">Visual aids, maps, flowcharts, and infographics.</div>
-                            <a href="materials/${path}/visual-aids.pdf" class="material-btn ppt" download>📥 ${downloadText} Visuals</a>
-                        </div>
-                    </div>
-                </div>
-            `;
+        <div class="sub-heading"><span class="dot"></span>7. Anthropology</div>
+        <div class="subjects-grid">
+          <div class="subj-card"><div class="subj-code">AN.421</div><div class="subj-name">Introduction to Anthropology</div><div class="subj-marks"><span class="marks-pill">70 + 30</span><span>Full Marks</span></div><div class="subj-actions"><button class="btn-content" onclick="openPanel('AN.421','Introduction to Anthropology','70+30','an421','syllabus')">📄 Syllabus</button><button class="btn-content btn-notes" onclick="openPanel('AN.421','Introduction to Anthropology','70+30','an421','notes')">📖 Notes</button><button class="btn-content btn-video" onclick="openPanel('AN.421','Introduction to Anthropology','70+30','an421','videos')">🎥 Videos</button><button class="btn-content btn-questions" onclick="openPanel('AN.421','Introduction to Anthropology','70+30','an421','questions')">📊 Q.Papers</button></div></div>
+          <div class="subj-card"><div class="subj-code">AN.422</div><div class="subj-name">Theoretical Perspectives in Anthropology</div><div class="subj-marks"><span class="marks-pill">70 + 30</span><span>Full Marks</span></div><div class="subj-actions"><button class="btn-content" onclick="openPanel('AN.422','Theoretical Perspectives in Anthropology','70+30','an422','syllabus')">📄 Syllabus</button><button class="btn-content btn-notes" onclick="openPanel('AN.422','Theoretical Perspectives in Anthropology','70+30','an422','notes')">📖 Notes</button><button class="btn-content btn-video" onclick="openPanel('AN.422','Theoretical Perspectives in Anthropology','70+30','an422','videos')">🎥 Videos</button><button class="btn-content btn-questions" onclick="openPanel('AN.422','Theoretical Perspectives in Anthropology','70+30','an422','questions')">📊 Q.Papers</button></div></div>
+        </div>
 
-            document.getElementById('subjectModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
+        <div class="sub-heading"><span class="dot"></span>8. Rural Development</div>
+        <div class="subjects-grid">
+          <div class="subj-card"><div class="subj-code">RDS421</div><div class="subj-name">Theories of Development</div><div class="subj-marks"><span class="marks-pill">70 + 30</span><span>Full Marks</span></div><div class="subj-actions"><button class="btn-content" onclick="openPanel('RDS421','Theories of Development','70+30','rds421','syllabus')">📄 Syllabus</button><button class="btn-content btn-notes" onclick="openPanel('RDS421','Theories of Development','70+30','rds421','notes')">📖 Notes</button><button class="btn-content btn-video" onclick="openPanel('RDS421','Theories of Development','70+30','rds421','videos')">🎥 Videos</button><button class="btn-content btn-questions" onclick="openPanel('RDS421','Theories of Development','70+30','rds421','questions')">📊 Q.Papers</button></div></div>
+          <div class="subj-card"><div class="subj-code">RDS422</div><div class="subj-name">Basic Research Methods</div><div class="subj-marks"><span class="marks-pill">70 + 30</span><span>Full Marks</span></div><div class="subj-actions"><button class="btn-content" onclick="openPanel('RDS422','Basic Research Methods','70+30','rds422','syllabus')">📄 Syllabus</button><button class="btn-content btn-notes" onclick="openPanel('RDS422','Basic Research Methods','70+30','rds422','notes')">📖 Notes</button><button class="btn-content btn-video" onclick="openPanel('RDS422','Basic Research Methods','70+30','rds422','videos')">🎥 Videos</button><button class="btn-content btn-questions" onclick="openPanel('RDS422','Basic Research Methods','70+30','rds422','questions')">📊 Q.Papers</button></div></div>
+        </div>
+      </div>
+    </div>
 
-        function closeModal() {
-            document.getElementById('subjectModal').classList.remove('active');
-            document.body.style.overflow = '';
-        }
+    <div id="year2" class="tab-pane">
+      <div class="year-pill">Bachelor of Arts · Second Year</div>
+      <div class="intro-box"><h3>📖 Second Year Academic Structure</h3><p>Advanced courses in your chosen majors building on first-year foundations.</p></div>
+      <div class="empty-info">📚 B.A. Second Year subject cards are being prepared. Download the official TU curriculum below.<br><br><a href="https://www.tribhuvan-university.edu.np/" target="_blank" class="res-btn" style="display:inline-block;margin-top:.75rem;">📄 Download Year 2 Syllabus</a></div>
+    </div>
+    <div id="year3" class="tab-pane">
+      <div class="year-pill">Bachelor of Arts · Third Year</div>
+      <div class="intro-box"><h3>📖 Third Year Academic Structure</h3><p>Specialised courses, seminars, and research methodology preparation.</p></div>
+      <div class="empty-info">🔬 B.A. Third Year content is being compiled.<br><br><a href="https://www.tribhuvan-university.edu.np/" target="_blank" class="res-btn" style="display:inline-block;margin-top:.75rem;">📄 Download Year 3 Syllabus</a></div>
+    </div>
+    <div id="year4" class="tab-pane">
+      <div class="year-pill">Bachelor of Arts · Fourth Year</div>
+      <div class="intro-box"><h3>📖 Fourth Year Academic Structure</h3><p>Thesis writing, comprehensive examinations, and advanced seminars.</p></div>
+      <div class="empty-info">📊 B.A. Fourth Year content is being compiled.<br><br><a href="https://www.tribhuvan-university.edu.np/" target="_blank" class="res-btn" style="display:inline-block;margin-top:.75rem;">📄 Download Year 4 Syllabus</a></div>
+    </div>
+  </div>
+</section>
 
-        function closeModalOnOverlay(event) {
-            if (event.target === document.getElementById('subjectModal')) {
-                closeModal();
-            }
-        }
+<section class="section" id="materials">
+  <div class="section-header"><h2>Teaching &amp; Learning Materials</h2><div class="divider"></div><p>Comprehensive resources for all B.A. programs</p></div>
+  <div class="res-grid">
+    <div class="res-card"><div class="res-icon">📖</div><h3>Study Notes</h3><p>Chapter-wise notes for all subjects across all years, prepared by expert faculty.</p><button class="res-btn">Access Notes</button></div>
+    <div class="res-card"><div class="res-icon">📚</div><h3>Reference Books</h3><p>Recommended textbooks and reference materials for each subject and year.</p><button class="res-btn">View Books</button></div>
+    <div class="res-card"><div class="res-icon">📝</div><h3>Assignments &amp; Projects</h3><p>Downloadable assignments, project guidelines, and rubrics for assessment.</p><button class="res-btn">Get Assignments</button></div>
+    <div class="res-card"><div class="res-icon">🎥</div><h3>Video Lectures</h3><p>Recorded lectures and tutorial videos for complex topics.</p><button class="res-btn">Watch Videos</button></div>
+    <div class="res-card"><div class="res-icon">📊</div><h3>Question Papers</h3><p>Previous years' examination papers with solutions for practice.</p><button class="res-btn">Browse Papers</button></div>
+    <div class="res-card"><div class="res-icon">🔍</div><h3>Research Guides</h3><p>Guidelines for academic research, citation formats, thesis writing, and methodologies.</p><button class="res-btn">Read Guides</button></div>
+    <div class="res-card"><div class="res-icon">💻</div><h3>Online Resources</h3><p>Links to journals, databases, e-books, and digital libraries.</p><a href="https://scholar.google.com" target="_blank" class="res-btn">Google Scholar</a></div>
+    <div class="res-card"><div class="res-icon">📋</div><h3>Practical Materials</h3><p>Lab reports, field study guides, and practical examination guidelines.</p><button class="res-btn">Download</button></div>
+  </div>
+</section>
 
-        function switchTab(tabName) {
-            const tabContents = document.querySelectorAll('.tab-content');
-            tabContents.forEach(tab => tab.classList.remove('active'));
-            const tabButtons = document.querySelectorAll('.tab-button');
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-            document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
-        }
+<section class="section" id="syllabus">
+  <div class="section-header"><h2>Official TU Syllabus</h2><div class="divider"></div><p>Complete Bachelor of Arts syllabus from Tribhuvan University</p></div>
+  <div class="res-grid">
+    <div class="res-card"><div class="res-icon">📄</div><h3>B.A. First Year Syllabus</h3><p>Complete syllabus as prescribed by Tribhuvan University — all compulsory and major subjects.</p><a href="https://www.tribhuvan-university.edu.np/" target="_blank" class="res-btn">Download PDF</a></div>
+    <div class="res-card"><div class="res-icon">📄</div><h3>B.A. Second Year Syllabus</h3><p>Advanced curriculum with detailed course descriptions and learning outcomes.</p><a href="https://www.tribhuvan-university.edu.np/" target="_blank" class="res-btn">Download PDF</a></div>
+    <div class="res-card"><div class="res-icon">📄</div><h3>B.A. Third Year Syllabus</h3><p>Specialised curriculum including seminars and research methodologies.</p><a href="https://www.tribhuvan-university.edu.np/" target="_blank" class="res-btn">Download PDF</a></div>
+    <div class="res-card"><div class="res-icon">📄</div><h3>B.A. Fourth Year Syllabus</h3><p>Final year curriculum with thesis guidelines and comprehensive examination details.</p><a href="https://www.tribhuvan-university.edu.np/" target="_blank" class="res-btn">Download PDF</a></div>
+    <div class="res-card"><div class="res-icon">🔗</div><h3>TU Official Portal</h3><p>Access the official Tribhuvan University website for regulations and syllabus documents.</p><a href="https://www.tribhuvan-university.edu.np/" target="_blank" class="res-btn">Visit TU</a></div>
+    <div class="res-card"><div class="res-icon">📋</div><h3>Academic Regulations</h3><p>Examination rules, evaluation criteria, grading system, and academic regulations from TU.</p><button class="res-btn">View Regulations</button></div>
+  </div>
+</section>
 
-        function toggleMenu() {
-            const navLinks = document.getElementById('navLinks');
-            navLinks.classList.toggle('active');
-        }
+<section class="section" id="faculty">
+  <div class="section-header"><h2>Department Leadership</h2><div class="divider"></div><p>Meet the dedicated faculty members of Humanity &amp; Social Science</p></div>
+  <div class="fac-grid">
+    <div class="fac-card">
+      <div class="fac-avatar">BR</div>
+      <div class="fac-name">Mr. Bishnu Singh Rayamajhi</div>
+      <div class="fac-role">Head of Department &amp; Math Lecturer</div>
+      <div class="fac-dept">Humanity &amp; Social Science<br><strong style="color:var(--primary)">Kapilvastu Multiple Campus, Taulihawa</strong></div>
+      <div class="fac-contact">
+        <p>📧 bishnu.rayamajhi@kmc.edu.np</p>
+        <p>📞 Taulihawa Campus Office</p>
+        <p>🔬 Mathematics · Curriculum Development</p>
+      </div>
+    </div>
+  </div>
+  <div class="dev-banner">
+    <h3>🎯 Portal Developer &amp; Maintainer</h3>
+    <p><strong>Mr. Bishnu Singh Rayamajhi</strong></p>
+    <p>Math Lecturer and Head of Humanity &amp; Social Science Department, Taulihawa</p>
+    <div class="dev-badge">Developed &amp; Maintained by Department Head</div>
+    <p style="margin-top:1.25rem;font-size:.9rem;color:rgba(255,255,255,.75);">This academic portal provides students with centralised access to curriculum, teaching materials, and syllabus resources for all B.A. programs at Kapilvastu Multiple Campus.</p>
+  </div>
+</section>
 
-        function scrollToSection(id) {
-            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-        }
+<footer id="contact">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <h3>KMC | Humanity &amp; Social Science</h3>
+      <p>Kapilvastu Multiple Campus is a leading academic institution in Lumbini Province, dedicated to quality higher education in Humanities and Social Sciences under Tribhuvan University affiliation.</p>
+      <p style="margin-top:.9rem;"><strong>Location:</strong> Taulihawa, Kapilvastu, Lumbini Province, Nepal</p>
+    </div>
+    <div class="footer-links">
+      <h4>Navigation</h4>
+      <ul><li><a href="#home">Home</a></li><li><a href="#about">About</a></li><li><a href="#curriculum">Curriculum</a></li><li><a href="#materials">Materials</a></li><li><a href="#syllabus">Syllabus</a></li><li><a href="#faculty">Faculty</a></li></ul>
+    </div>
+    <div class="footer-links">
+      <h4>Resources</h4>
+      <ul><li><a href="https://www.tribhuvan-university.edu.np/" target="_blank">TU Official Portal</a></li><li><a href="#">Research Guidelines</a></li><li><a href="#">Exam Schedule</a></li><li><a href="#">Contact Office</a></li><li><a href="#">Student Forum</a></li><li><a href="#">Admission Info</a></li></ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Kapilvastu Multiple Campus (KMC), Taulihawa. All Rights Reserved. | Tribhuvan University Affiliated</p>
+    <p style="margin-top:.5rem;">Developed &amp; Maintained by <a href="#">Mr. Bishnu Singh Rayamajhi</a> | Math Lecturer &amp; Head of Department · Portal Last Updated: August 2026</p>
+  </div>
+</footer>
 
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('navLinks').classList.remove('active');
-            });
-        });
+<!-- SLIDE-IN CONTENT PANEL -->
+<div class="panel-overlay" id="panelOverlay" onclick="closePanel()"></div>
+<div class="content-panel" id="contentPanel">
+  <div class="panel-header">
+    <div style="flex:1;min-width:0;">
+      <div class="panel-code" id="panelCode">So.421</div>
+      <h3 id="panelTitle">Introduction to Sociology</h3>
+      <div class="panel-marks-text" id="panelMarks">Full Marks: 70+30</div>
+    </div>
+    <button class="panel-close" onclick="closePanel()">✕</button>
+  </div>
+  <div class="panel-tabs">
+    <button class="ptab active" onclick="switchPanelTab(event,'psyllabus')">📄 Syllabus</button>
+    <button class="ptab" onclick="switchPanelTab(event,'pnotes')">📖 Notes</button>
+    <button class="ptab" onclick="switchPanelTab(event,'pvideos')">🎥 Videos</button>
+    <button class="ptab" onclick="switchPanelTab(event,'pquestions')">📊 Q.Papers</button>
+  </div>
+  <div class="panel-body">
+    <div id="psyllabus" class="panel-section active"></div>
+    <div id="pnotes" class="panel-section"></div>
+    <div id="pvideos" class="panel-section"></div>
+    <div id="pquestions" class="panel-section"></div>
+  </div>
+</div>
 
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeModal();
-        });
+<script>
+function switchTab(e,id){document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');e.currentTarget.classList.add('active');}
 
-        window.addEventListener('scroll', () => {
-            const nav = document.querySelector('nav');
-            if (window.scrollY > 50) {
-                nav.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)';
-            } else {
-                nav.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.1)';
-            }
-        });
-    </script>
+const SUBJECTS={
+ceng401:{
+  syllabus:[{u:'1',t:'Reading Comprehension',topics:['Intensive and extensive reading','Identifying main ideas and supporting details','Skimming and scanning techniques','Inference and critical reading']},{u:'2',t:'Vocabulary Development',topics:['Context clues','Word formation: prefixes, suffixes, roots','Academic Vocabulary List (AWL)','Collocations and idiomatic expressions']},{u:'3',t:'Writing Skills',topics:['Paragraph structure: topic sentence, body, conclusion','Essay types: descriptive, narrative, expository','Cohesion and coherence devices','Sentence variety and punctuation']},{u:'4',t:'Grammar in Use',topics:['Tenses review: simple, continuous, perfect','Passive voice constructions','Modal verbs and conditionals','Reported speech and relative clauses']}],
+  notes:[{title:'Reading Strategies',body:'Effective reading requires pre-reading (skimming headings, predicting), active reading (underlining, margin questions), and post-reading (summarising, reviewing).\n\nKey skills: identifying thesis statements, recognising rhetorical patterns (cause-effect, compare-contrast), and interpreting implicit meaning.',pts:['Use the SQ3R method: Survey, Question, Read, Recite, Review','Build vocabulary by noting new words in context','Identify the author\'s purpose before deep reading']},{title:'Paragraph & Essay Writing',body:'A well-formed paragraph follows TEEL structure:\n• Topic sentence — states the main idea\n• Evidence — fact, quote, or example\n• Explanation — analyse the evidence\n• Link — connect back or transition\n\nFor academic essays, use formal register, avoid contractions, and signal arguments with discourse markers (Furthermore, However, In contrast).',pts:['Write a clear thesis that previews your main arguments','Use transitions between paragraphs for flow','Proofread for subject-verb agreement and tense consistency']}],
+  videos:[{t:'Academic Reading Techniques',d:'18 min'},{t:'Essay Structure & Planning',d:'22 min'},{t:'Grammar: Tenses in Academic Writing',d:'25 min'}],
+  questions:[{y:'2079 (2022)',type:'Annual Exam'},{y:'2078 (2021)',type:'Annual Exam'},{y:'2077 (2020)',type:'Annual Exam'},{y:'2076 (2019)',type:'Annual Exam'}]
+},
+so421:{
+  syllabus:[{u:'1',t:'Nature and Scope of Sociology',topics:['Definition and subject matter of Sociology','Relationship with other social sciences','Sociology as a science: debates and methods','Importance of Sociology in modern world']},{u:'2',t:'Sociological Perspectives',topics:['Functionalism: Durkheim and Parsons','Conflict theory: Marx and Weber','Symbolic interactionism: Mead and Blumer','Feminist and postmodern perspectives']},{u:'3',t:'Social Institutions',topics:['Family: forms, functions, and change','Education: sociological analysis','Religion: Durkheim\'s sacred and profane','Economy, politics, and media as institutions']},{u:'4',t:'Culture and Society',topics:['Elements of culture: norms, values, beliefs','Cultural diversity and ethnocentrism','Socialisation: agents and process','Social stratification: class, caste, and gender']}],
+  notes:[{title:'Functionalism vs Conflict Theory',body:'Functionalism (Durkheim, Parsons) views society as an organism where each part serves a function to maintain stability. Institutions like family and education promote social cohesion.\n\nConflict Theory (Marx) sees society as structured by power inequalities. The dominant class (bourgeoisie) controls means of production and maintains ideology that keeps the working class subordinate.',pts:['Functionalism → consensus, stability, social order','Conflict Theory → power, inequality, social change','Weber added status groups and party (political power) to economic class']},{title:'Socialisation & Social Institutions',body:'Socialisation is the lifelong process by which individuals learn cultural norms, values, and roles. Primary socialisation occurs in family during childhood; secondary socialisation through schools, peers, and media.\n\nKey agents: Family (first norms), School (formal rules, hidden curriculum), Peer groups (informal norms), Media (mass socialisation).',pts:['Primary vs Secondary socialisation distinction','Hidden curriculum transmits class-based expectations','Re-socialisation occurs in total institutions (prisons, military)']}],
+  videos:[{t:'Introduction to Sociology – Core Concepts',d:'20 min'},{t:'The Three Major Sociological Paradigms',d:'28 min'},{t:'Social Stratification in Nepal',d:'19 min'}],
+  questions:[{y:'2079 (2022)',type:'Annual Exam'},{y:'2078 (2021)',type:'Annual Exam'},{y:'2077 (2020)',type:'Annual Exam'},{y:'2076 (2019)',type:'Annual Exam'}]
+},
+so422:{
+  syllabus:[{u:'1',t:'Nepalese Society: Overview',topics:['Demographic features of Nepal','Ethnic and caste composition','Geographic and ecological diversity','Rural-urban distinctions']},{u:'2',t:'Social Structure of Nepal',topics:['Caste system: history and current status','Janjati (indigenous nationalities) and their identities','Gender relations and patriarchy','Religious pluralism: Hinduism, Buddhism, others']},{u:'3',t:'Social Change in Nepal',topics:['Modernisation and its social effects','Migration: internal and international','Role of education in social mobility','Impact of 2006 political change on society']},{u:'4',t:'Social Problems in Nepal',topics:['Poverty and inequality','Gender-based violence and discrimination','Child labour and trafficking','Corruption and governance issues']}],
+  notes:[{title:'Caste System in Nepal',body:'Nepal\'s caste hierarchy is rooted in Hindu Varnashrama tradition codified in the 1854 Muluki Ain. The hierarchy placed Tagadhari (twice-born) at top, then Matwali tribes, then lower Pani nachalne castes.\n\nThe 1963 New Muluki Ain legally abolished caste discrimination, and 2006 changes strengthened Dalit rights. Yet social practice often lags behind legal reform.',pts:['Legal abolition ≠ social abolition','Reservation policies address structural inequality','Intersectionality: caste + gender creates compounded disadvantage']},{title:'Migration & Social Dynamics',body:'Nepal has one of the highest rates of labour migration in Asia. Key destinations: India (historical, informal), Gulf countries (post-1990), Malaysia, and recently South Korea and Japan.\n\nSocial effects: remittance economy (>25% of GDP), feminisation of agriculture, social capital erosion in origin villages, and brain drain of educated youth.',pts:['Remittances reduce household poverty but create dependency','Female-headed households become more common','Return migration brings new social norms and practices']}],
+  videos:[{t:'Caste and Ethnicity in Nepal',d:'24 min'},{t:"Nepal's Social Change After 2006",d:'21 min'},{t:'Labour Migration and Remittance Economy',d:'17 min'}],
+  questions:[{y:'2079 (2022)',type:'Annual Exam'},{y:'2078 (2021)',type:'Annual Exam'},{y:'2077 (2020)',type:'Annual Exam'}]
+},
+econ421:{
+  syllabus:[{u:'1',t:'Introduction to Economics',topics:['Scarcity, choice, and opportunity cost','Economic systems: market, planned, mixed','Positive vs normative economics','Economic models and their assumptions']},{u:'2',t:'Demand and Supply Analysis',topics:['Law of demand and demand curves','Elasticity of demand: price, income, cross','Law of supply and market equilibrium','Price mechanism and market adjustments']},{u:'3',t:'Consumer Theory',topics:['Cardinal utility: marginal utility and equilibrium','Ordinal utility: indifference curves','Budget line and consumer equilibrium','Income and substitution effects']},{u:'4',t:'Production and Cost Theory',topics:['Production function: short run and long run','Law of variable proportions','Cost concepts: TC, FC, VC, MC, AC','Economies and diseconomies of scale']}],
+  notes:[{title:'Demand, Supply & Equilibrium',body:'Law of Demand: Ceteris paribus, as price ↑ → quantity demanded ↓ (inverse relationship). Demand curve slopes downward.\n\nLaw of Supply: As price ↑ → quantity supplied ↑ (direct). Supply curve slopes upward.\n\nEquilibrium: Where Qd = Qs. Price above equilibrium creates surplus; below creates shortage. Market automatically adjusts.',pts:['Shifts in demand: income, prices of related goods, tastes, expectations','Shifts in supply: input costs, technology, number of sellers','Price ceiling (below equilibrium) → shortage; Price floor (above) → surplus']},{title:'Elasticity Concepts',body:'Price Elasticity of Demand (PED) = % change in Qd / % change in Price\n\n|PED| > 1: elastic (luxury goods, many substitutes)\n|PED| < 1: inelastic (necessities, few substitutes)\n|PED| = 1: unit elastic\n\nIncome Elasticity: Positive for normal goods; negative for inferior goods.\nCross-Price Elasticity: Positive for substitutes; negative for complements.',pts:['Elastic demand → price ↑ means Total Revenue ↓','Inelastic demand goods face heavy indirect taxes','Perfectly inelastic (vertical curve): price has no effect on quantity']}],
+  videos:[{t:'Demand & Supply: Full Explanation',d:'30 min'},{t:'Elasticity of Demand – Types & Measurement',d:'26 min'},{t:'Indifference Curve Analysis',d:'22 min'},{t:'Cost Curves: Short Run vs Long Run',d:'24 min'}],
+  questions:[{y:'2079 (2022)',type:'Annual Exam'},{y:'2078 (2021)',type:'Annual Exam'},{y:'2077 (2020)',type:'Annual Exam'},{y:'2076 (2019)',type:'Annual Exam'}]
+},
+econ422:{
+  syllabus:[{u:'1',t:'Mathematical Tools',topics:['Functions: linear, quadratic, exponential','Differentiation: rules and applications','Optimization: maxima and minima','Integration: basic concepts and use in economics']},{u:'2',t:'Matrix Algebra',topics:['Matrix operations: addition, multiplication','Determinants and Cramer\'s rule','Input-output analysis (Leontief model)','Linear equations: simultaneous solution']},{u:'3',t:'Statistical Measures',topics:['Measures of central tendency: mean, median, mode','Measures of dispersion: variance, standard deviation','Skewness and kurtosis','Index numbers: construction and use']},{u:'4',t:'Probability & Regression',topics:['Basic probability theory','Normal distribution and standardisation','Simple linear regression and correlation','Hypothesis testing: t-test, chi-square']}],
+  notes:[{title:'Differentiation in Economics',body:'Differentiation measures rate of change. In economics: MC = dTC/dQ, MR = dTR/dQ, and profit maximisation requires MR = MC (first-order condition) and d²π/dQ² < 0 (second-order condition).\n\nFor demand function Q = a – bP: dQ/dP = –b, giving price elasticity ε = (dQ/dP)×(P/Q).',pts:['Rules: power rule, product rule, chain rule, quotient rule','At maximum: first derivative = 0','Second derivative test: negative → maximum; positive → minimum']},{title:'Measures of Central Tendency',body:'Mean: ΣX/N. Affected by outliers; used when data is symmetric.\n\nMedian: Middle value when sorted. Resistant to outliers; used for skewed distributions (e.g. income data).\n\nMode: Most frequent value. Used for categorical data.\n\nIn positive skew: Mean > Median > Mode.',pts:['Weighted mean used when observations have different importance','Geometric mean used for growth rates and index numbers','Harmonic mean used for rates and ratios']}],
+  videos:[{t:'Calculus for Economists – Differentiation',d:'28 min'},{t:'Statistics: Central Tendency & Dispersion',d:'25 min'},{t:'Regression Analysis & Interpretation',d:'30 min'}],
+  questions:[{y:'2079 (2022)',type:'Annual Exam'},{y:'2078 (2021)',type:'Annual Exam'},{y:'2077 (2020)',type:'Annual Exam'}]
+},
+hist421:{
+  syllabus:[{u:'1',t:'Pre-Historic and Ancient Nepal',topics:['Pre-historic settlements in Nepal','Kiranti period: political and cultural aspects','Licchavi period: administration and culture','Licchavi art and architecture']},{u:'2',t:'Early Medieval Nepal',topics:['Transitional period after Licchavi','Thakuri rulers and their legacy','Development of towns and trade','Social and religious changes']},{u:'3',t:'Medieval Malla Period',topics:['Unification under early Mallas','Division into three kingdoms (1482)','Kathmandu Valley: art, architecture, and trade','Social and religious conditions under Mallas']},{u:'4',t:'Gorkha Expansion',topics:["Rise of Gorkha under Dravya Shah","Prithvi Narayan Shah's unification campaign","Fall of the Malla kingdoms (1768–69)","Significance of unification"]}],
+  notes:[{title:'Licchavi Period (c. 400–750 CE)',body:'The Licchavi period is often called the "Golden Age" of Nepal, marked by:\n\n• Political: Republican oligarchy of Licchavi clans; later individual rulers (Manadeva I, Amsuverma)\n• Economic: Trans-Himalayan trade between India and Tibet; Nepal as entrepôt\n• Cultural: Synthesis of Hindu and Buddhist traditions; Sanskrit inscriptions\n• Art: Changu Narayan temple (c. 464 CE), Budhanilkantha, iconic stone sculptures',pts:['Manadeva I (c. 464 CE): first historical king confirmed by inscription','Amsuverma: diplomat who sent daughter Bhrikuti to Tibet','Pashupatinath established as royal deity during Licchavi period']},{title:"Prithvi Narayan Shah's Unification",body:'Prithvi Narayan Shah (1723–1775) unified Nepal between 1743 and 1769. Strategy:\n\n1. Conquest of trade routes to starve valley kingdoms economically\n2. Economic blockade of Kathmandu Valley (1765 onwards)\n3. Capture of Kirtipur (1766, after two failed attempts)\n4. Conquest of Kathmandu (Indra Jatra, 1768), Patan, and Bhaktapur (1769)\n\nHis "Divyopadesh" outlined his philosophy: Nepal as "yam between two boulders" (India and China), self-reliance, merit-based governance.',pts:['Nepal remained independent unlike other South Asian kingdoms','Set capital at Kathmandu after conquest','Policy of limited contact with Europeans']}],
+  videos:[{t:'Licchavi Nepal: Art & Politics',d:'22 min'},{t:'Medieval Malla Kingdoms of Kathmandu Valley',d:'26 min'},{t:'Prithvi Narayan Shah & Unification of Nepal',d:'30 min'}],
+  questions:[{y:'2079 (2022)',type:'Annual Exam'},{y:'2078 (2021)',type:'Annual Exam'},{y:'2077 (2020)',type:'Annual Exam'},{y:'2076 (2019)',type:'Annual Exam'}]
+},
+hist422:{
+  syllabus:[{u:'1',t:'Age of Revolutions (1774–1848)',topics:['American Revolution and its global impact','French Revolution: causes, phases, outcomes','Industrial Revolution and social transformation','Revolutions of 1848 in Europe']},{u:'2',t:'Imperialism and Nationalism (1848–1914)',topics:['European nationalism and nation-state formation','New Imperialism: Africa and Asia partition','Scramble for Africa and Berlin Conference (1884)','Nationalist movements in colonised territories']},{u:'3',t:'World Wars (1914–1945)',topics:['Causes of World War I: MAIN factors','Treaty of Versailles and its consequences','Rise of fascism and Nazism','World War II: key events and Holocaust']},{u:'4',t:'Post-War World (1945–1990)',topics:['Cold War: origins, blocs, and crises','Decolonisation in Asia and Africa','Non-Aligned Movement','End of Cold War and collapse of USSR (1989–1991)']}],
+  notes:[{title:'Causes of World War I (MAIN)',body:'Militarism: European powers built massive armies and navies (arms race, especially Anglo-German naval rivalry).\n\nAlliances: Triple Entente (France, Russia, Britain) vs Triple Alliance (Germany, Austria-Hungary, Italy) turned a local conflict into a world war.\n\nImperialism: Competition for colonies created tensions (Morocco Crises 1905, 1911).\n\nNationalism: Pan-Slavism in the Balkans; assassination of Archduke Franz Ferdinand (June 28, 1914) by Gavrilo Princip was the trigger.',pts:['Long-term causes (MAIN) vs immediate cause (assassination)','War guilt assigned to Germany by Article 231 of Versailles','War created conditions for Russian Revolution (1917) and WWII']},{title:'Cold War: Key Events',body:'The Cold War (1947–1991) was an ideological conflict between the USA (liberal capitalism) and USSR (communism) that never escalated into direct "hot" war.\n\nKey events: Truman Doctrine (1947), Marshall Plan (1948), Berlin Blockade (1948–49), Korean War (1950–53), Cuban Missile Crisis (1962), Vietnam War (1955–75), Fall of Berlin Wall (1989).',pts:['Policy of containment: prevent communism spreading','MAD (Mutually Assured Destruction) prevented direct war','Non-Aligned Movement: Nepal, India, Yugoslavia avoided both blocs']}],
+  videos:[{t:'French Revolution: Causes to Consequences',d:'32 min'},{t:'World War I in 10 Minutes',d:'10 min'},{t:'Cold War: Origins and Key Events',d:'28 min'}],
+  questions:[{y:'2079 (2022)',type:'Annual Exam'},{y:'2078 (2021)',type:'Annual Exam'},{y:'2077 (2020)',type:'Annual Exam'}]
+},
+polsc421:{
+  syllabus:[{u:'1',t:'Nature and Scope of Political Theory',topics:['Meaning and definition of political theory','Traditional vs modern political theory','Normative, empirical, and historical approaches','Political theory and political science']},{u:'2',t:'Key Concepts',topics:['State: origin, nature, and elements','Sovereignty: internal and external','Law and legitimacy','Power, authority, and legitimacy']},{u:'3',t:'Rights and Justice',topics:["Theory of rights: natural, legal, moral","Liberty: positive and negative","Equality: types and debates","Rawls' theory of justice and its critique"]},{u:'4',t:'Democratic Theory',topics:['Classical and modern democracy','Liberalism and its core principles','Democratic participation and representation','Challenges to democracy: populism and authoritarianism']}],
+  notes:[{title:'State, Sovereignty & Legitimacy',body:'The State has four elements: (1) Population, (2) Territory, (3) Government, (4) Sovereignty.\n\nSovereignty (Jean Bodin): Supreme, absolute, and permanent power. Internal = supreme over citizens. External = independence from foreign control.\n\nLegitimacy (Max Weber) — Three types:\n• Traditional: based on custom (monarchy)\n• Charismatic: based on personal qualities (revolutionary leaders)\n• Legal-Rational: based on laws and procedures (modern democratic states)',pts:['State ≠ Government: government can change; state is permanent','Hobbes: state as Leviathan preventing "war of all against all"','Locke: state derives legitimacy from social contract and consent']},{title:'Liberty: Positive vs Negative',body:"Isaiah Berlin's distinction (1958):\n\nNegative Liberty: Freedom FROM interference. 'You are free if no one stops you.' Focus on absence of external constraint. Associated with classical liberalism.\n\nPositive Liberty: Freedom TO achieve your potential. Requires enabling conditions: education, health, economic security. Associated with social democracy and welfare state.\n\nRepublican Liberty (Philip Pettit): Freedom as non-domination — not merely non-interference but free from capacity of others to interfere arbitrarily.",pts:["Negative liberty: J.S. Mill's harm principle limits state intervention","Positive liberty requires active state role","Amartya Sen's capabilities approach links liberty to development"]}],
+  videos:[{t:'Political Theory: Nature and Scope',d:'18 min'},{t:'Theories of State & Sovereignty',d:'24 min'},{t:'Liberty, Equality and Justice',d:'26 min'}],
+  questions:[{y:'2079 (2022)',type:'Annual Exam'},{y:'2078 (2021)',type:'Annual Exam'},{y:'2077 (2020)',type:'Annual Exam'}]
+},
+polsc422:{
+  syllabus:[{u:'1',t:'Ancient Political Thought',topics:["Plato's ideal state and philosopher-king","Aristotle: politics as master science","Kautilya's Arthashastra","Cicero and Roman political ideas"]},{u:'2',t:'Medieval & Renaissance Thought',topics:['Theocratic theory and Church vs State','Machiavelli: realism and The Prince','Reformation and secular political ideas','Social contract theory: Hobbes']},{u:'3',t:'Enlightenment & Liberal Thought',topics:['Locke: natural rights and limited government','Rousseau: general will and democracy','Montesquieu: separation of powers','Adam Smith and economic liberalism']},{u:'4',t:'Modern Political Thought',topics:['Hegel: state and dialectics','Marxism: historical materialism and class struggle','Anarchism: Bakunin and Kropotkin','Fascism and totalitarianism: Hannah Arendt']}],
+  notes:[{title:"Plato's Republic – Key Ideas",body:"Plato's Republic (c. 380 BCE) argues for an ideal city-state (Kallipolis) governed by wisdom.\n\nThree classes: Philosophers (Rulers) — wisdom; Guardians (Warriors) — courage; Producers — temperance. Justice = each class performing its proper function.\n\nPhilosopher-King: Only those who understand the 'Form of the Good' (highest truth) should rule.\n\nAllegory of the Cave: Most humans see only shadows (appearances). The philosopher who escapes sees the sun (truth) and must return to govern.",pts:["Plato distrusted democracy after Socrates' execution","His ideal state is aristocratic (rule by the best)","Education and censorship of arts used to shape ideal citizens"]},{title:'Marxism: Key Concepts',body:"Historical Materialism: History is driven by material/economic forces, not ideas. Modes of production (slavery → feudalism → capitalism → socialism → communism) shape all social institutions.\n\nClass Struggle: 'The history of all hitherto existing society is the history of class struggles.' Bourgeoisie vs Proletariat in capitalism.\n\nAlienation: Workers alienated from their labour, product, fellow workers, and human potential under capitalism.\n\nDictatorship of Proletariat: Transition period before communist stateless, classless society.",pts:["Base (economy) determines superstructure (law, politics, culture)","Ideology = 'false consciousness' that keeps workers passive","Surplus value = unpaid labour extracted by capitalists"]}],
+  videos:[{t:"Plato's Republic Explained",d:'24 min'},{t:'Social Contract Theory: Hobbes, Locke & Rousseau',d:'30 min'},{t:'Karl Marx & Marxist Political Thought',d:'28 min'}],
+  questions:[{y:'2079 (2022)',type:'Annual Exam'},{y:'2078 (2021)',type:'Annual Exam'},{y:'2077 (2020)',type:'Annual Exam'}]
+},
+eng421:{
+  syllabus:[{u:'1',t:'Critical Reading',topics:['Analysing argument structure in texts','Evaluating evidence and reasoning','Recognising bias and rhetorical devices','Synthesising multiple sources']},{u:'2',t:'Academic Writing',topics:['Thesis statement and argument development','Research-based essay writing','Citation and referencing (APA/MLA)','Avoiding plagiarism']},{u:'3',t:'Critical Thinking Skills',topics:['Logical fallacies and how to avoid them','Inductive and deductive reasoning','Problem-solving and analytical frameworks','Evaluating information sources']},{u:'4',t:'Language in Use',topics:['Register and genre in academic writing','Hedging language in academic discourse','Discourse markers and coherence','Revision strategies for polished writing']}],
+  notes:[{title:'Critical Thinking & Logical Fallacies',body:'Critical thinking involves systematic evaluation of information. Key components: Analysis (breaking down arguments), Evaluation (judging evidence quality), Inference (drawing conclusions), Explanation (justifying positions).\n\nCommon fallacies to recognise:\n• Ad Hominem: attacking the person, not the argument\n• Straw Man: misrepresenting the opposing view\n• False Dichotomy: presenting only two options\n• Slippery Slope: assuming one event leads to extreme consequences\n• Appeal to Authority: citing authority in unrelated field',pts:['Distinguish facts from opinions and interpretations','Correlation ≠ causation','Recognise emotional manipulation in persuasive texts']},{title:'Academic Essay Structure',body:'A standard academic essay:\n\nIntroduction: Hook → Background → Thesis statement (your argument)\n\nBody Paragraph: Topic sentence → Evidence → Analysis → Transition\n\nConclusion: Restate thesis (differently) → Summarise main points → Broader significance\n\nCitation (APA in-text): (Author, Year, p. page) or Author (Year) at start of sentence.',pts:['Every body paragraph should directly support your thesis','Use signal phrases: "According to…" "Smith (2020) argues…"','Avoid "I believe" or "I think" in formal academic writing']}],
+  videos:[{t:'Critical Reading Techniques',d:'20 min'},{t:'How to Write an Academic Essay',d:'26 min'},{t:'APA & MLA Citation Guide',d:'18 min'}],
+  questions:[{y:'2079 (2022)',type:'Annual Exam'},{y:'2078 (2021)',type:'Annual Exam'},{y:'2077 (2020)',type:'Annual Exam'}]
+},
+eng422:{
+  syllabus:[{u:'1',t:'Old and Middle English Literature',topics:['Anglo-Saxon period: Beowulf and oral tradition','Norman Conquest and its literary impact','Chaucer: Canterbury Tales and Middle English','Medieval drama: mystery and morality plays']},{u:'2',t:'Renaissance and Elizabethan Era',topics:['Humanism and its literary expression','Sonnets: Sidney, Spenser, Shakespeare','Elizabethan drama: Marlowe and Shakespeare','Major plays: Hamlet, Macbeth, King Lear']},{u:'3',t:'17th–18th Century Literature',topics:['Metaphysical poetry: Donne and Marvell','Milton: Paradise Lost and epic tradition','Restoration comedy and Neo-classical literature','Novel origins: Defoe, Richardson, Fielding']},{u:'4',t:'Literary Criticism',topics:["Classical criticism: Aristotle's Poetics","Neo-classical criticism: Dryden and Pope","Romantic criticism: Wordsworth and Coleridge","Modern criticism: New Criticism, structuralism"]}],
+  notes:[{title:"Shakespeare's Major Tragedies",body:"Shakespeare's four great tragedies share common features: a noble protagonist with a fatal flaw (hamartia), conflict between order and chaos, and a catastrophic ending that restores moral order.\n\nHamlet (1601): Indecision and appearance vs reality.\n\nMacbeth (1606): Unchecked ambition. Witches' prophecy + Lady Macbeth's manipulation → regicide → psychological disintegration.\n\nKing Lear (1606): Blindness (literal and metaphorical), the effects of divided loyalty, and the relationship between power and love.",pts:["Aristotle's catharsis: tragedy purges pity and fear in audience","Tragic flaw (hamartia) is central to understanding each protagonist","Shakespeare's histories vs tragedies vs comedies: key distinctions"]},{title:'Literary Criticism: Key Schools',body:"Aristotle's Poetics (c. 335 BCE): Imitation (mimesis), six elements of tragedy (plot, character, thought, diction, song, spectacle). Plot is the 'soul of tragedy.'\n\nNew Criticism (1930s–50s): Close reading of the text alone. 'Intentional fallacy' and 'affective fallacy'. Focus: ambiguity, irony, tension, paradox.\n\nStructuralism (Saussure, Barthes, Lévi-Strauss): Literature as a system of signs. Meaning comes from structural relationships.",pts:['Formalism = focus on form and technique','Post-structuralism (Derrida): deconstruction — texts are unstable','Feminist criticism: gender, patriarchy, and representation in literature']}],
+  videos:[{t:'History of English Literature Overview',d:'35 min'},{t:"Shakespeare's Tragedies Explained",d:'28 min'},{t:'Introduction to Literary Theory',d:'24 min'}],
+  questions:[{y:'2079 (2022)',type:'Annual Exam'},{y:'2078 (2021)',type:'Annual Exam'},{y:'2077 (2020)',type:'Annual Exam'}]
+},
+nep421:{
+  syllabus:[{u:'१',t:'नेपाली कथा',topics:['नेपाली कथाको उत्पत्ति र विकास','प्रमुख कथाकारहरू','पाठ्यक्रममा निर्धारित कथाहरूको अध्ययन','कथाको शिल्प र विषयवस्तु']},{u:'२',t:'नेपाली उपन्यास',topics:['नेपाली उपन्यासको इतिहास','उपन्यासका तत्त्वहरू','निर्धारित उपन्यासको विस्तृत अध्ययन','सामाजिक सन्दर्भ र उपन्यास']},{u:'३',t:'नेपाली नाटक',topics:['नेपाली नाटकको उत्पत्ति र परम्परा','आधुनिक नाटकका प्रमुख नाटककारहरू','नाट्य तत्त्वहरूको विश्लेषण','निर्धारित नाटकहरूको अध्ययन']}],
+  notes:[{title:'नेपाली कथाको परिचय',body:'नेपाली कथाको आधुनिक विकास विसं १९३३ तिर सुरु भएको मानिन्छ। प्रमुख कथाकारहरू: पारसमणि प्रधान, गुरुप्रसाद मैनाली, विश्वेश्वरप्रसाद कोइराला, लैनसिंह बाङ्देल आदि।\n\nकथाका तत्त्वहरू: कथानक, पात्र, संवाद, परिवेश, दृष्टिकोण, भाषा-शैली र उद्देश्य।\n\nमैनालीको "नासो" नेपाली कथाको मील-पत्थर मानिन्छ — ग्रामीण जीवनको यथार्थ चित्रण।',pts:['आधुनिक कथाले सामाजिक समस्याहरूलाई केन्द्रमा राख्छ','प्रतीकवादी कथाहरूमा गहन अर्थ लुकेको हुन्छ','नेपाली कथामा नारी-विमर्श महत्त्वपूर्ण छ']},{title:'उपन्यासका तत्त्वहरू',body:'उपन्यास एक दीर्घ गद्य रचना हो जसमा जीवनको व्यापक चित्रण हुन्छ।\n\nमुख्य तत्त्वहरू:\n• कथावस्तु (Plot): घटनाक्रमको व्यवस्थित संयोजन\n• पात्र (Character): नायक, प्रतिनायक, सहायक पात्र\n• संवाद (Dialogue): पात्रको व्यक्तित्व प्रकट गर्ने माध्यम\n• परिवेश (Setting): स्थान र कालको चित्रण\n• दृष्टिकोण (Point of View): कथक को हो?\n\nबीपी कोइरालाको "सुम्निमा" नेपाली उपन्यासको प्रमुख कृति हो।',pts:['उपन्यासमा थिम (मूल विषय) केन्द्रीय हुन्छ','प्रत्येक पात्रको प्रेरणा (motivation) बुझ्नु जरुरी छ','भाषा-शैलीले उपन्यासको युग र समाज प्रतिबिम्बित गर्छ']}],
+  videos:[{t:'नेपाली कथाको विकासक्रम',d:'20 min'},{t:'उपन्यासका तत्त्वहरू',d:'18 min'},{t:'नेपाली नाटकको परिचय',d:'22 min'}],
+  questions:[{y:'२०७९ (2022)',type:'वार्षिक परीक्षा'},{y:'२०७८ (2021)',type:'वार्षिक परीक्षा'},{y:'२०७७ (2020)',type:'वार्षिक परीक्षा'}]
+},
+nep422:{
+  syllabus:[{u:'१',t:'नेपाली फुटकर कविता',topics:['आधुनिक नेपाली कवितको विकास','प्रमुख कविहरू: लेखनाथ, देवकोटा, माधव घिमिरे','निर्धारित कविताहरूको व्याख्या','कविताका अलंकार र छन्द']},{u:'२',t:'खण्डकाव्य',topics:['खण्डकाव्यको परिभाषा र विशेषता','प्रमुख नेपाली खण्डकाव्यहरू','निर्धारित खण्डकाव्यको विस्तृत अध्ययन','खण्डकाव्यको शिल्प']},{u:'३',t:'महाकाब्य',topics:["महाकाब्यको परिभाषा र तत्त्वहरू","नेपाली महाकाब्यको परम्परा","देवकोटाको 'शाकुन्तल' महाकाब्य","महाकाब्यको साहित्यिक महत्त्व"]}],
+  notes:[{title:'आधुनिक नेपाली कविता',body:'नेपाली कवितामा तीन मुख्य युग:\n\n१. आदिकाल: प्रारम्भिक लोककविता, भानुभक्त आचार्यको रामायण (१८३३)\n२. आधुनिककाल: लेखनाथ पौड्याल (नेपाली कविताका जनक), देवकोटा (महाकवि)\n३. समकालीन: प्रयोगवाद, छन्दमुक्त कविता, नारीवादी कविता\n\nलेखनाथको "पिंजडाको सुगा" — राष्ट्रवादको प्रतीक\nदेवकोटाको "मुनामदन" — खण्डकाव्य, मानवतावादको सन्देश',pts:['अलंकार: उपमा, रूपक, उत्प्रेक्षा, अनुप्रास','छन्द: हाइकु, गजल, सनेट, मुक्त छन्द','कविताको भाव (Rasa): शृंगार, करुण, वीर, भयानक आदि']}],
+  videos:[{t:'नेपाली कविताको इतिहास',d:'22 min'},{t:'देवकोटाको काव्य-संसार',d:'20 min'},{t:'मुनामदनको विश्लेषण',d:'25 min'}],
+  questions:[{y:'२०७९ (2022)',type:'वार्षिक परीक्षा'},{y:'२०७८ (2021)',type:'वार्षिक परीक्षा'},{y:'२०७७ (2020)',type:'वार्षिक परीक्षा'}]
+},
+an421:{
+  syllabus:[{u:'1',t:'What is Anthropology?',topics:['Definition and scope of anthropology','Sub-fields: cultural, physical, linguistic, archaeological','Anthropology vs other social sciences','History of anthropological thought']},{u:'2',t:'Culture',topics:['Concept and characteristics of culture','Cultural universals and diversity','Cultural relativism vs ethnocentrism','Enculturation and acculturation']},{u:'3',t:'Society and Social Organisation',topics:['Kinship systems: descent and alliance','Family forms and marriage patterns','Political organisation: band, tribe, chiefdom, state','Economic anthropology: exchange and reciprocity']},{u:'4',t:'Religion and Symbolism',topics:['Anthropological theories of religion','Magic, witchcraft, and religion','Ritual and symbols','Shamanism and religious leaders']}],
+  notes:[{title:'Culture: Definition and Characteristics',body:"Culture is the integrated system of learned behaviour patterns, beliefs, and values shared by members of a society. Key characteristics:\n\n1. Learned (not innate): Transmitted through socialisation, not genes\n2. Shared: Collectively held by a group\n3. Symbolic: Uses symbols (especially language) to represent meaning\n4. Integrated: Parts are interconnected (religion affects economy affects kinship)\n5. Dynamic: Changes over time\n\nMalinowski: Culture satisfies basic biological and social needs (functionalist view)\nGeertz: Culture is a 'web of significance' — interpretive approach",pts:['Cultural relativism: judge cultures by their own standards, not yours','Ethnocentrism: judging other cultures by your own standards (bias)','Emic (insider) vs Etic (outsider) perspectives in ethnography']},{title:'Kinship Systems',body:"Kinship is the social recognition of biological relationships, extended through marriage and adoption.\n\nDescent systems:\n• Patrilineal: descent through father's line (most common in Nepal, Hindu castes)\n• Matrilineal: descent through mother's line (e.g., Khasi of Meghalaya)\n• Bilateral (cognatic): both lines (e.g., Nepal's Gurung community)\n\nMarriage patterns:\n• Monogamy, Polygyny (one man, multiple wives), Polyandry (one woman, multiple husbands)\n• Endogamy (within group) vs Exogamy (outside group)",pts:['In Nepal: patrilineal descent is dominant in Hindu communities','Levirate marriage: widow marries deceased husband\'s brother','Bridewealth vs Dowry: key distinction in marriage economics']}],
+  videos:[{t:'Introduction to Anthropology',d:'20 min'},{t:'What is Culture? Anthropological Perspective',d:'18 min'},{t:'Kinship, Family & Marriage in Anthropology',d:'24 min'}],
+  questions:[{y:'2079 (2022)',type:'Annual Exam'},{y:'2078 (2021)',type:'Annual Exam'},{y:'2077 (2020)',type:'Annual Exam'}]
+},
+an422:{
+  syllabus:[{u:'1',t:'Evolutionism',topics:['Unilinear evolution: Morgan and Tylor','Social Darwinism and its critique','Neo-evolutionism: White and Steward','Critique of evolutionist approaches']},{u:'2',t:'Diffusionism and Functionalism',topics:["Cultural diffusion: British and German schools","Malinowski's functional theory","Structural-functionalism: Radcliffe-Brown","Critique of functionalism"]},{u:'3',t:'Structuralism & Interpretivism',topics:['Lévi-Strauss and structural anthropology','Binary oppositions and myth analysis',"Geertz's interpretive anthropology",'Symbol and meaning in culture']},{u:'4',t:'Contemporary Approaches',topics:['Post-modern anthropology','Feminist anthropology','Applied anthropology and development','Engaged and activist anthropology']}],
+  notes:[{title:'Functionalism: Malinowski vs Radcliffe-Brown',body:"Malinowski's Functionalism: Every cultural element satisfies a human need (biological, derived, or integrative). Example: magic in Trobriand fishing — reduces anxiety in risky open-sea fishing (psychological function).\n\nRadcliffe-Brown's Structural-Functionalism: Focus on social structure, not individual needs. Institutions maintain social structure and solidarity. Compare how institutions (family, law, ritual) maintain social order.\n\nKey difference: Malinowski → individual needs; Radcliffe-Brown → social structure maintenance.",pts:['Functionalism critiqued for being ahistorical and justifying status quo','Cannot explain social change or conflict well','Both used synchronic (present-time) analysis rather than historical']},{title:'Lévi-Strauss & Structuralism',body:"Claude Lévi-Strauss applied Saussure's structural linguistics to anthropology. Key idea: the human mind universally organises experience through binary oppositions.\n\nExamples: Nature/Culture, Raw/Cooked, Male/Female, Sacred/Profane.\n\nMyth Analysis: Myths from different cultures share underlying structural patterns. Meaning lies in the relationships between elements.\n\nThe Raw and the Cooked (1964): Cooking = transformation from nature to culture = symbolic operation performed by all societies.",pts:["Totemism: animals chosen 'good to think' not just 'good to eat'",'Structuralism is synchronic — ignores historical change','Post-structuralism (Derrida) challenges stable binary oppositions']}],
+  videos:[{t:'Evolutionism in Anthropology',d:'20 min'},{t:'Functionalism: Malinowski & Radcliffe-Brown',d:'22 min'},{t:'Lévi-Strauss & Structural Anthropology',d:'24 min'}],
+  questions:[{y:'2079 (2022)',type:'Annual Exam'},{y:'2078 (2021)',type:'Annual Exam'},{y:'2077 (2020)',type:'Annual Exam'}]
+},
+rds421:{
+  syllabus:[{u:'1',t:'Concept of Development',topics:['Meaning and dimensions of development','Economic growth vs development','Human Development Index (HDI)','Sustainable development: concept and goals (SDGs)']},{u:'2',t:'Classical Development Theories',topics:["Modernisation theory: Rostow's stages",'Dependency theory: Frank and Wallerstein','World-systems theory','Basic needs approach']},{u:'3',t:'Alternative Theories',topics:["Sen's capabilities approach",'People-centred development (UNDP)','Participatory development','Indigenous knowledge and development']},{u:'4',t:'Rural Development in Nepal',topics:['History of development planning in Nepal','Periodic plans and their outcomes','Poverty and inequality in Nepal','Community development programs']}],
+  notes:[{title:'Modernisation vs Dependency Theory',body:"Modernisation Theory (Rostow): Development is a universal linear path from 'traditional' to 'modern' society. Rostow's 5 Stages: Traditional → Preconditions for takeoff → Takeoff → Drive to maturity → Age of mass consumption. Prescriptions: capital transfer, technology, Western institutions.\n\nDependency Theory (Frank): Underdevelopment is a product of colonialism and unequal exchange. Core (developed) nations extract surplus from Periphery (developing) nations. 'Development of underdevelopment' — the third world is poor BECAUSE rich nations are rich.",pts:['Modernisation: internal factors cause underdevelopment','Dependency: external/historical factors cause underdevelopment','Both theories challenged by East Asian development success']},{title:"Sen's Capabilities Approach",body:"Amartya Sen's capabilities approach (Development as Freedom, 1999) defines development as expanding human capabilities — what people are able to be and do.\n\nFive instrumental freedoms:\n1. Political freedoms (civil rights, democratic voice)\n2. Economic facilities (markets, credit, property rights)\n3. Social opportunities (education, healthcare)\n4. Transparency guarantees (information, anti-corruption)\n5. Protective security (social safety nets)\n\nUnfreedom (poverty, lack of education, discrimination) is the primary obstacle to development.",pts:['GDP growth alone is insufficient — quality of life matters','HDI (UNDP) operationalises Sen\'s ideas: income + education + life expectancy','Women\'s empowerment is central — gender inequality is a capability failure']}],
+  videos:[{t:'Development Theories: Overview',d:'25 min'},{t:'Dependency Theory Explained',d:'20 min'},{t:"Amartya Sen's Capabilities Approach",d:'22 min'}],
+  questions:[{y:'2079 (2022)',type:'Annual Exam'},{y:'2078 (2021)',type:'Annual Exam'},{y:'2077 (2020)',type:'Annual Exam'}]
+},
+rds422:{
+  syllabus:[{u:'1',t:'Introduction to Research',topics:['Meaning and types of research','Characteristics of good research','Scientific method in social research','Ethical considerations in research']},{u:'2',t:'Research Design',topics:['Research problem identification and formulation','Hypothesis: types and formulation','Research designs: exploratory, descriptive, causal','Variables: independent, dependent, control']},{u:'3',t:'Data Collection Methods',topics:['Questionnaire design and survey methods','Interview: structured and unstructured','Observation: participant and non-participant','Secondary data and document analysis']},{u:'4',t:'Data Analysis and Report Writing',topics:['Qualitative data analysis: coding and themes','Quantitative analysis: tables, graphs, measures','Research report structure','Referencing and bibliography']}],
+  notes:[{title:'Research Design Fundamentals',body:'A research design is the blueprint for data collection, measurement, and analysis.\n\n1. Exploratory: When little is known. Methods: interviews, focus groups. Goal: generate hypotheses.\n\n2. Descriptive: Describes characteristics of a phenomenon. Methods: surveys, census. Goal: answer "what" questions.\n\n3. Explanatory (Causal): Explains cause-and-effect. Methods: experiments, longitudinal studies. Goal: answer "why" questions.\n\nApproaches:\n• Quantitative: numerical data, statistical analysis, positivist\n• Qualitative: textual/observational data, interpretive\n• Mixed Methods: combines both',pts:['Hypothesis must be testable and falsifiable','Null hypothesis (H₀): no relationship; Alternative hypothesis (H₁): relationship exists','Validity: measuring what you intend; Reliability: consistency of measurement']},{title:'Data Collection Methods',body:'Questionnaire: Structured tool with closed-ended and open-ended questions. Best for large samples.\n\nInterview: Structured (fixed questions, quantitative), Semi-structured (guiding questions, qualitative), Unstructured (open conversation, ethnographic).\n\nObservation: Participant (researcher joins the group — Malinowski in Trobriands) vs Non-participant (researcher observes without joining).\n\nSampling:\n• Probability: random, systematic, stratified, cluster\n• Non-probability: purposive, snowball, convenience',pts:['Pre-test questionnaire before full deployment','Informed consent is essential for ethical research','Triangulation: using multiple methods increases validity']}],
+  videos:[{t:'Introduction to Social Research Methods',d:'22 min'},{t:'Questionnaire Design & Survey Methods',d:'20 min'},{t:'Qualitative vs Quantitative Research',d:'18 min'}],
+  questions:[{y:'2079 (2022)',type:'Annual Exam'},{y:'2078 (2021)',type:'Annual Exam'},{y:'2077 (2020)',type:'Annual Exam'}]
+}
+};
+
+function openPanel(code,title,marks,id,tab){
+  const data=SUBJECTS[id]||null;
+  document.getElementById('panelCode').textContent=code;
+  document.getElementById('panelTitle').textContent=title;
+  document.getElementById('panelMarks').textContent='Full Marks: '+marks;
+  buildSyllabus(data);buildNotes(data);buildVideos(data);buildQuestions(data);
+  const tabMap={syllabus:'psyllabus',notes:'pnotes',videos:'pvideos',questions:'pquestions'};
+  const tabId=tabMap[tab]||'psyllabus';
+  document.querySelectorAll('.panel-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  const idx=['psyllabus','pnotes','pvideos','pquestions'].indexOf(tabId);
+  document.querySelectorAll('.ptab')[idx].classList.add('active');
+  document.getElementById('panelOverlay').classList.add('open');
+  document.getElementById('contentPanel').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closePanel(){
+  document.getElementById('panelOverlay').classList.remove('open');
+  document.getElementById('contentPanel').classList.remove('open');
+  document.body.style.overflow='';
+}
+function switchPanelTab(e,id){
+  document.querySelectorAll('.panel-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  e.currentTarget.classList.add('active');
+}
+function buildSyllabus(data){
+  const el=document.getElementById('psyllabus');
+  if(!data||!data.syllabus){el.innerHTML=cs('Syllabus is being prepared for this subject.');return;}
+  el.innerHTML=data.syllabus.map(u=>`<div class="syl-unit"><div class="unit-hd"><span class="u-num">${u.u}</span>${u.t}</div><ul class="topic-list">${u.topics.map(t=>`<li>${t}</li>`).join('')}</ul></div>`).join('');
+}
+function buildNotes(data){
+  const el=document.getElementById('pnotes');
+  if(!data||!data.notes){el.innerHTML=cs('Notes are being compiled for this subject.');return;}
+  el.innerHTML=data.notes.map(n=>`<div class="note-card"><h4>📝 ${n.title}</h4><div class="note-body">${n.body}</div>${n.pts?`<ul>${n.pts.map(p=>`<li>${p}</li>`).join('')}</ul>`:''}</div>`).join('');
+}
+function buildVideos(data){
+  const el=document.getElementById('pvideos');
+  if(!data||!data.videos){el.innerHTML=cs('Video lectures are being recorded for this subject.');return;}
+  el.innerHTML=data.videos.map((v,i)=>`<div class="vid-item"><div class="vid-thumb">▶️</div><div class="vid-info"><h5>${v.t}</h5><p>⏱ ${v.d} · Lecture ${i+1}</p></div><button class="vid-btn" onclick="alert('Video link for: ${v.t.replace(/'/g,'')}\\nContact the department for the current streaming link.')">Watch</button></div>`).join('')+`<div class="panel-note-info">📌 Video links are maintained by the department instructor. Contact the office to get the latest links.</div>`;
+}
+function buildQuestions(data){
+  const el=document.getElementById('pquestions');
+  if(!data||!data.questions){el.innerHTML=cs('Question papers will be uploaded soon.');return;}
+  el.innerHTML=`<p style="font-size:.83rem;color:var(--text-light);margin-bottom:1rem;">📌 Download previous years' question papers for practice. Contact the department office for download links.</p>`+data.questions.map(q=>`<div class="q-row"><div class="q-left"><div class="q-icon">📊</div><div><div class="q-title">${q.y} Question Paper</div><div class="q-meta">${q.type} · B.A. First Year</div></div></div><button class="q-dl" onclick="alert('Question paper ${q.y}\\nContact the department office or check the notice board for the download link.')">Download</button></div>`).join('');
+}
+function cs(msg){return`<div class="coming-soon-panel"><div class="cs-icon">🚀</div><h4>Coming Soon</h4><p>${msg}</p><p style="margin-top:.4rem;font-size:.8rem;">Please check back later or contact the department office.</p></div>`;}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePanel();});
+</script>
 </body>
 </html>
