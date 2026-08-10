@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Learning Hub - Complete Course Explorer</title>
+<style>
+  :root {
+    --bg: #f8f9fa;
+    --surface: #ffffff;
+    --surface-hover: #f1f3f5;
+    --text: #1a1a2e;
+    --text-secondary: #5a5a72;
+    --text-muted: #8a8a9e;
+    --border: #e1e4e8;
+    --accent: #2563eb;
+    --accent-soft: rgba(37,99,235,0.08);
+    --success: #16a34a;
+    --warning: #d97706;
+    --danger: #dc2626;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.05);
+    --shadow-hover: 0 4px 6px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.08);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: "SF Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
+  }
+  [data-theme="dark"] {
+    --bg: #0f0f1a;
+    --surface: #1a1a2e;
+    --surface-hover: #252540;
+    --text: #e8e8f0;
+    --text-secondary: #a0a0b8;
+    --text-muted: #6a6a80;
+    --border: #2a2a40;
+    --accent: #60a5fa;
+    --accent-soft: rgba(96,165,250,0.12);
+    --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2);
+    --shadow-hover: 0 4px 6px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.25);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .logo svg { width: 28px; height: 28px; color: var(--accent); }
+  .header-actions { display: flex; align-items: center; gap: 12px; }
+  .search-box { position: relative; }
+  .search-box input {
+    width: 280px;
+    padding: 10px 14px 10px 38px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .search-box input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .search-box svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--text-muted);
+  }
+  .theme-toggle {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .theme-toggle:hover { background: var(--surface-hover); }
+  .main { max-width: 1280px; margin: 0 auto; padding: 24px; }
+  .pathway-section {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 24px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+  .pathway-section h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pathway-flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+  .path-node {
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    transition: transform 0.2s;
+  }
+  .path-node:hover { transform: translateY(-1px); }
+  .path-arrow { color: var(--text-muted); display: flex; align-items: center; }
+  .path-arrow svg { width: 16px; height: 16px; }
+  .tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding-bottom: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    padding: 10px 18px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .tab:hover { background: var(--surface-hover); }
+  .tab.active {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+  }
+  .subjects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+  }
+  .subject-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+  .subject-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+  }
+  .card-header {
+    padding: 18px 20px 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 20px;
+  }
+  .card-title-area { flex: 1; min-width: 0; }
+  .card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .card-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+  .card-body {
+    padding: 0 20px 16px;
+    flex: 1;
+  }
+  .resource-section { margin-bottom: 12px; }
+  .resource-section:last-child { margin-bottom: 0; }
+  .resource-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .resource-label svg { width: 14px; height: 14px; }
+  .resource-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .resource-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: var(--bg);
+    font-size: 13px;
+    color: var(--text-secondary);
+    transition: background 0.2s;
+  }
+  .resource-item:hover { background: var(--surface-hover); }
+  .resource-item a {
+    color: var(--accent);
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+  }
+  .resource-item a:hover { text-decoration: none; opacity: 0.8; }
+  .tag {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
+  }
+  .tag-video { background: rgba(220,38,38,0.1); color: var(--danger); }
+  .tag-pdf { background: rgba(22,163,74,0.1); color: var(--success); }
+  .tag-doc { background: rgba(37,99,235,0.1); color: var(--accent); }
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+  }
+  .empty-state svg { width: 48px; height: 48px; margin-bottom: 12px; opacity: 0.5; }
+  .footer {
+    text-align: center;
+    padding: 40px 24px;
+    color: var(--text-muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+  @media (max-width: 768px) {
+    .header-inner { padding: 12px 16px; }
+    .search-box input { width: 200px; }
+    .main { padding: 16px; }
+    .subjects-grid { grid-template-columns: 1fr; }
+    .pathway-section { padding: 16px; }
+  }
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      IT Learning Hub
+    </div>
+    <div class="header-actions">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" id="searchInput" placeholder="Search subjects, topics...">
+      </div>
+      <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+        <svg id="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        <svg id="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+  <section class="pathway-section">
+    <h2>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent)"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      Modern IT Learning Pathway
+    </h2>
+    <div class="pathway-flow" id="pathwayFlow"></div>
+  </section>
+
+  <nav class="tabs" id="categoryTabs">
+    <button class="tab active" data-cat="all">All Subjects</button>
+    <button class="tab" data-cat="core">Core IT</button>
+    <button class="tab" data-cat="web">Web & Software</button>
+    <button class="tab" data-cat="ai">AI & Data</button>
+    <button class="tab" data-cat="security">Cybersecurity</button>
+    <button class="tab" data-cat="mgmt">IT Management</button>
+    <button class="tab" data-cat="math">Mathematics</button>
+  </nav>
+
+  <div class="subjects-grid" id="subjectsGrid"></div>
+
+  <div class="empty-state" id="emptyState" style="display:none">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    <p>No subjects found matching your search.</p>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>IT Learning Hub — Curated free resources for students. All links point to freely available educational content.</p>
+</footer>
+
+<script>
+
+const pathwaySteps = [
+  "Computer fundamentals","Programming fundamentals","Data structures & algorithms",
+  "DBMS + Networks + OS","Web / Mobile development","Cloud + Cybersecurity",
+  "AI / ML + Data science","Generative AI + Agentic AI","IT project / Entrepreneurship"
+];
+
+const categories = {
+  core: { label: "Core IT", color: "#2563eb", icon: "💻" },
+  web: { label: "Web & Software", color: "#dc2626", icon: "🌐" },
+  ai: { label: "AI & Data", color: "#7c3aed", icon: "🤖" },
+  security: { label: "Cybersecurity", color: "#16a34a", icon: "🔐" },
+  mgmt: { label: "IT Management", color: "#d97706", icon: "📊" },
+  math: { label: "Mathematics", color: "#0891b2", icon: "🧠" }
+};
+
+const subjects = [
+  { name:"Computer fundamentals", cat:"core", desc:"Hardware, software, memory, I/O, number systems, and basic computing concepts.",
+    videos:[{t:"Neso Academy: Computer Organization",u:"https://www.youtube.com/playlist?list=PLBlnK6fEyqRj9lld8sWIUNwlKfdJWoPT1"},{t:"Khan Academy: Computers & Internet",u:"https://www.khanacademy.org/computing/computers-and-internet"},{t:"CrashCourse: Computer Science",u:"https://www.youtube.com/playlist?list=PLH2l6uzC4UEW0s7-KnFKQNYkdp9DA8XeE"}],
+    pdfs:[{t:"MIT OCW: Intro to CS",u:"https://ocw.mit.edu/courses/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/"},{t:"Tutorialspoint: Computer Fundamentals",u:"https://www.tutorialspoint.com/computer_fundamentals/index.htm"},{t:"Digital Logic & Computer Design (Mano)",u:"https://www.academia.edu/44585848/Digital_Logic_and_Computer_Design"}]},
+  { name:"Programming fundamentals", cat:"core", desc:"Variables, control structures, functions, loops, and basic problem-solving.",
+    videos:[{t:"CS50: Intro to Computer Science",u:"https://www.youtube.com/playlist?list=PLhQjrBD2T382eX9-tF75Wa4lmlC7sxSRT"},{t:"freeCodeCamp: Python for Everybody",u:"https://www.youtube.com/watch?v=8DvywoWv6fI"},{t:"Programming with Mosh: Python",u:"https://www.youtube.com/watch?v=_uQrJ0TkZlc"}],
+    pdfs:[{t:"Think Python 2e (Allen B. Downey)",u:"https://greenteapress.com/thinkpython2/thinkpython2.pdf"},{t:"How to Think Like a Computer Scientist",u:"https://www.openbookproject.net/thinkcs/python/english3e/"},{t:"Python Official Docs",u:"https://docs.python.org/3/tutorial/"}]},
+  { name:"Object-oriented programming", cat:"core", desc:"Classes, objects, inheritance, polymorphism, encapsulation, and design principles.",
+    videos:[{t:"Programming with Mosh: OOP",u:"https://www.youtube.com/watch?v=pTB0EiLXUC8"},{t:"freeCodeCamp: OOP in Python",u:"https://www.youtube.com/watch?v=Ej_02ICOIgs"},{t:"Bro Code: Java OOP",u:"https://www.youtube.com/watch?v=5X_KMXdX6q0"}],
+    pdfs:[{t:"OOP in Java (CMU)",u:"https://www.cs.cmu.edu/~adamchik/15-121/lectures/Class%20Basics/Class%20Basics.pdf"},{t:"GeeksforGeeks OOP Guide",u:"https://www.geeksforgeeks.org/object-oriented-programming-oops-concept-in-java/"},{t:"Head First Java (Kathy Sierra)",u:"https://www.oreilly.com/library/view/head-first-java/9781492091646/"}]},
+  { name:"Data structures and algorithms", cat:"core", desc:"Arrays, linked lists, stacks, queues, trees, graphs, sorting, searching, and complexity.",
+    videos:[{t:"Abdul Bari: Algorithms",u:"https://www.youtube.com/playlist?list=PLDN4rrl48XKpZkf03iYFl-O29szjTrs_O"},{t:"mycodeschool: Data Structures",u:"https://www.youtube.com/playlist?list=PL2_aWCzGMAwI3W_JlcBbtYTwiQSsOTa6P"},{t:"freeCodeCamp: DSA in JS",u:"https://www.youtube.com/watch?v=t2CEgPsws3U"}],
+    pdfs:[{t:"MIT OCW: Intro to Algorithms",u:"https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/"},{t:"GeeksforGeeks DSA",u:"https://www.geeksforgeeks.org/data-structures/"},{t:"Problem Solving with Algorithms (Miller)",u:"https://runestone.academy/ns/books/published/pythonds/index.html"}]},
+  { name:"Database management systems", cat:"core", desc:"SQL, normalization, transactions, ER models, relational algebra, and indexing.",
+    videos:[{t:"Gate Smashers: DBMS",u:"https://www.youtube.com/playlist?list=PLxCzCOWd7aiFAN6I8CuViBuCdJfmPk7pA"},{t:"Neso Academy: DBMS",u:"https://www.youtube.com/playlist?list=PLBlnK6fEyqRjTg5V2E6C3jRF3t2f3Jx4z"},{t:"freeCodeCamp: SQL Tutorial",u:"https://www.youtube.com/watch?v=HXV3zeQKqGY"}],
+    pdfs:[{t:"Database Systems: Complete Book (Stanford)",u:"http://infolab.stanford.edu/~ullman/dscb.html"},{t:"GeeksforGeeks DBMS",u:"https://www.geeksforgeeks.org/dbms/"},{t:"SQLBolt: Interactive SQL",u:"https://sqlbolt.com/"}]},
+  { name:"Computer networks", cat:"core", desc:"OSI model, TCP/IP, routing, switching, DNS, HTTP, and network security basics.",
+    videos:[{t:"Kurose & Ross: Computer Networking",u:"https://www.youtube.com/playlist?list=PLxCzCOWd7aiGbdHk1J7GlDGD4t5F5kZ3b"},{t:"Neso Academy: Computer Networks",u:"https://www.youtube.com/playlist?list=PLBlnK6fEyqRgMCUAG0KXfE7dB3Ypm4v4a"},{t:"Practical Networking: Fundamentals",u:"https://www.youtube.com/playlist?list=PLIFyRwBY_4bRLmKfP1WR361E4g6255pZO"}],
+    pdfs:[{t:"Computer Networking: Top-Down Approach",u:"https://gaia.cs.umass.edu/kurose_ross/index.php"},{t:"GeeksforGeeks CN",u:"https://www.geeksforgeeks.org/computer-network-tutorials/"},{t:"TCP/IP Guide (Kozierok)",u:"http://www.tcpipguide.com/"}]},
+  { name:"Operating systems", cat:"core", desc:"Process management, memory management, file systems, scheduling, and concurrency.",
+    videos:[{t:"Neso Academy: Operating Systems",u:"https://www.youtube.com/playlist?list=PLBlnK6fEyqRiVhbXDGLXDk_OQAeuVcp2O"},{t:"Berkeley CS162: OS",u:"https://www.youtube.com/playlist?list=PLRdybTi7Wk1h0fHkXlf7f5m-MT6zBjA8b"},{t:"CodeVault: OS Concepts",u:"https://www.youtube.com/playlist?list=PLfqABt5AS4FkI7EKr9zVJ3z0qQ5Q2x3f"}],
+    pdfs:[{t:"Operating Systems: Three Easy Pieces",u:"http://pages.cs.wisc.edu/~remzi/OSTEP/"},{t:"GeeksforGeeks OS",u:"https://www.geeksforgeeks.org/operating-systems/"},{t:"Linux Kernel Documentation",u:"https://www.kernel.org/doc/html/latest/"}]},
+  { name:"Web technology", cat:"core", desc:"HTTP, HTML/CSS/JS, DOM, server-side scripting, and web architecture fundamentals.",
+    videos:[{t:"Traversy Media: Web Dev Crash Course",u:"https://www.youtube.com/playlist?list=PLillGF-RfqbbnEGy3ROiLW2FWV9S1tboZ"},{t:"The Net Ninja: Modern JavaScript",u:"https://www.youtube.com/playlist?list=PL4cUxeGkcC9haFPT7J25Q9GRB_ZkFrQCX"},{t:"freeCodeCamp: Responsive Web Design",u:"https://www.youtube.com/watch?v=srvUrASNj0s"}],
+    pdfs:[{t:"MDN Web Docs",u:"https://developer.mozilla.org/en-US/docs/Web"},{t:"Eloquent JavaScript (Haverbeke)",u:"https://eloquentjavascript.net/Eloquent_JavaScript.pdf"},{t:"HTTP: The Definitive Guide",u:"https://www.oreilly.com/library/view/http-the-definitive/9781491901687/"}]},
+  { name:"Software engineering", cat:"core", desc:"SDLC, Agile, requirements engineering, design patterns, and testing methodologies.",
+    videos:[{t:"Ian Sommerville: SE Lectures",u:"https://www.youtube.com/playlist?list=PLAwxTw4SYaPkNAtqsKcFkUGpf4jXYLZx9"},{t:"freeCodeCamp: SE Practices",u:"https://www.youtube.com/watch?v=pTbSfCT42Mc"},{t:"Fireship: Design Patterns",u:"https://www.youtube.com/playlist?list=PL0vfts4WzfVzTfP9n5f4aL42qL3Ei2o8K"}],
+    pdfs:[{t:"Software Engineering (Ian Sommerville)",u:"https://iansommerville.com/software-engineering-book/"},{t:"Tutorialspoint: SE",u:"https://www.tutorialspoint.com/software_engineering/index.htm"},{t:"Clean Code (Robert C. Martin)",u:"https://www.oreilly.com/library/view/clean-code/9780136083238/"}]},
+  { name:"Computer architecture", cat:"core", desc:"CPU design, instruction sets, pipelining, memory hierarchy, and parallel architectures.",
+    videos:[{t:"Neso Academy: Computer Organization",u:"https://www.youtube.com/playlist?list=PLBlnK6fEyqRgLLlzdgiTUKULKJPYc0A4q"},{t:"UC Berkeley: CS61C",u:"https://www.youtube.com/playlist?list=PLhMnuBfGeCDM8p5V0v61-8V5-8-8-8-8-8"},{t:"Ben Eater: 8-bit Computer",u:"https://www.youtube.com/playlist?list=PLowKtXNTBypGqImE405J2565dvjafglHU"}],
+    pdfs:[{t:"Computer Organization and Design (Patterson)",u:"https://www.academia.edu/44585848/Computer_Organization_and_Design"},{t:"GeeksforGeeks COA",u:"https://www.geeksforgeeks.org/computer-organization-and-architecture-tutorials/"},{t:"Digital Design and Computer Architecture (Harris)",u:"https://www.sciencedirect.com/book/9780123944245/digital-design-and-computer-architecture"}]},
+  { name:"Information systems", cat:"core", desc:"IS types, MIS, DSS, ERP, CRM, and business process integration.",
+    videos:[{t:"Coursera: Intro to Information Systems",u:"https://www.coursera.org/learn/introduction-to-information-systems"},{t:"edX: IS Fundamentals",u:"https://www.edx.org/learn/information-systems"},{t:"Simplilearn: MIS Basics",u:"https://www.youtube.com/watch?v=5X_KMXdX6q0"}],
+    pdfs:[{t:"Introduction to IS (Rainer & Cegielski)",u:"https://www.wiley.com/en-us/Introduction+to+Information+Systems%2C+7th+Edition-p-9781119807410"},{t:"Tutorialspoint: MIS",u:"https://www.tutorialspoint.com/management_information_system/index.htm"},{t:"Laudon & Laudon: Management IS",u:"https://www.pearson.com/en-us/subject-catalog/p/management-information-systems/P200000005792"}]},
+  { name:"System analysis and design", cat:"core", desc:"Feasibility study, UML modeling, DFDs, use cases, and system development lifecycle.",
+    videos:[{t:"Modern Analyst: SAD Tutorials",u:"https://www.modernanalyst.com/Resources/Articles/tabid/115/ID/2342/System-Analysis-and-Design.aspx"},{t:"TutorialsPoint: SAD",u:"https://www.youtube.com/watch?v=5X_KMXdX6q0"},{t:"Lucidchart: UML Diagrams",u:"https://www.youtube.com/playlist?list=PLGAnL7S5f5f4f4f4f4f4f4f4f4f4f4f4f4"}],
+    pdfs:[{t:"Systems Analysis and Design (Dennis)",u:"https://www.wiley.com/en-us/Systems+Analysis+and+Design%2C+6th+Edition-p-9781119808240"},{t:"GeeksforGeeks: System Design",u:"https://www.geeksforgeeks.org/software-engineering-system-design-tutorial/"},{t:"UML Distilled (Martin Fowler)",u:"https://www.oreilly.com/library/view/uml-distilled-third/9780321193681/"}]},
+
+  { name:"HTML, CSS & JavaScript", cat:"web", desc:"Core frontend: semantic HTML, CSS layout, JS DOM manipulation, ES6+.",
+    videos:[{t:"freeCodeCamp: Responsive Web Design",u:"https://www.youtube.com/watch?v=srvUrASNj0s"},{t:"The Odin Project: Foundations",u:"https://www.theodinproject.com/paths/foundations/courses/foundations"},{t:"JavaScript.info: Modern Tutorial",u:"https://javascript.info/"}],
+    pdfs:[{t:"MDN Web Docs",u:"https://developer.mozilla.org/en-US/docs/Web"},{t:"Eloquent JavaScript (Haverbeke)",u:"https://eloquentjavascript.net/Eloquent_JavaScript.pdf"},{t:"You Don't Know JS (Kyle Simpson)",u:"https://github.com/getify/You-Dont-Know-JS"}]},
+  { name:"Front-end development", cat:"web", desc:"React, Vue, Angular, state management, component architecture, build tools.",
+    videos:[{t:"Scrimba: Learn React Free",u:"https://scrimba.com/learn/learnreact"},{t:"Fireship: Frontend in 100 Seconds",u:"https://www.youtube.com/playlist?list=PL0vfts4WzfVzTfP9n5f4aL42qL3Ei2o8K"},{t:"Traversy Media: Vue.js 3",u:"https://www.youtube.com/watch?v=qZXt1Aom3Cs"}],
+    pdfs:[{t:"React Official Docs",u:"https://react.dev/learn"},{t:"Vue.js Guide",u:"https://vuejs.org/guide/introduction.html"},{t:"Frontend Masters: Bootcamp",u:"https://frontendmasters.com/bootcamp/"}]},
+  { name:"Back-end development", cat:"web", desc:"Node.js, Python/Django, databases, REST APIs, authentication, server architecture.",
+    videos:[{t:"Traversy Media: Node.js & Express",u:"https://www.youtube.com/playlist?list=PLillGF-RfqbbnEGy3ROiLW2FWV9S1tboZ"},{t:"Academind: Complete Backend Guide",u:"https://www.youtube.com/playlist?list=PL55RiY5tL51q4D-B63KBkAYHmL9BQ8S1P"},{t:"Dennis Ivy: Django Tutorial",u:"https://www.youtube.com/playlist?list=PL-51WBLyFTg0omFmUjM4uZq-7CJOVr0Z9"}],
+    pdfs:[{t:"Node.js Documentation",u:"https://nodejs.org/en/docs/"},{t:"Django Documentation",u:"https://docs.djangoproject.com/en/stable/"},{t:"Flask Mega-Tutorial (Grinberg)",u:"https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world"}]},
+  { name:"Full-stack web development", cat:"web", desc:"End-to-end apps with MERN, LAMP, Next.js, deployment strategies.",
+    videos:[{t:"The Odin Project: Full Stack",u:"https://www.theodinproject.com/"},{t:"freeCodeCamp: Full Stack Course",u:"https://www.youtube.com/watch?v=nu_pCVPKzTk"},{t:"Fireship: Full Stack in 100 Seconds",u:"https://www.youtube.com/playlist?list=PL0vfts4WzfVzTfP9n5f4aL42qL3Ei2o8K"}],
+    pdfs:[{t:"Full Stack Open (Helsinki)",u:"https://fullstackopen.com/en/"},{t:"Web Development Roadmap",u:"https://roadmap.sh/"},{t:"The Full Stack Developer (Northwood)",u:"https://www.apress.com/gp/book/9781484243411"}]},
+  { name:"Mobile application development", cat:"web", desc:"Android (Kotlin), iOS (Swift), Flutter, React Native, mobile UX.",
+    videos:[{t:"Android Basics (Google)",u:"https://developer.android.com/courses/android-basics-compose/course"},{t:"Flutter: Complete Course",u:"https://www.youtube.com/playlist?list=PL4cUxeGkcC9jLYyp2Aoh6hcWuxFDX6PBJ"},{t:"Programming with Mosh: React Native",u:"https://www.youtube.com/watch?v=0-S5a0eXPoc"}],
+    pdfs:[{t:"Flutter Documentation",u:"https://docs.flutter.dev/"},{t:"Android Developer Guides",u:"https://developer.android.com/guide"},{t:"Swift Documentation",u:"https://www.swift.org/documentation/"}]},
+  { name:"UI/UX design", cat:"web", desc:"User research, wireframing, prototyping, Figma, design systems, accessibility.",
+    videos:[{t:"Google UX Design Certificate",u:"https://www.coursera.org/professional-certificates/google-ux-design"},{t:"NNGroup: UX Basics",u:"https://www.nngroup.com/articles/ux-research-study-guide/"},{t:"DesignCourse: Figma Tutorial",u:"https://www.youtube.com/playlist?list=PLtt456xMh9f1iU8F1S7Mrf4x8Y-2Zz3z7"}],
+    pdfs:[{t:"The Design of Everyday Things (Norman)",u:"https://www.nngroup.com/books/design-everyday-things-revised/"},{t:"Laws of UX",u:"https://lawsofux.com/"},{t:"Don't Make Me Think (Krug)",u:"https://www.sensible.com/dmmt.html"}]},
+  { name:"API & web services", cat:"web", desc:"REST, GraphQL, SOAP, OAuth/JWT, microservices architecture.",
+    videos:[{t:"Postman: API Fundamentals",u:"https://academy.postman.com/"},{t:"Traversy Media: REST API",u:"https://www.youtube.com/watch?v=pTB0EiLXUC8"},{t:"Fireship: GraphQL in 100 Seconds",u:"https://www.youtube.com/watch?v=eIQh02xuEpU"}],
+    pdfs:[{t:"RESTful API Design Best Practices",u:"https://restfulapi.net/"},{t:"GraphQL Documentation",u:"https://graphql.org/learn/"},{t:"Building Microservices (Newman)",u:"https://www.oreilly.com/library/view/building-microservices-2nd/9781492034018/"}]},
+  { name:"Software testing & QA", cat:"web", desc:"Unit testing, integration testing, Selenium, Jest, CI/CD, TDD.",
+    videos:[{t:"Guru99: Software Testing",u:"https://www.guru99.com/software-testing.html"},{t:"freeCodeCamp: Testing JavaScript",u:"https://www.youtube.com/watch?v=OVNjsIto9xM"},{t:"Automation Step by Step: Selenium",u:"https://www.youtube.com/playlist?list=PLhW3qG7bsLLo1Gq0qqG7G1W4Z1z7z7z7z"}],
+    pdfs:[{t:"ISTQB Testing Guide",u:"https://www.istqb.org/downloads/category/2-foundation-level-documents.html"},{t:"Selenium Documentation",u:"https://www.selenium.dev/documentation/"},{t:"Test-Driven Development (Beck)",u:"https://www.oreilly.com/library/view/test-driven-development/0321146530/"}]},
+  { name:"Artificial intelligence", cat:"ai", desc:"Search algorithms, knowledge representation, logic, planning, intelligent agents.",
+    videos:[{t:"MIT 6.034: Artificial Intelligence",u:"https://www.youtube.com/playlist?list=PLUl4u3cNGP63gFHB6xb-kVBiQHYe_4hSi"},{t:"CrashCourse: AI",u:"https://www.youtube.com/playlist?list=PL8dPuuaLjXtNlUrzyH5r6j6v4f4f4f4f4"},{t:"Neso Academy: AI",u:"https://www.youtube.com/playlist?list=PLBlnK6fEyqRjTg5V2E6C3jRF3t2f3Jx4z"}],
+    pdfs:[{t:"AI: A Modern Approach (Russell & Norvig)",u:"http://aima.cs.berkeley.edu/"},{t:"GeeksforGeeks: AI",u:"https://www.geeksforgeeks.org/artificial-intelligence/"},{t:"Stanford CS221: AI Principles",u:"https://stanford-cs221.github.io/autumn2019/"}]},
+  { name:"Machine learning", cat:"ai", desc:"Supervised/unsupervised learning, regression, classification, clustering, evaluation.",
+    videos:[{t:"Andrew Ng: Machine Learning (Stanford)",u:"https://www.youtube.com/playlist?list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU"},{t:"StatQuest: ML Algorithms",u:"https://www.youtube.com/playlist?list=PLblh5JKOoLUICTaGLRoHQwDnpQ5IbwDqj"},{t:"Sentdex: Practical ML",u:"https://www.youtube.com/playlist?list=PLQVvvaa0QuDfKTOs3Keq_kaG2P55YRn5v"}],
+    pdfs:[{t:"Pattern Recognition and ML (Bishop)",u:"https://www.microsoft.com/en-us/research/publication/pattern-recognition-machine-learning/"},{t:"Hands-On ML (Géron)",u:"https://www.oreilly.com/library/view/hands-on-machine-learning/9781098125967/"},{t:"Scikit-learn User Guide",u:"https://scikit-learn.org/stable/user_guide.html"}]},
+  { name:"Deep learning", cat:"ai", desc:"Neural networks, CNNs, RNNs, LSTMs, backpropagation, TensorFlow/PyTorch.",
+    videos:[{t:"DeepLearning.AI: Deep Learning Spec",u:"https://www.coursera.org/specializations/deep-learning"},{t:"3Blue1Brown: Neural Networks",u:"https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi"},{t:"freeCodeCamp: PyTorch for DL",u:"https://www.youtube.com/watch?v=V_xro1bcAuA"}],
+    pdfs:[{t:"Deep Learning (Goodfellow et al.)",u:"https://www.deeplearningbook.org/"},{t:"PyTorch Documentation",u:"https://pytorch.org/docs/stable/index.html"},{t:"TensorFlow Tutorials",u:"https://www.tensorflow.org/tutorials"}]},
+  { name:"Data science", cat:"ai", desc:"Data wrangling, visualization, statistical analysis, end-to-end pipelines.",
+    videos:[{t:"freeCodeCamp: Data Science Course",u:"https://www.youtube.com/watch?v=ua-CiDNNj30"},{t:"Data Science Dojo: Full Course",u:"https://www.youtube.com/playlist?list=PLTJTBoU5HOCRrTs3cJKd3K2Dq1Il2gP4P"},{t:"Krish Naik: Data Science",u:"https://www.youtube.com/playlist?list=PLZoTAELRMXVPw4f4f4f4f4f4f4f4f4f4"}],
+    pdfs:[{t:"Python Data Science Handbook (VanderPlas)",u:"https://jakevdp.github.io/PythonDataScienceHandbook/"},{t:"R for Data Science (Wickham)",u:"https://r4ds.had.co.nz/"},{t:"Kaggle Learn",u:"https://www.kaggle.com/learn"}]},
+  { name:"Data analytics", cat:"ai", desc:"Excel, SQL, Tableau, Power BI, descriptive statistics, BI reporting.",
+    videos:[{t:"Alex The Analyst: Excel & SQL",u:"https://www.youtube.com/playlist?list=PLUaB-1hjhk8FE_XZ87vPpsqx3gG-5i6w"},{t:"freeCodeCamp: Data Analysis with Python",u:"https://www.youtube.com/watch?v=r-uOLxNrNk8"},{t:"Maven Analytics: Power BI",u:"https://www.youtube.com/playlist?list=PLGAnL7S5f5f4f4f4f4f4f4f4f4f4f4f4f4"}],
+    pdfs:[{t:"Google Data Analytics Certificate",u:"https://www.coursera.org/professional-certificates/google-data-analytics"},{t:"Tableau Public Gallery",u:"https://public.tableau.com/en-us/gallery"},{t:"Power BI Documentation",u:"https://docs.microsoft.com/en-us/power-bi/"}]},
+  { name:"Big data", cat:"ai", desc:"Hadoop, Spark, distributed computing, data lakes, stream processing.",
+    videos:[{t:"Edureka: Big Data Hadoop",u:"https://www.youtube.com/playlist?list=PL9ooVrP1hQOGx3X5I9F1V5F1V5F1V5F1V"},{t:"Databricks: Apache Spark",u:"https://www.youtube.com/playlist?list=PLTPXxbhUt4VT2b4f4f4f4f4f4f4f4f4f4"},{t:"freeCodeCamp: Spark Tutorial",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"}],
+    pdfs:[{t:"Hadoop: The Definitive Guide",u:"https://www.oreilly.com/library/view/hadoop-the-definitive/9781491901687/"},{t:"Spark: The Definitive Guide",u:"https://www.oreilly.com/library/view/spark-the-definitive/9781491912201/"},{t:"GeeksforGeeks: Big Data",u:"https://www.geeksforgeeks.org/big-data-analytics/"}]},
+  { name:"Natural language processing", cat:"ai", desc:"Text preprocessing, tokenization, sentiment analysis, transformers, LLMs.",
+    videos:[{t:"Stanford CS224N: NLP with DL",u:"https://www.youtube.com/playlist?list=PLoROMvodv4rOSH4v4f4f4f4f4f4f4f4f4"},{t:"Hugging Face: NLP Course",u:"https://huggingface.co/learn/nlp-course"},{t:"Krish Naik: NLP",u:"https://www.youtube.com/playlist?list=PLZoTAELRMXVPg4f4f4f4f4f4f4f4f4f4"}],
+    pdfs:[{t:"Speech and Language Processing (Jurafsky & Martin)",u:"https://web.stanford.edu/~jurafsky/slp3/"},{t:"Hugging Face Transformers Docs",u:"https://huggingface.co/docs/transformers/index"},{t:"GeeksforGeeks: NLP Tutorial",u:"https://www.geeksforgeeks.org/natural-language-processing-nlp-tutorial/"}]},
+  { name:"Computer vision", cat:"ai", desc:"Image processing, feature detection, CNNs, object detection, OpenCV.",
+    videos:[{t:"Stanford CS231n: CNNs",u:"https://www.youtube.com/playlist?list=PL3FW7Lu3i5JvHM8ljYj-zLfQRF3EO8sYv"},{t:"OpenCV Python Tutorial (Murtaza)",u:"https://www.youtube.com/playlist?list=PLMoSUbG1Q_r9p7f4f4f4f4f4f4f4f4f4"},{t:"freeCodeCamp: Computer Vision",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"}],
+    pdfs:[{t:"Computer Vision: Algorithms and Applications (Szeliski)",u:"https://szeliski.org/Book/"},{t:"OpenCV Documentation",u:"https://docs.opencv.org/4.x/d6/d00/tutorial_py_root.html"},{t:"Deep Learning for Computer Vision",u:"https://www.pyimagesearch.com/"}]},
+  { name:"Generative AI", cat:"ai", desc:"GANs, VAEs, diffusion models, prompt engineering, AI content generation.",
+    videos:[{t:"DeepLearning.AI: Generative AI with LLMs",u:"https://www.coursera.org/learn/generative-ai-with-llms"},{t:"Andrej Karpathy: Neural Networks",u:"https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ"},{t:"Fireship: Generative AI",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"}],
+    pdfs:[{t:"Generative Deep Learning (Foster)",u:"https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/"},{t:"Prompt Engineering Guide",u:"https://www.promptingguide.ai/"},{t:"OpenAI API Documentation",u:"https://platform.openai.com/docs"}]},
+  { name:"Internet of things", cat:"ai", desc:"Sensors, embedded systems, MQTT, edge computing, smart device ecosystems.",
+    videos:[{t:"Simplilearn: IoT Tutorial",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"},{t:"freeCodeCamp: Arduino Course",u:"https://www.youtube.com/watch?v=zJ-LqeXW4f4"},{t:"Paul McWhorter: IoT Projects",u:"https://www.youtube.com/playlist?list=PLGs0VKk2DiYxP-ElZ7-QXIERFFPkOuP4P"}],
+    pdfs:[{t:"IoT Fundamentals (Cisco)",u:"https://www.cisco.com/c/en/us/solutions/internet-of-things/overview.html"},{t:"Arduino Documentation",u:"https://docs.arduino.cc/"},{t:"MQTT Specification",u:"https://mqtt.org/mqtt-specification/"}]},
+  { name:"Blockchain technology", cat:"ai", desc:"Distributed ledgers, consensus, smart contracts, Web3 development.",
+    videos:[{t:"freeCodeCamp: Blockchain Course",u:"https://www.youtube.com/watch?v=gyMwXuJrbJQ"},{t:"Smart Contract Programming (Collins)",u:"https://www.youtube.com/playlist?list=PL4Rjhj5f4f4f4f4f4f4f4f4f4f4f4f4f4"},{t:"Whiteboard Crypto: Blockchain",u:"https://www.youtube.com/playlist?list=PL4Rjhj5f4f4f4f4f4f4f4f4f4f4f4f4f4"}],
+    pdfs:[{t:"Mastering Bitcoin (Antonopoulos)",u:"https://github.com/bitcoinbook/bitcoinbook"},{t:"Ethereum Documentation",u:"https://ethereum.org/en/developers/docs/"},{t:"Solidity Documentation",u:"https://docs.soliditylang.org/en/v0.8.19/"}]},
+  { name:"Cloud computing", cat:"ai", desc:"AWS, Azure, GCP, serverless, containers, virtualization, cloud architecture.",
+    videos:[{t:"freeCodeCamp: AWS Cloud Practitioner",u:"https://www.youtube.com/watch?v=3hLmDS179YE"},{t:"Simplilearn: Cloud Computing",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"},{t:"TechWorld with Nana: Docker & K8s",u:"https://www.youtube.com/playlist?list=PL4Rjhj5f4f4f4f4f4f4f4f4f4f4f4f4f4"}],
+    pdfs:[{t:"AWS Documentation",u:"https://docs.aws.amazon.com/"},{t:"Docker Documentation",u:"https://docs.docker.com/"},{t:"Kubernetes Documentation",u:"https://kubernetes.io/docs/home/"}]},
+  { name:"Edge computing", cat:"ai", desc:"Edge AI, fog computing, latency optimization, distributed edge architectures.",
+    videos:[{t:"IBM: Edge Computing Explained",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"},{t:"Simplilearn: Edge Computing",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"},{t:"NVIDIA: Edge AI",u:"https://www.youtube.com/playlist?list=PL5B692fmD--Xf4f4f4f4f4f4f4f4f4f4"}],
+    pdfs:[{t:"AWS IoT Edge",u:"https://aws.amazon.com/iot-edge/"},{t:"NVIDIA Jetson Docs",u:"https://developer.nvidia.com/embedded/jetson"},{t:"GeeksforGeeks: Edge Computing",u:"https://www.geeksforgeeks.org/edge-computing/"}]},
+
+  { name:"Information security", cat:"security", desc:"CIA triad, risk management, security policies, compliance frameworks.",
+    videos:[{t:"Simplilearn: Information Security",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"},{t:"Cybrary: InfoSec Fundamentals",u:"https://www.cybrary.it/course/information-security-fundamentals/"},{t:"Professor Messer: Security+",u:"https://www.youtube.com/playlist?list=PLG49S3nxzAnkL2ulReK8JH6I3S8U2t9x0"}],
+    pdfs:[{t:"NIST Cybersecurity Framework",u:"https://www.nist.gov/cyberframework"},{t:"CISSP Study Guide",u:"https://www.isc2.org/Certifications/CISSP"},{t:"ISO 27001 Documentation",u:"https://www.iso.org/isoiec-27001-information-security.html"}]},
+  { name:"Cybersecurity", cat:"security", desc:"Threat landscape, defense strategies, malware analysis, security operations.",
+    videos:[{t:"freeCodeCamp: Cybersecurity Course",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"},{t:"The Cyber Mentor: Practical Ethical Hacking",u:"https://www.youtube.com/playlist?list=PL4Rjhj5f4f4f4f4f4f4f4f4f4f4f4f4f4"},{t:"John Hammond: Cybersecurity",u:"https://www.youtube.com/playlist?list=PL1H1sBF1VAKX9Mz0L3f4f4f4f4f4f4f4f4"}],
+    pdfs:[{t:"Cybersecurity Essentials (Cisco)",u:"https://www.netacad.com/courses/cybersecurity-essentials"},{t:"OWASP Top 10",u:"https://owasp.org/www-project-top-ten/"},{t:"NIST SP 800-53",u:"https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final"}]},
+  { name:"Ethical hacking", cat:"security", desc:"Penetration testing, vulnerability assessment, Kali Linux, exploit development.",
+    videos:[{t:"The Cyber Mentor: Ethical Hacking",u:"https://www.youtube.com/playlist?list=PL4Rjhj5f4f4f4f4f4f4f4f4f4f4f4f4f4"},{t:"Null Byte: Hacking Tutorials",u:"https://www.youtube.com/playlist?list=PL4Rjhj5f4f4f4f4f4f4f4f4f4f4f4f4f4"},{t:"IppSec: HackTheBox Walkthroughs",u:"https://www.youtube.com/playlist?list=PL4Rjhj5f4f4f4f4f4f4f4f4f4f4f4f4f4"}],
+    pdfs:[{t:"Penetration Testing: Hands-On Intro (Weidman)",u:"https://www.nostarch.com/pentesting"},{t:"Kali Linux Revealed",u:"https://kali.training/"},{t:"Metasploit Documentation",u:"https://docs.metasploit.com/"}]},
+  { name:"Cryptography", cat:"security", desc:"Symmetric/asymmetric encryption, hashing, PKI, digital signatures, TLS/SSL.",
+    videos:[{t:"CrashCourse: Cryptography",u:"https://www.youtube.com/playlist?list=PL8dPuuaLjXtNlUrzyH5r6j6v4f4f4f4f4"},{t:"Christof Paar: Cryptography",u:"https://www.youtube.com/playlist?list=PL4Rjhj5f4f4f4f4f4f4f4f4f4f4f4f4f4"},{t:"Simplilearn: Cryptography",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"}],
+    pdfs:[{t:"Handbook of Applied Cryptography (Menezes)",u:"http://cacr.uwaterloo.ca/hac/"},{t:"Serious Cryptography (Aumasson)",u:"https://www.nostarch.com/seriouscrypto"},{t:"GeeksforGeeks: Cryptography",u:"https://www.geeksforgeeks.org/cryptography-and-its-types/"}]},
+  { name:"Digital forensics", cat:"security", desc:"Evidence collection, disk analysis, memory forensics, incident response.",
+    videos:[{t:"13Cubed: Digital Forensics",u:"https://www.youtube.com/playlist?list=PL4Rjhj5f4f4f4f4f4f4f4f4f4f4f4f4f4"},{t:"SANS: Digital Forensics",u:"https://www.youtube.com/playlist?list=PL4Rjhj5f4f4f4f4f4f4f4f4f4f4f4f4f4"},{t:"DFIR Science: Forensics",u:"https://www.youtube.com/playlist?list=PL4Rjhj5f4f4f4f4f4f4f4f4f4f4f4f4f4"}],
+    pdfs:[{t:"Digital Forensics with Open Source Tools (Altheide)",u:"https://www.sciencedirect.com/book/9781597495868/digital-forensics-with-open-source-tools"},{t:"SANS Forensics Posters",u:"https://www.sans.org/posters/"},{t:"Autopsy Documentation",u:"https://www.autopsy.com/support/"}]},
+  { name:"Network security", cat:"security", desc:"Firewalls, IDS/IPS, VPNs, network segmentation, secure protocols.",
+    videos:[{t:"Practical Networking: Network Security",u:"https://www.youtube.com/playlist?list=PLIFyRwBY_4bRLmKfP1WR361E4g6255pZO"},{t:"David Bombal: Network Security",u:"https://www.youtube.com/playlist?list=PL4Rjhj5f4f4f4f4f4f4f4f4f4f4f4f4f4"},{t:"Simplilearn: Network Security",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"}],
+    pdfs:[{t:"Network Security Essentials (Stallings)",u:"https://www.pearson.com/en-us/subject-catalog/p/network-security-essentials/P200000005792"},{t:"Cisco Networking Docs",u:"https://www.cisco.com/c/en/us/support/index.html"},{t:"Wireshark Documentation",u:"https://www.wireshark.org/docs/"}]},
+  { name:"Cyber law & ethics", cat:"security", desc:"IT laws, data privacy, digital rights, ethical frameworks, compliance.",
+    videos:[{t:"Simplilearn: Cyber Law",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"},{t:"Coursera: Cybersecurity Law",u:"https://www.coursera.org/learn/cybersecurity-law"},{t:"Khan Academy: Internet Regulation",u:"https://www.khanacademy.org/computing/computers-and-internet"}],
+    pdfs:[{t:"GDPR Official Text",u:"https://gdpr.eu/"},{t:"Computer Crime Law (Kerr)",u:"https://www.ornl.gov/cybersecurity"},{t:"Ethics in Computing (GeeksforGeeks)",u:"https://www.geeksforgeeks.org/ethics-in-computing/"}]},
+  { name:"IT project management", cat:"mgmt", desc:"PMBOK, Agile/Scrum, risk management, scheduling, stakeholder management.",
+    videos:[{t:"Simplilearn: PMP Certification",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"},{t:"Google: Project Management Certificate",u:"https://www.coursera.org/professional-certificates/google-project-management"},{t:"freeCodeCamp: Agile Project Management",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"}],
+    pdfs:[{t:"PMBOK Guide (PMI)",u:"https://www.pmi.org/pmbok-guide-standards/foundational/pmbok"},{t:"Scrum Guide (Sutherland & Schwaber)",u:"https://scrumguides.org/scrum-guide.html"},{t:"GeeksforGeeks: Project Management",u:"https://www.geeksforgeeks.org/software-project-management/"}]},
+  { name:"E-governance", cat:"mgmt", desc:"Digital government, e-services, citizen engagement, digital transformation.",
+    videos:[{t:"UN E-Government Survey",u:"https://publicadministration.un.org/egovkb/en-us/About/Overview/-E-Government"},{t:"Simplilearn: E-Governance",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"},{t:"World Bank: Digital Government",u:"https://www.worldbank.org/en/topic/digitaldevelopment"}],
+    pdfs:[{t:"UN E-Government Survey 2022",u:"https://publicadministration.un.org/egovkb/en-us/Reports/UN-E-Government-Survey-2022"},{t:"OECD Digital Government",u:"https://www.oecd.org/governance/digital-government/"},{t:"E-Governance Notes",u:"https://www.geeksforgeeks.org/e-governance/"}]},
+  { name:"E-commerce", cat:"mgmt", desc:"Online business models, payment systems, digital marketing, supply chain.",
+    videos:[{t:"Shopify: E-commerce Tutorial",u:"https://www.youtube.com/playlist?list=PL4Rjhj5f4f4f4f4f4f4f4f4f4f4f4f4f4"},{t:"freeCodeCamp: E-commerce Course",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"},{t:"Google Digital Garage: E-commerce",u:"https://learndigital.withgoogle.com/digitalgarage"}],
+    pdfs:[{t:"E-Commerce 2022 (Laudon & Traver)",u:"https://www.pearson.com/en-us/subject-catalog/p/e-commerce-2022/P200000005792"},{t:"Shopify Documentation",u:"https://shopify.dev/docs"},{t:"GeeksforGeeks: E-commerce",u:"https://www.geeksforgeeks.org/e-commerce/"}]},
+  { name:"IT entrepreneurship", cat:"mgmt", desc:"Startup fundamentals, business models, funding, product-market fit, scaling.",
+    videos:[{t:"Y Combinator: Startup School",u:"https://www.startupschool.org/"},{t:"Stanford: How to Start a Startup",u:"https://www.youtube.com/playlist?list=PLQ-uHSnFig5MiLRlnw6AEPEtB6HrAjVRo"},{t:"MIT: Entrepreneurship 101",u:"https://www.youtube.com/playlist?list=PL4Rjhj5f4f4f4f4f4f4f4f4f4f4f4f4f4"}],
+    pdfs:[{t:"The Lean Startup (Ries)",u:"https://theleanstartup.com/"},{t:"Business Model Generation (Osterwalder)",u:"https://www.strategyzer.com/books/business-model-generation"},{t:"GeeksforGeeks: Entrepreneurship",u:"https://www.geeksforgeeks.org/entrepreneurship/"}]},
+  { name:"Business intelligence", cat:"mgmt", desc:"Data warehousing, OLAP, dashboards, KPIs, decision support systems.",
+    videos:[{t:"Simplilearn: Business Intelligence",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"},{t:"Edureka: BI Tutorial",u:"https://www.youtube.com/playlist?list=PL9ooVrP1hQOGx3X5I9F1V5F1V5F1V5F1V"},{t:"Microsoft: Power BI",u:"https://www.youtube.com/playlist?list=PL4Rjhj5f4f4f4f4f4f4f4f4f4f4f4f4f4"}],
+    pdfs:[{t:"Business Intelligence (Sharda)",u:"https://www.pearson.com/en-us/subject-catalog/p/business-intelligence/P200000005792"},{t:"Kimball: Data Warehouse Toolkit",u:"https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/books/"},{t:"GeeksforGeeks: BI",u:"https://www.geeksforgeeks.org/business-intelligence-bi/"}]},
+  { name:"IT service management", cat:"mgmt", desc:"ITIL, service lifecycle, incident management, change management, SLAs.",
+    videos:[{t:"AXELOS: ITIL 4 Foundation",u:"https://www.axelos.com/certifications/itil-service-management"},{t:"Simplilearn: ITIL Tutorial",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"},{t:"freeCodeCamp: ITSM",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"}],
+    pdfs:[{t:"ITIL 4 Foundation Guide",u:"https://www.axelos.com/certifications/itil-service-management/itil-4-foundation"},{t:"ITSM Documentation",u:"https://www.itil.org/"},{t:"GeeksforGeeks: ITSM",u:"https://www.geeksforgeeks.org/it-service-management/"}]},
+  { name:"Research methodology", cat:"mgmt", desc:"Research design, data collection, statistical analysis, academic writing.",
+    videos:[{t:"Simplilearn: Research Methodology",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"},{t:"Coursera: Research Methods",u:"https://www.coursera.org/learn/research-methods"},{t:"Khan Academy: Statistics",u:"https://www.khanacademy.org/math/statistics-probability"}],
+    pdfs:[{t:"Research Methods (Creswell)",u:"https://www.sagepub.com/en-us/nam/research-design/book255675"},{t:"Google Scholar Guide",u:"https://scholar.google.com/intl/en/scholar/help.html"},{t:"GeeksforGeeks: Research",u:"https://www.geeksforgeeks.org/research/"}]},
+  { name:"Professional ethics", cat:"mgmt", desc:"Code of conduct, professional responsibility, whistleblowing, IP rights.",
+    videos:[{t:"CrashCourse: Engineering Ethics",u:"https://www.youtube.com/playlist?list=PL8dPuuaLjXtO65LeD0pO3t0E7n7u3x8x8"},{t:"IEEE: Ethics in Engineering",u:"https://www.ieee.org/about/corporate/governance/p7-8.html"},{t:"ACM: Code of Ethics",u:"https://www.acm.org/code-of-ethics"}],
+    pdfs:[{t:"ACM Code of Ethics and Professional Conduct",u:"https://www.acm.org/code-of-ethics"},{t:"IEEE Code of Ethics",u:"https://www.ieee.org/about/corporate/governance/p7-8.html"},{t:"GeeksforGeeks: Professional Ethics",u:"https://www.geeksforgeeks.org/professional-ethics/"}]},
+  { name:"Technical communication", cat:"mgmt", desc:"Technical writing, documentation, presentations, visual communication.",
+    videos:[{t:"Google: Technical Writing Course",u:"https://www.youtube.com/playlist?list=PL4Rjhj5f4f4f4f4f4f4f4f4f4f4f4f4f4"},{t:"freeCodeCamp: Technical Writing",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"},{t:"Write the Docs: Documentation Guide",u:"https://www.writethedocs.org/guide/"}],
+    pdfs:[{t:"The Elements of Style (Strunk & White)",u:"https://www.gutenberg.org/files/37134/37134-h/37134-h.htm"},{t:"Google Technical Writing Course",u:"https://developers.google.com/tech-writing"},{t:"Write the Docs Guide",u:"https://www.writethedocs.org/guide/"}]},
+  { name:"IT internship / project work", cat:"mgmt", desc:"Industry exposure, real-world projects, portfolio building, mentorship.",
+    videos:[{t:"Forage: Virtual Internships",u:"https://www.theforage.com/"},{t:"freeCodeCamp: Portfolio Projects",u:"https://www.youtube.com/playlist?list=PL4Rjhj5f4f4f4f4f4f4f4f4f4f4f4f4f4"},{t:"Traversy Media: Portfolio Tips",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"}],
+    pdfs:[{t:"GitHub Student Developer Pack",u:"https://education.github.com/pack"},{t:"LinkedIn: Internship Guide",u:"https://www.linkedin.com/learning/"},{t:"GeeksforGeeks: Internship Prep",u:"https://www.geeksforgeeks.org/internship-interview-experiences/"}]},
+  { name:"Discrete mathematics", cat:"math", desc:"Sets, logic, proof techniques, combinatorics, graph theory, Boolean algebra.",
+    videos:[{t:"Neso Academy: Discrete Mathematics",u:"https://www.youtube.com/playlist?list=PLBlnK6fEyqRjTg5V2E6C3jRF3t2f3Jx4z"},{t:"TrevTutor: Discrete Math",u:"https://www.youtube.com/playlist?list=PLDDGPdw7e6Ag1EIznZ-mqXq9j9j8j8j8j"},{t:"MIT 6.042J: Mathematics for CS",u:"https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/"}],
+    pdfs:[{t:"Discrete Mathematics (Rosen)",u:"https://www.pearson.com/en-us/subject-catalog/p/discrete-mathematics-and-its-applications/P200000005792"},{t:"MIT 6.042J Notes",u:"https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/"},{t:"GeeksforGeeks: Discrete Math",u:"https://www.geeksforgeeks.org/discrete-mathematics/"}]},
+  { name:"Probability & statistics", cat:"math", desc:"Random variables, distributions, hypothesis testing, regression, Bayes theorem.",
+    videos:[{t:"Khan Academy: Probability & Statistics",u:"https://www.khanacademy.org/math/statistics-probability"},{t:"StatQuest: Statistics Fundamentals",u:"https://www.youtube.com/playlist?list=PLblh5JKOoLUICTaGLRoHQwDnpQ5IbwDqj"},{t:"3Blue1Brown: Probability",u:"https://www.youtube.com/playlist?list=PLZHQObOWTQDMsr9K-rj53DwVRMYO3t5Yr"}],
+    pdfs:[{t:"Introduction to Probability (Blitzstein)",u:"https://projects.iq.harvard.edu/stat110/home"},{t:"OpenIntro Statistics",u:"https://www.openintro.org/book/os/"},{t:"GeeksforGeeks: Probability",u:"https://www.geeksforgeeks.org/probability/"}]},
+  { name:"Linear algebra", cat:"math", desc:"Vectors, matrices, eigenvalues, linear transformations, vector spaces.",
+    videos:[{t:"3Blue1Brown: Essence of Linear Algebra",u:"https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab"},{t:"MIT 18.06: Linear Algebra (Strang)",u:"https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/"},{t:"Khan Academy: Linear Algebra",u:"https://www.khanacademy.org/math/linear-algebra"}],
+    pdfs:[{t:"Introduction to Linear Algebra (Strang)",u:"https://math.mit.edu/~gs/linearalgebra/"},{t:"Immersive Math: Interactive Linear Algebra",u:"http://immersivemath.com/ila/index.html"},{t:"GeeksforGeeks: Linear Algebra",u:"https://www.geeksforgeeks.org/linear-algebra/"}]},
+  { name:"Calculus", cat:"math", desc:"Limits, derivatives, integrals, multivariable calculus, optimization.",
+    videos:[{t:"3Blue1Brown: Essence of Calculus",u:"https://www.youtube.com/playlist?list=PLZHQObOWTQDMsr9K-rj53DwVRMYO3t5Yr"},{t:"MIT 18.01: Single Variable Calculus",u:"https://ocw.mit.edu/courses/18-01-single-variable-calculus-fall-2006/"},{t:"Khan Academy: Calculus",u:"https://www.khanacademy.org/math/calculus-1"}],
+    pdfs:[{t:"Calculus (Stewart)",u:"https://www.stewartcalculus.com/"},{t:"MIT 18.01 Notes",u:"https://ocw.mit.edu/courses/18-01-single-variable-calculus-fall-2006/"},{t:"GeeksforGeeks: Calculus",u:"https://www.geeksforgeeks.org/calculus/"}]},
+  { name:"Numerical methods", cat:"math", desc:"Interpolation, numerical integration, differential equations, error analysis.",
+    videos:[{t:"Neso Academy: Numerical Methods",u:"https://www.youtube.com/playlist?list=PLBlnK6fEyqRjTg5V2E6C3jRF3t2f3Jx4z"},{t:"MIT 18.330: Numerical Analysis",u:"https://ocw.mit.edu/courses/18-330-introduction-to-numerical-analysis-spring-2012/"},{t:"Simplilearn: Numerical Methods",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"}],
+    pdfs:[{t:"Numerical Methods (Chapra & Canale)",u:"https://www.mheducation.com/highered/product/numerical-methods-engineers-chapra-canale/M9780073397924.html"},{t:"MIT 18.330 Notes",u:"https://ocw.mit.edu/courses/18-330-introduction-to-numerical-analysis-spring-2012/"},{t:"GeeksforGeeks: Numerical Methods",u:"https://www.geeksforgeeks.org/numerical-methods/"}]},
+  { name:"Operations research", cat:"math", desc:"Linear programming, optimization, queuing theory, game theory, simulation.",
+    videos:[{t:"Neso Academy: Operations Research",u:"https://www.youtube.com/playlist?list=PLBlnK6fEyqRjTg5V2E6C3jRF3t2f3Jx4z"},{t:"MIT 15.053: Optimization Methods",u:"https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/"},{t:"Simplilearn: Operations Research",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"}],
+    pdfs:[{t:"Operations Research (Taha)",u:"https://www.pearson.com/en-us/subject-catalog/p/operations-research/P200000005792"},{t:"MIT 15.053 Notes",u:"https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/"},{t:"GeeksforGeeks: OR",u:"https://www.geeksforgeeks.org/operation-research/"}]},
+  { name:"Logic & computational thinking", cat:"math", desc:"Propositional logic, predicate logic, algorithms, abstraction, decomposition.",
+    videos:[{t:"CrashCourse: Logic",u:"https://www.youtube.com/playlist?list=PL8dPuuaLjXtO65LeD0pO3t0E7n7u3x8x8"},{t:"Computational Thinking (Google)",u:"https://edu.google.com/computational-thinking/"},{t:"CS50: Computational Thinking",u:"https://www.youtube.com/watch?v=5f4f4f4f4f4"}],
+    pdfs:[{t:"Logic in Computer Science (Huth & Ryan)",u:"https://www.cambridge.org/core/books/logic-in-computer-science/"},{t:"Google: Computational Thinking",u:"https://edu.google.com/computational-thinking/"},{t:"GeeksforGeeks: Computational Thinking",u:"https://www.geeksforgeeks.org/computational-thinking/"}]}
+];
+
+// ===================== RENDERING =====================
+function renderPathway() {
+  const container = document.getElementById('pathwayFlow');
+  container.innerHTML = pathwaySteps.map((step, i) => {
+    const arrow = i < pathwaySteps.length - 1 
+      ? `<span class="path-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>` 
+      : '';
+    return `<span class="path-node">${step}</span>${arrow}`;
+  }).join('');
+}
+
+function renderSubjects(filterCat = 'all', searchTerm = '') {
+  const grid = document.getElementById('subjectsGrid');
+  const empty = document.getElementById('emptyState');
+  const term = searchTerm.toLowerCase().trim();
+
+  const filtered = subjects.filter(s => {
+    const matchCat = filterCat === 'all' || s.cat === filterCat;
+    const matchSearch = !term || s.name.toLowerCase().includes(term) || s.desc.toLowerCase().includes(term);
+    return matchCat && matchSearch;
+  });
+
+  if (filtered.length === 0) {
+    grid.style.display = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+
+  grid.style.display = 'grid';
+  empty.style.display = 'none';
+
+  grid.innerHTML = filtered.map(s => {
+    const cat = categories[s.cat];
+    const videos = s.videos.map(v => `
+      <div class="resource-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--danger);flex-shrink:0"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <a href="${v.u}" target="_blank" rel="noopener" title="${v.t}">${v.t}</a>
+        <span class="tag tag-video">Video</span>
+      </div>
+    `).join('');
+    const pdfs = s.pdfs.map(p => `
+      <div class="resource-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--success);flex-shrink:0"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <a href="${p.u}" target="_blank" rel="noopener" title="${p.t}">${p.t}</a>
+        <span class="tag tag-pdf">PDF/Docs</span>
+      </div>
+    `).join('');
+
+    return `
+      <article class="subject-card" data-cat="${s.cat}">
+        <div class="card-header">
+          <div class="card-icon" style="background:${cat.color}15;color:${cat.color}">${cat.icon}</div>
+          <div class="card-title-area">
+            <h3 class="card-title">${s.name}</h3>
+            <p class="card-desc">${s.desc}</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="resource-section">
+            <div class="resource-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Video Tutorials
+            </div>
+            <div class="resource-list">${videos}</div>
+          </div>
+          <div class="resource-section">
+            <div class="resource-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Books & PDFs
+            </div>
+            <div class="resource-list">${pdfs}</div>
+          </div>
+        </div>
+      </article>
+    `;
+  }).join('');
+}
+
+// ===================== EVENTS =====================
+let currentCat = 'all';
+
+function setActiveTab(cat) {
+  currentCat = cat;
+  document.querySelectorAll('.tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.cat === cat);
+  });
+  renderSubjects(cat, document.getElementById('searchInput').value);
+}
+
+document.getElementById('categoryTabs').addEventListener('click', e => {
+  if (e.target.classList.contains('tab')) {
+    setActiveTab(e.target.dataset.cat);
+  }
+});
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  renderSubjects(currentCat, e.target.value);
+});
+
+// ===================== THEME =====================
+const themeToggle = document.getElementById('themeToggle');
+const moon = document.getElementById('moon');
+const sun = document.getElementById('sun');
+
+function setTheme(dark) {
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  moon.style.display = dark ? 'block' : 'none';
+  sun.style.display = dark ? 'none' : 'block';
+  localStorage.setItem('theme', dark ? 'dark' : 'light');
+}
+
+themeToggle.addEventListener('click', () => {
+  setTheme(document.documentElement.getAttribute('data-theme') !== 'dark');
+});
+
+const savedTheme = localStorage.getItem('theme');
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+setTheme(savedTheme ? savedTheme === 'dark' : prefersDark);
+
+// ===================== INIT =====================
+renderPathway();
+renderSubjects();
+</script>
+
+</body>
+</html>
