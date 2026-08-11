@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Social Development & Research Information | SDROK</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:      #1a1a2e;
+    --deep:     #16213e;
+    --mid:      #0f3460;
+    --gold:     #c9a84c;
+    --gold-lt:  #e8c97a;
+    --cream:    #fdf8f0;
+    --muted:    #6b7280;
+    --border:   #e5e0d6;
+    --accent:   #2563eb;
+    --accent-lt:#dbeafe;
+    --radius:   8px;
+    --shadow:   0 4px 24px rgba(26,26,46,.10);
+  }
+
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--ink); line-height: 1.6; }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--deep);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px; height: 64px;
+    box-shadow: 0 2px 16px rgba(0,0,0,.35);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .nav-logo img { height: 40px; width: 40px; object-fit: contain; border-radius: 50%; border: 2px solid var(--gold); }
+  .nav-logo span { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--gold); letter-spacing: .05em; }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a { color: #cbd5e1; text-decoration: none; font-size: .875rem; font-weight: 500; letter-spacing: .04em; transition: color .2s; }
+  .nav-links a:hover { color: var(--gold-lt); }
+
+  /* ── HERO / SLIDER ── */
+  .hero { position: relative; height: 520px; overflow: hidden; background: var(--deep); }
+  .slides { display: flex; height: 100%; transition: transform .7s ease; }
+  .slide { min-width: 100%; height: 100%; position: relative; }
+  .slide img { width: 100%; height: 100%; object-fit: cover; opacity: .7; }
+  .slide-caption {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 32px;
+    background: linear-gradient(to bottom, rgba(15,52,96,.3), rgba(22,33,62,.7));
+  }
+  .slide-caption h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 700;
+    color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,.5);
+    max-width: 760px; line-height: 1.2;
+  }
+  .slide-caption p { color: var(--gold-lt); margin-top: 12px; font-size: 1rem; letter-spacing: .06em; }
+  .slider-btn {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: rgba(201,168,76,.85); border: none; color: var(--deep);
+    width: 44px; height: 44px; border-radius: 50%; font-size: 1.2rem;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background .2s;
+  }
+  .slider-btn:hover { background: var(--gold); }
+  .slider-btn.prev { left: 20px; }
+  .slider-btn.next { right: 20px; }
+  .slider-dots { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.45); cursor: pointer; transition: background .2s; border: none; }
+  .dot.active { background: var(--gold); }
+
+  /* ── TAGLINE BAND ── */
+  .tagline-band {
+    background: var(--mid); color: #fff; text-align: center;
+    padding: 18px 32px; font-size: .85rem; letter-spacing: .08em; font-weight: 500;
+  }
+  .tagline-band strong { color: var(--gold-lt); }
+
+  /* ── SECTION ── */
+  .section { padding: 72px 32px; max-width: 1100px; margin: 0 auto; }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 700;
+    color: var(--mid); margin-bottom: 8px;
+  }
+  .section-sub { color: var(--muted); margin-bottom: 40px; font-size: .95rem; max-width: 680px; }
+  .divider { width: 56px; height: 3px; background: var(--gold); border-radius: 2px; margin-bottom: 32px; }
+
+  /* ── SERVICE ACCORDION ── */
+  .services-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .srv-item {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    border-left: 4px solid transparent;
+    transition: border-color .25s;
+  }
+  .srv-item.open { border-left-color: var(--gold); }
+
+  .srv-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; cursor: pointer;
+    user-select: none; gap: 12px;
+    transition: background .15s;
+  }
+  .srv-header:hover { background: var(--accent-lt); }
+
+  .srv-left { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
+  .srv-icon { font-size: 1.4rem; flex-shrink: 0; }
+  .srv-title-wrap { display: flex; flex-direction: column; }
+  .srv-name { font-weight: 600; color: var(--mid); font-size: .95rem; }
+  .srv-desc { color: var(--muted); font-size: .82rem; margin-top: 2px; line-height: 1.4; }
+
+  .srv-arrow {
+    width: 28px; height: 28px; flex-shrink: 0;
+    background: var(--mid); color: #fff; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .85rem; transition: transform .35s, background .2s;
+  }
+  .srv-item.open .srv-arrow { transform: rotate(180deg); background: var(--gold); color: var(--deep); }
+
+  /* smooth accordion body */
+  .srv-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .45s cubic-bezier(.4,0,.2,1), padding .35s;
+    padding: 0 20px;
+  }
+  .srv-item.open .srv-body { max-height: 700px; padding: 0 20px 20px; }
+
+  .video-links { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+
+  .vid-link {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: #f8faff; border: 1px solid var(--border);
+    border-radius: 6px; padding: 12px 14px;
+    text-decoration: none; color: inherit;
+    transition: background .15s, border-color .15s, transform .15s;
+  }
+  .vid-link:hover { background: var(--accent-lt); border-color: var(--accent); transform: translateX(4px); }
+
+  .vid-thumb {
+    width: 48px; height: 48px; border-radius: 6px; flex-shrink: 0;
+    background: var(--deep); display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+  }
+  .vid-info { display: flex; flex-direction: column; }
+  .vid-info strong { font-size: .88rem; color: var(--mid); line-height: 1.3; }
+  .vid-info span { font-size: .78rem; color: var(--muted); margin-top: 3px; }
+  .vid-badge {
+    display: inline-block; margin-top: 4px;
+    background: #dcfce7; color: #166534;
+    font-size: .7rem; font-weight: 600; padding: 1px 7px;
+    border-radius: 20px; width: fit-content;
+  }
+
+  /* ── CTA BUTTONS ── */
+  .btn-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 24px; border-radius: var(--radius);
+    font-size: .875rem; font-weight: 600; text-decoration: none;
+    transition: transform .15s, box-shadow .15s; cursor: pointer;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.18); }
+  .btn-primary { background: var(--mid); color: #fff; }
+  .btn-gold   { background: var(--gold); color: var(--deep); }
+
+  /* ── PROFILE ── */
+  .profile-section { display: flex; gap: 40px; align-items: flex-start; flex-wrap: wrap; }
+  .profile-img { width: 180px; height: 180px; object-fit: cover; border-radius: 50%; border: 4px solid var(--gold); box-shadow: var(--shadow); flex-shrink: 0; }
+  .profile-info h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--mid); margin-bottom: 6px; }
+  .profile-info p { color: var(--muted); font-size: .9rem; margin-bottom: 16px; }
+  .journey-links { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+  .journey-link { background: var(--deep); color: var(--gold-lt); padding: 6px 14px; border-radius: 20px; text-decoration: none; font-size: .8rem; font-weight: 500; transition: background .2s; }
+  .journey-link:hover { background: var(--mid); }
+  .social-icons { display: flex; gap: 14px; flex-wrap: wrap; }
+  .social-icons a img { width: 36px; height: 36px; object-fit: contain; border-radius: 8px; transition: transform .2s, opacity .2s; opacity: .85; }
+  .social-icons a img:hover { transform: scale(1.15); opacity: 1; }
+
+  /* ── ACADEMIC ── */
+  .academic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 28px; }
+  .academic-card { background: #fff; border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); border-top: 3px solid var(--gold); }
+  .academic-card h4 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--mid); margin-bottom: 12px; }
+  .academic-card ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .academic-card ul li a { color: var(--accent); text-decoration: none; font-size: .85rem; transition: color .2s; }
+  .academic-card ul li a:hover { color: var(--mid); text-decoration: underline; }
+
+  /* ── GALLERY ── */
+  .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+  .gallery img { width: 100%; height: 180px; object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow); transition: transform .2s; }
+  .gallery img:hover { transform: scale(1.03); }
+
+  /* ── SUGGEST ── */
+  .suggest-box { background: var(--mid); border-radius: var(--radius); padding: 36px; color: #fff; display: flex; gap: 24px; align-items: center; flex-wrap: wrap; box-shadow: var(--shadow); }
+  .suggest-box h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; flex: 1; }
+  .suggest-box input { flex: 2; padding: 12px 16px; border: none; border-radius: var(--radius); font-size: .9rem; }
+  .suggest-box button { background: var(--gold); color: var(--deep); border: none; padding: 12px 22px; border-radius: var(--radius); font-weight: 700; cursor: pointer; white-space: nowrap; transition: opacity .2s; }
+  .suggest-box button:hover { opacity: .85; }
+
+  /* ── VIDEO ── */
+  .video-section { background: var(--deep); padding: 64px 32px; text-align: center; }
+  .video-section h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--gold-lt); margin-bottom: 28px; }
+  .video-wrapper { max-width: 760px; margin: 0 auto; aspect-ratio: 16/9; border-radius: var(--radius); overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,.5); }
+  .video-wrapper iframe { width: 100%; height: 100%; border: none; }
+
+  /* ── PARTNER ── */
+  .partner-section { text-align: center; padding: 40px 32px; background: #fff; }
+  .partner-section a { color: var(--accent); font-size: 1rem; text-decoration: none; }
+  .partner-section a:hover { text-decoration: underline; }
+
+  /* ── FOOTER ── */
+  footer { background: var(--ink); color: #94a3b8; text-align: center; padding: 28px 32px; font-size: .82rem; line-height: 1.8; }
+  footer a { color: var(--gold-lt); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  footer .footer-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; margin-bottom: 12px; }
+
+  .bg-white { background: #fff; }
+  .bg-cream { background: var(--cream); }
+
+  @media (max-width: 640px) {
+    nav { padding: 0 16px; }
+    .nav-links { gap: 14px; }
+    .nav-links a { font-size: .75rem; }
+    .section { padding: 48px 16px; }
+    .profile-section { flex-direction: column; align-items: center; text-align: center; }
+    .hero { height: 320px; }
+    .slide-caption h1 { font-size: 1.4rem; }
+    .srv-desc { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <img src="https://sdrok2080.github.io/sdrok2080/logo.jpg" alt="SDROK Logo" onerror="this.style.display='none'" />
+    <span>SDROK</span>
+  </a>
+  <div class="nav-links">
+    <a href="https://sdrok2080.github.io/sdrok2080/home.txt">🏠 Home</a>
+    <a href="https://sdrok2080.github.io/sdrok2080/about.txt">📍 About</a>
+    <a href="https://sdrok2080.github.io/sdrok2080/services.txt">🛩️ Services</a>
+    <a href="https://sdrok2080.github.io/sdrok2080/contact.html">📞 Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" aria-label="Hero slideshow">
+  <div class="slides" id="slides">
+    <div class="slide">
+      <img src="https://sdrok2080.github.io/sdrok2080/ImageI.jpg" alt="Slide 1" />
+      <div class="slide-caption">
+        <h1>Social Development &amp; Research Information</h1>
+        <p>"Advancing Communities Through Insight &amp; Innovation"</p>
+      </div>
+    </div>
+    <div class="slide">
+      <img src="https://sdrok2080.github.io/sdrok2080/Imageii.jpg" alt="Slide 2" />
+      <div class="slide-caption">
+        <h1>Empowering Communities Through Knowledge</h1>
+        <p>Research · Case Studies · Policy Insight</p>
+      </div>
+    </div>
+    <div class="slide">
+      <img src="https://sdrok2080.github.io/sdrok2080/ImageIII.webp" alt="Slide 3" />
+      <div class="slide-caption">
+        <h1>Archaeological &amp; Life Science Frontiers</h1>
+        <p>Unearthing the past. Shaping the future.</p>
+      </div>
+    </div>
+    <div class="slide">
+      <img src="https://sdrok2080.github.io/sdrok2080/ImageIV.png" alt="Slide 4" />
+      <div class="slide-caption">
+        <h1>NeuroScience &amp; Human Science</h1>
+        <p>Understanding behavior. Advancing humanity.</p>
+      </div>
+    </div>
+    <div class="slide">
+      <img src="https://sdrok2080.github.io/sdrok2080/ImageV.jpg" alt="Slide 5" />
+      <div class="slide-caption">
+        <h1>Navigate Our Dynamic Platform — Anytime, Anywhere</h1>
+        <p>Elevating Experience Beyond Boundaries</p>
+      </div>
+    </div>
+  </div>
+  <button class="slider-btn prev" onclick="move(-1)" aria-label="Previous">&#8249;</button>
+  <button class="slider-btn next" onclick="move(1)" aria-label="Next">&#8250;</button>
+  <div class="slider-dots" id="dots"></div>
+</section>
+
+<!-- TAGLINE -->
+<div class="tagline-band">
+  <strong>Research Article</strong> &nbsp;|&nbsp; Case Study &nbsp;|&nbsp; Interviews &nbsp;|&nbsp; Seminars &amp; Webinars &nbsp;|&nbsp;
+  <strong>Community Engagement</strong> &nbsp;|&nbsp; Policy Insight &nbsp;|&nbsp; Archaeological Investigation &nbsp;|&nbsp; Life Science &nbsp;|&nbsp; NeuroScience
+</div>
+
+<!-- SERVICES WITH VIDEO TUTORIALS -->
+<div class="bg-white">
+  <div class="section">
+    <p class="section-title">Our Services — with Free Video Tutorials</p>
+    <div class="divider"></div>
+    <p class="section-sub">Click any service below to explore it and access free curated video tutorials from YouTube and other open platforms.</p>
+
+    <div class="services-list" id="servicesList">
+
+      <!-- 1. Research Article -->
+      <div class="srv-item" data-index="0">
+        <div class="srv-header" onclick="toggleSrv(0)">
+          <div class="srv-left">
+            <span class="srv-icon">📚</span>
+            <div class="srv-title-wrap">
+              <span class="srv-name">Research Article</span>
+              <span class="srv-desc">Platform for in-depth research articles fostering knowledge sharing and academic discourse.</span>
+            </div>
+          </div>
+          <div class="srv-arrow">▼</div>
+        </div>
+        <div class="srv-body">
+          <div class="video-links">
+            <a class="vid-link" href="https://www.youtube.com/watch?v=VK51E3gHENc" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>How to Write a Great Research Paper – Microsoft Research</strong>
+                <span>Simon Peyton Jones shares practical guidelines used by top researchers worldwide.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=yRxFwMHS_A8" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Beginners Guide to Writing a Research Paper – Smart Student</strong>
+                <span>Step-by-step academic writing crash course for beginners.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=XTcwUI2tS_w" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Research Paper Example: Full Step-By-Step Tutorial</strong>
+                <span>Complete walkthrough of writing a research paper from start to finish.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Case Study -->
+      <div class="srv-item" data-index="1">
+        <div class="srv-header" onclick="toggleSrv(1)">
+          <div class="srv-left">
+            <span class="srv-icon">🔬</span>
+            <div class="srv-title-wrap">
+              <span class="srv-name">Case Study</span>
+              <span class="srv-desc">Comprehensive studies delving into real-world scenarios, offering insights and practical applications.</span>
+            </div>
+          </div>
+          <div class="srv-arrow">▼</div>
+        </div>
+        <div class="srv-body">
+          <div class="video-links">
+            <a class="vid-link" href="https://www.youtube.com/watch?v=epvd9AWyQCg" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Case Study Research Methodology: A Beginner's Guide</strong>
+                <span>Learn how to apply the case study research method step by step.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=kynoEFQNEq8" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>What is Case Study & How to Conduct Case Study Research</strong>
+                <span>Covers case study design, features, data collection, and analysis.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=S47RIVkr978" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>How to Write a Research Paper – Full Beginner Overview</strong>
+                <span>Covers real-world problem framing and case-driven research structure.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Interviews -->
+      <div class="srv-item" data-index="2">
+        <div class="srv-header" onclick="toggleSrv(2)">
+          <div class="srv-left">
+            <span class="srv-icon">🎙</span>
+            <div class="srv-title-wrap">
+              <span class="srv-name">Interviews</span>
+              <span class="srv-desc">Published interviews with experts, professionals, and thought leaders providing firsthand experiences.</span>
+            </div>
+          </div>
+          <div class="srv-arrow">▼</div>
+        </div>
+        <div class="srv-body">
+          <div class="video-links">
+            <a class="vid-link" href="https://www.youtube.com/watch?v=6PhcglOGFg8" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Fundamentals of Qualitative Research Methods: Interviews (Module 3) – Yale</strong>
+                <span>Dr. Taylor covers interview techniques for systematic qualitative data collection.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=q5Uw6PTFlUg" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>A Practical Guide to Conducting Interviews in Qualitative Studies</strong>
+                <span>Expert techniques for interviews that generate rich, meaningful qualitative data.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=_7DhQJ4Qf0U" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>How to Write a Research Paper Even If You Hate Writing</strong>
+                <span>Stress-free guide covering interviews, data synthesis, and presentation.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Seminars & Webinars -->
+      <div class="srv-item" data-index="3">
+        <div class="srv-header" onclick="toggleSrv(3)">
+          <div class="srv-left">
+            <span class="srv-icon">📢</span>
+            <div class="srv-title-wrap">
+              <span class="srv-name">Seminars &amp; Webinars</span>
+              <span class="srv-desc">Organized events for education, discussion, and idea exchange across diverse fields.</span>
+            </div>
+          </div>
+          <div class="srv-arrow">▼</div>
+        </div>
+        <div class="srv-body">
+          <div class="video-links">
+            <a class="vid-link" href="https://www.youtube.com/watch?v=MnIPpUiTcRc" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>How to Host a Successful Webinar – Step by Step</strong>
+                <span>Complete guide to planning, promoting, and running effective webinars.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=7CBTE3bvgkM" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>How to Present a Seminar Paper – Academic Presentation Skills</strong>
+                <span>Tips for presenting research at seminars and academic conferences confidently.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=Yz2nQp4BQVY" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>TED Talk – How to Speak so That People Want to Listen</strong>
+                <span>Julian Treasure's iconic talk on powerful speaking for seminars and public events.</span>
+                <span class="vid-badge">Free · TED / YouTube</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Social Media -->
+      <div class="srv-item" data-index="4">
+        <div class="srv-header" onclick="toggleSrv(4)">
+          <div class="srv-left">
+            <span class="srv-icon">🌐</span>
+            <div class="srv-title-wrap">
+              <span class="srv-name">Social Media</span>
+              <span class="srv-desc">Active engagement on social media platforms for content sharing, updates, and community building.</span>
+            </div>
+          </div>
+          <div class="srv-arrow">▼</div>
+        </div>
+        <div class="srv-body">
+          <div class="video-links">
+            <a class="vid-link" href="https://www.youtube.com/watch?v=ombFAMzs98s" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Social Media Marketing Full Course – Simplilearn</strong>
+                <span>Comprehensive free course on using all major social media platforms for engagement.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=qAc-FWasRao" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Social Media Strategy for Beginners 2024</strong>
+                <span>Learn how to build a social media presence and grow an online community from scratch.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=M_j6DdjD6jU" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Content Creation for Social Media – HubSpot Academy</strong>
+                <span>How to create shareable, impactful content for research and development communities.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. News & Updates -->
+      <div class="srv-item" data-index="5">
+        <div class="srv-header" onclick="toggleSrv(5)">
+          <div class="srv-left">
+            <span class="srv-icon">📰</span>
+            <div class="srv-title-wrap">
+              <span class="srv-name">News &amp; Updates</span>
+              <span class="srv-desc">Regular information sharing about program activities, research findings, and relevant developments.</span>
+            </div>
+          </div>
+          <div class="srv-arrow">▼</div>
+        </div>
+        <div class="srv-body">
+          <div class="video-links">
+            <a class="vid-link" href="https://www.youtube.com/watch?v=4RvD8OVAGpk" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>How to Write a News Article – Step by Step Guide</strong>
+                <span>Journalist's framework for clear, accurate, and engaging news and updates writing.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=eIPoV3KxNSU" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Science Communication: Sharing Research with the Public</strong>
+                <span>How scientists and researchers can effectively share discoveries as news updates.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=IJHztuA-CJ8" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Newsletter Writing Tips – How to Write Engaging Updates</strong>
+                <span>Practical tips for creating compelling newsletters and program update bulletins.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Community Engagement -->
+      <div class="srv-item" data-index="6">
+        <div class="srv-header" onclick="toggleSrv(6)">
+          <div class="srv-left">
+            <span class="srv-icon">🤝</span>
+            <div class="srv-title-wrap">
+              <span class="srv-name">Community Engagement</span>
+              <span class="srv-desc">Active involvement with communities through outreach, collaborations, and projects for local impact.</span>
+            </div>
+          </div>
+          <div class="srv-arrow">▼</div>
+        </div>
+        <div class="srv-body">
+          <div class="video-links">
+            <a class="vid-link" href="https://www.youtube.com/watch?v=5e2YPQzgZzQ" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Community Engagement Strategies – Practical Guide</strong>
+                <span>How to plan and run effective community outreach and engagement programs.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=MIezVHPSZHg" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Public Participation & Community Engagement in Research – WHO</strong>
+                <span>WHO-aligned approaches to participatory research and grassroots community collaboration.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=OL0rvwOjNcU" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>How to Build Community – Social Development Framework</strong>
+                <span>Frameworks for building lasting, impact-driven community relationships.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. Community Spotlight -->
+      <div class="srv-item" data-index="7">
+        <div class="srv-header" onclick="toggleSrv(7)">
+          <div class="srv-left">
+            <span class="srv-icon">🔦</span>
+            <div class="srv-title-wrap">
+              <span class="srv-name">Community Spotlight</span>
+              <span class="srv-desc">Highlights achievements, stories, and contributions of individuals or groups within communities.</span>
+            </div>
+          </div>
+          <div class="srv-arrow">▼</div>
+        </div>
+        <div class="srv-body">
+          <div class="video-links">
+            <a class="vid-link" href="https://www.youtube.com/watch?v=GpVD7sELmEI" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>How to Tell a Community Story – Video Storytelling Guide</strong>
+                <span>Techniques for capturing and sharing impactful stories from your community.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=Nj-hdQMa3uA" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Documentary Filmmaking for Beginners – Storytelling Techniques</strong>
+                <span>How to document and spotlight community achievements through compelling narratives.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=fOGXvBAmTsY" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>The Art of Storytelling – TED Talk by Andrew Stanton</strong>
+                <span>Pixar's Andrew Stanton reveals the universal rules of storytelling for community narratives.</span>
+                <span class="vid-badge">Free · TED / YouTube</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. Policy Insight -->
+      <div class="srv-item" data-index="8">
+        <div class="srv-header" onclick="toggleSrv(8)">
+          <div class="srv-left">
+            <span class="srv-icon">📊</span>
+            <div class="srv-title-wrap">
+              <span class="srv-name">Policy Insight</span>
+              <span class="srv-desc">Insights into policies with analysis, commentary, and recommendations for program focus areas.</span>
+            </div>
+          </div>
+          <div class="srv-arrow">▼</div>
+        </div>
+        <div class="srv-body">
+          <div class="video-links">
+            <a class="vid-link" href="https://www.youtube.com/watch?v=oCHm1nS3Wng" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Introduction to Public Policy Analysis – Crash Course</strong>
+                <span>How governments create policy, and how to analyse and evaluate policy decisions.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=ExBCe2FjQwo" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Policy Analysis Framework – How to Analyse a Policy</strong>
+                <span>Step-by-step methodology for writing policy briefs and evaluating effectiveness.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=UNnZJRJPVIA" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>How to Write a Policy Brief – IDRC</strong>
+                <span>Practical tutorial on translating research into policy-relevant insights and briefs.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. Archaeological Investigation -->
+      <div class="srv-item" data-index="9">
+        <div class="srv-header" onclick="toggleSrv(9)">
+          <div class="srv-left">
+            <span class="srv-icon">⛏</span>
+            <div class="srv-title-wrap">
+              <span class="srv-name">Archaeological Investigation</span>
+              <span class="srv-desc">Investigations contributing to historical understanding, cultural heritage preservation, and research.</span>
+            </div>
+          </div>
+          <div class="srv-arrow">▼</div>
+        </div>
+        <div class="srv-body">
+          <div class="video-links">
+            <a class="vid-link" href="https://www.youtube.com/watch?v=bRcu-ysocX4" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Introduction to Archaeology – CrashCourse</strong>
+                <span>Overview of archaeological methods, excavation, and the science of uncovering the past.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=vt8zvfb6mkQ" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Archaeological Field Methods – How a Dig Works</strong>
+                <span>Detailed walkthrough of fieldwork techniques used in archaeological investigations.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=HB8-MoCRDQY" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Cultural Heritage Preservation – UNESCO Overview</strong>
+                <span>How archaeological findings connect to cultural identity and heritage protection.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11. Academic Field -->
+      <div class="srv-item" data-index="10">
+        <div class="srv-header" onclick="toggleSrv(10)">
+          <div class="srv-left">
+            <span class="srv-icon">🎓</span>
+            <div class="srv-title-wrap">
+              <span class="srv-name">Academic Field</span>
+              <span class="srv-desc">Supports and promotes academic activities — a platform for discourse, collaboration, and knowledge.</span>
+            </div>
+          </div>
+          <div class="srv-arrow">▼</div>
+        </div>
+        <div class="srv-body">
+          <div class="video-links">
+            <a class="vid-link" href="https://www.youtube.com/watch?v=I-Un7SCX7VQ" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>How to Read Academic Papers Effectively</strong>
+                <span>Techniques to quickly extract key insights from scholarly journals and research papers.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=M0t__6LCWY0" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Academic Writing – The Basics – University of Melbourne</strong>
+                <span>Foundational guide to academic argumentation, citation, and scholarly writing standards.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=kAqRTMnNj9U" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Literature Review Tutorial – How to Do a Literature Review</strong>
+                <span>Comprehensive tutorial on reviewing existing academic literature for any field.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12. Life Science -->
+      <div class="srv-item" data-index="11">
+        <div class="srv-header" onclick="toggleSrv(11)">
+          <div class="srv-left">
+            <span class="srv-icon">🔬</span>
+            <div class="srv-title-wrap">
+              <span class="srv-name">Life Science</span>
+              <span class="srv-desc">Focuses on biology, ecology, genetics, and related areas to advance understanding in life sciences.</span>
+            </div>
+          </div>
+          <div class="srv-arrow">▼</div>
+        </div>
+        <div class="srv-body">
+          <div class="video-links">
+            <a class="vid-link" href="https://www.youtube.com/watch?v=QnQe0xW_JY4" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Biology: The Science of Life – Khan Academy</strong>
+                <span>Introduction to core life science concepts: cells, genetics, evolution, and ecosystems.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=URUJD5NEXC8" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Ecology – CrashCourse Biology</strong>
+                <span>Engaging overview of ecological systems, biodiversity, and environmental science.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=8m6hHRlKwxY" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Genetics Basics – DNA, Chromosomes, Genes – MIT OpenCourseWare</strong>
+                <span>MIT lecture-level introduction to genetics and molecular biology for all learners.</span>
+                <span class="vid-badge">Free · MIT OCW / YouTube</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13. NeuroScience -->
+      <div class="srv-item" data-index="12">
+        <div class="srv-header" onclick="toggleSrv(12)">
+          <div class="srv-left">
+            <span class="srv-icon">🧠</span>
+            <div class="srv-title-wrap">
+              <span class="srv-name">NeuroScience</span>
+              <span class="srv-desc">Studies, insights, and developments in understanding the brain, nervous system, and behavior.</span>
+            </div>
+          </div>
+          <div class="srv-arrow">▼</div>
+        </div>
+        <div class="srv-body">
+          <div class="video-links">
+            <a class="vid-link" href="https://www.youtube.com/watch?v=NNnIGh9g6fA" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Introduction to Neuroscience – MIT OpenCourseWare (Lecture 1)</strong>
+                <span>MIT's introductory neuroscience lecture covering brain structure, neurons, and function.</span>
+                <span class="vid-badge">Free · MIT OCW / YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=IdYGmHBUCQo" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>How the Brain Works – CrashCourse Psychology</strong>
+                <span>Accessible deep dive into brain anatomy, neural pathways, and cognitive functions.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=5YKs7QXXr3g" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Neuroscience of Learning – How Your Brain Learns</strong>
+                <span>Explores neuroplasticity, memory formation, and how the brain adapts to new information.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 14. Human Science -->
+      <div class="srv-item" data-index="13">
+        <div class="srv-header" onclick="toggleSrv(13)">
+          <div class="srv-left">
+            <span class="srv-icon">🧑‍🔬</span>
+            <div class="srv-title-wrap">
+              <span class="srv-name">Human Science</span>
+              <span class="srv-desc">Explores psychology, sociology, and anthropology, fostering interdisciplinary research.</span>
+            </div>
+          </div>
+          <div class="srv-arrow">▼</div>
+        </div>
+        <div class="srv-body">
+          <div class="video-links">
+            <a class="vid-link" href="https://www.youtube.com/watch?v=vo4pMVb0R6M" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Introduction to Psychology – CrashCourse</strong>
+                <span>Broad overview of psychology: behavior, cognition, emotion, and mental health.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=YR5ApYxkU-U" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>Introduction to Sociology – CrashCourse Sociology</strong>
+                <span>Foundational concepts of sociology: society, culture, norms, and social structures.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+            <a class="vid-link" href="https://www.youtube.com/watch?v=Fh1D5P2wFc8" target="_blank" rel="noopener">
+              <div class="vid-thumb">▶️</div>
+              <div class="vid-info">
+                <strong>What is Anthropology? – Introduction to the Field</strong>
+                <span>Overview of anthropological perspectives: cultural, biological, linguistic, and archaeological.</span>
+                <span class="vid-badge">Free · YouTube</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /services-list -->
+
+    <div class="btn-row">
+      <a class="btn btn-primary" href="https://bbsrm4591sdrok.wordpress.com" target="_blank">Click Here For More Information</a>
+      <a class="btn btn-gold" href="https://sdrok2080.github.io/sdrok2080/IntroSDROK.jpeg" target="_blank">IntroSDROK</a>
+    </div>
+  </div>
+</div>
+
+<!-- INNOVATING JOURNEY -->
+<div class="bg-cream">
+  <div class="section">
+    <p class="section-title">Our Innovating Cyber Journey!</p>
+    <div class="divider"></div>
+    <div class="profile-section">
+      <img class="profile-img" src="https://sdrok2080.github.io/sdrok2080/Foto.jpg" alt="Bishnu Singh Rayamajhi" />
+      <div class="profile-info">
+        <h3>Mr. Bishnu Singh Rayamajhi</h3>
+        <h6>Math Lecturer and Head of Humanity & Social Science</h6>
+        <h6>Kapilvastu Multiple Campus (KMC),Taulihawa</h6>
+        <p>Founder &amp; Researcher — Social Development &amp; Research Information (SDROK)</p>
+        <div class="journey-links">
+          <a class="journey-link" href="https://www.cbs.gov.np/" target="_blank">Rural Population of Nepal</a>
+          <a class="journey-link" href="https://www.nbcnews.com/" target="_blank">NBC News</a>
+          <a class="journey-link" href="https://www.r4d.org/" target="_blank">Research for Development</a>
+          <a class="journey-link" href="https://www.neuroscience.com/" target="_blank">Neuroscience</a>
+          <a class="journey-link" href="https://www.sciencedirect.com/" target="_blank">Creativity &amp; Innovation Research</a>
+          <a class="journey-link" href="https://www.wordvice.com/" target="_blank">Dissertation Writing</a>
+          <a class="journey-link" href="https://en.wikipedia.org/" target="_blank">R&amp;D Encyclopedia</a>
+        </div>
+        <div class="social-icons">
+          <a href="https://www.facebook.com/profile.php?id=100063495316107" title="Facebook" target="_blank"><img src="https://sdrok2080.github.io/sdrok2080/facebook.webp" alt="Facebook" /></a>
+          <a href="https://www.youtube.com/@bishnubdrsinghrayamajhi9643" title="YouTube" target="_blank"><img src="https://sdrok2080.github.io/sdrok2080/Youtube.png" alt="YouTube" /></a>
+          <a href="https://www.instagram.com/rayamajhi48/" title="Instagram" target="_blank"><img src="https://sdrok2080.github.io/sdrok2080/instagram.png" alt="Instagram" /></a>
+          <a href="https://twitter.com/SinghBdr2458" title="Twitter / X" target="_blank"><img src="https://sdrok2080.github.io/sdrok2080/twitterX.png" alt="Twitter X" /></a>
+          <a href="https://www.linkedin.com/in/bishnu-bahadur-singh-rayamajhi-5552b91a5/" title="LinkedIn" target="_blank"><img src="https://sdrok2080.github.io/sdrok2080/linkedin.png" alt="LinkedIn" /></a>
+          <a href="https://www.pinterest.com/sdrok2080" title="Pinterest" target="_blank"><img src="https://sdrok2080.github.io/sdrok2080/pinterest.png" alt="Pinterest" /></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ACADEMIC RESOURCES -->
+<div class="bg-white">
+  <div class="section">
+    <p class="section-title">Academic Field Resources</p>
+    <div class="divider"></div>
+    <div class="academic-grid">
+      <div class="academic-card">
+        <h4>University Programs</h4>
+        <ul>
+          <li><a href="https://tuexam.edu.np/" target="_blank">MBS Syllabus TU</a></li>
+          <li><a href="https://tuexam.edu.np/" target="_blank">B.Ed. Syllabus TU</a></li>
+          <li><a href="https://cdmaths.edu.np/" target="_blank">Central Dept. of Mathematics</a></li>
+          <li><a href="https://emis.gov.np/" target="_blank">EMIS – e-Learning Courses</a></li>
+          <li><a href="https://www.google.com/" target="_blank">Google</a></li>
+        </ul>
+      </div>
+      <div class="academic-card">
+        <h4>Calculus &amp; Analysis</h4>
+        <ul>
+          <li><a href="https://www.youtube.com/" target="_blank">Calculus in TU (Video)</a></li>
+          <li><a href="https://tutorial.math.lamar.edu/" target="_blank">Differential Calculus PDF</a></li>
+          <li><a href="https://www.youtube.com/" target="_blank">Differential Equation Video</a></li>
+          <li><a href="https://ocw.mit.edu/" target="_blank">Calculus PDF (MIT)</a></li>
+          <li><a href="https://www.youtube.com/" target="_blank">Real Analysis in TU (Video)</a></li>
+        </ul>
+      </div>
+      <div class="academic-card">
+        <h4>Geometry &amp; Advanced Calculus</h4>
+        <ul>
+          <li><a href="https://www.mathsisfun.com/" target="_blank">Analytic Geometry</a></li>
+          <li><a href="https://ncert.nic.in/" target="_blank">3D Geometry (NCERT)</a></li>
+          <li><a href="https://people.math.harvard.edu/" target="_blank">Advanced Calculus (Harvard)</a></li>
+          <li><a href="https://tuexam.edu.np/" target="_blank">TU Question Set</a></li>
+        </ul>
+      </div>
+      <div class="academic-card">
+        <h4>Management &amp; Operations</h4>
+        <ul>
+          <li><a href="https://www.mbaknol.com/" target="_blank">Production &amp; Operation Management</a></li>
+          <li><a href="https://www.mbaknol.com/" target="_blank">POM PDF</a></li>
+          <li><a href="https://www.mbaknol.com/" target="_blank">POM Book</a></li>
+        </ul>
+      </div>
+      <div class="academic-card">
+        <h4>Civil Service &amp; Heritage</h4>
+        <ul>
+          <li><a href="https://psc.gov.np/" target="_blank">लोक सेवा आयोग नेपाल</a></li>
+          <li><a href="https://tsc.gov.np/" target="_blank">शिक्षक सेवा आयोग</a></li>
+          <li><a href="https://www.youtube.com/" target="_blank">TSC Preparation Class</a></li>
+          <li><a href="https://en.wikipedia.org/wiki/Tilaurakot" target="_blank">Tilarurakot – Ancient Capital</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<div class="bg-cream">
+  <div class="section">
+    <p class="section-title">Photo Gallery</p>
+    <div class="divider"></div>
+    <div class="gallery">
+      <img src="https://sdrok2080.github.io/sdrok2080/image01.jpg"  alt="Gallery 1" />
+      <img src="https://sdrok2080.github.io/sdrok2080/image02.png"  alt="Gallery 2" />
+      <img src="https://sdrok2080.github.io/sdrok2080/image03.jpeg" alt="Gallery 3" />
+      <img src="https://sdrok2080.github.io/sdrok2080/image04.jpg"  alt="Gallery 4" />
+    </div>
+  </div>
+</div>
+
+<!-- PARTNER -->
+<div class="partner-section bg-white">
+  <p style="color:var(--muted);font-size:.85rem;margin-bottom:8px;letter-spacing:.06em;">PARTNER PLATFORM</p>
+  <a href="https://chakrakeyacademy.com/" target="_blank">chakrakeyacademy.com</a>
+</div>
+
+<!-- FEATURED VIDEO -->
+<div class="video-section">
+  <h2>Featured Videos</h2>
+  <div class="video-wrapper">
+    <iframe src="https://www.youtube.com/embed/yrWAQ7T_vwA?list=PLX-KmXTn6p4jfu3ZOaqsCVD6afq0ilYUn" title="SDROK Featured Video" allowfullscreen></iframe>
+  </div>
+</div>
+
+<!-- SUGGESTION -->
+<div class="bg-cream" style="padding:64px 32px;">
+  <div style="max-width:860px;margin:0 auto;">
+    <div class="suggest-box">
+      <h3>Share Your Suggestion</h3>
+      <input type="text" id="suggestInput" placeholder="Type your suggestion here…" />
+      <button onclick="sendSuggestion()">Send Suggestion</button>
+    </div>
+    <p id="suggestMsg" style="margin-top:10px;color:var(--mid);font-size:.875rem;display:none;">✅ Thank you for your suggestion!</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <a href="https://sdrok2080.github.io/sdrok2080/home.txt">Home</a>
+    <a href="https://sdrok2080.github.io/sdrok2080/about.txt">About</a>
+    <a href="https://sdrok2080.github.io/sdrok2080/services.txt">Services</a>
+    <a href="https://sdrok2080.github.io/sdrok2080/contact.html">Contact</a>
+    <a href="#">Social Media Policy</a>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms of Services</a>
+  </div>
+  <p>© 2024 SDROK — Social Development &amp; Research Information. All rights reserved.</p>
+</footer>
+
+<script>
+// ── SLIDER ──
+const slides = document.getElementById('slides');
+const dotsContainer = document.getElementById('dots');
+const total = slides.children.length;
+let cur = 0, timer;
+
+for (let i = 0; i < total; i++) {
+  const d = document.createElement('button');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.setAttribute('aria-label', 'Slide ' + (i+1));
+  d.onclick = () => { goTo(i); resetTimer(); };
+  dotsContainer.appendChild(d);
+}
+
+function goTo(n) {
+  cur = (n + total) % total;
+  slides.style.transform = `translateX(-${cur * 100}%)`;
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === cur));
+}
+function move(dir) { goTo(cur + dir); resetTimer(); }
+function resetTimer() { clearInterval(timer); timer = setInterval(() => goTo(cur + 1), 4500); }
+resetTimer();
+
+// ── ACCORDION ──
+function toggleSrv(idx) {
+  const item = document.querySelector(`.srv-item[data-index="${idx}"]`);
+  const isOpen = item.classList.contains('open');
+  // close all others
+  document.querySelectorAll('.srv-item.open').forEach(el => el.classList.remove('open'));
+  // toggle clicked
+  if (!isOpen) {
+    item.classList.add('open');
+    // smooth scroll so the opened panel is visible
+    setTimeout(() => {
+      const rect = item.getBoundingClientRect();
+      const offset = rect.top + window.scrollY - 80;
+      window.scrollTo({ top: offset, behavior: 'smooth' });
+    }, 60);
+  }
+}
+
+// ── SUGGESTION ──
+function sendSuggestion() {
+  const val = document.getElementById('suggestInput').value.trim();
+  if (!val) return;
+  document.getElementById('suggestMsg').style.display = 'block';
+  document.getElementById('suggestInput').value = '';
+  setTimeout(() => document.getElementById('suggestMsg').style.display = 'none', 4000);
+}
+</script>
+</body>
+</html>
