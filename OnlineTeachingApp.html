@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Online Academic Roadmap — UCDL Academy</title>
+<style>
+  :root {
+    --bg: #080c14; --surface: #0d1422; --card: #111827;
+    --border: rgba(99,179,237,0.18); --accent: #38bdf8; --accent2: #818cf8;
+    --green: #34d399; --red: #f87171; --text: #e2e8f0; --muted: #64748b;
+    --glow: 0 0 30px rgba(56,189,248,0.25);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;line-height:1.5}
+  .wrap{max-width:720px;margin:0 auto;padding:0 20px 60px;position:relative;z-index:1}
+  .hero{text-align:center;padding:40px 20px 24px}
+  .hero h1{font-size:clamp(1.5rem,4vw,2rem);font-weight:600;line-height:1.2;margin-bottom:6px;color:var(--text)}
+  .hero .subtitle{color:var(--muted);font-size:14px}
+  .lang-row{display:flex;justify-content:center;gap:0;margin:16px auto 0;background:var(--surface);border:1px solid var(--border);border-radius:8px;width:fit-content;padding:3px}
+  .lang-btn{padding:6px 16px;border:none;cursor:pointer;border-radius:6px;font-size:13px;font-weight:500;background:transparent;color:var(--muted);transition:all .2s}
+  .lang-btn.active{background:var(--accent);color:#0d1422;font-weight:600}
+  .stats-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:20px 0 24px}
+  .stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 8px;text-align:center;flex:1;min-width:80px;max-width:140px;transition:border-color .2s}
+  .stat:hover{border-color:var(--accent)}
+  .stat-num{font-size:24px;font-weight:500;color:var(--accent);line-height:1}
+  .stat-lbl{font-size:11px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.03em}
+  .progress-wrap{background:var(--surface);border:1px solid var(--border);border-radius:999px;height:6px;margin-bottom:24px;overflow:hidden}
+  .progress-bar{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .5s cubic-bezier(.4,0,.2,1)}
+  .step-row{display:flex;gap:0;align-items:stretch}
+  .tl{display:flex;flex-direction:column;align-items:center;width:40px;flex-shrink:0}
+  .tl-node{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;border:2px solid var(--border);background:var(--surface);color:var(--muted);transition:all .25s;position:relative;z-index:1}
+  .tl-node.done{border-color:var(--green);background:rgba(52,211,153,.12);color:var(--green)}
+  .tl-line{flex:1;width:2px;background:var(--border);min-height:12px;margin:4px 0}
+  .step-row:last-child .tl-line{display:none}
+  .step-card{flex:1;margin:0 0 10px 12px;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .2s,transform .2s;cursor:pointer}
+  .step-card:hover{border-color:rgba(56,189,248,.4)}
+  .step-card.open{border-color:rgba(56,189,248,.5);box-shadow:var(--glow)}
+  .step-card.done-card{opacity:.6}
+  .card-head{display:flex;align-items:center;gap:12px;padding:12px 16px;user-select:none}
+  .step-titles{flex:1;min-width:0}
+  .step-name{font-size:14px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .step-sub{font-size:12px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .step-badge{font-size:11px;font-weight:500;color:var(--accent);background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.25);padding:2px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0}
+  .chevron{color:var(--muted);transition:transform .25s;flex-shrink:0}
+  .step-card.open .chevron{transform:rotate(180deg)}
+  .card-body{max-height:0;overflow:hidden;transition:max-height .35s ease}
+  .step-card.open .card-body{max-height:900px}
+  .card-inner{padding:0 16px 16px}
+  .meta-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+  .meta-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+  .meta-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-weight:500;margin-bottom:4px}
+  .meta-val{font-size:13px;color:var(--text);font-weight:500}
+  .tool-pill{display:inline-block;padding:2px 8px;background:rgba(129,140,248,.12);border:1px solid rgba(129,140,248,.3);border-radius:999px;font-size:11px;color:var(--accent2);font-weight:500;margin:2px}
+  .section-lbl{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+  .section-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
+  .vid-btn{display:flex;align-items:center;gap:10px;width:100%;margin-bottom:6px;padding:8px 12px;background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);border-radius:8px;color:#fca5a5;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;text-align:left;border:none}
+  .vid-btn:hover{background:rgba(248,113,113,.12);transform:translateX(3px);color:#fff}
+  .vid-ico{width:24px;height:24px;border-radius:50%;flex-shrink:0;background:rgba(248,113,113,.2);display:flex;align-items:center;justify-content:center}
+  .notes-ta{width:100%;padding:8px 12px;min-height:60px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;resize:vertical;transition:border-color .2s}
+  .notes-ta:focus{outline:none;border-color:var(--accent)}
+  .notes-ta::placeholder{color:var(--muted)}
+  .check-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:var(--surface);border:1px solid var(--border);cursor:pointer;transition:all .2s;user-select:none}
+  .check-row:hover{border-color:var(--green);background:rgba(52,211,153,.04)}
+  .check-row.checked{border-color:var(--green);background:rgba(52,211,153,.08)}
+  .check-box{width:18px;height:18px;border-radius:5px;flex-shrink:0;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .2s;background:transparent;color:transparent}
+  .check-row.checked .check-box{background:var(--green);border-color:var(--green);color:var(--surface);font-weight:700}
+  .check-lbl{font-size:13px;color:var(--muted);font-weight:500;transition:color .2s}
+  .check-row.checked .check-lbl{color:var(--green)}
+  .resources{margin-top:32px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:12px}
+  .res-title{font-size:17px;font-weight:500;color:var(--accent);margin-bottom:16px}
+  .res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+  .res-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;transition:all .2s}
+  .res-card:hover{border-color:rgba(56,189,248,.4);transform:translateY(-2px)}
+  .res-name{font-weight:500;margin-bottom:4px;font-size:14px}
+  .res-desc{font-size:12px;color:var(--muted);margin-bottom:10px}
+  .res-link{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.3);border-radius:6px;color:var(--accent);font-size:12px;font-weight:500;text-decoration:none;transition:all .2s}
+  .res-link:hover{background:rgba(56,189,248,.22)}
+  footer{margin-top:40px;text-align:center;color:var(--muted);font-size:12px;border-top:1px solid var(--border);padding-top:20px}
+  footer span{color:var(--accent)}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(0px);pointer-events:none;transition:background .3s,backdrop-filter .3s}
+  .modal-overlay.open{background:rgba(0,0,0,.85);backdrop-filter:blur(8px);pointer-events:all}
+  .modal-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;width:100%;max-width:720px;overflow:hidden;transform:scale(.9) translateY(16px);opacity:0;transition:transform .3s ease,opacity .25s}
+  .modal-overlay.open .modal-box{transform:scale(1) translateY(0);opacity:1}
+  .modal-head{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border)}
+  .modal-title{flex:1;font-weight:500;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .modal-close{width:32px;height:32px;border-radius:6px;border:none;background:rgba(248,113,113,.12);color:var(--red);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:monospace}
+  .modal-close:hover{background:rgba(248,113,113,.22)}
+  .vid-frame{position:relative;width:100%;padding-bottom:56.25%;background:#000}
+  .vid-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
+  .toast{position:fixed;bottom:20px;right:20px;z-index:8888;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--green);border-radius:10px;padding:12px 16px;color:var(--green);font-size:13px;font-weight:500;transform:translateY(60px);opacity:0;transition:all .35s ease}
+  .toast.show{transform:none;opacity:1}
+  @media(max-width:520px){.meta-row{grid-template-columns:1fr}.stat{min-width:70px;padding:10px 4px}.stat-num{font-size:20px}}
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div style="width:28px;height:28px;border-radius:50%;background:rgba(248,113,113,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7.76 3.1c.5 0 .98.14 1.4.39l10.37 6.12c1.32.78 1.76 2.48.98 3.8-.24.41-.58.75-.98 1l-10.37 6.11c-1.32.78-3.02.34-3.8-.98-.25-.43-.38-.92-.38-1.42V5.89c0-1.53 1.24-2.78 2.78-2.78zm-1 15.02c0 .17.05.34.14.5.27.46.87.62 1.33.34l10.36-6.11c.14-.08.26-.2.35-.35.27-.47.12-1.07-.35-1.35L8.26 5.04c-.15-.09-.32-.13-.5-.13-.54 0-.98.44-.98.98v12.23z" fill="currentColor"/></svg>
+      </div>
+      <div class="modal-title" id="modalTitle">Video</div>
+      <button class="modal-close" id="modalClose">&#10005;</button>
+    </div>
+    <div class="vid-frame"><iframe id="modalFrame" allowfullscreen></iframe></div>
+  </div>
+</div>
+
+<div class="toast" id="toast">&#10003; <span id="toastMsg">Step marked complete!</span></div>
+
+<div class="wrap">
+  <header class="hero">
+    <h1 id="heroTitle">Online Academic Roadmap</h1>
+    <p class="subtitle" id="heroSub">15-step comprehensive academic workflow &mdash; UCDL Academy</p>
+    <div class="lang-row">
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')">English</button>
+      <button class="lang-btn" data-lang="hi" onclick="setLang('hi')">Hindi</button>
+      <button class="lang-btn" data-lang="ne" onclick="setLang('ne')">Nepali</button>
+    </div>
+  </header>
+
+  <div class="stats-row">
+    <div class="stat"><div class="stat-num" id="sTotal">15</div><div class="stat-lbl" id="sLblTotal">Total Steps</div></div>
+    <div class="stat"><div class="stat-num" id="sDone">0</div><div class="stat-lbl" id="sLblDone">Completed</div></div>
+    <div class="stat"><div class="stat-num" id="sLeft">15</div><div class="stat-lbl" id="sLblLeft">Remaining</div></div>
+    <div class="stat"><div class="stat-num" id="sPct">0%</div><div class="stat-lbl" id="sLblPct">Progress</div></div>
+  </div>
+
+  <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+  <div id="stepsContainer"></div>
+
+  <div class="resources">
+    <div class="res-title">Free Learning Resources</div>
+    <div class="res-grid" id="resGrid"></div>
+  </div>
+
+  <footer>
+    <p id="ftMain">UCDL Academy &copy; 2024 &middot; Online Academic Management System</p>
+    <p style="margin-top:4px">Developed for <span id="ftSpan">Kapilvastu Multiple Campus</span></p>
+  </footer>
+</div>
+
+<script>
+const DATA = {
+  en: {
+    title: 'Online Academic Roadmap',
+    sub: '15-step comprehensive academic workflow — UCDL Academy',
+    lblTotal: 'Total Steps', lblDone: 'Completed', lblLeft: 'Remaining', lblPct: 'Progress',
+    notesPlaceholder: 'Add your notes for this step…',
+    markDone: 'Mark as Completed',
+    alreadyDone: 'Completed',
+    toastDone: 'Step marked complete!',
+    toastUndone: 'Step unmarked.',
+    ft1: 'UCDL Academy © 2024 · Online Academic Management System',
+    ft2: 'Kapilvastu Multiple Campus',
+    resources: [
+      { name: 'Google Workspace for Education', desc: 'Official guides for Classroom, Meet and more', url: 'https://support.google.com/edu/', btn: 'Visit →' },
+      { name: 'UCDL Academy YouTube', desc: 'Free bilingual educational content', url: 'https://www.youtube.com/@UCDLAcademy', btn: 'Watch →' },
+      { name: 'Zoom Support Center', desc: 'Comprehensive Zoom tutorials and guides', url: 'https://support.zoom.com/', btn: 'Learn →' },
+      { name: 'Google Forms Help', desc: 'Create surveys, quizzes and assessments', url: 'https://support.google.com/docs/topic/9071391', btn: 'Explore →' },
+      { name: 'Online Teaching Best Practices', desc: 'Tips and strategies for effective online education', url: 'https://www.youtube.com/results?search_query=online+teaching+best+practices', btn: 'Search →' },
+      { name: 'Digital Literacy Resources', desc: 'Free courses on digital skills and technology', url: 'https://www.youtube.com/results?search_query=digital+literacy+free+course', btn: 'Explore →' },
+    ],
+    steps: [
+      { n:1, title:'Student Database', act:'Create year-wise student database', resp:'Department / Admin', tools:'Google Sheets', vids:[{t:'Google Sheets Full Course Tutorial (2023)',u:'5e6LWOvNq_8'},{t:'How to Use Google Sheets as a Database',u:'r687iPljs-k'}] },
+      { n:2, title:'Subject & Teacher Mapping', act:'Map subjects to responsible teachers', resp:'HOD / Teachers', tools:'Google Sheets', vids:[{t:'How to Use VLOOKUP in Google Sheets',u:'FI1LJpHBcOI'},{t:'How to Create a VLOOKUP in Google Sheets',u:'uTl6XDAwHyQ'}] },
+      { n:3, title:'Academic Calendar', act:'Create and share academic calendar', resp:'HOD', tools:'Google Calendar', vids:[{t:'Google Calendar & Classroom for Teachers',u:'vDUSmmRIPwc'},{t:'10 Google Calendar Hacks for Teachers',u:'xWqq7G951dc'}] },
+      { n:4, title:'Google Classroom Setup', act:'Create classroom for each year/section', resp:'Subject Teacher', tools:'Google Classroom', vids:[{t:'Google Classroom Ultimate Tutorial 2024',u:'QeJbAc36PcE'},{t:'Google Classroom Tutorial for Teachers',u:'oCA5L_6fUwA'}] },
+      { n:5, title:'Class Schedule', act:'Publish online class timetable', resp:'Department', tools:'Calendar / WhatsApp', vids:[{t:'Appointment Schedule in Google Calendar',u:'fs7mzWxrTOU'},{t:'Google Calendar — The Complete Course',u:'j62xYE--ywQ'}] },
+      { n:6, title:'Live Classes', act:'Conduct interactive live sessions', resp:'Teacher', tools:'Google Meet / Zoom', vids:[{t:'Google Meet for Teachers 2023',u:'mlJO-rDiBTg'},{t:'Teach Online with Zoom — Beginner Tutorial',u:'JlRfIUH8ENw'}] },
+      { n:7, title:'Attendance Tracking', act:'Record and monitor student attendance', resp:'Teacher', tools:'Google Forms / Meet', vids:[{t:'Free Google Form for Attendance Tracking',u:'vHzfJn2h3VU'},{t:'Track Attendance with Google Forms',u:'-orPYaNMAc4'}] },
+      { n:8, title:'Class Recordings', act:'Record and archive all sessions', resp:'Teacher', tools:'Meet / Google Drive', vids:[{t:'How to Record in Google Meet',u:'HTQ_aRG-xu8'},{t:'Find Google Meet Recordings in Drive',u:'W6n8AAty9sk'}] },
+      { n:9, title:'Course Materials', act:'Upload notes, slides and resources', resp:'Teacher', tools:'Classroom / Drive', vids:[{t:'Google Classroom Tutorial — Full Guide 2024',u:'6ZaUOqhuFtw'},{t:'Google Drive Organisation for Teachers',u:'ZckLp-K-xBg'}] },
+      { n:10, title:'Assignments', act:'Create assignments and collect submissions', resp:'Teacher / Student', tools:'Google Classroom', vids:[{t:'How to Create Assignments in Google Classroom',u:'hH_hc0dSuOs'},{t:'How to Submit an Assignment in Google Classroom',u:'JxoSbp5F9m8'}] },
+      { n:11, title:'Quizzes & Tests', act:'Conduct online assessments and auto-grade', resp:'Teacher', tools:'Google Forms', vids:[{t:'Google Forms Tutorial for Teachers (2023)',u:'mNdVjHy4tZ4'},{t:'Turn on Quiz Mode & Auto-Grading in Google Forms',u:'M9WeFGgbmIc'}] },
+      { n:12, title:'Academic Meetings', act:'Host monthly faculty coordination meetings', resp:'HOD + Faculty', tools:'Meet / Zoom', vids:[{t:'How to Use Zoom in 2023 — Step-by-Step Guide',u:'idQlUcO8Fe8'},{t:'Zoom for Teachers Tutorial',u:'uHd4Cff4Ha8'}] },
+      { n:13, title:'Student Interaction', act:'Webinars, guest talks and Q&A sessions', resp:'Department', tools:'Meet / Zoom', vids:[{t:'Zoom Webinar Tutorial: How to Host a Webinar',u:'PDttXMq6RQ8'},{t:'Google Meet Tutorial for Teachers',u:'0Qvm2-I9H40'}] },
+      { n:14, title:'Feedback & Evaluation', act:'Collect student and teacher feedback', resp:'Department', tools:'Google Forms', vids:[{t:'Google Forms Tutorial for Teachers',u:'mNdVjHy4tZ4'},{t:'Create Self-Grading Quizzes & Feedback Forms',u:'ayvhVM2BMv0'}] },
+      { n:15, title:'Monthly Reporting', act:'Generate and distribute monthly reports', resp:'Coordinator / HOD', tools:'Sheets / Docs', vids:[{t:'Google Sheets Charts Tutorial',u:'eyv7SSKnlgU'},{t:'Charts in Google Sheets — Data Visualisation',u:'B5_gRGEsD2Q'}] },
+    ]
+  },
+  hi: {
+    title: 'ऑनलाइन शैक्षिक रोडमैप',
+    sub: '१५-चरण व्यापक शैक्षिक कार्यप्रवाह — UCDL Academy',
+    lblTotal: 'कुल चरण', lblDone: 'पूर्ण', lblLeft: 'बचे', lblPct: 'प्रगति',
+    notesPlaceholder: 'इस चरण के लिए अपने नोट्स जोड़ें…',
+    markDone: 'पूर्ण के रूप में चिह्नित करें',
+    alreadyDone: 'पूर्ण ✓',
+    toastDone: 'चरण पूर्ण चिह्नित!',
+    toastUndone: 'चरण अचिह्नित।',
+    ft1: 'UCDL Academy © 2024 · ऑनलाइन शैक्षिक प्रबंधन प्रणाली',
+    ft2: 'कपिलवस्तु मल्टिपल कैम्पस',
+    resources: [
+      { name: 'Google Workspace for Education', desc: 'Classroom, Meet और अधिक के लिए आधिकारिक गाइड', url: 'https://support.google.com/edu/', btn: 'जाएँ →' },
+      { name: 'UCDL Academy YouTube', desc: 'निःशुल्क द्विभाषी शैक्षिक सामग्री', url: 'https://www.youtube.com/@UCDLAcademy', btn: 'देखें →' },
+      { name: 'Zoom Support Center', desc: 'Zoom ट्यूटोरियल और गाइड', url: 'https://support.zoom.com/', btn: 'सीखें →' },
+      { name: 'Google Forms Help', desc: 'सर्वेक्षण, क्विज और मूल्यांकन बनाएँ', url: 'https://support.google.com/docs/topic/9071391', btn: 'अन्वेषण →' },
+      { name: 'Online Teaching Best Practices', desc: 'प्रभावी ऑनलाइन शिक्षा के लिए सुझाव', url: 'https://www.youtube.com/results?search_query=online+teaching+best+practices', btn: 'खोजें →' },
+      { name: 'Digital Literacy Resources', desc: 'डिजिटल कौशल और तकनीक पर निःशुल्क पाठ्यक्रम', url: 'https://www.youtube.com/results?search_query=digital+literacy+free+course', btn: 'अन्वेषण →' },
+    ],
+    steps: [
+      { n:1, title:'छात्र डेटाबेस', act:'वर्ष-वार छात्र डेटाबेस बनाएँ', resp:'विभाग / प्रशासन', tools:'Google Sheets', vids:[{t:'Google Sheets पूर्ण ट्यूटोरियल हिंदी में (2023)',u:'DSQlsvB8J0E'},{t:'Google Sheets Full Tutorial हिंदी में',u:'Ub1NgVy2CHY'}] },
+      { n:2, title:'विषय और शिक्षक मैपिंग', act:'विषयों को जिम्मेदार शिक्षकों से जोड़ें', resp:'HOD / शिक्षक', tools:'Google Sheets', vids:[{t:'VLOOKUP in Google Sheets हिंदी में',u:'indxLt9LmW8'},{t:'Excel VLOOKUP Masterclass हिंदी में',u:'3I0IDBLwQ8w'}] },
+      { n:3, title:'शैक्षिक कैलेंडर', act:'शैक्षिक कैलेंडर बनाएँ और साझा करें', resp:'HOD', tools:'Google Calendar', vids:[{t:'Google Calendar Management Course हिंदी में',u:'dLKPBSov2F4'},{t:'How to Use Google Calendar in Hindi',u:'iKRdoLJbpvM'}] },
+      { n:4, title:'Google Classroom सेटअप', act:'प्रत्येक वर्ष/सेक्शन के लिए क्लासरूम बनाएँ', resp:'विषय शिक्षक', tools:'Google Classroom', vids:[{t:'How To Use Google Classroom in Hindi/Urdu',u:'DHu4Ra6jy0s'},{t:'Google Classroom Ultimate Tutorial 2024',u:'QeJbAc36PcE'}] },
+      { n:5, title:'क्लास शेड्यूल', act:'ऑनलाइन क्लास टाइमटेबल प्रकाशित करें', resp:'विभाग', tools:'Calendar / WhatsApp', vids:[{t:'Google Calendar Management Course हिंदी में',u:'dLKPBSov2F4'},{t:'How to Use Google Calendar in Hindi',u:'iKRdoLJbpvM'}] },
+      { n:6, title:'लाइव क्लास', act:'इंटरएक्टिव लाइव सत्र संचालित करें', resp:'शिक्षक', tools:'Google Meet / Zoom', vids:[{t:'Google Meet Expert Full Tutorial Hindi 2025',u:'Bw1izUSG0B4'},{t:'Zoom for Online Classes in Hindi/Urdu',u:'481uzJjLrx4'}] },
+      { n:7, title:'उपस्थिति ट्रैकिंग', act:'छात्र उपस्थिति रिकॉर्ड और मॉनिटर करें', resp:'शिक्षक', tools:'Google Forms / Meet', vids:[{t:'Hindi Google Form Quiz & Attendance',u:'5GJNH25k_SI'},{t:'Google Form Quiz Assessments Hindi',u:'t821EDjsIbA'}] },
+      { n:8, title:'क्लास रिकॉर्डिंग', act:'सभी सत्र रिकॉर्ड और संग्रहीत करें', resp:'शिक्षक', tools:'Meet / Google Drive', vids:[{t:'How to Record Meetings in Google Meet [Hindi]',u:'6lMQe8ZQwdA'},{t:'Record Google Meet Video Call Hindi',u:'P5KFxiD7Pg8'}] },
+      { n:9, title:'पाठ्य सामग्री', act:'नोट्स, स्लाइड और संसाधन अपलोड करें', resp:'शिक्षक', tools:'Classroom / Drive', vids:[{t:'Google Drive Tutorial in Hindi',u:'40PIbb5pmsk'},{t:'Learn Google Drive from Scratch Hindi',u:'b0N_veB6Bsk'}] },
+      { n:10, title:'असाइनमेंट', act:'असाइनमेंट बनाएँ और सबमिशन एकत्र करें', resp:'शिक्षक / छात्र', tools:'Google Classroom', vids:[{t:'How To Use Google Classroom in Hindi/Urdu',u:'DHu4Ra6jy0s'},{t:'Google Classroom Ultimate Tutorial 2024',u:'QeJbAc36PcE'}] },
+      { n:11, title:'क्विज और टेस्ट', act:'ऑनलाइन मूल्यांकन और ऑटो-ग्रेडिंग करें', resp:'शिक्षक', tools:'Google Forms', vids:[{t:'Google Forms Quiz with Auto Grading Hindi',u:'qm3BRJttyJM'},{t:'Hindi Google Form Quiz & Attendance',u:'5GJNH25k_SI'}] },
+      { n:12, title:'शैक्षिक बैठकें', act:'मासिक संकाय समन्वय बैठक आयोजित करें', resp:'HOD + संकाय', tools:'Meet / Zoom', vids:[{t:'Zoom for Online Classes in Hindi/Urdu',u:'481uzJjLrx4'},{t:'Simple Video Lecture using Zoom Hindi',u:'iMQQyug6hjg'}] },
+      { n:13, title:'छात्र इंटरैक्शन', act:'वेबिनार, गेस्ट टॉक और Q&A सत्र', resp:'विभाग', tools:'Meet / Zoom', vids:[{t:'Google Meet Expert Full Tutorial Hindi 2025',u:'Bw1izUSG0B4'},{t:'Google Meet Beginner to Master Hindi',u:'uRqaGXIqY2g'}] },
+      { n:14, title:'फीडबैक और मूल्यांकन', act:'छात्र और शिक्षक फीडबैक एकत्र करें', resp:'विभाग', tools:'Google Forms', vids:[{t:'Hindi Google Form Quiz & Attendance',u:'5GJNH25k_SI'},{t:'Google Form Quiz Assessments Hindi',u:'t821EDjsIbA'}] },
+      { n:15, title:'मासिक रिपोर्टिंग', act:'मासिक रिपोर्ट तैयार और वितरित करें', resp:'समन्वयक / HOD', tools:'Sheets / Docs', vids:[{t:'Create Charts in Google Sheet Hindi',u:'lWgQZmy7ZTM'},{t:'Data Interpretation in Google Sheets Hindi',u:'OslRvsyAmlQ'}] },
+    ]
+  },
+  ne: {
+    title: 'अनलाइन शैक्षिक रोडम्याप',
+    sub: '१५-चरण व्यापक शैक्षिक कार्यप्रवाह — UCDL Academy',
+    lblTotal: 'कुल चरण', lblDone: 'पूर्ण भए', lblLeft: 'बाँकी', lblPct: 'प्रगति',
+    notesPlaceholder: 'यस चरणका लागि नोट थप्नुहोस्…',
+    markDone: 'पूर्ण भयो भनी चिन्ह लगाउनुहोस्',
+    alreadyDone: 'पूर्ण भयो ✓',
+    toastDone: 'चरण पूर्ण भएको चिन्ह लगाइयो!',
+    toastUndone: 'चरण अचिन्हित गरियो।',
+    ft1: 'UCDL Academy © 2024 · अनलाइन शैक्षिक व्यवस्थापन प्रणाली',
+    ft2: 'कपिलवस्तु मल्टिपल क्याम्पस',
+    resources: [
+      { name: 'Google Workspace शिक्षाको लागि', desc: 'Classroom, Meet र थपको आधिकारिक गाइड', url: 'https://support.google.com/edu/', btn: 'जानुहोस् →' },
+      { name: 'UCDL Academy YouTube', desc: 'निःशुल्क द्विभाषिक शैक्षिक सामग्री', url: 'https://www.youtube.com/@UCDLAcademy', btn: 'हेर्नुहोस् →' },
+      { name: 'Zoom सहायता केन्द्र', desc: 'Zoom ट्यूटोरियल र गाइड', url: 'https://support.zoom.com/', btn: 'सिक्नुहोस् →' },
+      { name: 'Google Forms सहायता', desc: 'सर्वेक्षण, क्विज र मूल्यांकन बनाउनुहोस्', url: 'https://support.google.com/docs/topic/9071391', btn: 'अन्वेषण →' },
+      { name: 'अनलाइन शिक्षण उत्तम अभ्यास', desc: 'प्रभावकारी अनलाइन शिक्षाका सुझाव', url: 'https://www.youtube.com/results?search_query=online+teaching+best+practices', btn: 'खोज्नुहोस् →' },
+      { name: 'डिजिटल साक्षरता स्रोत', desc: 'डिजिटल सीपमा निःशुल्क पाठ्यक्रम', url: 'https://www.youtube.com/results?search_query=digital+literacy+free+course', btn: 'अन्वेषण →' },
+    ],
+    steps: [
+      { n:1, title:'विद्यार्थी डाटाबेस', act:'वर्ष-अनुसार विद्यार्थी डाटाबेस बनाउने', resp:'विभाग / प्रशासन', tools:'Google Sheets', vids:[{t:'Google Sheets पूर्ण ट्यूटोरियल (2023)',u:'5e6LWOvNq_8'},{t:'Sheets लाई डाटाबेसको रूपमा प्रयोग',u:'r687iPljs-k'}] },
+      { n:2, title:'विषय र शिक्षक म्यापिङ', act:'विषय र शिक्षक जोड्ने', resp:'HOD / शिक्षकहरु', tools:'Google Sheets', vids:[{t:'Google Sheets मा VLOOKUP प्रयोग',u:'FI1LJpHBcOI'},{t:'VLOOKUP Sheets मा बनाउने तरिका',u:'uTl6XDAwHyQ'}] },
+      { n:3, title:'शैक्षिक पञ्जिका', act:'शैक्षिक पञ्जिका बनाउने र साझा गर्ने', resp:'HOD', tools:'Google Calendar', vids:[{t:'शिक्षकहरुको लागि Google Calendar',u:'vDUSmmRIPwc'},{t:'शिक्षकहरुको लागि Calendar ह्याक्स',u:'xWqq7G951dc'}] },
+      { n:4, title:'Google Classroom स्थापना', act:'प्रत्येक वर्षको Classroom बनाउने', resp:'विषय शिक्षक', tools:'Google Classroom', vids:[{t:'Google Classroom अल्टिमेट ट्यूटोरियल 2024',u:'QeJbAc36PcE'},{t:'शिक्षकहरुका लागि Classroom ट्यूटोरियल',u:'oCA5L_6fUwA'}] },
+      { n:5, title:'क्लास समय तालिका', act:'अनलाइन क्लास समय प्रकाशित गर्ने', resp:'विभाग', tools:'Calendar / WhatsApp', vids:[{t:'Google Calendar मा समय तालिका बनाउने',u:'fs7mzWxrTOU'},{t:'Google Calendar — सम्पूर्ण कोर्स',u:'j62xYE--ywQ'}] },
+      { n:6, title:'लाइभ क्लास', act:'अन्तरक्रियात्मक लाइभ सत्र सञ्चालन', resp:'शिक्षक', tools:'Google Meet / Zoom', vids:[{t:'शिक्षकहरुका लागि Google Meet 2023',u:'mlJO-rDiBTg'},{t:'Zoom बाट अनलाइन सिकाउने',u:'JlRfIUH8ENw'}] },
+      { n:7, title:'उपस्थिति ट्र्याकिङ', act:'विद्यार्थी उपस्थिति रेकर्ड र अनुगमन', resp:'शिक्षक', tools:'Google Forms / Meet', vids:[{t:'Google Form बाट उपस्थिति ट्र्याकिङ',u:'vHzfJn2h3VU'},{t:'Forms बाट उपस्थिति रेकर्ड',u:'-orPYaNMAc4'}] },
+      { n:8, title:'क्लास रेकर्डिङ', act:'सबै सत्र रेकर्ड र अभिलेख राख्ने', resp:'शिक्षक', tools:'Meet / Google Drive', vids:[{t:'Google Meet मा रेकर्ड गर्ने तरिका',u:'HTQ_aRG-xu8'},{t:'Drive मा Meet रेकर्डिङ खोज्ने',u:'W6n8AAty9sk'}] },
+      { n:9, title:'पाठ्यसामग्री', act:'नोट, स्लाइड र स्रोत अपलोड गर्ने', resp:'शिक्षक', tools:'Classroom / Drive', vids:[{t:'Google Classroom सम्पूर्ण गाइड 2024',u:'6ZaUOqhuFtw'},{t:'शिक्षकहरुको Drive व्यवस्थित गर्ने',u:'ZckLp-K-xBg'}] },
+      { n:10, title:'कार्यभार', act:'कार्यभार बनाउने र प्रस्तुति संकलन गर्ने', resp:'शिक्षक / विद्यार्थी', tools:'Google Classroom', vids:[{t:'Classroom मा Assignment कसरी बनाउने',u:'hH_hc0dSuOs'},{t:'Classroom मा Assignment कसरी पेस गर्ने',u:'JxoSbp5F9m8'}] },
+      { n:11, title:'क्विज र परीक्षा', act:'अनलाइन मूल्यांकन र स्वचालित ग्रेडिङ', resp:'शिक्षक', tools:'Google Forms', vids:[{t:'शिक्षकहरुको लागि Google Forms (2023)',u:'mNdVjHy4tZ4'},{t:'Google Forms क्विज मोड र Auto-Grading',u:'M9WeFGgbmIc'}] },
+      { n:12, title:'शैक्षिक बैठकहरु', act:'मासिक संकाय समन्वय बैठक', resp:'HOD + संकाय', tools:'Meet / Zoom', vids:[{t:'Zoom प्रयोग गर्ने तरिका 2023',u:'idQlUcO8Fe8'},{t:'शिक्षकहरुको लागि Zoom ट्यूटोरियल',u:'uHd4Cff4Ha8'}] },
+      { n:13, title:'विद्यार्थी अन्तरक्रिया', act:'वेबिनार, अतिथि वक्ता र प्रश्नोत्तर सत्र', resp:'विभाग', tools:'Meet / Zoom', vids:[{t:'Zoom वेबिनार ट्यूटोरियल',u:'PDttXMq6RQ8'},{t:'शिक्षकहरुको लागि Google Meet ट्यूटोरियल',u:'0Qvm2-I9H40'}] },
+      { n:14, title:'प्रतिक्रिया र मूल्यांकन', act:'विद्यार्थी र शिक्षकको प्रतिक्रिया संकलन', resp:'विभाग', tools:'Google Forms', vids:[{t:'Google Forms पूर्ण ट्यूटोरियल',u:'mNdVjHy4tZ4'},{t:'स्वचालित क्विज र प्रतिक्रिया फॉर्म',u:'ayvhVM2BMv0'}] },
+      { n:15, title:'मासिक रिपोर्टिङ', act:'मासिक रिपोर्ट तयार र वितरण गर्ने', resp:'समन्वयकारी / HOD', tools:'Sheets / Docs', vids:[{t:'Google Sheets चार्ट ट्यूटोरियल',u:'eyv7SSKnlgU'},{t:'Sheets मा डाटा भिजुअलाइजेसन',u:'B5_gRGEsD2Q'}] },
+    ]
+  }
+};
+
+let lang = 'en';
+const done = new Set();
+const notes = {};
+
+function setLang(l) {
+  lang = l;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === l));
+  render();
+}
+
+function updateStats() {
+  const total = 15, d = done.size, left = total - d, pct = Math.round(d / total * 100);
+  document.getElementById('sDone').textContent = d;
+  document.getElementById('sLeft').textContent = left;
+  document.getElementById('sPct').textContent = pct + '%';
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+function openModal(vid, title) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalFrame').src = '';
+  document.getElementById('modal').classList.add('open');
+  setTimeout(() => { document.getElementById('modalFrame').src = 'https://www.youtube.com/embed/' + vid + '?autoplay=1&rel=0'; }, 200);
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  setTimeout(() => { document.getElementById('modalFrame').src = ''; }, 350);
+}
+
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+}
+
+function render() {
+  const L = DATA[lang];
+  document.getElementById('heroTitle').textContent = L.title;
+  document.getElementById('heroSub').textContent = L.sub;
+  document.getElementById('sLblTotal').textContent = L.lblTotal;
+  document.getElementById('sLblDone').textContent = L.lblDone;
+  document.getElementById('sLblLeft').textContent = L.lblLeft;
+  document.getElementById('sLblPct').textContent = L.lblPct;
+  document.getElementById('ftMain').textContent = L.ft1;
+  document.getElementById('ftSpan').textContent = L.ft2;
+
+  const sc = document.getElementById('stepsContainer');
+  sc.innerHTML = '';
+  L.steps.forEach((s, i) => {
+    const isDone = done.has(s.n);
+    const row = document.createElement('div');
+    row.className = 'step-row';
+
+    const vidsHtml = s.vids.map(v => `
+      <button class="vid-btn" onclick="event.stopPropagation();openModal('${v.u}','${v.t.replace(/'/g, "\'")}')">
+        <div class="vid-ico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M7.76 3.1c.5 0 .98.14 1.4.39l10.37 6.12c1.32.78 1.76 2.48.98 3.8-.24.41-.58.75-.98 1l-10.37 6.11c-1.32.78-3.02.34-3.8-.98-.25-.43-.38-.92-.38-1.42V5.89c0-1.53 1.24-2.78 2.78-2.78zm-1 15.02c0 .17.05.34.14.5.27.46.87.62 1.33.34l10.36-6.11c.14-.08.26-.2.35-.35.27-.47.12-1.07-.35-1.35L8.26 5.04c-.15-.09-.32-.13-.5-.13-.54 0-.98.44-.98.98v12.23z" fill="currentColor"/></svg></div>
+        <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${v.t}</span>
+      </button>
+    `).join('');
+
+    row.innerHTML = `
+      <div class="tl">
+        <div class="tl-node ${isDone ? 'done' : ''}" id="node${s.n}">
+          <span style="display:${isDone ? 'none' : 'inline'}">${s.n}</span>
+          <span style="display:${isDone ? 'inline' : 'none'};"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M19.3 5.9c.35-.35.92-.35 1.27 0 .35.35.35.92 0 1.27L9.66 18.1c-.35.35-.92.35-1.27 0l-4.96-4.96c-.35-.35-.35-.92 0-1.27.35-.35.92-.35 1.27 0l4.33 4.33L19.3 5.9z" fill="currentColor"/></svg></span>
+        </div>
+        ${i < L.steps.length - 1 ? '<div class="tl-line"></div>' : ''}
+      </div>
+      <div class="step-card ${isDone ? 'done-card' : ''}" id="card${s.n}" tabindex="0" role="button" aria-expanded="false">
+        <div class="card-head" onclick="toggleCard(${s.n})">
+          <div class="step-titles">
+            <div class="step-name">${s.title}</div>
+            <div class="step-sub">${s.act}</div>
+          </div>
+          <div class="step-badge">${s.n}/15</div>
+          <div class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6.34 9.34c.39-.39 1.02-.39 1.41 0L12 13.59l4.24-4.25c.39-.39 1.02-.39 1.41 0 .39.39.39 1.02 0 1.41l-4.95 4.95c-.39.39-1.02.39-1.41 0l-4.95-4.95a.996.996 0 0 1 0-1.41z" fill="currentColor"/></svg></div>
+        </div>
+        <div class="card-body">
+          <div class="card-inner">
+            <div class="meta-row">
+              <div class="meta-box">
+                <div class="meta-lbl">Responsible</div>
+                <div class="meta-val">${s.resp}</div>
+              </div>
+              <div class="meta-box">
+                <div class="meta-lbl">Tools</div>
+                <div>${s.tools.split('/').map(t => '<span class="tool-pill">' + t.trim() + '</span>').join(' ')}</div>
+              </div>
+            </div>
+            <div style="margin-bottom:12px;">
+              <div class="section-lbl">Learning videos</div>
+              ${vidsHtml}
+            </div>
+            <div style="margin-bottom:12px;">
+              <div class="section-lbl">Notes</div>
+              <textarea class="notes-ta" placeholder="${L.notesPlaceholder}" oninput="notes[${s.n}]=this.value">${notes[s.n] || ''}</textarea>
+            </div>
+            <div class="check-row ${isDone ? 'checked' : ''}" id="chk${s.n}" onclick="toggleDone(${s.n},event)">
+              <div class="check-box">${isDone ? '<svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M19.3 5.9c.35-.35.92-.35 1.27 0 .35.35.35.92 0 1.27L9.66 18.1c-.35.35-.92.35-1.27 0l-4.96-4.96c-.35-.35-.35-.92 0-1.27.35-.35.92-.35 1.27 0l4.33 4.33L19.3 5.9z" fill="currentColor"/></svg>' : ''}</div>
+              <span class="check-lbl">${isDone ? L.alreadyDone : L.markDone}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    sc.appendChild(row);
+  });
+
+  const rg = document.getElementById('resGrid');
+  rg.innerHTML = L.resources.map(r => `
+    <div class="res-card">
+      <div class="res-name">${r.name}</div>
+      <div class="res-desc">${r.desc}</div>
+      <a class="res-link" href="${r.url}" target="_blank" rel="noopener">${r.btn}</a>
+    </div>
+  `).join('');
+
+  updateStats();
+}
+
+function toggleCard(n) {
+  const c = document.getElementById('card' + n);
+  const open = c.classList.toggle('open');
+  c.setAttribute('aria-expanded', open);
+}
+
+function toggleDone(n, ev) {
+  ev.stopPropagation();
+  const L = DATA[lang];
+  const checked = !done.has(n);
+  const chkRow = document.getElementById('chk' + n);
+  const card = document.getElementById('card' + n);
+  const node = document.getElementById('node' + n);
+  const chkBox = chkRow.querySelector('.check-box');
+  const chkLbl = chkRow.querySelector('.check-lbl');
+  const numSpan = node.querySelector('span:first-child');
+  const checkSpan = node.querySelector('span:last-child');
+
+  if (checked) {
+    done.add(n);
+    chkRow.classList.add('checked');
+    chkBox.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M19.3 5.9c.35-.35.92-.35 1.27 0 .35.35.35.92 0 1.27L9.66 18.1c-.35.35-.92.35-1.27 0l-4.96-4.96c-.35-.35-.35-.92 0-1.27.35-.35.92-.35 1.27 0l4.33 4.33L19.3 5.9z" fill="currentColor"/></svg>';
+    chkLbl.textContent = L.alreadyDone;
+    card.classList.add('done-card');
+    node.classList.add('done');
+    numSpan.style.display = 'none';
+    checkSpan.style.display = 'inline';
+    toast(L.toastDone);
+  } else {
+    done.delete(n);
+    chkRow.classList.remove('checked');
+    chkBox.innerHTML = '';
+    chkLbl.textContent = L.markDone;
+    card.classList.remove('done-card');
+    node.classList.remove('done');
+    numSpan.style.display = 'inline';
+    checkSpan.style.display = 'none';
+    toast(L.toastUndone);
+  }
+  updateStats();
+}
+
+render();
+</script>
+</body>
+</html>
