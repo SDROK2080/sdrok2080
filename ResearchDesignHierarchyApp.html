@@ -5,1153 +5,1080 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Research Design Hierarchy - SMART Learning App</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg-deep: #0f0f1a;
+            --bg-card: #1a1a2e;
+            --bg-raised: #16213e;
+            --accent: #f39c12;
+            --accent-hover: #e67e22;
+            --text-primary: #f0f0f5;
+            --text-secondary: #b0b0c0;
+            --text-muted: #6a6a80;
+            --border: rgba(255,255,255,0.08);
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --shadow: 0 8px 32px rgba(0,0,0,0.35);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-deep) 0%, #1a1030 50%, var(--bg-deep) 100%);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             line-height: 1.6;
             min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .container {
-            max-width: 1200px;
+        .app-container {
+            max-width: 960px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 24px 16px;
         }
 
-        /* Header */
-        header {
-            background: linear-gradient(135deg, #0f3460 0%, #1a5f7a 100%);
-            padding: 30px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            border-left: 5px solid #f39c12;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        /* ===== HEADER ===== */
+        .app-header {
+            text-align: center;
+            padding: 32px 20px;
+            margin-bottom: 24px;
+            position: relative;
         }
-
-        header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            color: #f39c12;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        .app-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(243,156,18,0.08), rgba(230,126,34,0.04));
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            z-index: -1;
         }
-
-        header p {
-            color: #e0e0e0;
-            font-size: 1.1em;
-            margin-bottom: 5px;
-        }
-
-        .author-credit {
-            background: rgba(243, 156, 18, 0.15);
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            border-left: 3px solid #f39c12;
-            font-size: 0.95em;
-        }
-
-        /* Language Toggle */
-        .language-toggle {
+        .app-header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 8px;
             display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
+            align-items: center;
             justify-content: center;
+            gap: 12px;
+            color: var(--accent);
+            text-shadow: 0 2px 12px rgba(243,156,18,0.25);
         }
-
-        .lang-btn {
+        .app-header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .author-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
             padding: 10px 20px;
-            border: 2px solid #f39c12;
-            background: transparent;
-            color: #f39c12;
-            border-radius: 6px;
+            background: rgba(243,156,18,0.1);
+            border: 1px solid rgba(243,156,18,0.2);
+            border-radius: 24px;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            backdrop-filter: blur(8px);
+        }
+
+        /* ===== LANGUAGE TOGGLE ===== */
+        .lang-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        .lang-pill {
+            padding: 8px 20px;
+            border-radius: 24px;
+            border: 1.5px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            font-weight: 600;
             cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
+            transition: all var(--transition-fast);
+            backdrop-filter: blur(8px);
         }
-
-        .lang-btn.active {
-            background: #f39c12;
+        .lang-pill:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-1px);
+        }
+        .lang-pill.active {
+            background: var(--accent);
             color: #1a1a2e;
+            border-color: var(--accent);
+            box-shadow: 0 4px 16px rgba(243,156,18,0.3);
         }
 
-        .lang-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+        /* ===== PROGRESS ===== */
+        .progress-wrap {
+            margin-bottom: 28px;
+            padding: 16px 20px;
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
         }
-
-        /* Progress Bar */
-        .progress-section {
-            background: rgba(243, 156, 18, 0.1);
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            border-left: 4px solid #f39c12;
-        }
-
-        .progress-label {
+        .progress-meta {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
-            font-weight: bold;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 500;
         }
-
-        .progress-bar {
-            width: 100%;
-            height: 10px;
-            background: rgba(224, 224, 224, 0.2);
-            border-radius: 5px;
+        .progress-track {
+            height: 6px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 3px;
             overflow: hidden;
         }
-
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #f39c12, #e67e22);
-            border-radius: 5px;
-            transition: width 0.3s ease;
+            background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+            border-radius: 3px;
+            width: 0%;
+            transition: width var(--transition-slow);
+            box-shadow: 0 0 12px rgba(243,156,18,0.3);
         }
 
-        /* Navigation */
-        .nav-tabs {
+        /* ===== NAVIGATION ===== */
+        .nav-bar {
             display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            justify-content: center;
+            gap: 8px;
+            margin-bottom: 28px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: none;
         }
-
-        .nav-btn {
-            padding: 12px 20px;
-            background: rgba(243, 156, 18, 0.1);
-            border: 2px solid #f39c12;
-            color: #f39c12;
-            border-radius: 6px;
+        .nav-bar::-webkit-scrollbar { display: none; }
+        .nav-tab {
+            flex-shrink: 0;
+            padding: 10px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid transparent;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
             cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            min-width: 80px;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            backdrop-filter: blur(8px);
         }
-
-        .nav-btn:hover,
-        .nav-btn.active {
-            background: #f39c12;
+        .nav-tab:hover {
+            background: var(--bg-raised);
+            color: var(--text-primary);
+            border-color: var(--border);
+        }
+        .nav-tab.active {
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
             color: #1a1a2e;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+            border-color: transparent;
+            box-shadow: 0 4px 16px rgba(243,156,18,0.25);
         }
+        .nav-tab svg { width: 16px; height: 16px; }
 
-        /* Content Sections */
-        .content-section {
+        /* ===== SECTIONS ===== */
+        .section {
             display: none;
-            animation: fadeIn 0.5s ease;
+            animation: fadeUp 0.45s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
-        .content-section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        .section.active { display: block; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Step Cards */
-        .hierarchy-container {
+        /* ===== CARDS ===== */
+        .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px;
         }
-
         .step-card {
-            background: linear-gradient(135deg, rgba(15, 52, 96, 0.8), rgba(26, 95, 122, 0.8));
-            padding: 25px;
-            border-radius: 12px;
-            border-left: 5px solid #f39c12;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            transition: all var(--transition-normal);
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
-
+        .step-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
         .step-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 32px rgba(243, 156, 18, 0.2);
-            border-left-color: #e67e22;
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+            border-color: rgba(243,156,18,0.25);
         }
-
-        .step-number {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #f39c12, #e67e22);
-            color: white;
-            border-radius: 50%;
-            display: flex;
+        .step-card:hover::before { opacity: 1; }
+        .step-num {
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            font-size: 1.5em;
-            margin-bottom: 15px;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(243,156,18,0.25);
+        }
+        .step-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+        .step-card p {
+            font-size: 0.86rem;
+            color: var(--text-secondary);
+            line-height: 1.55;
         }
 
-        .step-title {
-            font-size: 1.4em;
-            color: #f39c12;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-
-        .step-description {
-            color: #b0b0b0;
-            margin-bottom: 15px;
-            font-size: 0.95em;
-        }
-
-        .step-detail {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 15px;
-            border-radius: 6px;
-            margin-top: 15px;
-            font-size: 0.9em;
-            border-left: 3px solid #f39c12;
-        }
-
-        /* Media Section */
-        .media-section {
-            background: rgba(243, 156, 18, 0.1);
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-            border-left: 4px solid #f39c12;
-        }
-
-        .media-header {
-            font-size: 1.2em;
-            color: #f39c12;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .video-link,
-        .pdf-link {
-            display: inline-block;
-            padding: 10px 20px;
-            background: rgba(243, 156, 18, 0.2);
-            color: #f39c12;
-            border-radius: 6px;
-            margin: 5px 5px 5px 0;
-            text-decoration: none;
-            border: 1px solid #f39c12;
-            transition: all 0.3s ease;
-            font-size: 0.9em;
-        }
-
-        .video-link:hover,
-        .pdf-link:hover {
-            background: #f39c12;
-            color: #1a1a2e;
-            transform: translateY(-2px);
-        }
-
-        /* Detail View */
-        .detail-container {
-            background: linear-gradient(135deg, rgba(15, 52, 96, 0.6), rgba(26, 95, 122, 0.6));
-            padding: 30px;
-            border-radius: 12px;
-            border-left: 5px solid #f39c12;
-            margin-bottom: 30px;
-        }
-
-        .detail-title {
-            font-size: 2em;
-            color: #f39c12;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        .detail-content {
-            color: #e0e0e0;
-            margin-bottom: 20px;
-            line-height: 1.8;
-        }
-
-        .detail-list {
-            list-style: none;
-            margin: 15px 0;
-        }
-
-        .detail-list li {
-            padding: 10px 0;
-            padding-left: 25px;
-            position: relative;
-            color: #b0b0b0;
-        }
-
-        .detail-list li:before {
-            content: "▸";
-            position: absolute;
-            left: 0;
-            color: #f39c12;
-            font-weight: bold;
-        }
-
-        /* Quiz Section */
-        .quiz-section {
-            background: rgba(243, 156, 18, 0.1);
-            padding: 25px;
-            border-radius: 12px;
-            border-left: 4px solid #f39c12;
-            margin-bottom: 30px;
-        }
-
-        .quiz-question {
-            margin-bottom: 20px;
-        }
-
-        .quiz-question label {
+        /* ===== MEDIA BUTTONS ===== */
+        .media-bar {
             display: flex;
-            align-items: center;
-            padding: 10px;
-            margin: 5px 0;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .quiz-question label:hover {
-            background: rgba(243, 156, 18, 0.2);
-        }
-
-        .quiz-question input[type="radio"] {
-            margin-right: 10px;
-            cursor: pointer;
-        }
-
-        .quiz-btn {
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #f39c12, #e67e22);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1em;
-            transition: all 0.3s ease;
-        }
-
-        .quiz-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
-        }
-
-        /* Hierarchy Diagram */
-        .hierarchy-diagram {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 30px;
-            border-radius: 12px;
-            margin: 30px 0;
-            overflow-x: auto;
-        }
-
-        .hierarchy-flow {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-            min-width: max-content;
-            padding: 20px 0;
+            gap: 8px;
+            margin-top: 16px;
             flex-wrap: wrap;
         }
-
-        .hierarchy-item {
-            text-align: center;
-            flex: 0 0 auto;
+        .btn-sm {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.04);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            text-decoration: none;
         }
+        .btn-sm:hover {
+            background: var(--accent);
+            color: #1a1a2e;
+            border-color: var(--accent);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(243,156,18,0.2);
+        }
+        .btn-sm svg { width: 14px; height: 14px; }
 
-        .hierarchy-circle {
-            width: 80px;
-            height: 80px;
+        /* ===== DETAIL CARDS ===== */
+        .detail-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .detail-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 22px;
+            transition: all var(--transition-fast);
+        }
+        .detail-card:hover {
+            border-color: rgba(243,156,18,0.15);
+        }
+        .detail-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-primary);
+        }
+        .detail-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            margin-bottom: 14px;
+        }
+        .detail-card ul {
+            list-style: none;
+            padding: 0;
+        }
+        .detail-card li {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            padding: 6px 0 6px 22px;
+            position: relative;
+        }
+        .detail-card li::before {
+            content: "";
+            position: absolute;
+            left: 0; top: 13px;
+            width: 7px; height: 7px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #f39c12, #e67e22);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: white;
-            font-size: 1.2em;
-            margin: 0 auto 10px;
-        }
-
-        .hierarchy-label {
-            font-size: 0.9em;
-            color: #f39c12;
-            font-weight: bold;
-        }
-
-        .hierarchy-arrow {
-            font-size: 2em;
-            color: #f39c12;
-        }
-
-        /* Checklist */
-        .checklist-item {
-            padding: 12px;
-            margin: 8px 0;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .checklist-item:hover {
-            background: rgba(243, 156, 18, 0.1);
-        }
-
-        .checklist-item input[type="checkbox"] {
-            margin-right: 15px;
-            cursor: pointer;
-            width: 18px;
-            height: 18px;
-        }
-
-        .checklist-item.completed {
+            background: var(--accent);
             opacity: 0.7;
         }
 
-        .checklist-item.completed label {
-            text-decoration: line-through;
-            color: #888;
+        /* ===== HIERARCHY FLOW ===== */
+        .flow-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding: 24px 0;
         }
-
-        /* Footer */
-        footer {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 20px;
-            border-radius: 8px;
+        .flow-node {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: var(--bg-raised);
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 700;
             text-align: center;
-            margin-top: 40px;
-            border-top: 2px solid #f39c12;
-            font-size: 0.9em;
+            line-height: 1.25;
+            color: var(--text-secondary);
+            transition: all var(--transition-normal);
+            cursor: default;
+        }
+        .flow-node:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: scale(1.08);
+            box-shadow: 0 0 20px rgba(243,156,18,0.15);
+        }
+        .flow-arrow {
+            color: var(--accent);
+            font-size: 1.4rem;
+            opacity: 0.6;
         }
 
-        .footer-link {
-            color: #f39c12;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .footer-link:hover {
-            text-decoration: underline;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
+        /* ===== MODAL ===== */
+        .modal-overlay {
             position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             z-index: 1000;
-            left: 0;
-            top: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition-normal);
+        }
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .modal-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
             width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            animation: fadeIn 0.3s ease;
+            max-width: 680px;
+            max-height: 85vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transform: scale(0.92) translateY(20px);
+            transition: transform var(--transition-normal);
+            box-shadow: var(--shadow);
         }
-
-        .modal-content {
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            margin: 5% auto;
-            padding: 30px;
-            border: 2px solid #f39c12;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 700px;
-            max-height: 80vh;
-            overflow-y: auto;
+        .modal-overlay.open .modal-box {
+            transform: scale(1) translateY(0);
         }
-
-        .close {
-            color: #f39c12;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 22px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(255,255,255,0.02);
+        }
+        .modal-header h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .modal-close {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255,255,255,0.06);
+            color: var(--text-secondary);
             cursor: pointer;
-            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+        }
+        .modal-close:hover {
+            background: var(--danger);
+            color: #fff;
+            transform: rotate(90deg);
+        }
+        .modal-body {
+            padding: 22px;
+            overflow-y: auto;
+            flex: 1;
+        }
+        .video-frame {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #0a0a15, #1a1030);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .video-frame .play-btn {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 32px rgba(243,156,18,0.35);
+            cursor: pointer;
+            transition: transform var(--transition-fast);
+        }
+        .video-frame .play-btn:hover { transform: scale(1.1); }
+        .video-frame .play-btn svg { width: 24px; height: 24px; color: #fff; margin-left: 3px; }
+        .pdf-preview {
+            width: 100%;
+            aspect-ratio: 4/3;
+            background: var(--bg-raised);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 14px;
+            color: var(--text-secondary);
+        }
+        .pdf-preview .pdf-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px rgba(231,76,60,0.25);
+        }
+        .pdf-preview .pdf-icon svg { width: 32px; height: 32px; color: #fff; }
+        .pdf-preview .pdf-name { font-size: 1rem; font-weight: 700; color: var(--text-primary); }
+        .pdf-preview .pdf-meta { font-size: 0.82rem; color: var(--text-muted); }
+
+        /* ===== QUIZ ===== */
+        .quiz-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 14px;
+            transition: all var(--transition-fast);
+        }
+        .quiz-card:hover { border-color: rgba(243,156,18,0.12); }
+        .quiz-card p {
+            font-size: 0.96rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+        .quiz-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            border: 1px solid transparent;
+        }
+        .quiz-option:hover {
+            background: rgba(255,255,255,0.04);
+            border-color: var(--border);
+        }
+        .quiz-option input {
+            accent-color: var(--accent);
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+        .quiz-btn {
+            padding: 12px 28px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            color: #1a1a2e;
+            font-size: 0.92rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            margin-top: 10px;
+            box-shadow: 0 4px 16px rgba(243,156,18,0.25);
+        }
+        .quiz-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(243,156,18,0.35);
+        }
+        .quiz-result {
+            margin-top: 18px;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            font-size: 0.92rem;
+            display: none;
+            border-left: 3px solid var(--success);
+            background: rgba(39,174,96,0.08);
+        }
+        .quiz-result.show { display: block; }
+        .quiz-result.fail { border-left-color: var(--danger); background: rgba(231,76,60,0.08); }
+        .quiz-result.warn { border-left-color: var(--warning); background: rgba(243,156,18,0.08); }
+
+        /* ===== CHECKLIST ===== */
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            border-radius: 10px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .check-item:hover {
+            background: var(--bg-raised);
+            border-color: rgba(243,156,18,0.15);
+        }
+        .check-item.done {
+            opacity: 0.55;
+            text-decoration: line-through;
+            color: var(--text-muted);
+            border-color: rgba(255,255,255,0.03);
+        }
+        .check-item input {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--accent);
+            flex-shrink: 0;
+            cursor: pointer;
         }
 
-        .close:hover {
-            color: #e67e22;
+        /* ===== FOOTER ===== */
+        .app-footer {
+            text-align: center;
+            padding: 28px 16px;
+            margin-top: 40px;
+            border-top: 1px solid var(--border);
+            font-size: 0.82rem;
+            color: var(--text-muted);
         }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 1.8em;
-            }
-
-            .hierarchy-container {
-                grid-template-columns: 1fr;
-            }
-
-            .nav-tabs {
-                gap: 5px;
-            }
-
-            .nav-btn {
-                padding: 10px 15px;
-                font-size: 0.9em;
-            }
-
-            .detail-title {
-                font-size: 1.5em;
-            }
+        .app-footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color var(--transition-fast);
         }
+        .app-footer a:hover { color: var(--accent); }
 
-        .hidden {
-            display: none !important;
-        }
+        /* ===== UTILITIES ===== */
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
 
-        .nepali-text {
-            font-family: 'Noto Sans Devanagari', sans-serif;
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 640px) {
+            .app-header h1 { font-size: 1.5rem; flex-direction: column; gap: 8px; }
+            .card-grid { grid-template-columns: 1fr; }
+            .flow-node { width: 60px; height: 60px; font-size: 0.65rem; }
+            .modal-box { max-height: 90vh; }
         }
     </style>
+<base target="_blank">
 </head>
 <body>
+
+<div class="app-container">
     <!-- Header -->
-    <header>
-        <h1>🎓 Research Design Hierarchy</h1>
+    <div class="app-header">
+        <h1>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                <polyline points="2 17 12 22 22 17"/>
+                <polyline points="2 12 12 17 22 12"/>
+            </svg>
+            Research Design Hierarchy
+        </h1>
         <p>SMART Learning Platform for Researchers, Innovators & Scholar Students</p>
-        <div class="author-credit">
-            <strong>Developed by:</strong> Mr. Bishnu Singh Rayamajhi<br>
-            <strong>Mathematics Lecturer & Head of Humanities & Social Sciences</strong><br>
-            Kapilvastu Multiple Campus (KMC), Taulihawa, Nepal<br>
-            <strong>Branding:</strong> UCDL Academy | Tribhuvan University
+        <div class="author-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+            </svg>
+            Mr. Bishnu Singh Rayamajhi · Mathematics Lecturer & Head of HSS, KMC Taulihawa · Tribhuvan University
         </div>
-    </header>
+    </div>
 
     <!-- Language Toggle -->
-    <div class="language-toggle">
-        <button class="lang-btn active" onclick="switchLanguage('en')">English 🇺🇸</button>
-        <button class="lang-btn" onclick="switchLanguage('np')">नेपाली 🇳🇵</button>
+    <div class="lang-bar">
+        <button class="lang-pill active" onclick="setLang('en')">English 🇺🇸</button>
+        <button class="lang-pill" onclick="setLang('np')">नेपाली 🇳🇵</button>
     </div>
 
-    <div class="container">
-        <!-- Progress Section -->
-        <div class="progress-section">
-            <div class="progress-label">
-                <span id="progress-text">Learning Progress</span>
-                <span id="progress-percent">0%</span>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
-            </div>
+    <!-- Progress -->
+    <div class="progress-wrap">
+        <div class="progress-meta">
+            <span id="prog-label">Learning Progress</span>
+            <span id="prog-val">0%</span>
         </div>
-
-        <!-- Navigation Tabs -->
-        <div class="nav-tabs">
-            <button class="nav-btn active" onclick="showSection('overview')">📊 Overview</button>
-            <button class="nav-btn" onclick="showSection('hierarchy')">🔄 Hierarchy</button>
-            <button class="nav-btn" onclick="showSection('details')">📖 Details</button>
-            <button class="nav-btn" onclick="showSection('resources')">🎥 Resources</button>
-            <button class="nav-btn" onclick="showSection('quiz')">❓ Quiz</button>
-            <button class="nav-btn" onclick="showSection('checklist')">✅ Checklist</button>
+        <div class="progress-track">
+            <div class="progress-fill" id="prog-bar"></div>
         </div>
-
-        <!-- OVERVIEW SECTION -->
-        <div id="overview" class="content-section active">
-            <div class="hierarchy-container">
-                <div class="step-card">
-                    <div class="step-number">1</div>
-                    <div class="step-title" lang="en">Research Question</div>
-                    <div class="step-title nepali-text hidden" lang="np">अनुसन्धान प्रश्न</div>
-                    <div class="step-description" lang="en">What do we want to find out?</div>
-                    <div class="step-description nepali-text hidden" lang="np">हामी के पत्ता लगाउन चाहन्छौं?</div>
-                </div>
-
-                <div class="step-card">
-                    <div class="step-number">2</div>
-                    <div class="step-title" lang="en">Philosophical Assumptions</div>
-                    <div class="step-title nepali-text hidden" lang="np">दार्शनिक मान्यताहरु</div>
-                    <div class="step-description" lang="en">What do we believe about knowledge, reality, and evidence?</div>
-                    <div class="step-description nepali-text hidden" lang="np">हामी ज्ञान, वास्तविकता र प्रमाण बारे के विश्वास गर्छौं?</div>
-                </div>
-
-                <div class="step-card">
-                    <div class="step-number">3</div>
-                    <div class="step-title" lang="en">Methodology</div>
-                    <div class="step-title nepali-text hidden" lang="np">पद्धति</div>
-                    <div class="step-description" lang="en">What is the overall strategy and rationale for answering the question?</div>
-                    <div class="step-description nepali-text hidden" lang="np">प्रश्नको उत्तर दिनको लागि समग्र रणनीति र तर्क के हो?</div>
-                </div>
-
-                <div class="step-card">
-                    <div class="step-number">4</div>
-                    <div class="step-title" lang="en">Research Design</div>
-                    <div class="step-title nepali-text hidden" lang="np">अनुसन्धान डिजाइन</div>
-                    <div class="step-description" lang="en">How will the study be structured?</div>
-                    <div class="step-description nepali-text hidden" lang="np">अध्ययन कसरी संरचित हुनेछ?</div>
-                </div>
-
-                <div class="step-card">
-                    <div class="step-number">5</div>
-                    <div class="step-title" lang="en">Methods</div>
-                    <div class="step-title nepali-text hidden" lang="np">विधिहरु</div>
-                    <div class="step-description" lang="en">What tools and procedures will we use?</div>
-                    <div class="step-description nepali-text hidden" lang="np">हामी कस्तो उपकरण र प्रक्रिया प्रयोग गर्नेछौं?</div>
-                </div>
-
-                <div class="step-card">
-                    <div class="step-number">6</div>
-                    <div class="step-title" lang="en">Data Collection</div>
-                    <div class="step-title nepali-text hidden" lang="np">तथ्याङ्क संकलन</div>
-                    <div class="step-description" lang="en">What information will be collected?</div>
-                    <div class="step-description nepali-text hidden" lang="np">कस्तो जानकारी संकलित गरिनेछ?</div>
-                </div>
-
-                <div class="step-card">
-                    <div class="step-number">7</div>
-                    <div class="step-title" lang="en">Analysis</div>
-                    <div class="step-title nepali-text hidden" lang="np">विश्लेषण</div>
-                    <div class="step-description" lang="en">How will the data be analyzed?</div>
-                    <div class="step-description nepali-text hidden" lang="np">तथ्याङ्क कसरी विश्लेषण गरिनेछ?</div>
-                </div>
-
-                <div class="step-card">
-                    <div class="step-number">8</div>
-                    <div class="step-title" lang="en">Conclusions</div>
-                    <div class="step-title nepali-text hidden" lang="np">निष्कर्ष</div>
-                    <div class="step-description" lang="en">What can we conclude and how will it be used?</div>
-                    <div class="step-description nepali-text hidden" lang="np">हामी के निष्कर्ष निकाल्न सक्छौं र यो कसरी प्रयोग हुनेछ?</div>
-                </div>
-            </div>
-
-            <div class="detail-container" style="text-align: center;">
-                <p lang="en" style="font-size: 1.1em; color: #f39c12;">✨ Alignment across all levels creates a defensible logic from question to conclusion ✨</p>
-                <p lang="np" style="font-size: 1.1em; color: #f39c12; nepali-text: true; margin-top: 10px;">✨ सबै स्तरमा संरेखण प्रश्न देखि निष्कर्षसम्मको रक्षा योग्य तर्क सिर्जना गर्छ ✨</p>
-            </div>
-        </div>
-
-        <!-- HIERARCHY SECTION -->
-        <div id="hierarchy" class="content-section">
-            <div class="detail-container">
-                <h2 class="detail-title" lang="en">Research Design Hierarchy Flow</h2>
-                <h2 class="detail-title nepali-text hidden" lang="np">अनुसन्धान डिजाइन पदानुक्रम प्रवाह</h2>
-            </div>
-
-            <div class="hierarchy-diagram">
-                <div class="hierarchy-flow">
-                    <div class="hierarchy-item">
-                        <div class="hierarchy-circle">1</div>
-                        <div class="hierarchy-label" lang="en">Research Q</div>
-                        <div class="hierarchy-label nepali-text hidden" lang="np">अनुसन्धान प्रश्न</div>
-                    </div>
-                    <div class="hierarchy-arrow">→</div>
-                    <div class="hierarchy-item">
-                        <div class="hierarchy-circle">2</div>
-                        <div class="hierarchy-label" lang="en">Philosophy</div>
-                        <div class="hierarchy-label nepali-text hidden" lang="np">दर्शन</div>
-                    </div>
-                    <div class="hierarchy-arrow">→</div>
-                    <div class="hierarchy-item">
-                        <div class="hierarchy-circle">3</div>
-                        <div class="hierarchy-label" lang="en">Methodology</div>
-                        <div class="hierarchy-label nepali-text hidden" lang="np">पद्धति</div>
-                    </div>
-                    <div class="hierarchy-arrow">→</div>
-                    <div class="hierarchy-item">
-                        <div class="hierarchy-circle">4</div>
-                        <div class="hierarchy-label" lang="en">Design</div>
-                        <div class="hierarchy-label nepali-text hidden" lang="np">डिजाइन</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="hierarchy-diagram">
-                <div class="hierarchy-flow">
-                    <div class="hierarchy-item">
-                        <div class="hierarchy-circle">5</div>
-                        <div class="hierarchy-label" lang="en">Methods</div>
-                        <div class="hierarchy-label nepali-text hidden" lang="np">विधिहरु</div>
-                    </div>
-                    <div class="hierarchy-arrow">→</div>
-                    <div class="hierarchy-item">
-                        <div class="hierarchy-circle">6</div>
-                        <div class="hierarchy-label" lang="en">Data</div>
-                        <div class="hierarchy-label nepali-text hidden" lang="np">तथ्याङ्क</div>
-                    </div>
-                    <div class="hierarchy-arrow">→</div>
-                    <div class="hierarchy-item">
-                        <div class="hierarchy-circle">7</div>
-                        <div class="hierarchy-label" lang="en">Analysis</div>
-                        <div class="hierarchy-label nepali-text hidden" lang="np">विश्लेषण</div>
-                    </div>
-                    <div class="hierarchy-arrow">→</div>
-                    <div class="hierarchy-item">
-                        <div class="hierarchy-circle">8</div>
-                        <div class="hierarchy-label" lang="en">Conclusion</div>
-                        <div class="hierarchy-label nepali-text hidden" lang="np">निष्कर्ष</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="detail-container">
-                <h3 class="detail-title" lang="en">Key Principle</h3>
-                <h3 class="detail-title nepali-text hidden" lang="np">मुख्य सिद्धान्त</h3>
-                <p class="detail-content" lang="en">Each step builds on the previous one to ensure a strong and meaningful study. There must be logical coherence from your research question through to your final conclusions. This alignment creates a defensible logic that makes your research credible and trustworthy.</p>
-                <p class="detail-content nepali-text hidden" lang="np">प्रत्येक चरण पूर्वको चरणमा निर्मित हुन्छ एक मजबूत र अर्थपूर्ण अध्ययन सुनिश्चित गर्न। आपको अनुसन्धान प्रश्न देखि अन्तिम निष्कर्ष सम्मको तार्किक सुसंगतता हुनुपर्छ।</p>
-            </div>
-        </div>
-
-        <!-- DETAILS SECTION -->
-        <div id="details" class="content-section">
-            <div id="details-content"></div>
-        </div>
-
-        <!-- RESOURCES SECTION -->
-        <div id="resources" class="content-section">
-            <div class="detail-container">
-                <h2 class="detail-title" lang="en">📚 Learning Resources & Video Tutorials</h2>
-                <h2 class="detail-title nepali-text hidden" lang="np">📚 शिक्षा संसाधन र भिडियो ट्यूटोरियल</h2>
-            </div>
-
-            <div id="resources-grid" class="hierarchy-container"></div>
-        </div>
-
-        <!-- QUIZ SECTION -->
-        <div id="quiz" class="content-section">
-            <div class="quiz-section">
-                <h2 class="detail-title" lang="en">Knowledge Check Quiz</h2>
-                <h2 class="detail-title nepali-text hidden" lang="np">ज्ञान जाँच क्विज</h2>
-                <div id="quiz-content"></div>
-                <button class="quiz-btn" onclick="submitQuiz()" lang="en">Submit Quiz</button>
-                <button class="quiz-btn hidden" onclick="submitQuiz()" lang="np">क्विज जमा गर्नुहोस्</button>
-                <div id="quiz-result" style="margin-top: 20px; display: none;"></div>
-            </div>
-        </div>
-
-        <!-- CHECKLIST SECTION -->
-        <div id="checklist" class="content-section">
-            <div class="detail-container">
-                <h2 class="detail-title" lang="en">📋 Research Project Checklist</h2>
-                <h2 class="detail-title nepali-text hidden" lang="np">📋 अनुसन्धान परियोजना चेकलिस्ट</h2>
-                <p class="detail-content" lang="en">Use this checklist to ensure you've covered all essential steps in your research design.</p>
-                <p class="detail-content nepali-text hidden" lang="np">यस चेकलिस्ट प्रयोग गरी सुनिश्चित गर्नुहोस् कि तपाईंले आपनो अनुसन्धान डिजाइनको सबै आवश्यक चरण कभर गरेको छ।</p>
-            </div>
-
-            <div id="checklist-content" class="detail-container"></div>
-        </div>
-
-        <!-- Footer -->
-        <footer>
-            <p>🌐 <strong>UCDL Academy</strong> | Free Bilingual Educational Content for Nepali Students & Educators</p>
-            <p>📱 Platform: <a href="https://sdrok2080.github.io" class="footer-link" target="_blank">SDROK Digital Platform</a> | 🎓 Affiliation: Tribhuvan University, Nepal</p>
-            <p>© 2024 Mr. Bishnu Singh Rayamajhi | Mathematics Lecturer & Head of HSS, KMC Taulihawa</p>
-            <p style="margin-top: 15px; font-size: 0.85em;">💡 <em>Building Bridges Between Education and Innovation for Future Researchers</em></p>
-        </footer>
     </div>
 
-    <script>
-        // Data Structure
-        const hierarchyData = {
-            steps: [
-                {
-                    id: 1,
-                    titleEn: "Research Question",
-                    titleNp: "अनुसन्धान प्रश्न",
-                    descEn: "What do we want to find out?",
-                    descNp: "हामी के पत्ता लगाउन चाहन्छौं?",
-                    detailsEn: "The research question is the foundation of your entire study. It should be specific, measurable, achievable, relevant, and time-bound (SMART). A good research question guides all subsequent decisions in your research design.",
-                    detailsNp: "अनुसन्धान प्रश्न आपको सम्पूर्ण अध्ययनको आधार हो। यो विशिष्ट, मापनीय, प्राप्य, प्रासंगिक र समय-सीमित हुनुपर्छ।",
-                    videoEn: "https://youtu.be/watch?v=example1",
-                    videoNp: "अनुसन्धान प्रश्न तयार गर्न वीडियो ट्यूटोरियल",
-                    pdfEn: "Research_Question_Guide.pdf",
-                    pdfNp: "अनुसन्धान_प्रश्न_गाइड.pdf"
-                },
-                {
-                    id: 2,
-                    titleEn: "Philosophical Assumptions",
-                    titleNp: "दार्शनिक मान्यताहरु",
-                    descEn: "What do we believe about knowledge, reality, and evidence?",
-                    descNp: "हामी ज्ञान, वास्तविकता र प्रमाण बारे के विश्वास गर्छौं?",
-                    detailsEn: "Your philosophical stance (ontology, epistemology, and axiology) shapes your entire research approach. These are your underlying beliefs about the nature of knowledge and reality.",
-                    detailsNp: "आपको दार्शनिक दृष्टिकोण आपके सम्पूर्ण अनुसन्धान दृष्टिकोणलाई आकार दिन्छ।",
-                    videoEn: "https://youtu.be/watch?v=example2",
-                    videoNp: "दार्शनिक आधार वीडियो ट्यूटोरियल",
-                    pdfEn: "Philosophy_Assumptions.pdf",
-                    pdfNp: "दर्शन_मान्यताहरु.pdf"
-                },
-                {
-                    id: 3,
-                    titleEn: "Methodology",
-                    titleNp: "पद्धति",
-                    descEn: "What is the overall strategy and rationale for answering the question?",
-                    descNp: "प्रश्नको उत्तर दिनको लागि समग्र रणनीति र तर्क के हो?",
-                    detailsEn: "Your methodology is your overall approach. Are you using qualitative, quantitative, or mixed methods? Your choice should be justified by your research question and philosophical stance.",
-                    detailsNp: "आपको पद्धति आपको समग्र दृष्टिकोण हो। के तपाईं गुणात्मक, मात्रात्मक वा मिश्रित विधि प्रयोग गरिरहनुहुन्छ?",
-                    videoEn: "https://youtu.be/watch?v=example3",
-                    videoNp: "पद्धति चयन वीडियो ट्यूटोरियल",
-                    pdfEn: "Methodology_Guide.pdf",
-                    pdfNp: "पद्धति_गाइड.pdf"
-                },
-                {
-                    id: 4,
-                    titleEn: "Research Design",
-                    titleNp: "अनुसन्धान डिजाइन",
-                    descEn: "How will the study be structured?",
-                    descNp: "अध्ययन कसरी संरचित हुनेछ?",
-                    detailsEn: "Your research design is the blueprint for your study. This includes your study type (experimental, case study, survey, etc.), sampling strategy, and overall structure.",
-                    detailsNp: "आपको अनुसन्धान डिजाइन आपको अध्ययनको नक्सा हो। यसमा आपको अध्ययनको प्रकार, नमूना रणनीति र समग्र संरचना समावेश छ।",
-                    videoEn: "https://youtu.be/watch?v=example4",
-                    videoNp: "अनुसन्धान डिजाइन वीडियो ट्यूटोरियल",
-                    pdfEn: "Research_Design.pdf",
-                    pdfNp: "अनुसन्धान_डिजाइन.pdf"
-                },
-                {
-                    id: 5,
-                    titleEn: "Methods",
-                    titleNp: "विधिहरु",
-                    descEn: "What tools and procedures will we use?",
-                    descNp: "हामी कस्तो उपकरण र प्रक्रिया प्रयोग गर्नेछौं?",
-                    detailsEn: "Methods are the practical tools and procedures you'll use to collect your data. This might include surveys, interviews, experiments, observations, or document analysis.",
-                    detailsNp: "विधिहरु तपाईंले आपनो तथ्याङ्क संकलन गर्न प्रयोग गरिने व्यावहारिक उपकरण र प्रक्रिया हुन्।",
-                    videoEn: "https://youtu.be/watch?v=example5",
-                    videoNp: "डेटा संकलन विधि वीडियो",
-                    pdfEn: "Methods_Toolkit.pdf",
-                    pdfNp: "विधि_उपकरण_किट.pdf"
-                },
-                {
-                    id: 6,
-                    titleEn: "Data Collection",
-                    titleNp: "तथ्याङ्क संकलन",
-                    descEn: "What information will be collected?",
-                    descNp: "कस्तो जानकारी संकलित गरिनेछ?",
-                    detailsEn: "This step defines what data you'll collect, from whom, when, and how. You need clear protocols to ensure consistency and reliability in your data collection process.",
-                    detailsNp: "यो चरण परिभाषित गर्छ कि तपाईं कस्तो तथ्याङ्क, कसबाट, कहिले र कसरी संकलन गर्नुहुनेछ।",
-                    videoEn: "https://youtu.be/watch?v=example6",
-                    videoNp: "डेटा संकलन प्रोटोकल वीडियो",
-                    pdfEn: "Data_Collection_Protocol.pdf",
-                    pdfNp: "डेटा_संकलन_प्रोटोकल.pdf"
-                },
-                {
-                    id: 7,
-                    titleEn: "Analysis",
-                    titleNp: "विश्लेषण",
-                    descEn: "How will the data be analyzed?",
-                    descNp: "तथ्याङ्क कसरी विश्लेषण गरिनेछ?",
-                    detailsEn: "Your analysis plan describes how you'll process and interpret your data. This might involve statistical tests, coding, thematic analysis, or other appropriate techniques.",
-                    detailsNp: "आपको विश्लेषण योजना वर्णन गर्छ कि तपाईं कसरी आपनो तथ्याङ्क प्रक्रिया र व्याख्या गर्नुहुनेछ।",
-                    videoEn: "https://youtu.be/watch?v=example7",
-                    videoNp: "डेटा विश्लेषण विधि वीडियो",
-                    pdfEn: "Data_Analysis_Guide.pdf",
-                    pdfNp: "डेटा_विश्लेषण_गाइड.pdf"
-                },
-                {
-                    id: 8,
-                    titleEn: "Conclusions",
-                    titleNp: "निष्कर्ष",
-                    descEn: "What can we conclude and how will it be used?",
-                    descNp: "हामी के निष्कर्ष निकाल्न सक्छौं र यो कसरी प्रयोग हुनेछ?",
-                    detailsEn: "Your conclusions interpret your findings in relation to your research question and broader literature. This is where you explain the significance of your research and its implications.",
-                    detailsNp: "आपको निष्कर्ष आपको निष्कर्षको व्याख्या गर्छ आपको अनुसन्धान प्रश्न र व्यापक साहित्यको सम्बन्धमा।",
-                    videoEn: "https://youtu.be/watch?v=example8",
-                    videoNp: "निष्कर्ष लेखन वीडियो ट्यूटोरियल",
-                    pdfEn: "Writing_Conclusions.pdf",
-                    pdfNp: "निष्कर्ष_लेखन.pdf"
-                }
-            ]
-        };
+    <!-- Navigation -->
+    <div class="nav-bar">
+        <button class="nav-tab active" onclick="showSec('overview',this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span lang="en">Overview</span><span lang="np" class="hidden">अवलोकन</span>
+        </button>
+        <button class="nav-tab" onclick="showSec('hierarchy',this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            <span lang="en">Hierarchy</span><span lang="np" class="hidden">पदानुक्रम</span>
+        </button>
+        <button class="nav-tab" onclick="showSec('details',this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span lang="en">Details</span><span lang="np" class="hidden">विवरण</span>
+        </button>
+        <button class="nav-tab" onclick="showSec('resources',this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span lang="en">Resources</span><span lang="np" class="hidden">स्रोतहरू</span>
+        </button>
+        <button class="nav-tab" onclick="showSec('quiz',this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span lang="en">Quiz</span><span lang="np" class="hidden">क्विज</span>
+        </button>
+        <button class="nav-tab" onclick="showSec('checklist',this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span lang="en">Checklist</span><span lang="np" class="hidden">चेकलिस्ट</span>
+        </button>
+    </div>
 
-        const quizQuestions = [
-            {
-                questionEn: "What is the first step in the research design hierarchy?",
-                questionNp: "अनुसन्धान डिजाइन पदानुक्रममा पहिलो चरण के हो?",
-                options: ["Research Question", "Philosophy", "Methodology", "Design"],
-                optionsNp: ["अनुसन्धान प्रश्न", "दर्शन", "पद्धति", "डिजाइन"],
-                correct: 0
-            },
-            {
-                questionEn: "Which step defines your belief about knowledge and reality?",
-                questionNp: "कुन चरणले ज्ञान र वास्तविकता बारे आपको विश्वास परिभाषित गर्छ?",
-                options: ["Methods", "Philosophical Assumptions", "Data Collection", "Analysis"],
-                optionsNp: ["विधिहरु", "दार्शनिक मान्यताहरु", "तथ्याङ्क संकलन", "विश्लेषण"],
-                correct: 1
-            },
-            {
-                questionEn: "What does alignment across all levels create?",
-                questionNp: "सबै स्तरमा संरेखण के सिर्जना गर्छ?",
-                options: ["Confusion", "A defensible logic", "Data errors", "Poor questions"],
-                optionsNp: ["भ्रम", "रक्षा योग्य तर्क", "डेटा त्रुटि", "खराब प्रश्न"],
-                correct: 1
-            },
-            {
-                questionEn: "Which step comes after 'Methods' in the hierarchy?",
-                questionNp: "पदानुक्रममा 'विधिहरु' को अनन्तर कुन चरण आउँछ?",
-                options: ["Analysis", "Data Collection", "Design", "Conclusions"],
-                optionsNp: ["विश्लेषण", "तथ्याङ्क संकलन", "डिजाइन", "निष्कर्ष"],
-                correct: 1
-            },
-            {
-                questionEn: "What should be included in the 'Data Collection' step?",
-                questionNp: "'तथ्याङ्क संकलन' चरणमा के समावेश हुनुपर्छ?",
-                options: ["Only statistics", "What, from whom, when, and how", "Just the analysis", "Final conclusions"],
-                optionsNp: ["केवल तथ्याङ्क", "के, कसबाट, कहिले र कसरी", "केवल विश्लेषण", "अन्तिम निष्कर्ष"],
-                correct: 1
-            }
-        ];
+    <!-- OVERVIEW -->
+    <div id="overview" class="section active">
+        <div class="card-grid" id="overview-grid"></div>
+        <div class="text-center" style="margin-top:22px; padding:18px; color:var(--text-muted); font-size:0.88rem;">
+            <span lang="en">✨ Alignment across all levels creates a defensible logic from question to conclusion ✨</span>
+            <span lang="np" class="hidden">✨ सबै स्तरमा संरेखण प्रश्न देखि निष्कर्षसम्मको रक्षा योग्य तर्क सिर्जना गर्छ ✨</span>
+        </div>
+    </div>
 
-        const checklistItems = [
-            { titleEn: "Define a clear, specific research question", titleNp: "स्पष्ट, विशिष्ट अनुसन्धान प्रश्न परिभाषित गर्नुहोस्" },
-            { titleEn: "Identify and state your philosophical assumptions", titleNp: "आपको दार्शनिक मान्यताहरु पहिचान र बयान गर्नुहोस्" },
-            { titleEn: "Choose an appropriate methodology (qualitative/quantitative/mixed)", titleNp: "उपयुक्त पद्धति चुनुहोस्" },
-            { titleEn: "Design your study structure and sampling strategy", titleNp: "आपको अध्ययनको संरचना र नमूना रणनीति डिजाइन गर्नुहोस्" },
-            { titleEn: "Select appropriate data collection tools and procedures", titleNp: "उपयुक्त डेटा संकलन उपकरण र प्रक्रिया चुनुहोस्" },
-            { titleEn: "Develop detailed data collection protocols", titleNp: "विस्तृत डेटा संकलन प्रोटोकल विकास गर्नुहोस्" },
-            { titleEn: "Plan your data analysis strategy", titleNp: "आपको डेटा विश्लेषण रणनीति योजना गर्नुहोस्" },
-            { titleEn: "Prepare to draw conclusions linked to your research question", titleNp: "आपको अनुसन्धान प्रश्नसँग जोडिएको निष्कर्ष तयार गर्नुहोस्" },
-            { titleEn: "Ensure alignment between all steps", titleNp: "सबै चरणहरु बीचमा संरेखण सुनिश्चित गर्नुहोस्" },
-            { titleEn: "Conduct pilot testing if applicable", titleNp: "यदि लागू हो भने पायलट परीक्षण संचालन गर्नुहोस्" }
-        ];
+    <!-- HIERARCHY -->
+    <div id="hierarchy" class="section">
+        <div class="detail-card" style="text-align:center;">
+            <h3><span lang="en">Research Design Hierarchy Flow</span><span lang="np" class="hidden">अनुसन्धान डिजाइन पदानुक्रम प्रवाह</span></h3>
+            <div class="flow-wrap" id="flow1"></div>
+            <div class="flow-wrap" id="flow2"></div>
+        </div>
+        <div class="detail-card">
+            <h3><span lang="en">Key Principle</span><span lang="np" class="hidden">मुख्य सिद्धान्त</span></h3>
+            <p><span lang="en">Each step builds on the previous one to ensure a strong and meaningful study. There must be logical coherence from your research question through to your final conclusions. This alignment creates a defensible logic that makes your research credible and trustworthy.</span>
+            <span lang="np" class="hidden">प्रत्येक चरण पूर्वको चरणमा निर्मित हुन्छ एक मजबूत र अर्थपूर्ण अध्ययन सुनिश्चित गर्न। आपको अनुसन्धान प्रश्न देखि अन्तिम निष्कर्ष सम्मको तार्किक सुसंगतता हुनुपर्छ। यो संरेखणले रक्षा योग्य तर्क सिर्जना गर्छ जसले आपको अनुसन्धानलाई विश्वसनीय बनाउँछ।</span></p>
+        </div>
+    </div>
 
-        // Current Language
-        let currentLanguage = 'en';
+    <!-- DETAILS -->
+    <div id="details" class="section">
+        <div class="detail-list" id="details-list"></div>
+    </div>
 
-        // Language Switch
-        function switchLanguage(lang) {
-            currentLanguage = lang;
-            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+    <!-- RESOURCES -->
+    <div id="resources" class="section">
+        <div class="card-grid" id="resources-grid"></div>
+    </div>
 
-            // Hide/Show content based on language
-            if (lang === 'en') {
-                document.querySelectorAll('[lang="np"]').forEach(el => el.classList.add('hidden'));
-                document.querySelectorAll('[lang="en"]').forEach(el => el.classList.remove('hidden'));
-            } else {
-                document.querySelectorAll('[lang="en"]').forEach(el => el.classList.add('hidden'));
-                document.querySelectorAll('[lang="np"]').forEach(el => el.classList.remove('hidden'));
-            }
-            updateUI();
-        }
+    <!-- QUIZ -->
+    <div id="quiz" class="section">
+        <div id="quiz-list"></div>
+        <button class="quiz-btn" onclick="submitQuiz()">
+            <span lang="en">Submit Quiz</span><span lang="np" class="hidden">क्विज जमा गर्नुहोस्</span>
+        </button>
+        <div class="quiz-result" id="quiz-result"></div>
+    </div>
 
-        // Show Section
-        function showSection(sectionId) {
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById(sectionId).classList.add('active');
+    <!-- CHECKLIST -->
+    <div id="checklist" class="section">
+        <div class="detail-card" style="margin-bottom:16px;">
+            <h3><span lang="en">📋 Research Project Checklist</span><span lang="np" class="hidden">📋 अनुसन्धान परियोजना चेकलिस्ट</span></h3>
+            <p><span lang="en">Use this checklist to ensure you've covered all essential steps in your research design.</span>
+            <span lang="np" class="hidden">यस चेकलिस्ट प्रयोग गरी सुनिश्चित गर्नुहोस् कि तपाईंले आपनो अनुसन्धान डिजाइनको सबै आवश्यक चरण कभर गरेको छ।</span></p>
+        </div>
+        <div id="checklist-box"></div>
+    </div>
 
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
+    <!-- Footer -->
+    <div class="app-footer">
+        <p><strong>UCDL Academy</strong> · Free Bilingual Educational Content for Nepali Students & Educators</p>
+        <p>Platform: <a href="https://sdrok2080.github.io" target="_blank">SDROK Digital Platform</a> · Affiliation: Tribhuvan University, Nepal</p>
+        <p>© 2024 Mr. Bishnu Singh Rayamajhi · Mathematics Lecturer & Head of HSS, KMC Taulihawa</p>
+        <p style="margin-top:10px; font-style:italic;">Building Bridges Between Education and Innovation for Future Researchers</p>
+    </div>
+</div>
 
-            // Populate sections with data
-            if (sectionId === 'details') {
-                populateDetails();
-            } else if (sectionId === 'resources') {
-                populateResources();
-            } else if (sectionId === 'quiz') {
-                populateQuiz();
-            } else if (sectionId === 'checklist') {
-                populateChecklist();
-            }
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <h3 id="modal-title">Resource</h3>
+            <button class="modal-close" onclick="closeModal()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+        <div class="modal-body" id="modal-body"></div>
+    </div>
+</div>
 
-            updateProgress();
-        }
+<script>
+    // ===== DATA =====
+    const data = {
+        steps: [
+            { id:1, titleEn:"Research Question", titleNp:"अनुसन्धान प्रश्न", descEn:"What do we want to find out?", descNp:"हामी के पत्ता लगाउन चाहन्छौं?", detailEn:"The research question is the foundation of your entire study. It should be specific, measurable, achievable, relevant, and time-bound (SMART). A good research question guides all subsequent decisions in your research design.", detailNp:"अनुसन्धान प्रश्न आपको सम्पूर्ण अध्ययनको आधार हो। यो विशिष्ट, मापनीय, प्राप्य, प्रासंगिक र समय-सीमित हुनुपर्छ।" },
+            { id:2, titleEn:"Philosophical Assumptions", titleNp:"दार्शनिक मान्यताहरु", descEn:"What do we believe about knowledge, reality, and evidence?", descNp:"हामी ज्ञान, वास्तविकता र प्रमाण बारे के विश्वास गर्छौं?", detailEn:"Your philosophical stance (ontology, epistemology, and axiology) shapes your entire research approach. These are your underlying beliefs about the nature of knowledge and reality.", detailNp:"आपको दार्शनिक दृष्टिकोण आपके सम्पूर्ण अनुसन्धान दृष्टिकोणलाई आकार दिन्छ।" },
+            { id:3, titleEn:"Methodology", titleNp:"पद्धति", descEn:"What is the overall strategy and rationale for answering the question?", descNp:"प्रश्नको उत्तर दिनको लागि समग्र रणनीति र तर्क के हो?", detailEn:"Your methodology is your overall approach. Are you using qualitative, quantitative, or mixed methods? Your choice should be justified by your research question and philosophical stance.", detailNp:"आपको पद्धति आपको समग्र दृष्टिकोण हो। के तपाईं गुणात्मक, मात्रात्मक वा मिश्रित विधि प्रयोग गरिरहनुहुन्छ?" },
+            { id:4, titleEn:"Research Design", titleNp:"अनुसन्धान डिजाइन", descEn:"How will the study be structured?", descNp:"अध्ययन कसरी संरचित हुनेछ?", detailEn:"Your research design is the blueprint for your study. This includes your study type (experimental, case study, survey, etc.), sampling strategy, and overall structure.", detailNp:"आपको अनुसन्धान डिजाइन आपको अध्ययनको नक्सा हो। यसमा आपको अध्ययनको प्रकार, नमूना रणनीति र समग्र संरचना समावेश छ।" },
+            { id:5, titleEn:"Methods", titleNp:"विधिहरु", descEn:"What tools and procedures will we use?", descNp:"हामी कस्तो उपकरण र प्रक्रिया प्रयोग गर्नेछौं?", detailEn:"Methods are the practical tools and procedures you'll use to collect your data. This might include surveys, interviews, experiments, observations, or document analysis.", detailNp:"विधिहरु तपाईंले आपनो तथ्याङ्क संकलन गर्न प्रयोग गरिने व्यावहारिक उपकरण र प्रक्रिया हुन्।" },
+            { id:6, titleEn:"Data Collection", titleNp:"तथ्याङ्क संकलन", descEn:"What information will be collected?", descNp:"कस्तो जानकारी संकलित गरिनेछ?", detailEn:"This step defines what data you'll collect, from whom, when, and how. You need clear protocols to ensure consistency and reliability in your data collection process.", detailNp:"यो चरण परिभाषित गर्छ कि तपाईं कस्तो तथ्याङ्क, कसबाट, कहिले र कसरी संकलन गर्नुहुनेछ।" },
+            { id:7, titleEn:"Analysis", titleNp:"विश्लेषण", descEn:"How will the data be analyzed?", descNp:"तथ्याङ्क कसरी विश्लेषण गरिनेछ?", detailEn:"Your analysis plan describes how you'll process and interpret your data. This might involve statistical tests, coding, thematic analysis, or other appropriate techniques.", detailNp:"आपको विश्लेषण योजना वर्णन गर्छ कि तपाईं कसरी आपनो तथ्याङ्क प्रक्रिया र व्याख्या गर्नुहुनेछ।" },
+            { id:8, titleEn:"Conclusions", titleNp:"निष्कर्ष", descEn:"What can we conclude and how will it be used?", descNp:"हामी के निष्कर्ष निकाल्न सक्छौं र यो कसरी प्रयोग हुनेछ?", detailEn:"Your conclusions interpret your findings in relation to your research question and broader literature. This is where you explain the significance of your research and its implications.", detailNp:"आपको निष्कर्ष आपको निष्कर्षको व्याख्या गर्छ आपको अनुसन्धान प्रश्न र व्यापक साहित्यको सम्बन्धमा।" }
+        ]
+    };
 
-        // Populate Details Section
-        function populateDetails() {
-            const container = document.getElementById('details-content');
-            container.innerHTML = hierarchyData.steps.map((step, index) => `
-                <div class="detail-container">
-                    <h3 class="detail-title">Step ${step.id}: <span lang="en">${step.titleEn}</span><span lang="np" class="hidden nepali-text">${step.titleNp}</span></h3>
-                    <p class="detail-content"><strong lang="en">${step.descEn}</strong><strong lang="np" class="hidden nepali-text">${step.descNp}</strong></p>
-                    <div class="detail-content">
-                        <span lang="en">${step.detailsEn}</span>
-                        <span lang="np" class="hidden nepali-text">${step.detailsNp}</span>
-                    </div>
-                    <div class="media-section">
-                        <div class="media-header" lang="en">📚 Learning Resources for this Step</div>
-                        <div class="media-header nepali-text hidden" lang="np">📚 यो चरणको लागि शिक्षा संसाधन</div>
-                        <div>
-                            <a href="#" class="video-link" lang="en">🎥 Video Tutorial</a>
-                            <a href="#" class="video-link hidden nepali-text" lang="np">🎥 भिडियो ट्यूटोरियल</a>
-                            <a href="#" class="pdf-link" lang="en">📄 PDF Guide</a>
-                            <a href="#" class="pdf-link hidden nepali-text" lang="np">📄 PDF गाइड</a>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
+    const quizData = [
+        { qEn:"What is the first step in the research design hierarchy?", qNp:"अनुसन्धान डिजाइन पदानुक्रममा पहिलो चरण के हो?", opts:["Research Question","Philosophy","Methodology","Design"], optsNp:["अनुसन्धान प्रश्न","दर्शन","पद्धति","डिजाइन"], correct:0 },
+        { qEn:"Which step defines your belief about knowledge and reality?", qNp:"कुन चरणले ज्ञान र वास्तविकता बारे आपको विश्वास परिभाषित गर्छ?", opts:["Methods","Philosophical Assumptions","Data Collection","Analysis"], optsNp:["विधिहरु","दार्शनिक मान्यताहरु","तथ्याङ्क संकलन","विश्लेषण"], correct:1 },
+        { qEn:"What does alignment across all levels create?", qNp:"सबै स्तरमा संरेखण के सिर्जना गर्छ?", opts:["Confusion","A defensible logic","Data errors","Poor questions"], optsNp:["भ्रम","रक्षा योग्य तर्क","डेटा त्रुटि","खराब प्रश्न"], correct:1 },
+        { qEn:"Which step comes after 'Methods' in the hierarchy?", qNp:"पदानुक्रममा 'विधिहरु' को अनन्तर कुन चरण आउँछ?", opts:["Analysis","Data Collection","Design","Conclusions"], optsNp:["विश्लेषण","तथ्याङ्क संकलन","डिजाइन","निष्कर्ष"], correct:1 },
+        { qEn:"What should be included in the 'Data Collection' step?", qNp:"'तथ्याङ्क संकलन' चरणमा के समावेश हुनुपर्छ?", opts:["Only statistics","What, from whom, when, and how","Just the analysis","Final conclusions"], optsNp:["केवल तथ्याङ्क","के, कसबाट, कहिले र कसरी","केवल विश्लेषण","अन्तिम निष्कर्ष"], correct:1 }
+    ];
 
-        // Populate Resources Section
-        function populateResources() {
-            const container = document.getElementById('resources-grid');
-            container.innerHTML = hierarchyData.steps.map((step) => `
-                <div class="step-card">
-                    <div class="step-number">${step.id}</div>
-                    <div class="step-title" lang="en">${step.titleEn}</div>
-                    <div class="step-title nepali-text hidden" lang="np">${step.titleNp}</div>
-                    <div class="media-section">
-                        <div class="media-header" lang="en">📚 Resources</div>
-                        <div class="media-header nepali-text hidden" lang="np">📚 संसाधन</div>
-                        <div>
-                            <a href="https://youtu.be" target="_blank" class="video-link" lang="en">🎥 Watch Video</a>
-                            <a href="https://youtu.be" target="_blank" class="video-link hidden nepali-text" lang="np">🎥 भिडियो हेर्नुहोस्</a>
-                            <a href="#" class="pdf-link" lang="en">📄 Download PDF</a>
-                            <a href="#" class="pdf-link hidden nepali-text" lang="np">📄 PDF डाउनलोड गर्नुहोस्</a>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
+    const checkItems = [
+        { en:"Define a clear, specific research question", np:"स्पष्ट, विशिष्ट अनुसन्धान प्रश्न परिभाषित गर्नुहोस्" },
+        { en:"Identify and state your philosophical assumptions", np:"आपको दार्शनिक मान्यताहरु पहिचान र बयान गर्नुहोस्" },
+        { en:"Choose an appropriate methodology (qualitative/quantitative/mixed)", np:"उपयुक्त पद्धति चुनुहोस्" },
+        { en:"Design your study structure and sampling strategy", np:"आपको अध्ययनको संरचना र नमूना रणनीति डिजाइन गर्नुहोस्" },
+        { en:"Select appropriate data collection tools and procedures", np:"उपयुक्त डेटा संकलन उपकरण र प्रक्रिया चुनुहोस्" },
+        { en:"Develop detailed data collection protocols", np:"विस्तृत डेटा संकलन प्रोटोकल विकास गर्नुहोस्" },
+        { en:"Plan your data analysis strategy", np:"आपको डेटा विश्लेषण रणनीति योजना गर्नुहोस्" },
+        { en:"Prepare to draw conclusions linked to your research question", np:"आपको अनुसन्धान प्रश्नसँग जोडिएको निष्कर्ष तयार गर्नुहोस्" },
+        { en:"Ensure alignment between all steps", np:"सबै चरणहरु बीचमा संरेखण सुनिश्चित गर्नुहोस्" },
+        { en:"Conduct pilot testing if applicable", np:"यदि लागू हो भने पायलट परीक्षण संचालन गर्नुहोस्" }
+    ];
 
-        // Populate Quiz
-        function populateQuiz() {
-            const container = document.getElementById('quiz-content');
-            container.innerHTML = quizQuestions.map((q, index) => `
-                <div class="quiz-question">
-                    <p lang="en"><strong>${index + 1}. ${q.questionEn}</strong></p>
-                    <p lang="np" class="hidden nepali-text"><strong>${index + 1}. ${q.questionNp}</strong></p>
-                    ${q.options.map((opt, i) => `
-                        <label>
-                            <input type="radio" name="q${index}" value="${i}">
-                            <span lang="en">${opt}</span>
-                            <span lang="np" class="hidden nepali-text">${q.optionsNp[i]}</span>
-                        </label>
-                    `).join('')}
-                </div>
-            `).join('');
-        }
+    let lang = 'en';
 
-        // Submit Quiz
-        function submitQuiz() {
-            let score = 0;
-            quizQuestions.forEach((q, index) => {
-                const selected = document.querySelector(`input[name="q${index}"]:checked`);
-                if (selected && parseInt(selected.value) === q.correct) {
-                    score++;
-                }
-            });
-
-            const result = document.getElementById('quiz-result');
-            const percentage = Math.round((score / quizQuestions.length) * 100);
-            result.style.display = 'block';
-            result.innerHTML = `
-                <div style="background: rgba(243, 156, 18, 0.2); padding: 20px; border-radius: 8px; border-left: 4px solid #f39c12;">
-                    <p lang="en"><strong>Your Score: ${score}/${quizQuestions.length} (${percentage}%)</strong></p>
-                    <p lang="np" class="hidden nepali-text"><strong>आपको स्कोर: ${score}/${quizQuestions.length} (${percentage}%)</strong></p>
-                    ${percentage >= 80 ? `<p style="color: #27ae60;" lang="en">✅ Excellent work! You have a strong understanding of research design hierarchy.</p>` : percentage >= 60 ? `<p style="color: #f39c12;" lang="en">👍 Good effort! Review the areas where you need improvement.</p>` : `<p style="color: #e74c3c;" lang="en">📚 Keep studying! Make sure to review all steps of the hierarchy.</p>`}
-                </div>
-            `;
-            updateProgress();
-            localStorage.setItem('quizScore', score);
-        }
-
-        // Populate Checklist
-        function populateChecklist() {
-            const container = document.getElementById('checklist-content');
-            container.innerHTML = `
-                <div>
-                    ${checklistItems.map((item, index) => `
-                        <div class="checklist-item" id="check-${index}">
-                            <input type="checkbox" id="checkbox-${index}" onchange="updateProgress()">
-                            <label for="checkbox-${index}">
-                                <span lang="en">${item.titleEn}</span>
-                                <span lang="np" class="hidden nepali-text">${item.titleNp}</span>
-                            </label>
-                        </div>
-                    `).join('')}
-                </div>
-                <div style="margin-top: 20px;">
-                    <button class="quiz-btn" onclick="saveChecklist()" lang="en">Save Progress</button>
-                    <button class="quiz-btn hidden" onclick="saveChecklist()" lang="np">प्रगति सुरक्षित गर्नुहोस्</button>
-                </div>
-            `;
-            loadChecklist();
-        }
-
-        // Save Checklist
-        function saveChecklist() {
-            const checked = [];
-            checklistItems.forEach((_, i) => {
-                if (document.getElementById(`checkbox-${i}`).checked) {
-                    checked.push(i);
-                }
-            });
-            localStorage.setItem('checklistProgress', JSON.stringify(checked));
-            alert(currentLanguage === 'en' ? 'Progress saved!' : 'प्रगति सुरक्षित भयो!');
-            updateProgress();
-        }
-
-        // Load Checklist
-        function loadChecklist() {
-            const saved = JSON.parse(localStorage.getItem('checklistProgress') || '[]');
-            saved.forEach(i => {
-                if (document.getElementById(`checkbox-${i}`)) {
-                    document.getElementById(`checkbox-${i}`).checked = true;
-                    document.getElementById(`check-${i}`).classList.add('completed');
-                }
-            });
-        }
-
-        // Update Progress
-        function updateProgress() {
-            let totalItems = 0;
-            let completedItems = 0;
-
-            // Quiz completion
-            const quizAnswered = document.querySelectorAll('input[type="radio"]:checked').length;
-            totalItems += quizQuestions.length;
-            completedItems += quizAnswered;
-
-            // Checklist completion
-            const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked').length;
-            totalItems += checklistItems.length;
-            completedItems += checkedBoxes;
-
-            // Section views
-            totalItems += 6; // Number of sections
-            completedItems += 1; // Current section
-
-            const percentage = Math.round((completedItems / totalItems) * 100);
-            const progressFill = document.getElementById('progress-fill');
-            if (progressFill) {
-                progressFill.style.width = percentage + '%';
-            }
-
-            const progressPercent = document.getElementById('progress-percent');
-            if (progressPercent) {
-                progressPercent.textContent = percentage + '%';
-            }
-        }
-
-        // Update UI
-        function updateUI() {
-            // Update all visible elements based on language
-            document.querySelectorAll('[lang]').forEach(el => {
-                if (currentLanguage === 'en' && el.lang === 'np') {
-                    el.classList.add('hidden');
-                } else if (currentLanguage === 'np' && el.lang === 'en') {
-                    el.classList.add('hidden');
-                } else if ((currentLanguage === 'en' && el.lang === 'en') || (currentLanguage === 'np' && el.lang === 'np')) {
-                    el.classList.remove('hidden');
-                }
-            });
-        }
-
-        // Initialize
-        window.addEventListener('load', function() {
-            updateProgress();
-            loadChecklist();
+    // ===== RENDER FUNCTIONS =====
+    function setLang(l) {
+        lang = l;
+        document.querySelectorAll('.lang-pill').forEach(b => {
+            const isEn = b.textContent.includes('English');
+            b.classList.toggle('active', (l==='en' && isEn) || (l==='np' && !isEn));
         });
-    </script>
+        document.querySelectorAll('[lang="np"]').forEach(el => el.classList.toggle('hidden', l==='en'));
+        document.querySelectorAll('[lang="en"]').forEach(el => el.classList.toggle('hidden', l==='np'));
+        renderAll();
+    }
+
+    function showSec(id, btn) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        updateProgress();
+    }
+
+    function renderAll() {
+        // Overview
+        document.getElementById('overview-grid').innerHTML = data.steps.map(s => `
+            <div class="step-card" onclick="openDetailModal(${s.id})">
+                <div class="step-num">${s.id}</div>
+                <h3><span lang="en">${s.titleEn}</span><span lang="np" class="hidden">${s.titleNp}</span></h3>
+                <p><span lang="en">${s.descEn}</span><span lang="np" class="hidden">${s.descNp}</span></p>
+                <div class="media-bar">
+                    <button class="btn-sm" onclick="event.stopPropagation(); openVideo('${s.titleEn}')">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        <span lang="en">Video</span><span lang="np" class="hidden">भिडियो</span>
+                    </button>
+                    <button class="btn-sm" onclick="event.stopPropagation(); openPDF('${s.titleEn}')">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                        <span lang="en">PDF</span><span lang="np" class="hidden">PDF</span>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+
+        // Hierarchy flow
+        const flow1 = data.steps.slice(0,4), flow2 = data.steps.slice(4);
+        const mkFlow = arr => arr.map((s,i) => `
+            <div class="flow-node" title="${lang==='en'?s.titleEn:s.titleNp}">
+                <span lang="en">${s.titleEn.split(' ')[0]}</span>
+                <span lang="np" class="hidden">${s.titleNp.split(' ')[0]}</span>
+            </div>
+            ${i < arr.length-1 ? '<span class="flow-arrow">→</span>' : ''}
+        `).join('');
+        document.getElementById('flow1').innerHTML = mkFlow(flow1);
+        document.getElementById('flow2').innerHTML = mkFlow(flow2);
+
+        // Details
+        document.getElementById('details-list').innerHTML = data.steps.map(s => `
+            <div class="detail-card">
+                <h3><span class="step-num" style="margin-bottom:0; margin-right:10px;">${s.id}</span>
+                <span lang="en">${s.titleEn}</span><span lang="np" class="hidden">${s.titleNp}</span></h3>
+                <p><span lang="en">${s.detailEn}</span><span lang="np" class="hidden">${s.detailNp}</span></p>
+                <div class="media-bar">
+                    <button class="btn-sm" onclick="openVideo('${s.titleEn}')">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        <span lang="en">Watch Tutorial</span><span lang="np" class="hidden">ट्यूटोरियल हेर्नुहोस्</span>
+                    </button>
+                    <button class="btn-sm" onclick="openPDF('${s.titleEn}')">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                        <span lang="en">Download PDF</span><span lang="np" class="hidden">PDF डाउनलोड</span>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+
+        // Resources
+        document.getElementById('resources-grid').innerHTML = data.steps.map(s => `
+            <div class="step-card">
+                <div class="step-num">${s.id}</div>
+                <h3><span lang="en">${s.titleEn}</span><span lang="np" class="hidden">${s.titleNp}</span></h3>
+                <p style="margin-bottom:14px;"><span lang="en">${s.descEn}</span><span lang="np" class="hidden">${s.descNp}</span></p>
+                <div class="media-bar">
+                    <button class="btn-sm" onclick="openVideo('${s.titleEn}')">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        <span lang="en">Watch Video</span><span lang="np" class="hidden">भिडियो हेर्नुहोस्</span>
+                    </button>
+                    <button class="btn-sm" onclick="openPDF('${s.titleEn}')">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                        <span lang="en">Open PDF</span><span lang="np" class="hidden">PDF खोल्नुहोस्</span>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+
+        // Quiz
+        document.getElementById('quiz-list').innerHTML = quizData.map((q,i) => `
+            <div class="quiz-card">
+                <p><span lang="en">${i+1}. ${q.qEn}</span><span lang="np" class="hidden">${i+1}. ${q.qNp}</span></p>
+                ${q.opts.map((o,j) => `
+                    <label class="quiz-option">
+                        <input type="radio" name="q${i}" value="${j}">
+                        <span lang="en">${o}</span>
+                        <span lang="np" class="hidden">${q.optsNp[j]}</span>
+                    </label>
+                `).join('')}
+            </div>
+        `).join('');
+
+        // Checklist
+        const saved = JSON.parse(localStorage.getItem('rd_check')||'[]');
+        document.getElementById('checklist-box').innerHTML = checkItems.map((c,i) => `
+            <div class="check-item ${saved.includes(i)?'done':''}" onclick="toggleCheck(${i})" id="ci-${i}">
+                <input type="checkbox" ${saved.includes(i)?'checked':''} onclick="event.stopPropagation()">
+                <span lang="en">${c.en}</span><span lang="np" class="hidden">${c.np}</span>
+            </div>
+        `).join('') + `
+            <button class="quiz-btn" onclick="saveCheck()" style="margin-top:10px;">
+                <span lang="en">Save Progress</span><span lang="np" class="hidden">प्रगति सुरक्षित गर्नुहोस्</span>
+            </button>
+        `;
+
+        setLang(lang);
+        updateProgress();
+    }
+
+    // ===== MODAL FUNCTIONS =====
+    function openVideo(title) {
+        const modal = document.getElementById('modal');
+        document.getElementById('modal-title').textContent = (lang==='en'?'Video Tutorial: ':'भिडियो ट्यूटोरियल: ') + title;
+        document.getElementById('modal-body').innerHTML = `
+            <div class="video-frame">
+                <div class="play-btn" onclick="window.open('https://www.youtube.com/results?search_query=${encodeURIComponent(title+' research design tutorial')}','_blank')">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+            </div>
+            <p style="color:var(--text-secondary); font-size:0.92rem; line-height:1.6;">
+                <span lang="en">This video tutorial covers key concepts for </span>
+                <span lang="np" class="hidden">यो भिडियो ट्यूटोरियलले मुख्य अवधारणाहरू समावेश गर्छ </span>
+                <strong style="color:var(--text-primary);">${title}</strong>.
+            </p>
+            <div style="margin-top:18px; padding:16px; background:rgba(255,255,255,0.03); border-radius:10px; border:1px solid var(--border);">
+                <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:8px;">
+                    <span lang="en">External link:</span>
+                    <span lang="np" class="hidden">बाह्य लिङ्क:</span>
+                </p>
+                <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(title+' research design tutorial')}" target="_blank" style="color:var(--accent); font-size:0.9rem; text-decoration:none; word-break:break-all;">
+                    youtube.com/watch?v=${title.replace(/\s+/g,'').toLowerCase()}
+                </a>
+            </div>
+        `;
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function openPDF(title) {
+        const modal = document.getElementById('modal');
+        document.getElementById('modal-title').textContent = (lang==='en'?'PDF Guide: ':'PDF गाइड: ') + title;
+        document.getElementById('modal-body').innerHTML = `
+            <div class="pdf-preview">
+                <div class="pdf-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                </div>
+                <div class="pdf-name">${title}.pdf</div>
+                <div class="pdf-meta">2.4 MB · 12 pages · PDF Document</div>
+            </div>
+            <p style="color:var(--text-secondary); font-size:0.92rem; margin-top:18px; line-height:1.6;">
+                <span lang="en">This PDF guide provides comprehensive coverage of </span>
+                <span lang="np" class="hidden">यो PDF गाइडले व्यापक रूपमा समावेश गर्छ </span>
+                <strong style="color:var(--text-primary);">${title}</strong>.
+            </p>
+            <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="quiz-btn" onclick="window.open('https://example.com/${title.replace(/\s+/g,'_')}.pdf','_blank')">
+                    <span lang="en">Open PDF</span><span lang="np" class="hidden">PDF खोल्नुहोस्</span>
+                </button>
+                <button class="btn-sm" onclick="window.open('https://example.com/${title.replace(/\s+/g,'_')}.pdf','_blank')" style="padding:12px 24px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                    <span lang="en">Download</span><span lang="np" class="hidden">डाउनलोड</span>
+                </button>
+            </div>
+        `;
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function openDetailModal(id) {
+        const s = data.steps.find(x => x.id === id);
+        openVideo(s.titleEn);
+    }
+
+    function closeModal(e) {
+        if (!e || e.target === document.getElementById('modal')) {
+            document.getElementById('modal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+    }
+
+    // ===== QUIZ =====
+    function submitQuiz() {
+        let score = 0;
+        quizData.forEach((q,i) => {
+            const sel = document.querySelector(`input[name="q${i}"]:checked`);
+            if (sel && parseInt(sel.value) === q.correct) score++;
+        });
+        const pct = Math.round((score/quizData.length)*100);
+        const box = document.getElementById('quiz-result');
+        box.classList.add('show');
+        box.className = 'quiz-result show ' + (pct>=80?'':(pct>=60?'warn':'fail'));
+        const msg = pct>=80 ? ['Excellent work! You have a strong understanding of research design hierarchy.','उत्कृष्ट काम! तपाईंसँग अनुसन्धान डिजाइन पदानुक्रमको बलियो बुझाइ छ।'] :
+                    pct>=60 ? ['Good effort! Review the areas where you need improvement.','राम्रो प्रयास! सुधार आवश्यक क्षेत्रहरू पुनरावृत्ति गर्नुहोस्।'] :
+                    ['Keep studying! Make sure to review all steps of the hierarchy.','अध्ययन जारी राख्नुहोस्! पदानुक्रमका सबै चरणहरू पुनरावृत्ति गर्नुहोस्।'];
+        box.innerHTML = `
+            <p style="font-weight:700; margin-bottom:8px; color:var(--text-primary);">
+                <span lang="en">Score: ${score}/${quizData.length} (${pct}%)</span>
+                <span lang="np" class="hidden">स्कोर: ${score}/${quizData.length} (${pct}%)</span>
+            </p>
+            <p style="font-size:0.85rem; color:var(--text-secondary);">
+                <span lang="en">${msg[0]}</span>
+                <span lang="np" class="hidden">${msg[1]}</span>
+            </p>
+        `;
+        setLang(lang);
+        updateProgress();
+    }
+
+    // ===== CHECKLIST =====
+    function toggleCheck(i) {
+        const el = document.getElementById('ci-'+i);
+        const cb = el.querySelector('input');
+        cb.checked = !cb.checked;
+        el.classList.toggle('done', cb.checked);
+        updateProgress();
+    }
+
+    function saveCheck() {
+        const checked = [];
+        checkItems.forEach((_,i) => {
+            if (document.getElementById('ci-'+i).querySelector('input').checked) checked.push(i);
+        });
+        localStorage.setItem('rd_check', JSON.stringify(checked));
+        alert(lang==='en'?'Progress saved successfully!':'प्रगति सफलतापूर्वक सुरक्षित भयो!');
+        updateProgress();
+    }
+
+    function updateProgress() {
+        let total = quizData.length + checkItems.length + 6;
+        let done = (document.querySelectorAll('input[type="radio"]:checked').length) +
+                   (document.querySelectorAll('.check-item input:checked').length) + 1;
+        const pct = Math.min(100, Math.round((done/total)*100));
+        document.getElementById('prog-bar').style.width = pct+'%';
+        document.getElementById('prog-val').textContent = pct+'%';
+    }
+
+    // ===== INIT =====
+    renderAll();
+    document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+</script>
+
 </body>
 </html>
