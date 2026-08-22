@@ -486,6 +486,43 @@
   .btn-primary { background: var(--terracotta); color: white; }
   .btn-secondary { background: var(--cream); color: var(--text); border: 1px solid var(--border); }
   .btn:hover { opacity: 0.85; }
+
+  /* ── BACK BUTTON ── */
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--earth-mid);
+    color: var(--sand);
+    border: 1px solid var(--gold)44;
+    border-radius: 8px;
+    padding: 7px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.2s, transform 0.1s;
+    font-family: 'Inter', sans-serif;
+    text-decoration: none;
+    user-select: none;
+    margin-bottom: 20px;
+  }
+  .back-btn:hover {
+    background: var(--terracotta);
+    border-color: var(--terracotta);
+    color: white;
+    transform: translateX(-2px);
+  }
+  .back-btn svg {
+    width: 15px; height: 15px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+    transition: transform 0.15s;
+  }
+  .back-btn:hover svg { transform: translateX(-3px); }
   .quiz-score-card {
     background: white; border: 1px solid var(--border);
     border-radius: 12px; padding: 32px; text-align: center;
@@ -823,6 +860,10 @@
 
     <!-- SEARCH RESULTS -->
     <div class="view" id="view-search-results">
+      <button class="back-btn" onclick="goBack()">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </button>
       <h2 class="section-heading">Search Results</h2>
       <p class="section-sub" id="searchLabel">Showing results for ""</p>
       <div id="searchResultsContainer"></div>
@@ -830,6 +871,10 @@
 
     <!-- AI TUTOR -->
     <div class="view" id="view-ai">
+      <button class="back-btn" onclick="goBack()">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </button>
       <h2 class="section-heading">🤖 AI Tutor Assistant</h2>
       <p class="section-sub">Ask me anything about MAHE503 – Field Archaeology syllabus topics.</p>
       <div class="ai-panel">
@@ -865,6 +910,10 @@
 
     <!-- REFERENCES -->
     <div class="view" id="view-references">
+      <button class="back-btn" onclick="goBack()">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </button>
       <h2 class="section-heading">📚 Prescribed Books & References</h2>
       <p class="section-sub">Official reading list for MAHE503 as prescribed by Siddharth University.</p>
       <div style="max-width: 760px;">
@@ -884,6 +933,10 @@
         <p id="unitDesc" style="margin-bottom:0"></p>
       </div>
       <div style="padding:28px 40px;">
+        <button class="back-btn" onclick="goBack()">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+          Back
+        </button>
         <div class="topic-nav" id="tabNav"></div>
         <div id="tabContents"></div>
       </div>
@@ -1622,29 +1675,8 @@ let quizState = {};
 let visitedUnits = new Set();
 
 // ══════════════════════════════
-// VIEW MANAGEMENT
+// VIEW MANAGEMENT (handled in init section below)
 // ══════════════════════════════
-function showView(name) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
-
-  if (name === 'unit') {
-    document.getElementById('view-unit').style.display = '';
-    document.getElementById('view-unit').classList.add('active');
-    const navEl = document.getElementById('nav-u'+currentUnit);
-    if (navEl) navEl.classList.add('active');
-  } else {
-    const el = document.getElementById('view-'+name);
-    if (el) { el.style.display=''; el.classList.add('active'); }
-    const navEl = document.getElementById('nav-'+name);
-    if (navEl) navEl.classList.add('active');
-  }
-
-  // Populate references if needed
-  if (name === 'references') buildReferences();
-
-  window.scrollTo(0, 0);
-}
 
 // ══════════════════════════════
 // UNIT NAVIGATION
@@ -1992,6 +2024,67 @@ function showToast(msg) {
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+// ── NAVIGATION HISTORY & BACK ──
+const navHistory = [];
+
+const _originalShowView = showView;
+// Wrap showView to track history
+function showView(name) {
+  // Record previous state before switching
+  const currentActive = document.querySelector('.view.active');
+  if (currentActive && currentActive.id) {
+    const prevId = currentActive.id.replace('view-', '');
+    // push to history only if it's a real view change
+    if (navHistory.length === 0 || navHistory[navHistory.length-1] !== prevId) {
+      navHistory.push(prevId);
+      if (navHistory.length > 20) navHistory.shift(); // cap history
+    }
+  }
+
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+
+  if (name === 'unit') {
+    document.getElementById('view-unit').style.display = '';
+    document.getElementById('view-unit').classList.add('active');
+    const navEl = document.getElementById('nav-u'+currentUnit);
+    if (navEl) navEl.classList.add('active');
+  } else {
+    const el = document.getElementById('view-'+name);
+    if (el) { el.style.display=''; el.classList.add('active'); }
+    const navEl = document.getElementById('nav-'+name);
+    if (navEl) navEl.classList.add('active');
+  }
+
+  if (name === 'references') buildReferences();
+  window.scrollTo(0, 0);
+}
+
+function goBack() {
+  if (navHistory.length === 0) {
+    // Default: go home
+    showView('home');
+    return;
+  }
+  const prev = navHistory.pop();
+  // Don't push to history when going back
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+
+  if (prev === 'unit') {
+    document.getElementById('view-unit').style.display = '';
+    document.getElementById('view-unit').classList.add('active');
+    const navEl = document.getElementById('nav-u'+currentUnit);
+    if (navEl) navEl.classList.add('active');
+  } else {
+    const el = document.getElementById('view-'+prev);
+    if (el) { el.style.display=''; el.classList.add('active'); }
+    const navEl = document.getElementById('nav-'+prev);
+    if (navEl) navEl.classList.add('active');
+  }
+  window.scrollTo(0, 0);
 }
 
 // Init
