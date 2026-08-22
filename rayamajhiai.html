@@ -1,3 +1,125 @@
+<!-- PASSWORD PROTECTION -->
+<div id="passwordScreen">
+    <div class="password-box">
+        <h2>🔐 Free RayamajhiAI Tools Derectory</h2>
+        <p>Please enter the password to continue.</p>
+
+        <input
+            type="password"
+            id="appPassword"
+            placeholder="Enter Password"
+            autocomplete="off"
+        >
+
+        <button onclick="unlockApp()">🔓 Open App</button>
+
+        <p id="passwordMessage"></p>
+    </div>
+</div>
+
+<style>
+    #passwordScreen {
+        position: fixed;
+        inset: 0;
+        z-index: 999999;
+        background: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .password-box {
+        width: 90%;
+        max-width: 400px;
+        padding: 30px;
+        text-align: center;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 25px rgba(0,0,0,0.20);
+    }
+
+    .password-box input {
+        width: 100%;
+        padding: 13px;
+        margin: 15px 0;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+    }
+
+    .password-box button {
+        width: 100%;
+        padding: 13px;
+        border: none;
+        border-radius: 8px;
+        background: #1d4ed8;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    #passwordMessage {
+        color: red;
+        margin-top: 12px;
+    }
+</style>
+
+<script>
+    // अपना password यहाँ लिखें
+    const APP_PASSWORD = "KMC@2026";
+
+    function unlockApp() {
+
+        const enteredPassword =
+            document.getElementById("appPassword").value;
+
+        if (enteredPassword === APP_PASSWORD) {
+
+            document.getElementById("passwordScreen").style.display = "none";
+
+            sessionStorage.setItem(
+                "rayamajhiaiUnlocked",
+                "true"
+            );
+
+        } else {
+
+            document.getElementById("passwordMessage").textContent =
+                "❌ Incorrect Password";
+
+            document.getElementById("appPassword").value = "";
+        }
+    }
+
+    // Enter key से भी unlock होगा
+    document.getElementById("appPassword").addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Enter") {
+                unlockApp();
+            }
+
+        }
+    );
+
+    // उसी browser tab में पहले से unlock है तो password दोबारा नहीं माँगेगा
+    window.addEventListener("load", function() {
+
+        if (
+            sessionStorage.getItem(
+                "rayamajhiaiUnlocked"
+            ) === "true"
+        ) {
+            document.getElementById("passwordScreen").style.display = "none";
+        }
+
+    });
+</script>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
