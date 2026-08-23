@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Engineering for Web Developers</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap');
+
+  :root {
+    --bg: #0b0d14;
+    --surface: #13151f;
+    --surface2: #1a1d2e;
+    --border: #252840;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd166;
+    --text: #e8eaf6;
+    --muted: #7b80a0;
+    --code-bg: #0d0f1a;
+    --glow: rgba(108,99,255,0.15);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Header ── */
+  header {
+    background: linear-gradient(135deg, #0b0d14 0%, #13101f 50%, #0b1420 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+
+  nav {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    gap: 1rem;
+  }
+
+  .logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+  }
+
+  .logo span { color: var(--accent); }
+
+  .progress-bar-wrap {
+    flex: 1;
+    max-width: 300px;
+    background: var(--border);
+    border-radius: 99px;
+    height: 6px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 99px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  .progress-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    text-align: center;
+    padding: 5rem 2rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(108,99,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(108,99,255,0.12);
+    border: 1px solid rgba(108,99,255,0.3);
+    border-radius: 99px;
+    padding: 0.35rem 1rem;
+    font-size: 0.78rem;
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  .hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #fff 30%, var(--accent) 70%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    color: var(--muted);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    line-height: 1.7;
+  }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .stat-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 0.2rem;
+  }
+
+  /* ── Main Layout ── */
+  .app {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    position: sticky;
+    top: 80px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .sidebar-header {
+    padding: 1rem 1.25rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .module-nav {
+    list-style: none;
+    padding: 0.5rem;
+  }
+
+  .module-nav li button {
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 0.75rem;
+    border-radius: 10px;
+    text-align: left;
+    transition: all 0.2s;
+    color: var(--muted);
+    font-size: 0.83rem;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .module-nav li button:hover {
+    background: var(--surface2);
+    color: var(--text);
+  }
+
+  .module-nav li button.active {
+    background: rgba(108,99,255,0.15);
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .module-nav li button.done {
+    color: var(--accent2);
+  }
+
+  .module-nav li button.done .nav-icon { background: var(--accent2); }
+
+  .nav-icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+    transition: background 0.2s;
+  }
+
+  .module-nav li button.active .nav-icon {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  /* ── Content Area ── */
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .module-section {
+    display: none;
+  }
+
+  .module-section.active {
+    display: block;
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: rgba(108,99,255,0.3); }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .card-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+
+  .card-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+
+  .card-subtitle {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.15rem;
+  }
+
+  /* ── Resource Buttons ── */
+  .resources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+
+  .res-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1px solid;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .res-btn.video {
+    background: rgba(255,107,107,0.1);
+    border-color: rgba(255,107,107,0.3);
+    color: #ff8e8e;
+  }
+
+  .res-btn.video:hover {
+    background: rgba(255,107,107,0.2);
+    border-color: var(--accent3);
+  }
+
+  .res-btn.pdf {
+    background: rgba(255,209,102,0.1);
+    border-color: rgba(255,209,102,0.3);
+    color: var(--accent4);
+  }
+
+  .res-btn.pdf:hover {
+    background: rgba(255,209,102,0.2);
+    border-color: var(--accent4);
+  }
+
+  .res-btn.ppt {
+    background: rgba(108,99,255,0.1);
+    border-color: rgba(108,99,255,0.3);
+    color: #a8a4ff;
+  }
+
+  .res-btn.ppt:hover {
+    background: rgba(108,99,255,0.2);
+    border-color: var(--accent);
+  }
+
+  .res-btn.doc {
+    background: rgba(0,212,170,0.1);
+    border-color: rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+
+  .res-btn.doc:hover {
+    background: rgba(0,212,170,0.2);
+  }
+
+  /* ── Code Block ── */
+  .code-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    color: #a8b4c8;
+    overflow-x: auto;
+    position: relative;
+    margin: 1rem 0;
+  }
+
+  .code-block .kw { color: #c792ea; }
+  .code-block .str { color: #c3e88d; }
+  .code-block .comment { color: #546e7a; }
+  .code-block .num { color: var(--accent4); }
+  .code-block .fn { color: #82aaff; }
+
+  .copy-btn {
+    position: absolute;
+    top: 0.75rem; right: 0.75rem;
+    background: var(--border);
+    border: none;
+    border-radius: 6px;
+    padding: 0.3rem 0.6rem;
+    color: var(--muted);
+    font-size: 0.7rem;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .copy-btn:hover { background: var(--accent); color: #fff; }
+
+  /* ── Prompt Evaluator ── */
+  .eval-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 0.75rem;
+    margin: 1rem 0;
+  }
+
+  .eval-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.9rem;
+  }
+
+  .eval-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+
+  .eval-score {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent2);
+  }
+
+  .eval-bar {
+    height: 4px;
+    background: var(--border);
+    border-radius: 99px;
+    margin-top: 0.4rem;
+    overflow: hidden;
+  }
+
+  .eval-bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* ── Prompt Input Area ── */
+  .prompt-area {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    width: 100%;
+    min-height: 140px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .prompt-area:focus { border-color: var(--accent); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.4rem;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #7c74ff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(108,99,255,0.4);
+  }
+
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ── Tags ── */
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.75rem 0;
+  }
+
+  .tag {
+    padding: 0.25rem 0.7rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+  }
+
+  .tag-html { background: rgba(255,107,107,0.15); color: #ff8e8e; }
+  .tag-css { background: rgba(108,99,255,0.15); color: #a8a4ff; }
+  .tag-js { background: rgba(255,209,102,0.15); color: var(--accent4); }
+  .tag-react { background: rgba(0,212,170,0.12); color: var(--accent2); }
+  .tag-node { background: rgba(118,188,34,0.12); color: #8fd632; }
+  .tag-db { background: rgba(255,152,0,0.12); color: #ffb74d; }
+
+  /* ── Framework Steps ── */
+  .framework-steps {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .fw-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .fw-step:hover {
+    border-color: rgba(108,99,255,0.4);
+    background: rgba(108,99,255,0.05);
+  }
+
+  .fw-step-num {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .fw-step-content strong {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.95rem;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .fw-step-content p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ── Workflow Diagram ── */
+  .workflow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 0;
+  }
+
+  .wf-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .wf-box {
+    padding: 0.55rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    white-space: nowrap;
+    border: 1px solid;
+  }
+
+  .wf-arrow {
+    color: var(--muted);
+    font-size: 1.1rem;
+    padding: 0 0.3rem;
+  }
+
+  /* ── Score Display ── */
+  .score-display {
+    text-align: center;
+    padding: 1.5rem;
+    background: var(--surface2);
+    border-radius: 12px;
+    margin-top: 1rem;
+  }
+
+  .score-big {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .score-label { color: var(--muted); font-size: 0.85rem; margin-top: 0.3rem; }
+
+  /* ── Lifecycle ── */
+  .lifecycle-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 0.6rem;
+  }
+
+  .lc-step {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .lc-step:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .lc-icon { font-size: 1.4rem; display: block; margin-bottom: 0.4rem; }
+  .lc-name { font-size: 0.78rem; font-weight: 500; color: var(--text); }
+  .lc-desc { font-size: 0.7rem; color: var(--muted); margin-top: 0.2rem; }
+
+  /* ── Table ── */
+  .eval-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-top: 1rem;
+  }
+
+  .eval-table th {
+    text-align: left;
+    padding: 0.7rem 1rem;
+    background: var(--surface2);
+    color: var(--muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-weight: 500;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .eval-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .eval-table tr:last-child td { border-bottom: none; }
+  .eval-table tr:hover td { background: rgba(108,99,255,0.04); }
+
+  .criterion-badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    background: rgba(108,99,255,0.12);
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  /* ── Checkbox list ── */
+  .check-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .check-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .check-list li::before {
+    content: '→';
+    color: var(--accent2);
+    flex-shrink: 0;
+    margin-top: 0.05rem;
+  }
+
+  /* ── Module complete btn ── */
+  .complete-btn {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .app {
+      grid-template-columns: 1fr;
+    }
+    .sidebar {
+      position: static;
+    }
+    .module-nav {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .module-nav li {
+      flex: 0 0 auto;
+    }
+    .module-nav li button {
+      padding: 0.5rem 0.6rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 1.7rem; }
+    .hero-stats { gap: 1.5rem; }
+    .card { padding: 1.25rem; }
+    .eval-grid { grid-template-columns: repeat(2,1fr); }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--surface2);
+    border: 1px solid var(--accent2);
+    color: var(--accent2);
+    padding: 0.75rem 1.25rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s;
+    z-index: 999;
+    pointer-events: none;
+  }
+
+  .toast.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">⚡ <span>PromptDev</span> Academy</div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-label" id="progressLabel">0 / 11 Modules</div>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-badge">🚀 Practical Roadmap · 11 Modules</div>
+  <h1>Prompt Engineering<br>for Web Developers</h1>
+  <p>Master the art of directing AI to write better code, debug faster, and build full-stack projects from idea to deployment.</p>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">11</div>
+      <div class="stat-label">Modules</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">40+</div>
+      <div class="stat-label">Practical Prompts</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">8</div>
+      <div class="stat-label">Evaluation Criteria</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Real Projects</div>
+    </div>
+  </div>
+</section>
+
+<div class="app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">Course Modules</div>
+    <ul class="module-nav" id="moduleNav">
+      <li><button onclick="showModule(0)" class="active" id="nav0"><span class="nav-icon">01</span>Fundamentals</button></li>
+      <li><button onclick="showModule(1)" id="nav1"><span class="nav-icon">02</span>Basic Prompts</button></li>
+      <li><button onclick="showModule(2)" id="nav2"><span class="nav-icon">03</span>Dev Framework</button></li>
+      <li><button onclick="showModule(3)" id="nav3"><span class="nav-icon">04</span>Frontend</button></li>
+      <li><button onclick="showModule(4)" id="nav4"><span class="nav-icon">05</span>Backend</button></li>
+      <li><button onclick="showModule(5)" id="nav5"><span class="nav-icon">06</span>Database</button></li>
+      <li><button onclick="showModule(6)" id="nav6"><span class="nav-icon">07</span>Debugging Lab</button></li>
+      <li><button onclick="showModule(7)" id="nav7"><span class="nav-icon">08</span>Code Quality</button></li>
+      <li><button onclick="showModule(8)" id="nav8"><span class="nav-icon">09</span>Full-Stack</button></li>
+      <li><button onclick="showModule(9)" id="nav9"><span class="nav-icon">10</span>Evaluation</button></li>
+      <li><button onclick="showModule(10)" id="nav10"><span class="nav-icon">11</span>Final Project</button></li>
+    </ul>
+  </aside>
+
+  <!-- Content -->
+  <main class="content">
+
+    <!-- ── MODULE 0: Fundamentals ── -->
+    <div class="module-section active" id="module0">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(108,99,255,0.15)">🤖</div>
+          <div>
+            <div class="card-title">AI + Web Development Fundamentals</div>
+            <div class="card-subtitle">Module 1 · Foundation concepts</div>
+          </div>
+        </div>
+        <ul class="check-list">
+          <li>What is Prompt Engineering and why it matters for developers</li>
+          <li>How Large Language Models (LLMs) assist web developers</li>
+          <li>AI-assisted coding workflow: plan → prompt → review → integrate</li>
+          <li>Writing precise coding requirements for reliable AI output</li>
+          <li>Understanding AI limitations, hallucinations, and verification strategies</li>
+        </ul>
+        <div class="resources">
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=_ZvnD73m40o" target="_blank">▶ Prompt Eng. Intro – Andrej Karpathy</a>
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=dOxUroR57xs" target="_blank">▶ How LLMs Work</a>
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=T9aRN5JkmL8" target="_blank">▶ AI Coding Workflow</a>
+          <a class="res-btn pdf" href="https://arxiv.org/pdf/2302.11382" target="_blank">📄 Prompt Engineering Guide (PDF)</a>
+          <a class="res-btn ppt" href="https://docs.google.com/presentation/d/1RIBt5RcWAQanPXG7R7DqMqwWoF_EY9X1qJ7K3xJXJ1o/present" target="_blank">📊 AI Fundamentals Slides</a>
+          <a class="res-btn doc" href="https://www.promptingguide.ai/" target="_blank">🔗 PromptingGuide.ai</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(0,212,170,0.12)">💡</div>
+          <div>
+            <div class="card-title">Key Concepts: How AI Thinks About Code</div>
+            <div class="card-subtitle">Mental models for effective prompting</div>
+          </div>
+        </div>
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="comment">// ❌ Vague prompt — AI guesses your intent</span>
+<span class="str">"Make a login page"</span>
+
+<span class="comment">// ✅ Precise prompt — AI executes your vision</span>
+<span class="str">"Create an HTML5 login form with email + password fields,
+client-side validation, ARIA labels for accessibility,
+and a CSS gradient button. No frameworks. 
+Return separate HTML and CSS files."</span>
+        </div>
+        <div class="complete-btn">
+          <span style="color:var(--muted);font-size:0.83rem">Complete this module to track progress</span>
+          <button class="btn btn-primary" onclick="markDone(0)">✓ Mark Complete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MODULE 1: Basic Prompts ── -->
+    <div class="module-section" id="module1">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(255,107,107,0.12)">🎯</div>
+          <div>
+            <div class="card-title">Basic Coding Prompts</div>
+            <div class="card-subtitle">Module 2 · Learn by doing with these starter prompts</div>
+          </div>
+        </div>
+        <div class="tag-row">
+          <span class="tag tag-html">HTML</span>
+          <span class="tag tag-css">CSS</span>
+          <span class="tag tag-js">JavaScript</span>
+        </div>
+        <div class="framework-steps" style="margin-top:0.75rem">
+          <div class="fw-step">
+            <div class="fw-step-num">H</div>
+            <div class="fw-step-content">
+              <strong>HTML Page</strong>
+              <p>"Create a semantic HTML5 page for a restaurant website. Include: header with nav, hero section, menu cards grid, contact form, and footer. Use proper ARIA roles."</p>
+            </div>
+          </div>
+          <div class="fw-step">
+            <div class="fw-step-num">C</div>
+            <div class="fw-step-content" style="color:var(--accent)">
+              <strong>CSS Styling</strong>
+              <p>"Style the above HTML using CSS Flexbox. Use a dark navy/gold color palette, Google Font 'Playfair Display' for headings, and responsive breakpoints at 768px and 480px."</p>
+            </div>
+          </div>
+          <div class="fw-step">
+            <div class="fw-step-num">J</div>
+            <div class="fw-step-content">
+              <strong>JavaScript Function</strong>
+              <p>"Write a vanilla JS function that validates a contact form: required fields, email regex, phone number format (10 digits), and displays inline error messages."</p>
+            </div>
+          </div>
+          <div class="fw-step">
+            <div class="fw-step-num">R</div>
+            <div class="fw-step-content">
+              <strong>Responsive Layout</strong>
+              <p>"Convert this 3-column CSS Grid layout to fully responsive: desktop 3 cols, tablet 2 cols, mobile 1 col. Add smooth hover animations on cards."</p>
+            </div>
+          </div>
+        </div>
+        <div class="resources">
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=G3e-cpL7ofc" target="_blank">▶ HTML & CSS Crash Course</a>
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=hdI2bqOjy3c" target="_blank">▶ JavaScript Basics</a>
+          <a class="res-btn pdf" href="https://developer.mozilla.org/en-US/docs/Learn/HTML" target="_blank">📄 MDN HTML Reference</a>
+          <a class="res-btn ppt" href="https://www.w3schools.com/css/css_intro.asp" target="_blank">📊 CSS Intro Guide</a>
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=Ik-mNImBVcY" target="_blank">▶ Responsive Design Tutorial</a>
+        </div>
+        <div class="complete-btn">
+          <span style="color:var(--muted);font-size:0.83rem">Practice all 4 prompt types</span>
+          <button class="btn btn-primary" onclick="markDone(1)">✓ Mark Complete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MODULE 2: Framework ── -->
+    <div class="module-section" id="module2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(0,212,170,0.12)">🏗️</div>
+          <div>
+            <div class="card-title">The Developer Prompt Framework</div>
+            <div class="card-subtitle">Module 3 · 8-part structure for production-quality prompts</div>
+          </div>
+        </div>
+        <div class="framework-steps">
+          <div class="fw-step"><div class="fw-step-num">R</div><div class="fw-step-content"><strong>ROLE</strong><p>Assign an expert persona. "Act as a senior frontend developer with 10 years of React experience."</p></div></div>
+          <div class="fw-step"><div class="fw-step-num">P</div><div class="fw-step-content"><strong>PROJECT CONTEXT</strong><p>Describe what you're building, who uses it, and the business goal.</p></div></div>
+          <div class="fw-step"><div class="fw-step-num">T</div><div class="fw-step-content"><strong>TASK</strong><p>State the specific, bounded deliverable clearly and without ambiguity.</p></div></div>
+          <div class="fw-step"><div class="fw-step-num">TR</div><div class="fw-step-content"><strong>TECHNICAL REQUIREMENTS</strong><p>List technology stack, versions, APIs, constraints like "vanilla JS only".</p></div></div>
+          <div class="fw-step"><div class="fw-step-num">C</div><div class="fw-step-content"><strong>CONSTRAINTS</strong><p>What NOT to do: "No jQuery", "No external fonts", "WCAG 2.1 AA compliance".</p></div></div>
+          <div class="fw-step"><div class="fw-step-num">IO</div><div class="fw-step-content"><strong>INPUT / OUTPUT</strong><p>Specify exact output format: "Separate .html, .css, .js files with folder structure explained."</p></div></div>
+          <div class="fw-step"><div class="fw-step-num">E</div><div class="fw-step-content"><strong>EXAMPLES</strong><p>Provide a sample input/output or reference a design pattern to follow.</p></div></div>
+          <div class="fw-step"><div class="fw-step-num">Q</div><div class="fw-step-content"><strong>TESTING REQUIREMENTS</strong><p>"Include 5 test cases covering edge cases, empty input, and invalid formats."</p></div></div>
+        </div>
+
+        <div style="margin-top:1.5rem">
+          <div style="font-size:0.9rem;font-weight:600;margin-bottom:0.75rem;color:var(--text)">Example: Full Framework in Action</div>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="kw">ROLE:</span> Act as a senior frontend developer.
+
+<span class="kw">PROJECT:</span> Create a responsive student registration webpage.
+
+<span class="kw">TECHNOLOGY:</span> HTML5, CSS3, and vanilla JavaScript only.
+
+<span class="kw">REQUIREMENTS:</span>
+<span class="num">1.</span> Registration form with full name, email, student ID, program.
+<span class="num">2.</span> Validate all required fields on submit.
+<span class="num">3.</span> Validate email format with regex.
+<span class="num">4.</span> Display clear, accessible validation messages.
+<span class="num">5.</span> Fully responsive (desktop, tablet, mobile).
+<span class="num">6.</span> No external frameworks or libraries.
+
+<span class="kw">OUTPUT:</span> Separate HTML, CSS, and JS files.
+Explain folder structure. Include test cases.
+
+<span class="kw">TESTING:</span> Provide 5 test cases covering valid/invalid inputs.
+          </div>
+        </div>
+
+        <div class="resources">
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=_ZvnD73m40o" target="_blank">▶ Prompt Engineering Deep Dive</a>
+          <a class="res-btn pdf" href="https://www.promptingguide.ai/techniques" target="_blank">📄 Prompting Techniques PDF</a>
+          <a class="res-btn ppt" href="https://learnprompting.org/" target="_blank">📊 Learn Prompting</a>
+        </div>
+        <div class="complete-btn">
+          <span style="color:var(--muted);font-size:0.83rem">Write 3 prompts using the full framework</span>
+          <button class="btn btn-primary" onclick="markDone(2)">✓ Mark Complete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MODULE 3: Frontend ── -->
+    <div class="module-section" id="module3">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(255,209,102,0.12)">🎨</div>
+          <div>
+            <div class="card-title">Prompt Engineering for Frontend Development</div>
+            <div class="card-subtitle">Module 4 · HTML · CSS · JavaScript · React</div>
+          </div>
+        </div>
+        <div class="tag-row">
+          <span class="tag tag-html">HTML</span>
+          <span class="tag tag-css">CSS</span>
+          <span class="tag tag-js">JavaScript</span>
+          <span class="tag tag-react">React</span>
+        </div>
+
+        <div class="framework-steps" style="margin-top:0.75rem">
+          <div class="fw-step">
+            <div class="fw-step-num" style="background:#ff6b6b">H</div>
+            <div class="fw-step-content">
+              <strong>HTML → Semantic & Accessible</strong>
+              <p>"Generate semantic HTML5 for a blog article page. Use proper heading hierarchy, figure/figcaption for images, time element, and schema.org Article markup."</p>
+            </div>
+          </div>
+          <div class="fw-step">
+            <div class="fw-step-num" style="background:var(--accent)">C</div>
+            <div class="fw-step-content">
+              <strong>CSS → Grid, Flexbox, Animations</strong>
+              <p>"Create a CSS Grid magazine layout with a hero spanning 2 columns, sidebar, and 3 article cards. Add scroll-triggered fade-in animations using @keyframes only."</p>
+            </div>
+          </div>
+          <div class="fw-step">
+            <div class="fw-step-num" style="background:#ffd166;color:#000">J</div>
+            <div class="fw-step-content">
+              <strong>JavaScript → DOM, Events, APIs</strong>
+              <p>"Write a vanilla JS module that fetches data from a REST API, handles loading/error states, renders results as cards, and includes infinite scroll pagination."</p>
+            </div>
+          </div>
+          <div class="fw-step">
+            <div class="fw-step-num" style="background:var(--accent2);color:#000">R</div>
+            <div class="fw-step-content">
+              <strong>React → Components, Hooks, Routing</strong>
+              <p>"Build a React functional component for a student dashboard. Use useState for UI state, useEffect for data fetching, Context API for theme, and React Router for navigation."</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="resources">
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=pQN-pnXPaVg" target="_blank">▶ HTML Full Course</a>
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=1Rs2ND1ryYc" target="_blank">▶ CSS Grid Tutorial</a>
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=PkZNo7MFNFg" target="_blank">▶ JavaScript Full Course</a>
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=bMknfKXIFA8" target="_blank">▶ React Full Course</a>
+          <a class="res-btn pdf" href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout" target="_blank">📄 CSS Grid MDN</a>
+          <a class="res-btn ppt" href="https://react.dev/learn" target="_blank">📊 React Official Docs</a>
+        </div>
+        <div class="complete-btn">
+          <span style="color:var(--muted);font-size:0.83rem">Build one component per section</span>
+          <button class="btn btn-primary" onclick="markDone(3)">✓ Mark Complete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MODULE 4: Backend ── -->
+    <div class="module-section" id="module4">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(118,188,34,0.12)">⚙️</div>
+          <div>
+            <div class="card-title">Prompt Engineering for Backend Development</div>
+            <div class="card-subtitle">Module 5 · Node.js · Python · PHP · REST APIs</div>
+          </div>
+        </div>
+        <div class="tag-row">
+          <span class="tag tag-node">Node.js</span>
+          <span class="tag tag-node" style="background:rgba(53,114,165,0.15);color:#5ba3dc">Python</span>
+          <span class="tag tag-node" style="background:rgba(119,123,179,0.15);color:#9b9fd4">PHP</span>
+          <span class="tag tag-react">REST API</span>
+        </div>
+
+        <div class="code-block" style="margin-top:0.75rem">
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="comment">// Backend Prompt Template</span>
+<span class="kw">Act as</span> a senior Node.js/Express developer.
+
+<span class="kw">Task:</span> Create a REST API for a student registration system.
+
+<span class="kw">Requirements:</span>
+- <span class="fn">GET</span>    /api/students       → paginated list with filters
+- <span class="fn">POST</span>   /api/students       → create with validation
+- <span class="fn">PUT</span>    /api/students/:id   → update (partial support)
+- <span class="fn">DELETE</span> /api/students/:id   → soft delete
+
+<span class="kw">Include:</span>
+- JWT authentication middleware
+- Input validation with express-validator
+- Error handling middleware (400/401/404/500)
+- MongoDB/Mongoose integration
+- Rate limiting (express-rate-limit)
+
+<span class="kw">Output:</span> MVC folder structure with controller, route, model files.
+        </div>
+
+        <div class="framework-steps" style="margin-top:0.75rem">
+          <div class="fw-step"><div class="fw-step-num" style="background:var(--accent2);color:#000">A</div><div class="fw-step-content"><strong>Authentication Prompt</strong><p>"Implement JWT auth with refresh tokens, bcrypt password hashing, and middleware to protect routes. Include signup, login, logout, and token refresh endpoints."</p></div></div>
+          <div class="fw-step"><div class="fw-step-num" style="background:#ffd166;color:#000">V</div><div class="fw-step-content"><strong>Server-side Validation</strong><p>"Add server-side validation for all POST/PUT endpoints: sanitize inputs, check for SQL injection, validate data types and ranges, return structured error responses."</p></div></div>
+          <div class="fw-step"><div class="fw-step-num" style="background:#ff6b6b">E</div><div class="fw-step-content"><strong>Error Handling</strong><p>"Create a global error handling middleware that catches async errors, formats responses consistently as {success, message, error}, and logs to a file with timestamps."</p></div></div>
+        </div>
+
+        <div class="resources">
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=Oe421EPjeBE" target="_blank">▶ Node.js & Express Full Course</a>
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=WXsD0ZgxjRw" target="_blank">▶ REST API Tutorial</a>
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=7Q17ubqLfaM" target="_blank">▶ JWT Authentication</a>
+          <a class="res-btn pdf" href="https://expressjs.com/en/guide/routing.html" target="_blank">📄 Express.js Docs</a>
+          <a class="res-btn ppt" href="https://www.postman.com/api-documentation-tool/" target="_blank">📊 API Documentation</a>
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=9N6a-VLBa2I" target="_blank">▶ Python Flask API</a>
+        </div>
+        <div class="complete-btn">
+          <span style="color:var(--muted);font-size:0.83rem">Build and test a CRUD API</span>
+          <button class="btn btn-primary" onclick="markDone(4)">✓ Mark Complete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MODULE 5: Database ── -->
+    <div class="module-section" id="module5">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(255,152,0,0.12)">🗄️</div>
+          <div>
+            <div class="card-title">Database Prompt Engineering</div>
+            <div class="card-subtitle">Module 6 · Schema design, SQL, normalization</div>
+          </div>
+        </div>
+        <div class="tag-row">
+          <span class="tag tag-db">SQL</span>
+          <span class="tag tag-db" style="background:rgba(0,212,170,0.1);color:var(--accent2)">MongoDB</span>
+          <span class="tag tag-db">Normalization</span>
+          <span class="tag tag-db">ERD</span>
+        </div>
+
+        <div class="code-block" style="margin-top:0.75rem">
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="comment">-- Teaching-Learning Management System Prompt</span>
+<span class="kw">Act as</span> a database architect.
+
+<span class="kw">Design</span> a relational database for a University TLMS.
+
+<span class="kw">Entities:</span> Students, Teachers, Courses, Classes,
+          Assignments, Submissions, Results.
+
+<span class="kw">Provide:</span>
+<span class="num">1.</span> Tables with all columns and data types
+<span class="num">2.</span> Primary keys (use UUID where appropriate)
+<span class="num">3.</span> Foreign keys with ON DELETE behavior
+<span class="num">4.</span> Entity-relationship diagram (text-based)
+<span class="num">5.</span> Normalization to 3NF — explain each step
+<span class="num">6.</span> SQL CREATE TABLE statements (PostgreSQL syntax)
+<span class="num">7.</span> Sample INSERT data (10 rows per table)
+<span class="num">8.</span> Five useful SELECT queries with JOINs and aggregations
+
+<span class="kw">Output:</span> Ordered SQL file ready to execute.
+        </div>
+
+        <div class="resources">
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=HXV3zeQKqGY" target="_blank">▶ SQL Full Course</a>
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=qw--VYLpxG4" target="_blank">▶ Database Normalization</a>
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=ztHopE5Wnpc" target="_blank">▶ ER Diagrams Tutorial</a>
+          <a class="res-btn pdf" href="https://www.postgresql.org/docs/current/" target="_blank">📄 PostgreSQL Docs</a>
+          <a class="res-btn ppt" href="https://dbdiagram.io/" target="_blank">📊 DB Diagram Tool</a>
+        </div>
+        <div class="complete-btn">
+          <span style="color:var(--muted);font-size:0.83rem">Design and query a real schema</span>
+          <button class="btn btn-primary" onclick="markDone(5)">✓ Mark Complete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MODULE 6: Debugging ── -->
+    <div class="module-section" id="module6">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(255,107,107,0.15)">🔬</div>
+          <div>
+            <div class="card-title">AI-Assisted Debugging Laboratory</div>
+            <div class="card-subtitle">Module 7 · Diagnose, fix, test, refactor</div>
+          </div>
+        </div>
+        <div style="margin-bottom:1rem">
+          <div style="font-size:0.85rem;color:var(--muted);margin-bottom:0.75rem">The Debugging Workflow</div>
+          <div class="workflow">
+            <div class="wf-step"><div class="wf-box" style="border-color:#6c63ff;color:#a8a4ff">Code</div></div>
+            <div class="wf-arrow">→</div>
+            <div class="wf-step"><div class="wf-box" style="border-color:#ff6b6b;color:#ff8e8e">Error</div></div>
+            <div class="wf-arrow">→</div>
+            <div class="wf-step"><div class="wf-box" style="border-color:#ffd166;color:#ffd166">Explain</div></div>
+            <div class="wf-arrow">→</div>
+            <div class="wf-step"><div class="wf-box" style="border-color:#ff9800;color:#ffb74d">Diagnose</div></div>
+            <div class="wf-arrow">→</div>
+            <div class="wf-step"><div class="wf-box" style="border-color:#00d4aa;color:#00d4aa">Fix</div></div>
+            <div class="wf-arrow">→</div>
+            <div class="wf-step"><div class="wf-box" style="border-color:#8fd632;color:#8fd632">Test</div></div>
+            <div class="wf-arrow">→</div>
+            <div class="wf-step"><div class="wf-box" style="border-color:#6c63ff;color:#a8a4ff">Refactor</div></div>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="comment">// ✅ The RIGHT debugging prompt template</span>
+<span class="kw">Analyze</span> the following JavaScript code.
+
+<span class="kw">Goal:</span> Explain why the form validation is not working.
+
+<span class="kw">Requirements:</span>
+<span class="num">1.</span> Identify the <span class="fn">exact</span> problem (line number if possible)
+<span class="num">2.</span> Explain the root cause clearly
+<span class="num">3.</span> Provide the corrected code
+<span class="num">4.</span> Explain what changed and why it fixes the issue
+<span class="num">5.</span> Provide <span class="num">3</span> test cases: valid input, empty, edge case
+
+<span class="kw">Code:</span>
+<span class="str">[PASTE YOUR CODE HERE]</span>
+        </div>
+
+        <div class="resources">
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=AX7uybwukkk" target="_blank">▶ JS Debugging Techniques</a>
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=H0XScE08hy8" target="_blank">▶ Chrome DevTools</a>
+          <a class="res-btn pdf" href="https://developer.chrome.com/docs/devtools/javascript" target="_blank">📄 DevTools Debugging Guide</a>
+          <a class="res-btn ppt" href="https://jshint.com/" target="_blank">📊 JSHint Linter</a>
+        </div>
+        <div class="complete-btn">
+          <span style="color:var(--muted);font-size:0.83rem">Debug 3 broken code samples</span>
+          <button class="btn btn-primary" onclick="markDone(6)">✓ Mark Complete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MODULE 7: Code Quality ── -->
+    <div class="module-section" id="module7">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(0,212,170,0.12)">✨</div>
+          <div>
+            <div class="card-title">Prompt Engineering for Code Quality</div>
+            <div class="card-subtitle">Module 8 · Refactoring · Testing · Documentation</div>
+          </div>
+        </div>
+
+        <div class="lifecycle-grid">
+          <div class="lc-step" onclick="showQualityTip('refactor')"><span class="lc-icon">♻️</span><div class="lc-name">Refactoring</div><div class="lc-desc">Clean code patterns</div></div>
+          <div class="lc-step" onclick="showQualityTip('perf')"><span class="lc-icon">⚡</span><div class="lc-name">Performance</div><div class="lc-desc">Speed optimization</div></div>
+          <div class="lc-step" onclick="showQualityTip('a11y')"><span class="lc-icon">♿</span><div class="lc-name">Accessibility</div><div class="lc-desc">WCAG compliance</div></div>
+          <div class="lc-step" onclick="showQualityTip('seo')"><span class="lc-icon">🔍</span><div class="lc-name">SEO</div><div class="lc-desc">Search optimization</div></div>
+          <div class="lc-step" onclick="showQualityTip('docs')"><span class="lc-icon">📚</span><div class="lc-name">Documentation</div><div class="lc-desc">JSDoc, comments</div></div>
+          <div class="lc-step" onclick="showQualityTip('test')"><span class="lc-icon">🧪</span><div class="lc-name">Unit Testing</div><div class="lc-desc">Jest, coverage</div></div>
+          <div class="lc-step" onclick="showQualityTip('review')"><span class="lc-icon">👁️</span><div class="lc-name">Code Review</div><div class="lc-desc">Best practices</div></div>
+          <div class="lc-step" onclick="showQualityTip('error')"><span class="lc-icon">🛡️</span><div class="lc-name">Error Handling</div><div class="lc-desc">Graceful failures</div></div>
+        </div>
+
+        <div class="code-block" id="qualityTipBox" style="margin-top:1rem;display:none">
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          <div id="qualityTipContent"></div>
+        </div>
+
+        <div class="resources">
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=KnTVFuOSNiE" target="_blank">▶ Clean Code Principles</a>
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=r9HH_jd6uro" target="_blank">▶ Unit Testing with Jest</a>
+          <a class="res-btn pdf" href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank">📄 WCAG Quick Reference</a>
+          <a class="res-btn ppt" href="https://jsdoc.app/" target="_blank">📊 JSDoc Guide</a>
+        </div>
+        <div class="complete-btn">
+          <span style="color:var(--muted);font-size:0.83rem">Apply each quality prompt to existing code</span>
+          <button class="btn btn-primary" onclick="markDone(7)">✓ Mark Complete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MODULE 8: Full-Stack ── -->
+    <div class="module-section" id="module8">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(108,99,255,0.15)">🚀</div>
+          <div>
+            <div class="card-title">Full-Stack Project Prompting</div>
+            <div class="card-subtitle">Module 9 · Idea to Deployment lifecycle</div>
+          </div>
+        </div>
+        <div style="font-size:0.85rem;color:var(--muted);margin-bottom:0.75rem">Click any stage to see the prompt</div>
+        <div class="lifecycle-grid" id="lcGrid">
+          <div class="lc-step" onclick="showLcPrompt(0)"><span class="lc-icon">💡</span><div class="lc-name">Idea</div><div class="lc-desc">Concept definition</div></div>
+          <div class="lc-step" onclick="showLcPrompt(1)"><span class="lc-icon">📋</span><div class="lc-name">Requirements</div><div class="lc-desc">Spec document</div></div>
+          <div class="lc-step" onclick="showLcPrompt(2)"><span class="lc-icon">🏛️</span><div class="lc-name">Architecture</div><div class="lc-desc">System design</div></div>
+          <div class="lc-step" onclick="showLcPrompt(3)"><span class="lc-icon">🎨</span><div class="lc-name">UI Design</div><div class="lc-desc">Wireframes</div></div>
+          <div class="lc-step" onclick="showLcPrompt(4)"><span class="lc-icon">🗄️</span><div class="lc-name">Database</div><div class="lc-desc">Schema design</div></div>
+          <div class="lc-step" onclick="showLcPrompt(5)"><span class="lc-icon">🔌</span><div class="lc-name">API</div><div class="lc-desc">Endpoints</div></div>
+          <div class="lc-step" onclick="showLcPrompt(6)"><span class="lc-icon">⚛️</span><div class="lc-name">Frontend</div><div class="lc-desc">Components</div></div>
+          <div class="lc-step" onclick="showLcPrompt(7)"><span class="lc-icon">⚙️</span><div class="lc-name">Backend</div><div class="lc-desc">Server logic</div></div>
+          <div class="lc-step" onclick="showLcPrompt(8)"><span class="lc-icon">🧪</span><div class="lc-name">Testing</div><div class="lc-desc">Test suites</div></div>
+          <div class="lc-step" onclick="showLcPrompt(9)"><span class="lc-icon">🔒</span><div class="lc-name">Security</div><div class="lc-desc">Hardening</div></div>
+          <div class="lc-step" onclick="showLcPrompt(10)"><span class="lc-icon">☁️</span><div class="lc-name">Deployment</div><div class="lc-desc">CI/CD pipeline</div></div>
+        </div>
+
+        <div class="code-block" id="lcPromptBox" style="margin-top:1rem;display:none">
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          <div id="lcPromptContent"></div>
+        </div>
+
+        <div class="resources">
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=nu_pCVPKzTk" target="_blank">▶ MERN Stack Full Course</a>
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=MFh0Fd7BsjE" target="_blank">▶ System Design for Beginners</a>
+          <a class="res-btn pdf" href="https://12factor.net/" target="_blank">📄 12-Factor App Guide</a>
+        </div>
+        <div class="complete-btn">
+          <span style="color:var(--muted);font-size:0.83rem">Write prompts for each lifecycle stage</span>
+          <button class="btn btn-primary" onclick="markDone(8)">✓ Mark Complete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MODULE 9: Evaluation ── -->
+    <div class="module-section" id="module9">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(255,209,102,0.12)">📊</div>
+          <div>
+            <div class="card-title">Prompt Evaluation Scorer</div>
+            <div class="card-subtitle">Module 10 · Score your prompts against 8 criteria</div>
+          </div>
+        </div>
+
+        <table class="eval-table">
+          <thead>
+            <tr>
+              <th>Criterion</th>
+              <th>Question</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="criterion-badge">Clarity</span></td><td style="color:var(--muted);font-size:0.83rem">Is the task unambiguous and specific?</td></tr>
+            <tr><td><span class="criterion-badge">Context</span></td><td style="color:var(--muted);font-size:0.83rem">Has sufficient project information been supplied?</td></tr>
+            <tr><td><span class="criterion-badge">Specificity</span></td><td style="color:var(--muted);font-size:0.83rem">Are technical requirements precise and measurable?</td></tr>
+            <tr><td><span class="criterion-badge">Constraints</span></td><td style="color:var(--muted);font-size:0.83rem">Are limitations clearly stated (no X, use Y only)?</td></tr>
+            <tr><td><span class="criterion-badge">Output Format</span></td><td style="color:var(--muted);font-size:0.83rem">Is the expected response format defined?</td></tr>
+            <tr><td><span class="criterion-badge">Testing</span></td><td style="color:var(--muted);font-size:0.83rem">Are validation and test requirements included?</td></tr>
+            <tr><td><span class="criterion-badge">Security</span></td><td style="color:var(--muted);font-size:0.83rem">Are security considerations addressed?</td></tr>
+            <tr><td><span class="criterion-badge">Maintainability</span></td><td style="color:var(--muted);font-size:0.83rem">Is long-term code quality and documentation considered?</td></tr>
+          </tbody>
+        </table>
+
+        <div style="margin-top:1.5rem">
+          <div style="font-size:0.9rem;font-weight:600;margin-bottom:0.75rem">Evaluate Your Prompt</div>
+          <textarea class="prompt-area" id="evalPromptInput" placeholder="Paste your prompt here to score it..."></textarea>
+          <div style="display:flex;gap:0.75rem;margin-top:0.75rem;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="scorePrompt()">🎯 Score Prompt</button>
+            <button class="btn btn-outline" onclick="loadSamplePrompt()">Load Sample</button>
+          </div>
+        </div>
+
+        <div id="evalResults" style="display:none;margin-top:1rem">
+          <div class="eval-grid" id="evalGrid"></div>
+          <div class="score-display">
+            <div class="score-big" id="totalScore">0%</div>
+            <div class="score-label" id="scoreLabel">Overall Prompt Quality</div>
+            <div style="margin-top:0.75rem;font-size:0.83rem;color:var(--muted)" id="scoreFeedback"></div>
+          </div>
+        </div>
+
+        <div class="complete-btn">
+          <span style="color:var(--muted);font-size:0.83rem">Score 5 different prompts</span>
+          <button class="btn btn-primary" onclick="markDone(9)">✓ Mark Complete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MODULE 10: Final Project ── -->
+    <div class="module-section" id="module10">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:linear-gradient(135deg,rgba(108,99,255,0.2),rgba(0,212,170,0.2))">🏆</div>
+          <div>
+            <div class="card-title">Final Practical Project</div>
+            <div class="card-subtitle">Module 11 · Build an AI-Assisted Research TLMS</div>
+          </div>
+        </div>
+
+        <p style="color:var(--muted);font-size:0.9rem;line-height:1.7;margin-bottom:1.25rem">
+          Use everything you've learned to progressively build a <strong style="color:var(--text)">Research Teaching–Learning Management System</strong> entirely with AI-assisted prompt engineering.
+        </p>
+
+        <div class="framework-steps">
+          <div class="fw-step"><div class="fw-step-num" style="background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff">1</div><div class="fw-step-content"><strong>Requirements Document</strong><p>Prompt AI to generate a full SRS (Software Requirements Specification) with user stories, functional and non-functional requirements.</p></div></div>
+          <div class="fw-step"><div class="fw-step-num" style="background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff">2</div><div class="fw-step-content"><strong>Wireframes & UI Design</strong><p>Generate ASCII wireframes then convert to HTML/CSS mockups for student dashboard, course listing, assignment submission pages.</p></div></div>
+          <div class="fw-step"><div class="fw-step-num" style="background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff">3</div><div class="fw-step-content"><strong>Database Schema</strong><p>Design relational schema for Users, Courses, Assignments, Submissions, Grades with full SQL DDL and sample data.</p></div></div>
+          <div class="fw-step"><div class="fw-step-num" style="background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff">4</div><div class="fw-step-content"><strong>REST API Layer</strong><p>Generate a Node.js/Express API with authentication, CRUD for all entities, role-based access (student/teacher/admin).</p></div></div>
+          <div class="fw-step"><div class="fw-step-num" style="background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff">5</div><div class="fw-step-content"><strong>React Frontend</strong><p>Build the student dashboard, course viewer, assignment uploader, and grade viewer as React components with Hooks.</p></div></div>
+          <div class="fw-step"><div class="fw-step-num" style="background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff">6</div><div class="fw-step-content"><strong>Testing, Security & Deployment</strong><p>Generate Jest test suites, security checklist (OWASP Top 10), and a CI/CD pipeline config for GitHub Actions + Vercel.</p></div></div>
+        </div>
+
+        <div class="resources">
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=a_7Z7C_JCyo" target="_blank">▶ Full-Stack Project Tutorial</a>
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=Hej48pi_lOc" target="_blank">▶ Deploying to Vercel</a>
+          <a class="res-btn pdf" href="https://owasp.org/www-project-top-ten/" target="_blank">📄 OWASP Top 10 PDF</a>
+          <a class="res-btn ppt" href="https://docs.github.com/en/actions" target="_blank">📊 GitHub Actions Docs</a>
+          <a class="res-btn video" href="https://www.youtube.com/watch?v=EH3vGeqeIAo" target="_blank">▶ CI/CD Pipeline Tutorial</a>
+        </div>
+        <div class="complete-btn">
+          <span style="color:var(--muted);font-size:0.83rem">🎉 Complete your capstone project!</span>
+          <button class="btn btn-primary" onclick="markDone(10)" style="background:linear-gradient(135deg,var(--accent),var(--accent2))">🏆 Complete Course!</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const completed = new Set();
+const total = 11;
+
+const qualityTips = {
+  refactor: `<span class="kw">Refactoring Prompt:</span>
+Refactor this JavaScript function. Apply:
+- Single Responsibility Principle
+- Extract repeated logic into helpers
+- Replace loops with Array methods (map/filter/reduce)
+- Use early returns to reduce nesting
+- Add meaningful variable names
+Return: refactored code + explanation of each change.`,
+  perf: `<span class="kw">Performance Prompt:</span>
+Analyze this code for performance issues.
+Identify and fix:
+- Unnecessary re-renders (React)
+- N+1 database queries
+- Missing indexes
+- Blocking synchronous operations
+- Bundle size optimizations
+Return: optimized code + before/after performance comparison.`,
+  a11y: `<span class="kw">Accessibility Prompt:</span>
+Audit this HTML form for WCAG 2.1 AA compliance.
+Check and fix:
+- Missing ARIA labels and roles
+- Color contrast ratios (min 4.5:1)
+- Keyboard navigation order
+- Screen reader compatibility
+- Focus indicators
+Return: corrected HTML with accessibility score.`,
+  seo: `<span class="kw">SEO Prompt:</span>
+Optimize this HTML page for SEO.
+Add or improve:
+- Meta tags (title, description, OG)
+- Semantic heading hierarchy
+- Schema.org structured data
+- Image alt attributes
+- Page load performance
+Return: optimized HTML + SEO checklist.`,
+  docs: `<span class="kw">Documentation Prompt:</span>
+Generate JSDoc documentation for all functions.
+Include:
+- @param with types and descriptions
+- @returns with type and description
+- @throws for error conditions
+- @example usage for each function
+- Module-level README section
+Return: documented code + markdown README section.`,
+  test: `<span class="kw">Unit Testing Prompt:</span>
+Write Jest unit tests for this function.
+Cover:
+- Happy path with valid inputs
+- Edge cases (empty, null, undefined)
+- Error conditions
+- Boundary values
+- Async operations (if applicable)
+Return: complete test file with ≥80% coverage.`,
+  review: `<span class="kw">Code Review Prompt:</span>
+Review this code as a senior developer.
+Check for:
+- Security vulnerabilities (XSS, injection)
+- Code smells and anti-patterns
+- Missing error handling
+- Performance bottlenecks
+- Inconsistent style
+Return: numbered list of issues with priority (critical/major/minor).`,
+  error: `<span class="kw">Error Handling Prompt:</span>
+Add comprehensive error handling.
+Implement:
+- Try-catch for all async operations
+- Input validation with clear messages
+- Graceful degradation for network failures
+- User-friendly error messages (not stack traces)
+- Error logging with context
+Return: updated code + error handling documentation.`
+};
+
+const lcPrompts = [
+  `<span class="kw">IDEA STAGE PROMPT:</span>
+Act as a product manager. Help me define my app idea.
+My concept: [DESCRIBE YOUR IDEA IN 1 SENTENCE]
+Generate:
+1. Problem statement (who, what, why)
+2. Target users and their pain points
+3. Core value proposition
+4. 5 key features (MVP scope)
+5. Potential competitors and differentiation`,
+  `<span class="kw">REQUIREMENTS PROMPT:</span>
+Act as a business analyst.
+Convert this app concept into a Software Requirements Specification.
+Include: User stories (As a [role], I want [action], so that [benefit]).
+List functional requirements, non-functional requirements (performance, security, scalability).
+Define success metrics. Use standard SRS format.`,
+  `<span class="kw">ARCHITECTURE PROMPT:</span>
+Act as a solutions architect.
+Design the system architecture for [APP NAME].
+Provide: Technology stack choices with justification.
+Component diagram (text-based). Data flow between services.
+Scalability considerations. Recommended folder/repo structure.`,
+  `<span class="kw">UI DESIGN PROMPT:</span>
+Act as a UX designer.
+Create ASCII wireframes for these pages: [LIST PAGES].
+For each page provide: Layout description. Navigation flow.
+Component list. Mobile responsive notes.
+Then convert wireframes to semantic HTML/CSS structure.`,
+  `<span class="kw">DATABASE PROMPT:</span>
+Act as a database architect.
+Design a normalized (3NF) relational schema for [APP NAME].
+Provide: ER diagram, CREATE TABLE SQL, indexes, FK constraints.
+Sample data (10 rows each). 5 common queries with JOINs.`,
+  `<span class="kw">API DESIGN PROMPT:</span>
+Act as a backend architect.
+Design a RESTful API for [APP NAME].
+Document all endpoints: method, path, request body, response, status codes.
+Include: Authentication flow, rate limiting, versioning strategy.
+Output: OpenAPI 3.0 YAML specification.`,
+  `<span class="kw">FRONTEND PROMPT:</span>
+Act as a senior React developer.
+Build the [PAGE NAME] component.
+Use: Functional components, useState/useEffect hooks.
+Fetch data from [API ENDPOINT]. Handle loading/error states.
+Implement responsive design. Include prop types.`,
+  `<span class="kw">BACKEND PROMPT:</span>
+Act as a senior Node.js developer.
+Implement the [FEATURE NAME] backend module.
+Include: Controller, service layer, data access layer.
+Add input validation, error handling, logging.
+Follow REST conventions and MVC pattern.`,
+  `<span class="kw">TESTING PROMPT:</span>
+Act as a QA engineer.
+Write comprehensive tests for [MODULE NAME].
+Include: Unit tests (Jest), integration tests, E2E tests (Cypress).
+Cover: Happy path, edge cases, error states, performance.
+Target: ≥80% code coverage. Output: Complete test files.`,
+  `<span class="kw">SECURITY PROMPT:</span>
+Act as a security engineer.
+Audit [APP NAME] for OWASP Top 10 vulnerabilities.
+Check: SQL injection, XSS, CSRF, auth weaknesses, data exposure.
+Provide: Vulnerability list with severity. Fixes for each issue.
+Security headers configuration. Input sanitization code.`,
+  `<span class="kw">DEPLOYMENT PROMPT:</span>
+Act as a DevOps engineer.
+Create a CI/CD pipeline for [APP NAME] using GitHub Actions.
+Configure: Automated testing, build, Docker containerization.
+Deploy to: Vercel (frontend) + Railway/Render (backend).
+Include: Environment variables, secrets management, rollback strategy.`
+];
+
+function showModule(idx) {
+  document.querySelectorAll('.module-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('#moduleNav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('module'+idx).classList.add('active');
+  document.getElementById('nav'+idx).classList.add('active');
+  window.scrollTo({top: 0, behavior:'smooth'});
+}
+
+function markDone(idx) {
+  completed.add(idx);
+  const btn = document.getElementById('nav'+idx);
+  btn.classList.add('done');
+  updateProgress();
+  showToast('Module '+(idx+1)+' completed! 🎉');
+  if (idx < 10) {
+    setTimeout(() => showModule(idx+1), 800);
+  }
+}
+
+function updateProgress() {
+  const pct = Math.round((completed.size / total) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = completed.size + ' / ' + total + ' Modules';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function copyCode(btn) {
+  const block = btn.parentElement;
+  const text = block.innerText.replace('Copy','').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 1800);
+  });
+}
+
+function showQualityTip(key) {
+  const box = document.getElementById('qualityTipBox');
+  document.getElementById('qualityTipContent').innerHTML = qualityTips[key];
+  box.style.display = 'block';
+  box.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function showLcPrompt(idx) {
+  const box = document.getElementById('lcPromptBox');
+  document.getElementById('lcPromptContent').innerHTML = lcPrompts[idx];
+  box.style.display = 'block';
+  box.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+const criteria = ['Clarity','Context','Specificity','Constraints','Output Format','Testing','Security','Maintainability'];
+const signals = [
+  ['act as','role','you are a','senior'],
+  ['project','build','system','create','app','website'],
+  ['html5','css3','javascript','react','node','python','sql','version','framework'],
+  ['no ','do not','without','only','avoid','must not','never'],
+  ['output','provide','return','format','file','structure','separate'],
+  ['test','validate','case','verify','check'],
+  ['secure','auth','xss','injection','csrf','https','sanitize','encrypt'],
+  ['maintain','document','refactor','comment','explain','readable','clean']
+];
+
+function scorePrompt() {
+  const text = document.getElementById('evalPromptInput').value.toLowerCase();
+  if (!text.trim()) { showToast('Please paste a prompt first!'); return; }
+  
+  const scores = signals.map(sigs => {
+    let hits = 0;
+    sigs.forEach(s => { if (text.includes(s)) hits++; });
+    return Math.min(Math.round((hits / sigs.length) * 100), 100);
+  });
+
+  const total = Math.round(scores.reduce((a,b)=>a+b,0) / scores.length);
+  
+  const grid = document.getElementById('evalGrid');
+  grid.innerHTML = criteria.map((c,i) => `
+    <div class="eval-item">
+      <div class="eval-label">${c}</div>
+      <div class="eval-score">${scores[i]}%</div>
+      <div class="eval-bar"><div class="eval-bar-fill" style="width:${scores[i]}%"></div></div>
+    </div>
+  `).join('');
+
+  document.getElementById('totalScore').textContent = total + '%';
+  
+  let feedback = '';
+  if (total >= 80) feedback = '🏆 Excellent prompt! Well-structured and comprehensive.';
+  else if (total >= 60) feedback = '👍 Good prompt. Consider adding more technical constraints and testing requirements.';
+  else if (total >= 40) feedback = '⚠️ Needs work. Add role, context, output format, and testing criteria.';
+  else feedback = '❌ Too vague. Use the 8-part Developer Framework for better results.';
+  
+  document.getElementById('scoreFeedback').textContent = feedback;
+  document.getElementById('evalResults').style.display = 'block';
+}
+
+function loadSamplePrompt() {
+  document.getElementById('evalPromptInput').value = `Act as a senior frontend developer.
+
+Project: Build a responsive student registration form for a university portal.
+
+Technology: HTML5, CSS3, vanilla JavaScript only — no external frameworks.
+
+Requirements:
+1. Form fields: Full Name, Student ID, Email, Program, Year Level
+2. Validate all required fields before submission
+3. Validate email format using regex
+4. Show inline error messages with red borders
+5. Success message on valid submission
+6. Mobile responsive design
+
+Output: Provide separate HTML, CSS, and JavaScript files with folder structure.
+Explain what each file does.
+
+Testing: Include 5 test cases covering valid data, empty fields, invalid email, and edge cases.
+
+Security: Sanitize all inputs before displaying. Do not submit to any server.`;
+  showToast('Sample prompt loaded — click Score!');
+}
+</script>
+
+</body>
+</html>
