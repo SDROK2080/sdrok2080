@@ -1,0 +1,1508 @@
+<!-- ═══════════════════════════════════════
+     RAYAMAJHI AI TOOLS — PASSWORD GATE
+     ═══════════════════════════════════════ -->
+
+<div id="passwordScreen">
+    <div class="password-card">
+        <!-- Lock Icon -->
+        <div class="lock-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+        </div>
+
+        <h2>MAHC501: Historiography Concept & Methods</h2>
+        <p class="subtitle">Enter the password to access the app</p>
+
+        <div class="input-wrapper">
+            <input
+                type="password"
+                id="appPassword"
+                placeholder="Enter Password"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
+                aria-label="Password"
+            >
+            <button type="button" id="togglePassword" class="toggle-btn" aria-label="Show password">
+                <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <svg id="eyeOffIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>
+            </button>
+        </div>
+
+        <button id="unlockBtn" onclick="unlockApp()">
+            <span class="btn-text">🔓 Unlock App</span>
+            <span class="btn-loader" style="display:none;">
+                <svg class="spinner" viewBox="0 0 50 50">
+                    <circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="5"></circle>
+                </svg>
+            </span>
+        </button>
+
+        <p id="passwordMessage" role="alert" aria-live="polite"></p>
+
+        <div class="attempts-info" id="attemptsInfo"></div>
+    </div>
+</div>
+
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    #passwordScreen {
+        position: fixed;
+        inset: 0;
+        z-index: 999999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        padding: 20px;
+        transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    #passwordScreen.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    .password-card {
+        width: 100%;
+        max-width: 420px;
+        padding: 40px 35px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        box-shadow:
+            0 25px 50px -12px rgba(0, 0, 0, 0.25),
+            0 0 0 1px rgba(255, 255, 255, 0.1);
+        animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .lock-icon {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 20px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .lock-icon svg { width: 28px; height: 28px; }
+
+    .password-card h2 {
+        font-size: 26px;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 6px;
+        letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+        color: #6b7280;
+        font-size: 15px;
+        margin-bottom: 28px;
+    }
+
+    .input-wrapper {
+        position: relative;
+        margin-bottom: 16px;
+    }
+
+    #appPassword {
+        width: 100%;
+        padding: 14px 48px 14px 16px;
+        font-size: 16px;
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        background: #fafafa;
+        color: #1a1a2e;
+        transition: all 0.2s ease;
+        outline: none;
+    }
+
+    #appPassword:focus {
+        border-color: #667eea;
+        background: #ffffff;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+
+    #appPassword::placeholder { color: #9ca3af; }
+
+    .toggle-btn {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 6px;
+        color: #6b7280;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        transition: color 0.2s, background 0.2s;
+    }
+
+    .toggle-btn:hover {
+        color: #667eea;
+        background: rgba(102, 126, 234, 0.08);
+    }
+
+    .toggle-btn svg { width: 20px; height: 20px; }
+
+    #unlockBtn {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        position: relative;
+        overflow: hidden;
+    }
+
+    #unlockBtn:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+    }
+
+    #unlockBtn:active:not(:disabled) { transform: translateY(0); }
+
+    #unlockBtn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    .btn-loader {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .spinner {
+        width: 20px;
+        height: 20px;
+        animation: spin 1s linear infinite;
+    }
+
+    .spinner circle {
+        stroke-dasharray: 80;
+        stroke-dashoffset: 60;
+        stroke-linecap: round;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #passwordMessage {
+        margin-top: 14px;
+        min-height: 22px;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    #passwordMessage.error {
+        color: #dc2626;
+        animation: shake 0.5s ease-in-out;
+    }
+
+    #passwordMessage.success {
+        color: #059669;
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        20% { transform: translateX(-8px); }
+        40% { transform: translateX(8px); }
+        60% { transform: translateX(-4px); }
+        80% { transform: translateX(4px); }
+    }
+
+    .attempts-info {
+        margin-top: 10px;
+        font-size: 12px;
+        color: #9ca3af;
+        min-height: 18px;
+    }
+
+    .attempts-info.locked {
+        color: #dc2626;
+        font-weight: 600;
+    }
+
+    .password-card.shake {
+        animation: shakeCard 0.5s ease-in-out;
+    }
+
+    @keyframes shakeCard {
+        0%, 100% { transform: translateX(0); }
+        20% { transform: translateX(-10px); }
+        40% { transform: translateX(10px); }
+        60% { transform: translateX(-5px); }
+        80% { transform: translateX(5px); }
+    }
+
+    @media (max-width: 480px) {
+        .password-card { padding: 32px 24px; }
+        .password-card h2 { font-size: 22px; }
+    }
+</style>
+
+<script>
+    // ═══════════════════════════════════════
+    // CONFIGURATION
+    // ═══════════════════════════════════════
+
+    const APP_PASSWORD = "SUK@2026";
+
+    const MAX_ATTEMPTS = 5;
+    const LOCKOUT_DURATION = 30000; // 30 seconds
+
+    // ═══════════════════════════════════════
+    // STATE
+    // ═══════════════════════════════════════
+
+    let attempts = 0;
+    let isLocked = false;
+    let lockoutTimer = null;
+
+    // ═══════════════════════════════════════
+    // UTILITIES
+    // ═══════════════════════════════════════
+
+    function setMessage(text, type) {
+        const msg = document.getElementById('passwordMessage');
+        msg.textContent = text;
+        msg.className = type || '';
+    }
+
+    function setLoading(loading) {
+        const btn = document.getElementById('unlockBtn');
+        const text = btn.querySelector('.btn-text');
+        const loader = btn.querySelector('.btn-loader');
+        btn.disabled = loading;
+        text.style.display = loading ? 'none' : 'inline';
+        loader.style.display = loading ? 'inline-flex' : 'none';
+    }
+
+    function updateAttemptsInfo() {
+        const info = document.getElementById('attemptsInfo');
+        if (isLocked) {
+            info.textContent = `⏱️ Too many attempts. Please wait...`;
+            info.className = 'attempts-info locked';
+            return;
+        }
+        const remaining = MAX_ATTEMPTS - attempts;
+        if (attempts > 0) {
+            info.textContent = `⚠️ ${remaining} attempt${remaining !== 1 ? 's' : ''} remaining`;
+            info.className = 'attempts-info';
+        } else {
+            info.textContent = '';
+        }
+    }
+
+    function triggerShake() {
+        const card = document.querySelector('.password-card');
+        card.classList.remove('shake');
+        void card.offsetWidth;
+        card.classList.add('shake');
+    }
+
+    // ═══════════════════════════════════════
+    // CORE FUNCTIONS
+    // ═══════════════════════════════════════
+
+    async function unlockApp() {
+        if (isLocked) return;
+
+        const input = document.getElementById('appPassword');
+        const entered = input.value;
+
+        if (!entered) {
+            setMessage('⚠️ Please enter a password', 'error');
+            triggerShake();
+            input.focus();
+            return;
+        }
+
+        setLoading(true);
+        setMessage('');
+
+        // Small delay for UX feedback
+        await new Promise(r => setTimeout(r, 400));
+
+        if (entered === APP_PASSWORD) {
+            // SUCCESS
+            setMessage('✅ Access granted! Welcome.', 'success');
+            sessionStorage.setItem('RayamajhiAIToolsFreeUnlocked', 'true');
+
+            setTimeout(() => {
+                const screen = document.getElementById('passwordScreen');
+                screen.classList.add('hidden');
+                setLoading(false);
+            }, 800);
+
+        } else {
+            // FAILURE
+            attempts++;
+            updateAttemptsInfo();
+            setMessage('❌ Incorrect password. Try again.', 'error');
+            triggerShake();
+            input.value = '';
+            input.focus();
+            setLoading(false);
+
+            if (attempts >= MAX_ATTEMPTS) {
+                lockout();
+            }
+        }
+    }
+
+    function lockout() {
+        isLocked = true;
+        const input = document.getElementById('appPassword');
+        const btn = document.getElementById('unlockBtn');
+        input.disabled = true;
+        updateAttemptsInfo();
+
+        let remaining = LOCKOUT_DURATION / 1000;
+        const info = document.getElementById('attemptsInfo');
+
+        lockoutTimer = setInterval(() => {
+            remaining--;
+            info.textContent = `⏱️ Locked out. Retry in ${remaining}s`;
+            if (remaining <= 0) {
+                clearInterval(lockoutTimer);
+                isLocked = false;
+                attempts = 0;
+                input.disabled = false;
+                input.focus();
+                updateAttemptsInfo();
+                setMessage('');
+            }
+        }, 1000);
+    }
+
+    // ═══════════════════════════════════════
+    // EVENT LISTENERS
+    // ═══════════════════════════════════════
+
+    // Toggle password visibility
+    document.getElementById('togglePassword').addEventListener('click', function() {
+        const input = document.getElementById('appPassword');
+        const eye = document.getElementById('eyeIcon');
+        const eyeOff = document.getElementById('eyeOffIcon');
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            eye.style.display = 'none';
+            eyeOff.style.display = 'block';
+        } else {
+            input.type = 'password';
+            eye.style.display = 'block';
+            eyeOff.style.display = 'none';
+        }
+        input.focus();
+    });
+
+    // Enter key unlock
+    document.getElementById('appPassword').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') unlockApp();
+    });
+
+    // Auto-focus + session check on load
+    window.addEventListener('load', function() {
+        const input = document.getElementById('appPassword');
+
+        if (sessionStorage.getItem('RayamajhiAIToolsFreeUnlocked') === 'true') {
+            document.getElementById('passwordScreen').style.display = 'none';
+            return;
+        }
+
+        setTimeout(() => input.focus(), 100);
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAHC501: Teaching-Learning App | M.A. Ancient Indian History Archaeology & Culture</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8B0000;
+            --primary-light: #B22222;
+            --secondary: #DAA520;
+            --accent: #2F4F4F;
+            --bg-light: #FFF8F0;
+            --bg-card: #FFFFFF;
+            --text-dark: #2C1810;
+            --text-muted: #6B5B4F;
+            --border: #E8D5C4;
+            --shadow: rgba(139, 0, 0, 0.12);
+            --gradient: linear-gradient(135deg, #8B0000 0%, #B22222 50%, #DAA520 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans', 'Noto Sans Devanagari', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
+
+        /* Header */
+        .header {
+            background: var(--gradient);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+
+        .header h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header .hindi-title {
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+            opacity: 0.95;
+            font-weight: 600;
+        }
+
+        .header .subtitle {
+            font-size: 0.9rem;
+            margin-top: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .header .subtitle-hindi {
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+            opacity: 0.85;
+        }
+
+        /* Language Toggle */
+        .lang-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            background: white;
+            padding: 0.8rem;
+            border-bottom: 2px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+
+        .lang-btn {
+            padding: 0.6rem 2rem;
+            border: 2px solid var(--primary);
+            background: white;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .lang-btn:first-child {
+            border-radius: 8px 0 0 8px;
+            border-right: none;
+        }
+
+        .lang-btn:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+        .lang-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .lang-btn:hover:not(.active) {
+            background: #FFF0F0;
+        }
+
+        /* Course Info Bar */
+        .course-info {
+            background: linear-gradient(90deg, #2F4F4F, #3D6B6B);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        .course-info span {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .course-info i {
+            color: var(--secondary);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem;
+        }
+
+        /* Unit Card */
+        .unit-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 20px var(--shadow);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .unit-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(139, 0, 0, 0.18);
+        }
+
+        .unit-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 1.2rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s ease;
+        }
+
+        .unit-header:hover {
+            background: linear-gradient(135deg, #6B0000, #8B0000);
+        }
+
+        .unit-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .unit-number {
+            background: var(--secondary);
+            color: var(--primary);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .unit-title-group h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .unit-title-group .hindi {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 0.2rem;
+        }
+
+        .unit-lectures {
+            background: rgba(255,255,255,0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .unit-card.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Unit Body */
+        .unit-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .unit-card.active .unit-body {
+            max-height: 3000px;
+        }
+
+        .unit-content {
+            padding: 1.5rem;
+        }
+
+        .topic-list {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .topic-list li {
+            padding: 0.6rem 0;
+            border-bottom: 1px dashed var(--border);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            font-size: 0.95rem;
+        }
+
+        .topic-list li:last-child {
+            border-bottom: none;
+        }
+
+        .topic-list li i {
+            color: var(--secondary);
+            margin-top: 0.3rem;
+            font-size: 0.8rem;
+        }
+
+        .topic-list .hindi-text {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            display: block;
+            margin-top: 0.2rem;
+        }
+
+        /* Resource Buttons */
+        .resource-section {
+            background: #FFF9F5;
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-top: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        .resource-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .resource-title .hindi {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.8rem;
+        }
+
+        .resource-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            padding: 0.9rem 1rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resource-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .resource-btn:hover::before {
+            left: 100%;
+        }
+
+        .resource-btn i {
+            font-size: 1.1rem;
+        }
+
+        .btn-video {
+            background: linear-gradient(135deg, #FF4444, #CC0000);
+            color: white;
+            box-shadow: 0 3px 10px rgba(204, 0, 0, 0.3);
+        }
+
+        .btn-video:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(204, 0, 0, 0.4);
+        }
+
+        .btn-pdf {
+            background: linear-gradient(135deg, #2E8B57, #1E6B3A);
+            color: white;
+            box-shadow: 0 3px 10px rgba(46, 139, 87, 0.3);
+        }
+
+        .btn-pdf:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 139, 87, 0.4);
+        }
+
+        .btn-notes {
+            background: linear-gradient(135deg, #4169E1, #27408B);
+            color: white;
+            box-shadow: 0 3px 10px rgba(65, 105, 225, 0.3);
+        }
+
+        .btn-notes:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(65, 105, 225, 0.4);
+        }
+
+        .btn-extra {
+            background: linear-gradient(135deg, #8B008B, #660066);
+            color: white;
+            box-shadow: 0 3px 10px rgba(139, 0, 139, 0.3);
+        }
+
+        .btn-extra:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 0, 139, 0.4);
+        }
+
+        /* Books Section */
+        .books-section {
+            background: linear-gradient(135deg, #2F4F4F, #1a3a3a);
+            color: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        .books-section h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .books-section h2 .hindi {
+            display: block;
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-top: 0.3rem;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .book-item {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: background 0.3s ease;
+        }
+
+        .book-item:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .book-item i {
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+
+        .book-item span {
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--text-dark);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 2rem;
+        }
+
+        .footer .developer {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer .developer-hindi {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .footer .university {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            margin-top: 0.5rem;
+        }
+
+        .footer .copyright {
+            font-size: 0.8rem;
+            opacity: 0.5;
+            margin-top: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.2rem; }
+            .header .hindi-title { font-size: 1rem; }
+            .unit-header { padding: 1rem; }
+            .unit-title-group h3 { font-size: 0.95rem; }
+            .unit-title-group .hindi { font-size: 0.8rem; }
+            .btn-grid { grid-template-columns: 1fr; }
+            .course-info { font-size: 0.75rem; gap: 0.8rem; }
+        }
+
+        /* Hindi text visibility */
+        .hindi { font-family: 'Noto Sans Devanagari', 'Noto Sans', sans-serif; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-light); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-light); }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .unit-card {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .unit-card:nth-child(1) { animation-delay: 0.1s; }
+        .unit-card:nth-child(2) { animation-delay: 0.2s; }
+        .unit-card:nth-child(3) { animation-delay: 0.3s; }
+        .unit-card:nth-child(4) { animation-delay: 0.4s; }
+        .unit-card:nth-child(5) { animation-delay: 0.5s; }
+    </style>
+<base target="_blank">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <h1><i class="fas fa-landmark"></i>MAHC501: M.A. Ancient Indian History Archaeology & Culture</h1>
+        <div class="hindi-title">एम.ए. प्राचीन भारतीय इतिहास पुरातत्व एवं संस्कृति</div>
+        <div class="subtitle">Course: Historiography — Concepts and Methods | MAHC-501 | Semester III, Paper-I</div>
+        <div class="subtitle-hindi">पाठ्यक्रम: इतिहासलेखन — संकल्पना और विधियाँ | एमएचसी-501 | सेमेस्टर III, पेपर-I</div>
+    </header>
+
+    <!-- Language Toggle -->
+    <div class="lang-toggle">
+        <button class="lang-btn active" onclick="setLang('en')" id="btn-en"><i class="fas fa-globe"></i> English</button>
+        <button class="lang-btn" onclick="setLang('hi')" id="btn-hi"><i class="fas fa-globe"></i> हिन्दी</button>
+    </div>
+
+    <!-- Course Info -->
+    <div class="course-info">
+        <span><i class="fas fa-university"></i> Siddharth University, Kapilvastu</span>
+        <span><i class="fas fa-graduation-cap"></i> M.A. 2nd Year</span>
+        <span><i class="fas fa-book"></i> Credit: 5</span>
+        <span><i class="fas fa-star"></i> Max Marks: 100</span>
+        <span><i class="fas fa-check-circle"></i> Min Pass: 33</span>
+        <span><i class="fas fa-clock"></i> 6 Hrs/Week</span>
+    </div>
+
+    <div class="container">
+
+        <!-- UNIT I -->
+        <div class="unit-card" id="unit1">
+            <div class="unit-header" onclick="toggleUnit('unit1')">
+                <div class="unit-header-left">
+                    <div class="unit-number">I</div>
+                    <div class="unit-title-group">
+                        <h3 class="en">Oriental Historiography and History Writing</h3>
+                        <h3 class="hi" style="display:none;">पूर्वीय इतिहासलेखन और इतिहास लेखन</h3>
+                        <div class="hindi en">पूर्वीय इतिहासलेखन एवं इतिहास लेखन</div>
+                        <div class="hindi hi" style="display:none;">पूर्वीय इतिहासलेखन और इतिहास लेखन</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:1rem;">
+                    <span class="unit-lectures"><i class="fas fa-clock"></i> 15 Lectures</span>
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </div>
+            </div>
+            <div class="unit-body">
+                <div class="unit-content">
+                    <ul class="topic-list">
+                        <li>
+                            <i class="fas fa-angle-right"></i>
+                            <div>
+                                <span class="en">Oriental Historiography and History Writing: An Introduction</span>
+                                <span class="hi" style="display:none;">पूर्वीय इतिहासलेखन और इतिहास लेखन: एक परिचय</span>
+                                <span class="hindi en">पूर्वीय इतिहासलेखन और इतिहास लेखन का परिचय</span>
+                                <span class="hindi hi" style="display:none;">पूर्वीय इतिहासलेखन और इतिहास लेखन का परिचय</span>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-angle-right"></i>
+                            <div>
+                                <span class="en">Problem and Remedies related to study of Indian Historiography</span>
+                                <span class="hi" style="display:none;">भारतीय इतिहासलेखन के अध्ययन से संबंधित समस्याएँ और उपाय</span>
+                                <span class="hindi en">भारतीय इतिहासलेखन के अध्ययन से संबंधित समस्याएँ और निवारण</span>
+                                <span class="hindi hi" style="display:none;">भारतीय इतिहासलेखन के अध्ययन से संबंधित समस्याएँ और निवारण</span>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="resource-section">
+                        <div class="resource-title">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="en">Learning Resources / </span>
+                            <span class="hi" style="display:none;">शिक्षण संसाधन / </span>
+                            <span class="hindi">अध्ययन सामग्री</span>
+                        </div>
+                        <div class="btn-grid">
+                            <a href="https://www.youtube.com/watch?v=HzM0gDALo8Q" target="_blank" class="resource-btn btn-video">
+                                <i class="fab fa-youtube"></i>
+                                <span class="en">Video: Historiography Concepts & Methods</span>
+                                <span class="hi" style="display:none;">वीडियो: इतिहासलेखन की अवधारणाएँ और विधियाँ</span>
+                            </a>
+                            <a href="https://www.youtube.com/watch?v=ODd_WYxq5GU" target="_blank" class="resource-btn btn-video">
+                                <i class="fab fa-youtube"></i>
+                                <span class="en">Video: Historiography Theory & Method</span>
+                                <span class="hi" style="display:none;">वीडियो: इतिहासलेखन सिद्धांत और विधि</span>
+                            </a>
+                            <a href="https://egyankosh.ac.in/bitstream/123456789/84167/3/Unit-2.pdf" target="_blank" class="resource-btn btn-pdf">
+                                <i class="fas fa-file-pdf"></i>
+                                <span class="en">PDF: Historiography Concepts (IGNOU)</span>
+                                <span class="hi" style="display:none;">पीडीएफ: इतिहासलेखन अवधारणाएँ (IGNOU)</span>
+                            </a>
+                            <a href="https://www.youtube.com/watch?v=kP0TN_KEhSE" target="_blank" class="resource-btn btn-notes">
+                                <i class="fas fa-book-open"></i>
+                                <span class="en">Video: History vs Itihasa</span>
+                                <span class="hi" style="display:none;">वीडियो: इतिहास बनाम इतिहास-पुराण</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UNIT II -->
+        <div class="unit-card" id="unit2">
+            <div class="unit-header" onclick="toggleUnit('unit2')">
+                <div class="unit-header-left">
+                    <div class="unit-number">II</div>
+                    <div class="unit-title-group">
+                        <h3 class="en">Historical Traditions in Ancient India</h3>
+                        <h3 class="hi" style="display:none;">प्राचीन भारत में ऐतिहासिक परंपराएँ</h3>
+                        <div class="hindi en">प्राचीन भारत में ऐतिहासिक परंपराएँ</div>
+                        <div class="hindi hi" style="display:none;">प्राचीन भारत में ऐतिहासिक परंपराएँ</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:1rem;">
+                    <span class="unit-lectures"><i class="fas fa-clock"></i> 15 Lectures</span>
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </div>
+            </div>
+            <div class="unit-body">
+                <div class="unit-content">
+                    <ul class="topic-list">
+                        <li>
+                            <i class="fas fa-angle-right"></i>
+                            <div>
+                                <span class="en">Vedic Tradition: Vamsha, Gatha, Narasamsi, Gotra, Pravar, Akhyan, Akhyayika, Danstuti</span>
+                                <span class="hi" style="display:none;">वैदिक परंपरा: वंश, गाथा, नरसंसी, गोत्र, प्रवर, आख्यान, आख्यायिका, दानस्तुति</span>
+                                <span class="hindi en">वैदिक परंपरा: वंश, गाथा, नरसंसी, गोत्र, प्रवर, आख्यान, आख्यायिका, दानस्तुति</span>
+                                <span class="hindi hi" style="display:none;">वैदिक परंपरा: वंश, गाथा, नरसंसी, गोत्र, प्रवर, आख्यान, आख्यायिका, दानस्तुति</span>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-angle-right"></i>
+                            <div>
+                                <span class="en">Epics: Mahabharata and Ramayana</span>
+                                <span class="hi" style="display:none;">महाकाव्य: महाभारत और रामायण</span>
+                                <span class="hindi en">महाकाव्य: महाभारत और रामायण</span>
+                                <span class="hindi hi" style="display:none;">महाकाव्य: महाभारत और रामायण</span>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-angle-right"></i>
+                            <div>
+                                <span class="en">Puranic Tradition of History</span>
+                                <span class="hi" style="display:none;">इतिहास की पौराणिक परंपरा</span>
+                                <span class="hindi en">इतिहास की पौराणिक परंपरा</span>
+                                <span class="hindi hi" style="display:none;">इतिहास की पौराणिक परंपरा</span>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="resource-section">
+                        <div class="resource-title">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="en">Learning Resources / </span>
+                            <span class="hi" style="display:none;">शिक्षण संसाधन / </span>
+                            <span class="hindi">अध्ययन सामग्री</span>
+                        </div>
+                        <div class="btn-grid">
+                            <a href="https://www.slideshare.net/slideshow/vedic-tradition-of-history-writing/259639244" target="_blank" class="resource-btn btn-video">
+                                <i class="fab fa-youtube"></i>
+                                <span class="en">Video/PPT: Vedic Tradition of History Writing</span>
+                                <span class="hi" style="display:none;">वीडियो/पीपीटी: इतिहास लेखन की वैदिक परंपरा</span>
+                            </a>
+                            <a href="https://egyankosh.ac.in/bitstream/123456789/84167/3/Unit-2.pdf" target="_blank" class="resource-btn btn-pdf">
+                                <i class="fas fa-file-pdf"></i>
+                                <span class="en">PDF: Myths, Dana-Stuti, Gatha, Akhyana (IGNOU)</span>
+                                <span class="hi" style="display:none;">पीडीएफ: मिथक, दान-स्तुति, गाथा, आख्यान (IGNOU)</span>
+                            </a>
+                            <a href="https://www.youtube.com/watch?v=kP0TN_KEhSE" target="_blank" class="resource-btn btn-video">
+                                <i class="fab fa-youtube"></i>
+                                <span class="en">Video: Itihasa-Purana Tradition</span>
+                                <span class="hi" style="display:none;">वीडियो: इतिहास-पुराण परंपरा</span>
+                            </a>
+                            <a href="https://www.youtube.com/watch?v=D6OqbqZ4zns" target="_blank" class="resource-btn btn-notes">
+                                <i class="fas fa-book-open"></i>
+                                <span class="en">Video: Itihasa-Purana Part 2</span>
+                                <span class="hi" style="display:none;">वीडियो: इतिहास-पुराण भाग 2</span>
+                            </a>
+                            <a href="https://www.scribd.com/document/681256803/Unit-2-Itihas-Purana-Tradition" target="_blank" class="resource-btn btn-pdf">
+                                <i class="fas fa-file-pdf"></i>
+                                <span class="en">PDF: Itihasa-Purana Tradition Notes</span>
+                                <span class="hi" style="display:none;">पीडीएफ: इतिहास-पुराण परंपरा नोट्स</span>
+                            </a>
+                            <a href="https://www.youtube.com/watch?v=ITASYbmdiEc" target="_blank" class="resource-btn btn-extra">
+                                <i class="fas fa-video"></i>
+                                <span class="en">Video: Corpus of Itihasa Purana</span>
+                                <span class="hi" style="display:none;">वीडियो: इतिहास पुराण का संग्रह</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UNIT III -->
+        <div class="unit-card" id="unit3">
+            <div class="unit-header" onclick="toggleUnit('unit3')">
+                <div class="unit-header-left">
+                    <div class="unit-number">III</div>
+                    <div class="unit-title-group">
+                        <h3 class="en">Buddhist and Jain Tradition of History</h3>
+                        <h3 class="hi" style="display:none;">बौद्ध और जैन इतिहास परंपरा</h3>
+                        <div class="hindi en">बौद्ध और जैन इतिहास परंपरा</div>
+                        <div class="hindi hi" style="display:none;">बौद्ध और जैन इतिहास परंपरा</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:1rem;">
+                    <span class="unit-lectures"><i class="fas fa-clock"></i> 15 Lectures</span>
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </div>
+            </div>
+            <div class="unit-body">
+                <div class="unit-content">
+                    <ul class="topic-list">
+                        <li>
+                            <i class="fas fa-angle-right"></i>
+                            <div>
+                                <span class="en">Buddhist Tradition of History with Special reference to Dipavamsa and Mahavamsa</span>
+                                <span class="hi" style="display:none;">इतिहास की बौद्ध परंपरा — विशेष संदर्भ: दीपवंश और महावंश</span>
+                                <span class="hindi en">इतिहास की बौद्ध परंपरा — विशेष संदर्भ: दीपवंश और महावंश</span>
+                                <span class="hindi hi" style="display:none;">इतिहास की बौद्ध परंपरा — विशेष संदर्भ: दीपवंश और महावंश</span>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-angle-right"></i>
+                            <div>
+                                <span class="en">Jain Tradition of History: A Survey</span>
+                                <span class="hi" style="display:none;">इतिहास की जैन परंपरा: एक सर्वेक्षण</span>
+                                <span class="hindi en">इतिहास की जैन परंपरा: एक सर्वेक्षण</span>
+                                <span class="hindi hi" style="display:none;">इतिहास की जैन परंपरा: एक सर्वेक्षण</span>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="resource-section">
+                        <div class="resource-title">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="en">Learning Resources / </span>
+                            <span class="hi" style="display:none;">शिक्षण संसाधन / </span>
+                            <span class="hindi">अध्ययन सामग्री</span>
+                        </div>
+                        <div class="btn-grid">
+                            <a href="https://www.youtube.com/watch?v=CX9gecYlGsc" target="_blank" class="resource-btn btn-video">
+                                <i class="fab fa-youtube"></i>
+                                <span class="en">Video: Buddhism in Sri Lanka | Mahavamsa vs Dipavamsa</span>
+                                <span class="hi" style="display:none;">वीडियो: श्रीलंका में बौद्ध धर्म | महावंश बनाम दीपवंश</span>
+                            </a>
+                            <a href="https://www.youtube.com/watch?v=lqSn_ko1ejA" target="_blank" class="resource-btn btn-video">
+                                <i class="fab fa-youtube"></i>
+                                <span class="en">Video: Dipavamsa & Mahavamsa Explained</span>
+                                <span class="hi" style="display:none;">वीडियो: दीपवंश और महावंश की व्याख्या</span>
+                            </a>
+                            <a href="https://www.scribd.com/document/116227018/Dipavamsa-and-Mahavamsa-A-Comparative-Study" target="_blank" class="resource-btn btn-pdf">
+                                <i class="fas fa-file-pdf"></i>
+                                <span class="en">PDF: Comparative Study of Dipavamsa & Mahavamsa</span>
+                                <span class="hi" style="display:none;">पीडीएफ: दीपवंश और महावंश की तुलनात्मक अध्ययन</span>
+                            </a>
+                            <a href="https://study.com/academy/lesson/video/jainism-definition-origin-founder.html" target="_blank" class="resource-btn btn-video">
+                                <i class="fab fa-youtube"></i>
+                                <span class="en">Video: Jainism — Definition, Origin & Founder</span>
+                                <span class="hi" style="display:none;">वीडियो: जैन धर्म — परिभाषा, उत्पत्ति और संस्थापक</span>
+                            </a>
+                            <a href="https://www.arihantainstitute.org/learning-areas/1-jain-philosophy-history-anthropology" target="_blank" class="resource-btn btn-notes">
+                                <i class="fas fa-book-open"></i>
+                                <span class="en">Video Course: Jain Philosophy & History</span>
+                                <span class="hi" style="display:none;">वीडियो पाठ्यक्रम: जैन दर्शन और इतिहास</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UNIT IV -->
+        <div class="unit-card" id="unit4">
+            <div class="unit-header" onclick="toggleUnit('unit4')">
+                <div class="unit-header-left">
+                    <div class="unit-number">IV</div>
+                    <div class="unit-title-group">
+                        <h3 class="en">Historical Tradition of Charita Literature & Epigraphs</h3>
+                        <h3 class="hi" style="display:none;">चरित साहित्य और अभिलेखों की ऐतिहासिक परंपरा</h3>
+                        <div class="hindi en">चरित साहित्य और अभिलेखों की ऐतिहासिक परंपरा</div>
+                        <div class="hindi hi" style="display:none;">चरित साहित्य और अभिलेखों की ऐतिहासिक परंपरा</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:1rem;">
+                    <span class="unit-lectures"><i class="fas fa-clock"></i> 15 Lectures</span>
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </div>
+            </div>
+            <div class="unit-body">
+                <div class="unit-content">
+                    <ul class="topic-list">
+                        <li>
+                            <i class="fas fa-angle-right"></i>
+                            <div>
+                                <span class="en">Ramcharita, Harsha charita, Vikramankdevcharita, Kumarpal charita, Prithviraj Vijay</span>
+                                <span class="hi" style="display:none;">रामचरित, हर्षचरित, विक्रमांकदेवचरित, कुमारपाल चरित, पृथ्वीराज विजय</span>
+                                <span class="hindi en">रामचरित, हर्षचरित, विक्रमांकदेवचरित, कुमारपाल चरित, पृथ्वीराज विजय</span>
+                                <span class="hindi hi" style="display:none;">रामचरित, हर्षचरित, विक्रमांकदेवचरित, कुमारपाल चरित, पृथ्वीराज विजय</span>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-angle-right"></i>
+                            <div>
+                                <span class="en">Historical Traditions and Charita elements in Epigraphs: Hathigumpha Inscription, Prayag Prashasti of Harisena, Mandsaur Inscription of Vatsbhati, Harha Inscription of Ravishanti, Aihole Inscription of Ravikirti, Khajuraho Inscription of Madhav, Junagadh Inscription</span>
+                                <span class="hi" style="display:none;">अभिलेखों में ऐतिहासिक परंपराएँ और चरित तत्व: हाथीगुम्फा अभिलेख, हरिसेन की प्रयाग प्रशस्ति, वत्सभट्टि का मंडसौर अभिलेख, रविशांति का हरहा अभिलेख, रविकीर्ति का ऐहोल अभिलेख, माधव का खजुराहो अभिलेख, जूनागढ़ अभिलेख</span>
+                                <span class="hindi en">अभिलेखों में ऐतिहासिक परंपराएँ और चरित तत्व: हाथीगुम्फा अभिलेख, हरिसेन की प्रयाग प्रशस्ति, वत्सभट्टि का मंडसौर अभिलेख, रविशांति का हरहा अभिलेख, रविकीर्ति का ऐहोल अभिलेख, माधव का खजुराहो अभिलेख, जूनागढ़ अभिलेख</span>
+                                <span class="hindi hi" style="display:none;">अभिलेखों में ऐतिहासिक परंपराएँ और चरित तत्व: हाथीगुम्फा अभिलेख, हरिसेन की प्रयाग प्रशस्ति, वत्सभट्टि का मंडसौर अभिलेख, रविशांति का हरहा अभिलेख, रविकीर्ति का ऐहोल अभिलेख, माधव का खजुराहो अभिलेख, जूनागढ़ अभिलेख</span>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="resource-section">
+                        <div class="resource-title">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="en">Learning Resources / </span>
+                            <span class="hi" style="display:none;">शिक्षण संसाधन / </span>
+                            <span class="hindi">अध्ययन सामग्री</span>
+                        </div>
+                        <div class="btn-grid">
+                            <a href="https://egyankosh.ac.in/bitstream/123456789/84169/3/Unit-4.pdf" target="_blank" class="resource-btn btn-pdf">
+                                <i class="fas fa-file-pdf"></i>
+                                <span class="en">PDF: Kathas and Charitas (IGNOU)</span>
+                                <span class="hi" style="display:none;">पीडीएफ: कथाएँ और चरित (IGNOU)</span>
+                            </a>
+                            <a href="https://www.youtube.com/watch?v=Pqvxglu1ORk" target="_blank" class="resource-btn btn-video">
+                                <i class="fab fa-youtube"></i>
+                                <span class="en">Video: Hathigumpha Inscription of Kharavela</span>
+                                <span class="hi" style="display:none;">वीडियो: खारवेल का हाथीगुम्फा अभिलेख</span>
+                            </a>
+                            <a href="https://www.youtube.com/watch?v=LrvZzIZ5T7g" target="_blank" class="resource-btn btn-video">
+                                <i class="fab fa-youtube"></i>
+                                <span class="en">Video: Prayag Prashasti (Allahabad Pillar)</span>
+                                <span class="hi" style="display:none;">वीडियो: प्रयाग प्रशस्ति (इलाहाबाद स्तंभ)</span>
+                            </a>
+                            <a href="https://www.youtube.com/watch?v=_lCK0KvdnZA" target="_blank" class="resource-btn btn-video">
+                                <i class="fab fa-youtube"></i>
+                                <span class="en">Video: Aihole Inscription of Pulakesin II</span>
+                                <span class="hi" style="display:none;">वीडियो: पुलकेशिन II का ऐहोल अभिलेख</span>
+                            </a>
+                            <a href="https://www.slideshare.net/slideshow/aihole-inscriptionpdf/251572797" target="_blank" class="resource-btn btn-pdf">
+                                <i class="fas fa-file-pdf"></i>
+                                <span class="en">PDF: Aihole Inscription (Slideshare)</span>
+                                <span class="hi" style="display:none;">पीडीएफ: ऐहोल अभिलेख (स्लाइडशेयर)</span>
+                            </a>
+                            <a href="https://itihaas.ai/en/artifacts/aihole-inscription" target="_blank" class="resource-btn btn-notes">
+                                <i class="fas fa-book-open"></i>
+                                <span class="en">Notes: Aihole Inscription Details</span>
+                                <span class="hi" style="display:none;">नोट्स: ऐहोल अभिलेख विवरण</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UNIT V -->
+        <div class="unit-card" id="unit5">
+            <div class="unit-header" onclick="toggleUnit('unit5')">
+                <div class="unit-header-left">
+                    <div class="unit-number">V</div>
+                    <div class="unit-title-group">
+                        <h3 class="en">Modern Historians of Ancient India</h3>
+                        <h3 class="hi" style="display:none;">प्राचीन भारत के आधुनिक इतिहासकार</h3>
+                        <div class="hindi en">प्राचीन भारत के आधुनिक इतिहासकार</div>
+                        <div class="hindi hi" style="display:none;">प्राचीन भारत के आधुनिक इतिहासकार</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:1rem;">
+                    <span class="unit-lectures"><i class="fas fa-clock"></i> 15 Lectures</span>
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </div>
+            </div>
+            <div class="unit-body">
+                <div class="unit-content">
+                    <ul class="topic-list">
+                        <li>
+                            <i class="fas fa-angle-right"></i>
+                            <div>
+                                <span class="en">A.K. Coomaraswamy, V.A. Smith, R.G. Bhandarkar, K.P. Jayaswal, D.D. Kaushambi, M.B. Garde, H.D. Sankalia, R.C. Majumdar, B.B. Lal, A. Cunningham</span>
+                                <span class="hi" style="display:none;">ए.के. कुमारस्वामी, वी.ए. स्मिथ, आर.जी. भंडारकर, के.पी. जयस्वाल, द.द. कौशांबी, एम.बी. गर्दे, एच.डी. संकलिया, आर.सी. मजूमदार, बी.बी. लाल, ए. कनिंघम</span>
+                                <span class="hindi en">ए.के. कुमारस्वामी, वी.ए. स्मिथ, आर.जी. भंडारकर, के.पी. जयस्वाल, द.द. कौशांबी, एम.बी. गर्दे, एच.डी. संकलिया, आर.सी. मजूमदार, बी.बी. लाल, ए. कनिंघम</span>
+                                <span class="hindi hi" style="display:none;">ए.के. कुमारस्वामी, वी.ए. स्मिथ, आर.जी. भंडारकर, के.पी. जयस्वाल, द.द. कौशांबी, एम.बी. गर्दे, एच.डी. संकलिया, आर.सी. मजूमदार, बी.बी. लाल, ए. कनिंघम</span>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="resource-section">
+                        <div class="resource-title">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="en">Learning Resources / </span>
+                            <span class="hi" style="display:none;">शिक्षण संसाधन / </span>
+                            <span class="hindi">अध्ययन सामग्री</span>
+                        </div>
+                        <div class="btn-grid">
+                            <a href="https://www.youtube.com/watch?v=OGN2gKTN_HI" target="_blank" class="resource-btn btn-video">
+                                <i class="fab fa-youtube"></i>
+                                <span class="en">Video: A.K. Coomaraswamy — Indian Art History</span>
+                                <span class="hi" style="display:none;">वीडियो: ए.के. कुमारस्वामी — भारतीय कला इतिहास</span>
+                            </a>
+                            <a href="https://www.youtube.com/watch?v=u9yRd5Fp1zU" target="_blank" class="resource-btn btn-video">
+                                <i class="fab fa-youtube"></i>
+                                <span class="en">Video: Alexander Cunningham — Father of Indian Archaeology</span>
+                                <span class="hi" style="display:none;">वीडियो: एलेक्जेंडर कनिंघम — भारतीय पुरातत्व के जनक</span>
+                            </a>
+                            <a href="https://archive.org/details/classicalage03bhar" target="_blank" class="resource-btn btn-pdf">
+                                <i class="fas fa-file-pdf"></i>
+                                <span class="en">PDF: R.C. Majumdar — Classical Age (Archive)</span>
+                                <span class="hi" style="display:none;">पीडीएफ: आर.सी. मजूमदार — शास्त्रीय काल (Archive)</span>
+                            </a>
+                            <a href="https://www.britannica.com/biography/Alexander-Cunningham" target="_blank" class="resource-btn btn-notes">
+                                <i class="fas fa-book-open"></i>
+                                <span class="en">Notes: Sir Alexander Cunningham (Britannica)</span>
+                                <span class="hi" style="display:none;">नोट्स: सर एलेक्जेंडर कनिंघम (ब्रिटानिका)</span>
+                            </a>
+                            <a href="https://www.youtube.com/watch?v=a0E7dN_y6SI" target="_blank" class="resource-btn btn-extra">
+                                <i class="fas fa-video"></i>
+                                <span class="en">Video: Letters from Alexander Cunningham</span>
+                                <span class="hi" style="display:none;">वीडियो: एलेक्जेंडर कनिंघम के पत्र</span>
+                            </a>
+                            <a href="https://archive.org/details/in.ernet.dli.2015.94077" target="_blank" class="resource-btn btn-pdf">
+                                <i class="fas fa-file-pdf"></i>
+                                <span class="en">PDF: Archaeological Survey of India Vol.1 (Cunningham)</span>
+                                <span class="hi" style="display:none;">पीडीएफ: भारतीय पुरातात्विक सर्वेक्षण खंड 1 (कनिंघम)</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommended Books -->
+        <div class="books-section">
+            <h2>
+                <i class="fas fa-book-reader"></i> Recommended Books
+                <span class="hindi">/ अनुशंसित पुस्तकें</span>
+            </h2>
+            <div class="books-grid">
+                <div class="book-item">
+                    <i class="fas fa-book"></i>
+                    <span>The Idea of History — Collingwood R.G.</span>
+                </div>
+                <div class="book-item">
+                    <i class="fas fa-book"></i>
+                    <span>What is History — Carr E.H.</span>
+                </div>
+                <div class="book-item">
+                    <i class="fas fa-book"></i>
+                    <span>History: Its Purpose and Methods — Reaier G.I.</span>
+                </div>
+                <div class="book-item">
+                    <i class="fas fa-book"></i>
+                    <span>History of Buddhism — Pandey G.C.</span>
+                </div>
+                <div class="book-item">
+                    <i class="fas fa-book"></i>
+                    <span>Historian and Historical Evidences — Johnson, Allan</span>
+                </div>
+                <div class="book-item">
+                    <i class="fas fa-book"></i>
+                    <span>History in a Changing World — Barraclough</span>
+                </div>
+                <div class="book-item">
+                    <i class="fas fa-book"></i>
+                    <span>The Art of History — Black J.B.</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="developer">
+
+        <div style="color:var(--gold); font-size:0.78rem; margin-bottom:0.4rem; letter-spacing:0.08em;">
+            <h4>DEVELOPED BY: Mr. Bishnu Singh Rayamajhi</h4> </div>
+
+            <div class="developer-hindi">
+            विकासकर्ता: श्री बिष्णु सिंह रायमाझी
+        </div>
+        <div class="university">
+            <i class="fas fa-university"></i> Student of Ancient History Archaeology & Culture Department<br>
+            Siddharth University, Kapilvastu, Siddharth Nagar, Uttar Pradesh
+        </div>
+        <div class="university" style="margin-top:0.3rem;opacity:0.6;">
+            प्राचीन इतिहास पुरातत्व एवं संस्कृति विभाग के छात्र<br>
+            सिद्धार्थ विश्वविद्यालय, कपिलवस्तु, सिद्धार्थ नगर, उत्तर प्रदेश
+        </div>
+        <div class="copyright">
+            © 2026 Teaching-Learning App | All Rights Reserved | Free Educational Resource
+        </div>
+    </footer>
+
+    <script>
+        // Toggle Unit Accordion
+        function toggleUnit(unitId) {
+            const card = document.getElementById(unitId);
+            const wasActive = card.classList.contains('active');
+
+            // Close all units
+            document.querySelectorAll('.unit-card').forEach(u => u.classList.remove('active'));
+
+            // Open clicked unit if it wasn't active
+            if (!wasActive) {
+                card.classList.add('active');
+            }
+        }
+
+        // Open first unit by default
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('unit1').classList.add('active');
+        });
+
+        // Language Toggle
+        function setLang(lang) {
+            // Update buttons
+            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+            document.getElementById('btn-hi').classList.toggle('active', lang === 'hi');
+
+            // Toggle all .en and .hi elements
+            document.querySelectorAll('.en').forEach(el => {
+                el.style.display = lang === 'en' ? '' : 'none';
+            });
+            document.querySelectorAll('.hi').forEach(el => {
+                el.style.display = lang === 'hi' ? '' : 'none';
+            });
+
+            // Store preference
+            localStorage.setItem('appLang', lang);
+        }
+
+        // Restore language preference
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('appLang') || 'en';
+            if (savedLang === 'hi') {
+                setLang('hi');
+            }
+        });
+    </script>
+
+</body>
+</html>
