@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAHE-504: Iconography & Sculpture | MA Learning App</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif}
+body{background:#f0f2f5;min-height:100vh}
+.app{max-width:1000px;margin:0 auto}
+header{background:linear-gradient(135deg,#1a237e,#3949ab);color:#fff;padding:32px 20px;text-align:center;border-radius:0 0 24px 24px;box-shadow:0 4px 20px rgba(26,35,126,.3)}
+.badge{display:inline-block;background:rgba(255,255,255,.2);padding:5px 16px;border-radius:20px;font-size:12px;margin-bottom:10px;letter-spacing:.5px}
+header h1{font-size:28px;margin-bottom:6px}
+.subtitle{font-size:16px;opacity:.92}
+.student{font-size:13px;opacity:.85;margin-top:10px}
+nav{display:flex;gap:6px;padding:14px;overflow-x:auto;background:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+nav button{flex:1;min-width:100px;padding:12px 8px;border:none;background:#e8eaf6;color:#1a237e;border-radius:12px;font-weight:700;font-size:13px;cursor:pointer;transition:.2s;white-space:nowrap}
+nav button:hover,nav button.on{background:#1a237e;color:#fff;transform:translateY(-1px)}
+.sec{display:none;padding:18px;animation:fade .35s}
+.sec.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;padding:22px;border-radius:18px;margin-bottom:16px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.card h2{color:#1a237e;font-size:20px;margin-bottom:14px;border-bottom:2px solid #e8eaf6;padding-bottom:10px}
+.card h3{color:#283593;font-size:16px;margin:16px 0 8px}
+.card h4{color:#455a64;font-size:14px;margin:12px 0 6px}
+.card ul{margin-left:20px;font-size:13.5px;line-height:1.75;color:#37474f}
+.card li{margin-bottom:5px}
+.key{background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;border-radius:0 10px 10px 0;margin:14px 0;font-size:13.5px;color:#1b5e20}
+.def{background:#fff3e0;border-left:4px solid #ff9800;padding:12px 16px;border-radius:0 10px 10px 0;margin:14px 0;font-size:13.5px;color:#bf360c}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:14px 0}
+.rev{background:#e3f2fd;padding:14px;border-radius:12px;text-align:center;font-size:13px}
+.rev strong{display:block;color:#0d47a1;margin-bottom:6px;font-size:14px}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+th{background:#1a237e;color:#fff;padding:11px;text-align:left}
+td{padding:11px;border-bottom:1px solid #e0e0e0}
+tr:hover{background:#f5f5f5}
+.timeline{display:flex;flex-direction:column;gap:10px;margin:14px 0}
+.tl{display:flex;align-items:center;gap:12px}
+.tl span:first-child{min-width:120px;background:#1a237e;color:#fff;padding:7px 12px;border-radius:20px;font-size:12px;font-weight:700;text-align:center}
+.tl span:last-child{flex:1;font-size:13.5px;color:#37474f}
+.tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.utab,.etab{padding:9px 16px;border:none;background:#e8eaf6;color:#1a237e;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;transition:.2s}
+.utab.on,.etab.on{background:#1a237e;color:#fff}
+.uc,.ec{display:none}
+.uc.on,.ec.on{display:block}
+.qcard{background:#fff;padding:16px 18px;border-radius:14px;margin-bottom:12px;box-shadow:0 1px 8px rgba(0,0,0,.06);border-left:4px solid #3949ab}
+.qnum{display:inline-flex;align-items:center;justify-content:center;background:#1a237e;color:#fff;width:26px;height:26px;border-radius:50%;font-size:12px;font-weight:800;margin-right:10px}
+.qtext{font-weight:700;color:#1a237e;font-size:14.5px;margin-bottom:8px;line-height:1.5}
+.qhint{font-size:12.5px;color:#555;background:#f5f5f5;padding:10px;border-radius:8px;line-height:1.6}
+.quizbox{background:#fff;padding:24px;border-radius:18px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.qprogress{color:#666;font-size:13px;margin-bottom:12px}
+.qtext2{font-size:17px;font-weight:700;color:#1a237e;margin-bottom:20px;line-height:1.5}
+.opt{display:block;width:100%;padding:14px;margin:10px 0;border:2px solid #e0e0e0;background:#fff;border-radius:12px;cursor:pointer;text-align:left;font-size:14px;transition:.2s}
+.opt:hover{border-color:#3949ab;background:#f5f5ff}
+.opt.correct{background:#e8f5e9;border-color:#4caf50;color:#1b5e20}
+.opt.wrong{background:#ffebee;border-color:#f44336;color:#b71c1c}
+.feed{font-weight:700;margin:14px 0;font-size:14px;min-height:20px}
+.nxt{padding:12px 32px;border:none;background:#1a237e;color:#fff;border-radius:24px;font-size:14px;font-weight:700;cursor:pointer;margin-top:10px}
+.nxt:disabled{opacity:.45;cursor:not-allowed}
+.result{text-align:center;padding:40px 20px}
+.result h3{color:#1a237e;font-size:24px;margin-bottom:12px}
+.result span{font-size:32px;color:#4caf50;font-weight:800}
+.dashg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:18px}
+.dashc{background:#fff;padding:20px;border-radius:16px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.06);cursor:pointer;transition:.2s}
+.dashc:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.dashi{font-size:32px;margin-bottom:8px}
+.dashc h3{font-size:15px;color:#1a237e;margin-bottom:5px}
+.dashc p{font-size:12.5px;color:#666}
+.acc{border-radius:14px;overflow:hidden;margin-bottom:12px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.ach{background:#fff;padding:16px 18px;cursor:pointer;font-weight:700;color:#1a237e;font-size:14.5px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee}
+.ach:after{content:'▼';font-size:11px;color:#666}
+.ach.on:after{content:'▲'}
+.acb{display:none;padding:16px 18px;background:#fff;font-size:13.5px;line-height:1.7}
+.acb.on{display:block}
+.dfc{background:#f5f5f5;padding:12px;border-radius:10px;margin-bottom:10px}
+.dfc strong{color:#1a237e}
+.video-box{background:#f8f9fa;border-radius:14px;padding:16px;margin:14px 0;text-align:center}
+.video-box iframe{width:100%;max-width:560px;height:315px;border-radius:12px;border:none}
+.pdf-box{background:#e8eaf6;border-radius:12px;padding:14px 18px;margin:12px 0;display:flex;align-items:center;gap:12px}
+.pdf-box a{color:#1a237e;font-weight:700;text-decoration:none;font-size:14px}
+.pdf-box a:hover{text-decoration:underline}
+.pdf-icon{font-size:24px}
+.resource-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin:14px 0}
+.res-card{background:#fff;padding:16px;border-radius:14px;box-shadow:0 1px 8px rgba(0,0,0,.06)}
+.res-card h4{color:#1a237e;font-size:15px;margin-bottom:8px}
+.res-card p{font-size:13px;color:#555;margin-bottom:10px}
+.res-card a{display:inline-block;padding:8px 16px;background:#1a237e;color:#fff;border-radius:20px;text-decoration:none;font-size:12.5px;font-weight:600}
+.res-card a:hover{background:#3949ab}
+footer{text-align:center;padding:24px;font-size:12.5px;color:#888;margin-top:20px}
+@media(max-width:600px){header h1{font-size:22px}.video-box iframe{height:200px}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header>
+<div class="badge">MA Third Semester | MAHE-504 | Credit: 5</div>
+<h1>Iconography & Sculpture</h1>
+<div class="subtitle">Ancient Indian History, Archaeology & Culture</div>
+<div class="student">Prepared By: Bishnu Singh Rayamajhi, Ancient History Archaeology & Culture | Siddharth University, Kapilvastu, Siddharth Nagar (U.P.)</div>
+</header>
+
+<nav>
+<button class="on" onclick="sh('dashboard')">📊 Dashboard</button>
+<button onclick="sh('units')">📚 Units</button>
+<button onclick="sh('videos')">🎥 Videos</button>
+<button onclick="sh('pdfs')">📄 PDFs</button>
+<button onclick="sh('revision')">📝 Revision</button>
+<button onclick="sh('quiz')">❓ Quiz</button>
+<button onclick="sh('exam')">🎯 Exam</button>
+</nav>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="sec on">
+<div class="dashg">
+<div class="dashc" onclick="sh('units')"><div class="dashi">📖</div><h3>5 Units</h3><p>Complete Syllabus Coverage with Notes</p></div>
+<div class="dashc" onclick="sh('videos')"><div class="dashi">🎥</div><h3>Video Lectures</h3><p>Unit-wise YouTube Tutorials</p></div>
+<div class="dashc" onclick="sh('pdfs')"><div class="dashi">📄</div><h3>PDF Notes</h3><p>Downloadable Unit-wise Study Material</p></div>
+<div class="dashc" onclick="sh('quiz')"><div class="dashi">❓</div><h3>20 MCQs</h3><p>Self Assessment Tests</p></div>
+<div class="dashc" onclick="sh('revision')"><div class="dashi">📝</div><h3>Quick Revision</h3><p>Key Points & Short Notes</p></div>
+<div class="dashc" onclick="sh('exam')"><div class="dashi">🎯</div><h3>Exam Questions</h3><p>Long, Short & Very Short Answers</p></div>
+</div>
+
+<div class="card">
+<h3>🎓 Course Overview</h3>
+<p style="font-size:13.5px;color:#555;line-height:1.8"><strong>Course Code:</strong> MAHE-504 | <strong>Credit:</strong> 5 | <strong>Max Marks:</strong> 100 | <strong>Min Passing:</strong> 33 | <strong>Lectures/Week:</strong> 6 Hours<br><br>
+<strong>Objective:</strong> This paper makes students understand Iconography and Sculpture Art. It covers Hindu, Buddhist and Jain Iconography and Evolution of Indian Art. Students will also learn to identify images.<br><br>
+<strong>Programme Specific Outcome:</strong> Inventive Learning will acquaint students with the growth of Art and Iconography in India. Students will learn different regional and Stylistic contexts.</p>
+</div>
+
+<div class="card">
+<h3>📋 Syllabus At a Glance</h3>
+<table>
+<tr><th>Unit</th><th>Topic</th><th>Lectures</th></tr>
+<tr><td><strong>I</strong></td><td>Sources of Ancient Indian Iconography & Indus Valley Sculptures</td><td>15</td></tr>
+<tr><td><strong>II</strong></td><td>Mauryan, Sunga & Gupta Sculptures</td><td>15</td></tr>
+<tr><td><strong>III</strong></td><td>Buddhist & Jain Iconography</td><td>15</td></tr>
+<tr><td><strong>IV</strong></td><td>Hindu Iconography (Vishnu, Shiva, Devi)</td><td>15</td></tr>
+<tr><td><strong>V</strong></td><td>Pal, Pratihara, Chandella & Bronze Sculptures</td><td>15</td></tr>
+</table>
+</div>
+
+<div class="card">
+<h3>📚 Recommended Books</h3>
+<ul>
+<li>India Art - Agarwal V.S</li>
+<li>Development of Hindu Iconography - Banerjea J.N</li>
+<li>Indian Sculpture - Kramrisch Stella</li>
+<li>Elements of Hindu Iconography - Gopinath Rao T.A</li>
+<li>Antiquity of Buddha Image - Ganguli, G.C</li>
+<li>Maurya and Sunga Art - Rag N.R</li>
+<li>Origin of Buddha Image - Coomarswamy A.K</li>
+<li>Iconography of Vishnu - Desai Kalpana</li>
+<li>Iconography of Hindu Buddhist and Jains - Gupte R.S</li>
+<li>The Pala Sen School of Sculpture - Huntington, Susan</li>
+<li>Ardhanarisvara In Indian art - Yadav Neeta</li>
+<li>The Future Buddha Maitreya - Kim, Inchang</li>
+<li>Female divinities in Hindu Mythology - Lal, Shyam Kishore</li>
+<li>Buddhist Iconography 2 Vols - Lokesh, Chandra</li>
+</ul>
+</div>
+</div>
+
+<!-- UNITS -->
+<div id="units" class="sec">
+<div class="tabs">
+<button class="utab on" onclick="su(1)">Unit I</button>
+<button class="utab" onclick="su(2)">Unit II</button>
+<button class="utab" onclick="su(3)">Unit III</button>
+<button class="utab" onclick="su(4)">Unit IV</button>
+<button class="utab" onclick="su(5)">Unit V</button>
+</div>
+
+<!-- UNIT I -->
+<div id="u1" class="uc on">
+<div class="card"><h2>Unit I: Sources & Indus Valley Sculptures</h2>
+<h3>📌 1.1 Sources of Ancient Indian Iconography</h3>
+<h4>A. Literary Sources</h4>
+<ul>
+<li><strong>Vedic Texts:</strong> Rigveda mentions Indra, Agni, Varuna — no image worship, only symbolic.</li>
+<li><strong>Puranas:</strong> <em>Vishnudharmottara Purana (Chitrasutra)</em> — most important for Hindu iconography. Describes proportions, colors, postures.</li>
+<li><strong>Agamas & Tantras:</strong> Shaiva Agamas, Pancharatra Agamas, Shakta Tantras — rules for temple construction and idol making.</li>
+<li><strong>Buddhist Texts:</strong> Lalitavistara, Buddhacharita — describe Buddha's 32 Lakshanas.</li>
+<li><strong>Jain Texts:</strong> Acharanga Sutra, Kalpasutra — describe Tirthankaras' appearances.</li>
+<li><strong>Shilpa Shastras:</strong> Manasara, Mayamata, Samaranganasutradhara — technical manuals for sculptors.</li>
+</ul>
+<div class="key">💡 Key Point: Vishnudharmottara Purana states "One who does not know chitra (painting) cannot understand image-making rules."</div>
+<h4>B. Archaeological Sources</h4>
+<ul>
+<li><strong>Excavated Sculptures:</strong> Mathura, Sarnath, Bharhut, Sanchi, Amravati.</li>
+<li><strong>Temple Architecture:</strong> Walls serve as galleries of iconographic development.</li>
+<li><strong>Coins:</strong> Indo-Greek, Kushana, Gupta coins depict deities.</li>
+<li><strong>Seals:</strong> Harappan seals show animals and proto-Shiva (Pashupati).</li>
+<li><strong>Inscriptions:</strong> Donative inscriptions reveal patronage and dating.</li>
+</ul>
+
+<h3>📌 1.2 Antiquity of Image Worship in India</h3>
+<div class="timeline">
+<div class="tl"><span>Pre-Vedic</span><span>Primitive animism — worship of natural forces</span></div>
+<div class="tl"><span>Vedic Period</span><span>No image worship; Yajna (sacrifice) was main form</span></div>
+<div class="tl"><span>Indus Valley</span><span>Seals & terracotta figurines suggest proto-image worship</span></div>
+<div class="tl"><span>Mauryan Period</span><span>Yaksha/Yakshi cult — beginning of anthropomorphic worship</span></div>
+<div class="tl"><span>Post-Mauryan</span><span>Image worship firmly established in Hinduism, Buddhism, Jainism</span></div>
+</div>
+<div class="def"><strong>Iconography (Pratima Shastra):</strong> Science of identification, description, and interpretation of images. Includes study of symbols, attributes, postures, and proportions of divine images.</div>
+
+<h3>📌 1.3 Sculptures of Indus Valley Civilisation</h3>
+<h4>A. Stone Sculptures</h4>
+<ul><li><strong>Priest-King (Mohenjodaro):</strong> Steatite bust, beard with trefoil pattern, shawl with trefoil motif. Height ~17.5 cm.</li></ul>
+<h4>B. Terracotta Sculptures</h4>
+<ul><li><strong>Mother Goddess:</strong> Most common. Elaborate headdress, fan-shaped headgear, necklace. Evidence of fertility cult.</li></ul>
+<h4>C. Metal Sculptures</h4>
+<ul><li><strong>Dancing Girl (Mohenjodaro):</strong> Bronze, c. 2500 BCE. Nude female in confident posture. Lost-wax (cire perdue) technique.</li></ul>
+<div class="key">💡 Key Point: Indus artists used lost-wax (cire perdue) technique — continued for millennia in India.</div>
+<div class="grid">
+<div class="rev"><strong>Important Text</strong>Vishnudharmottara Purana</div>
+<div class="rev"><strong>Technique</strong>Lost-wax (Cire Perdue)</div>
+<div class="rev"><strong>Key Figure</strong>Priest-King, Mohenjodaro</div>
+<div class="rev"><strong>Materials</strong>Steatite, Bronze, Terracotta</div>
+</div>
+</div>
+</div>
+
+<!-- UNIT II -->
+<div id="u2" class="uc">
+<div class="card"><h2>Unit II: Mauryan, Sunga & Gupta Sculptures</h2>
+<h3>📌 2.1 Mauryan Period (c. 322-185 BCE)</h3>
+<ul>
+<li><strong>Polished Sandstone Pillars:</strong> Lauriya-Nandangarh, Sarnath, Allahabad. Monolithic, highly polished, animal capitals.</li>
+<li><strong>Lion Capital (Sarnath):</strong> National Emblem of India. Four lions back-to-back. Abacus with dharmachakra, bull, horse, elephant, lion.</li>
+<li><strong>Yaksha Statues:</strong> Patna Yaksha, Parkham Yaksha (~2m tall). Massive nature spirits.</li>
+<li><strong>Yakshi (Didarganj):</strong> Chauri-bearer, polished sandstone, tribhanga posture.</li>
+</ul>
+<div class="def"><strong>Mauryan Polish:</strong> Mirror-like finish on sandstone using fine abrasives. Technique lost after Mauryan period.</div>
+
+<h3>📌 2.2 Sunga Period (c. 185-73 BCE)</h3>
+<h4>A. Bharhut (MP)</h4>
+<ul><li>Stupa railing sculptures, c. 150 BCE. Red sandstone, low relief. Jataka stories. Deities with inscribed names.</li></ul>
+<h4>B. Sanchi (MP)</h4>
+<ul><li>Stupa I (Great Stupa). Four ornate Toranas. Deep relief, narrative panels. <strong>Aniconic:</strong> Buddha shown through symbols.</li></ul>
+<h4>C. Mathura</h4>
+<ul><li>Red Sikri sandstone. Buddhist and Jain images. Heavy, stiff figures with prominent ushnisha.</li></ul>
+<h4>D. Bodh Gaya</h4>
+<ul><li>Railing sculptures around Mahabodhi Temple. Lotus motifs, narrative scenes.</li></ul>
+
+<h3>📌 2.3 Gupta Sculptures (c. 320-550 CE) — "Golden Age"</h3>
+<h4>A. Sarnath School</h4>
+<ul>
+<li>Chunar sandstone (buff-colored).</li>
+<li><strong>Dharmachakra Pravartana Buddha:</strong> Most famous Gupta image. Seated in dharmachakra mudra.</li>
+<li>Features: Transparent drapery (wet look), spiritual expression, downcast eyes, gentle smile, snail-shell curls.</li>
+</ul>
+<h4>B. Mathura School</h4>
+<ul><li>Red sandstone tradition refined. Standing Buddha in abhaya mudra. Halos with intricate carving. More earthly and muscular.</li></ul>
+<h4>C. Kaushambi</h4>
+<ul><li>Buddhist and Brahmanical sculptures. Seated Buddha with attendants.</li></ul>
+<h4>D. Amravati (Andhra)</h4>
+<ul><li>White marble/green limestone. Sensuous, fluid style. Elongated faces, graceful postures.</li></ul>
+
+<h3>Comparison: Mathura vs Sarnath School</h3>
+<table>
+<tr><th>Feature</th><th>Mathura</th><th>Sarnath</th></tr>
+<tr><td>Stone</td><td>Red Sikri sandstone</td><td>Buff Chunar sandstone</td></tr>
+<tr><td>Drapery</td><td>Thick, visible folds</td><td>Transparent, clinging (wet look)</td></tr>
+<tr><td>Expression</td><td>Earthy, muscular</td><td>Spiritual, serene</td></tr>
+<tr><td>Eyes</td><td>Wide open</td><td>Half-closed, downcast</td></tr>
+<tr><td>Usnisha</td><td>Prominent spiral</td><td>Small bump with curls</td></tr>
+</table>
+<div class="grid">
+<div class="rev"><strong>Mauryan</strong>Polished pillars, Yaksha/Yakshi</div>
+<div class="rev"><strong>Sunga</strong>Bharhut, Sanchi (Aniconic)</div>
+<div class="rev"><strong>Gupta</strong>Golden Age, Sarnath & Mathura</div>
+<div class="rev"><strong>Key Mudra</strong>Dharmachakra, Abhaya</div>
+</div>
+</div>
+</div>
+
+<!-- UNIT III -->
+<div id="u3" class="uc">
+<div class="card"><h2>Unit III: Buddhist & Jain Iconography</h2>
+<h3>📌 3.1 Buddhist Iconography</h3>
+<h4>A. Aniconic Representation of Buddha</h4>
+<ul>
+<li>Early Buddhism (Hinayana) avoided direct depiction.</li>
+<li><strong>Symbols:</strong> Bodhi Tree (Enlightenment), Footprints (Presence), Dharmachakra (First Sermon), Lion (Shakya Simha), Stupa (Mahaparinirvana), Lotus (Purity), Horse (Renunciation).</li>
+<li>Seen at Sanchi, Bharhut, Amravati.</li>
+</ul>
+<h4>B. Origin of Buddha Images (c. 1st century CE)</h4>
+<ul>
+<li><strong>Greco-Roman Theory:</strong> Gandhara school influenced by Apollo Belvedere. Wavy hair, realistic features, heavy drapery (Roman toga).</li>
+<li><strong>Indigenous Theory:</strong> Mathura school evolved from Yaksha tradition. Spiritual, ushnisha, urna, elongated earlobes.</li>
+</ul>
+<h4>C. Bodhisattvas</h4>
+<ul>
+<li><strong>Avalokiteshvara (Padmapani):</strong> Compassion. Lotus, white color, swan mount. Popular in Nepal/Tibet.</li>
+<li><strong>Vajrapani:</strong> Wields vajra (thunderbolt), protector. Blue/black color.</li>
+<li><strong>Maitreya:</strong> Future Buddha. Stupa in head-dress, water-pot (kamandalu).</li>
+<li><strong>Manjushri:</strong> Wisdom. Sword (cuts ignorance) and book (Prajnaparamita). Yellow color, lion mount.</li>
+</ul>
+<div class="key">💡 Key Point: Bodhisattvas attained enlightenment but choose to remain to help others. Central to Mahayana Buddhism.</div>
+<h4>D. Female Deities</h4>
+<ul>
+<li><strong>Tara:</strong> "Savioress." Green Tara and White Tara. Seat of compassion.</li>
+<li><strong>Prajnaparamita:</strong> "Perfection of Wisdom." Personification of text. Two arms, vajra and book.</li>
+<li><strong>Chunda:</strong> Tantric deity, multi-armed.</li>
+<li><strong>Marichi:</strong> Goddess of dawn, three faces, eight arms, riding boar.</li>
+<li><strong>Hariti:</strong> Yakshi converted by Buddha. Mother of demons turned protector of children.</li>
+</ul>
+
+<h3>📌 3.2 Jain Iconography</h3>
+<h4>A. Ayagpatta (Worship Tablets)</h4>
+<ul><li>Stone tablets with relief Tirthankaras. Used in Jain temples. Tirthankara seated with lion emblem below.</li></ul>
+<h4>B. Jain Tirthankaras</h4>
+<table>
+<tr><th>Tirthankara</th><th>Emblem (Lanchhana)</th><th>Color</th></tr>
+<tr><td>Rishabhanatha (Adinath)</td><td>Bull</td><td>Golden</td></tr>
+<tr><td>Neminath</td><td>Conch</td><td>Black/Dark Blue</td></tr>
+<tr><td>Parsvanath</td><td>Serpent</td><td>Blue</td></tr>
+<tr><td>Mahavir</td><td>Lion</td><td>Golden</td></tr>
+</table>
+<ul>
+<li><strong>Common features:</strong> Nude (Digambara) or white-clad (Shvetambara), padmasana or kayotsarga posture, ushnisha, srivatsa mark on chest.</li>
+<li><strong>Parsvanath:</strong> Always with seven-hooded serpent canopy.</li>
+</ul>
+<h4>C. Yaksha & Yakshi</h4>
+<ul>
+<li><strong>Ambika (Kushmandi):</strong> Yakshi of Neminath. Mango tree, children, lion mount. Very popular.</li>
+<li><strong>Chakreshvari:</strong> Yakshi of Adinath. 12-armed, riding garuda.</li>
+<li><strong>Padmavati:</strong> Yakshi of Parshvanath. Snake canopy, associated with wealth.</li>
+</ul>
+<div class="grid">
+<div class="rev"><strong>Bodhisattvas</strong>Avalokiteshvara, Vajrapani, Maitreya, Manjushri</div>
+<div class="rev"><strong>Female Deities</strong>Tara, Prajnaparamita, Hariti</div>
+<div class="rev"><strong>Jain Emblems</strong>Bull, Serpent, Lion, Conch</div>
+<div class="rev"><strong>Postures</strong>Padmasana, Kayotsarga</div>
+</div>
+</div>
+</div>
+
+<!-- UNIT IV -->
+<div id="u4" class="uc">
+<div class="card"><h2>Unit IV: Hindu Iconography (Vishnu, Shiva, Devi)</h2>
+<h3>📌 4.1 Vishnu Iconography</h3>
+<h4>A. Iconographical Features</h4>
+<ul>
+<li><strong>Color:</strong> Dark blue (rain-laden cloud).</li>
+<li><strong>Four Arms:</strong> Shankha (conch), Chakra (discus), Gada (mace), Padma (lotus).</li>
+<li><strong>Garments:</strong> Yellow dhoti (pitambara). <strong>Ornaments:</strong> Kaustubha gem, Vaijayanti garland.</li>
+<li><strong>Crown:</strong> Kiritamukuta. <strong>Mount:</strong> Garuda. <strong>Consort:</strong> Lakshmi.</li>
+</ul>
+<h4>B. Important Forms</h4>
+<ul>
+<li><strong>Chakravyuha:</strong> Cosmic being. Multiple forms in concentric circles. Represents universe.</li>
+<li><strong>Vaikuntha (Chaturmurti):</strong> Four-headed — human, lion, boar, demon. Different aspects of Vishnu.</li>
+<li><strong>Visvarupa:</strong> Cosmic Form. Multiple heads, arms, eyes. Arjuna sees this in Bhagavad Gita.</li>
+<li><strong>Narayana:</strong> Reclining on Shesha, Lakshmi at feet, Brahma from navel. Represents creation.</li>
+<li><strong>Harihara:</strong> Half Vishnu (right), half Shiva (left). Unity of Vaishnavism and Shaivism.</li>
+<li><strong>Dashavatara (Ten Incarnations):</strong> Matsya, Kurma, Varaha, Narasimha, Vamana, Parashurama, Rama, Krishna, Buddha, Kalki.</li>
+</ul>
+
+<h3>📌 4.2 Shaiva Iconography</h3>
+<h4>A. Features</h4>
+<ul>
+<li><strong>Third Eye:</strong> Destructive power. <strong>Matted Locks (Jata):</strong> Ganga flows from them.</li>
+<li><strong>Crescent Moon:</strong> On head. <strong>Trishula:</strong> Weapon. <strong>Damaru:</strong> Sound of creation.</li>
+<li><strong>Serpent:</strong> Around neck. <strong>Tiger Skin:</strong> Garment. <strong>Mount:</strong> Nandi (bull).</li>
+</ul>
+<h4>B. Important Forms</h4>
+<ul>
+<li><strong>Anugraha:</strong> Granting boons. Varada mudra.</li>
+<li><strong>Samhara:</strong> Destroying evil. Fierce expression.</li>
+<li><strong>Uma-Maheshwar:</strong> Shiva with Parvati. Seated, Nandi below. Domestic aspect.</li>
+<li><strong>Nataraja (Lord of Dance):</strong> Dancing in ring of fire (prabhamandala).
+<ul>
+<li>Upper right: Damaru (creation) | Upper left: Fire (destruction)</li>
+<li>Lower right: Abhaya mudra (protection) | Lower left: Pointing to raised foot (salvation)</li>
+<li>Right foot: On demon Apasmara (ignorance) | Left foot: Raised (liberation)</li>
+</ul></li>
+<li><strong>Kalyansundar:</strong> Shiva's marriage. Brahma as priest, Vishnu holds Parvati's hand.</li>
+<li><strong>Ravananugraha:</strong> Shiva granting boon to Ravana. On Mount Kailash.</li>
+<li><strong>Ardhanarishvara:</strong> Half male (Shiva, right), half female (Parvati, left). Unity of Purusha and Prakriti.</li>
+<li><strong>Tripurantaka:</strong> Destroyer of three demon cities. Riding chariot, shooting arrow.</li>
+</ul>
+
+<h3>📌 4.3 Devi (Goddess) Iconography</h3>
+<ul>
+<li><strong>Mahishasurmardini (Durga):</strong> 8-10 arms, riding lion, killing buffalo demon. Victory of good over evil.</li>
+<li><strong>Parvati/Uma:</strong> Consort of Shiva. Beautiful, graceful. Two arms.</li>
+<li><strong>Lakshmi:</strong> Wealth. Four arms, lotus, gold coins. Riding owl or elephant. White garments.</li>
+<li><strong>Chamunda:</strong> Fierce form. Emaciated, skull garland, seated on corpse. One of Saptamatrikas.</li>
+<li><strong>Saraswati:</strong> Knowledge, music. White color, riding swan/peacock. Veena, book, rosary, water pot.</li>
+<li><strong>Saptamatrikas (Seven Mothers):</strong> Brahmani (swan), Maheshvari (bull), Kaumari (peacock), Vaishnavi (Garuda), Varahi (boar-faced), Indrani (elephant), Chamunda (emaciated).</li>
+</ul>
+<div class="key">💡 Key Point: Saptamatrikas always shown together, flanked by Shiva (left) and Ganesha (right) or Virabhadra and Ganesha.</div>
+<div class="grid">
+<div class="rev"><strong>Vishnu</strong>4 arms, Shankha-Chakra-Gada-Padma, Garuda</div>
+<div class="rev"><strong>Shiva Forms</strong>Nataraja, Ardhanarishvara, Tripurantaka</div>
+<div class="rev"><strong>Devi</strong>Mahishasurmardini, Saptamatrikas</div>
+<div class="rev"><strong>Dashavatara</strong>10 incarnations of Vishnu</div>
+</div>
+</div>
+</div>
+
+<!-- UNIT V -->
+<div id="u5" class="uc">
+<div class="card"><h2>Unit V: Pal, Pratihara, Chandella & Bronze Sculptures</h2>
+<h3>📌 5.1 Pala Sculptures (8th-12th c. CE, Bengal-Bihar)</h3>
+<ul>
+<li><strong>Material:</strong> Black basalt stone. Highly polished.</li>
+<li><strong>Features:</strong> Slender, graceful figures. Ornate halos (prabhamandala) with flame designs. Elaborate jewellery. Lotus pedestals. Intricate background carvings.</li>
+<li><strong>Subjects:</strong> Buddhist images — Tara, Buddha, Bodhisattvas most common.</li>
+<li><strong>Sites:</strong> Nalanda, Vikramshila, Kurkihar.</li>
+</ul>
+<div class="key">💡 Key Point: Pala art is the last great phase of Buddhist art in India. Many sculptures exported to Tibet, Nepal, SE Asia.</div>
+
+<h3>📌 5.2 Pratihara Sculptures (8th-11th c. CE)</h3>
+<ul>
+<li><strong>Region:</strong> Gujarat, Rajasthan, Malwa, parts of UP.</li>
+<li><strong>Features:</strong> Massive, heavy figures. Ornate decoration. Large eyes, sharp features. Elaborate drapery. Temple sculptures at Khajuraho (early) and Gwalior.</li>
+</ul>
+
+<h3>📌 5.3 Chandella Sculptures (10th-12th c. CE, Khajuraho)</h3>
+<ul>
+<li><strong>Features:</strong> Most exquisite temple sculptures. Three-dimensional, almost detached from wall. Surasundaris (celestial nymphs) — most famous. Mithuna (amorous couples) panels. Perfect proportions, tribhanga posture. Elaborate hairstyles and ornaments.</li>
+<li><strong>Temples:</strong> Kandariya Mahadeva, Lakshmana, Vishvanatha.</li>
+<li><strong>Deities:</strong> Shiva (most common), Vishnu, Devi, Surya.</li>
+</ul>
+<div class="key">💡 Key Point: Chandella sculptures represent pinnacle of medieval Indian temple art. Surasundaris show 84 poses (asanas) from texts.</div>
+
+<h3>📌 5.4 Bronzes — Pala, Pallava, Chola</h3>
+<h4>A. Pala Bronzes (Bengal-Bihar)</h4>
+<ul><li>Cire perdue technique. Buddhist deities — Tara, Buddha, Bodhisattvas. Copper alloy with silver inlay for eyes. Slender figures with elaborate prabhavali. Exported to Tibet, Nepal, Burma.</li></ul>
+<h4>B. Pallava Bronzes (7th-9th c., Tamil Nadu)</h4>
+<ul><li>Early South Indian bronze. Shiva as Somaskanda (with Uma and Skanda). Less refined than Chola. Square, heavy figures.</li></ul>
+<h4>C. Chola Bronzes (9th-13th c., Tamil Nadu) — PEAK</h4>
+<ul>
+<li><strong>Technique:</strong> Lost-wax perfected. Hollow casting for large images.</li>
+<li><strong>Features:</strong> Natural proportions, perfect tribhanga, expressive faces, half-closed eyes, detailed jewellery, smooth polished surface.</li>
+<li><strong>Famous:</strong> Nataraja (most famous), Devi (Parvati), Saint-poets (Nayanars/Alvars), Rama-Sita-Lakshmana-Hanuman (Utsava murtis).</li>
+<li><strong>Purpose:</strong> Utsava (processional) images for temple festivals.</li>
+</ul>
+<div class="key">💡 Key Point: Chola bronzes are considered finest in the world. Nataraja represents Shiva's cosmic dance of creation and destruction.</div>
+<div class="grid">
+<div class="rev"><strong>Pala</strong>Black basalt, Bengal-Bihar, 8th-12th c.</div>
+<div class="rev"><strong>Chandella</strong>Khajuraho, Surasundaris, 10th-12th c.</div>
+<div class="rev"><strong>Chola Bronze</strong>Lost-wax, Nataraja, 9th-13th c.</div>
+<div class="rev"><strong>Pallava</strong>Somaskanda, Early South Indian</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- VIDEOS -->
+<div id="videos" class="sec">
+<div class="card">
+<h2>🎥 Unit-wise Video Tutorials</h2>
+<p style="font-size:13.5px;color:#555;margin-bottom:16px">नीचे दिए गए videos प्रत्येक Unit से संबंधित academic lectures और tutorials हैं। इन्हें ध्यान से देखें।</p>
+
+<div class="resource-grid">
+<div class="res-card">
+<h4>📹 Unit I: Indus Valley Art & Sources</h4>
+<p>Art of the Indus Valley — Detailed lecture covering Priest-King, Dancing Girl, Mother Goddess, seals and techniques.</p>
+<div class="video-box"><iframe src="https://www.youtube.com/embed/5WHFvkObPuc" allowfullscreen></iframe></div>
+</div>
+<div class="res-card">
+<h4>📹 Unit I: Quick Revision — IVC</h4>
+<p>Quick revision of Indus Valley Civilization covering society, religion, art, seals, and practice questions.</p>
+<div class="video-box"><iframe src="https://www.youtube.com/embed/_f9vmzsWzwc" allowfullscreen></iframe></div>
+</div>
+<div class="res-card">
+<h4>📹 Unit II: Indian Architecture, Sculpture & Pottery</h4>
+<p>Comprehensive lecture on Indian architecture, sculpture and pottery covering Mauryan to Gupta periods.</p>
+<div class="video-box"><iframe src="https://www.youtube.com/embed/ZY67-ug46vA" allowfullscreen></iframe></div>
+</div>
+<div class="res-card">
+<h4>📹 Unit III: Fundamentals of Indian Iconography</h4>
+<p>Lecture on fundamentals of Indian iconography covering Buddhist and Jain iconographic principles.</p>
+<div class="video-box"><iframe src="https://www.youtube.com/embed/sh6sa4SkTjM" allowfullscreen></iframe></div>
+</div>
+<div class="res-card">
+<h4>📹 Unit IV: Introduction to Hindu Art & Architecture</h4>
+<p>Lecture introducing Sakta Iconography, Hindu art traditions and temple architecture.</p>
+<div class="video-box"><iframe src="https://www.youtube.com/embed/sm3_pfyEFlM" allowfullscreen></iframe></div>
+</div>
+<div class="res-card">
+<h4>📹 Unit IV: Essence of Hindu Iconography</h4>
+<p>Dr. Gauri Krishnan on Hindu iconography and comparative survey of Hindu arts in Southeast Asia.</p>
+<div class="video-box"><iframe src="https://www.youtube.com/embed/0EtaOEG3k0k" allowfullscreen></iframe></div>
+</div>
+<div class="res-card">
+<h4>📹 Unit V: Chola Bronzes — Vidya Dehejia</h4>
+<p>Prof. Vidya Dehejia (Columbia University) on Chola bronzes — technique, meaning, and cultural context.</p>
+<div class="video-box"><iframe src="https://www.youtube.com/embed/jjyjEVLIswA" allowfullscreen></iframe></div>
+</div>
+<div class="res-card">
+<h4>📹 Unit III: Buddhist & Jain Iconography (UGC-NET)</h4>
+<p>NTA-NET Visual Arts lecture specifically on Buddhist and Jain Iconography for competitive exams.</p>
+<p><a href="https://www.doorsteptutor.com/Exams/UGC/Visual-Arts/Lectures/Lecture-m.html" target="_blank">🎬 Open Lecture Page</a></p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PDFs -->
+<div id="pdfs" class="sec">
+<div class="card">
+<h2>📄 Unit-wise PDF Study Notes</h2>
+<p style="font-size:13.5px;color:#555;margin-bottom:16px">नीचे दिए गए links से प्रत्येक Unit की print-friendly study notes download करें। इन्हें browser में खोलकर Print → Save as PDF कर सकते हैं।</p>
+
+<div class="resource-grid">
+<div class="res-card">
+<h4>📄 Unit I PDF Notes</h4>
+<p>Sources of Ancient Indian Iconography & Indus Valley Sculptures — Definitions, Timeline, Key Points, Quick Revision.</p>
+<a href="MAHE504_Unit1_Notes.html" target="_blank">📥 Open Unit I Notes</a>
+</div>
+<div class="res-card">
+<h4>📄 Unit II PDF Notes</h4>
+<p>Mauryan, Sunga & Gupta Sculptures — Lion Capital, Bharhut, Sanchi, Mathura vs Sarnath comparison table.</p>
+<a href="MAHE504_Unit2_Notes.html" target="_blank">📥 Open Unit II Notes</a>
+</div>
+<div class="res-card">
+<h4>📄 Unit III PDF Notes</h4>
+<p>Buddhist & Jain Iconography — Bodhisattvas, Female Deities, Tirthankaras, Yakshas & Yakshis.</p>
+<a href="MAHE504_Unit3_Notes.html" target="_blank">📥 Open Unit III Notes</a>
+</div>
+<div class="res-card">
+<h4>📄 Unit IV PDF Notes</h4>
+<p>Hindu Iconography — Vishnu forms, Shiva forms (Nataraja, Ardhanarishvara), Devi & Saptamatrikas.</p>
+<a href="MAHE504_Unit4_Notes.html" target="_blank">📥 Open Unit IV Notes</a>
+</div>
+<div class="res-card">
+<h4>📄 Unit V PDF Notes</h4>
+<p>Pal, Pratihara, Chandella & Bronze Sculptures — Chola bronzes, lost-wax technique, Khajuraho art.</p>
+<a href="MAHE504_Unit5_Notes.html" target="_blank">📥 Open Unit V Notes</a>
+</div>
+</div>
+
+<h3 style="margin-top:24px">📚 External Academic PDFs & References</h3>
+<div class="pdf-box"><span class="pdf-icon">📖</span><a href="https://archive.org/details/in.gov.ignca.52987" target="_blank">Iconography of the Hindus, Buddhists and Jains — Gupte, R.S. (IGNCA Archive)</a></div>
+<div class="pdf-box"><span class="pdf-icon">📖</span><a href="https://www.scribd.com/document/883089641/Mauryan-Shunga-Kushana-and-Gupta-Period" target="_blank">Art of Mauryan, Shunga, Kushana and Gupta Period (Scribd)</a></div>
+<div class="pdf-box"><span class="pdf-icon">📖</span><a href="https://www.scribd.com/document/476304792/Central-theme-of-sculptures-in-Medieval-Indian-Art" target="_blank">Medieval Indian Sculpture: Pala, Pratihara, Chandella (Scribd)</a></div>
+<div class="pdf-box"><span class="pdf-icon">📖</span><a href="https://sjss.isp.edu.pk/index.php/about/article/download/58/38" target="_blank">The Legacy of Indus Valley Civilization in Indian Classical Sculptures (Research PDF)</a></div>
+</div>
+</div>
+
+<!-- REVISION -->
+<div id="revision" class="sec">
+<div class="card">
+<div class="acc">
+<div class="ach" onclick="ta(this)">📌 Important Definitions</div>
+<div class="acb">
+<div class="dfc"><strong>Iconography (Pratima Shastra):</strong> Science of identification, description and interpretation of images, symbols, and themes in art.</div>
+<div class="dfc"><strong>Aniconism:</strong> Practice of not showing deity in human form, using symbols instead.</div>
+<div class="dfc"><strong>Mudra:</strong> Hand gesture in Indian art conveying specific meaning.</div>
+<div class="dfc"><strong>Prabhamandala / Prabhavali:</strong> Halo or aureole behind deity's head, often decorated with flames or lotus.</div>
+<div class="dfc"><strong>Tribhanga:</strong> Triple-bend posture in Indian sculpture (head, torso, legs bent in opposite directions).</div>
+<div class="dfc"><strong>Usnisha:</strong> Cranial bump on Buddha's head representing wisdom and enlightenment.</div>
+<div class="dfc"><strong>Urna:</strong> Dot or curl between Buddha's eyebrows representing third eye of wisdom.</div>
+<div class="dfc"><strong>Lanchhana:</strong> Emblem or symbol associated with Jain Tirthankaras.</div>
+<div class="dfc"><strong>Kayotsarga:</strong> Standing meditation posture of Jain Tirthankaras.</div>
+<div class="dfc"><strong>Cire Perdue:</strong> Lost-wax bronze casting technique.</div>
+</div>
+</div>
+<div class="acc">
+<div class="ach" onclick="ta(this)">📌 Important Dates & Timeline</div>
+<div class="acb">
+<table>
+<tr><th>Period</th><th>Dates</th><th>Key Features</th></tr>
+<tr><td>Indus Valley</td><td>c. 2500 BCE</td><td>Priest-King, Dancing Girl</td></tr>
+<tr><td>Mauryan</td><td>322-185 BCE</td><td>Polished pillars, Yakshas</td></tr>
+<tr><td>Sunga</td><td>185-73 BCE</td><td>Bharhut, Sanchi (Aniconic)</td></tr>
+<tr><td>Kushana</td><td>1st-3rd c. CE</td><td>First Buddha images</td></tr>
+<tr><td>Gupta</td><td>320-550 CE</td><td>Golden Age, Sarnath & Mathura</td></tr>
+<tr><td>Pala</td><td>8th-12th c. CE</td><td>Black basalt Buddhist art</td></tr>
+<tr><td>Pratihara</td><td>8th-11th c. CE</td><td>North Indian temple sculpture</td></tr>
+<tr><td>Chandella</td><td>10th-12th c. CE</td><td>Khajuraho, Surasundaris</td></tr>
+<tr><td>Chola</td><td>9th-13th c. CE</td><td>Bronze masterpieces, Nataraja</td></tr>
+</table>
+</div>
+</div>
+<div class="acc">
+<div class="ach" onclick="ta(this)">📌 Mudras (Hand Gestures)</div>
+<div class="acb">
+<table>
+<tr><th>Mudra</th><th>Meaning</th><th>Common in</th></tr>
+<tr><td>Dharmachakra</td><td>Teaching, Turning Wheel of Law</td><td>Buddha (Sarnath)</td></tr>
+<tr><td>Abhaya</td><td>Fearlessness, Protection</td><td>Buddha, Shiva, Devi</td></tr>
+<tr><td>Varada</td><td>Boon-granting</td><td>Vishnu, Shiva</td></tr>
+<tr><td>Bhumisparsha</td><td>Earth-touching (witness)</td><td>Buddha</td></tr>
+<tr><td>Dhyana</td><td>Meditation</td><td>Buddha, Tirthankaras</td></tr>
+<tr><td>Vitarka</td><td>Discussion, Argument</td><td>Buddha</td></tr>
+</table>
+</div>
+</div>
+<div class="acc">
+<div class="ach" onclick="ta(this)">📌 Key Points — All Units</div>
+<div class="acb">
+<ul style="margin-left:18px;font-size:13.5px;line-height:1.85;color:#37474f">
+<li>Vishnudharmottara Purana is the most important text for Hindu iconography.</li>
+<li>Indus Valley used lost-wax technique for bronze casting.</li>
+<li>Mauryan polish is unique and lost after Mauryan period.</li>
+<li>Early Buddhism was aniconic — Buddha shown through symbols.</li>
+<li>First Buddha images appeared in 1st century CE (Gandhara & Mathura).</li>
+<li>Gupta period is called the "Golden Age" of Indian sculpture.</li>
+<li>Sarnath Buddha has transparent drapery (wet look); Mathura has thick drapery.</li>
+<li>All Jain Tirthankaras look identical — identified by their emblems (Lanchhana).</li>
+<li>Parsvanath is always shown with seven-hooded serpent canopy.</li>
+<li>Vishnu's four attributes: Shankha, Chakra, Gada, Padma.</li>
+<li>Nataraja represents cosmic dance — creation, preservation, destruction.</li>
+<li>Ardhanarishvara represents unity of male and female principles.</li>
+<li>Saptamatrikas are seven mother goddesses always shown together.</li>
+<li>Chandella art at Khajuraho shows surasundaris and mithuna couples.</li>
+<li>Chola bronzes are the finest bronze sculptures in the world.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="sec">
+<div class="quizbox" id="qbox">
+<div class="qprogress">Question <span id="qn">1</span> / 20</div>
+<div class="qtext2" id="qt"></div>
+<div id="opts"></div>
+<div class="feed" id="qf"></div>
+<button class="nxt" id="nb" onclick="nq()" disabled>Next →</button>
+</div>
+<div class="result" id="qres" style="display:none">
+<h3>🎉 Quiz Completed!</h3>
+<p>Your Score: <span id="sc"></span> / 20</p>
+<button class="nxt" onclick="rq()">Restart Quiz</button>
+</div>
+</div>
+
+<!-- EXAM -->
+<div id="exam" class="sec">
+<div class="tabs">
+<button class="etab on" onclick="se('long')">Long (20 Marks)</button>
+<button class="etab" onclick="se('short')">Short (10 Marks)</button>
+<button class="etab" onclick="se('vshort')">Very Short (5 Marks)</button>
+</div>
+<div id="elong" class="ec on">
+<div class="qcard"><span class="qnum">1</span><div class="qtext">Describe the sources of Ancient Indian Iconography. Discuss literary and archaeological sources with examples.</div><div class="qhint">Cover Vedic texts, Puranas (Vishnudharmottara), Agamas, Buddhist/Jain texts, Shilpa Shastras. Archaeological: excavated sculptures, temples, coins, seals, inscriptions.</div></div>
+<div class="qcard"><span class="qnum">2</span><div class="qtext">Discuss the development of sculpture from Indus Valley to Gupta period. OR Trace the evolution of Indian sculpture from earliest times to Gupta period.</div><div class="qhint">Indus → Mauryan (polished pillars) → Sunga (Bharhut, Sanchi aniconic) → Kushana (first Buddha images) → Gupta (Golden Age, Sarnath & Mathura).</div></div>
+<div class="qcard"><span class="qnum">3</span><div class="qtext">Describe the iconography of Buddhist deities. Discuss Bodhisattvas and Female deities in detail.</div><div class="qhint">Aniconic symbols → Buddha images → Avalokiteshvara, Vajrapani, Maitreya, Manjushri → Tara, Prajnaparamita, Hariti.</div></div>
+<div class="qcard"><span class="qnum">4</span><div class="qtext">Give a detailed account of Hindu Iconography. Discuss iconography of Vishnu, Shiva and Devi with reference to their forms and attributes.</div><div class="qhint">Vishnu (4 arms, Dashavatara, Vaikuntha) → Shiva (Nataraja, Ardhanarishvara) → Devi (Mahishasurmardini, Saptamatrikas).</div></div>
+<div class="qcard"><span class="qnum">5</span><div class="qtext">Describe Pala, Pratihara and Chandella sculptures. What are their distinctive features?</div><div class="qhint">Pala (black basalt, Buddhist, flame aureoles) → Pratihara (massive, ornate) → Chandella (Khajuraho, surasundaris, 3D).</div></div>
+<div class="qcard"><span class="qnum">6</span><div class="qtext">Discuss development of Bronze sculpture in India with special reference to Chola bronzes.</div><div class="qhint">Lost-wax technique → Pala → Pallava → Chola (peak). Nataraja, Devi, processional images. Why finest.</div></div>
+<div class="qcard"><span class="qnum">7</span><div class="qtext">Compare and contrast Mathura and Sarnath schools of Buddhist sculpture.</div><div class="qhint">Stone type, drapery, expression, eyes, ushnisha, spiritual vs earthly. Use comparison table.</div></div>
+<div class="qcard"><span class="qnum">8</span><div class="qtext">Describe Jain Iconography. Discuss Tirthankaras, Yakshas and Yakshis with examples.</div><div class="qhint">Ayagpatta → 24 Tirthankaras (emblems, postures) → Parsvanath (serpent) → Ambika, Chakreshvari, Padmavati.</div></div>
+</div>
+<div id="eshort" class="ec">
+<div class="qcard"><span class="qnum">1</span><div class="qtext">Write a note on the antiquity of image worship in India.</div></div>
+<div class="qcard"><span class="qnum">2</span><div class="qtext">Describe the sculptures of Indus Valley Civilization.</div></div>
+<div class="qcard"><span class="qnum">3</span><div class="qtext">Discuss Mauryan polished pillars and their significance.</div></div>
+<div class="qcard"><span class="qnum">4</span><div class="qtext">Describe the aniconic representation of Buddha with examples.</div></div>
+<div class="qcard"><span class="qnum">5</span><div class="qtext">Write a note on Nataraja as a symbol of cosmic dance.</div></div>
+<div class="qcard"><span class="qnum">6</span><div class="qtext">Describe the iconography of Ardhanarishvara.</div></div>
+<div class="qcard"><span class="qnum">7</span><div class="qtext">Discuss the Saptamatrikas and their iconographical features.</div></div>
+<div class="qcard"><span class="qnum">8</span><div class="qtext">Describe the Gandhara and Mathura schools of Buddha images.</div></div>
+<div class="qcard"><span class="qnum">9</span><div class="qtext">Write a note on Gupta sculpture and its features.</div></div>
+<div class="qcard"><span class="qnum">10</span><div class="qtext">Describe the bronze sculptures of South India.</div></div>
+</div>
+<div id="evshort" class="ec">
+<div class="qcard"><span class="qnum">1</span><div class="qtext">What is Iconography?</div></div>
+<div class="qcard"><span class="qnum">2</span><div class="qtext">Define Tribhanga.</div></div>
+<div class="qcard"><span class="qnum">3</span><div class="qtext">What is Mauryan Polish?</div></div>
+<div class="qcard"><span class="qnum">4</span><div class="qtext">Name the four attributes of Vishnu.</div></div>
+<div class="qcard"><span class="qnum">5</span><div class="qtext">What is Aniconism in Buddhism?</div></div>
+<div class="qcard"><span class="qnum">6</span><div class="qtext">Name the ten incarnations of Vishnu (any five).</div></div>
+<div class="qcard"><span class="qnum">7</span><div class="qtext">What is Ayagpatta?</div></div>
+<div class="qcard"><span class="qnum">8</span><div class="qtext">Name the Saptamatrikas.</div></div>
+<div class="qcard"><span class="qnum">9</span><div class="qtext">What is Cire Perdue?</div></div>
+<div class="qcard"><span class="qnum">10</span><div class="qtext">Distinguish between Mathura and Sarnath Buddha (any two points).</div></div>
+<div class="qcard"><span class="qnum">11</span><div class="qtext">Name the emblems of Adinath and Parsvanath.</div></div>
+<div class="qcard"><span class="qnum">12</span><div class="qtext">What is Prabhamandala?</div></div>
+</div>
+</div>
+
+<footer>
+<p><h3>MAHE-504 Learning App | Siddharth University, Kapilvastu, Siddharth Nagar (U.P.)</h3></p> 
+ <p><h3>Prepared By: Bishnu Singh Rayamajhi, Anient History Archaeology & Culture</h3></p>
+<p style="font-size:11px;opacity:.7;margin-top:4px">Note: This is a study guide based on the official syllabus. Always refer to recommended textbooks for detailed study.</p>
+</footer>
+
+</div>
+
+<script>
+// Navigation
+function sh(id){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('on'));
+  event.target.classList.add('on');
+}
+function su(n){
+  document.querySelectorAll('.uc').forEach(u=>u.classList.remove('on'));
+  document.getElementById('u'+n).classList.add('on');
+  document.querySelectorAll('.utab').forEach(t=>t.classList.remove('on'));
+  event.target.classList.add('on');
+}
+function se(id){
+  document.querySelectorAll('.ec').forEach(e=>e.classList.remove('on'));
+  document.getElementById('e'+id).classList.add('on');
+  document.querySelectorAll('.etab').forEach(t=>t.classList.remove('on'));
+  event.target.classList.add('on');
+}
+function ta(el){
+  el.classList.toggle('on');
+  el.nextElementSibling.classList.toggle('on');
+}
+
+// Quiz Data
+const quiz=[
+{q:"Which text is considered the most important for Hindu iconography?",a:"Vishnudharmottara Purana",o:["Rigveda","Vishnudharmottara Purana","Manasara","Kalpasutra"]},
+{q:"What technique was used for the Dancing Girl bronze of Mohenjodaro?",a:"Lost-wax (Cire Perdue)",o:["Carving","Lost-wax (Cire Perdue)","Moulding","Hammering"]},
+{q:"The Lion Capital of Sarnath is associated with which dynasty?",a:"Mauryan",o:["Sunga","Mauryan","Gupta","Kushana"]},
+{q:"Which school of Gupta sculpture used buff-colored Chunar sandstone?",a:"Sarnath",o:["Mathura","Sarnath","Amravati","Gandhara"]},
+{q:"What does the term 'Aniconic' mean in Buddhist art?",a:"Not showing Buddha in human form",o:["Showing multiple Buddhas","Not showing Buddha in human form","Abstract art","Miniature paintings"]},
+{q:"Which Bodhisattva represents Compassion and holds a lotus?",a:"Avalokiteshvara",o:["Vajrapani","Manjushri","Maitreya","Avalokiteshvara"]},
+{q:"What is the emblem (Lanchhana) of Parsvanath?",a:"Serpent",o:["Bull","Lion","Serpent","Conch"]},
+{q:"Vishnu's mount (vahana) is:",a:"Garuda",o:["Nandi","Garuda","Lion","Elephant"]},
+{q:"In Nataraja image, what does the upper right hand hold?",a:"Damaru (drum)",o:["Fire","Damaru (drum)","Abhaya mudra","Trishula"]},
+{q:"Ardhanarishvara represents:",a:"Unity of male and female principles",o:["Shiva's anger","Unity of male and female principles","Vishnu and Shiva combined","Rama and Krishna"]},
+{q:"Which goddess is shown riding a lion and killing Mahishasura?",a:"Durga (Mahishasurmardini)",o:["Lakshmi","Saraswati","Durga (Mahishasurmardini)","Parvati"]},
+{q:"How many Matrikas (mothers) are there in Saptamatrikas?",a:"Seven",o:["Five","Six","Seven","Eight"]},
+{q:"Pala sculptures are mainly made of:",a:"Black basalt",o:["Red sandstone","White marble","Black basalt","Granite"]},
+{q:"Surasundaris (celestial nymphs) are associated with which school?",a:"Chandella",o:["Pala","Pratihara","Chandella","Chola"]},
+{q:"Which dynasty produced the finest bronze sculptures in India?",a:"Chola",o:["Pallava","Pala","Chola","Rashtrakuta"]},
+{q:"The 'wet look' transparent drapery is characteristic of:",a:"Sarnath School",o:["Mathura School","Gandhara School","Sarnath School","Amravati School"]},
+{q:"What does Bhumisparsha mudra signify?",a:"Earth-touching, calling earth to witness",o:["Teaching","Meditation","Earth-touching, calling earth to witness","Fearlessness"]},
+{q:"Who is the Future Buddha in Buddhist iconography?",a:"Maitreya",o:["Avalokiteshvara","Manjushri","Maitreya","Vajrapani"]},
+{q:"What is the posture of Jain Tirthankaras standing in meditation called?",a:"Kayotsarga",o:["Padmasana","Kayotsarga","Tribhanga","Samabhanga"]},
+{q:"Harihara is a combined form of:",a:"Vishnu and Shiva",o:["Brahma and Vishnu","Shiva and Parvati","Vishnu and Shiva","Rama and Krishna"]}
+];
+
+let qi=0,score=0,answered=false;
+function loadQ(){
+  answered=false;
+  document.getElementById('qn').textContent=qi+1;
+  document.getElementById('qt').textContent=quiz[qi].q;
+  const ob=document.getElementById('opts');
+  ob.innerHTML='';
+  quiz[qi].o.forEach(opt=>{
+    const b=document.createElement('button');
+    b.className='opt';
+    b.textContent=opt;
+    b.onclick=()=>checkA(b,opt);
+    ob.appendChild(b);
+  });
+  document.getElementById('qf').textContent='';
+  document.getElementById('nb').disabled=true;
+}
+function checkA(btn,ans){
+  if(answered)return;
+  answered=true;
+  const correct=ans===quiz[qi].a;
+  if(correct){btn.classList.add('correct');score++;document.getElementById('qf').textContent='✅ Correct!';document.getElementById('qf').style.color='#2e7d32';}
+  else{btn.classList.add('wrong');document.getElementById('qf').textContent='❌ Wrong! Correct answer: '+quiz[qi].a;document.getElementById('qf').style.color='#c62828';
+    document.querySelectorAll('.opt').forEach(b=>{if(b.textContent===quiz[qi].a)b.classList.add('correct');});
+  }
+  document.getElementById('nb').disabled=false;
+}
+function nq(){
+  qi++;
+  if(qi>=quiz.length){
+    document.getElementById('qbox').style.display='none';
+    document.getElementById('qres').style.display='block';
+    document.getElementById('sc').textContent=score;
+  }else{loadQ();}
+}
+function rq(){qi=0;score=0;document.getElementById('qbox').style.display='block';document.getElementById('qres').style.display='none';loadQ();}
+loadQ();
+</script>
+</body>
+</html>
