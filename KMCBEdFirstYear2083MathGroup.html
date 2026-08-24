@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> KMC-taulihawa: B.Ed. Math Group </title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── TOKENS ─────────────────────────────────────────────────── */
+    :root {
+      --ink:       #0f1117;
+      --slate:     #2a3340;
+      --mid:       #5a6a7a;
+      --mist:      #e8edf2;
+      --paper:     #f7f9fb;
+      --white:     #ffffff;
+      --gold:      #c8933a;
+      --gold-lt:   #f0d9a8;
+      --gold-dk:   #8f6420;
+      --teal:      #1a7a74;
+      --teal-lt:   #d0eeec;
+      --crimson:   #a02020;
+      --radius:    10px;
+      --radius-lg: 18px;
+      --shadow:    0 4px 24px rgba(15,17,23,.10);
+      --shadow-md: 0 8px 40px rgba(15,17,23,.15);
+      --transition: 0.22s cubic-bezier(.4,0,.2,1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.65;
+      overflow-x: hidden;
+      /* Disable text selection site-wide */
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    /* ── SCROLLBAR ──────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--mist); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+    /* ── SKIP LINK ──────────────────────────────────────────────── */
+    .skip-link {
+      position: absolute; left: -9999px; top: 8px;
+      background: var(--gold); color: var(--white);
+      padding: 8px 16px; border-radius: 4px; font-weight: 600;
+      z-index: 9999;
+    }
+    .skip-link:focus { left: 8px; }
+
+    /* ── HEADER ─────────────────────────────────────────────────── */
+    .site-header {
+      background: var(--ink);
+      position: sticky; top: 0; z-index: 200;
+      box-shadow: 0 2px 20px rgba(0,0,0,.35);
+    }
+
+    .header-inner {
+      max-width: 1280px; margin: 0 auto;
+      padding: 14px 28px;
+      display: flex; align-items: center; gap: 16px;
+      justify-content: space-between; flex-wrap: wrap;
+    }
+
+    .brand { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+
+    .brand-logo {
+      width: 46px; height: 46px; border-radius: 50%;
+      border: 2px solid var(--gold);
+      object-fit: cover; flex-shrink: 0;
+      pointer-events: none; /* prevent drag */
+    }
+
+    .brand-text { line-height: 1.2; }
+    .brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem; font-weight: 700;
+      color: var(--white); letter-spacing: .01em;
+    }
+    .brand-tagline {
+      font-size: .72rem; color: var(--gold-lt);
+      font-style: italic; opacity: .85;
+    }
+
+    /* Search bar in header */
+    .header-search {
+      display: flex; align-items: center;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 24px; overflow: hidden;
+      transition: var(--transition);
+    }
+    .header-search:focus-within {
+      background: rgba(255,255,255,.14);
+      border-color: var(--gold);
+    }
+    .header-search input {
+      background: none; border: none; outline: none;
+      color: var(--white); padding: 8px 16px;
+      font-size: .875rem; width: 200px;
+      /* Allow typing in search */
+      -webkit-user-select: text;
+      -moz-user-select: text;
+      user-select: text;
+    }
+    .header-search input::placeholder { color: rgba(255,255,255,.45); }
+    .header-search button {
+      background: var(--gold); border: none;
+      color: var(--ink); padding: 8px 14px;
+      cursor: pointer; font-size: .9rem;
+      transition: background var(--transition);
+    }
+    .header-search button:hover { background: var(--gold-lt); }
+
+    /* ── TICKER ─────────────────────────────────────────────────── */
+    .ticker-wrap {
+      background: linear-gradient(90deg, var(--teal) 0%, #145e59 100%);
+      overflow: hidden; white-space: nowrap;
+      border-bottom: 2px solid var(--gold);
+    }
+    .ticker-inner {
+      display: inline-block;
+      animation: ticker-scroll 40s linear infinite;
+      padding: 9px 0;
+    }
+    .ticker-wrap:hover .ticker-inner { animation-play-state: paused; }
+    .ticker-inner span {
+      font-size: .82rem; font-weight: 500; color: var(--white);
+      letter-spacing: .04em; padding: 0 40px;
+    }
+    @keyframes ticker-scroll {
+      from { transform: translateX(100vw); }
+      to   { transform: translateX(-100%); }
+    }
+
+    /* ── NAV ────────────────────────────────────────────────────── */
+    .main-nav {
+      background: var(--slate);
+      position: sticky; top: 74px; z-index: 190;
+    }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto;
+      padding: 0 28px;
+      display: flex; align-items: center; gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .nav-item { position: relative; }
+
+    .nav-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--mist); font-family: 'Inter', sans-serif;
+      font-size: .85rem; font-weight: 500;
+      padding: 12px 16px;
+      display: flex; align-items: center; gap: 6px;
+      transition: color var(--transition), background var(--transition);
+      border-radius: 0;
+      white-space: nowrap;
+    }
+    .nav-btn:hover, .nav-btn.active {
+      color: var(--gold-lt);
+      background: rgba(255,255,255,.07);
+    }
+    .nav-btn .chevron {
+      font-size: .6rem; transition: transform var(--transition);
+      display: inline-block;
+    }
+    .nav-btn.active .chevron { transform: rotate(180deg); }
+
+    .dropdown {
+      position: absolute; top: calc(100% + 4px); left: 0;
+      background: var(--white);
+      border: 1px solid var(--mist);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+      min-width: 220px;
+      opacity: 0; pointer-events: none; transform: translateY(-8px);
+      transition: opacity var(--transition), transform var(--transition);
+      z-index: 300;
+    }
+    .dropdown.open {
+      opacity: 1; pointer-events: all; transform: translateY(0);
+    }
+    .dropdown a, .dropdown button {
+      display: block; width: 100%;
+      padding: 10px 16px;
+      font-size: .85rem; color: var(--slate);
+      background: none; border: none; text-align: left;
+      text-decoration: none; cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      border-bottom: 1px solid var(--mist);
+      transition: background var(--transition), color var(--transition);
+    }
+    .dropdown a:last-child, .dropdown button:last-child { border-bottom: none; }
+    .dropdown a:hover, .dropdown button:hover {
+      background: var(--teal-lt); color: var(--teal);
+    }
+
+    /* ── HERO / CAROUSEL ────────────────────────────────────────── */
+    .hero {
+      position: relative; overflow: hidden;
+      background: var(--ink);
+      height: 480px;
+    }
+
+    .slides-container {
+      display: flex; height: 100%;
+      transition: transform 0.65s cubic-bezier(.4,0,.2,1);
+    }
+
+    .slide {
+      min-width: 100%; height: 100%;
+      display: flex; align-items: flex-end;
+      position: relative;
+    }
+
+    .slide-bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      pointer-events: none;
+    }
+
+    .slide:nth-child(1) .slide-bg { background: linear-gradient(135deg, #0f1117 0%, #1a3a2a 50%, #0f2a1a 100%); }
+    .slide:nth-child(2) .slide-bg { background: linear-gradient(135deg, #1a1a0f 0%, #3a2a0a 50%, #1a2a0f 100%); }
+    .slide:nth-child(3) .slide-bg { background: linear-gradient(135deg, #0f1a2a 0%, #1a2a3a 50%, #0a1a2a 100%); }
+    .slide:nth-child(4) .slide-bg { background: linear-gradient(135deg, #2a0f1a 0%, #3a1a2a 50%, #1a0f2a 100%); }
+    .slide:nth-child(5) .slide-bg { background: linear-gradient(135deg, #1a2a0f 0%, #2a3a1a 50%, #0f2a1a 100%); }
+    .slide:nth-child(6) .slide-bg { background: linear-gradient(135deg, #0f0f2a 0%, #1a1a3a 50%, #0f1a2a 100%); }
+    .slide:nth-child(7) .slide-bg { background: linear-gradient(135deg, #2a1a0f 0%, #3a2a1a 50%, #1a1a0f 100%); }
+
+    .slide-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(15,17,23,.85) 0%, rgba(15,17,23,.2) 60%, transparent 100%);
+    }
+
+    .slide-content {
+      position: relative; z-index: 2;
+      padding: 40px 52px; max-width: 700px;
+    }
+    .slide-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--gold-lt); margin-bottom: 10px; opacity: .9;
+    }
+    .slide-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; font-weight: 900;
+      color: var(--white); line-height: 1.15;
+      text-shadow: 0 2px 12px rgba(0,0,0,.4);
+    }
+
+    .carousel-ctrl {
+      position: absolute; top: 50%; z-index: 10;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,.15);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.2);
+      color: var(--white); border-radius: 50%;
+      width: 44px; height: 44px;
+      cursor: pointer; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background var(--transition), transform var(--transition);
+    }
+    .carousel-ctrl:hover {
+      background: var(--gold); transform: translateY(-50%) scale(1.1);
+    }
+    .carousel-ctrl.prev { left: 18px; }
+    .carousel-ctrl.next { right: 18px; }
+
+    .carousel-dots {
+      position: absolute; bottom: 18px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: 8px; z-index: 10;
+    }
+    .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,.4);
+      border: none; cursor: pointer;
+      transition: all var(--transition);
+    }
+    .dot.active {
+      background: var(--gold);
+      width: 24px; border-radius: 4px;
+    }
+
+    /* ── CONTENT AREA ───────────────────────────────────────────── */
+    .page-body {
+      max-width: 1280px; margin: 0 auto;
+      padding: 0 28px 80px;
+    }
+
+    .section-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--teal); font-weight: 500;
+      margin-bottom: 8px; display: block;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem; font-weight: 700;
+      color: var(--ink); margin-bottom: 32px;
+      padding-bottom: 12px;
+      border-bottom: 3px solid var(--gold);
+      display: inline-block;
+    }
+
+    /* ── STATS BAR ──────────────────────────────────────────────── */
+    .stats-bar {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1px; background: var(--mist);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin: 40px 0;
+      box-shadow: var(--shadow);
+    }
+    .stat-cell {
+      background: var(--white); padding: 24px 20px;
+      text-align: center;
+    }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; font-weight: 900;
+      color: var(--teal);
+      display: block;
+    }
+    .stat-label {
+      font-size: .78rem; color: var(--mid);
+      margin-top: 4px; letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    /* ── SERVICE CARDS ──────────────────────────────────────────── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px; margin: 40px 0;
+    }
+
+    .service-card {
+      background: var(--white);
+      border: 1px solid var(--mist);
+      border-radius: var(--radius-lg);
+      padding: 28px 24px;
+      cursor: pointer;
+      transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .service-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+      border-color: var(--gold);
+    }
+    .service-card:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 2px;
+    }
+    .card-icon {
+      font-size: 2rem;
+      width: 52px; height: 52px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--teal-lt);
+      border-radius: var(--radius);
+    }
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem; font-weight: 700; color: var(--ink);
+    }
+    .card-desc { font-size: .83rem; color: var(--mid); line-height: 1.5; }
+    .card-arrow {
+      margin-top: auto; color: var(--teal);
+      font-size: .85rem; font-weight: 600;
+      display: flex; align-items: center; gap: 4px;
+      transition: gap var(--transition);
+    }
+    .service-card:hover .card-arrow { gap: 8px; }
+
+    /* ── RESOURCE TABLE ─────────────────────────────────────────── */
+    .table-wrap {
+      background: var(--white);
+      border: 1px solid var(--mist);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      margin: 40px 0;
+    }
+
+    .table-head {
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--mist);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .table-head h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem; color: var(--ink);
+    }
+    .table-filter {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .filter-btn {
+      background: var(--paper); border: 1px solid var(--mist);
+      color: var(--mid); padding: 6px 14px;
+      border-radius: 20px; font-size: .8rem; cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: all var(--transition);
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--teal); border-color: var(--teal);
+      color: var(--white);
+    }
+
+    .resource-table { width: 100%; border-collapse: collapse; }
+    .resource-table thead tr {
+      background: var(--ink);
+    }
+    .resource-table th {
+      padding: 13px 20px; text-align: left;
+      font-size: .78rem; font-weight: 600;
+      color: var(--gold-lt); letter-spacing: .06em; text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .resource-table td {
+      padding: 14px 20px;
+      font-size: .875rem; color: var(--slate);
+      border-bottom: 1px solid var(--mist);
+      vertical-align: middle;
+    }
+    .resource-table tr:last-child td { border-bottom: none; }
+    .resource-table tr:hover td { background: var(--paper); }
+    .resource-table td:first-child { font-weight: 600; color: var(--ink); }
+
+    .tag {
+      display: inline-block;
+      background: var(--teal-lt);
+      color: var(--teal);
+      border-radius: 12px; padding: 2px 10px;
+      font-size: .72rem; font-weight: 600; letter-spacing: .04em;
+      margin-bottom: 4px;
+    }
+    .tag.gold { background: var(--gold-lt); color: var(--gold-dk); }
+    .tag.crimson { background: #fce8e8; color: var(--crimson); }
+
+    .resource-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--teal); color: var(--white);
+      border: none; border-radius: 6px;
+      padding: 7px 13px; font-size: .78rem; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      margin: 3px 3px 3px 0;
+      transition: background var(--transition), transform var(--transition);
+      font-family: 'Inter', sans-serif;
+    }
+    .resource-btn:hover {
+      background: var(--gold); transform: scale(1.04);
+    }
+    .resource-btn.outline {
+      background: transparent; border: 1px solid var(--teal);
+      color: var(--teal);
+    }
+    .resource-btn.outline:hover {
+      background: var(--teal); color: var(--white);
+    }
+
+    /* ── LIVE PORTALS ───────────────────────────────────────────── */
+    .portals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px; margin: 40px 0;
+    }
+
+    .portal-card {
+      background: var(--white);
+      border: 1px solid var(--mist);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: box-shadow var(--transition);
+    }
+    .portal-card:hover { box-shadow: var(--shadow-md); }
+    .portal-header {
+      background: var(--slate); color: var(--white);
+      padding: 12px 18px;
+      display: flex; align-items: center; gap: 8px;
+      font-size: .85rem; font-weight: 600;
+    }
+    .portal-header .dot-live {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #3bba4c;
+      box-shadow: 0 0 0 2px rgba(59,186,76,.25);
+      animation: pulse-live 2s infinite;
+    }
+    @keyframes pulse-live {
+      0%,100% { box-shadow: 0 0 0 2px rgba(59,186,76,.25); }
+      50%      { box-shadow: 0 0 0 5px rgba(59,186,76,.1); }
+    }
+    .portal-card iframe {
+      width: 100%; height: 280px;
+      border: none; display: block;
+      pointer-events: none; /* prevent interaction inside iframe */
+    }
+    .portal-footer {
+      padding: 12px 18px;
+      display: flex; justify-content: flex-end;
+      border-top: 1px solid var(--mist);
+    }
+
+    /* ── FEEDBACK ───────────────────────────────────────────────── */
+    .feedback-panel {
+      background: var(--ink);
+      border-radius: var(--radius-lg);
+      padding: 52px 48px;
+      text-align: center; margin: 40px 0;
+      position: relative; overflow: hidden;
+    }
+    .feedback-panel::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 70% 50%, rgba(200,147,58,.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .feedback-panel h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem; color: var(--white);
+      margin-bottom: 10px;
+    }
+    .feedback-panel p { color: rgba(255,255,255,.65); margin-bottom: 28px; }
+    .feedback-row {
+      display: flex; gap: 12px; max-width: 560px; margin: 0 auto;
+    }
+    .feedback-row input {
+      flex: 1; padding: 12px 18px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 8px; color: var(--white);
+      font-family: 'Inter', sans-serif; font-size: .9rem;
+      outline: none; transition: border-color var(--transition);
+      /* Allow typing in feedback */
+      -webkit-user-select: text;
+      -moz-user-select: text;
+      user-select: text;
+    }
+    .feedback-row input::placeholder { color: rgba(255,255,255,.4); }
+    .feedback-row input:focus { border-color: var(--gold); }
+    .feedback-row button {
+      background: var(--gold); border: none;
+      color: var(--ink); font-weight: 700;
+      padding: 12px 24px; border-radius: 8px;
+      cursor: pointer; font-family: 'Inter', sans-serif;
+      font-size: .9rem; white-space: nowrap;
+      transition: background var(--transition), transform var(--transition);
+    }
+    .feedback-row button:hover {
+      background: var(--gold-lt); transform: scale(1.04);
+    }
+
+    /* ── FOOTER ─────────────────────────────────────────────────── */
+    .site-footer {
+      background: var(--slate);
+      padding: 48px 28px 60px;
+      color: rgba(255,255,255,.7);
+    }
+    .footer-inner {
+      max-width: 1280px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+    }
+    .footer-brand .brand-name { color: var(--white); font-size: 1.1rem; margin-bottom: 8px; }
+    .footer-brand p { font-size: .82rem; line-height: 1.6; color: rgba(255,255,255,.55); }
+    .footer-links h4 {
+      color: var(--gold-lt); font-size: .82rem;
+      letter-spacing: .08em; text-transform: uppercase;
+      margin-bottom: 14px; font-family: 'JetBrains Mono', monospace;
+    }
+    .footer-links ul { list-style: none; }
+    .footer-links li { margin-bottom: 8px; }
+    .footer-links a {
+      color: rgba(255,255,255,.6); text-decoration: none;
+      font-size: .83rem; transition: color var(--transition);
+    }
+    .footer-links a:hover { color: var(--gold-lt); }
+    .footer-copy {
+      max-width: 1280px; margin: 32px auto 0;
+      padding-top: 20px; border-top: 1px solid rgba(255,255,255,.12);
+      display: flex; justify-content: space-between; flex-wrap: wrap;
+      gap: 10px; font-size: .78rem; color: rgba(255,255,255,.4);
+    }
+
+    /* ── BOTTOM TICKER ──────────────────────────────────────────── */
+    .bottom-ticker {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--ink); border-top: 2px solid var(--gold);
+      overflow: hidden; white-space: nowrap; z-index: 200;
+      padding: 8px 0;
+    }
+    .bottom-ticker-inner {
+      display: inline-block;
+      animation: ticker-scroll 55s linear infinite;
+    }
+    .bottom-ticker-inner span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem; color: var(--gold-lt);
+      letter-spacing: .05em; padding: 0 60px;
+    }
+
+    /* ── MODAL ──────────────────────────────────────────────────── */
+    .modal-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(15,17,23,.75);
+      backdrop-filter: blur(6px);
+      z-index: 400;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity var(--transition);
+    }
+    .modal-backdrop.open {
+      opacity: 1; pointer-events: all;
+    }
+    .modal {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      max-width: 680px; width: 100%;
+      max-height: 82vh;
+      display: flex; flex-direction: column;
+      box-shadow: 0 24px 80px rgba(0,0,0,.35);
+      transform: scale(.94); transition: transform var(--transition);
+    }
+    .modal-backdrop.open .modal { transform: scale(1); }
+    .modal-hd {
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--mist);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .modal-hd h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; color: var(--ink);
+    }
+    .modal-close {
+      background: var(--paper); border: 1px solid var(--mist);
+      border-radius: 50%; width: 32px; height: 32px;
+      cursor: pointer; font-size: 1.1rem; color: var(--mid);
+      display: flex; align-items: center; justify-content: center;
+      transition: background var(--transition), color var(--transition);
+    }
+    .modal-close:hover { background: var(--mist); color: var(--ink); }
+    .modal-bd {
+      padding: 24px 28px;
+      overflow-y: auto; line-height: 1.75;
+      font-size: .9rem; color: var(--slate);
+    }
+    .modal-bd ul { padding-left: 20px; margin: 10px 0; }
+    .modal-bd li { margin-bottom: 6px; }
+    .modal-bd h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; color: var(--ink);
+      margin: 16px 0 8px;
+    }
+
+    /* ── TOAST ──────────────────────────────────────────────────── */
+    .toast {
+      position: fixed; bottom: 56px; right: 24px;
+      background: var(--teal); color: var(--white);
+      padding: 12px 20px; border-radius: 8px;
+      font-size: .875rem; font-weight: 500;
+      box-shadow: var(--shadow-md);
+      z-index: 500; opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* ── CREATOR BAND ───────────────────────────────────────────── */
+    .creator-band {
+      background: linear-gradient(90deg, var(--teal) 0%, var(--gold-dk) 100%);
+      padding: 18px 28px; text-align: center;
+      color: var(--white); font-size: .875rem;
+      border-radius: var(--radius-lg);
+      margin: 40px 0;
+    }
+    .creator-band strong { font-family: 'Playfair Display', serif; font-size: 1rem; }
+
+    /* ── UTILITY ────────────────────────────────────────────────── */
+    .section-block { margin: 60px 0; }
+
+    /* ── COPYRIGHT OVERLAY (blocks Print Screen overlay) ────────── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background: transparent;
+      z-index: 9998;
+      pointer-events: none;
+    }
+
+    /* Images: prevent drag & save */
+    img {
+      pointer-events: none;
+      -webkit-user-drag: none;
+      user-drag: none;
+    }
+
+    @media (max-width: 768px) {
+      .header-inner { gap: 10px; }
+      .header-search { display: none; }
+      .hero { height: 320px; }
+      .slide-content { padding: 24px 24px; }
+      .slide-title { font-size: 1.35rem; }
+      .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+      .feedback-row { flex-direction: column; }
+      .page-body { padding: 0 16px 80px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, .ticker-inner, .bottom-ticker-inner { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<!-- ── HEADER ──────────────────────────────────────────────────── -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="#" class="brand" aria-label="SDROK Home">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='46' viewBox='0 0 46 46'%3E%3Ccircle cx='23' cy='23' r='23' fill='%231a7a74'/%3E%3Ctext x='23' y='29' font-family='serif' font-size='20' font-weight='bold' fill='%23f0d9a8' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E" alt="SDROK" class="brand-logo">
+      <div class="brand-text">
+        <div class="brand-name">KMC-Taulihawa</div>
+        <div class="brand-tagline">B.Ed. First Years&amp; Math Group</div>
+      </div>
+    </a>
+    <div class="header-search" role="search">
+      <input type="search" id="globalSearch" placeholder="Search resources…" aria-label="Search resources" autocomplete="off">
+      <button onclick="handleSearch()" aria-label="Search">🔍</button>
+    </div>
+  </div>
+</header>
+
+<!-- ── TICKER ──────────────────────────────────────────────────── -->
+<div class="ticker-wrap" aria-label="Updates ticker" aria-live="off">
+  <div class="ticker-inner">
+    <span>🌱 Research Articles &nbsp;·&nbsp; Case Studies &nbsp;·&nbsp; Interviews &nbsp;·&nbsp; Seminars &amp; Webinars &nbsp;·&nbsp; Social Media &nbsp;·&nbsp; News &amp; Updates &nbsp;·&nbsp; Community Engagement &nbsp;·&nbsp; Policy Insights &nbsp;·&nbsp; Academic Resources &nbsp;·&nbsp; Life Sciences &nbsp;·&nbsp; Archaeological Investigations &nbsp;·&nbsp; PSC/TSC Preparation &nbsp;·&nbsp; Mathematics &amp; Education &nbsp;🌱</span>
+  </div>
+</div>
+
+<!-- ── NAVIGATION ──────────────────────────────────────────────── -->
+<nav class="main-nav" aria-label="Main navigation">
+  <div class="nav-inner">
+
+    <div class="nav-item">
+      <button class="nav-btn" onclick="toggleNav('homeDD')" aria-expanded="false" aria-controls="homeDD">
+        🏠 Homepage <span class="chevron">▼</span>
+      </button>
+      <div class="dropdown" id="homeDD" role="menu">
+        <button onclick="openModal('Header Section','headerContent')" role="menuitem">📰 Header</button>
+        <button onclick="openModal('Content Section','contentContent')" role="menuitem">📝 Content</button>
+        <button onclick="openModal('Innovating Journey','journeyContent')" role="menuitem">🚀 Innovating Journey</button>
+        <button onclick="openModal('Action Section','actionContent')" role="menuitem">⚡ Action</button>
+        <button onclick="openModal('Desire Section','desireContent')" role="menuitem">💡 Desire</button>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <button class="nav-btn" onclick="toggleNav('resDD')" aria-expanded="false" aria-controls="resDD">
+        📚 Resources <span class="chevron">▼</span>
+      </button>
+      <div class="dropdown" id="resDD" role="menu">
+        <button onclick="openModal('Research Articles','researchContent')" role="menuitem">📄 Research Articles</button>
+        <button onclick="openModal('Case Studies','caseStudyContent')" role="menuitem">📊 Case Studies</button>
+        <button onclick="openModal('Interviews','interviewContent')" role="menuitem">🎤 Interviews</button>
+        <button onclick="openModal('Seminars & Webinars','seminarContent')" role="menuitem">🎓 Seminars</button>
+        <button onclick="openModal('Cyber Networking','cyberContent')" role="menuitem">🌐 Cyber Networking</button>
+        <button onclick="openModal('News & Updates','newsContent')" role="menuitem">📰 News &amp; Updates</button>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <button class="nav-btn" onclick="toggleNav('acadDD')" aria-expanded="false" aria-controls="acadDD">
+        🎓 Academic <span class="chevron">▼</span>
+      </button>
+      <div class="dropdown" id="acadDD" role="menu">
+        <button onclick="openModal('Policy Insight','policyContent')" role="menuitem">🏛️ Policy Insight</button>
+        <button onclick="openModal('Archaeological Investigation','archaeoContent')" role="menuitem">🏺 Archaeological</button>
+        <button onclick="openModal('Academic Field','academicContent')" role="menuitem">📐 Academic Field</button>
+        <button onclick="openModal('Life Science','lifeSciContent')" role="menuitem">🧬 Life Science</button>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <button class="nav-btn" onclick="toggleNav('footDD')" aria-expanded="false" aria-controls="footDD">
+        📋 About <span class="chevron">▼</span>
+      </button>
+      <div class="dropdown" id="footDD" role="menu">
+        <button onclick="openModal('Privacy Policy','privacyContent')" role="menuitem">🔒 Privacy Policy</button>
+        <button onclick="openModal('Terms of Service','termsContent')" role="menuitem">📜 Terms</button>
+        <button onclick="openModal('Social Media Policy','socialPolicyContent')" role="menuitem">📱 Social Media Policy</button>
+        <button onclick="openModal('Copyright Information','copyrightContent')" role="menuitem">© Copyright</button>
+      </div>
+    </div>
+
+    <div class="nav-item" style="margin-left:auto;">
+      <button class="nav-btn" onclick="openLink('https://sdrok2080.github.io/sdrok2080/KMCHSSDTestProtect.html')" style="color:var(--gold-lt);">
+        🌐 Visit Portal ↗
+      </button>
+    </div>
+
+  </div>
+</nav>
+
+<!-- ── HERO CAROUSEL ───────────────────────────────────────────── -->
+<section class="hero" aria-label="Featured content carousel" role="region">
+  <div class="slides-container" id="slidesContainer">
+
+  <div class="slide">
+    <div class="slide-bg" style="background-image:url('image01.jpg'); background-size:cover; background-position:center;"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-content">
+      <div class="slide-label">Mission</div>
+      <h1 class="slide-title">Advancing Communities Through Insight &amp; Innovation</h1>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-bg" style="background-image:url('image02.jpg'); background-size:cover; background-position:center;"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-content">
+      <div class="slide-label">Research</div>
+      <h1 class="slide-title">Peer-Reviewed Articles on Social Development &amp; Policy</h1>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-bg" style="background-image:url('image04.jpg'); background-size:cover; background-position:center;"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-content">
+      <div class="slide-label">Education</div>
+      <h1 class="slide-title">B.Ed. &amp; Mathematics Resources for Tribhuvan University</h1>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-bg" style="background-image:url('image18.jpg'); background-size:cover; background-position:center;"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-content">
+      <div class="slide-label">Heritage</div>
+      <h1 class="slide-title">Archaeological Investigations at Tilaurakot &amp; Kapilvastu</h1>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-bg" style="background-image:url('image09.jpeg'); background-size:cover; background-position:center;"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-content">
+      <div class="slide-label">Exam Prep</div>
+      <h1 class="slide-title">PSC &amp; TSC Examination Resources for Nepal</h1>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-bg" style="background-image:url('image11.jpeg'); background-size:cover; background-position:center;"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-content">
+      <div class="slide-label">Community</div>
+      <h1 class="slide-title">Empowering Grassroots Change Through Collaborative Research</h1>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-bg" style="background-image:url('imagekmclogo02.jpeg'); background-size:cover; background-position:center;"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-content">
+      <div class="slide-label">Life Science</div>
+      <h1 class="slide-title">Child Development &amp; Public Health Studies from KMCHSS</h1>
+    </div>
+  </div>
+
+</div>
+
+  <!-- Carousel controls (injected by JS) -->
+  <button class="carousel-ctrl prev" onclick="changeSlide(-1)" aria-label="Previous slide">&#8592;</button>
+  <button class="carousel-ctrl next" onclick="changeSlide(1)" aria-label="Next slide">&#8594;</button>
+  <div class="carousel-dots" id="carouselDots"></div>
+</section>
+
+<!-- ── MAIN BODY ───────────────────────────────────────────────── -->
+<main id="main" class="page-body">
+
+  <!-- Stats -->
+  <div class="stats-bar" role="region" aria-label="Platform statistics">
+    <div class="stat-cell">
+      <span class="stat-num" id="statArticles">0</span>
+      <span class="stat-label">Research Articles</span>
+    </div>
+    <div class="stat-cell">
+      <span class="stat-num" id="statResources">0</span>
+      <span class="stat-label">Academic Resources</span>
+    </div>
+    <div class="stat-cell">
+      <span class="stat-num" id="statCourses">0</span>
+      <span class="stat-label">Courses Linked</span>
+    </div>
+    <div class="stat-cell">
+      <span class="stat-num" id="statPortals">0</span>
+      <span class="stat-label">Live Portals</span>
+    </div>
+    <div class="stat-cell">
+      <span class="stat-num" id="statYears">0</span>
+      <span class="stat-label">Years Active</span>
+    </div>
+  </div>
+
+  <!-- Creator Band -->
+  <div class="creator-band">
+    Crafted by <strong>Bishnu Singh Rayamajhi</strong> — Pioneering transformative digital solutions for social research and community advancement
+  </div>
+
+  <!-- Services -->
+  <section class="section-block" aria-labelledby="servicesTitle">
+    <span class="section-eyebrow">What We Offer</span>
+    <h2 class="section-title" id="servicesTitle">Services for Empowering Change</h2>
+
+    <div class="card-grid">
+
+      <article class="service-card" onclick="openLink('https://sdrok2080.github.io/sdrok2080/')" tabindex="0" role="button" aria-label="Visit SDROK WordPress Portal">
+        <div class="card-icon">🌐</div>
+        <div class="card-title">SDROK Portal</div>
+        <div class="card-desc">Visit our WordPress portal for comprehensive research resources and community updates.</div>
+        <div class="card-arrow">Visit portal →</div>
+      </article>
+
+      <article class="service-card" onclick="openModal('Research Articles','researchContent')" tabindex="0" role="button">
+        <div class="card-icon">📄</div>
+        <div class="card-title">Research Articles</div>
+        <div class="card-desc">Access peer-reviewed articles on social development, policy analysis, and community studies.</div>
+        <div class="card-arrow">Browse articles →</div>
+      </article>
+
+      <article class="service-card" onclick="openModal('Case Studies','caseStudyContent')" tabindex="0" role="button">
+        <div class="card-icon">📊</div>
+        <div class="card-title">Case Studies</div>
+        <div class="card-desc">Explore detailed case studies documenting successful community interventions and outcomes.</div>
+        <div class="card-arrow">Explore cases →</div>
+      </article>
+
+      <article class="service-card" onclick="openModal('Academic Field','academicContent')" tabindex="0" role="button">
+        <div class="card-icon">🎓</div>
+        <div class="card-title">Academic Resources</div>
+        <div class="card-desc">Syllabi, lecture notes, and educational materials for B.Ed. and Mathematics students.</div>
+        <div class="card-arrow">Access resources →</div>
+      </article>
+
+      <article class="service-card" onclick="openModal('Policy Insight','policyContent')" tabindex="0" role="button">
+        <div class="card-icon">🏛️</div>
+        <div class="card-title">Policy Insights</div>
+        <div class="card-desc">In-depth analysis of education, health, and governance policy frameworks in Nepal.</div>
+        <div class="card-arrow">Read policies →</div>
+      </article>
+
+      <article class="service-card" onclick="openModal('Life Science','lifeSciContent')" tabindex="0" role="button">
+        <div class="card-icon">🧬</div>
+        <div class="card-title">Life Sciences</div>
+        <div class="card-desc">Child development research, public health studies, and biodiversity documentation.</div>
+        <div class="card-arrow">Explore science →</div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- Resource Table -->
+  <section class="section-block" aria-labelledby="resourcesTitle">
+    <span class="section-eyebrow">Curated by KMC-Rayamajhi Sir</span>
+    <h2 class="section-title" id="resourcesTitle">Academic Resources &amp; Course Syllabi</h2>
+
+    <div class="table-wrap">
+      <div class="table-head">
+        <h3>Resource Directory</h3>
+        <div class="table-filter" role="group" aria-label="Filter resources">
+          <button class="filter-btn active" onclick="filterTable('all',this)">All</button>
+          <button class="filter-btn" onclick="filterTable('education',this)">Education</button>
+          <button class="filter-btn" onclick="filterTable('mathematics',this)">Mathematics</button>
+          <button class="filter-btn" onclick="filterTable('exam',this)">Exam Prep</button>
+          <button class="filter-btn" onclick="filterTable('heritage',this)">Heritage</button>
+        </div>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="resource-table" id="resourceTable">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Description</th>
+              <th>Category</th>
+              <th>Resources</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-cat="education">
+              <td>Bachelor of Education (B.Ed.)</td>
+              <td>Syllabus for B.Ed. under Tribhuvan University.</td>
+              <td><span class="tag">Education</span></td>
+              <td><button class="resource-btn" onclick="openLink('https://thepronotes.com/b-ed-syllabus-tribhuwan-university-tu/')">📋 B.Ed. Syllabus TU</button></td>
+            </tr>
+            <tr data-cat="mathematics">
+              <td>Mathematics Department</td>
+              <td>Central Department of Mathematics at Tribhuvan University.</td>
+              <td><span class="tag gold">Mathematics</span></td>
+              <td><button class="resource-btn" onclick="openLink('https://www.cdmathtu.edu.np/index.php?linkId=63')">📐 CD Math TU</button></td>
+            </tr>
+            <tr data-cat="education">
+              <td>Education Management (EMIS)</td>
+              <td>Teacher e-learning courses through EMIS portal.</td>
+              <td><span class="tag">Education</span></td>
+              <td><button class="resource-btn" onclick="openLink('https://emis.kmctlw.edu.np/teacher-elearning-courses')">💻 EMIS Portal</button></td>
+            </tr>
+            <tr data-cat="mathematics">
+              <td>Calculus Resources</td>
+              <td>Videos, PDFs, and lecture notes on calculus and differential equations.</td>
+              <td><span class="tag gold">Mathematics</span></td>
+              <td>
+                <button class="resource-btn" onclick="openLink('https://www.youtube.com/watch?v=SdEjDu6KAXI&list=PLy1AwDuFJqmh3eMjifz4kJbf5x2Fy1m9Z')">▶ Calculus TU</button>
+                <button class="resource-btn outline" onclick="openLink('https://www.youtube.com/watch?v=HnFozJrVkBU')">▶ Differential</button>
+                <button class="resource-btn outline" onclick="openLink('https://ocw.mit.edu/search/?d=Mathematics&s=department_course_numbers.sort_coursenum')">📄 MIT PDF</button>
+              </td>
+            </tr>
+            <tr data-cat="mathematics">
+              <td>Differential Equations</td>
+              <td>Comprehensive video playlist on differential equations.</td>
+              <td><span class="tag gold">Mathematics</span></td>
+              <td><button class="resource-btn" onclick="openLink('https://www.youtube.com/watch?v=7eTKdCvXYxA&list=PLQHn51XWneW_Hj9wKAluMG4Qsaon2gL-I')">▶ Diff. Equations</button></td>
+            </tr>
+            <tr data-cat="exam">
+              <td>Public Service Commission Nepal</td>
+              <td>Official PSC exam portal for civil service preparation.</td>
+              <td><span class="tag crimson">Exam Prep</span></td>
+              <td>
+                <button class="resource-btn" onclick="openLink('https://psc.gov.np/')">🏛️ PSC Nepal</button>
+                <button class="resource-btn outline" onclick="openLink('https://tsc.gov.np/')">🏛️ TSC Nepal</button>
+              </td>
+            </tr>
+            <tr data-cat="heritage">
+              <td>Historical Research</td>
+              <td>Kapilvastu-Tilaurakot archaeological research by Prof. Robin Cunningham.</td>
+              <td><span class="tag crimson">Heritage</span></td>
+              <td><button class="resource-btn" onclick="openLink('https://www.youtube.com/watch?v=T-nIi4eaoX8&t=1348s')">▶ Tilaurakot Video</button></td>
+            </tr>
+            <tr data-cat="education">
+              <td>Child Development Research</td>
+              <td>Research video on child development from KMCHSS.</td>
+              <td><span class="tag">Education</span></td>
+              <td><button class="resource-btn" onclick="openLink('https://www.youtube.com/watch?v=7ByPyzrC1Pk')">▶ Child Dev. Video</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Portals -->
+  <section class="section-block" aria-labelledby="portalsTitle">
+    <span class="section-eyebrow">Live Embedded</span>
+    <h2 class="section-title" id="portalsTitle">Live Portals &amp; Resources</h2>
+
+    <div class="portals-grid">
+
+      <div class="portal-card">
+        <div class="portal-header">
+          <div class="dot-live"></div>
+          📄 Google Document
+        </div>
+        <iframe src="https://docs.google.com/document/d/e/2PACX-1vQU6tUy1VzMlhJY2dLzJlb5OSquHfPemc7OAA3RlYIcQtNHgjkxjuNhirWuGgFyN1_bTC4V1cBYGQ0T/pub?embedded=true" title="SDROK Google Document" loading="lazy"></iframe>
+        <div class="portal-footer">
+          <button class="resource-btn outline" onclick="openLink('https://docs.google.com/document/d/1xxxxxxx/view')">Open ↗</button>
+        </div>
+      </div>
+
+      <div class="portal-card">
+        <div class="portal-header">
+          <div class="dot-live"></div>
+          🎓 IOST Tribhuvan University
+        </div>
+        <iframe src="https://iost.tu.edu.np/" title="IOST TU Portal" loading="lazy"></iframe>
+        <div class="portal-footer">
+          <button class="resource-btn outline" onclick="openLink('https://iost.tu.edu.np/')">Open ↗</button>
+        </div>
+      </div>
+
+      <div class="portal-card">
+        <div class="portal-header">
+          <div class="dot-live"></div>
+          📊 KMC-HSSD Slide
+        </div>
+        <iframe src="https://docs.google.com/presentation/d/1O6TjWTAY8qjxBAZKsSfGJG806a9YUMYF/edit?slide=id.p1#slide=id.p1" title="HSSD Presentation" loading="lazy"></iframe>
+        <div class="portal-footer">
+          <button class="resource-btn outline" onclick="openLink('https://docs.google.com/presentation/d/1O6TjWTAY8qjxBAZKsSfGJG806a9YUMYF/edit?slide=id.p1#slide=id.p1')">Open ↗</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Feedback -->
+  <section class="feedback-panel" aria-labelledby="feedbackTitle">
+    <h2 id="feedbackTitle">Share Your Suggestions</h2>
+    <p>Your feedback helps us improve the platform for researchers, educators, and communities.</p>
+    <div class="feedback-row">
+      <input type="text" id="feedbackInput" placeholder="Type your suggestion here…" aria-label="Feedback input" onkeydown="if(event.key==='Enter')sendFeedback()">
+      <button onclick="sendFeedback()">Send ✉</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── FOOTER ──────────────────────────────────────────────────── -->
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="brand-name" style="font-family:'Playfair Display',serif; font-weight:700; margin-bottom:10px;">SDROK</div>
+      <p>Social Development &amp; Research Information. Advancing communities through insight, innovation, and rigorous academic inquiry.</p>
+      <p style="margin-top:10px; font-size:.78rem; color:rgba(255,255,255,.4);">Designed &amp; Developed by Bishnu Singh Rayamajhi</p>
+    </div>
+
+    <div class="footer-links">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="https://bbsrm4591sdrok.wordpress.com" target="_blank" rel="noopener">SDROK WordPress Portal</a></li>
+        <li><a href="https://thepronotes.com/b-ed-syllabus-tribhuwan-university-tu/" target="_blank" rel="noopener">B.Ed. Syllabus TU</a></li>
+        <li><a href="https://www.cdmathtu.edu.np/index.php?linkId=63" target="_blank" rel="noopener">CD Mathematics TU</a></li>
+        <li><a href="https://psc.gov.np/" target="_blank" rel="noopener">PSC Nepal</a></li>
+        <li><a href="https://tsc.gov.np/" target="_blank" rel="noopener">TSC Nepal</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-links">
+      <h4>Policies</h4>
+      <ul>
+        <li><a href="#" onclick="openModal('Privacy Policy','privacyContent');return false;">Privacy Policy</a></li>
+        <li><a href="#" onclick="openModal('Terms of Service','termsContent');return false;">Terms of Service</a></li>
+        <li><a href="#" onclick="openModal('Social Media Policy','socialPolicyContent');return false;">Social Media Policy</a></li>
+        <li><a href="#" onclick="openModal('Copyright Information','copyrightContent');return false;">Copyright</a></li>
+        <li><a href="mailto:sdrok2080@gmail.com">Contact Us</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-copy">
+    <span>© 2024 Social Development &amp; Research Information (SDROK). All rights reserved.</span>
+    <span>Advancing communities through research &amp; innovation.</span>
+  </div>
+</footer>
+
+<!-- ── BOTTOM TICKER ───────────────────────────────────────────── -->
+<div class="bottom-ticker" aria-hidden="true">
+  <div class="bottom-ticker-inner">
+    <span>🌟 Social Development &amp; Research Information pioneers transformative initiatives, leveraging the dynamic pulse of social vibrations to drive innovation and positive change globally. | Crafted by Bishnu Singh Rayamajhi | sdrok2080@gmail.com 🌟</span>
+  </div>
+</div>
+
+<!-- ── MODAL ───────────────────────────────────────────────────── -->
+<div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalHeading" onclick="handleBackdropClick(event)">
+  <div class="modal" id="modalBox">
+    <div class="modal-hd">
+      <h3 id="modalHeading">Title</h3>
+      <button class="modal-close" onclick="closeModal()" aria-label="Close dialog">✕</button>
+    </div>
+    <div class="modal-bd" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- ── TOAST ───────────────────────────────────────────────────── -->
+<div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   READ-ONLY / COPY PROTECTION
+   ══════════════════════════════════════════════════════════════ */
+
+// 1. Block right-click context menu
+document.addEventListener('contextmenu', function(e) {
+  e.preventDefault();
+  showToast('🔒 Right-click is disabled on this page.');
+  return false;
+});
+
+// 2. Block common keyboard shortcuts for copy, save, print, view-source
+document.addEventListener('keydown', function(e) {
+  const ctrl = e.ctrlKey || e.metaKey;
+
+  // Allow Tab, Enter, Space, Arrow keys and Escape (navigation / modal close)
+  if (!ctrl && !e.shiftKey && !e.altKey) return;
+
+  // Block: Ctrl+C, Ctrl+X, Ctrl+A, Ctrl+S, Ctrl+P, Ctrl+U (view source)
+  if (ctrl && ['c','x','a','s','p','u'].includes(e.key.toLowerCase())) {
+    // Allow Ctrl+A inside input/textarea so users can type normally
+    if (['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+    e.preventDefault();
+    if (e.key.toLowerCase() !== 'a') {
+      showToast('🔒 Copying content is not permitted.');
+    }
+    return false;
+  }
+
+  // Block: F12 (DevTools), Ctrl+Shift+I/J/C (DevTools), Ctrl+Shift+U (view-source Firefox)
+  if (e.key === 'F12') {
+    e.preventDefault();
+    return false;
+  }
+  if (ctrl && e.shiftKey && ['i','j','c','u'].includes(e.key.toLowerCase())) {
+    e.preventDefault();
+    return false;
+  }
+
+  // Allow Escape (for modal close) — handled separately below
+});
+
+// 3. Block copy & cut events (handles mouse-drag select + copy)
+document.addEventListener('copy', function(e) {
+  if (['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+  e.preventDefault();
+  showToast('🔒 Copying content is not permitted.');
+});
+document.addEventListener('cut', function(e) {
+  if (['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+  e.preventDefault();
+});
+
+// 4. Block drag-start on images
+document.addEventListener('dragstart', function(e) {
+  if (e.target.tagName === 'IMG') {
+    e.preventDefault();
+    return false;
+  }
+});
+
+/* ══════════════════════════════════════════════════════════════
+   CAROUSEL
+   ══════════════════════════════════════════════════════════════ */
+let currentSlide = 0;
+const totalSlides = 7;
+let autoTimer;
+
+// Build dots
+const dotsContainer = document.getElementById('carouselDots');
+for (let i = 0; i < totalSlides; i++) {
+  const dot = document.createElement('button');
+  dot.className = 'dot' + (i === 0 ? ' active' : '');
+  dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+  dot.setAttribute('aria-selected', i === 0);
+  dot.addEventListener('click', () => goToSlide(i));
+  dotsContainer.appendChild(dot);
+}
+
+function updateCarousel() {
+  const container = document.getElementById('slidesContainer');
+  container.style.transform = `translateX(-${currentSlide * 100}%)`;
+  document.querySelectorAll('.dot').forEach((d, i) => {
+    d.classList.toggle('active', i === currentSlide);
+    d.setAttribute('aria-selected', i === currentSlide);
+  });
+}
+
+function changeSlide(dir) {
+  currentSlide = (currentSlide + dir + totalSlides) % totalSlides;
+  updateCarousel();
+  resetAutoplay();
+}
+
+function goToSlide(idx) {
+  currentSlide = idx;
+  updateCarousel();
+  resetAutoplay();
+}
+
+function resetAutoplay() {
+  clearInterval(autoTimer);
+  autoTimer = setInterval(() => changeSlide(1), 5000);
+}
+
+resetAutoplay();
+
+document.querySelector('.hero').addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft') changeSlide(-1);
+  if (e.key === 'ArrowRight') changeSlide(1);
+});
+
+/* ── NAV DROPDOWNS ─────────────────────────────────────────────── */
+function toggleNav(id) {
+  const target = document.getElementById(id);
+  const btn = target.previousElementSibling;
+  const isOpen = target.classList.contains('open');
+  document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open'));
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-expanded', 'false');
+  });
+  if (!isOpen) {
+    target.classList.add('open');
+    btn.classList.add('active');
+    btn.setAttribute('aria-expanded', 'true');
+  }
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.nav-item')) {
+    document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open'));
+    document.querySelectorAll('.nav-btn').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-expanded', 'false');
+    });
+  }
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open'));
+    document.querySelectorAll('.nav-btn').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-expanded','false');
+    });
+    closeModal();
+  }
+});
+
+/* ── MODAL ─────────────────────────────────────────────────────── */
+const contentDB = {
+  headerContent: `
+    <h4>Header Section</h4>
+    <p>The SDROK header contains the main branding, logo, and primary navigation. It acts as the gateway to all research and academic resources provided by Social Development &amp; Research Information.</p>
+    <ul>
+      <li>Sticky top navigation for easy access</li>
+      <li>Global search functionality</li>
+      <li>Live ticker with latest updates</li>
+      <li>Responsive across all devices</li>
+    </ul>
+  `,
+  contentContent: `
+    <h4>Content Section</h4>
+    <p>This area houses the core material of our website including research publications, case studies, interview transcripts, and multimedia resources. All content is curated to support academic excellence and social development initiatives.</p>
+    <ul>
+      <li>Peer-reviewed research articles</li>
+      <li>Community case studies</li>
+      <li>Interview transcripts with experts</li>
+      <li>Multimedia resources and videos</li>
+    </ul>
+  `,
+  journeyContent: `
+    <h4>Innovating Journey</h4>
+    <p>Trace our path from inception to impact. This section documents the milestones, challenges, and breakthroughs that have shaped SDROK into a leading platform for social research and community empowerment in Nepal and beyond.</p>
+    <ul>
+      <li>Platform launched to serve TU community</li>
+      <li>Expanded to PSC/TSC preparation materials</li>
+      <li>Integration with live academic portals</li>
+      <li>Heritage and archaeological research added</li>
+    </ul>
+  `,
+  actionContent: `
+    <h4>Action Section</h4>
+    <p>Discover our active projects and ongoing initiatives. From field research to policy advocacy, this section highlights the tangible actions we are taking to create positive social change.</p>
+    <ul>
+      <li>Community-based participatory research</li>
+      <li>Policy advocacy and submissions</li>
+      <li>Educational outreach programs</li>
+      <li>Digital literacy initiatives</li>
+    </ul>
+  `,
+  desireContent: `
+    <h4>Desire Section</h4>
+    <p>Our vision for the future. This section outlines our aspirations, long-term goals, and the transformative outcomes we strive to achieve through sustained research and community engagement.</p>
+    <ul>
+      <li>Establish a comprehensive research repository for Nepal</li>
+      <li>Bridge academic research with community practice</li>
+      <li>Support PSC/TSC aspirants with quality resources</li>
+      <li>Document and preserve cultural heritage digitally</li>
+    </ul>
+  `,
+  researchContent: `
+    <h4>Research Articles</h4>
+    <p>Access our comprehensive collection of research articles covering a wide range of social development topics.</p>
+    <ul>
+      <li>Social development theories and frameworks</li>
+      <li>Community-based participatory research</li>
+      <li>Policy analysis and recommendations</li>
+      <li>Quantitative and qualitative studies</li>
+      <li>Interdisciplinary approaches to social change</li>
+    </ul>
+    <p style="margin-top:12px;"><strong>Access:</strong> Visit our <a href="https://bbsrm4591sdrok.wordpress.com" target="_blank" rel="noopener" style="color:var(--teal);">WordPress portal</a> for the full archive.</p>
+  `,
+  caseStudyContent: `
+    <h4>Case Studies</h4>
+    <p>Detailed examinations of successful social interventions including:</p>
+    <ul>
+      <li>Community mobilization strategies in rural Nepal</li>
+      <li>Education program implementations and outcomes</li>
+      <li>Health initiative assessments at district level</li>
+      <li>Economic development projects in Lumbini province</li>
+      <li>Environmental sustainability programs</li>
+    </ul>
+  `,
+  interviewContent: `
+    <h4>Interviews</h4>
+    <p>Conversations with leading experts, community leaders, and academicians discussing:</p>
+    <ul>
+      <li>Emerging trends in social research in Nepal</li>
+      <li>Grassroots perspectives on development</li>
+      <li>Policy-maker insights on education reform</li>
+      <li>Youth engagement strategies</li>
+      <li>Technology in social innovation</li>
+    </ul>
+  `,
+  seminarContent: `
+    <h4>Seminars &amp; Webinars</h4>
+    <p>Archive of past and upcoming events organized by SDROK:</p>
+    <ul>
+      <li>Monthly research methodology workshops</li>
+      <li>Quarterly policy dialogue sessions</li>
+      <li>Annual international conferences</li>
+      <li>Specialized training webinars for educators</li>
+      <li>Collaborative academic forums with TU</li>
+    </ul>
+  `,
+  cyberContent: `
+    <h4>Cyber Networking</h4>
+    <p>Our digital connectivity initiatives connecting researchers and communities:</p>
+    <ul>
+      <li>Online research collaboration platforms</li>
+      <li>Virtual community engagement tools</li>
+      <li>Digital literacy programs for rural communities</li>
+      <li>Social media analytics for development</li>
+      <li>E-learning resource networks</li>
+    </ul>
+  `,
+  newsContent: `
+    <h4>News &amp; Updates</h4>
+    <p>Latest developments from SDROK and the broader academic community:</p>
+    <ul>
+      <li>New research publications and findings</li>
+      <li>Partnership announcements with universities</li>
+      <li>Event coverage and reports</li>
+      <li>Policy update summaries from Government of Nepal</li>
+      <li>Community success stories and impact reports</li>
+    </ul>
+  `,
+  policyContent: `
+    <h4>Policy Insight</h4>
+    <p>In-depth analysis of policy frameworks relevant to social development and education in Nepal:</p>
+    <ul>
+      <li>Education policy reviews (National Education Policy 2076)</li>
+      <li>Health sector guidelines and implementation</li>
+      <li>Local governance structures under Federalism</li>
+      <li>International development protocols (SDGs)</li>
+      <li>Evidence-based policy recommendations for TU</li>
+    </ul>
+  `,
+  archaeoContent: `
+    <h4>Archaeological Investigation</h4>
+    <p>Research on Nepal's rich cultural and historical heritage:</p>
+    <ul>
+      <li>Tilaurakot and Kapilvastu archaeological studies</li>
+      <li>Research by Prof. Robin Coningham (Durham University)</li>
+      <li>Ancient trade route documentation in Lumbini region</li>
+      <li>Preservation methodologies for UNESCO sites</li>
+      <li>Community archaeology programs</li>
+      <li>Digital heritage mapping and documentation</li>
+    </ul>
+    <p style="margin-top:12px;"><strong>Watch:</strong> <a href="https://www.youtube.com/watch?v=T-nIi4eaoX8&t=1348s" target="_blank" rel="noopener" style="color:var(--teal);">Tilaurakot Research Video</a></p>
+  `,
+  academicContent: `
+    <h4>Academic Field</h4>
+    <p>Resources for students and educators at Tribhuvan University and affiliated colleges:</p>
+    <ul>
+      <li>B.Ed. syllabus and study materials</li>
+      <li>Mathematics department resources (CD Math TU)</li>
+      <li>Calculus, differential equations video playlists</li>
+      <li>MIT OpenCourseWare calculus PDF</li>
+      <li>PSC/TSC exam preparation guides</li>
+      <li>EMIS e-learning modules for teachers</li>
+    </ul>
+  `,
+  lifeSciContent: `
+    <h4>Life Science</h4>
+    <p>Exploring biological and health sciences with a focus on community impact:</p>
+    <ul>
+      <li>Child development research from KMCHSS</li>
+      <li>Public health studies in Kapilvastu district</li>
+      <li>Environmental biology and ecology</li>
+      <li>Nutrition and wellness programs</li>
+      <li>Biodiversity documentation in Lumbini region</li>
+    </ul>
+    <p style="margin-top:12px;"><strong>Watch:</strong> <a href="https://www.youtube.com/watch?v=7ByPyzrC1Pk" target="_blank" rel="noopener" style="color:var(--teal);">Child Development Research Video</a></p>
+  `,
+  privacyContent: `
+    <h4>Privacy Policy</h4>
+    <p>Your data is protected under SDROK's privacy framework:</p>
+    <ul>
+      <li>We collect only information you voluntarily provide</li>
+      <li>Personal data is never sold to third parties</li>
+      <li>Secure storage and encryption standards applied</li>
+      <li>Transparent data usage policies</li>
+      <li>You have the right to access and delete your information</li>
+      <li>Cookies used only for essential site functionality</li>
+    </ul>
+    <p style="margin-top:12px;">For privacy inquiries, contact: <a href="mailto:sdrok2080@gmail.com" style="color:var(--teal);">sdrok2080@gmail.com</a></p>
+  `,
+  termsContent: `
+    <h4>Terms of Service</h4>
+    <p>By using the SDROK platform, you agree to:</p>
+    <ul>
+      <li>Use resources for educational and research purposes only</li>
+      <li>Respect intellectual property rights of all authors</li>
+      <li>Maintain confidentiality of sensitive research materials</li>
+      <li>Report technical issues or inaccuracies promptly</li>
+      <li>Adhere to community guidelines and ethical standards</li>
+      <li>Not use the platform for commercial gain without permission</li>
+    </ul>
+  `,
+  socialPolicyContent: `
+    <h4>Social Media Policy</h4>
+    <p>Guidelines for engaging with SDROK on social media platforms:</p>
+    <ul>
+      <li>Respectful and constructive communication at all times</li>
+      <li>Accurate representation of research findings when sharing</li>
+      <li>Protection of participant privacy in all posts</li>
+      <li>Proper citation and attribution of shared content</li>
+      <li>Zero tolerance for misinformation or harmful content</li>
+      <li>Engagement must align with SDROK's mission values</li>
+    </ul>
+  `,
+  copyrightContent: `
+    <h4>Copyright Information</h4>
+    <p>© 2024 Social Development &amp; Research Information (SDROK). All rights reserved.</p>
+    <p style="margin-top:10px;">No part of this website may be reproduced, distributed, or transmitted in any form without prior written permission from SDROK.</p>
+    <ul style="margin-top:10px;">
+      <li>Content attribution and fair use policies apply</li>
+      <li>Academic resources are credited to original authors</li>
+      <li>Educational fair use permitted with proper citation</li>
+      <li>Design and structure © Bishnu Singh Rayamajhi 2024</li>
+    </ul>
+  `
+};
+
+let lastFocusedElement = null;
+
+function openModal(title, key) {
+  lastFocusedElement = document.activeElement;
+  document.getElementById('modalHeading').textContent = title;
+  document.getElementById('modalBody').innerHTML = contentDB[key] || '<p>Content coming soon.</p>';
+  document.getElementById('modalBackdrop').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.querySelector('.modal-close').focus();
+  document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open'));
+}
+
+function closeModal() {
+  document.getElementById('modalBackdrop').classList.remove('open');
+  document.body.style.overflow = '';
+  if (lastFocusedElement) lastFocusedElement.focus();
+}
+
+function handleBackdropClick(e) {
+  if (e.target === document.getElementById('modalBackdrop')) closeModal();
+}
+
+/* ── TABLE FILTER ──────────────────────────────────────────────── */
+function filterTable(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const rows = document.querySelectorAll('#resourceTable tbody tr');
+  rows.forEach(row => {
+    const show = cat === 'all' || row.dataset.cat === cat;
+    row.style.display = show ? '' : 'none';
+  });
+}
+
+/* ── SEARCH ────────────────────────────────────────────────────── */
+function handleSearch() {
+  const q = document.getElementById('globalSearch').value.trim().toLowerCase();
+  if (!q) return;
+
+  const map = {
+    'research': ['Research Articles','researchContent'],
+    'case': ['Case Studies','caseStudyContent'],
+    'interview': ['Interviews','interviewContent'],
+    'seminar': ['Seminars & Webinars','seminarContent'],
+    'policy': ['Policy Insight','policyContent'],
+    'math': ['Academic Field','academicContent'],
+    'calculus': ['Academic Field','academicContent'],
+    'education': ['Academic Field','academicContent'],
+    'bed': ['Academic Field','academicContent'],
+    'psc': ['Academic Field','academicContent'],
+    'tsc': ['Academic Field','academicContent'],
+    'archaeology': ['Archaeological Investigation','archaeoContent'],
+    'tilaurakot': ['Archaeological Investigation','archaeoContent'],
+    'life': ['Life Science','lifeSciContent'],
+    'child': ['Life Science','lifeSciContent'],
+    'privacy': ['Privacy Policy','privacyContent'],
+    'terms': ['Terms of Service','termsContent'],
+    'news': ['News & Updates','newsContent'],
+  };
+
+  for (const key in map) {
+    if (q.includes(key)) {
+      openModal(...map[key]);
+      document.getElementById('globalSearch').value = '';
+      return;
+    }
+  }
+
+  showToast(`No results for "${q}". Try: research, calculus, policy, archaeology…`);
+  document.getElementById('globalSearch').value = '';
+}
+
+document.getElementById('globalSearch').addEventListener('keydown', e => {
+  if (e.key === 'Enter') handleSearch();
+});
+
+/* ── FEEDBACK ──────────────────────────────────────────────────── */
+function sendFeedback() {
+  const input = document.getElementById('feedbackInput');
+  const text = input.value.trim();
+  if (!text) {
+    showToast('Please type your suggestion before sending.');
+    return;
+  }
+  window.open(`mailto:sdrok2080@gmail.com?subject=Website Feedback&body=${encodeURIComponent(text)}`, '_blank');
+  input.value = '';
+  showToast('✓ Thank you! Your feedback has been sent.');
+}
+
+/* ── TOAST ─────────────────────────────────────────────────────── */
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+/* ── OPEN LINK ─────────────────────────────────────────────────── */
+function openLink(url) { window.open(url, '_blank', 'noopener,noreferrer'); }
+
+/* ── SERVICE CARD KEYBOARD ─────────────────────────────────────── */
+document.querySelectorAll('.service-card').forEach(card => {
+  card.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      card.click();
+    }
+  });
+});
+
+/* ── ANIMATED COUNTERS ─────────────────────────────────────────── */
+function animateCounter(id, target, duration = 1400) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  let start = 0;
+  const step = Math.ceil(target / (duration / 16));
+  const suffix = target > 100 ? '+' : '';
+  const timer = setInterval(() => {
+    start = Math.min(start + step, target);
+    el.textContent = start + suffix;
+    if (start >= target) clearInterval(timer);
+  }, 16);
+}
+
+const statsObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateCounter('statArticles', 120);
+      animateCounter('statResources', 48);
+      animateCounter('statCourses', 15);
+      animateCounter('statPortals', 4);
+      animateCounter('statYears', 5);
+      statsObserver.disconnect();
+    }
+  });
+}, { threshold: 0.3 });
+
+const statBar = document.querySelector('.stats-bar');
+if (statBar) statsObserver.observe(statBar);
+
+/* ── SCROLL REVEAL ─────────────────────────────────────────────── */
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }, i * 60);
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.service-card, .portal-card').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
+  revealObserver.observe(el);
+});
+</script>
+
+</body>
+</html>
