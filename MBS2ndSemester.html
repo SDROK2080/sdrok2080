@@ -1,465 +1,3 @@
-<!-- ═══════════════════════════════════════
-     KMC MBS 2nd Semester — PASSWORD GATE
-     ═══════════════════════════════════════ -->
-
-<div id="passwordScreen">
-    <div class="password-card">
-        <!-- Lock Icon -->
-        <div class="lock-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-            </svg>
-        </div>
-
-        <h2>KMC MBS 2nd Semester</h2>
-        <p class="subtitle">Enter the password to access the app</p>
-
-        <div class="input-wrapper">
-            <input
-                type="password"
-                id="appPassword"
-                placeholder="Enter Password"
-                autocomplete="off"
-                autocapitalize="off"
-                spellcheck="false"
-                aria-label="Password"
-            >
-            <button type="button" id="togglePassword" class="toggle-btn" aria-label="Show password">
-                <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                </svg>
-                <svg id="eyeOffIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
-                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                    <line x1="1" y1="1" x2="23" y2="23"></line>
-                </svg>
-            </button>
-        </div>
-
-        <button id="unlockBtn" onclick="unlockApp()">
-            <span class="btn-text">🔓 Unlock App</span>
-            <span class="btn-loader" style="display:none;">
-                <svg class="spinner" viewBox="0 0 50 50">
-                    <circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="5"></circle>
-                </svg>
-            </span>
-        </button>
-
-        <p id="passwordMessage" role="alert" aria-live="polite"></p>
-
-        <div class="attempts-info" id="attemptsInfo"></div>
-    </div>
-</div>
-
-<style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    #passwordScreen {
-        position: fixed;
-        inset: 0;
-        z-index: 999999;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-        padding: 20px;
-        transition: opacity 0.6s ease, visibility 0.6s ease;
-    }
-
-    #passwordScreen.hidden {
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-    }
-
-    .password-card {
-        width: 100%;
-        max-width: 420px;
-        padding: 40px 35px;
-        text-align: center;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(20px);
-        border-radius: 24px;
-        box-shadow:
-            0 25px 50px -12px rgba(0, 0, 0, 0.25),
-            0 0 0 1px rgba(255, 255, 255, 0.1);
-        animation: slideUp 0.5s ease-out;
-    }
-
-    @keyframes slideUp {
-        from { opacity: 0; transform: translateY(30px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .lock-icon {
-        width: 64px;
-        height: 64px;
-        margin: 0 auto 20px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-    }
-
-    .lock-icon svg { width: 28px; height: 28px; }
-
-    .password-card h2 {
-        font-size: 26px;
-        font-weight: 700;
-        color: #1a1a2e;
-        margin-bottom: 6px;
-        letter-spacing: -0.5px;
-    }
-
-    .subtitle {
-        color: #6b7280;
-        font-size: 15px;
-        margin-bottom: 28px;
-    }
-
-    .input-wrapper {
-        position: relative;
-        margin-bottom: 16px;
-    }
-
-    #appPassword {
-        width: 100%;
-        padding: 14px 48px 14px 16px;
-        font-size: 16px;
-        border: 2px solid #e5e7eb;
-        border-radius: 12px;
-        background: #fafafa;
-        color: #1a1a2e;
-        transition: all 0.2s ease;
-        outline: none;
-    }
-
-    #appPassword:focus {
-        border-color: #667eea;
-        background: #ffffff;
-        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-    }
-
-    #appPassword::placeholder { color: #9ca3af; }
-
-    .toggle-btn {
-        position: absolute;
-        right: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 6px;
-        color: #6b7280;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 6px;
-        transition: color 0.2s, background 0.2s;
-    }
-
-    .toggle-btn:hover {
-        color: #667eea;
-        background: rgba(102, 126, 234, 0.08);
-    }
-
-    .toggle-btn svg { width: 20px; height: 20px; }
-
-    #unlockBtn {
-        width: 100%;
-        padding: 14px;
-        border: none;
-        border-radius: 12px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        position: relative;
-        overflow: hidden;
-    }
-
-    #unlockBtn:hover:not(:disabled) {
-        transform: translateY(-1px);
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
-    }
-
-    #unlockBtn:active:not(:disabled) { transform: translateY(0); }
-
-    #unlockBtn:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
-    }
-
-    .btn-loader {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .spinner {
-        width: 20px;
-        height: 20px;
-        animation: spin 1s linear infinite;
-    }
-
-    .spinner circle {
-        stroke-dasharray: 80;
-        stroke-dashoffset: 60;
-        stroke-linecap: round;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    #passwordMessage {
-        margin-top: 14px;
-        min-height: 22px;
-        font-size: 14px;
-        font-weight: 500;
-        transition: all 0.3s ease;
-    }
-
-    #passwordMessage.error {
-        color: #dc2626;
-        animation: shake 0.5s ease-in-out;
-    }
-
-    #passwordMessage.success {
-        color: #059669;
-    }
-
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        20% { transform: translateX(-8px); }
-        40% { transform: translateX(8px); }
-        60% { transform: translateX(-4px); }
-        80% { transform: translateX(4px); }
-    }
-
-    .attempts-info {
-        margin-top: 10px;
-        font-size: 12px;
-        color: #9ca3af;
-        min-height: 18px;
-    }
-
-    .attempts-info.locked {
-        color: #dc2626;
-        font-weight: 600;
-    }
-
-    .password-card.shake {
-        animation: shakeCard 0.5s ease-in-out;
-    }
-
-    @keyframes shakeCard {
-        0%, 100% { transform: translateX(0); }
-        20% { transform: translateX(-10px); }
-        40% { transform: translateX(10px); }
-        60% { transform: translateX(-5px); }
-        80% { transform: translateX(5px); }
-    }
-
-    @media (max-width: 480px) {
-        .password-card { padding: 32px 24px; }
-        .password-card h2 { font-size: 22px; }
-    }
-</style>
-
-<script>
-    // ═══════════════════════════════════════
-    // CONFIGURATION
-    // ═══════════════════════════════════════
-
-    const APP_PASSWORD = "KMC@2026";
-
-    const MAX_ATTEMPTS = 5;
-    const LOCKOUT_DURATION = 30000; // 30 seconds
-
-    
-
-    // ═══════════════════════════════════════
-    // STATE
-    // ═══════════════════════════════════════
-
-    let attempts = 0;
-    let isLocked = false;
-    let lockoutTimer = null;
-
-    // ═══════════════════════════════════════
-    // UTILITIES
-    // ═══════════════════════════════════════
-
-    function setMessage(text, type) {
-        const msg = document.getElementById('passwordMessage');
-        msg.textContent = text;
-        msg.className = type || '';
-    }
-
-    function setLoading(loading) {
-        const btn = document.getElementById('unlockBtn');
-        const text = btn.querySelector('.btn-text');
-        const loader = btn.querySelector('.btn-loader');
-        btn.disabled = loading;
-        text.style.display = loading ? 'none' : 'inline';
-        loader.style.display = loading ? 'inline-flex' : 'none';
-    }
-
-    function updateAttemptsInfo() {
-        const info = document.getElementById('attemptsInfo');
-        if (isLocked) {
-            info.textContent = `⏱️ Too many attempts. Please wait...`;
-            info.className = 'attempts-info locked';
-            return;
-        }
-        const remaining = MAX_ATTEMPTS - attempts;
-        if (attempts > 0) {
-            info.textContent = `⚠️ ${remaining} attempt${remaining !== 1 ? 's' : ''} remaining`;
-            info.className = 'attempts-info';
-        } else {
-            info.textContent = '';
-        }
-    }
-
-    function triggerShake() {
-        const card = document.querySelector('.password-card');
-        card.classList.remove('shake');
-        void card.offsetWidth;
-        card.classList.add('shake');
-    }
-
-    // ═══════════════════════════════════════
-    // CORE FUNCTIONS
-    // ═══════════════════════════════════════
-
-    async function unlockApp() {
-        if (isLocked) return;
-
-        const input = document.getElementById('appPassword');
-        const entered = input.value;
-
-        if (!entered) {
-            setMessage('⚠️ Please enter a password', 'error');
-            triggerShake();
-            input.focus();
-            return;
-        }
-
-        setLoading(true);
-        setMessage('');
-
-        // Small delay for UX feedback
-        await new Promise(r => setTimeout(r, 400));
-
-        if (entered === APP_PASSWORD) {
-            // SUCCESS
-            setMessage('✅ Access granted! Welcome.', 'success');
-            sessionStorage.setItem('RayamajhiAIToolsFreeUnlocked', 'true');
-
-            setTimeout(() => {
-                const screen = document.getElementById('passwordScreen');
-                screen.classList.add('hidden');
-                setLoading(false);
-            }, 800);
-
-        } else {
-            // FAILURE
-            attempts++;
-            updateAttemptsInfo();
-            setMessage('❌ Incorrect password. Try again.', 'error');
-            triggerShake();
-            input.value = '';
-            input.focus();
-            setLoading(false);
-
-            if (attempts >= MAX_ATTEMPTS) {
-                lockout();
-            }
-        }
-    }
-
-    function lockout() {
-        isLocked = true;
-        const input = document.getElementById('appPassword');
-        const btn = document.getElementById('unlockBtn');
-        input.disabled = true;
-        updateAttemptsInfo();
-
-        let remaining = LOCKOUT_DURATION / 1000;
-        const info = document.getElementById('attemptsInfo');
-
-        lockoutTimer = setInterval(() => {
-            remaining--;
-            info.textContent = `⏱️ Locked out. Retry in ${remaining}s`;
-            if (remaining <= 0) {
-                clearInterval(lockoutTimer);
-                isLocked = false;
-                attempts = 0;
-                input.disabled = false;
-                input.focus();
-                updateAttemptsInfo();
-                setMessage('');
-            }
-        }, 1000);
-    }
-
-    // ═══════════════════════════════════════
-    // EVENT LISTENERS
-    // ═══════════════════════════════════════
-
-    // Toggle password visibility
-    document.getElementById('togglePassword').addEventListener('click', function() {
-        const input = document.getElementById('appPassword');
-        const eye = document.getElementById('eyeIcon');
-        const eyeOff = document.getElementById('eyeOffIcon');
-
-        if (input.type === 'password') {
-            input.type = 'text';
-            eye.style.display = 'none';
-            eyeOff.style.display = 'block';
-        } else {
-            input.type = 'password';
-            eye.style.display = 'block';
-            eyeOff.style.display = 'none';
-        }
-        input.focus();
-    });
-
-    // Enter key unlock
-    document.getElementById('appPassword').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') unlockApp();
-    });
-
-    // Auto-focus + session check on load
-    window.addEventListener('load', function() {
-        const input = document.getElementById('appPassword');
-
-        if (sessionStorage.getItem('RayamajhiAIToolsFreeUnlocked') === 'true') {
-            document.getElementById('passwordScreen').style.display = 'none';
-            return;
-        }
-
-        setTimeout(() => input.focus(), 100);
-    });
-</script>
-
-
-
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -468,26 +6,126 @@
   <title>MGT 515 Production & Operations Management | TU Nepal — KMC Rayamajhi Sir</title>
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Open+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
+    /* ── COPY / SELECTION PROTECTION ── */
+    * { -webkit-user-select: none !important; -moz-user-select: none !important; -ms-user-select: none !important; user-select: none !important; }
+    img { pointer-events: none; -webkit-user-drag: none; }
+
     :root {
-      --tu-red: #B91C1C; --tu-red-dark: #991B1B; --tu-red-light: #DC2626;
-      --tu-blue: #1E3A8A; --tu-blue-light: #3B82F6; --tu-orange: #EA580C; --tu-gold: #D97706;
-      --bg: #FFFFFF; --surface: #F9FAFB; --surface-alt: #F3F4F6; --border: #E5E7EB; --border-light: #F3F4F6;
-      --text: #1F2937; --text-heading: #111827; --text-muted: #6B7280; --text-light: #9CA3AF;
-      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05); --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
-      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+      --tu-red:#B91C1C;--tu-red-dark:#991B1B;--tu-red-light:#DC2626;
+      --tu-blue:#1E3A8A;--tu-blue-light:#3B82F6;--tu-orange:#EA580C;--tu-gold:#D97706;
+      --bg:#FFFFFF;--surface:#F9FAFB;--surface-alt:#F3F4F6;--border:#E5E7EB;--border-light:#F3F4F6;
+      --text:#1F2937;--text-heading:#111827;--text-muted:#6B7280;--text-light:#9CA3AF;
+      --shadow-sm:0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -2px rgba(0,0,0,0.1);
+      --shadow-lg:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -4px rgba(0,0,0,0.1);
     }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     html{scroll-behavior:smooth;}
     body{background:var(--bg);color:var(--text);font-family:'Open Sans',system-ui,sans-serif;font-size:15px;line-height:1.7;}
+
+    /* ══════════════════ PASSWORD SCREEN ══════════════════ */
+    #passwordScreen{
+      position:fixed;inset:0;z-index:999999;display:flex;justify-content:center;align-items:center;
+      background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+      padding:20px;transition:opacity 0.6s ease,visibility 0.6s ease;
+    }
+    #passwordScreen.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+    .password-card{
+      width:100%;max-width:420px;padding:40px 35px;text-align:center;
+      background:rgba(255,255,255,0.97);backdrop-filter:blur(20px);
+      border-radius:24px;
+      box-shadow:0 25px 50px -12px rgba(0,0,0,0.3),0 0 0 1px rgba(255,255,255,0.15);
+      animation:slideUp 0.5s ease-out;
+    }
+    @keyframes slideUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+    .lock-icon{
+      width:70px;height:70px;margin:0 auto 20px;
+      background:linear-gradient(135deg,#667eea,#764ba2);
+      border-radius:50%;display:flex;align-items:center;justify-content:center;
+      color:white;box-shadow:0 12px 28px rgba(102,126,234,0.45);
+    }
+    .lock-icon svg{width:30px;height:30px;}
+    .password-card h2{font-size:24px;font-weight:700;color:#1a1a2e;margin-bottom:4px;letter-spacing:-0.5px;}
+    .subtitle{color:#6b7280;font-size:14px;margin-bottom:26px;}
+    .input-wrapper{position:relative;margin-bottom:14px;}
+    #appPassword{
+      width:100%;padding:14px 48px 14px 16px;font-size:16px;
+      border:2px solid #e5e7eb;border-radius:12px;background:#fafafa;color:#1a1a2e;
+      transition:all .2s;outline:none;
+      -webkit-user-select:text !important;-moz-user-select:text !important;user-select:text !important;
+    }
+    #appPassword:focus{border-color:#667eea;background:#fff;box-shadow:0 0 0 4px rgba(102,126,234,0.12);}
+    #appPassword::placeholder{color:#9ca3af;}
+    .toggle-btn{
+      position:absolute;right:12px;top:50%;transform:translateY(-50%);
+      background:none;border:none;cursor:pointer;padding:6px;color:#6b7280;
+      display:flex;align-items:center;justify-content:center;border-radius:6px;
+      transition:color .2s,background .2s;
+    }
+    .toggle-btn:hover{color:#667eea;background:rgba(102,126,234,0.08);}
+    .toggle-btn svg{width:20px;height:20px;}
+    #unlockBtn{
+      width:100%;padding:14px;border:none;border-radius:12px;
+      background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+      color:white;font-size:16px;font-weight:600;cursor:pointer;
+      transition:all .2s;box-shadow:0 4px 15px rgba(102,126,234,0.4);
+    }
+    #unlockBtn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 25px rgba(102,126,234,0.5);}
+    #unlockBtn:active:not(:disabled){transform:translateY(0);}
+    #unlockBtn:disabled{opacity:0.7;cursor:not-allowed;}
+    .btn-loader{display:inline-flex;align-items:center;justify-content:center;}
+    .spinner{width:20px;height:20px;animation:spin 1s linear infinite;}
+    .spinner circle{stroke-dasharray:80;stroke-dashoffset:60;stroke-linecap:round;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    #passwordMessage{margin-top:14px;min-height:22px;font-size:14px;font-weight:500;transition:all .3s;}
+    #passwordMessage.error{color:#dc2626;animation:shake 0.5s ease-in-out;}
+    #passwordMessage.success{color:#059669;}
+    @keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-8px);}40%{transform:translateX(8px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}}
+    .attempts-info{margin-top:10px;font-size:12px;color:#9ca3af;min-height:18px;}
+    .attempts-info.locked{color:#dc2626;font-weight:600;}
+    .password-card.shake{animation:shakeCard 0.5s ease-in-out;}
+    @keyframes shakeCard{0%,100%{transform:translateX(0);}20%{transform:translateX(-10px);}40%{transform:translateX(10px);}60%{transform:translateX(-5px);}80%{transform:translateX(5px);}}
+
+    /* ── WATERMARK overlay ── */
+    #watermarkOverlay{
+      position:fixed;inset:0;z-index:9000;pointer-events:none;
+      background:repeating-linear-gradient(
+        -55deg,
+        transparent,
+        transparent 120px,
+        rgba(185,28,28,0.04) 120px,
+        rgba(185,28,28,0.04) 122px
+      );
+    }
+    #watermarkOverlay::after{
+      content:'KMC · READ ONLY · KMC · READ ONLY · KMC · READ ONLY';
+      position:fixed;top:50%;left:50%;
+      transform:translate(-50%,-50%) rotate(-35deg);
+      font-size:3rem;font-weight:900;
+      color:rgba(185,28,28,0.06);
+      white-space:nowrap;pointer-events:none;
+      letter-spacing:.5em;font-family:sans-serif;
+    }
+
+    /* ── PROTECTED NOTICE BAR ── */
+    .protection-bar{
+      background:linear-gradient(90deg,#7c3aed,#4f46e5);
+      color:#fff;text-align:center;font-size:.78rem;font-weight:600;
+      padding:.5rem 1rem;letter-spacing:.04em;
+      display:flex;align-items:center;justify-content:center;gap:.5rem;
+    }
+
+    /* ══════════════════ MAIN STYLES ══════════════════ */
     .topbar-strip{height:4px;background:linear-gradient(90deg,var(--tu-red) 0%,var(--tu-orange) 50%,var(--tu-blue) 100%);}
     .topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:72px;position:sticky;top:0;z-index:200;box-shadow:var(--shadow-sm);}
-    .topbar-brand{display:flex;align-items:center;gap:0.85rem;text-decoration:none;}
+    .topbar-brand{display:flex;align-items:center;gap:.85rem;text-decoration:none;}
     .topbar-brand img{height:48px;width:auto;}
     .topbar-brand-text{display:flex;flex-direction:column;}
     .topbar-brand-text .brand-main{font-family:'Merriweather',serif;font-size:1.05rem;font-weight:700;color:var(--tu-red);line-height:1.3;}
-    .topbar-brand-text .brand-sub{font-size:0.72rem;color:var(--text-muted);font-weight:600;letter-spacing:0.05em;text-transform:uppercase;}
-    .topbar-nav{display:flex;gap:0.25rem;align-items:center;}
-    .topbar-nav a{color:var(--text);text-decoration:none;font-size:0.82rem;font-weight:600;transition:all .2s;padding:8px 14px;border-radius:6px;}
+    .topbar-brand-text .brand-sub{font-size:.72rem;color:var(--text-muted);font-weight:600;letter-spacing:.05em;text-transform:uppercase;}
+    .topbar-nav{display:flex;gap:.25rem;align-items:center;}
+    .topbar-nav a{color:var(--text);text-decoration:none;font-size:.82rem;font-weight:600;transition:all .2s;padding:8px 14px;border-radius:6px;}
     .topbar-nav a:hover{background:var(--surface-alt);color:var(--tu-red);}
     .topbar-nav a.active{background:var(--tu-red);color:#fff;}
     .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:6px;}
@@ -497,7 +135,7 @@
     .hamburger.open span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg);}
     .mobile-menu{display:none;position:fixed;top:76px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--border);z-index:199;padding:1rem 2rem;flex-direction:column;gap:0;box-shadow:var(--shadow-lg);}
     .mobile-menu.open{display:flex;}
-    .mobile-menu a{color:var(--text);text-decoration:none;font-size:0.92rem;font-weight:600;padding:0.7rem 0;border-bottom:1px solid var(--border-light);}
+    .mobile-menu a{color:var(--text);text-decoration:none;font-size:.92rem;font-weight:600;padding:.7rem 0;border-bottom:1px solid var(--border-light);}
     .mobile-menu a:last-child{border-bottom:none;}
     .mobile-menu a:hover{color:var(--tu-red);}
     .hero{position:relative;min-height:380px;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;border-bottom:1px solid var(--border);}
@@ -508,8 +146,8 @@
     .hero h1 em{color:#FDE68A;font-style:normal;}
     .hero-sub{color:rgba(255,255,255,0.9);max-width:600px;margin:0 auto 1.5rem;font-size:1rem;font-weight:400;}
     .hero-meta{display:inline-flex;gap:0;flex-wrap:wrap;justify-content:center;margin-bottom:1.5rem;background:rgba(255,255,255,0.12);backdrop-filter:blur(8px);border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,0.15);}
-    .hero-meta > div{padding:.6rem 1.2rem;color:rgba(255,255,255,0.85);font-size:.8rem;border-right:1px solid rgba(255,255,255,0.15);}
-    .hero-meta > div:last-child{border-right:none;}
+    .hero-meta>div{padding:.6rem 1.2rem;color:rgba(255,255,255,0.85);font-size:.8rem;border-right:1px solid rgba(255,255,255,0.15);}
+    .hero-meta>div:last-child{border-right:none;}
     .hero-meta strong{color:#fff;font-weight:700;}
     .hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
     .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.4rem;border-radius:6px;font-size:.82rem;font-weight:700;cursor:pointer;text-decoration:none;border:none;transition:all .2s;}
@@ -536,8 +174,6 @@
     .section-label{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--tu-red);margin-bottom:.3rem;font-weight:600;}
     .section-title{font-family:'Merriweather',serif;font-size:1.5rem;font-weight:700;color:var(--text-heading);margin-bottom:.4rem;}
     .section-intro{color:var(--text-muted);max-width:700px;font-size:.92rem;}
-
-    /* Chapter Cards */
     .chapter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(520px,1fr));gap:1.25rem;}
     .chapter-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:0;transition:all .25s;display:flex;flex-direction:column;overflow:hidden;box-shadow:var(--shadow-sm);}
     .chapter-card:hover{border-color:var(--tu-red);transform:translateY(-2px);box-shadow:var(--shadow);}
@@ -553,8 +189,6 @@
     .chapter-resources a{text-decoration:none;}
     .chapter-it{display:flex;align-items:center;gap:.4rem;padding:.5rem 1.4rem;background:rgba(234,88,12,0.04);border-top:1px solid var(--border-light);font-size:.78rem;color:var(--tu-orange);font-weight:600;}
     .chapter-it .it-icon{font-size:1rem;}
-
-    /* IT Tools Section */
     .it-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;}
     .it-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:1.2rem;transition:all .2s;box-shadow:var(--shadow-sm);}
     .it-card:hover{border-color:var(--tu-orange);transform:translateY(-2px);box-shadow:var(--shadow);}
@@ -563,8 +197,6 @@
     .it-desc{font-size:.8rem;color:var(--text-muted);line-height:1.55;margin-bottom:.6rem;}
     .it-link{font-size:.78rem;font-weight:700;color:var(--tu-orange);text-decoration:none;}
     .it-link:hover{text-decoration:underline;}
-
-    /* Model Questions */
     .mq-list{display:flex;flex-direction:column;gap:.6rem;}
     .mq-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.9rem 1.1rem;display:flex;align-items:center;gap:.8rem;transition:all .15s;}
     .mq-item:hover{background:var(--bg);border-color:var(--tu-blue);}
@@ -574,8 +206,6 @@
     .mq-sub{font-size:.76rem;color:var(--text-muted);}
     .mq-btn{font-size:.75rem;padding:.35rem .75rem;border-radius:6px;background:var(--tu-blue);color:#fff;text-decoration:none;font-weight:700;transition:.2s;}
     .mq-btn:hover{background:#1e3a5f;}
-
-    /* Exam Table */
     .exam-table-wrap{border-radius:10px;overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow-sm);}
     .exam-table{width:100%;border-collapse:collapse;font-size:.87rem;background:var(--bg);}
     .exam-table th{background:linear-gradient(180deg,var(--tu-red) 0%,var(--tu-red-dark) 100%);color:#fff;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;padding:1rem 1.1rem;text-align:left;font-weight:700;}
@@ -583,41 +213,73 @@
     .exam-table tr:last-child td{border-bottom:none;}
     .exam-table tr:hover td{background:var(--surface);}
     .mark-full{color:var(--tu-red);font-weight:700;font-family:'JetBrains Mono',monospace;}
-    .mark-pass{color:var(--tu-blue-light);font-weight:700;font-family:'JetBrains Mono',monospace;}
-
-    /* Footer */
     .footer-top{background:linear-gradient(135deg,var(--tu-blue) 0%,#1e3a5f 100%);padding:2.5rem 2rem 2rem;color:#fff;}
     .footer-top-inner{max-width:1140px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2rem;}
-    .footer-brand{display:flex;align-items:center;gap:0.85rem;margin-bottom:1rem;}
+    .footer-brand{display:flex;align-items:center;gap:.85rem;margin-bottom:1rem;}
     .footer-brand img{height:56px;width:auto;}
     .footer-brand-text .brand-main{font-family:'Merriweather',serif;font-size:1.1rem;font-weight:700;}
-    .footer-brand-text .brand-sub{font-size:.72rem;opacity:0.8;margin-top:.15rem;}
+    .footer-brand-text .brand-sub{font-size:.72rem;opacity:.8;margin-top:.15rem;}
     .footer-desc{font-size:.85rem;color:rgba(255,255,255,0.75);line-height:1.7;max-width:320px;}
-    .footer-col h4{font-size:.78rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;margin-bottom:1rem;opacity:0.9;}
+    .footer-col h4{font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:1rem;opacity:.9;}
     .footer-col a{display:block;color:rgba(255,255,255,0.7);text-decoration:none;font-size:.84rem;margin-bottom:.6rem;transition:all .2s;}
     .footer-col a:hover{color:#fff;padding-left:4px;}
     .footer-bottom{background:var(--text-heading);padding:1rem 2rem;text-align:center;font-size:.78rem;color:var(--text-light);}
     .back-to-top{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--tu-red);color:#fff;border:none;border-radius:50%;width:46px;height:46px;font-size:1.2rem;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:300;box-shadow:var(--shadow-lg);transition:all .2s;}
     .back-to-top.visible{display:flex;}
     .back-to-top:hover{background:var(--tu-red-dark);transform:translateY(-3px);}
-
     @media(max-width:768px){
-      .topbar-nav{display:none;}
-      .hamburger{display:flex;}
-      .hero{min-height:320px;}
-      .hero-content{padding:2.5rem 1.25rem;}
-      .page-wrap{padding:0 1.25rem;}
+      .topbar-nav{display:none;}.hamburger{display:flex;}.hero{min-height:320px;}
+      .hero-content{padding:2.5rem 1.25rem;}.page-wrap{padding:0 1.25rem;}
       .chapter-grid{grid-template-columns:1fr;}
-      .section-header{flex-direction:column;gap:.5rem;}
-      .section-header::before{width:40px;height:4px;}
+      .section-header{flex-direction:column;gap:.5rem;}.section-header::before{width:40px;height:4px;}
       .footer-top-inner{grid-template-columns:1fr;gap:1.5rem;}
       .chapter-resources{flex-direction:column;}
     }
   </style>
-<base target="_blank">
+  <base target="_blank">
 </head>
 <body>
 
+<!-- ══════════ PASSWORD SCREEN ══════════ -->
+<div id="passwordScreen">
+  <div class="password-card">
+    <div class="lock-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+      </svg>
+    </div>
+    <h2>KMC MBS 2nd Semester</h2>
+    <p class="subtitle">Enter the password to access this page</p>
+    <div class="input-wrapper">
+      <input type="password" id="appPassword" placeholder="Enter Password"
+        autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Password" />
+      <button type="button" id="togglePassword" class="toggle-btn" aria-label="Show password">
+        <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>
+        </svg>
+        <svg id="eyeOffIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+          <line x1="1" y1="1" x2="23" y2="23"></line>
+        </svg>
+      </button>
+    </div>
+    <button id="unlockBtn" onclick="unlockApp()">
+      <span class="btn-text">🔓 Unlock App</span>
+      <span class="btn-loader" style="display:none;">
+        <svg class="spinner" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="5"></circle></svg>
+      </span>
+    </button>
+    <p id="passwordMessage" role="alert" aria-live="polite"></p>
+    <div class="attempts-info" id="attemptsInfo"></div>
+  </div>
+</div>
+
+<!-- ══════════ WATERMARK ══════════ -->
+<div id="watermarkOverlay"></div>
+
+<!-- ══════════ MAIN CONTENT ══════════ -->
+<div class="protection-bar">🔒 READ-ONLY — Copying, printing & downloading are disabled on this page</div>
 <div class="topbar-strip"></div>
 
 <header class="topbar">
@@ -669,7 +331,7 @@
       <div><strong>Pass Marks</strong> &nbsp;40</div>
     </div>
     <div class="hero-btns">
-      <a href="https://www.bbsnotes.com/2024/03/23/mbs-2nd-semester-production-and-operations-management-notes/" target="_blank" class="btn btn-primary">📄 Download Full Notes (PDF)</a>
+      <a href="https://www.bbsnotes.com/2024/03/23/mbs-2nd-semester-production-and-operations-management-notes/" target="_blank" class="btn btn-primary">📄 View Full Notes</a>
       <a href="#chapters" class="btn btn-outline">📖 Browse Chapters</a>
       <a href="#it-tools" class="btn btn-outline">💻 IT Tools</a>
     </div>
@@ -687,10 +349,8 @@
       </div>
     </div>
     <p class="section-intro">All topics are taken directly from the official TU Nepal MGT 515 / MSC 517 textbook. Each chapter includes video lectures, PDF notes, and recommended IT software.</p>
-
     <div class="chapter-grid">
 
-      <!-- CHAPTER 1 -->
       <div class="chapter-card">
         <div class="chapter-header">
           <div class="chapter-num">1</div>
@@ -701,25 +361,22 @@
         </div>
         <div class="chapter-body">
           <ul>
-            <li>1.1 Concept</li>
-            <li>1.2 Transformation model</li>
+            <li>1.1 Concept</li><li>1.2 Transformation model</li>
             <li>1.3 Manufacturing versus Service operations</li>
             <li>1.4 Historical Development of Operations Management</li>
-            <li>1.5 Types of production system</li>
-            <li>1.6 Operations strategy</li>
+            <li>1.5 Types of production system</li><li>1.6 Operations strategy</li>
             <li>1.7 Global view of operations</li>
             <li>1.8 Achieving competitive advantage through operations</li>
             <li>1.9 Concept and types of Productivity</li>
           </ul>
         </div>
         <div class="chapter-resources">
-          <a href="https://www.youtube.com/watch?v=PE_ZRZZAqy0&list=PLzj2eBwEXFvfRbLyBxXyotzY2-8jETObL" target="_blank" rel="noopener" class="btn btn-sm btn-video">▶ POM Full Playlist</a>
-          <a href="https://www.youtube.com/watch?v=dFfl0vNYNeg" target="_blank" rel="noopener" class="btn btn-sm btn-video">▶ Model Questions</a>
-          <a href="https://www.bbsnotes.com/2024/03/23/mbs-2nd-semester-production-and-operations-management-notes/" target="_blank" rel="noopener" class="btn btn-sm btn-pdf">📄 Chapter Notes (PDF)</a>
+          <a href="https://www.youtube.com/watch?v=PE_ZRZZAqy0&list=PLzj2eBwEXFvfRbLyBxXyotzY2-8jETObL" class="btn btn-sm btn-video">▶ POM Full Playlist</a>
+          <a href="https://www.youtube.com/watch?v=dFfl0vNYNeg" class="btn btn-sm btn-video">▶ Model Questions</a>
+          <a href="https://www.bbsnotes.com/2024/03/23/mbs-2nd-semester-production-and-operations-management-notes/" class="btn btn-sm btn-pdf">📄 Chapter Notes</a>
         </div>
       </div>
 
-      <!-- CHAPTER 2 -->
       <div class="chapter-card">
         <div class="chapter-header">
           <div class="chapter-num">2</div>
@@ -731,26 +388,23 @@
         <div class="chapter-body">
           <ul>
             <li>2.1 Product Development: Operational Issues in Product Life Cycle</li>
-            <li>2.2 Product Development Process</li>
-            <li>2.3 Quality Function Deployment</li>
+            <li>2.2 Product Development Process</li><li>2.3 Quality Function Deployment</li>
             <li>2.4 Value Engineering</li>
             <li>2.5 Manufacturing Process and Service Process</li>
-            <li>2.6 Capacity Planning Decisions</li>
-            <li>2.7 Aggregate Planning Strategies</li>
+            <li>2.6 Capacity Planning Decisions</li><li>2.7 Aggregate Planning Strategies</li>
             <li>2.8–2.10 Location Planning & Evaluation Methods</li>
             <li>2.11–2.13 Layout Strategies & Assembly Line Balance</li>
             <li>2.14–2.19 Operations Planning, Loading, Sequencing, Scheduling, OPT</li>
           </ul>
         </div>
         <div class="chapter-resources">
-          <a href="https://www.youtube.com/watch?v=bmHkoSJmgGs" target="_blank" rel="noopener" class="btn btn-sm btn-video">▶ Aggregate Planning</a>
-          <a href="https://www.youtube.com/watch?v=M-l9l_uIyiA" target="_blank" rel="noopener" class="btn btn-sm btn-video">▶ Chase vs Level Strategy</a>
-          <a href="https://www.youtube.com/watch?v=bCUHVCP_thA" target="_blank" rel="noopener" class="btn btn-sm btn-video">▶ Capacity Planning Lecture</a>
-          <a href="https://www.bbsnotes.com/2024/03/23/mbs-2nd-semester-production-and-operations-management-notes/" target="_blank" rel="noopener" class="btn btn-sm btn-pdf">📄 Chapter Notes (PDF)</a>
+          <a href="https://www.youtube.com/watch?v=bmHkoSJmgGs" class="btn btn-sm btn-video">▶ Aggregate Planning</a>
+          <a href="https://www.youtube.com/watch?v=M-l9l_uIyiA" class="btn btn-sm btn-video">▶ Chase vs Level Strategy</a>
+          <a href="https://www.youtube.com/watch?v=bCUHVCP_thA" class="btn btn-sm btn-video">▶ Capacity Planning</a>
+          <a href="https://www.bbsnotes.com/2024/03/23/mbs-2nd-semester-production-and-operations-management-notes/" class="btn btn-sm btn-pdf">📄 Chapter Notes</a>
         </div>
       </div>
 
-      <!-- CHAPTER 3 -->
       <div class="chapter-card">
         <div class="chapter-header">
           <div class="chapter-num">3</div>
@@ -762,25 +416,20 @@
         <div class="chapter-body">
           <ul>
             <li>3.1 Objective and Importance of Material Management</li>
-            <li>3.2 Procurement Activities</li>
-            <li>3.3 Material Handling</li>
-            <li>3.4 Material Requirement Planning (MRP)</li>
-            <li>3.5 Warehousing</li>
-            <li>3.6 Inventory Management</li>
-            <li>3.7 Inventory Costs</li>
-            <li>3.8 Inventory Control System</li>
-            <li>3.9 ABC Inventory Planning System</li>
+            <li>3.2 Procurement Activities</li><li>3.3 Material Handling</li>
+            <li>3.4 Material Requirement Planning (MRP)</li><li>3.5 Warehousing</li>
+            <li>3.6 Inventory Management</li><li>3.7 Inventory Costs</li>
+            <li>3.8 Inventory Control System</li><li>3.9 ABC Inventory Planning System</li>
           </ul>
         </div>
         <div class="chapter-resources">
-          <a href="https://www.youtube.com/watch?v=KiCFfD5zBWQ" target="_blank" rel="noopener" class="btn btn-sm btn-video">▶ EOQ Explained</a>
-          <a href="https://www.youtube.com/watch?v=KiCFfD5zBWQ" target="_blank" rel="noopener" class="btn btn-sm btn-video">▶ ABC Analysis</a>
-          <a href="https://www.bbsnotes.com/2024/03/23/mbs-2nd-semester-production-and-operations-management-notes/" target="_blank" rel="noopener" class="btn btn-sm btn-pdf">📄 Chapter Notes (PDF)</a>
+          <a href="https://www.youtube.com/watch?v=KiCFfD5zBWQ" class="btn btn-sm btn-video">▶ EOQ Explained</a>
+          <a href="https://www.youtube.com/watch?v=KiCFfD5zBWQ" class="btn btn-sm btn-video">▶ ABC Analysis</a>
+          <a href="https://www.bbsnotes.com/2024/03/23/mbs-2nd-semester-production-and-operations-management-notes/" class="btn btn-sm btn-pdf">📄 Chapter Notes</a>
         </div>
-        <div class="chapter-it"><span class="it-icon">💻</span> IT Tool: <strong>Excel</strong> for EOQ & ABC calculations; <strong>POM-QM</strong> for Inventory models</div>
+        <div class="chapter-it"><span class="it-icon">💻</span> IT Tool: <strong>Excel</strong> for EOQ & ABC; <strong>POM-QM</strong> for Inventory models</div>
       </div>
 
-      <!-- CHAPTER 4 -->
       <div class="chapter-card">
         <div class="chapter-header">
           <div class="chapter-num">4</div>
@@ -791,29 +440,25 @@
         </div>
         <div class="chapter-body">
           <ul>
-            <li>4.1 Introduction</li>
-            <li>4.2 Definitions of quality</li>
+            <li>4.1 Introduction</li><li>4.2 Definitions of quality</li>
             <li>4.3 Concepts of total quality management</li>
-            <li>4.4 Quality management system</li>
-            <li>4.5 Quality costs</li>
+            <li>4.4 Quality management system</li><li>4.5 Quality costs</li>
             <li>4.6 7 tools for the quality journey</li>
             <li>4.7 Statistical process control</li>
             <li>4.8 Control charts for variables and attributes</li>
-            <li>4.9 Acceptance sampling</li>
-            <li>4.10 Six sigma</li>
+            <li>4.9 Acceptance sampling</li><li>4.10 Six sigma</li>
             <li>4.11 Process capability</li>
           </ul>
         </div>
         <div class="chapter-resources">
-          <a href="https://www.youtube.com/watch?v=iOJDBpOa3Ko" target="_blank" rel="noopener" class="btn btn-sm btn-video">▶ Control Charts (SPC)</a>
-          <a href="https://www.youtube.com/watch?v=YHu-6HSP-V4" target="_blank" rel="noopener" class="btn btn-sm btn-video">▶ SPC: Variables</a>
-          <a href="https://www.youtube.com/watch?v=omsDVexPYUU" target="_blank" rel="noopener" class="btn btn-sm btn-video">▶ What is SPC?</a>
-          <a href="https://www.bbsnotes.com/2024/03/23/mbs-2nd-semester-production-and-operations-management-notes/" target="_blank" rel="noopener" class="btn btn-sm btn-pdf">📄 Chapter Notes (PDF)</a>
+          <a href="https://www.youtube.com/watch?v=iOJDBpOa3Ko" class="btn btn-sm btn-video">▶ Control Charts (SPC)</a>
+          <a href="https://www.youtube.com/watch?v=YHu-6HSP-V4" class="btn btn-sm btn-video">▶ SPC: Variables</a>
+          <a href="https://www.youtube.com/watch?v=omsDVexPYUU" class="btn btn-sm btn-video">▶ What is SPC?</a>
+          <a href="https://www.bbsnotes.com/2024/03/23/mbs-2nd-semester-production-and-operations-management-notes/" class="btn btn-sm btn-pdf">📄 Chapter Notes</a>
         </div>
-        <div class="chapter-it"><span class="it-icon">💻</span> IT Tool: <strong>Minitab</strong> for Control Charts & Process Capability; <strong>Excel</strong> for 7 QC Tools</div>
+        <div class="chapter-it"><span class="it-icon">💻</span> IT Tool: <strong>Minitab</strong> for Control Charts; <strong>Excel</strong> for 7 QC Tools</div>
       </div>
 
-      <!-- CHAPTER 5 -->
       <div class="chapter-card">
         <div class="chapter-header">
           <div class="chapter-num">5</div>
@@ -826,25 +471,22 @@
           <ul>
             <li>5.1 Introduction to Linear Programming Problem</li>
             <li>5.2 Assumptions of Linear Programming Problem</li>
-            <li>5.3 Limitations of LPP</li>
-            <li>5.4 Mathematical Formulation of LPP</li>
+            <li>5.3 Limitations of LPP</li><li>5.4 Mathematical Formulation of LPP</li>
             <li>5.5 Graphical Method for Solving LPP</li>
             <li>5.6 Solving Maximization Problem by Simplex Method</li>
             <li>5.7 Solving Minimization problem by simplex method</li>
-            <li>5.8 Some Special Types of LPP Solutions</li>
-            <li>5.9 Degeneracy in LPP</li>
+            <li>5.8 Some Special Types of LPP Solutions</li><li>5.9 Degeneracy in LPP</li>
           </ul>
         </div>
         <div class="chapter-resources">
-          <a href="https://www.youtube.com/watch?v=zl5sK5Efm7I" target="_blank" rel="noopener" class="btn btn-sm btn-video">▶ Simplex Method (Part 1)</a>
-          <a href="https://www.youtube.com/watch?v=fKnqVJNsVK8" target="_blank" rel="noopener" class="btn btn-sm btn-video">▶ Graphical vs Simplex</a>
-          <a href="https://www.youtube.com/watch?v=PpWOUoLhF4E" target="_blank" rel="noopener" class="btn btn-sm btn-video">▶ Simplex Calculator Demo</a>
-          <a href="https://www.bbsnotes.com/2024/03/23/mbs-2nd-semester-production-and-operations-management-notes/" target="_blank" rel="noopener" class="btn btn-sm btn-pdf">📄 Chapter Notes (PDF)</a>
+          <a href="https://www.youtube.com/watch?v=zl5sK5Efm7I" class="btn btn-sm btn-video">▶ Simplex Method (Part 1)</a>
+          <a href="https://www.youtube.com/watch?v=fKnqVJNsVK8" class="btn btn-sm btn-video">▶ Graphical vs Simplex</a>
+          <a href="https://www.youtube.com/watch?v=PpWOUoLhF4E" class="btn btn-sm btn-video">▶ Simplex Demo</a>
+          <a href="https://www.bbsnotes.com/2024/03/23/mbs-2nd-semester-production-and-operations-management-notes/" class="btn btn-sm btn-pdf">📄 Chapter Notes</a>
         </div>
-        <div class="chapter-it"><span class="it-icon">💻</span> IT Tool: <strong>Excel Solver</strong> · <strong>TORA</strong> · <strong>Online Simplex Calculator</strong> (zweigmedia.com)</div>
+        <div class="chapter-it"><span class="it-icon">💻</span> IT Tool: <strong>Excel Solver</strong> · <strong>TORA</strong> · <strong>Online Simplex Calculator</strong></div>
       </div>
 
-      <!-- CHAPTER 6 -->
       <div class="chapter-card">
         <div class="chapter-header">
           <div class="chapter-num">6</div>
@@ -855,21 +497,19 @@
         </div>
         <div class="chapter-body">
           <ul>
-            <li>6.1 Introduction</li>
-            <li>6.2 Importance of Duality</li>
+            <li>6.1 Introduction</li><li>6.2 Importance of Duality</li>
             <li>6.3 General Guidelines for Constructing the dual Problem</li>
             <li>6.4 Formulation of Dual Linear Problem</li>
           </ul>
         </div>
         <div class="chapter-resources">
-          <a href="https://www.youtube.com/watch?v=zl5sK5Efm7I" target="_blank" rel="noopener" class="btn btn-sm btn-video">▶ Duality Concepts</a>
-          <a href="https://www.youtube.com/playlist?list=PLAW0AIUILck3FRYusJUq5-ZCqYDq9Js-A" target="_blank" rel="noopener" class="btn btn-sm btn-video">▶ OR Full Playlist</a>
-          <a href="https://www.bbsnotes.com/2024/03/23/mbs-2nd-semester-production-and-operations-management-notes/" target="_blank" rel="noopener" class="btn btn-sm btn-pdf">📄 Chapter Notes (PDF)</a>
+          <a href="https://www.youtube.com/watch?v=zl5sK5Efm7I" class="btn btn-sm btn-video">▶ Duality Concepts</a>
+          <a href="https://www.youtube.com/playlist?list=PLAW0AIUILck3FRYusJUq5-ZCqYDq9Js-A" class="btn btn-sm btn-video">▶ OR Full Playlist</a>
+          <a href="https://www.bbsnotes.com/2024/03/23/mbs-2nd-semester-production-and-operations-management-notes/" class="btn btn-sm btn-pdf">📄 Chapter Notes</a>
         </div>
         <div class="chapter-it"><span class="it-icon">💻</span> IT Tool: <strong>Excel Solver</strong> · <strong>TORA</strong> · <strong>QM for Windows</strong></div>
       </div>
 
-      <!-- CHAPTER 7 -->
       <div class="chapter-card">
         <div class="chapter-header">
           <div class="chapter-num">7</div>
@@ -887,14 +527,13 @@
           </ul>
         </div>
         <div class="chapter-resources">
-          <a href="https://www.youtube.com/watch?v=gPE5aPgeUi4" target="_blank" rel="noopener" class="btn btn-sm btn-video">▶ Transportation Problem Full</a>
-          <a href="https://www.youtube.com/watch?v=WT3IjstuE74" target="_blank" rel="noopener" class="btn btn-sm btn-video">▶ Network Diagram & Constraints</a>
-          <a href="https://www.bbsnotes.com/2024/03/23/mbs-2nd-semester-production-and-operations-management-notes/" target="_blank" rel="noopener" class="btn btn-sm btn-pdf">📄 Chapter Notes (PDF)</a>
+          <a href="https://www.youtube.com/watch?v=gPE5aPgeUi4" class="btn btn-sm btn-video">▶ Transportation Problem Full</a>
+          <a href="https://www.youtube.com/watch?v=WT3IjstuE74" class="btn btn-sm btn-video">▶ Network Diagram & Constraints</a>
+          <a href="https://www.bbsnotes.com/2024/03/23/mbs-2nd-semester-production-and-operations-management-notes/" class="btn btn-sm btn-pdf">📄 Chapter Notes</a>
         </div>
-        <div class="chapter-it"><span class="it-icon">💻</span> IT Tool: <strong>Excel Solver</strong> · <strong>TORA</strong> · <strong>QM for Windows</strong> · <strong>Optimization City</strong></div>
+        <div class="chapter-it"><span class="it-icon">💻</span> IT Tool: <strong>Excel Solver</strong> · <strong>TORA</strong> · <strong>QM for Windows</strong></div>
       </div>
 
-      <!-- CHAPTER 8 -->
       <div class="chapter-card">
         <div class="chapter-header">
           <div class="chapter-num">8</div>
@@ -905,19 +544,16 @@
         </div>
         <div class="chapter-body">
           <ul>
-            <li>8.1 Introduction</li>
-            <li>8.2 Objectives of AP Model</li>
-            <li>8.3 Assumptions of AP Model</li>
-            <li>8.5 Terminology Used in AP Model</li>
-            <li>8.6 Structuring Assignment Problem</li>
-            <li>8.7 Types of Assignment Problem</li>
+            <li>8.1 Introduction</li><li>8.2 Objectives of AP Model</li>
+            <li>8.3 Assumptions of AP Model</li><li>8.5 Terminology Used in AP Model</li>
+            <li>8.6 Structuring Assignment Problem</li><li>8.7 Types of Assignment Problem</li>
           </ul>
         </div>
         <div class="chapter-resources">
-          <a href="https://www.youtube.com/watch?v=ezSx8OyBZVc" target="_blank" rel="noopener" class="btn btn-sm btn-video">▶ Hungarian Method</a>
-          <a href="https://www.youtube.com/watch?v=qUUeZI2mKqE" target="_blank" rel="noopener" class="btn btn-sm btn-video">▶ Hungarian Method (Step-by-Step)</a>
-          <a href="https://www.youtube.com/watch?v=49R8QHUFSAg" target="_blank" rel="noopener" class="btn btn-sm btn-video">▶ Unbalanced Assignment</a>
-          <a href="https://www.bbsnotes.com/2024/03/23/mbs-2nd-semester-production-and-operations-management-notes/" target="_blank" rel="noopener" class="btn btn-sm btn-pdf">📄 Chapter Notes (PDF)</a>
+          <a href="https://www.youtube.com/watch?v=ezSx8OyBZVc" class="btn btn-sm btn-video">▶ Hungarian Method</a>
+          <a href="https://www.youtube.com/watch?v=qUUeZI2mKqE" class="btn btn-sm btn-video">▶ Hungarian Method (Step-by-Step)</a>
+          <a href="https://www.youtube.com/watch?v=49R8QHUFSAg" class="btn btn-sm btn-video">▶ Unbalanced Assignment</a>
+          <a href="https://www.bbsnotes.com/2024/03/23/mbs-2nd-semester-production-and-operations-management-notes/" class="btn btn-sm btn-pdf">📄 Chapter Notes</a>
         </div>
         <div class="chapter-it"><span class="it-icon">💻</span> IT Tool: <strong>Excel Solver</strong> · <strong>TORA</strong> · <strong>QM for Windows</strong> · <strong>Hungarian Algorithm Online</strong></div>
       </div>
@@ -935,45 +571,25 @@
     </div>
     <p class="section-intro">Practice with official TU model questions, past papers, and solved examples to prepare for the 70-mark final examination.</p>
     <div class="mq-list">
-      <div class="mq-item">
-        <span class="mq-icon">📝</span>
-        <div class="mq-text">
-          <div class="mq-title">TU MBS Model Questions — All Subjects</div>
-          <div class="mq-sub">Educate Nepal — past papers & model questions for MBS 2nd Semester</div>
-        </div>
-        <a href="https://www.educatenepal.com/news/detail/tu-mbs-model-questions" target="_blank" rel="noopener" class="mq-btn">Open →</a>
+      <div class="mq-item"><span class="mq-icon">📝</span>
+        <div class="mq-text"><div class="mq-title">TU MBS Model Questions — All Subjects</div><div class="mq-sub">Educate Nepal — past papers & model questions for MBS 2nd Semester</div></div>
+        <a href="https://www.educatenepal.com/news/detail/tu-mbs-model-questions" class="mq-btn">Open →</a>
       </div>
-      <div class="mq-item">
-        <span class="mq-icon">📄</span>
-        <div class="mq-text">
-          <div class="mq-title">MBS 2nd Semester All Subjects PDF</div>
-          <div class="mq-sub">Razan Blog — chapter-wise notes & question bank for all 6 courses</div>
-        </div>
-        <a href="https://www.rajeshowerbhattarai.com.np/2024/09/mbs-2nd-semester-tu-all-subjects-pdf.html" target="_blank" rel="noopener" class="mq-btn">Open →</a>
+      <div class="mq-item"><span class="mq-icon">📄</span>
+        <div class="mq-text"><div class="mq-title">MBS 2nd Semester All Subjects PDF</div><div class="mq-sub">Razan Blog — chapter-wise notes & question bank for all 6 courses</div></div>
+        <a href="https://www.rajeshowerbhattarai.com.np/2024/09/mbs-2nd-semester-tu-all-subjects-pdf.html" class="mq-btn">Open →</a>
       </div>
-      <div class="mq-item">
-        <span class="mq-icon">▶</span>
-        <div class="mq-text">
-          <div class="mq-title">POM Model Question Solution — Video</div>
-          <div class="mq-sub">YouTube — solved model question paper for Production & Operations Management</div>
-        </div>
-        <a href="https://www.youtube.com/watch?v=dFfl0vNYNeg" target="_blank" rel="noopener" class="mq-btn">Watch →</a>
+      <div class="mq-item"><span class="mq-icon">▶</span>
+        <div class="mq-text"><div class="mq-title">POM Model Question Solution — Video</div><div class="mq-sub">YouTube — solved model question paper for Production & Operations Management</div></div>
+        <a href="https://www.youtube.com/watch?v=dFfl0vNYNeg" class="mq-btn">Watch →</a>
       </div>
-      <div class="mq-item">
-        <span class="mq-icon">📊</span>
-        <div class="mq-text">
-          <div class="mq-title">MBS 2nd Semester POM Notes — Chapter-wise</div>
-          <div class="mq-sub">BBS Notes Nepal — detailed notes with exercises, skill development & case analysis</div>
-        </div>
-        <a href="https://www.bbsnotes.com/2024/03/23/mbs-2nd-semester-production-and-operations-management-notes/" target="_blank" rel="noopener" class="mq-btn">Open →</a>
+      <div class="mq-item"><span class="mq-icon">📊</span>
+        <div class="mq-text"><div class="mq-title">MBS 2nd Semester POM Notes — Chapter-wise</div><div class="mq-sub">BBS Notes Nepal — detailed notes with exercises, skill development & case analysis</div></div>
+        <a href="https://www.bbsnotes.com/2024/03/23/mbs-2nd-semester-production-and-operations-management-notes/" class="mq-btn">Open →</a>
       </div>
-      <div class="mq-item">
-        <span class="mq-icon">📥</span>
-        <div class="mq-text">
-          <div class="mq-title">TU MBS 2nd Sem Syllabus (Official PDF)</div>
-          <div class="mq-sub">Scribd — official Tribhuvan University MBS 2nd Semester syllabus document</div>
-        </div>
-        <a href="https://www.scribd.com/document/719013225/MBS-2nd-Sem-Syllabus" target="_blank" rel="noopener" class="mq-btn">Open →</a>
+      <div class="mq-item"><span class="mq-icon">📥</span>
+        <div class="mq-text"><div class="mq-title">TU MBS 2nd Sem Syllabus (Official PDF)</div><div class="mq-sub">Scribd — official Tribhuvan University MBS 2nd Semester syllabus document</div></div>
+        <a href="https://www.scribd.com/document/719013225/MBS-2nd-Sem-Syllabus" class="mq-btn">Open →</a>
       </div>
     </div>
   </section>
@@ -988,42 +604,12 @@
     </div>
     <p class="section-intro">Free software and online tools to solve Linear Programming, Transportation, Assignment, Inventory, and Quality Control problems computationally.</p>
     <div class="it-grid">
-      <div class="it-card">
-        <div class="it-icon-wrap">📊</div>
-        <div class="it-name">Microsoft Excel + Solver</div>
-        <div class="it-desc">Built-in Excel add-in for solving LP, Transportation, and Assignment problems. Configure objective functions, constraints, and decision variables.</div>
-        <a href="https://www.youtube.com/watch?v=g8kprwAc8cg" target="_blank" rel="noopener" class="it-link">▶ Excel Solver Tutorial →</a>
-      </div>
-      <div class="it-card">
-        <div class="it-icon-wrap">🔧</div>
-        <div class="it-name">TORA (Operations Research)</div>
-        <div class="it-desc">Menu-driven Windows software for LP, Transportation, Assignment, Network models, CPM/PERT, and Queuing. Runs in automated or tutorial mode.</div>
-        <a href="https://www.scribd.com/document/113186799/Tora" target="_blank" rel="noopener" class="it-link">📄 TORA Guide (PDF) →</a>
-      </div>
-      <div class="it-card">
-        <div class="it-icon-wrap">🖥️</div>
-        <div class="it-name">POM-QM for Windows</div>
-        <div class="it-desc">Comprehensive teaching tool for OM & quantitative methods. Covers LP, Forecasting, Inventory, Queuing, PERT/CPM, Decision Analysis, and Quality Control.</div>
-        <a href="https://pom-qm-for-windows.software.informer.com/" target="_blank" rel="noopener" class="it-link">⬇ Download Info →</a>
-      </div>
-      <div class="it-card">
-        <div class="it-icon-wrap">📈</div>
-        <div class="it-name">Minitab Statistical Software</div>
-        <div class="it-desc">Industry-standard tool for Statistical Process Control (SPC), Control Charts (X-bar, R, p, c), Process Capability Analysis, and Six Sigma projects.</div>
-        <a href="https://www.youtube.com/watch?v=pJKxwFl3Wpg" target="_blank" rel="noopener" class="it-link">▶ Minitab Control Charts →</a>
-      </div>
-      <div class="it-card">
-        <div class="it-icon-wrap">🌐</div>
-        <div class="it-name">Online Simplex Calculator</div>
-        <div class="it-desc">Free browser-based simplex method solver. Enter LP constraints and objective function to get step-by-step tableau solutions with sensitivity analysis.</div>
-        <a href="http://www.zweigmedia.com/simplex/simplex.php" target="_blank" rel="noopener" class="it-link">🌐 Open Calculator →</a>
-      </div>
-      <div class="it-card">
-        <div class="it-icon-wrap">📐</div>
-        <div class="it-name">QM for Windows</div>
-        <div class="it-desc">Mathematical analyzer for Management Science. Features PERT/CPM, Linear Programming, Decision Analysis, Transportation, Statistical functions, and Game Theory.</div>
-        <a href="https://qm-for-windows.software.informer.com/" target="_blank" rel="noopener" class="it-link">⬇ Download Info →</a>
-      </div>
+      <div class="it-card"><div class="it-icon-wrap">📊</div><div class="it-name">Microsoft Excel + Solver</div><div class="it-desc">Built-in Excel add-in for solving LP, Transportation, and Assignment problems. Configure objective functions, constraints, and decision variables.</div><a href="https://www.youtube.com/watch?v=g8kprwAc8cg" class="it-link">▶ Excel Solver Tutorial →</a></div>
+      <div class="it-card"><div class="it-icon-wrap">🔧</div><div class="it-name">TORA (Operations Research)</div><div class="it-desc">Menu-driven Windows software for LP, Transportation, Assignment, Network models, CPM/PERT, and Queuing. Runs in automated or tutorial mode.</div><a href="https://www.scribd.com/document/113186799/Tora" class="it-link">📄 TORA Guide (PDF) →</a></div>
+      <div class="it-card"><div class="it-icon-wrap">🖥️</div><div class="it-name">POM-QM for Windows</div><div class="it-desc">Comprehensive teaching tool for OM & quantitative methods. Covers LP, Forecasting, Inventory, Queuing, PERT/CPM, Decision Analysis, and Quality Control.</div><a href="https://pom-qm-for-windows.software.informer.com/" class="it-link">⬇ Download Info →</a></div>
+      <div class="it-card"><div class="it-icon-wrap">📈</div><div class="it-name">Minitab Statistical Software</div><div class="it-desc">Industry-standard tool for Statistical Process Control (SPC), Control Charts (X-bar, R, p, c), Process Capability Analysis, and Six Sigma projects.</div><a href="https://www.youtube.com/watch?v=pJKxwFl3Wpg" class="it-link">▶ Minitab Control Charts →</a></div>
+      <div class="it-card"><div class="it-icon-wrap">🌐</div><div class="it-name">Online Simplex Calculator</div><div class="it-desc">Free browser-based simplex method solver. Enter LP constraints and objective function to get step-by-step tableau solutions with sensitivity analysis.</div><a href="http://www.zweigmedia.com/simplex/simplex.php" class="it-link">🌐 Open Calculator →</a></div>
+      <div class="it-card"><div class="it-icon-wrap">📐</div><div class="it-name">QM for Windows</div><div class="it-desc">Mathematical analyzer for Management Science. Features PERT/CPM, Linear Programming, Decision Analysis, Transportation, Statistical functions, and Game Theory.</div><a href="https://qm-for-windows.software.informer.com/" class="it-link">⬇ Download Info →</a></div>
     </div>
   </section>
 
@@ -1038,9 +624,7 @@
     <p class="section-intro">MGT 515 Production & Operations Management: 30 marks internal assessment + 70 marks final written exam = 100 full marks. Minimum pass: 40.</p>
     <div class="exam-table-wrap">
       <table class="exam-table">
-        <thead>
-          <tr><th>Component</th><th>Marks</th><th>Details</th></tr>
-        </thead>
+        <thead><tr><th>Component</th><th>Marks</th><th>Details</th></tr></thead>
         <tbody>
           <tr><td>Internal Assessment</td><td class="mark-full">30</td><td>Presentations, mid-term tests, assignments, case analysis</td></tr>
           <tr><td>Final Written Exam</td><td class="mark-full">70</td><td>TU Office of the Controller — long questions, numerical problems, case studies</td></tr>
@@ -1060,44 +644,15 @@
     </div>
     <p class="section-intro">Hubs and portals with supplementary materials for MBS 2nd Semester students.</p>
     <div class="mq-list">
-      <div class="mq-item">
-        <span class="mq-icon">🌐</span>
-        <div class="mq-text">
-          <div class="mq-title">SDROK Main Portal</div>
-          <div class="mq-sub">Social Development & Research Information — curated by Rayamajhi Sir</div>
-        </div>
-        <a href="https://sdrok2080.github.io/sdrok2080/" target="_blank" rel="noopener" class="mq-btn">Visit →</a>
-      </div>
-      <div class="mq-item">
-        <span class="mq-icon">🏛️</span>
-        <div class="mq-text">
-          <div class="mq-title">Tribhuvan University Official</div>
-          <div class="mq-sub">tu.edu.np — syllabus, notices, and examination updates</div>
-        </div>
-        <a href="https://tu.edu.np" target="_blank" rel="noopener" class="mq-btn">Visit →</a>
-      </div>
-      <div class="mq-item">
-        <span class="mq-icon">📚</span>
-        <div class="mq-text">
-          <div class="mq-title">BBS Notes Nepal</div>
-          <div class="mq-sub">Chapter-wise notes for MBS, BBS, and BBA across all semesters</div>
-        </div>
-        <a href="https://www.bbsnotes.com" target="_blank" rel="noopener" class="mq-btn">Visit →</a>
-      </div>
-      <div class="mq-item">
-        <span class="mq-icon">🎓</span>
-        <div class="mq-text">
-          <div class="mq-title">Study Notes Nepal</div>
-          <div class="mq-sub">Syllabus, notes, and question bank for TU Nepal programs</div>
-        </div>
-        <a href="https://studynotesnepal.com" target="_blank" rel="noopener" class="mq-btn">Visit →</a>
-      </div>
+      <div class="mq-item"><span class="mq-icon">🌐</span><div class="mq-text"><div class="mq-title">SDROK Main Portal</div><div class="mq-sub">Social Development & Research Information — curated by Rayamajhi Sir</div></div><a href="https://sdrok2080.github.io/sdrok2080/" class="mq-btn">Visit →</a></div>
+      <div class="mq-item"><span class="mq-icon">🏛️</span><div class="mq-text"><div class="mq-title">Tribhuvan University Official</div><div class="mq-sub">tu.edu.np — syllabus, notices, and examination updates</div></div><a href="https://tu.edu.np" class="mq-btn">Visit →</a></div>
+      <div class="mq-item"><span class="mq-icon">📚</span><div class="mq-text"><div class="mq-title">BBS Notes Nepal</div><div class="mq-sub">Chapter-wise notes for MBS, BBS, and BBA across all semesters</div></div><a href="https://www.bbsnotes.com" class="mq-btn">Visit →</a></div>
+      <div class="mq-item"><span class="mq-icon">🎓</span><div class="mq-text"><div class="mq-title">Study Notes Nepal</div><div class="mq-sub">Syllabus, notes, and question bank for TU Nepal programs</div></div><a href="https://studynotesnepal.com" class="mq-btn">Visit →</a></div>
     </div>
   </section>
 
 </main>
 
-<!-- FOOTER -->
 <div class="footer-top">
   <div class="footer-top-inner">
     <div>
@@ -1112,8 +667,8 @@
     </div>
     <div class="footer-col">
       <h4>Quick Links</h4>
-      <a href="https://tu.edu.np" target="_blank">TU Official Portal</a>
-      <a href="https://iost.tu.edu.np" target="_blank">Institute of Science & Tech</a>
+      <a href="https://tu.edu.np">TU Official Portal</a>
+      <a href="https://iost.tu.edu.np">Institute of Science & Tech</a>
       <a href="https://sdrok2080.github.io/sdrok2080/">SDROK Main Site</a>
       <a href="https://sdrok2080.github.io/sdrok2080/contact.html">Contact</a>
     </div>
@@ -1127,48 +682,170 @@
     <div class="footer-col">
       <h4>Support</h4>
       <a href="https://sdrok2080.github.io/sdrok2080/contact.html">Contact Rayamajhi Sir</a>
-      <a href="https://www.bbsnotes.com/2024/03/23/mbs-2nd-semester-production-and-operations-management-notes/" target="_blank">Download Notes</a>
+      <a href="https://www.bbsnotes.com/2024/03/23/mbs-2nd-semester-production-and-operations-management-notes/">View Notes</a>
     </div>
   </div>
 </div>
 <div class="footer-bottom">
-  <p>© 2024 Tribhuvan University · MGT 515 POM · Kapilvastu Multiple Campus · All rights reserved.</p>
+  <p>© 2024 Tribhuvan University · MGT 515 POM · Kapilvastu Multiple Campus · All rights reserved. · 🔒 Read-Only</p>
 </div>
 
 <button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="Back to top">↑</button>
 
+<!-- ══════════ SCRIPTS ══════════ -->
 <script>
-  const ham = document.getElementById('hamburger');
-  const mob = document.getElementById('mobileMenu');
-  ham.addEventListener('click', () => {
-    ham.classList.toggle('open');
-    mob.classList.toggle('open');
-  });
-  function closeMobile() {
-    ham.classList.remove('open');
-    mob.classList.remove('open');
+  // ─── PASSWORD GATE ───
+  const APP_PASSWORD = "KMC@2026";
+  const MAX_ATTEMPTS = 5;
+  const LOCKOUT_DURATION = 30000;
+  let attempts = 0, isLocked = false, lockoutTimer = null;
+
+  function setMessage(text, type) {
+    const msg = document.getElementById('passwordMessage');
+    msg.textContent = text; msg.className = type || '';
+  }
+  function setLoading(loading) {
+    const btn = document.getElementById('unlockBtn');
+    btn.disabled = loading;
+    btn.querySelector('.btn-text').style.display = loading ? 'none' : 'inline';
+    btn.querySelector('.btn-loader').style.display = loading ? 'inline-flex' : 'none';
+  }
+  function updateAttemptsInfo() {
+    const info = document.getElementById('attemptsInfo');
+    if (isLocked) { info.textContent = '⏱️ Too many attempts. Please wait...'; info.className = 'attempts-info locked'; return; }
+    const remaining = MAX_ATTEMPTS - attempts;
+    info.textContent = attempts > 0 ? `⚠️ ${remaining} attempt${remaining !== 1 ? 's' : ''} remaining` : '';
+    info.className = 'attempts-info';
+  }
+  function triggerShake() {
+    const card = document.querySelector('.password-card');
+    card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
   }
 
+  async function unlockApp() {
+    if (isLocked) return;
+    const input = document.getElementById('appPassword');
+    const entered = input.value;
+    if (!entered) { setMessage('⚠️ Please enter a password', 'error'); triggerShake(); input.focus(); return; }
+    setLoading(true); setMessage('');
+    await new Promise(r => setTimeout(r, 400));
+
+    if (entered === APP_PASSWORD) {
+      setMessage('✅ Access granted! Welcome.', 'success');
+      sessionStorage.setItem('KMCPOMUnlocked', 'true');
+      setTimeout(() => {
+        document.getElementById('passwordScreen').classList.add('hidden');
+        setLoading(false);
+      }, 800);
+    } else {
+      attempts++; updateAttemptsInfo();
+      setMessage('❌ Incorrect password. Try again.', 'error');
+      triggerShake(); input.value = ''; input.focus(); setLoading(false);
+      if (attempts >= MAX_ATTEMPTS) lockout();
+    }
+  }
+
+  function lockout() {
+    isLocked = true;
+    const input = document.getElementById('appPassword');
+    input.disabled = true; updateAttemptsInfo();
+    let remaining = LOCKOUT_DURATION / 1000;
+    const info = document.getElementById('attemptsInfo');
+    lockoutTimer = setInterval(() => {
+      remaining--;
+      info.textContent = `⏱️ Locked out. Retry in ${remaining}s`;
+      if (remaining <= 0) {
+        clearInterval(lockoutTimer); isLocked = false; attempts = 0;
+        input.disabled = false; input.focus(); updateAttemptsInfo(); setMessage('');
+      }
+    }, 1000);
+  }
+
+  document.getElementById('togglePassword').addEventListener('click', function() {
+    const input = document.getElementById('appPassword');
+    const isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+    document.getElementById('eyeIcon').style.display = isHidden ? 'none' : 'block';
+    document.getElementById('eyeOffIcon').style.display = isHidden ? 'block' : 'none';
+    input.focus();
+  });
+  document.getElementById('appPassword').addEventListener('keydown', e => { if (e.key === 'Enter') unlockApp(); });
+
+  window.addEventListener('load', function() {
+    if (sessionStorage.getItem('KMCPOMUnlocked') === 'true') {
+      document.getElementById('passwordScreen').style.display = 'none'; return;
+    }
+    setTimeout(() => document.getElementById('appPassword').focus(), 100);
+  });
+
+  // ─── COPY / PRINT / DOWNLOAD PROTECTION ───
+
+  // Block right-click context menu
+  document.addEventListener('contextmenu', e => { e.preventDefault(); showProtectionToast(); });
+
+  // Block common keyboard shortcuts
+  document.addEventListener('keydown', function(e) {
+    const key = e.key.toLowerCase();
+    // Ctrl/Cmd + C, X, A, S, P, U, F12
+    if ((e.ctrlKey || e.metaKey) && ['c','x','a','s','p','u'].includes(key)) {
+      e.preventDefault(); showProtectionToast(); return false;
+    }
+    // F12, F5 (DevTools / inspect)
+    if (key === 'f12') { e.preventDefault(); showProtectionToast(); return false; }
+    // PrintScreen
+    if (key === 'printscreen') { e.preventDefault(); showProtectionToast(); }
+  });
+
+  // Block print (Ctrl+P)
+  window.addEventListener('beforeprint', e => { e.preventDefault(); showProtectionToast(); });
+  window.onbeforeprint = () => false;
+
+  // Block drag selection
+  document.addEventListener('dragstart', e => e.preventDefault());
+
+  // ─── TOAST ───
+  function showProtectionToast() {
+    let toast = document.getElementById('protToast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'protToast';
+      toast.style.cssText = `
+        position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);
+        background:#1e293b;color:#fff;padding:.7rem 1.4rem;border-radius:8px;
+        font-size:.83rem;font-weight:600;z-index:99999;
+        box-shadow:0 8px 20px rgba(0,0,0,0.3);
+        border-left:4px solid #ef4444;
+        transition:opacity .4s;opacity:0;pointer-events:none;
+      `;
+      document.body.appendChild(toast);
+    }
+    toast.textContent = '🔒 This content is read-only. Copying & printing are disabled.';
+    toast.style.opacity = '1';
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => { toast.style.opacity = '0'; }, 2500);
+  }
+
+  // ─── NAV ACTIVE STATE ───
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.topbar-nav a');
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        navLinks.forEach(a => {
-          a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
-        });
+        navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id));
       }
     });
   }, { rootMargin: '-40% 0px -55% 0px' });
   sections.forEach(s => observer.observe(s));
 
+  const ham = document.getElementById('hamburger');
+  const mob = document.getElementById('mobileMenu');
+  ham.addEventListener('click', () => { ham.classList.toggle('open'); mob.classList.toggle('open'); });
+  function closeMobile() { ham.classList.remove('open'); mob.classList.remove('open'); }
+
   const btt = document.getElementById('backToTop');
-  window.addEventListener('scroll', () => {
-    btt.classList.toggle('visible', window.scrollY > 400);
-  });
-  function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+  window.addEventListener('scroll', () => btt.classList.toggle('visible', window.scrollY > 400));
+  function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 </script>
+
 </body>
 </html>
