@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS Learning Roadmap — Smart Educational App</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─── TOKENS ─────────────────────────────────────── */
+:root {
+  --ink:       #111827;
+  --ink-2:     #374151;
+  --ink-3:     #6b7280;
+  --paper:     #f9fafb;
+  --white:     #ffffff;
+  --border:    #e5e7eb;
+  --border-2:  #d1d5db;
+
+  /* phase palette — warm-cool split */
+  --g1: #059669;  /* emerald  — foundation */
+  --g2: #0d9488;  /* teal     — layout     */
+  --y1: #d97706;  /* amber    — components  */
+  --o1: #ea580c;  /* orange   — interactiv  */
+  --b1: #2563eb;  /* blue     — advanced   */
+  --p1: #7c3aed;  /* violet   — system     */
+
+  /* signature accent: acid-mint stripe */
+  --mint:      #6ee7b7;
+  --mint-dark: #047857;
+
+  --r: 10px;
+  --r-sm: 5px;
+  --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.05);
+  --shadow-lg: 0 4px 6px rgba(0,0,0,.06), 0 10px 32px rgba(0,0,0,.09);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.6; }
+a { text-decoration: none; color: inherit; }
+
+/* ─── HERO ───────────────────────────────────────── */
+.hero {
+  background: var(--ink);
+  padding: 0 0 0 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* signature: diagonal mint stripe top-right */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 420px; height: 420px;
+  background: conic-gradient(from 220deg, var(--mint) 0deg, transparent 60deg);
+  opacity: .18;
+  border-radius: 50%;
+}
+
+.hero-body {
+  max-width: 1000px; margin: 0 auto;
+  padding: 64px 40px 56px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: end;
+}
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--mint); margin-bottom: 20px;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 24px; height: 2px;
+  background: var(--mint);
+}
+
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(36px, 5.5vw, 68px);
+  line-height: 1.05;
+  color: #fff;
+  margin-bottom: 20px;
+}
+.hero h1 em { font-style: italic; color: var(--mint); }
+
+.hero-desc {
+  font-size: 16px; color: rgba(255,255,255,.6);
+  max-width: 520px; line-height: 1.75; margin-bottom: 36px;
+}
+
+.author-card {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  border-left: 3px solid var(--mint);
+  border-radius: var(--r-sm);
+  padding: 16px 20px;
+}
+.author-label { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--mint); margin-bottom: 5px; }
+.author-name { font-size: 15px; font-weight: 600; color: #fff; }
+.author-role { font-size: 12px; color: rgba(255,255,255,.5); margin-top: 3px; line-height: 1.5; }
+
+/* right: floating stat block */
+.hero-stats {
+  display: flex; flex-direction: column; gap: 12px; align-self: center;
+}
+.stat-pill {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 100px; padding: 8px 20px;
+  display: flex; align-items: baseline; gap: 8px;
+  white-space: nowrap;
+}
+.stat-pill strong {
+  font-family: 'DM Serif Display', serif;
+  font-size: 24px; color: #fff;
+}
+.stat-pill span { font-size: 12px; color: rgba(255,255,255,.5); }
+
+/* ─── MILESTONE BANNER ───────────────────────────── */
+.milestones {
+  background: var(--mint-dark);
+  padding: 18px 0;
+}
+.milestones-inner {
+  max-width: 1000px; margin: 0 auto; padding: 0 40px;
+  display: flex; gap: 0; align-items: stretch;
+}
+.ms-item {
+  flex: 1; display: flex; align-items: center; gap: 14px;
+  padding: 0 28px 0 0;
+}
+.ms-item:not(:last-child) {
+  border-right: 1px solid rgba(255,255,255,.2);
+  margin-right: 28px;
+}
+.ms-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 28px; color: var(--mint); line-height: 1;
+}
+.ms-text { font-size: 13px; font-weight: 500; color: #fff; line-height: 1.4; }
+.ms-sub { font-size: 11px; color: rgba(255,255,255,.6); margin-top: 1px; }
+
+/* ─── FLOW STRIP ─────────────────────────────────── */
+.flow-strip {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 24px 0;
+  overflow-x: auto;
+}
+.flow-inner {
+  max-width: 1000px; margin: 0 auto; padding: 0 40px;
+  display: flex; align-items: center; gap: 0; min-width: max-content;
+}
+.flow-node {
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  padding: 4px 10px;
+}
+.flow-dot { width: 9px; height: 9px; border-radius: 50%; }
+.flow-lbl { font-size: 10px; font-weight: 500; text-align: center; color: var(--ink-3); white-space: nowrap; }
+.flow-arr { color: var(--border-2); font-size: 16px; padding: 0 4px; margin-bottom: 14px; }
+
+/* ─── SECTION WRAPPER ────────────────────────────── */
+.wrap { max-width: 1000px; margin: 0 auto; padding: 0 40px; }
+.section { padding: 64px 0; }
+.section-label {
+  font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+  font-weight: 600; color: var(--ink-3); margin-bottom: 6px;
+}
+.section-heading {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(24px, 3.5vw, 38px);
+  line-height: 1.15; margin-bottom: 12px;
+}
+.section-sub { font-size: 15px; color: var(--ink-2); max-width: 580px; margin-bottom: 40px; }
+
+/* ─── PHASE CARDS ─────────────────────────────────── */
+.phases { display: flex; flex-direction: column; gap: 20px; }
+
+.phase {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: box-shadow .2s, transform .2s;
+}
+.phase:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+
+.phase-header {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border);
+  cursor: default;
+}
+.phase-num-box {
+  width: 48px; height: 48px; border-radius: 10px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  color: #fff; flex-shrink: 0;
+}
+.phase-num-box .pn { font-family: 'JetBrains Mono', monospace; font-size: 11px; opacity: .8; }
+.phase-num-box .pp { font-family: 'DM Serif Display', serif; font-size: 20px; line-height: 1; }
+
+.phase-title { font-size: 16px; font-weight: 600; color: var(--ink); }
+.phase-sub { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+
+.phase-tag {
+  font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 100px; white-space: nowrap;
+}
+
+.phase-body { padding: 22px; }
+
+/* two-column content */
+.pcols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.pcol-title {
+  font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink-3); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+.pcol-title span { display: block; width: 5px; height: 5px; border-radius: 50%; }
+.pcol ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+.pcol ul li { font-size: 13px; color: var(--ink-2); padding-left: 16px; position: relative; }
+.pcol ul li::before { content: '–'; position: absolute; left: 0; color: var(--border-2); }
+
+/* code snippet */
+.code-snip {
+  background: #0d1117;
+  border-radius: var(--r-sm);
+  padding: 16px 18px; margin-top: 16px;
+  overflow-x: auto;
+}
+.code-snip pre {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; line-height: 1.8;
+  color: #8b949e; white-space: pre;
+}
+.code-snip .prop { color: #79c0ff; }
+.code-snip .val  { color: #a5d6ff; }
+.code-snip .sel  { color: #ff7b72; }
+.code-snip .com  { color: #484f58; }
+.code-snip .var  { color: #ffa657; }
+
+/* box model diagram */
+.bm-diagram {
+  background: #0d1117; border-radius: var(--r-sm);
+  padding: 18px; margin-top: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px; line-height: 1.7;
+  color: #8b949e; white-space: pre; overflow-x: auto;
+}
+
+/* progress viz */
+.prog-demo { margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
+.prog-row { display: flex; align-items: center; gap: 12px; }
+.prog-label { font-size: 12px; font-weight: 500; width: 110px; flex-shrink: 0; color: var(--ink-2); }
+.prog-track {
+  flex: 1; height: 8px; border-radius: 100px;
+  background: var(--border);
+}
+.prog-fill { height: 100%; border-radius: 100px; transition: width .6s ease; }
+.prog-pct { font-size: 11px; color: var(--ink-3); width: 36px; text-align: right; flex-shrink: 0; }
+
+/* dashboard ASCII */
+.dash-ascii {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 18px; margin-top: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; line-height: 1.8;
+  color: var(--ink-3); white-space: pre; overflow-x: auto;
+}
+
+/* highlight note */
+.note {
+  background: linear-gradient(135deg, #ecfdf5, #eff6ff);
+  border: 1px solid #a7f3d0;
+  border-radius: var(--r-sm); padding: 14px 18px; margin-top: 16px;
+}
+.note p { font-size: 13px; color: #065f46; line-height: 1.65; }
+
+/* ─── PHASE COLORS ───────────────────────────────── */
+.pc-g1 { background: var(--g1); }
+.pc-g2 { background: var(--g2); }
+.pc-y1 { background: var(--y1); }
+.pc-o1 { background: var(--o1); }
+.pc-b1 { background: var(--b1); }
+.pc-p1 { background: var(--p1); }
+
+.tag-g1 { background:#d1fae5; color:#065f46; }
+.tag-g2 { background:#ccfbf1; color:#0f766e; }
+.tag-y1 { background:#fef3c7; color:#92400e; }
+.tag-o1 { background:#ffedd5; color:#9a3412; }
+.tag-b1 { background:#dbeafe; color:#1e40af; }
+.tag-p1 { background:#ede9fe; color:#5b21b6; }
+
+.bl-g1 { border-left: 3px solid var(--g1); }
+.bl-g2 { border-left: 3px solid var(--g2); }
+.bl-y1 { border-left: 3px solid var(--y1); }
+.bl-o1 { border-left: 3px solid var(--o1); }
+.bl-b1 { border-left: 3px solid var(--b1); }
+.bl-p1 { border-left: 3px solid var(--p1); }
+
+/* ─── SUMMARY TABLE ──────────────────────────────── */
+.tbl-wrap {
+  border-radius: var(--r); border: 1px solid var(--border);
+  overflow: hidden; overflow-x: auto;
+}
+table.plan { width: 100%; border-collapse: collapse; font-size: 13px; }
+.plan thead th {
+  text-align: left; padding: 11px 16px;
+  font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-3); background: var(--paper);
+  border-bottom: 2px solid var(--border);
+}
+.plan tbody tr { border-bottom: 1px solid var(--border); }
+.plan tbody tr:hover { background: #fafafa; }
+.plan td { padding: 10px 16px; color: var(--ink-2); vertical-align: middle; }
+.plan td:first-child { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink); }
+.lvl-dot {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 6px;
+  font-size: 11px; font-weight: 700; color: #fff;
+}
+
+/* ─── CYCLE DIAGRAM ──────────────────────────────── */
+.cycle-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px; margin-top: 28px;
+}
+.cycle-step {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 20px;
+  position: relative;
+  box-shadow: var(--shadow);
+}
+.cycle-step::after {
+  content: attr(data-arrow);
+  position: absolute; right: -18px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--border-2); font-size: 18px; z-index: 1;
+}
+.cycle-step:nth-child(3)::after, .cycle-step:nth-child(6)::after { display: none; }
+.cycle-icon { font-size: 26px; margin-bottom: 8px; }
+.cycle-name { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.cycle-desc { font-size: 12px; color: var(--ink-3); line-height: 1.5; }
+
+/* ─── PHILOSOPHY ─────────────────────────────────── */
+.philosophy {
+  background: var(--ink);
+  border-radius: var(--r); padding: 52px;
+  position: relative; overflow: hidden;
+}
+.philosophy::after {
+  content: 'CSS';
+  position: absolute; bottom: -20px; right: 20px;
+  font-family: 'DM Serif Display', serif;
+  font-size: 140px; color: rgba(255,255,255,.04); pointer-events: none;
+  line-height: 1;
+}
+.philosophy-quote {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(20px, 3vw, 30px);
+  color: #fff; line-height: 1.45;
+  max-width: 680px; position: relative;
+}
+.philosophy-quote em { color: var(--mint); font-style: italic; }
+.ms-strip {
+  display: flex; gap: 16px; margin-top: 36px; flex-wrap: wrap;
+}
+.ms-badge {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--r-sm); padding: 12px 18px;
+}
+.ms-badge-num {
+  font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--mint);
+}
+.ms-badge-text { font-size: 12px; color: rgba(255,255,255,.6); line-height: 1.4; margin-top: 2px; }
+
+/* ─── FOOTER ─────────────────────────────────────── */
+.footer {
+  background: #0d1117; color: rgba(255,255,255,.4);
+  text-align: center; padding: 36px 24px;
+  font-size: 13px;
+}
+.footer strong { color: rgba(255,255,255,.85); }
+.footer-divider { width: 40px; height: 2px; background: var(--mint); margin: 16px auto; border-radius: 2px; }
+
+@media (max-width: 700px) {
+  .hero-body { grid-template-columns: 1fr; }
+  .hero-stats { flex-direction: row; flex-wrap: wrap; }
+  .milestones-inner { flex-direction: column; gap: 16px; }
+  .ms-item { border-right: none !important; margin-right: 0 !important; padding-right: 0; }
+  .pcols { grid-template-columns: 1fr; }
+  .cycle-grid { grid-template-columns: 1fr; }
+  .cycle-step::after { display: none; }
+  .wrap { padding: 0 20px; }
+  .section { padding: 44px 0; }
+  .philosophy { padding: 28px 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
+  <div class="hero-body">
+    <div>
+      <p class="hero-eyebrow">Step-by-Step CSS Learning Workflow</p>
+      <h1>Learn <em>CSS</em> by<br>Building a Smart<br>Educational App</h1>
+      <p class="hero-desc">Every CSS concept is learned by immediately applying it to a real component of your Smart Education Platform — from a basic selector to a complete design system.</p>
+      <div class="author-card">
+        <div class="author-label">Prepared By</div>
+        <div class="author-name">Mr. Bishnu Singh Rayamajhi</div>
+        <div class="author-role">Math Lecturer &amp; Head of Humanity &amp; Social Science<br>Kapilvastu Multiple Campus (KMC), Taulihawa</div>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-pill"><strong>21</strong><span>CSS Phases</span></div>
+      <div class="stat-pill"><strong>20</strong><span>App Components</span></div>
+      <div class="stat-pill"><strong>3</strong><span>Milestones</span></div>
+      <div class="stat-pill"><strong>100%</strong><span>Project-Based</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ MILESTONES ═══════════ -->
+<div class="milestones">
+  <div class="milestones-inner">
+    <div class="ms-item">
+      <div class="ms-num">01</div>
+      <div>
+        <div class="ms-text">HTML + Basic CSS</div>
+        <div class="ms-sub">Static educational website</div>
+      </div>
+    </div>
+    <div class="ms-item">
+      <div class="ms-num">02</div>
+      <div>
+        <div class="ms-text">Advanced CSS + Responsive</div>
+        <div class="ms-sub">Modern educational dashboard</div>
+      </div>
+    </div>
+    <div class="ms-item">
+      <div class="ms-num">03</div>
+      <div>
+        <div class="ms-text">CSS + JavaScript + API</div>
+        <div class="ms-sub">Interactive smart learning platform</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ FLOW STRIP ═══════════ -->
+<div class="flow-strip">
+  <div class="flow-inner">
+    <div class="flow-node"><div class="flow-dot" style="background:var(--g1)"></div><span class="flow-lbl">CSS<br>Fundamentals</span></div>
+    <span class="flow-arr">›</span>
+    <div class="flow-node"><div class="flow-dot" style="background:var(--g1)"></div><span class="flow-lbl">Selectors &amp;<br>Properties</span></div>
+    <span class="flow-arr">›</span>
+    <div class="flow-node"><div class="flow-dot" style="background:var(--g2)"></div><span class="flow-lbl">Typography<br>&amp; Colors</span></div>
+    <span class="flow-arr">›</span>
+    <div class="flow-node"><div class="flow-dot" style="background:var(--g2)"></div><span class="flow-lbl">Box<br>Model</span></div>
+    <span class="flow-arr">›</span>
+    <div class="flow-node"><div class="flow-dot" style="background:var(--y1)"></div><span class="flow-lbl">Cards &amp;<br>Components</span></div>
+    <span class="flow-arr">›</span>
+    <div class="flow-node"><div class="flow-dot" style="background:var(--y1)"></div><span class="flow-lbl">Flexbox</span></div>
+    <span class="flow-arr">›</span>
+    <div class="flow-node"><div class="flow-dot" style="background:var(--y1)"></div><span class="flow-lbl">CSS<br>Grid</span></div>
+    <span class="flow-arr">›</span>
+    <div class="flow-node"><div class="flow-dot" style="background:var(--o1)"></div><span class="flow-lbl">Responsive<br>Design</span></div>
+    <span class="flow-arr">›</span>
+    <div class="flow-node"><div class="flow-dot" style="background:var(--o1)"></div><span class="flow-lbl">Forms &amp;<br>Quiz UI</span></div>
+    <span class="flow-arr">›</span>
+    <div class="flow-node"><div class="flow-dot" style="background:var(--b1)"></div><span class="flow-lbl">Animations<br>&amp; Interactions</span></div>
+    <span class="flow-arr">›</span>
+    <div class="flow-node"><div class="flow-dot" style="background:var(--b1)"></div><span class="flow-lbl">Accessibility</span></div>
+    <span class="flow-arr">›</span>
+    <div class="flow-node"><div class="flow-dot" style="background:var(--p1)"></div><span class="flow-lbl">Design<br>System</span></div>
+    <span class="flow-arr">›</span>
+    <div class="flow-node"><div class="flow-dot" style="background:var(--p1)"></div><span class="flow-lbl">Modern<br>App</span></div>
+  </div>
+</div>
+
+<!-- ═══════════ PHASES ═══════════ -->
+<section class="section">
+  <div class="wrap">
+    <p class="section-label">Phase by Phase</p>
+    <h2 class="section-heading">21 CSS Phases — Learn, Then Build</h2>
+    <p class="section-sub">Each phase introduces one CSS concept, then applies it immediately to a component of the Smart Education App.</p>
+
+    <div class="phases">
+
+      <!-- ── Phase 1 ── -->
+      <div class="phase bl-g1">
+        <div class="phase-header">
+          <div class="phase-num-box pc-g1"><span class="pn">Phase</span><span class="pp">01</span></div>
+          <div>
+            <div class="phase-title">Prepare the CSS Environment</div>
+            <div class="phase-sub">Link your stylesheet; write your first CSS rule; understand syntax, properties, values and comments.</div>
+          </div>
+          <span class="phase-tag tag-g1">Foundation</span>
+        </div>
+        <div class="phase-body">
+          <div class="pcols">
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--g1)"></span>Learn</div>
+              <ul>
+                <li>CSS file structure</li>
+                <li>CSS rules: selector + declaration</li>
+                <li>Properties and values</li>
+                <li>Comments in CSS</li>
+                <li>Linking CSS to HTML via &lt;link&gt;</li>
+              </ul>
+            </div>
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--mint-dark)"></span>Build</div>
+              <ul>
+                <li>smart-education-app/ folder</li>
+                <li>css/style.css connected</li>
+                <li>Basic body + heading rules</li>
+                <li>Font-family &amp; font-size set</li>
+              </ul>
+            </div>
+          </div>
+          <div class="code-snip"><pre><span class="com">/* Phase 1 — First CSS */</span>
+<span class="sel">body</span> {
+    <span class="prop">font-family</span>: <span class="val">Arial, sans-serif</span>;
+    <span class="prop">margin</span>: <span class="val">0</span>;
+}
+<span class="sel">h1</span> {
+    <span class="prop">font-size</span>: <span class="val">2rem</span>;
+}</pre></div>
+        </div>
+      </div>
+
+      <!-- ── Phase 2 ── -->
+      <div class="phase bl-g1">
+        <div class="phase-header">
+          <div class="phase-num-box pc-g1"><span class="pn">Phase</span><span class="pp">02</span></div>
+          <div>
+            <div class="phase-title">Learn CSS Selectors</div>
+            <div class="phase-sub">Element, class, ID, descendant, multiple — then apply to the app's course cards.</div>
+          </div>
+          <span class="phase-tag tag-g1">Foundation</span>
+        </div>
+        <div class="phase-body">
+          <div class="pcols">
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--g1)"></span>Selectors</div>
+              <ul>
+                <li>Element selector: body { }</li>
+                <li>Class selector: .card { }</li>
+                <li>ID selector: #dashboard { }</li>
+                <li>Multiple: h1, h2, h3 { }</li>
+                <li>Descendant: .card p { }</li>
+              </ul>
+            </div>
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--mint-dark)"></span>Build</div>
+              <ul>
+                <li>5 course cards: HTML, CSS, JS</li>
+                <li>Python, Research Methodology</li>
+                <li>.course-card class applied</li>
+                <li>Padding &amp; spacing set</li>
+              </ul>
+            </div>
+          </div>
+          <div class="code-snip"><pre><span class="com">/* Selector types */</span>
+<span class="sel">body</span> {}  <span class="com">/* element */</span>
+<span class="sel">.card</span> {}  <span class="com">/* class */</span>
+<span class="sel">#dashboard</span> {}  <span class="com">/* ID */</span>
+<span class="sel">h1, h2, h3</span> {}  <span class="com">/* multiple */</span>
+<span class="sel">.card p</span> {}  <span class="com">/* descendant */</span>
+
+<span class="sel">.course-card</span> { <span class="prop">padding</span>: <span class="val">20px</span>; }</pre></div>
+        </div>
+      </div>
+
+      <!-- ── Phase 3 ── -->
+      <div class="phase bl-g1">
+        <div class="phase-header">
+          <div class="phase-num-box pc-g1"><span class="pn">Phase</span><span class="pp">03</span></div>
+          <div>
+            <div class="phase-title">Typography</div>
+            <div class="phase-sub">Font families, sizes, weights, line-height, letter-spacing — create a readable lesson page.</div>
+          </div>
+          <span class="phase-tag tag-g1">Foundation</span>
+        </div>
+        <div class="phase-body">
+          <div class="pcols">
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--g1)"></span>Learn</div>
+              <ul>
+                <li>font-family — typeface selection</li>
+                <li>font-size — rem, px, em</li>
+                <li>font-weight — 300 to 900</li>
+                <li>line-height — readability</li>
+                <li>letter-spacing, text-align</li>
+                <li>text-decoration</li>
+              </ul>
+            </div>
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--mint-dark)"></span>Build</div>
+              <ul>
+                <li>SMART EDUCATION branded headline</li>
+                <li>Readable lesson body text</li>
+                <li>Sub-headings with correct weights</li>
+                <li>Learning Objectives section</li>
+              </ul>
+            </div>
+          </div>
+          <div class="code-snip"><pre><span class="sel">.app-title</span> {
+    <span class="prop">font-size</span>: <span class="val">2rem</span>;
+    <span class="prop">font-weight</span>: <span class="val">700</span>;
+    <span class="prop">letter-spacing</span>: <span class="val">-0.02em</span>;
+}
+<span class="sel">.lesson-text</span> {
+    <span class="prop">line-height</span>: <span class="val">1.7</span>;
+    <span class="prop">font-size</span>: <span class="val">1rem</span>;
+}</pre></div>
+        </div>
+      </div>
+
+      <!-- ── Phase 4 ── -->
+      <div class="phase bl-g2">
+        <div class="phase-header">
+          <div class="phase-num-box pc-g2"><span class="pn">Phase</span><span class="pp">04</span></div>
+          <div>
+            <div class="phase-title">Colors &amp; CSS Custom Properties</div>
+            <div class="phase-sub">Design system foundations — CSS variables for a consistent, maintainable color palette.</div>
+          </div>
+          <span class="phase-tag tag-g2">Design System</span>
+        </div>
+        <div class="phase-body">
+          <div class="pcols">
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--g2)"></span>Learn</div>
+              <ul>
+                <li>:root { } — global scope</li>
+                <li>--variable-name: value</li>
+                <li>var(--variable-name)</li>
+                <li>Design consistency principle</li>
+                <li>One variable → whole app updates</li>
+              </ul>
+            </div>
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--mint-dark)"></span>Build</div>
+              <ul>
+                <li>Primary, secondary, background vars</li>
+                <li>Surface &amp; text color tokens</li>
+                <li>Apply to body, buttons, cards</li>
+                <li>Change theme with one edit</li>
+              </ul>
+            </div>
+          </div>
+          <div class="code-snip"><pre><span class="sel">:root</span> {
+    <span class="var">--primary</span>:    <span class="val">#2563eb</span>;
+    <span class="var">--secondary</span>:  <span class="val">#7c3aed</span>;
+    <span class="var">--background</span>: <span class="val">#f8fafc</span>;
+    <span class="var">--surface</span>:    <span class="val">#ffffff</span>;
+    <span class="var">--text</span>:       <span class="val">#1e293b</span>;
+    <span class="var">--muted</span>:      <span class="val">#64748b</span>;
+}
+<span class="sel">button</span> { <span class="prop">background</span>: <span class="val">var(--primary)</span>; }</pre></div>
+        </div>
+      </div>
+
+      <!-- ── Phase 5 ── -->
+      <div class="phase bl-g2">
+        <div class="phase-header">
+          <div class="phase-num-box pc-g2"><span class="pn">Phase</span><span class="pp">05</span></div>
+          <div>
+            <div class="phase-title">Master the CSS Box Model</div>
+            <div class="phase-sub">Content → Padding → Border → Margin. The rule that governs all layout.</div>
+          </div>
+          <span class="phase-tag tag-g2">Layout Core</span>
+        </div>
+        <div class="phase-body">
+          <div class="pcols">
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--g2)"></span>Learn</div>
+              <ul>
+                <li>width, height — content size</li>
+                <li>padding — inner spacing</li>
+                <li>border — edge line</li>
+                <li>margin — outer spacing</li>
+                <li>box-sizing: border-box ← always!</li>
+              </ul>
+            </div>
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--mint-dark)"></span>Build</div>
+              <ul>
+                <li>Professional lesson card</li>
+                <li>Consistent spacing on all elements</li>
+                <li>Universal box-sizing reset</li>
+              </ul>
+            </div>
+          </div>
+          <div class="bm-diagram">┌──────────────────────────┐
+│         Margin           │
+│  ┌────────────────────┐  │
+│  │      Border        │  │
+│  │  ┌──────────────┐  │  │
+│  │  │   Padding    │  │  │
+│  │  │ ┌──────────┐ │  │  │
+│  │  │ │ Content  │ │  │  │
+│  │  │ └──────────┘ │  │  │
+│  │  └──────────────┘  │  │
+│  └────────────────────┘  │
+└──────────────────────────┘</div>
+          <div class="code-snip"><pre><span class="com">/* Universal reset — always use this */</span>
+<span class="sel">*</span> { <span class="prop">box-sizing</span>: <span class="val">border-box</span>; }</pre></div>
+        </div>
+      </div>
+
+      <!-- ── Phase 6 ── -->
+      <div class="phase bl-y1">
+        <div class="phase-header">
+          <div class="phase-num-box pc-y1"><span class="pn">Phase</span><span class="pp">06</span></div>
+          <div>
+            <div class="phase-title">Build Modern Course Cards</div>
+            <div class="phase-sub">Border-radius, box-shadow, background — create styled subject cards for all courses.</div>
+          </div>
+          <span class="phase-tag tag-y1">Components</span>
+        </div>
+        <div class="phase-body">
+          <div class="pcols">
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--y1)"></span>Learn</div>
+              <ul>
+                <li>border-radius — rounded corners</li>
+                <li>box-shadow — depth &amp; elevation</li>
+                <li>background-color / gradient</li>
+                <li>overflow: hidden</li>
+                <li>Card pattern: icon + title + body + CTA</li>
+              </ul>
+            </div>
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--mint-dark)"></span>Build</div>
+              <ul>
+                <li>Web Development card</li>
+                <li>Progress bar inside card: 75%</li>
+                <li>[ Continue Learning ] button</li>
+                <li>Cards for HTML, CSS, JS, Python, Research</li>
+              </ul>
+            </div>
+          </div>
+          <div class="prog-demo">
+            <div class="prog-row"><span class="prog-label">HTML</span><div class="prog-track"><div class="prog-fill" style="width:90%;background:var(--g1)"></div></div><span class="prog-pct">90%</span></div>
+            <div class="prog-row"><span class="prog-label">CSS</span><div class="prog-track"><div class="prog-fill" style="width:70%;background:var(--g2)"></div></div><span class="prog-pct">70%</span></div>
+            <div class="prog-row"><span class="prog-label">JavaScript</span><div class="prog-track"><div class="prog-fill" style="width:50%;background:var(--o1)"></div></div><span class="prog-pct">50%</span></div>
+            <div class="prog-row"><span class="prog-label">Research</span><div class="prog-track"><div class="prog-fill" style="width:60%;background:var(--p1)"></div></div><span class="prog-pct">60%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Phase 7 ── -->
+      <div class="phase bl-y1">
+        <div class="phase-header">
+          <div class="phase-num-box pc-y1"><span class="pn">Phase</span><span class="pp">07</span></div>
+          <div>
+            <div class="phase-title">Learn Flexbox</div>
+            <div class="phase-sub">The essential modern layout tool — build the navigation bar, header, and toolbars.</div>
+          </div>
+          <span class="phase-tag tag-y1">Layout</span>
+        </div>
+        <div class="phase-body">
+          <div class="pcols">
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--y1)"></span>Learn</div>
+              <ul>
+                <li>display: flex — activates Flexbox</li>
+                <li>flex-direction: row / column</li>
+                <li>justify-content — main axis</li>
+                <li>align-items — cross axis</li>
+                <li>gap — space between items</li>
+                <li>flex-wrap — allows wrapping</li>
+              </ul>
+            </div>
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--mint-dark)"></span>Build</div>
+              <ul>
+                <li>SMART EDU navigation bar</li>
+                <li>Logo left, links right layout</li>
+                <li>User profile section</li>
+                <li>Course toolbar / filter row</li>
+              </ul>
+            </div>
+          </div>
+          <div class="code-snip"><pre><span class="sel">.navbar</span> {
+    <span class="prop">display</span>: <span class="val">flex</span>;
+    <span class="prop">justify-content</span>: <span class="val">space-between</span>;
+    <span class="prop">align-items</span>: <span class="val">center</span>;
+    <span class="prop">gap</span>: <span class="val">20px</span>;
+}</pre></div>
+        </div>
+      </div>
+
+      <!-- ── Phase 8 ── -->
+      <div class="phase bl-y1">
+        <div class="phase-header">
+          <div class="phase-num-box pc-y1"><span class="pn">Phase</span><span class="pp">08</span></div>
+          <div>
+            <div class="phase-title">Learn CSS Grid</div>
+            <div class="phase-sub">For complex two-dimensional layouts — build the full application dashboard.</div>
+          </div>
+          <span class="phase-tag tag-y1">Layout</span>
+        </div>
+        <div class="phase-body">
+          <div class="pcols">
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--y1)"></span>Learn</div>
+              <ul>
+                <li>display: grid</li>
+                <li>grid-template-columns</li>
+                <li>grid-template-rows</li>
+                <li>gap — row and column gaps</li>
+                <li>grid-column / grid-row spanning</li>
+              </ul>
+            </div>
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--mint-dark)"></span>Build</div>
+              <ul>
+                <li>Sidebar + main content grid</li>
+                <li>Stat cards row: 3 columns</li>
+                <li>Learning progress section</li>
+                <li>Full dashboard layout</li>
+              </ul>
+            </div>
+          </div>
+          <div class="dash-ascii">┌─────────────┬─────────────────────────────────┐
+│             │  SMART EDUCATION DASHBOARD      │
+│  Sidebar    │  ┌──────┐  ┌──────┐  ┌──────┐  │
+│             │  │  12  │  │  48  │  │  20  │  │
+│  Courses    │  │Cours.│  │Less. │  │Quiz  │  │
+│  Lessons    │  └──────┘  └──────┘  └──────┘  │
+│  Research   │                                 │
+│  Resources  │  Learning Progress ───────────  │
+│             │  HTML       █████████░  90%     │
+│             │  CSS        ███████░░░  70%     │
+└─────────────┴─────────────────────────────────┘</div>
+        </div>
+      </div>
+
+      <!-- ── Phase 9 ── -->
+      <div class="phase bl-y1">
+        <div class="phase-header">
+          <div class="phase-num-box pc-y1"><span class="pn">Phase</span><span class="pp">09</span></div>
+          <div>
+            <div class="phase-title">Create the Educational Dashboard</div>
+            <div class="phase-sub">Combine Grid + Flexbox + Cards + Typography + CSS Variables into one cohesive interface.</div>
+          </div>
+          <span class="phase-tag tag-y1">Integration</span>
+        </div>
+        <div class="phase-body">
+          <div class="pcols">
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--y1)"></span>Combine</div>
+              <ul>
+                <li>CSS Grid for overall layout</li>
+                <li>Flexbox inside each section</li>
+                <li>Card components for stats</li>
+                <li>Typography scale applied</li>
+                <li>CSS variables for all colors</li>
+              </ul>
+            </div>
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--mint-dark)"></span>Dashboard Includes</div>
+              <ul>
+                <li>Welcome header + user name</li>
+                <li>Courses: 12 | Lessons: 48 | Quizzes: 20</li>
+                <li>Continue Learning progress bars</li>
+                <li>HTML 90% · CSS 70% · JS 50%</li>
+              </ul>
+            </div>
+          </div>
+          <div class="note"><p>🎯 <strong>Milestone 1 complete</strong> after this phase — you have a fully styled static educational website using HTML + CSS fundamentals.</p></div>
+        </div>
+      </div>
+
+      <!-- ── Phase 10 ── -->
+      <div class="phase bl-o1">
+        <div class="phase-header">
+          <div class="phase-num-box pc-o1"><span class="pn">Phase</span><span class="pp">10</span></div>
+          <div>
+            <div class="phase-title">Learn Responsive CSS</div>
+            <div class="phase-sub">@media queries, max-width/min-width — make the entire app work on every device.</div>
+          </div>
+          <span class="phase-tag tag-o1">Responsive</span>
+        </div>
+        <div class="phase-body">
+          <div class="pcols">
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--o1)"></span>Learn</div>
+              <ul>
+                <li>@media — breakpoint declarations</li>
+                <li>max-width: 768px (tablet)</li>
+                <li>max-width: 480px (mobile)</li>
+                <li>min-width (mobile-first approach)</li>
+                <li>Fluid: %, vw, vh, rem</li>
+              </ul>
+            </div>
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--mint-dark)"></span>Build</div>
+              <ul>
+                <li>Desktop: 3-column course grid</li>
+                <li>Tablet: 2-column layout</li>
+                <li>Mobile: single column stack</li>
+                <li>Hamburger menu on small screens</li>
+              </ul>
+            </div>
+          </div>
+          <div class="code-snip"><pre><span class="sel">.course-grid</span> {
+    <span class="prop">display</span>: <span class="val">grid</span>;
+    <span class="prop">grid-template-columns</span>: <span class="val">repeat(3, 1fr)</span>;
+}
+<span class="sel">@media</span> (max-width: <span class="val">768px</span>) {
+    <span class="sel">.course-grid</span> {
+        <span class="prop">grid-template-columns</span>: <span class="val">1fr</span>;
+    }
+}</pre></div>
+        </div>
+      </div>
+
+      <!-- ── Phase 11 ── -->
+      <div class="phase bl-o1">
+        <div class="phase-header">
+          <div class="phase-num-box pc-o1"><span class="pn">Phase</span><span class="pp">11</span></div>
+          <div>
+            <div class="phase-title">Style Forms — Student Registration</div>
+            <div class="phase-sub">Input, textarea, select, button — :focus and :hover states for a polished registration UI.</div>
+          </div>
+          <span class="phase-tag tag-o1">Forms</span>
+        </div>
+        <div class="phase-body">
+          <div class="pcols">
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--o1)"></span>Learn</div>
+              <ul>
+                <li>input, textarea, select styling</li>
+                <li>:focus — focus ring / outline</li>
+                <li>:hover — hover feedback</li>
+                <li>placeholder color</li>
+                <li>button states: default, hover, active</li>
+              </ul>
+            </div>
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--mint-dark)"></span>Build</div>
+              <ul>
+                <li>Name, Email input fields</li>
+                <li>Choose Course dropdown</li>
+                <li>Learning Goal textarea</li>
+                <li>[ Create Profile ] submit button</li>
+              </ul>
+            </div>
+          </div>
+          <div class="code-snip"><pre><span class="sel">input, textarea, select</span> {
+    <span class="prop">width</span>: <span class="val">100%</span>;
+    <span class="prop">padding</span>: <span class="val">12px</span>;
+    <span class="prop">border</span>: <span class="val">1px solid #cbd5e1</span>;
+    <span class="prop">border-radius</span>: <span class="val">8px</span>;
+}
+<span class="sel">input:focus</span> {
+    <span class="prop">outline</span>: <span class="val">2px solid var(--primary)</span>;
+}</pre></div>
+        </div>
+      </div>
+
+      <!-- ── Phase 12 ── -->
+      <div class="phase bl-o1">
+        <div class="phase-header">
+          <div class="phase-num-box pc-o1"><span class="pn">Phase</span><span class="pp">12</span></div>
+          <div>
+            <div class="phase-title">Design the Quiz Interface</div>
+            <div class="phase-sub">Question cards, answer buttons, selected / correct / incorrect CSS states.</div>
+          </div>
+          <span class="phase-tag tag-o1">Quiz UI</span>
+        </div>
+        <div class="phase-body">
+          <div class="pcols">
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--o1)"></span>Learn</div>
+              <ul>
+                <li>CSS state classes: .selected, .correct, .incorrect</li>
+                <li>:hover on answer options</li>
+                <li>Progress indicator styling</li>
+                <li>Score display component</li>
+              </ul>
+            </div>
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--mint-dark)"></span>Build</div>
+              <ul>
+                <li>Question card: "Question 4 of 10"</li>
+                <li>○ HTML  ○ CSS  ○ Python  ○ SQL</li>
+                <li>Selected state (highlighted)</li>
+                <li>Correct ✓ / Incorrect ✗ feedback</li>
+              </ul>
+            </div>
+          </div>
+          <div class="code-snip"><pre><span class="sel">.answer:hover</span>    { <span class="prop">background</span>: <span class="val">#f0f9ff</span>; }
+<span class="sel">.answer.selected</span> { <span class="prop">background</span>: <span class="val">#dbeafe</span>; }
+<span class="sel">.answer.correct</span>  { <span class="prop">background</span>: <span class="val">#d1fae5</span>; }
+<span class="sel">.answer.wrong</span>    { <span class="prop">background</span>: <span class="val">#fee2e2</span>; }</pre></div>
+        </div>
+      </div>
+
+      <!-- ── Phase 13 ── -->
+      <div class="phase bl-o1">
+        <div class="phase-header">
+          <div class="phase-num-box pc-o1"><span class="pn">Phase</span><span class="pp">13</span></div>
+          <div>
+            <div class="phase-title">Create Progress Visualization</div>
+            <div class="phase-sub">Animated progress bars — width, background, border-radius, transitions for learning analytics.</div>
+          </div>
+          <span class="phase-tag tag-o1">Analytics UI</span>
+        </div>
+        <div class="phase-body">
+          <div class="pcols">
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--o1)"></span>Learn</div>
+              <ul>
+                <li>width as a percentage value</li>
+                <li>background-color for fills</li>
+                <li>border-radius: 100px (pill)</li>
+                <li>overflow: hidden on track</li>
+                <li>transition for animated updates</li>
+              </ul>
+            </div>
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--mint-dark)"></span>Build</div>
+              <ul>
+                <li>YOUR PROGRESS section</li>
+                <li>HTML ████████░░ 80%</li>
+                <li>CSS  ███████░░░ 70%</li>
+                <li>JavaScript █████░░ 50%</li>
+              </ul>
+            </div>
+          </div>
+          <div class="code-snip"><pre><span class="sel">.progress-bar</span> {
+    <span class="prop">height</span>: <span class="val">10px</span>;
+    <span class="prop">border-radius</span>: <span class="val">10px</span>;
+    <span class="prop">overflow</span>: <span class="val">hidden</span>;
+}
+<span class="sel">.progress-value</span> {
+    <span class="prop">width</span>: <span class="val">75%</span>; <span class="com">/* JS can update this */</span>
+    <span class="prop">transition</span>: <span class="val">width 0.6s ease</span>;
+}</pre></div>
+        </div>
+      </div>
+
+      <!-- ── Phase 14 ── -->
+      <div class="phase bl-o1">
+        <div class="phase-header">
+          <div class="phase-num-box pc-o1"><span class="pn">Phase</span><span class="pp">14</span></div>
+          <div>
+            <div class="phase-title">Learn CSS Positioning</div>
+            <div class="phase-sub">Static, relative, absolute, fixed, sticky — sidebars, badges, modals, and floating buttons.</div>
+          </div>
+          <span class="phase-tag tag-o1">Positioning</span>
+        </div>
+        <div class="phase-body">
+          <div class="pcols">
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--o1)"></span>Learn</div>
+              <ul>
+                <li>static — normal document flow</li>
+                <li>relative — offset from self</li>
+                <li>absolute — relative to parent</li>
+                <li>fixed — fixed to viewport</li>
+                <li>sticky — scrolls then sticks</li>
+              </ul>
+            </div>
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--mint-dark)"></span>Build</div>
+              <ul>
+                <li>Sticky navigation bar on scroll</li>
+                <li>Notification badges on icons</li>
+                <li>Floating "Back to top" button</li>
+                <li>Modal window overlay</li>
+              </ul>
+            </div>
+          </div>
+          <div class="code-snip"><pre><span class="sel">.sidebar</span> {
+    <span class="prop">position</span>: <span class="val">sticky</span>;
+    <span class="prop">top</span>: <span class="val">20px</span>;
+}
+<span class="sel">.nav</span> {
+    <span class="prop">position</span>: <span class="val">fixed</span>;
+    <span class="prop">top</span>: <span class="val">0</span>; <span class="prop">width</span>: <span class="val">100%</span>;
+}</pre></div>
+        </div>
+      </div>
+
+      <!-- ── Phase 15 ── -->
+      <div class="phase bl-b1">
+        <div class="phase-header">
+          <div class="phase-num-box pc-b1"><span class="pn">Phase</span><span class="pp">15</span></div>
+          <div>
+            <div class="phase-title">Transitions &amp; Animations</div>
+            <div class="phase-sub">Subtle, purposeful motion — hover lifts, smooth state changes, gentle progress updates.</div>
+          </div>
+          <span class="phase-tag tag-b1">Interaction</span>
+        </div>
+        <div class="phase-body">
+          <div class="pcols">
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--b1)"></span>Learn</div>
+              <ul>
+                <li>transition: property duration easing</li>
+                <li>transform: translateY, scale, rotate</li>
+                <li>animation: name duration iteration</li>
+                <li>@keyframes — define animation steps</li>
+              </ul>
+            </div>
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--mint-dark)"></span>Apply To</div>
+              <ul>
+                <li>Course cards — subtle hover lift</li>
+                <li>Buttons — smooth background shift</li>
+                <li>Quiz answers — state transition</li>
+                <li>Progress bars — animated fill</li>
+                <li>Notifications — gentle appearance</li>
+              </ul>
+            </div>
+          </div>
+          <div class="code-snip"><pre><span class="sel">.course-card</span> {
+    <span class="prop">transition</span>: <span class="val">transform 0.2s ease</span>;
+}
+<span class="sel">.course-card:hover</span> {
+    <span class="prop">transform</span>: <span class="val">translateY(-4px)</span>;
+}</pre></div>
+        </div>
+      </div>
+
+      <!-- ── Phase 16 ── -->
+      <div class="phase bl-b1">
+        <div class="phase-header">
+          <div class="phase-num-box pc-b1"><span class="pn">Phase</span><span class="pp">16</span></div>
+          <div>
+            <div class="phase-title">Create Dark Mode</div>
+            <div class="phase-sub">Two themes from one codebase using CSS variables — switched by JavaScript toggling a data attribute.</div>
+          </div>
+          <span class="phase-tag tag-b1">Theming</span>
+        </div>
+        <div class="phase-body">
+          <div class="pcols">
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--b1)"></span>Light Mode</div>
+              <ul>
+                <li>--background: #f8fafc</li>
+                <li>--surface: #ffffff</li>
+                <li>--text: #1e293b</li>
+                <li>Bright, readable, welcoming</li>
+              </ul>
+            </div>
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--mint-dark)"></span>Dark Mode</div>
+              <ul>
+                <li>--background: #0f172a</li>
+                <li>--surface: #1e293b</li>
+                <li>--text: #f8fafc</li>
+                <li>Easy on eyes, night learning</li>
+              </ul>
+            </div>
+          </div>
+          <div class="code-snip"><pre><span class="sel">[data-theme="dark"]</span> {
+    <span class="var">--background</span>: <span class="val">#0f172a</span>;
+    <span class="var">--surface</span>:    <span class="val">#1e293b</span>;
+    <span class="var">--text</span>:       <span class="val">#f8fafc</span>;
+}
+<span class="com">/* JavaScript switches via: */</span>
+<span class="com">/* document.body.dataset.theme = 'dark' */</span></pre></div>
+        </div>
+      </div>
+
+      <!-- ── Phase 17 ── -->
+      <div class="phase bl-b1">
+        <div class="phase-header">
+          <div class="phase-num-box pc-b1"><span class="pn">Phase</span><span class="pp">17</span></div>
+          <div>
+            <div class="phase-title">Accessibility-Oriented CSS</div>
+            <div class="phase-sub">Contrast, focus rings, motion preferences — every learner can use the app.</div>
+          </div>
+          <span class="phase-tag tag-b1">Accessibility</span>
+        </div>
+        <div class="phase-body">
+          <div class="pcols">
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--b1)"></span>Focus On</div>
+              <ul>
+                <li>Readable text (16px+ body)</li>
+                <li>Colour contrast ≥ 4.5:1 ratio</li>
+                <li>Visible keyboard :focus-visible</li>
+                <li>Sufficient clickable areas ≥ 44px</li>
+                <li>prefers-reduced-motion</li>
+              </ul>
+            </div>
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--mint-dark)"></span>Build</div>
+              <ul>
+                <li>Focus rings on all interactive items</li>
+                <li>Skip-to-content link</li>
+                <li>Motion-safe animation wrapper</li>
+                <li>High-contrast mode support</li>
+              </ul>
+            </div>
+          </div>
+          <div class="code-snip"><pre><span class="sel">button:focus-visible,
+a:focus-visible</span> {
+    <span class="prop">outline</span>: <span class="val">3px solid currentColor</span>;
+    <span class="prop">outline-offset</span>: <span class="val">3px</span>;
+}
+<span class="sel">@media</span> (prefers-reduced-motion: reduce) {
+    <span class="sel">*</span> { <span class="prop">transition</span>: <span class="val">none</span> !important; }
+}</pre></div>
+        </div>
+      </div>
+
+      <!-- ── Phase 18 ── -->
+      <div class="phase bl-p1">
+        <div class="phase-header">
+          <div class="phase-num-box pc-p1"><span class="pn">Phase</span><span class="pp">18</span></div>
+          <div>
+            <div class="phase-title">Build a Reusable Design System</div>
+            <div class="phase-sub">Organize CSS professionally — colors, typography, spacing, buttons, cards, forms, navigation.</div>
+          </div>
+          <span class="phase-tag tag-p1">Design System</span>
+        </div>
+        <div class="phase-body">
+          <div class="pcols">
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--p1)"></span>System Includes</div>
+              <ul>
+                <li>Color tokens (--primary, --text…)</li>
+                <li>Typography scale (--text-sm to --text-xl)</li>
+                <li>Spacing scale (--space-1 to --space-5)</li>
+                <li>Button variants (primary, ghost, outline)</li>
+                <li>Card, form, nav, alert components</li>
+              </ul>
+            </div>
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--mint-dark)"></span>Think Like</div>
+              <ul>
+                <li>A UI system designer</li>
+                <li>Style components, not pages</li>
+                <li>One change → whole app updates</li>
+                <li>Consistent spacing everywhere</li>
+              </ul>
+            </div>
+          </div>
+          <div class="code-snip"><pre><span class="sel">:root</span> {
+    <span class="var">--space-1</span>: <span class="val">4px</span>;
+    <span class="var">--space-2</span>: <span class="val">8px</span>;
+    <span class="var">--space-3</span>: <span class="val">16px</span>;
+    <span class="var">--space-4</span>: <span class="val">24px</span>;
+    <span class="var">--space-5</span>: <span class="val">32px</span>;
+}</pre></div>
+        </div>
+      </div>
+
+      <!-- ── Phase 19 ── -->
+      <div class="phase bl-p1">
+        <div class="phase-header">
+          <div class="phase-num-box pc-p1"><span class="pn">Phase</span><span class="pp">19</span></div>
+          <div>
+            <div class="phase-title">Build Complete Learning Pages</div>
+            <div class="phase-sub">Full lesson page layout — sidebar navigation, content area, code examples, quiz button.</div>
+          </div>
+          <span class="phase-tag tag-p1">Full Pages</span>
+        </div>
+        <div class="phase-body">
+          <div class="pcols">
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--p1)"></span>Lesson Page Has</div>
+              <ul>
+                <li>01 Intro · 02 Elements · 03 Forms</li>
+                <li>04 Tables · 05 Project</li>
+                <li>Main: Learning Objectives</li>
+                <li>Code Example block</li>
+                <li>Practice section + [ Take Quiz ]</li>
+              </ul>
+            </div>
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--mint-dark)"></span>Also Build</div>
+              <ul>
+                <li>Courses listing page</li>
+                <li>Quiz page with score display</li>
+                <li>Progress / analytics page</li>
+                <li>About / Research page</li>
+              </ul>
+            </div>
+          </div>
+          <div class="note"><p>🎯 <strong>Milestone 2 complete</strong> after this phase — you have a fully responsive modern educational dashboard. Ready to add JavaScript interactivity.</p></div>
+        </div>
+      </div>
+
+      <!-- ── Phase 20 ── -->
+      <div class="phase bl-p1">
+        <div class="phase-header">
+          <div class="phase-num-box pc-p1"><span class="pn">Phase</span><span class="pp">20</span></div>
+          <div>
+            <div class="phase-title">Integrate JavaScript</div>
+            <div class="phase-sub">CSS controls appearance — JavaScript controls state. Together they create a living app.</div>
+          </div>
+          <span class="phase-tag tag-p1">Integration</span>
+        </div>
+        <div class="phase-body">
+          <div class="pcols">
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--p1)"></span>CSS Handles</div>
+              <ul>
+                <li>Visual appearance &amp; theme</li>
+                <li>Layout &amp; spacing</li>
+                <li>Responsive breakpoints</li>
+                <li>Transitions &amp; animations</li>
+              </ul>
+            </div>
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--mint-dark)"></span>JS Controls</div>
+              <ul>
+                <li>Quiz logic &amp; scoring</li>
+                <li>Search &amp; filtering</li>
+                <li>Theme toggle (data-theme)</li>
+                <li>Progress update → CSS displays new state</li>
+              </ul>
+            </div>
+          </div>
+          <div class="code-snip"><pre><span class="com">/* Student clicks "Complete Lesson" */</span>
+<span class="com">/* JS updates class → CSS animates bar */</span>
+
+<span class="sel">button</span>.addEventListener(<span class="val">'click'</span>, () => {
+    progressBar.style.<span class="prop">width</span> = <span class="val">'100%'</span>;
+    <span class="com">/* CSS transition animates the fill */</span>
+});</pre></div>
+        </div>
+      </div>
+
+      <!-- ── Phase 21 ── -->
+      <div class="phase bl-p1" style="border:2px solid var(--p1);">
+        <div class="phase-header" style="background:linear-gradient(135deg,#faf5ff,#ede9fe);">
+          <div class="phase-num-box pc-p1"><span class="pn">Phase</span><span class="pp">21</span></div>
+          <div>
+            <div class="phase-title">Advanced CSS &amp; Optimization 🎓</div>
+            <div class="phase-sub">Container queries, CSS nesting, logical properties, modern selectors — production-ready app.</div>
+          </div>
+          <span class="phase-tag tag-p1">Capstone</span>
+        </div>
+        <div class="phase-body">
+          <div class="pcols">
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--p1)"></span>Advanced Topics</div>
+              <ul>
+                <li>CSS Custom Properties (advanced)</li>
+                <li>Advanced Grid layouts</li>
+                <li>Container Queries (@container)</li>
+                <li>Logical Properties (margin-inline)</li>
+                <li>CSS Nesting (native)</li>
+                <li>Modern Selectors (:is, :where, :has)</li>
+                <li>Performance Optimization</li>
+              </ul>
+            </div>
+            <div class="pcol">
+              <div class="pcol-title"><span style="background:var(--mint-dark)"></span>Final App Has</div>
+              <ul>
+                <li>Fully responsive across all devices</li>
+                <li>Dark / light theme toggle</li>
+                <li>Smooth transitions throughout</li>
+                <li>Accessible to all learners</li>
+                <li>Reusable CSS design system</li>
+                <li>Ready for JS + Backend</li>
+              </ul>
+            </div>
+          </div>
+          <div class="note"><p>🏆 <strong>Milestone 3 complete</strong> — CSS + JavaScript + Backend/API → Interactive Smart Educational Learning Platform. You are a CSS developer.</p></div>
+        </div>
+      </div>
+
+    </div><!-- /phases -->
+  </div>
+</section>
+
+<!-- ═══════════ SUMMARY TABLE ═══════════ -->
+<section class="section" style="background:var(--white); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div class="wrap">
+    <p class="section-label">At a Glance</p>
+    <h2 class="section-heading">CSS Learning-by-Building Plan</h2>
+    <p class="section-sub">20 levels mapped to specific CSS topics and the app component they directly build.</p>
+    <div class="tbl-wrap">
+      <table class="plan">
+        <thead>
+          <tr>
+            <th>Level</th>
+            <th>CSS Topic</th>
+            <th>App Component Built</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="lvl-dot" style="background:var(--g1)">1</span></td><td>Syntax &amp; Setup</td><td>Basic page</td></tr>
+          <tr><td><span class="lvl-dot" style="background:var(--g1)">2</span></td><td>Selectors</td><td>Course elements</td></tr>
+          <tr><td><span class="lvl-dot" style="background:var(--g1)">3</span></td><td>Typography</td><td>Lesson page</td></tr>
+          <tr><td><span class="lvl-dot" style="background:var(--g2)">4</span></td><td>Colors &amp; Variables</td><td>Design theme</td></tr>
+          <tr><td><span class="lvl-dot" style="background:var(--g2)">5</span></td><td>Box Model</td><td>Cards</td></tr>
+          <tr><td><span class="lvl-dot" style="background:var(--y1)">6</span></td><td>Card Components</td><td>Course cards grid</td></tr>
+          <tr><td><span class="lvl-dot" style="background:var(--y1)">7</span></td><td>Flexbox</td><td>Navigation bar</td></tr>
+          <tr><td><span class="lvl-dot" style="background:var(--y1)">8</span></td><td>CSS Grid</td><td>Dashboard layout</td></tr>
+          <tr><td><span class="lvl-dot" style="background:var(--y1)">9</span></td><td>Layout Integration</td><td>Full dashboard</td></tr>
+          <tr><td><span class="lvl-dot" style="background:var(--o1)">10</span></td><td>Responsive CSS</td><td>Mobile app interface</td></tr>
+          <tr><td><span class="lvl-dot" style="background:var(--o1)">11</span></td><td>Form Styling</td><td>Registration UI</td></tr>
+          <tr><td><span class="lvl-dot" style="background:var(--o1)">12</span></td><td>CSS States</td><td>Interactive quiz</td></tr>
+          <tr><td><span class="lvl-dot" style="background:var(--o1)">13</span></td><td>Progress Styling</td><td>Learning analytics</td></tr>
+          <tr><td><span class="lvl-dot" style="background:var(--o1)">14</span></td><td>Positioning</td><td>Sidebar &amp; overlays</td></tr>
+          <tr><td><span class="lvl-dot" style="background:var(--b1)">15</span></td><td>Transitions</td><td>Interactive UI feedback</td></tr>
+          <tr><td><span class="lvl-dot" style="background:var(--b1)">16</span></td><td>Dark Mode</td><td>Theme system</td></tr>
+          <tr><td><span class="lvl-dot" style="background:var(--b1)">17</span></td><td>Accessibility</td><td>Inclusive app</td></tr>
+          <tr><td><span class="lvl-dot" style="background:var(--p1)">18</span></td><td>Design System</td><td>Component library</td></tr>
+          <tr><td><span class="lvl-dot" style="background:var(--p1)">19</span></td><td>Full Pages</td><td>Production app</td></tr>
+          <tr><td><span class="lvl-dot" style="background:var(--p1)">20</span></td><td>Advanced CSS</td><td>Smart Educational App ✓</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CYCLE ═══════════ -->
+<section class="section">
+  <div class="wrap">
+    <p class="section-label">The Core Learning Cycle</p>
+    <h2 class="section-heading">How to Learn Every Phase</h2>
+    <p class="section-sub">Apply this cycle to every single phase — it builds deep understanding through doing, not just reading.</p>
+    <div class="cycle-grid">
+      <div class="cycle-step" data-arrow="›">
+        <div class="cycle-icon">📖</div>
+        <div class="cycle-name">Learn</div>
+        <div class="cycle-desc">Read the concept — understand the CSS property and what it controls.</div>
+      </div>
+      <div class="cycle-step" data-arrow="›">
+        <div class="cycle-icon">💻</div>
+        <div class="cycle-name">Code</div>
+        <div class="cycle-desc">Write the CSS rule in your style.css file against real HTML.</div>
+      </div>
+      <div class="cycle-step" data-arrow="›">
+        <div class="cycle-icon">🧩</div>
+        <div class="cycle-name">Build</div>
+        <div class="cycle-desc">Apply the concept to a real component of the Smart Education App.</div>
+      </div>
+      <div class="cycle-step" data-arrow="›">
+        <div class="cycle-icon">🔍</div>
+        <div class="cycle-name">Test</div>
+        <div class="cycle-desc">Open in browser. Check desktop, tablet, and mobile views.</div>
+      </div>
+      <div class="cycle-step" data-arrow="›">
+        <div class="cycle-icon">🐞</div>
+        <div class="cycle-name">Debug</div>
+        <div class="cycle-desc">Use browser DevTools to inspect elements and fix issues.</div>
+      </div>
+      <div class="cycle-step">
+        <div class="cycle-icon">🚀</div>
+        <div class="cycle-name">Improve</div>
+        <div class="cycle-desc">Refine the design, add a transition, check responsiveness, then move on.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PHILOSOPHY ═══════════ -->
+<section class="section" style="background:var(--paper); border-top:1px solid var(--border);">
+  <div class="wrap">
+    <div class="philosophy">
+      <p class="section-label" style="color:var(--mint); margin-bottom:16px;">Final Philosophy</p>
+      <p class="philosophy-quote">Don't learn CSS by memorizing properties. Learn it by <em>designing a real app</em> — one component at a time, with intention.</p>
+      <div class="ms-strip">
+        <div class="ms-badge">
+          <div class="ms-badge-num">Milestone 1</div>
+          <div class="ms-badge-text">HTML + basic CSS<br>Static educational website</div>
+        </div>
+        <div class="ms-badge">
+          <div class="ms-badge-num">Milestone 2</div>
+          <div class="ms-badge-text">Advanced CSS + responsive<br>Modern educational dashboard</div>
+        </div>
+        <div class="ms-badge">
+          <div class="ms-badge-num">Milestone 3</div>
+          <div class="ms-badge-text">CSS + JavaScript + backend<br>Interactive smart learning platform</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="footer">
+  <div class="footer-divider"></div>
+  <p>Prepared by <strong>Mr. Bishnu Singh Rayamajhi</strong></p>
+  <p style="margin-top:6px;">Math Lecturer &amp; Head of Humanity &amp; Social Science · <strong>Kapilvastu Multiple Campus (KMC), Taulihawa</strong></p>
+  <p style="margin-top:14px; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.2);">CSS Learning Roadmap · Smart Modern Educational App · 21 Phases · 3 Milestones</p>
+</footer>
+
+</body>
+</html>
