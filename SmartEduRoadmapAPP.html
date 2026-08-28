@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Modern Educational App — HTML Learning Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#0f1117;--ink-soft:#3a3f52;--ink-muted:#6b7290;
+    --paper:#f7f8fc;--surface:#ffffff;--surface-2:#eef0f8;
+    --accent:#2d54e8;--border:#e2e5f0;
+    --p1:#10b981;--p2:#3b82f6;--p3:#f59e0b;
+    --p4:#f97316;--p5:#8b5cf6;--p6:#ef4444;
+    --r:12px;--r-sm:6px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter',sans-serif;background:var(--paper);color:var(--ink);line-height:1.6;}
+
+  /* HERO */
+  .hero{background:linear-gradient(135deg,#0f1117 0%,#1a1f36 40%,#1e1456 100%);color:white;padding:72px 40px 60px;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/svg%3E");}
+  .hero-inner{max-width:960px;margin:0 auto;position:relative;}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:6px 16px;font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#a5b4fc;margin-bottom:28px;}
+  .hero h1{font-family:'Playfair Display',serif;font-size:clamp(36px,5vw,64px);font-weight:900;line-height:1.1;margin-bottom:20px;}
+  .hero h1 span{color:#a5b4fc;}
+  .hero-sub{font-size:18px;color:rgba(255,255,255,.7);max-width:560px;margin-bottom:40px;font-weight:300;line-height:1.7;}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:24px;align-items:center;}
+  .prepared-box{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-left:3px solid #a5b4fc;border-radius:var(--r-sm);padding:14px 20px;}
+  .prepared-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#a5b4fc;margin-bottom:4px;}
+  .prepared-name{font-size:16px;font-weight:600;color:white;}
+  .prepared-role{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px;}
+  .hero-stats{display:flex;gap:32px;}
+  .stat-num{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:white;}
+  .stat-label{font-size:11px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em;}
+
+  /* LAYOUT */
+  .container{max-width:980px;margin:0 auto;padding:0 24px;}
+  .section{padding:60px 0;}
+  .section-title{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;margin-bottom:8px;}
+  .section-eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:8px;}
+  .section-desc{font-size:15px;color:var(--ink-soft);max-width:600px;margin-bottom:36px;}
+
+  /* ROADMAP FLOW */
+  .roadmap-flow{display:flex;flex-wrap:wrap;align-items:center;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:28px;margin-bottom:40px;}
+  .flow-step{display:flex;flex-direction:column;align-items:center;gap:6px;padding:6px 10px;}
+  .flow-dot{width:10px;height:10px;border-radius:50%;}
+  .flow-label{font-size:10px;font-weight:500;text-align:center;color:var(--ink-soft);white-space:nowrap;}
+  .flow-arrow{color:var(--border);font-size:18px;padding:0 2px;margin-bottom:14px;}
+
+  /* PHASE CARDS */
+  .phases-grid{display:grid;gap:20px;}
+  .phase-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:box-shadow .2s,transform .2s;}
+  .phase-card:hover{box-shadow:0 8px 40px rgba(0,0,0,.09);transform:translateY(-2px);}
+  .phase-header{display:flex;align-items:center;gap:14px;padding:18px 22px;border-bottom:1px solid var(--border);}
+  .phase-number{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;color:white;flex-shrink:0;}
+  .phase-title-wrap{flex:1;}
+  .phase-title{font-size:16px;font-weight:600;}
+  .phase-subtitle{font-size:12px;color:var(--ink-muted);margin-top:2px;}
+  .phase-tag{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:100px;white-space:nowrap;}
+  .phase-body{padding:22px;}
+
+  /* COLS */
+  .phase-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;}
+  .phase-col-label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+  .phase-col-label::before{content:'';display:block;width:6px;height:6px;border-radius:50%;}
+  .learn-col .phase-col-label{color:#0ea5e9;}
+  .learn-col .phase-col-label::before{background:#0ea5e9;}
+  .build-col .phase-col-label{color:#10b981;}
+  .build-col .phase-col-label::before{background:#10b981;}
+  .phase-col ul{list-style:none;display:flex;flex-direction:column;gap:5px;}
+  .phase-col ul li{font-size:12.5px;color:var(--ink-soft);padding-left:14px;position:relative;}
+  .phase-col ul li::before{content:'→';position:absolute;left:0;color:var(--border);font-size:10px;top:1px;}
+
+  /* RESOURCES SECTION */
+  .resources-section{border-top:1px solid var(--border);padding-top:16px;margin-top:4px;}
+  .resources-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+  .resources-label::before{content:'📚';}
+  .resource-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;}
+  .resource-link{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;border:1px solid var(--border);border-radius:var(--r-sm);text-decoration:none;transition:all .15s;background:var(--paper);}
+  .resource-link:hover{border-color:currentColor;background:var(--surface);box-shadow:0 2px 12px rgba(0,0,0,.07);}
+  .res-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+  
+  /* resource type colors */
+  .r-video .res-type{color:#ef4444;}
+  .r-video{border-left:2px solid #ef4444;}
+  .r-pdf .res-type{color:#f97316;}
+  .r-pdf{border-left:2px solid #f97316;}
+  .r-web .res-type{color:#3b82f6;}
+  .r-web{border-left:2px solid #3b82f6;}
+  .r-interactive .res-type{color:#8b5cf6;}
+  .r-interactive{border-left:2px solid #8b5cf6;}
+
+  /* CODE */
+  .code-block{background:#0f1117;border-radius:var(--r-sm);padding:14px;margin-bottom:16px;overflow-x:auto;}
+  .code-block pre{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#a5b4fc;line-height:1.7;white-space:pre;}
+  .c-tag{color:#f472b6;}.c-attr{color:#34d399;}.c-str{color:#fbbf24;}.c-com{color:#4b5563;}
+
+  /* TABLE */
+  .stage-table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  .stage-table thead th{text-align:left;padding:11px 14px;font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted);background:var(--surface-2);border-bottom:2px solid var(--border);}
+  .stage-table tbody tr{border-bottom:1px solid var(--border);}
+  .stage-table tbody tr:hover{background:var(--surface-2);}
+  .stage-table td{padding:11px 14px;color:var(--ink-soft);}
+  .stage-num{display:inline-block;width:24px;height:24px;border-radius:5px;text-align:center;line-height:24px;font-size:10px;font-weight:700;color:white;}
+
+  /* PHILOSOPHY */
+  .philosophy{background:linear-gradient(135deg,#1a1f36,#0f1117);border-radius:var(--r);padding:44px;color:white;position:relative;overflow:hidden;}
+  .philosophy::before{content:'"';position:absolute;top:-20px;left:20px;font-family:'Playfair Display',serif;font-size:200px;color:rgba(255,255,255,.04);line-height:1;pointer-events:none;}
+  .philosophy-text{font-family:'Playfair Display',serif;font-size:clamp(17px,3vw,24px);font-weight:700;line-height:1.5;max-width:680px;position:relative;}
+  .philosophy-cycle{display:flex;flex-wrap:wrap;gap:0;align-items:center;margin-top:28px;position:relative;}
+  .cycle-step{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-sm);padding:7px 14px;font-size:12px;font-weight:500;color:#a5b4fc;}
+  .cycle-arrow{color:rgba(255,255,255,.3);padding:0 6px;font-size:13px;}
+
+  /* ARCH */
+  .arch-diagram{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:28px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);line-height:1.8;overflow-x:auto;white-space:pre;}
+
+  /* COLORS */
+  .p1{background:var(--p1);}.p2{background:var(--p2);}.p3{background:var(--p3);}
+  .p4{background:var(--p4);}.p5{background:var(--p5);}.p6{background:var(--p6);}
+  .tag-green{background:#d1fae5;color:#065f46;}.tag-blue{background:#dbeafe;color:#1e40af;}
+  .tag-amber{background:#fef3c7;color:#92400e;}.tag-orange{background:#ffedd5;color:#9a3412;}
+  .tag-purple{background:#ede9fe;color:#5b21b6;}.tag-red{background:#fee2e2;color:#991b1b;}
+  .bl1{border-left:3px solid var(--p1);}.bl2{border-left:3px solid var(--p2);}
+  .bl3{border-left:3px solid var(--p3);}.bl4{border-left:3px solid var(--p4);}
+  .bl5{border-left:3px solid var(--p5);}.bl6{border-left:3px solid var(--p6);}
+
+  /* LEGEND */
+  .legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:28px;}
+  .legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-soft);}
+  .legend-dot{width:10px;height:10px;border-radius:2px;}
+
+  /* HIGHLIGHT */
+  .highlight-box{background:linear-gradient(135deg,#ede9fe,#dbeafe);border:1px solid #c4b5fd;border-radius:var(--r);padding:20px;margin-top:14px;}
+  .highlight-box p{font-size:13px;color:#3730a3;line-height:1.7;}
+
+  /* FOOTER */
+  .footer{background:var(--ink);color:rgba(255,255,255,.5);text-align:center;padding:32px 24px;font-size:13px;}
+  .footer strong{color:white;}
+  .divider{height:1px;background:var(--border);}
+
+  @media(max-width:640px){
+    .hero{padding:44px 18px 36px;}
+    .phase-cols{grid-template-columns:1fr;}
+    .philosophy{padding:26px;}
+    .hero-stats{gap:18px;}
+    .resource-grid{grid-template-columns:1fr 1fr;}
+    .phase-header{flex-wrap:wrap;}
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">⚡ Project-Based HTML Learning Guide — With Resources</div>
+    <h1>Build a <span>Smart Modern</span><br>Educational App</h1>
+    <p class="hero-sub">A complete 20-phase workflow from your very first HTML tag to a fully deployed, AI-assisted learning platform — with curated video tutorials, PDF guides, and interactive references for every phase.</p>
+    <div class="hero-meta">
+      <div class="prepared-box">
+        <div class="prepared-label">Prepared By</div>
+        <div class="prepared-name">Mr. Bishnu Singh Rayamajhi</div>
+        <div class="prepared-role">Math Lecturer &amp; Head of Humanity &amp; Social Science · KMC, Taulihawa</div>
+      </div>
+      <div class="hero-stats">
+        <div><div class="stat-num">20</div><div class="stat-label">Phases</div></div>
+        <div><div class="stat-num">80+</div><div class="stat-label">Resources</div></div>
+        <div><div class="stat-num">∞</div><div class="stat-label">Possibilities</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP FLOW -->
+<section class="section" style="background:var(--surface);border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div class="section-eyebrow">Overall Roadmap</div>
+    <h2 class="section-title">Your Complete Learning Path</h2>
+    <p class="section-desc">Every concept builds directly on the last. Master the structure before adding style, interaction, and intelligence.</p>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--p1)"></div> Foundation (HTML)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--p2)"></div> HTML Structure</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--p3)"></div> CSS Styling</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--p4)"></div> JavaScript</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--p5)"></div> Advanced Features</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--p6)"></div> Deployment &amp; Backend</div>
+    </div>
+    <div class="roadmap-flow">
+      <div class="flow-step"><div class="flow-dot" style="background:var(--p1)"></div><span class="flow-label">HTML<br>Basics</span></div><span class="flow-arrow">›</span>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--p1)"></div><span class="flow-label">Semantic<br>HTML</span></div><span class="flow-arrow">›</span>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--p2)"></div><span class="flow-label">App<br>Structure</span></div><span class="flow-arrow">›</span>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--p2)"></div><span class="flow-label">Forms &amp;<br>Input</span></div><span class="flow-arrow">›</span>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--p3)"></div><span class="flow-label">CSS<br>Styling</span></div><span class="flow-arrow">›</span>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--p3)"></div><span class="flow-label">Responsive<br>Design</span></div><span class="flow-arrow">›</span>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--p4)"></div><span class="flow-label">JavaScript<br>Basics</span></div><span class="flow-arrow">›</span>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--p4)"></div><span class="flow-label">Quiz &amp;<br>Search</span></div><span class="flow-arrow">›</span>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--p5)"></div><span class="flow-label">Multimedia<br>&amp; AI</span></div><span class="flow-arrow">›</span>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--p6)"></div><span class="flow-label">PWA &amp;<br>Backend</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PHASES -->
+<section class="section">
+  <div class="container">
+    <div class="section-eyebrow">Phase by Phase — With Curated Resources</div>
+    <h2 class="section-title">20 Structured Learning Phases</h2>
+    <p class="section-desc">Each phase comes with hand-picked video tutorials, PDF references, and interactive practice tools — all free and student-friendly.</p>
+
+    <div class="phases-grid">
+
+<!-- ═══ PHASE 1 ═══ -->
+<div class="phase-card bl1">
+  <div class="phase-header">
+    <div class="phase-number p1">01</div>
+    <div class="phase-title-wrap">
+      <div class="phase-title">Set Up Your Development Environment</div>
+      <div class="phase-subtitle">What is HTML? Browser tools, VS Code, files &amp; folders.</div>
+    </div>
+    <span class="phase-tag tag-green">Foundation</span>
+  </div>
+  <div class="phase-body">
+    <div class="phase-cols">
+      <div class="phase-col learn-col">
+        <div class="phase-col-label">Learn</div>
+        <ul>
+          <li>HTML vs CSS vs JavaScript</li>
+          <li>Browser &amp; Developer Tools</li>
+          <li>VS Code setup</li>
+          <li>Files and folder structure</li>
+          <li>.html / .css / .js file types</li>
+        </ul>
+      </div>
+      <div class="phase-col build-col">
+        <div class="phase-col-label">Build</div>
+        <ul>
+          <li>Project folder structure</li>
+          <li>index.html · courses.html · quiz.html</li>
+          <li>css/style.css · js/app.js</li>
+          <li>data/courses.json</li>
+          <li>First "Smart Education App" page</li>
+        </ul>
+      </div>
+    </div>
+    <div class="code-block">
+      <pre><span class="c-com">&lt;!-- Your very first HTML page --&gt;</span>
+<span class="c-tag">&lt;!DOCTYPE html&gt;</span>
+<span class="c-tag">&lt;html&gt;</span>
+<span class="c-tag">&lt;head&gt;</span>  <span class="c-tag">&lt;title&gt;</span>Smart Education App<span class="c-tag">&lt;/title&gt;</span>  <span class="c-tag">&lt;/head&gt;</span>
+<span class="c-tag">&lt;body&gt;</span>
+  <span class="c-tag">&lt;h1&gt;</span>Smart Education App<span class="c-tag">&lt;/h1&gt;</span>
+  <span class="c-tag">&lt;p&gt;</span>Learn, Practice, Research and Grow.<span class="c-tag">&lt;/p&gt;</span>
+<span class="c-tag">&lt;/body&gt;</span>
+<span class="c-tag">&lt;/html&gt;</span></pre>
+    </div>
+    <div class="resources-section">
+      <div class="resources-label">Learning Resources</div>
+      <div class="resource-grid">
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=qz0aGYrrlhU" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">HTML Full Course — Build a Website for Beginners</div><div class="res-src">freeCodeCamp · YouTube</div></div>
+        </a>
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=UB1O30fR-EE" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">HTML Crash Course for Absolute Beginners</div><div class="res-src">Traversy Media · YouTube</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://www.w3schools.com/html/html_intro.asp" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Reference</div><div class="res-title">HTML Introduction — Try It Yourself</div><div class="res-src">W3Schools</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Guide</div><div class="res-title">Getting Started with the Web</div><div class="res-src">MDN Web Docs · Mozilla</div></div>
+        </a>
+        <a class="resource-link r-interactive" href="https://www.freecodecamp.org/learn/responsive-web-design/" target="_blank">
+          <span class="res-icon">💡</span>
+          <div class="res-text"><div class="res-type">Interactive</div><div class="res-title">Responsive Web Design Certification</div><div class="res-src">freeCodeCamp (Free)</div></div>
+        </a>
+        <a class="resource-link r-pdf" href="https://www.tutorialspoint.com/html/html_tutorial.pdf" target="_blank">
+          <span class="res-icon">📄</span>
+          <div class="res-text"><div class="res-type">PDF</div><div class="res-title">HTML Complete Tutorial PDF</div><div class="res-src">TutorialsPoint</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHASE 2 ═══ -->
+<div class="phase-card bl1">
+  <div class="phase-header">
+    <div class="phase-number p1">02</div>
+    <div class="phase-title-wrap">
+      <div class="phase-title">Learn Core HTML Elements</div>
+      <div class="phase-subtitle">Tags, headings, links, images, lists, tables, buttons and forms.</div>
+    </div>
+    <span class="phase-tag tag-green">Foundation</span>
+  </div>
+  <div class="phase-body">
+    <div class="phase-cols">
+      <div class="phase-col learn-col">
+        <div class="phase-col-label">Learn</div>
+        <ul>
+          <li>&lt;h1&gt;–&lt;h6&gt; — course titles</li>
+          <li>&lt;p&gt; — lesson content</li>
+          <li>&lt;a&gt; — navigation links</li>
+          <li>&lt;img&gt; — learning resources</li>
+          <li>&lt;ul&gt; / &lt;ol&gt; / &lt;li&gt; — topic lists</li>
+          <li>&lt;table&gt; — marks &amp; results</li>
+          <li>&lt;button&gt; · &lt;input&gt; · &lt;form&gt;</li>
+        </ul>
+      </div>
+      <div class="phase-col build-col">
+        <div class="phase-col-label">Build</div>
+        <ul>
+          <li>Course Information Page</li>
+          <li>Computer Science subject tree</li>
+          <li>Fundamentals · Programming · DB</li>
+          <li>Networking · Web Technology</li>
+        </ul>
+      </div>
+    </div>
+    <div class="resources-section">
+      <div class="resources-label">Learning Resources</div>
+      <div class="resource-grid">
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=salY_Sm6mv4" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">HTML Elements for Beginners — Full Playlist</div><div class="res-src">The Net Ninja · YouTube</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://www.w3schools.com/html/html_elements.asp" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Reference</div><div class="res-title">HTML Elements — All Tags Reference</div><div class="res-src">W3Schools</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Reference</div><div class="res-title">HTML Elements Reference (All Tags)</div><div class="res-src">MDN Web Docs</div></div>
+        </a>
+        <a class="resource-link r-interactive" href="https://www.codecademy.com/learn/learn-html" target="_blank">
+          <span class="res-icon">💡</span>
+          <div class="res-text"><div class="res-type">Interactive</div><div class="res-title">Learn HTML — Structured Course</div><div class="res-src">Codecademy (Free)</div></div>
+        </a>
+        <a class="resource-link r-pdf" href="https://www.tutorialspoint.com/html/html_quick_guide.htm" target="_blank">
+          <span class="res-icon">📄</span>
+          <div class="res-text"><div class="res-type">Quick Guide</div><div class="res-title">HTML Quick Reference Guide</div><div class="res-src">TutorialsPoint</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHASE 3 ═══ -->
+<div class="phase-card bl1">
+  <div class="phase-header">
+    <div class="phase-number p1">03</div>
+    <div class="phase-title-wrap">
+      <div class="phase-title">Learn Semantic HTML</div>
+      <div class="phase-subtitle">Write HTML that communicates meaning to browsers, search engines, and screen readers.</div>
+    </div>
+    <span class="phase-tag tag-green">Foundation</span>
+  </div>
+  <div class="phase-body">
+    <div class="phase-cols">
+      <div class="phase-col learn-col">
+        <div class="phase-col-label">Learn</div>
+        <ul>
+          <li>&lt;header&gt; — page header</li>
+          <li>&lt;nav&gt; — navigation bar</li>
+          <li>&lt;main&gt; — primary content</li>
+          <li>&lt;section&gt; — thematic groups</li>
+          <li>&lt;article&gt; — self-contained content</li>
+          <li>&lt;aside&gt; — sidebar</li>
+          <li>&lt;footer&gt; — page footer</li>
+        </ul>
+      </div>
+      <div class="phase-col build-col">
+        <div class="phase-col-label">Build</div>
+        <ul>
+          <li>Full app layout skeleton</li>
+          <li>Header with branding</li>
+          <li>Sidebar: categories, subjects</li>
+          <li>Main: courses &amp; lessons area</li>
+          <li>Footer with links</li>
+        </ul>
+      </div>
+    </div>
+    <div class="resources-section">
+      <div class="resources-label">Learning Resources</div>
+      <div class="resource-grid">
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=kGW8Al_cga4" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">Semantic HTML5 Elements Explained</div><div class="res-src">Web Dev Simplified · YouTube</div></div>
+        </a>
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=HJ0-fUJ-2F8" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">Semantic HTML — Nav, Main, Header, Footer</div><div class="res-src">Traversy Media · YouTube</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://developer.mozilla.org/en-US/docs/Glossary/Semantics#semantics_in_html" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Guide</div><div class="res-title">Semantics in HTML — MDN Guide</div><div class="res-src">MDN Web Docs</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://www.w3schools.com/html/html5_semantic_elements.asp" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Reference</div><div class="res-title">HTML5 Semantic Elements</div><div class="res-src">W3Schools</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHASE 4 ═══ -->
+<div class="phase-card bl2">
+  <div class="phase-header">
+    <div class="phase-number p2">04</div>
+    <div class="phase-title-wrap">
+      <div class="phase-title">Build the Header &amp; Navigation</div>
+      <div class="phase-subtitle">Create the global nav with working links across all pages.</div>
+    </div>
+    <span class="phase-tag tag-blue">HTML Structure</span>
+  </div>
+  <div class="phase-body">
+    <div class="phase-cols">
+      <div class="phase-col learn-col">
+        <div class="phase-col-label">Learn</div>
+        <ul>
+          <li>&lt;header&gt; &amp; &lt;nav&gt;</li>
+          <li>Logo with &lt;img&gt; or styled text</li>
+          <li>Navigation &lt;ul&gt; &amp; &lt;li&gt;</li>
+          <li>Anchor links — &lt;a href=""&gt;</li>
+        </ul>
+      </div>
+      <div class="phase-col build-col">
+        <div class="phase-col-label">Build</div>
+        <ul>
+          <li>SMART EDUCATION header bar</li>
+          <li>Home | Courses | Lessons | Quiz</li>
+          <li>Research | Resources | About</li>
+          <li>Each item links to a real .html page</li>
+        </ul>
+      </div>
+    </div>
+    <div class="resources-section">
+      <div class="resources-label">Learning Resources</div>
+      <div class="resource-grid">
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=oLgtucwjVII" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">HTML Navigation Bar Tutorial</div><div class="res-src">Dani Krossing · YouTube</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://www.w3schools.com/html/html_links.asp" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Reference</div><div class="res-title">HTML Links — Anchor Tag Guide</div><div class="res-src">W3Schools</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/nav" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Guide</div><div class="res-title">&lt;nav&gt; Element — MDN Documentation</div><div class="res-src">MDN Web Docs</div></div>
+        </a>
+        <a class="resource-link r-interactive" href="https://www.w3schools.com/html/exercise.asp" target="_blank">
+          <span class="res-icon">💡</span>
+          <div class="res-text"><div class="res-type">Practice</div><div class="res-title">HTML Exercises — Interactive Quizzes</div><div class="res-src">W3Schools</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHASE 5 ═══ -->
+<div class="phase-card bl2">
+  <div class="phase-header">
+    <div class="phase-number p2">05</div>
+    <div class="phase-title-wrap">
+      <div class="phase-title">Build the Educational Dashboard</div>
+      <div class="phase-subtitle">The main app interface — stats cards, progress bars, and recent activities.</div>
+    </div>
+    <span class="phase-tag tag-blue">HTML Structure</span>
+  </div>
+  <div class="phase-body">
+    <div class="phase-cols">
+      <div class="phase-col learn-col">
+        <div class="phase-col-label">Dashboard Contains</div>
+        <ul>
+          <li>Stat cards: Courses / Lessons / Quizzes</li>
+          <li>Continue Learning section</li>
+          <li>Progress bars (HTML only first)</li>
+          <li>Recent Activities list</li>
+        </ul>
+      </div>
+      <div class="phase-col build-col">
+        <div class="phase-col-label">Target Output</div>
+        <ul>
+          <li>12 Courses · 48 Lessons · 20 Quizzes</li>
+          <li>HTML 75% · CSS 50% · JS 30%</li>
+          <li>✓ Completed / ○ Pending items</li>
+          <li>Focus: HTML structure, not CSS yet</li>
+        </ul>
+      </div>
+    </div>
+    <div class="resources-section">
+      <div class="resources-label">Learning Resources</div>
+      <div class="resource-grid">
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=mU6anWqZJcc" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">Learn HTML5 &amp; CSS3 From Scratch (12 hrs)</div><div class="res-src">freeCodeCamp · YouTube</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://www.w3schools.com/html/html_layout.asp" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Reference</div><div class="res-title">HTML Page Layout Techniques</div><div class="res-src">W3Schools</div></div>
+        </a>
+        <a class="resource-link r-pdf" href="https://www.tutorialspoint.com/html5/html5_tutorial.pdf" target="_blank">
+          <span class="res-icon">📄</span>
+          <div class="res-text"><div class="res-type">PDF</div><div class="res-title">HTML5 Complete Tutorial PDF</div><div class="res-src">TutorialsPoint</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHASE 6 ═══ -->
+<div class="phase-card bl3">
+  <div class="phase-header">
+    <div class="phase-number p3">06</div>
+    <div class="phase-title-wrap">
+      <div class="phase-title">Learn CSS — Styling the Interface</div>
+      <div class="phase-subtitle">Transform plain HTML into a modern, polished educational UI.</div>
+    </div>
+    <span class="phase-tag tag-amber">CSS</span>
+  </div>
+  <div class="phase-body">
+    <div class="phase-cols">
+      <div class="phase-col learn-col">
+        <div class="phase-col-label">Learn in Order</div>
+        <ul>
+          <li>CSS Syntax &amp; Selectors</li>
+          <li>Colors &amp; Typography (Fonts)</li>
+          <li>Box Model: Margin &amp; Padding</li>
+          <li>Flexbox layout system</li>
+          <li>CSS Grid layout</li>
+          <li>Cards &amp; Navigation bars</li>
+          <li>Responsive Design basics</li>
+          <li>Transitions &amp; Animations</li>
+        </ul>
+      </div>
+      <div class="phase-col build-col">
+        <div class="phase-col-label">Build</div>
+        <ul>
+          <li>Styled dashboard with color theme</li>
+          <li>Responsive navigation bar</li>
+          <li>Styled cards for each subject</li>
+          <li>Mobile-friendly layout</li>
+        </ul>
+      </div>
+    </div>
+    <div class="resources-section">
+      <div class="resources-label">Learning Resources</div>
+      <div class="resource-grid">
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=yfoY53QXEnI" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">CSS Crash Course for Absolute Beginners</div><div class="res-src">Traversy Media · YouTube</div></div>
+        </a>
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=1Rs2ND1ryYc" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">CSS Tutorial — Zero to Hero (Full Course)</div><div class="res-src">freeCodeCamp · YouTube</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://www.w3schools.com/css/default.asp" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Reference</div><div class="res-title">CSS Complete Tutorial with Examples</div><div class="res-src">W3Schools</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://developer.mozilla.org/en-US/docs/Learn/CSS/First_steps" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Guide</div><div class="res-title">CSS First Steps — MDN Learn</div><div class="res-src">MDN Web Docs</div></div>
+        </a>
+        <a class="resource-link r-pdf" href="https://www.tutorialspoint.com/css/css_tutorial.pdf" target="_blank">
+          <span class="res-icon">📄</span>
+          <div class="res-text"><div class="res-type">PDF</div><div class="res-title">CSS Complete Tutorial PDF</div><div class="res-src">TutorialsPoint</div></div>
+        </a>
+        <a class="resource-link r-interactive" href="https://flexboxfroggy.com" target="_blank">
+          <span class="res-icon">💡</span>
+          <div class="res-text"><div class="res-type">Game</div><div class="res-title">Flexbox Froggy — Learn Flexbox Playfully</div><div class="res-src">flexboxfroggy.com</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHASE 7 ═══ -->
+<div class="phase-card bl3">
+  <div class="phase-header">
+    <div class="phase-number p3">07</div>
+    <div class="phase-title-wrap">
+      <div class="phase-title">Create Course Cards</div>
+      <div class="phase-subtitle">Design reusable card components for every subject on the platform.</div>
+    </div>
+    <span class="phase-tag tag-amber">CSS</span>
+  </div>
+  <div class="phase-body">
+    <div class="phase-cols">
+      <div class="phase-col learn-col">
+        <div class="phase-col-label">Subjects / Cards</div>
+        <ul>
+          <li>HTML &amp; Web Development</li>
+          <li>CSS &amp; UI Design</li>
+          <li>JavaScript Fundamentals</li>
+          <li>Python Programming</li>
+          <li>Mathematics</li>
+          <li>Research Methodology</li>
+          <li>Statistics</li>
+          <li>Artificial Intelligence</li>
+        </ul>
+      </div>
+      <div class="phase-col build-col">
+        <div class="phase-col-label">Each Card Has</div>
+        <ul>
+          <li>Subject title &amp; short description</li>
+          <li>Lesson count badge</li>
+          <li>[ Start Learning ] button</li>
+          <li>Hover animation effect</li>
+        </ul>
+      </div>
+    </div>
+    <div class="resources-section">
+      <div class="resources-label">Learning Resources</div>
+      <div class="resource-grid">
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=Qhaz36TZG5Y" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">CSS Cards — Design Beautiful Cards</div><div class="res-src">Web Dev Simplified · YouTube</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://www.w3schools.com/howto/howto_css_cards.asp" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">How-To</div><div class="res-title">How To Create Cards with CSS</div><div class="res-src">W3Schools</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://css-tricks.com/almanac/properties/b/box-shadow/" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Guide</div><div class="res-title">CSS Box-Shadow — Complete Guide</div><div class="res-src">CSS-Tricks</div></div>
+        </a>
+        <a class="resource-link r-interactive" href="https://cssgridgarden.com" target="_blank">
+          <span class="res-icon">💡</span>
+          <div class="res-text"><div class="res-type">Game</div><div class="res-title">CSS Grid Garden — Learn Grid Visually</div><div class="res-src">cssgridgarden.com</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHASE 8 ═══ -->
+<div class="phase-card bl3">
+  <div class="phase-header">
+    <div class="phase-number p3">08</div>
+    <div class="phase-title-wrap">
+      <div class="phase-title">Create the Learning Module System</div>
+      <div class="phase-subtitle">Organise every course into modules, lessons, examples, practice, and quizzes.</div>
+    </div>
+    <span class="phase-tag tag-amber">CSS + HTML</span>
+  </div>
+  <div class="phase-body">
+    <div class="phase-cols">
+      <div class="phase-col learn-col">
+        <div class="phase-col-label">Module Hierarchy</div>
+        <ul>
+          <li>Course → Module → Lesson</li>
+          <li>Example → Practice → Challenge</li>
+          <li>Quiz → Assessment → Progress</li>
+        </ul>
+      </div>
+      <div class="phase-col build-col">
+        <div class="phase-col-label">HTML Course Modules</div>
+        <ul>
+          <li>Module 1 — Introduction</li>
+          <li>Module 2 — HTML Elements</li>
+          <li>Module 3 — Semantic HTML</li>
+          <li>Module 4 — Forms · 5–8 Advanced</li>
+        </ul>
+      </div>
+    </div>
+    <div class="resources-section">
+      <div class="resources-label">Learning Resources</div>
+      <div class="resource-grid">
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=G3e-cpL7ofc" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">HTML &amp; CSS for Beginners — Full Project Build</div><div class="res-src">The Net Ninja · YouTube</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/Document_and_website_structure" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Guide</div><div class="res-title">Document &amp; Website Structure — MDN</div><div class="res-src">MDN Web Docs</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHASE 9 ═══ -->
+<div class="phase-card bl3">
+  <div class="phase-header">
+    <div class="phase-number p3">09</div>
+    <div class="phase-title-wrap">
+      <div class="phase-title">Learn HTML Forms</div>
+      <div class="phase-subtitle">Forms are the gateway to interaction — registration, search, feedback, quizzes.</div>
+    </div>
+    <span class="phase-tag tag-amber">Forms</span>
+  </div>
+  <div class="phase-body">
+    <div class="phase-cols">
+      <div class="phase-col learn-col">
+        <div class="phase-col-label">Learn</div>
+        <ul>
+          <li>&lt;form&gt; · &lt;label&gt; · &lt;input&gt;</li>
+          <li>&lt;textarea&gt; · &lt;select&gt; · &lt;option&gt;</li>
+          <li>&lt;button type="submit"&gt;</li>
+          <li>Input types: text, email, radio, checkbox</li>
+        </ul>
+      </div>
+      <div class="phase-col build-col">
+        <div class="phase-col-label">Build</div>
+        <ul>
+          <li>Student Registration form</li>
+          <li>Lesson Feedback form</li>
+          <li>Course search bar</li>
+          <li>Quiz answer radio buttons</li>
+        </ul>
+      </div>
+    </div>
+    <div class="resources-section">
+      <div class="resources-label">Learning Resources</div>
+      <div class="resource-grid">
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=fNcJuPIZ2WE" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">HTML Forms &amp; Inputs — Complete Tutorial</div><div class="res-src">Traversy Media · YouTube</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://www.w3schools.com/html/html_forms.asp" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Reference</div><div class="res-title">HTML Forms — All Input Types</div><div class="res-src">W3Schools</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://developer.mozilla.org/en-US/docs/Learn/Forms" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Guide</div><div class="res-title">Web Forms — Structured Learning Module</div><div class="res-src">MDN Web Docs</div></div>
+        </a>
+        <a class="resource-link r-pdf" href="https://www.tutorialspoint.com/html/html_forms.htm" target="_blank">
+          <span class="res-icon">📄</span>
+          <div class="res-text"><div class="res-type">Guide</div><div class="res-title">HTML Forms Guide with Examples</div><div class="res-src">TutorialsPoint</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHASE 10 ═══ -->
+<div class="phase-card bl4">
+  <div class="phase-header">
+    <div class="phase-number p4">10</div>
+    <div class="phase-title-wrap">
+      <div class="phase-title">Add JavaScript — Interactivity</div>
+      <div class="phase-subtitle">Your HTML comes alive: dynamic lessons, quiz scoring, dark mode, search.</div>
+    </div>
+    <span class="phase-tag tag-orange">JavaScript</span>
+  </div>
+  <div class="phase-body">
+    <div class="phase-cols">
+      <div class="phase-col learn-col">
+        <div class="phase-col-label">Learn in Sequence</div>
+        <ul>
+          <li>Variables · Data Types · Functions</li>
+          <li>Conditions · Loops · Arrays</li>
+          <li>Objects · DOM manipulation</li>
+          <li>Events &amp; Event listeners</li>
+          <li>Local Storage · Fetch API</li>
+        </ul>
+      </div>
+      <div class="phase-col build-col">
+        <div class="phase-col-label">Features You'll Build</div>
+        <ul>
+          <li>Quiz scoring &amp; live feedback</li>
+          <li>Progress tracking</li>
+          <li>Search &amp; filtering</li>
+          <li>Dark mode toggle</li>
+          <li>Flashcards &amp; countdown timers</li>
+        </ul>
+      </div>
+    </div>
+    <div class="resources-section">
+      <div class="resources-label">Learning Resources</div>
+      <div class="resource-grid">
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=PkZNo7MFNFg" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">Learn JavaScript — Full Course for Beginners</div><div class="res-src">freeCodeCamp · YouTube</div></div>
+        </a>
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=W6NZfCO5SIk" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">JavaScript Tutorial for Beginners (1 hr)</div><div class="res-src">Programming with Mosh · YouTube</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://javascript.info" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Deep Guide</div><div class="res-title">The Modern JavaScript Tutorial</div><div class="res-src">javascript.info</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://www.w3schools.com/js/default.asp" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Reference</div><div class="res-title">JavaScript Tutorial — All Chapters</div><div class="res-src">W3Schools</div></div>
+        </a>
+        <a class="resource-link r-pdf" href="https://www.tutorialspoint.com/javascript/javascript_tutorial.pdf" target="_blank">
+          <span class="res-icon">📄</span>
+          <div class="res-text"><div class="res-type">PDF</div><div class="res-title">JavaScript Complete Tutorial PDF</div><div class="res-src">TutorialsPoint</div></div>
+        </a>
+        <a class="resource-link r-interactive" href="https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/" target="_blank">
+          <span class="res-icon">💡</span>
+          <div class="res-text"><div class="res-type">Interactive</div><div class="res-title">JavaScript Algorithms &amp; Data Structures</div><div class="res-src">freeCodeCamp (Free)</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHASE 11 ═══ -->
+<div class="phase-card bl4">
+  <div class="phase-header">
+    <div class="phase-number p4">11</div>
+    <div class="phase-title-wrap">
+      <div class="phase-title">Build an Interactive Quiz System</div>
+      <div class="phase-subtitle">Questions → student selects → JS evaluates → score → feedback → progress.</div>
+    </div>
+    <span class="phase-tag tag-orange">JavaScript</span>
+  </div>
+  <div class="phase-body">
+    <div class="phase-cols">
+      <div class="phase-col learn-col">
+        <div class="phase-col-label">Quiz Workflow</div>
+        <ul>
+          <li>Display question &amp; radio options</li>
+          <li>Student selects answer</li>
+          <li>JavaScript evaluates on Submit</li>
+          <li>Score calculated (e.g. 8 / 10)</li>
+          <li>Feedback: Correct ✓ / Wrong ✗</li>
+          <li>Progress bar updated</li>
+        </ul>
+      </div>
+      <div class="phase-col build-col">
+        <div class="phase-col-label">Build</div>
+        <ul>
+          <li>Radio button answer choices</li>
+          <li>[ Submit Answer ] button</li>
+          <li>Correct / Incorrect feedback panel</li>
+          <li>Score &amp; [ Next Question ] navigation</li>
+        </ul>
+      </div>
+    </div>
+    <div class="resources-section">
+      <div class="resources-label">Learning Resources</div>
+      <div class="resource-grid">
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=riDzcEQbX6k" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">Build a Quiz App with HTML CSS &amp; JavaScript</div><div class="res-src">Web Dev Simplified · YouTube</div></div>
+        </a>
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=f4fB9Xg2JEY" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">JavaScript Quiz App — Step by Step Build</div><div class="res-src">Brian Design · YouTube</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Guide</div><div class="res-title">Introduction to Events — MDN Guide</div><div class="res-src">MDN Web Docs</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHASE 12 ═══ -->
+<div class="phase-card bl4">
+  <div class="phase-header">
+    <div class="phase-number p4">12</div>
+    <div class="phase-title-wrap">
+      <div class="phase-title">Build a Smart Search System</div>
+      <div class="phase-subtitle">Live search filtering across courses, lessons, and resources as you type.</div>
+    </div>
+    <span class="phase-tag tag-orange">JavaScript</span>
+  </div>
+  <div class="phase-body">
+    <div class="phase-cols">
+      <div class="phase-col learn-col">
+        <div class="phase-col-label">Learn</div>
+        <ul>
+          <li>JavaScript events (keyup / input)</li>
+          <li>Arrays of objects</li>
+          <li>.filter() &amp; .map() methods</li>
+          <li>DOM manipulation for results</li>
+        </ul>
+      </div>
+      <div class="phase-col build-col">
+        <div class="phase-col-label">Build</div>
+        <ul>
+          <li>🔎 Search Learning Resources bar</li>
+          <li>Live results as user types</li>
+          <li>Filter by title, category, tag</li>
+          <li>Empty state / no results message</li>
+        </ul>
+      </div>
+    </div>
+    <div class="resources-section">
+      <div class="resources-label">Learning Resources</div>
+      <div class="resource-grid">
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=TlP5WIxVirU" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">JavaScript Filter — Live Search Tutorial</div><div class="res-src">Web Dev Simplified · YouTube</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Reference</div><div class="res-title">Array.filter() — MDN Documentation</div><div class="res-src">MDN Web Docs</div></div>
+        </a>
+        <a class="resource-link r-interactive" href="https://www.w3schools.com/js/js_array_search.asp" target="_blank">
+          <span class="res-icon">💡</span>
+          <div class="res-text"><div class="res-type">Practice</div><div class="res-title">JavaScript Array Search Methods</div><div class="res-src">W3Schools</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHASE 13 ═══ -->
+<div class="phase-card bl4">
+  <div class="phase-header">
+    <div class="phase-number p4">13</div>
+    <div class="phase-title-wrap">
+      <div class="phase-title">Add Learning Progress Tracking</div>
+      <div class="phase-subtitle">Persist student data with Local Storage — lessons done, scores, learning time.</div>
+    </div>
+    <span class="phase-tag tag-orange">JavaScript</span>
+  </div>
+  <div class="phase-body">
+    <div class="phase-cols">
+      <div class="phase-col learn-col">
+        <div class="phase-col-label">Track</div>
+        <ul>
+          <li>Lessons completed per course</li>
+          <li>Quiz scores over time</li>
+          <li>Total learning time in minutes</li>
+          <li>Certificates &amp; badges earned</li>
+          <li>Current course indicator</li>
+        </ul>
+      </div>
+      <div class="phase-col build-col">
+        <div class="phase-col-label">Build</div>
+        <ul>
+          <li>Progress bars: HTML 100% · CSS 70%</li>
+          <li>Achievement badge display</li>
+          <li>Data saved to localStorage</li>
+          <li>Reset / clear progress option</li>
+        </ul>
+      </div>
+    </div>
+    <div class="resources-section">
+      <div class="resources-label">Learning Resources</div>
+      <div class="resource-grid">
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=AUOzvFzdIk4" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">JavaScript localStorage — Full Tutorial</div><div class="res-src">Web Dev Simplified · YouTube</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Reference</div><div class="res-title">localStorage API — MDN Documentation</div><div class="res-src">MDN Web Docs</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://www.w3schools.com/jsref/prop_win_localstorage.asp" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Guide</div><div class="res-title">Window localStorage — With Examples</div><div class="res-src">W3Schools</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHASE 14 ═══ -->
+<div class="phase-card bl5">
+  <div class="phase-header">
+    <div class="phase-number p5">14</div>
+    <div class="phase-title-wrap">
+      <div class="phase-title">Add Multimedia Learning</div>
+      <div class="phase-subtitle">Embed video, audio, code examples, and images — a multimodal learning environment.</div>
+    </div>
+    <span class="phase-tag tag-purple">Multimedia</span>
+  </div>
+  <div class="phase-body">
+    <div class="phase-cols">
+      <div class="phase-col learn-col">
+        <div class="phase-col-label">Learn HTML Tags</div>
+        <ul>
+          <li>&lt;video&gt; — lesson videos</li>
+          <li>&lt;audio&gt; — voice explanations</li>
+          <li>&lt;iframe&gt; — YouTube/Google Maps embed</li>
+          <li>&lt;figure&gt; &amp; &lt;figcaption&gt;</li>
+        </ul>
+      </div>
+      <div class="phase-col build-col">
+        <div class="phase-col-label">Each Lesson Has</div>
+        <ul>
+          <li>📖 Reading content block</li>
+          <li>🎥 Embedded video tutorial</li>
+          <li>💻 Code example with syntax highlight</li>
+          <li>📝 Notes editor &amp; 🧠 Mini Quiz</li>
+        </ul>
+      </div>
+    </div>
+    <div class="resources-section">
+      <div class="resources-label">Learning Resources</div>
+      <div class="resource-grid">
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=rnoeCC1Es10" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">HTML Audio &amp; Video Tags — Full Guide</div><div class="res-src">The Net Ninja · YouTube</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://www.w3schools.com/html/html5_video.asp" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Reference</div><div class="res-title">HTML5 Video Element — Try It Yourself</div><div class="res-src">W3Schools</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Reference</div><div class="res-title">&lt;video&gt; Element — Full MDN Reference</div><div class="res-src">MDN Web Docs</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHASE 15 ═══ -->
+<div class="phase-card bl5">
+  <div class="phase-header">
+    <div class="phase-number p5">15</div>
+    <div class="phase-title-wrap">
+      <div class="phase-title">Add Research &amp; Knowledge Resources</div>
+      <div class="phase-subtitle">Research methodology, articles, case studies, statistics, and workflow.</div>
+    </div>
+    <span class="phase-tag tag-purple">Research</span>
+  </div>
+  <div class="phase-body">
+    <div class="phase-cols">
+      <div class="phase-col learn-col">
+        <div class="phase-col-label">Research Section</div>
+        <ul>
+          <li>Research Methodology</li>
+          <li>Research Articles &amp; Case Studies</li>
+          <li>Statistical Tools &amp; Data Analysis</li>
+          <li>References &amp; Citation Tools</li>
+          <li>Research Proposal Templates</li>
+        </ul>
+      </div>
+      <div class="phase-col build-col">
+        <div class="phase-col-label">Research Workflow</div>
+        <ul>
+          <li>Problem → Literature Review</li>
+          <li>Research Questions → Methodology</li>
+          <li>Data Collection → Analysis</li>
+          <li>Findings → Conclusion → Publication</li>
+        </ul>
+      </div>
+    </div>
+    <div class="resources-section">
+      <div class="resources-label">Learning Resources</div>
+      <div class="resource-grid">
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=vqKQrXvhcLI" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">Research Methodology — Full Introduction</div><div class="res-src">Dr. Nadia Ayari · YouTube</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://scholar.google.com" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Tool</div><div class="res-title">Google Scholar — Free Academic Research</div><div class="res-src">scholar.google.com</div></div>
+        </a>
+        <a class="resource-link r-pdf" href="https://www.tutorialspoint.com/research_methodology/research_methodology_tutorial.pdf" target="_blank">
+          <span class="res-icon">📄</span>
+          <div class="res-text"><div class="res-type">PDF</div><div class="res-title">Research Methodology Tutorial PDF</div><div class="res-src">TutorialsPoint</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://www.scribbr.com/research-methods/" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Guide</div><div class="res-title">Research Methods — Comprehensive Guide</div><div class="res-src">Scribbr</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHASE 16 ═══ -->
+<div class="phase-card bl5">
+  <div class="phase-header">
+    <div class="phase-number p5">16</div>
+    <div class="phase-title-wrap">
+      <div class="phase-title">Add AI-Assisted Learning</div>
+      <div class="phase-subtitle">Intelligent features — only after mastering HTML + CSS + JavaScript fundamentals.</div>
+    </div>
+    <span class="phase-tag tag-purple">AI</span>
+  </div>
+  <div class="phase-body">
+    <div class="phase-cols">
+      <div class="phase-col learn-col">
+        <div class="phase-col-label">AI Modules</div>
+        <ul>
+          <li>Explain any topic on demand</li>
+          <li>Generate quiz questions</li>
+          <li>Summarize a lesson</li>
+          <li>Generate flashcards automatically</li>
+          <li>Research idea assistant</li>
+          <li>Writing &amp; grammar assistance</li>
+          <li>Personalized learning path</li>
+        </ul>
+      </div>
+      <div class="phase-col build-col">
+        <div class="phase-col-label">Key Principle</div>
+        <ul>
+          <li>AI adds intelligence, not shortcuts</li>
+          <li>Understand the web architecture first</li>
+          <li>AI augments — does not replace — skills</li>
+        </ul>
+      </div>
+    </div>
+    <div class="resources-section">
+      <div class="resources-label">Learning Resources</div>
+      <div class="resource-grid">
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=uRQH2CFvedY" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">Build an AI Chatbot with JS &amp; OpenAI API</div><div class="res-src">Fireship · YouTube</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://platform.openai.com/docs/overview" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Docs</div><div class="res-title">OpenAI API Documentation</div><div class="res-src">platform.openai.com</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://www.kaggle.com/learn" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Courses</div><div class="res-title">Free AI &amp; ML Micro-Courses</div><div class="res-src">Kaggle Learn (Free)</div></div>
+        </a>
+        <a class="resource-link r-interactive" href="https://developers.google.com/machine-learning/crash-course" target="_blank">
+          <span class="res-icon">💡</span>
+          <div class="res-text"><div class="res-type">Course</div><div class="res-title">Machine Learning Crash Course</div><div class="res-src">Google Developers (Free)</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHASE 17 ═══ -->
+<div class="phase-card bl5">
+  <div class="phase-header">
+    <div class="phase-number p5">17</div>
+    <div class="phase-title-wrap">
+      <div class="phase-title">Make the App Responsive</div>
+      <div class="phase-subtitle">Desktop → Tablet → Mobile — one app that adapts to every screen size.</div>
+    </div>
+    <span class="phase-tag tag-purple">Responsive</span>
+  </div>
+  <div class="phase-body">
+    <div class="phase-cols">
+      <div class="phase-col learn-col">
+        <div class="phase-col-label">Learn</div>
+        <ul>
+          <li>@media queries</li>
+          <li>Flexible Flexbox layouts</li>
+          <li>CSS Grid for responsive dashboard</li>
+          <li>Mobile hamburger navigation</li>
+          <li>Fluid typography &amp; images</li>
+        </ul>
+      </div>
+      <div class="phase-col build-col">
+        <div class="phase-col-label">Target Breakpoints</div>
+        <ul>
+          <li>Mobile: stacked single column</li>
+          <li>Tablet: two-column grid</li>
+          <li>Desktop: full sidebar layout</li>
+          <li>SMART EDU header ☰ on mobile</li>
+        </ul>
+      </div>
+    </div>
+    <div class="resources-section">
+      <div class="resources-label">Learning Resources</div>
+      <div class="resource-grid">
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=srvUrASNj0s" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">Responsive Web Design — Media Queries</div><div class="res-src">Kevin Powell · YouTube</div></div>
+        </a>
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=p0bGHP-PXD4" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">Build a Responsive Navigation Bar</div><div class="res-src">Traversy Media · YouTube</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://www.w3schools.com/css/css_rwd_intro.asp" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Guide</div><div class="res-title">Responsive Web Design — Full RWD Guide</div><div class="res-src">W3Schools</div></div>
+        </a>
+        <a class="resource-link r-interactive" href="https://www.freecodecamp.org/learn/responsive-web-design/" target="_blank">
+          <span class="res-icon">💡</span>
+          <div class="res-text"><div class="res-type">Certification</div><div class="res-title">Responsive Web Design Certification (Free)</div><div class="res-src">freeCodeCamp</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHASE 18 ═══ -->
+<div class="phase-card bl6">
+  <div class="phase-header">
+    <div class="phase-number p6">18</div>
+    <div class="phase-title-wrap">
+      <div class="phase-title">Convert to a PWA — App-Like Experience</div>
+      <div class="phase-subtitle">Installable on home screen, works offline, app icon &amp; splash screen.</div>
+    </div>
+    <span class="phase-tag tag-red">PWA</span>
+  </div>
+  <div class="phase-body">
+    <div class="phase-cols">
+      <div class="phase-col learn-col">
+        <div class="phase-col-label">PWA Features</div>
+        <ul>
+          <li>Service Worker (offline caching)</li>
+          <li>Web App Manifest (manifest.json)</li>
+          <li>App icon &amp; splash screen</li>
+          <li>Install prompt for mobile</li>
+        </ul>
+      </div>
+      <div class="phase-col build-col">
+        <div class="phase-col-label">Build</div>
+        <ul>
+          <li>manifest.json configuration</li>
+          <li>sw.js service worker script</li>
+          <li>Offline lesson content caching</li>
+          <li>App installable on Android / iOS</li>
+        </ul>
+      </div>
+    </div>
+    <div class="resources-section">
+      <div class="resources-label">Learning Resources</div>
+      <div class="resource-grid">
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=sFsRylCQblw" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">Progressive Web Apps (PWA) — Full Tutorial</div><div class="res-src">Academind · YouTube</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Guide</div><div class="res-title">Progressive Web Apps — MDN Guide</div><div class="res-src">MDN Web Docs</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://web.dev/learn/pwa/" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Course</div><div class="res-title">Learn PWA — Full Course by Google</div><div class="res-src">web.dev (Google)</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHASE 19 ═══ -->
+<div class="phase-card bl6">
+  <div class="phase-header">
+    <div class="phase-number p6">19</div>
+    <div class="phase-title-wrap">
+      <div class="phase-title">Connect a Backend</div>
+      <div class="phase-subtitle">User accounts, login, persistent data — your app becomes a real platform.</div>
+    </div>
+    <span class="phase-tag tag-red">Backend</span>
+  </div>
+  <div class="phase-body">
+    <div class="phase-cols">
+      <div class="phase-col learn-col">
+        <div class="phase-col-label">Technologies</div>
+        <ul>
+          <li>Node.js or Python</li>
+          <li>Django / Flask / FastAPI</li>
+          <li>REST API design principles</li>
+          <li>SQL or NoSQL database</li>
+        </ul>
+      </div>
+      <div class="phase-col build-col">
+        <div class="phase-col-label">Features Enabled</div>
+        <ul>
+          <li>Student account &amp; login</li>
+          <li>Persistent dashboard data</li>
+          <li>Course enrollment records</li>
+          <li>Progress stored in real database</li>
+        </ul>
+      </div>
+    </div>
+    <div class="resources-section">
+      <div class="resources-label">Learning Resources</div>
+      <div class="resource-grid">
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=Oe421EPjeBE" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">Node.js &amp; Express.js — Full Course</div><div class="res-src">freeCodeCamp · YouTube</div></div>
+        </a>
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=F5mRW0jo-U4" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">Python Django Web Framework — Full Course</div><div class="res-src">freeCodeCamp · YouTube</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://developer.mozilla.org/en-US/docs/Learn/Server-side/First_steps" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Guide</div><div class="res-title">Server-Side Web Programming — First Steps</div><div class="res-src">MDN Web Docs</div></div>
+        </a>
+        <a class="resource-link r-interactive" href="https://www.freecodecamp.org/learn/back-end-development-and-apis/" target="_blank">
+          <span class="res-icon">💡</span>
+          <div class="res-text"><div class="res-type">Certification</div><div class="res-title">Back End Development &amp; APIs (Free)</div><div class="res-src">freeCodeCamp</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHASE 20 ═══ -->
+<div class="phase-card bl6" style="border:2px solid var(--p6);">
+  <div class="phase-header" style="background:linear-gradient(135deg,#fff1f2,#fef2f2);">
+    <div class="phase-number p6">20</div>
+    <div class="phase-title-wrap">
+      <div class="phase-title">Final Smart Educational App 🎓</div>
+      <div class="phase-subtitle">Complete architecture: Learning · Research · Assessment · AI Assistant · Dashboard.</div>
+    </div>
+    <span class="phase-tag tag-red">Capstone</span>
+  </div>
+  <div class="phase-body">
+    <div class="arch-diagram">                  SMART EDUCATIONAL APP
+                           │
+       ┌───────────────────┼───────────────────┐
+       ↓                   ↓                   ↓
+   LEARNING            RESEARCH             ASSESSMENT
+       │                   │                   │
+   Courses             Articles              Quizzes
+   Lessons             Case Studies          Exams
+   Videos              Projects              Scores
+   Notes               Resources             Feedback
+       │                   │                   │
+       └───────────────────┼───────────────────┘
+                           ↓
+                  STUDENT DASHBOARD
+                           │
+                ┌──────────┼──────────┐
+                ↓          ↓          ↓
+             Progress   Analytics   Portfolio
+                           │
+                           ↓
+                     AI ASSISTANT</div>
+    <div class="resources-section" style="margin-top:16px;">
+      <div class="resources-label">Capstone &amp; Deployment Resources</div>
+      <div class="resource-grid">
+        <a class="resource-link r-video" href="https://www.youtube.com/watch?v=mxT233EdY5c" target="_blank">
+          <span class="res-icon">▶</span>
+          <div class="res-text"><div class="res-type">Video</div><div class="res-title">Deploy a Website for Free — GitHub Pages</div><div class="res-src">Traversy Media · YouTube</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://pages.github.com" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Tool</div><div class="res-title">GitHub Pages — Free Website Hosting</div><div class="res-src">pages.github.com</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://vercel.com" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Platform</div><div class="res-title">Vercel — Deploy &amp; Host Web Apps Free</div><div class="res-src">vercel.com</div></div>
+        </a>
+        <a class="resource-link r-web" href="https://roadmap.sh/frontend" target="_blank">
+          <span class="res-icon">🌐</span>
+          <div class="res-text"><div class="res-type">Roadmap</div><div class="res-title">Frontend Developer Roadmap 2024</div><div class="res-src">roadmap.sh</div></div>
+        </a>
+        <a class="resource-link r-interactive" href="https://www.freecodecamp.org/learn" target="_blank">
+          <span class="res-icon">💡</span>
+          <div class="res-text"><div class="res-type">All Certs</div><div class="res-title">freeCodeCamp — All Free Certifications</div><div class="res-src">freecodecamp.org</div></div>
+        </a>
+        <a class="resource-link r-pdf" href="https://www.tutorialspoint.com/web_development_tutorials.htm" target="_blank">
+          <span class="res-icon">📄</span>
+          <div class="res-text"><div class="res-type">PDF Library</div><div class="res-title">Web Development Tutorials Library</div><div class="res-src">TutorialsPoint</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+    </div><!-- /phases-grid -->
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- STAGE TABLE -->
+<section class="section" style="background:var(--surface);">
+  <div class="container">
+    <div class="section-eyebrow">Recommended Sequence</div>
+    <h2 class="section-title">20 Stages at a Glance</h2>
+    <p class="section-desc">From a blank file to a full AI-powered learning platform — every stage with a purpose.</p>
+    <div style="overflow-x:auto;border-radius:var(--r);border:1px solid var(--border);">
+      <table class="stage-table">
+        <thead><tr><th>Stage</th><th>What You Learn</th><th>What You Build</th></tr></thead>
+        <tbody>
+          <tr><td><span class="stage-num p1">1</span></td><td>HTML basics &amp; setup</td><td>Simple webpage</td></tr>
+          <tr><td><span class="stage-num p1">2</span></td><td>HTML elements</td><td>Course information page</td></tr>
+          <tr><td><span class="stage-num p1">3</span></td><td>Semantic HTML</td><td>Full app layout structure</td></tr>
+          <tr><td><span class="stage-num p2">4</span></td><td>Navigation &amp; links</td><td>Multi-page website</td></tr>
+          <tr><td><span class="stage-num p2">5</span></td><td>Dashboard HTML</td><td>Educational dashboard</td></tr>
+          <tr><td><span class="stage-num p3">6</span></td><td>CSS fundamentals</td><td>Modern styled UI</td></tr>
+          <tr><td><span class="stage-num p3">7</span></td><td>Flexbox / Grid</td><td>Course card grid</td></tr>
+          <tr><td><span class="stage-num p3">8</span></td><td>Module structure</td><td>Full learning module layout</td></tr>
+          <tr><td><span class="stage-num p3">9</span></td><td>HTML Forms</td><td>Student registration &amp; search</td></tr>
+          <tr><td><span class="stage-num p4">10</span></td><td>JavaScript basics</td><td>Interactive features</td></tr>
+          <tr><td><span class="stage-num p4">11</span></td><td>Events &amp; DOM</td><td>Interactive quiz system</td></tr>
+          <tr><td><span class="stage-num p4">12</span></td><td>Arrays / .filter()</td><td>Live search system</td></tr>
+          <tr><td><span class="stage-num p4">13</span></td><td>Local Storage</td><td>Progress tracking</td></tr>
+          <tr><td><span class="stage-num p5">14</span></td><td>Multimedia HTML</td><td>Video &amp; audio lessons</td></tr>
+          <tr><td><span class="stage-num p5">15</span></td><td>Research module</td><td>Research &amp; resources section</td></tr>
+          <tr><td><span class="stage-num p5">16</span></td><td>AI integration</td><td>Smart learning assistant</td></tr>
+          <tr><td><span class="stage-num p5">17</span></td><td>Responsive CSS</td><td>Mobile-first app interface</td></tr>
+          <tr><td><span class="stage-num p6">18</span></td><td>PWA concepts</td><td>Installable offline app</td></tr>
+          <tr><td><span class="stage-num p6">19</span></td><td>Backend basics</td><td>User accounts &amp; database</td></tr>
+          <tr><td><span class="stage-num p6">20</span></td><td>Full-stack integration</td><td>Complete educational platform</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PHILOSOPHY -->
+<section class="section">
+  <div class="container">
+    <div class="philosophy">
+      <div class="section-eyebrow" style="color:#a5b4fc;margin-bottom:16px;">Final Learning Philosophy</div>
+      <p class="philosophy-text">Don't learn HTML as a collection of tags. Learn it through the <em style="color:#a5b4fc">"Learn → Build → Test → Improve → Integrate"</em> cycle.</p>
+      <div class="philosophy-cycle">
+        <span class="cycle-step">LEARN</span><span class="cycle-arrow">→</span>
+        <span class="cycle-step">CODE</span><span class="cycle-arrow">→</span>
+        <span class="cycle-step">BUILD</span><span class="cycle-arrow">→</span>
+        <span class="cycle-step">TEST</span><span class="cycle-arrow">→</span>
+        <span class="cycle-step">DEBUG</span><span class="cycle-arrow">→</span>
+        <span class="cycle-step">IMPROVE</span><span class="cycle-arrow">→</span>
+        <span class="cycle-step">ADD FEATURE</span><span class="cycle-arrow">→</span>
+        <span class="cycle-step">REAL PROJECT</span>
+      </div>
+      <p style="margin-top:26px;color:rgba(255,255,255,.55);font-size:14px;max-width:640px;line-height:1.7;">The ideal capstone is not simply an HTML website, but a progressively developed Smart Educational Learning Platform — where HTML provides semantic structure, CSS provides the interface, JavaScript provides interaction, APIs provide data, and AI provides intelligent assistance.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>Prepared by <strong>Mr. Bishnu Singh Rayamajhi</strong> — Math Lecturer &amp; Head of Humanity &amp; Social Science</p>
+  <p style="margin-top:6px;">Kapilvastu Multiple Campus (KMC), Taulihawa</p>
+  <p style="margin-top:12px;font-size:10px;color:rgba(255,255,255,.25);letter-spacing:.06em;text-transform:uppercase;">Smart Modern Educational App · HTML Learning Roadmap · 20 Phases · 80+ Curated Resources</p>
+</footer>
+
+</body>
+</html>
