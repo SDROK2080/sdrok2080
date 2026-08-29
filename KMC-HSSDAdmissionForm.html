@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>KMC-HSSD | Online Admission Form</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f1f5f9;
+    color:#1e293b;
+    line-height:1.5;
+}
+
+.container{
+    max-width:1100px;
+    margin:30px auto;
+    padding:15px;
+}
+
+.header{
+    background:linear-gradient(135deg,#0f172a,#1e3a8a);
+    color:white;
+    padding:28px;
+    text-align:center;
+    border-radius:14px 14px 0 0;
+}
+
+.header h1{
+    font-size:30px;
+    margin-bottom:5px;
+}
+
+.header h2{
+    font-size:20px;
+    color:#facc15;
+}
+
+.header p{
+    margin-top:5px;
+}
+
+.form-card{
+    background:white;
+    padding:30px;
+    border-radius:0 0 14px 14px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+.section{
+    margin-bottom:28px;
+}
+
+.section-title{
+    background:#1e3a8a;
+    color:white;
+    padding:12px 16px;
+    border-radius:8px;
+    margin-bottom:18px;
+    font-size:18px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+}
+
+.field.full{
+    grid-column:1/-1;
+}
+
+label{
+    font-weight:bold;
+    margin-bottom:6px;
+}
+
+.required{
+    color:red;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:11px;
+    border:1px solid #cbd5e1;
+    border-radius:7px;
+    font-size:15px;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    outline:none;
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,.12);
+}
+
+textarea{
+    min-height:90px;
+    resize:vertical;
+}
+
+.photo-box{
+    display:flex;
+    gap:25px;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.photo-preview{
+    width:130px;
+    height:160px;
+    border:2px dashed #94a3b8;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:#f8fafc;
+}
+
+.photo-preview img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
+
+th,td{
+    border:1px solid #cbd5e1;
+    padding:10px;
+}
+
+th{
+    background:#e2e8f0;
+}
+
+.declaration{
+    background:#f8fafc;
+    padding:18px;
+    border-left:5px solid #1e3a8a;
+}
+
+.checkbox{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    margin-top:15px;
+}
+
+.checkbox input{
+    width:auto;
+    margin-top:5px;
+}
+
+.buttons{
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    margin-top:25px;
+    flex-wrap:wrap;
+}
+
+button{
+    padding:13px 25px;
+    border:none;
+    border-radius:7px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.submit{
+    background:#16a34a;
+    color:white;
+}
+
+.reset{
+    background:#dc2626;
+    color:white;
+}
+
+.print{
+    background:#2563eb;
+    color:white;
+}
+
+button:hover{
+    opacity:.9;
+}
+
+.success{
+    display:none;
+    background:#dcfce7;
+    border:1px solid #22c55e;
+    color:#166534;
+    padding:20px;
+    border-radius:8px;
+    margin-bottom:20px;
+    text-align:center;
+}
+
+.footer{
+    text-align:center;
+    margin-top:20px;
+    color:#64748b;
+    font-size:14px;
+}
+
+@media(max-width:700px){
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .field.full{
+        grid-column:auto;
+    }
+
+    .form-card{
+        padding:18px;
+    }
+
+    .header h1{
+        font-size:23px;
+    }
+
+    .photo-box{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    table{
+        font-size:13px;
+    }
+}
+
+@media print{
+    body{
+        background:white;
+    }
+
+    .buttons,
+    .footer{
+        display:none;
+    }
+
+    .form-card{
+        box-shadow:none;
+    }
+
+    .header{
+        border-radius:0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header class="header">
+    <h1>KAPILVASTU MULTIPLE CAMPUS</h1>
+    <h2>Humanities & Social Sciences Department</h2>
+    <p>Taulihawa, Kapilvastu, Lumbini Province, Nepal</p>
+    <p><strong>ONLINE ADMISSION FORM</strong></p>
+</header>
+
+<div class="form-card">
+
+<div id="successMessage" class="success">
+    <h3>Application Submitted Successfully!</h3>
+    <p>Your Applicant ID is:</p>
+    <h2 id="applicantID"></h2>
+    <p>Please save this Applicant ID for future reference.</p>
+</div>
+
+<form id="admissionForm">
+
+<!-- APPLICATION INFORMATION -->
+<div class="section">
+
+<div class="section-title">
+    1. Application Information
+</div>
+
+<div class="grid">
+
+<div class="field">
+<label>Academic Session <span class="required">*</span></label>
+<select required>
+<option value="">Select Session</option>
+<option>2083/084 BS</option>
+<option>2084/085 BS</option>
+<option>2085/086 BS</option>
+</select>
+</div>
+
+<div class="field">
+<label>Applying For <span class="required">*</span></label>
+<select required>
+<option value="">Select Program</option>
+<option>BA</option>
+<option>B.Ed.</option>
+<option>Other</option>
+</select>
+</div>
+
+<div class="field">
+<label>Preferred Major / Subject</label>
+<select>
+<option value="">Select Subject</option>
+<option>English</option>
+<option>Journalism</option>
+<option>Economics</option>
+<option>Sociology</option>
+<option>Rural Development</option>
+<option>Nepali</option>
+<option>Education</option>
+<option>Other</option>
+</select>
+</div>
+
+<div class="field">
+<label>Entrance Exam Status</label>
+<select>
+<option>To be appeared</option>
+<option>Appeared</option>
+<option>Passed</option>
+</select>
+</div>
+
+</div>
+</div>
+
+<!-- PERSONAL INFORMATION -->
+<div class="section">
+
+<div class="section-title">
+    2. Applicant Personal Information
+</div>
+
+<div class="photo-box">
+
+<div class="photo-preview">
+    <img id="photoPreview"
+         alt="Photo Preview"
+         style="display:none;">
+    <span id="photoText">Photo</span>
+</div>
+
+<div>
+<label>Passport-size Photograph <span class="required">*</span></label>
+<input type="file"
+       id="photo"
+       accept="image/*"
+       required>
+<small>Recommended: JPG/PNG</small>
+</div>
+
+</div>
+
+<div class="grid">
+
+<div class="field">
+<label>First Name <span class="required">*</span></label>
+<input type="text" required>
+</div>
+
+<div class="field">
+<label>Middle Name</label>
+<input type="text">
+</div>
+
+<div class="field">
+<label>Last Name <span class="required">*</span></label>
+<input type="text" required>
+</div>
+
+<div class="field">
+<label>Gender <span class="required">*</span></label>
+<select required>
+<option value="">Select</option>
+<option>Male</option>
+<option>Female</option>
+<option>Other</option>
+</select>
+</div>
+
+<div class="field">
+<label>Date of Birth <span class="required">*</span></label>
+<input type="date" required>
+</div>
+
+<div class="field">
+<label>Nationality</label>
+<input type="text" value="Nepali">
+</div>
+
+<div class="field">
+<label>Citizenship Number</label>
+<input type="text">
+</div>
+
+<div class="field">
+<label>Citizenship Issued District</label>
+<input type="text">
+</div>
+
+</div>
+</div>
+
+<!-- CONTACT -->
+<div class="section">
+
+<div class="section-title">
+    3. Contact Information
+</div>
+
+<div class="grid">
+
+<div class="field">
+<label>Mobile Number <span class="required">*</span></label>
+<input type="tel"
+       pattern="[0-9]{10}"
+       placeholder="98XXXXXXXX"
+       required>
+</div>
+
+<div class="field">
+<label>Email Address</label>
+<input type="email"
+       placeholder="example@gmail.com">
+</div>
+
+<div class="field full">
+<label>Permanent Address <span class="required">*</span></label>
+<textarea required></textarea>
+</div>
+
+<div class="field">
+<label>Province</label>
+<select>
+<option>Lumbini Province</option>
+<option>Koshi Province</option>
+<option>Madhesh Province</option>
+<option>Bagmati Province</option>
+<option>Gandaki Province</option>
+<option>Karnali Province</option>
+<option>Sudurpashchim Province</option>
+</select>
+</div>
+
+<div class="field">
+<label>District</label>
+<input type="text" placeholder="Kapilvastu">
+</div>
+
+<div class="field">
+<label>Municipality / Rural Municipality</label>
+<input type="text">
+</div>
+
+<div class="field">
+<label>Ward No.</label>
+<input type="number" min="1" max="35">
+</div>
+
+</div>
+</div>
+
+<!-- GUARDIAN -->
+<div class="section">
+
+<div class="section-title">
+    4. Parent / Guardian Information
+</div>
+
+<div class="grid">
+
+<div class="field">
+<label>Father's Name <span class="required">*</span></label>
+<input type="text" required>
+</div>
+
+<div class="field">
+<label>Mother's Name <span class="required">*</span></label>
+<input type="text" required>
+</div>
+
+<div class="field">
+<label>Guardian's Name</label>
+<input type="text">
+</div>
+
+<div class="field">
+<label>Guardian's Mobile Number</label>
+<input type="tel">
+</div>
+
+<div class="field full">
+<label>Guardian's Address</label>
+<textarea></textarea>
+</div>
+
+</div>
+</div>
+
+<!-- ACADEMIC -->
+<div class="section">
+
+<div class="section-title">
+    5. Academic Qualification
+</div>
+
+<table>
+
+<thead>
+<tr>
+<th>Level</th>
+<th>Institution</th>
+<th>Board / University</th>
+<th>Year</th>
+<th>GPA / Percentage</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr>
+<td>SEE / SLC</td>
+<td><input type="text"></td>
+<td><input type="text"></td>
+<td><input type="text"></td>
+<td><input type="text"></td>
+</tr>
+
+<tr>
+<td>+2 / Equivalent</td>
+<td><input type="text"></td>
+<td><input type="text"></td>
+<td><input type="text"></td>
+<td><input type="text"></td>
+</tr>
+
+<tr>
+<td>Bachelor</td>
+<td><input type="text"></td>
+<td><input type="text"></td>
+<td><input type="text"></td>
+<td><input type="text"></td>
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<!-- DOCUMENTS -->
+<div class="section">
+
+<div class="section-title">
+    6. Required Documents
+</div>
+
+<div class="grid">
+
+<div class="field">
+<label>SEE/SLC Mark Sheet</label>
+<input type="file" accept=".pdf,.jpg,.jpeg,.png">
+</div>
+
+<div class="field">
+<label>SEE/SLC Character Certificate</label>
+<input type="file" accept=".pdf,.jpg,.jpeg,.png">
+</div>
+
+<div class="field">
+<label>+2 Transcript</label>
+<input type="file" accept=".pdf,.jpg,.jpeg,.png">
+</div>
+
+<div class="field">
+<label>+2 Character Certificate</label>
+<input type="file" accept=".pdf,.jpg,.jpeg,.png">
+</div>
+
+<div class="field">
+<label>Migration / Transfer Certificate</label>
+<input type="file" accept=".pdf,.jpg,.jpeg,.png">
+</div>
+
+<div class="field">
+<label>Citizenship / ID</label>
+<input type="file" accept=".pdf,.jpg,.jpeg,.png">
+</div>
+
+</div>
+
+</div>
+
+<!-- ADDITIONAL -->
+<div class="section">
+
+<div class="section-title">
+    7. Additional Information
+</div>
+
+<div class="grid">
+
+<div class="field">
+<label>Previous TU Registration Number</label>
+<input type="text">
+</div>
+
+<div class="field">
+<label>Previous Campus / College</label>
+<input type="text">
+</div>
+
+<div class="field full">
+<label>Special Information / Remarks</label>
+<textarea
+placeholder="Write any additional information here..."></textarea>
+</div>
+
+</div>
+
+</div>
+
+<!-- DECLARATION -->
+<div class="section">
+
+<div class="section-title">
+    8. Declaration
+</div>
+
+<div class="declaration">
+
+<p>
+I hereby declare that all information provided in this
+admission form is true and correct to the best of my
+knowledge. I understand that providing false information
+may result in cancellation of my application/admission.
+I agree to follow the rules and regulations of
+Kapilvastu Multiple Campus and Tribhuvan University.
+</p>
+
+<div class="checkbox">
+
+<input type="checkbox" id="declaration" required>
+
+<label for="declaration">
+I accept the above declaration and confirm that the
+information submitted by me is correct.
+<span class="required">*</span>
+</label>
+
+</div>
+
+</div>
+</div>
+
+<!-- BUTTONS -->
+<div class="buttons">
+
+<button type="submit" class="submit">
+Submit Admission Form
+</button>
+
+<button type="reset" class="reset">
+Reset
+</button>
+
+<button type="button"
+        class="print"
+        onclick="window.print()">
+Print / Save PDF
+</button>
+
+</div>
+
+</form>
+
+<div class="footer">
+© 2026 Kapilvastu Multiple Campus – Humanities & Social Sciences Department
+</div>
+
+</div>
+</div>
+
+<script>
+
+/* PHOTO PREVIEW */
+
+document.getElementById("photo").addEventListener("change", function(){
+
+    const file = this.files[0];
+
+    if(file){
+
+        const reader = new FileReader();
+
+        reader.onload = function(e){
+
+            const preview =
+                document.getElementById("photoPreview");
+
+            preview.src = e.target.result;
+            preview.style.display = "block";
+
+            document.getElementById("photoText")
+                .style.display = "none";
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+});
+
+
+/* GENERATE APPLICANT ID */
+
+function generateApplicantID(){
+
+    const year = new Date().getFullYear();
+
+    const random =
+        Math.floor(100000 + Math.random() * 900000);
+
+    return "KMC-HSSD-" + year + "-" + random;
+}
+
+
+/* FORM SUBMISSION */
+
+document.getElementById("admissionForm")
+.addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    const applicantID = generateApplicantID();
+
+    document.getElementById("applicantID")
+        .textContent = applicantID;
+
+    document.getElementById("successMessage")
+        .style.display = "block";
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+    /*
+      IMPORTANT:
+
+      This version is frontend-only.
+
+      For real admission data storage,
+      connect this form to:
+
+      MySQL / PostgreSQL
+      + PHP / Node.js / Python FastAPI
+      + secure file storage
+      + admin dashboard
+      + email/SMS notification.
+    */
+
+});
+
+
+/* RESET MESSAGE */
+
+document.getElementById("admissionForm")
+.addEventListener("reset", function(){
+
+    setTimeout(function(){
+
+        document.getElementById("successMessage")
+            .style.display = "none";
+
+        document.getElementById("photoPreview")
+            .style.display = "none";
+
+        document.getElementById("photoText")
+            .style.display = "block";
+
+    },100);
+
+});
+
+</script>
+
+</body>
+</html>
