@@ -1,0 +1,1650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KMC-HSSD Humanities and Social Sciences Department - Student Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.0.0/tabler-icons.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --surface-0: #0a0a0a;
+            --surface-1: #1a1a1a;
+            --surface-2: #ffffff;
+            --text-primary: #e5e5e5;
+            --text-secondary: #a0a0a0;
+            --text-muted: #707070;
+            --border: rgba(255, 255, 255, 0.1);
+            --border-strong: rgba(255, 255, 255, 0.2);
+            --accent-color: #fb923c;
+            --accent-light: rgba(251, 146, 60, 0.2);
+            --accent-lighter: rgba(251, 146, 60, 0.08);
+            --radius: 8px;
+            --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--surface-0);
+            color: var(--text-primary);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .portal-container {
+            display: flex;
+            height: 100vh;
+            background: var(--surface-0);
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px;
+            background: var(--surface-1);
+            border-right: 0.5px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            padding: 16px;
+            border-bottom: 0.5px solid var(--border);
+            background: linear-gradient(135deg, rgba(251, 146, 60, 0.1), rgba(245, 158, 11, 0.1));
+        }
+
+        .sidebar-header h3 {
+            margin: 0 0 4px 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .sidebar-header p {
+            margin: 0;
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+
+        /* Language Toggle */
+        .language-toggle {
+            padding: 8px 12px;
+            display: flex;
+            gap: 4px;
+            border-bottom: 0.5px solid var(--border);
+        }
+
+        .lang-btn {
+            flex: 1;
+            padding: 4px 8px;
+            border: 0.5px solid var(--border);
+            background: transparent;
+            color: var(--text-secondary);
+            border-radius: var(--radius);
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .lang-btn.active {
+            border: 1px solid var(--accent-color);
+            background: var(--accent-lighter);
+            color: var(--accent-color);
+        }
+
+        .lang-btn:hover {
+            background: var(--accent-lighter);
+        }
+
+        /* Menu Scroll */
+        .portal-menu {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 4px;
+        }
+
+        .portal-menu::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .portal-menu::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .portal-menu::-webkit-scrollbar-thumb {
+            background: rgba(251, 146, 60, 0.3);
+            border-radius: 3px;
+        }
+
+        .portal-menu::-webkit-scrollbar-thumb:hover {
+            background: rgba(251, 146, 60, 0.5);
+        }
+
+        /* Menu Items */
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            margin: 2px 0;
+            width: 100%;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 400;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+            padding-left: 9px;
+        }
+
+        .menu-item:hover:not(.active) {
+            background: var(--accent-lighter);
+        }
+
+        .menu-item.active {
+            background: var(--accent-light);
+            color: var(--accent-color);
+            font-weight: 500;
+            border-left-color: var(--accent-color);
+        }
+
+        .menu-item i {
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .menu-item .label {
+            flex: 1;
+            text-align: left;
+        }
+
+        .menu-item .chevron {
+            font-size: 14px;
+            transition: transform 0.2s ease;
+        }
+
+        .menu-item .chevron.rotated {
+            transform: rotate(180deg);
+        }
+
+        /* Submenu */
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            animation: slideDown 0.3s ease forwards;
+            margin-left: 8px;
+            border-left: 2px solid rgba(251, 146, 60, 0.3);
+            padding-left: 0;
+        }
+
+        .submenu-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            margin: 2px 0;
+            width: 100%;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: var(--radius);
+            font-size: 13px;
+            font-weight: 400;
+            transition: all 0.15s ease;
+            border-left: 3px solid transparent;
+            padding-left: 9px;
+        }
+
+        .submenu-item:hover:not(.active) {
+            background: var(--accent-lighter);
+        }
+
+        .submenu-item.active {
+            background: rgba(251, 146, 60, 0.15);
+            color: var(--accent-color);
+            font-weight: 500;
+            border-left-color: var(--accent-color);
+        }
+
+        @keyframes slideDown {
+            from {
+                max-height: 0;
+                opacity: 0;
+            }
+            to {
+                max-height: 400px;
+                opacity: 1;
+            }
+        }
+
+        .submenu.collapsed {
+            max-height: 0;
+            animation: slideUp 0.3s ease forwards;
+            pointer-events: none;
+        }
+
+        @keyframes slideUp {
+            from {
+                max-height: 400px;
+                opacity: 1;
+            }
+            to {
+                max-height: 0;
+                opacity: 0;
+            }
+        }
+
+        /* Sidebar Footer */
+        .sidebar-footer {
+            padding: 12px;
+            border-top: 0.5px solid var(--border);
+            font-size: 10px;
+            color: var(--text-muted);
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .content-header {
+            padding: 20px 24px;
+            border-bottom: 0.5px solid var(--border);
+            background: linear-gradient(135deg, rgba(251, 146, 60, 0.05), rgba(245, 158, 11, 0.05));
+        }
+
+        .content-header h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .content-header p {
+            margin: 4px 0 0 0;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Content Body */
+        .content-body {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            display: block;
+        }
+
+        #pageContent {
+            display: block;
+            width: 100%;
+        }
+
+        #pageContent.content-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            text-align: center;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        .content-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .content-body::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .content-body::-webkit-scrollbar-thumb {
+            background: rgba(251, 146, 60, 0.3);
+            border-radius: 3px;
+        }
+
+        .content-body::-webkit-scrollbar-thumb:hover {
+            background: rgba(251, 146, 60, 0.5);
+        }
+
+        .content-placeholder {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        .content-placeholder::before {
+            content: "📝";
+            font-size: 48px;
+            display: block;
+            margin-bottom: 12px;
+            opacity: 0.6;
+        }
+
+        .content-html {
+            text-align: left;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .content-html a {
+            color: #fb923c;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .content-html a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        .content-html h3, .content-html h4 {
+            color: #fb923c;
+            margin-top: 0;
+        }
+
+        .content-html ul, .content-html ol {
+            padding-left: 20px;
+        }
+
+        .content-html li {
+            margin: 4px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 220px;
+            }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="portal-container">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <!-- Header -->
+            <div class="sidebar-header">
+                <h3>KMC-HSSD</h3>
+                <p id="headerSubtitle">Student Information Portal</p>
+            </div>
+
+            <!-- Language Toggle -->
+            <div class="language-toggle">
+                <button class="lang-btn active" id="langEnBtn" onclick="changeLanguage('en')">English</button>
+                <button class="lang-btn" id="langNeBtn" onclick="changeLanguage('ne')">नेपाली</button>
+            </div>
+
+            <!-- Menu Items -->
+            <div class="portal-menu" id="menuContainer"></div>
+
+            <!-- Footer -->
+            <div class="sidebar-footer" id="sidebarFooter">Tribhuvan University Humanities and Social Sciences Department</div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <div class="content-header">
+                <h2 id="pageTitle">Home</h2>
+                <p id="pageSubtitle">Welcome to Kapilvastu Multiple Campus - Humanities and Social Sciences Department</p>
+            </div>
+            <div class="content-body">
+                <div id="pageContent" class="content-placeholder">Welcome to KMC-HSSD. Explore all sections using the menu on the left.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Translations
+        const translations = {
+            en: {
+                headerSubtitle: 'Student Information Portal',
+                pageSubtitle: 'Welcome to Kapilvastu Multiple Campus - Humanities and Social Sciences Department',
+                pageContent: 'Welcome to KMC-HSSD. Explore all sections using the menu on the left.',
+                sidebarFooter: 'Kapilvastu Multiple Campus Humanities and Social Sciences Department',
+                home: 'Home',
+                notices: 'Notices',
+                academic: 'Academic',
+                examination: 'Examination',
+                learning: 'Learning',
+                research: 'Research',
+                ai: 'AI & Technology',
+                career: 'Career',
+                events: 'Events',
+                services: 'Student Services',
+                contact: 'Contact KMC-HSSD',
+                programs: 'Programs',
+                syllabus: 'Syllabus',
+                routine: 'Routine',
+                faculty: 'Faculty',
+                examForm: 'Exam Form',
+                examRoutine: 'Routine',
+                centre: 'Centre',
+                admitCard: 'Admit Card',
+                results: 'Results',
+                materials: 'Study Materials',
+                assignments: 'Assignments',
+                library: 'Library',
+                classes: 'Online Classes',
+                methodology: 'Methodology',
+                topics: 'Research Topics',
+                tools: 'Research Tools',
+                publications: 'Publications',
+                aiTools: 'AI Tools',
+                promptEng: 'Prompt Engineering',
+                ethics: 'AI Ethics',
+                jobs: 'Jobs',
+                internship: 'Internship',
+                fellowship: 'Fellowship',
+                higher: 'Higher Studies',
+                seminar: 'Seminar',
+                workshop: 'Workshop',
+                fieldVisit: 'Field Visit',
+                calendar: 'Calendar',
+                forms: 'Forms',
+                helpDesk: 'Help Desk',
+                feedback: 'Feedback',
+                scholarship: 'Scholarship'
+            },
+            ne: {
+                headerSubtitle: 'विद्यार्थी सूचना पोर्टल',
+                pageSubtitle: 'कपिलवस्तु बहु क्याम्पस - मानविकी र सामाजिक विज्ञान विभाग मा स्वागत छ',
+                pageContent: 'KMC-HSSD मा स्वागत छ। बाईँ पक्षको मेनु प्रयोग गरेर सबै खण्डहरु अन्वेषण गर्नुहोस्।',
+                sidebarFooter: 'UCDL Academy र SDROK डिजिटल प्लेटफर्म द्वारा संचालित',
+                home: 'गृह',
+                notices: 'सूचनाहरु',
+                academic: 'शैक्षिक',
+                examination: 'परीक्षा',
+                learning: 'सिकाइ',
+                research: 'अनुसन्धान',
+                ai: 'कृत्रिम बुद्धिमत्ता र प्रविधि',
+                career: 'क्यारियर',
+                events: 'कार्यक्रमहरु',
+                services: 'विद्यार्थी सेवाहरु',
+                contact: 'HSSD सम्पर्क',
+                programs: 'कार्यक्रमहरु',
+                syllabus: 'पाठ्यक्रम',
+                routine: 'समय तालिका',
+                faculty: 'संकाय',
+                examForm: 'परीक्षा फारम',
+                examRoutine: 'समय तालिका',
+                centre: 'केन्द्र',
+                admitCard: 'प्रवेश पत्र',
+                results: 'परिणामहरु',
+                materials: 'अध्ययन सामग्री',
+                assignments: 'कार्यहरु',
+                library: 'पुस्तकालय',
+                classes: 'अनलाइन कक्षाहरु',
+                methodology: 'विधि',
+                topics: 'अनुसन्धान विषयहरु',
+                tools: 'अनुसन्धान उपकरणहरु',
+                publications: 'प्रकाशनहरु',
+                aiTools: 'कृत्रिम बुद्धिमत्ता उपकरणहरु',
+                promptEng: 'प्रेरणा इञ्जिनियरिङ्ग',
+                ethics: 'कृत्रिम बुद्धिमत्ता नैतिकता',
+                jobs: 'काम',
+                internship: 'इन्टर्नशिप',
+                fellowship: 'फेलोशिप',
+                higher: 'उच्च अध्ययन',
+                seminar: 'सेमिनार',
+                workshop: 'कार्यशाला',
+                fieldVisit: 'क्षेत्र भ्रमण',
+                calendar: 'पञ्जिका',
+                forms: 'फारमहरु',
+                helpDesk: 'सहायता डेस्क',
+                feedback: 'प्रतिक्रिया',
+                scholarship: 'छात्रवृत्ति'
+            }
+        };
+
+        // Content Map with HTML content and links
+        const contentMap = {
+            home: {
+                titleKey: 'home',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h3 style="color: #fb923c; margin-bottom: 12px;">Welcome to KMC-HSSD Portal</h3>
+                        <p style="margin-bottom: 16px;">The Humanities and Social Sciences Department of Kapilvastu Multiple Campus is dedicated to providing quality education and fostering academic excellence.</p>
+                        <div style="background: rgba(251, 146, 60, 0.1); padding: 16px; border-radius: 8px; margin-top: 16px;">
+                            <h4 style="margin-top: 0; color: #fb923c;">Quick Links:</h4>
+                            <ul style="list-style: none; padding: 0;">
+                                <li><a href="#" style="color: #fb923c; text-decoration: none;">📚 View Academic Calendar</a></li>
+                                <li><a href="#" style="color: #fb923c; text-decoration: none;">📝 Submit Exam Form</a></li>
+                                <li><a href="#" style="color: #fb923c; text-decoration: none;">📖 Access Study Materials</a></li>
+                                <li><a href="#" style="color: #fb923c; text-decoration: none;">🤖 Learn AI & Technology</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            notices: {
+                titleKey: 'notices',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <div style="border-left: 4px solid #fb923c; padding-left: 12px; margin-bottom: 12px;">
+                            <h4 style="margin: 0 0 4px 0;">Semester Examination 2024 - Important Notice</h4>
+                            <p style="margin: 0; font-size: 12px; color: #a0a0a0;">Issued: August 2024</p>
+                            <p>All students must submit examination forms by <strong>September 15, 2024</strong>.</p>
+                        </div>
+                        <div style="border-left: 4px solid #fb923c; padding-left: 12px; margin-bottom: 12px;">
+                            <h4 style="margin: 0 0 4px 0;">Academic Calendar Released</h4>
+                            <p style="margin: 0; font-size: 12px; color: #a0a0a0;">Issued: August 2024</p>
+                            <p><a href="#" style="color: #fb923c;">Download Academic Calendar 2024-2025</a></p>
+                        </div>
+                        <div style="border-left: 4px solid #fb923c; padding-left: 12px;">
+                            <h4 style="margin: 0 0 4px 0;">Class Schedule Updated</h4>
+                            <p style="margin: 0; font-size: 12px; color: #a0a0a0;">Issued: August 2024</p>
+                            <p>New class schedules are available in the Academic section.</p>
+                        </div>
+                    </div>
+                `
+            },
+            programs: {
+                titleKey: 'programs',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Offered Programs:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                            <strong>Bachelor of Arts (BA)</strong>
+                            <p style="margin: 4px 0; font-size: 13px;">Duration: 4 years | Affiliated with Tribhuvan University</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">View Subjects & Specializations →</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                            <strong>Bachelor of Education (B.Ed)</strong>
+                            <p style="margin: 4px 0; font-size: 13px;">Duration: 4 years | Teacher Training Program</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">View Details →</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <strong>Master of Arts (MA)</strong>
+                            <p style="margin: 4px 0; font-size: 13px;">Duration: 2 years | Various specializations</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">View Options →</a>
+                        </div>
+                    </div>
+                `
+            },
+            syllabus: {
+                titleKey: 'syllabus',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Download Course Syllabus:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <a href="#" style="color: #fb923c; text-decoration: none;">📄 B.A. Syllabus 2023 (PDF)</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px; color: #a0a0a0;">Updated: January 2024</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <a href="#" style="color: #fb923c; text-decoration: none;">📄 B.Ed. Syllabus 2023 (PDF)</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px; color: #a0a0a0;">Updated: January 2024</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <a href="#" style="color: #fb923c; text-decoration: none;">📄 M.A. Syllabus 2024 (PDF)</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px; color: #a0a0a0;">Updated: March 2024</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <a href="https://tribhuvan-university.edu.np" target="_blank" style="color: #fb923c; text-decoration: none;">🔗 Tribhuvan University Official Syllabus</a>
+                        </div>
+                    </div>
+                `
+            },
+            routine: {
+                titleKey: 'routine',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Class Routine 2024:</h4>
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 12px;">
+                            <tr style="background: rgba(251, 146, 60, 0.1);">
+                                <th style="padding: 8px; text-align: left; border-bottom: 1px solid rgba(251, 146, 60, 0.3);">Program</th>
+                                <th style="padding: 8px; text-align: left; border-bottom: 1px solid rgba(251, 146, 60, 0.3);">Download</th>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(251, 146, 60, 0.2);">
+                                <td style="padding: 8px;">B.A. Year I</td>
+                                <td style="padding: 8px;"><a href="#" style="color: #fb923c;">📥 PDF</a></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(251, 146, 60, 0.2);">
+                                <td style="padding: 8px;">B.A. Year II</td>
+                                <td style="padding: 8px;"><a href="#" style="color: #fb923c;">📥 PDF</a></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(251, 146, 60, 0.2);">
+                                <td style="padding: 8px;">B.A. Year III</td>
+                                <td style="padding: 8px;"><a href="#" style="color: #fb923c;">📥 PDF</a></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px;">B.Ed. Combined</td>
+                                <td style="padding: 8px;"><a href="#" style="color: #fb923c;">📥 PDF</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                `
+            },
+            faculty: {
+                titleKey: 'faculty',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Faculty Members - KMC-HSSD:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>Math Lecturer Bishnu Singh Rayamajhi</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Head of Department | Humanities and Social Sciences</p>
+                            <a href="mailto:bbsrm4591@gmail.com" style="color: #fb923c; font-size: 12px;">📧 Email</a> | <a href="tel:+9779805445683" style="color: #fb923c; font-size: 12px; margin-left: 12px;">📞 Phone</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>English Lecturer Giriraj Pokhrel</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">ELT, Applied Linguistics, Literature, Educational Innovation and Creativity</p>
+                            <a href="mailto:kmckpl@gmail.com" style="color: #fb923c; font-size: 12px;">📧 Email</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>Population Lecturer Jivan Marasini</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Population, Environment and Data-Driven Research</p>
+                            <a href="mailto:kmckpl@gmail.com" style="color: #fb923c; font-size: 12px;">📧 Email</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <strong>Statistics and Economic Studies Lecturer Naresh Khanal </strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Applied Statistics and Microeconomics</p>
+                            <a href="mailto:Nareshkhanal1411@gmail.com" style="color: #fb923c; font-size: 12px;">📧 Email</a>
+                        </div>
+                    </div>
+                `
+            },
+            examForm: {
+                titleKey: 'examForm',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Examination Form Submission:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.1); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+                            <p style="margin: 0 0 12px 0;"><strong>Deadline: September 15, 2024</strong></p>
+                            <p style="margin: 0 0 12px 0; font-size: 13px;">Submit your examination form through the following options:</p>
+                            <a href="#" style="display: inline-block; background: rgba(251, 146, 60, 0.2); color: #fb923c; padding: 8px 16px; border-radius: 6px; text-decoration: none; margin-bottom: 8px; margin-right: 8px;">📝 Online Form</a>
+                            <a href="#" style="display: inline-block; background: rgba(251, 146, 60, 0.2); color: #fb923c; padding: 8px 16px; border-radius: 6px; text-decoration: none;">📥 Download PDF Form</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <h4 style="margin-top: 0; color: #fb923c;">Required Documents:</h4>
+                            <ul style="margin: 8px 0; padding-left: 20px;">
+                                <li>Filled examination form</li>
+                                <li>Student ID card copy</li>
+                                <li>Registration certificate</li>
+                                <li>Recent passport size photograph</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            examRoutine: {
+                titleKey: 'examRoutine',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Examination Schedule 2024:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                            <strong>BA First Year:</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">November 20 - December 5, 2024</p>
+                            <a href="#" style="color: #fb923c;">📄 Detailed Routine (PDF)</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                            <strong>BA Second Year:</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">November 25 - December 10, 2024</p>
+                            <a href="#" style="color: #fb923c;">📄 Detailed Routine (PDF)</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <strong>B.Ed. Combined:</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">December 1 - December 20, 2024</p>
+                            <a href="#" style="color: #fb923c;">📄 Detailed Routine (PDF)</a>
+                        </div>
+                    </div>
+                `
+            },
+            centre: {
+                titleKey: 'centre',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Examination Centres:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                            <strong>Centre 1: TU Central Campus, Taulihawa</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">📍 Tribhuvan University, Taulihawa, Kapilvastu</p>
+                            <p style="margin: 4px 0; font-size: 12px;">Capacity: 200 students | Accessible via main university gate</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                            <strong>Centre 2: Examination Control Division</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">📍 TU Exam Control Office, Kirtipur</p>
+                            <p style="margin: 4px 0; font-size: 12px;">Capacity: 150 students | Parking available</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <strong>Centre 3: Regional Examination Centre</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">📍 Patan Multiple Campus, Lalitpur</p>
+                            <p style="margin: 4px 0; font-size: 12px;">Capacity: 300 students | Easy accessibility</p>
+                        </div>
+                    </div>
+                `
+            },
+            admitCard: {
+                titleKey: 'admitCard',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Admit Card Download:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.1); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+                            <p style="margin: 0 0 12px 0;"><strong>Status: Available from October 1, 2024</strong></p>
+                            <a href="#" style="display: inline-block; background: rgba(251, 146, 60, 0.2); color: #fb923c; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: 500;">🎫 Download Your Admit Card</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <h4 style="margin-top: 0; color: #fb923c;">Requirements:</h4>
+                            <ul style="margin: 8px 0; padding-left: 20px;">
+                                <li>Student ID Number</li>
+                                <li>Password (sent via SMS)</li>
+                                <li>Must print and bring to exam centre</li>
+                                <li>Valid ID proof required</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            results: {
+                titleKey: 'results',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">View Examination Results:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.1); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+                            <p style="margin: 0 0 12px 0;"><strong>Results Expected: January 2025</strong></p>
+                            <a href="#" style="display: inline-block; background: rgba(251, 146, 60, 0.2); color: #fb923c; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: 500;">📊 Check Your Results</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <h4 style="margin-top: 0; color: #fb923c;">Result Portal Instructions:</h4>
+                            <ol style="margin: 8px 0; padding-left: 20px;">
+                                <li>Enter your Student ID</li>
+                                <li>Provide your Date of Birth</li>
+                                <li>Click Check Results</li>
+                                <li>Download or print your result card</li>
+                            </ol>
+                        </div>
+                    </div>
+                `
+            },
+            materials: {
+                titleKey: 'materials',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Study Materials & Resources:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <a href="https://ucdlacademy.com" target="_blank" style="color: #fb923c; text-decoration: none;">🎥 UCDL Academy (Free Bilingual Content)</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">English & Nepali educational videos</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <a href="https://sdrok2080.github.io" target="_blank" style="color: #fb923c; text-decoration: none;">📚 SDROK Digital Platform</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Digital learning resources</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>B.A. Study Notes</strong>
+                            <p style="margin: 4px 0; font-size: 12px;"><a href="#" style="color: #fb923c;">History Notes</a> | <a href="#" style="color: #fb923c;">Literature</a> | <a href="#" style="color: #fb923c;">Geography</a></p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <strong>Reference Books</strong>
+                            <p style="margin: 4px 0; font-size: 12px;"><a href="#" style="color: #fb923c;">JSTOR Digital Library</a> | <a href="https://archive.org" target="_blank" style="color: #fb923c;">Internet Archive</a></p>
+                        </div>
+                    </div>
+                `
+            },
+            assignments: {
+                titleKey: 'assignments',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Assignment Submission:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.1); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+                            <p style="margin: 0 0 12px 0;">Submit assignments through:</p>
+                            <a href="#" style="display: inline-block; background: rgba(251, 146, 60, 0.2); color: #fb923c; padding: 8px 16px; border-radius: 6px; text-decoration: none; margin-right: 8px; margin-bottom: 8px;">📤 Online Portal</a>
+                            <a href="mailto:hssd@tu.edu.np" style="display: inline-block; background: rgba(251, 146, 60, 0.2); color: #fb923c; padding: 8px 16px; border-radius: 6px; text-decoration: none;">📧 Email Submission</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                            <strong>Current Assignments:</strong>
+                            <p style="margin: 8px 0; font-size: 12px;">History: Ancient Civilizations - <strong style="color: #fb923c;">Due Sep 25</strong></p>
+                            <p style="margin: 8px 0; font-size: 12px;">Literature: Shakespearean Analysis - <strong style="color: #fb923c;">Due Oct 2</strong></p>
+                            <p style="margin: 8px 0; font-size: 12px;">Geography: Climate Change - <strong style="color: #fb923c;">Due Oct 10</strong></p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <a href="#" style="color: #fb923c;">📋 View All Assignments</a>
+                        </div>
+                    </div>
+                `
+            },
+            library: {
+                titleKey: 'library',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Library Services:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                            <strong>📍 Central Library</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Location: TU Central Campus, Ground Floor</p>
+                            <p style="margin: 4px 0; font-size: 12px;">Hours: 9:00 AM - 5:00 PM (Sun-Fri)</p>
+                            <a href="tel:+97745123456" style="color: #fb923c; font-size: 12px;">📞 +977-1-4330845</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                            <strong>Available Resources:</strong>
+                            <ul style="margin: 8px 0; padding-left: 20px;">
+                                <li>15,000+ Books</li>
+                                <li>Research Journals</li>
+                                <li>Digital Archives</li>
+                                <li>Computers & WiFi</li>
+                            </ul>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <a href="#" style="color: #fb923c;">🔍 Search Library Catalog</a> | <a href="#" style="color: #fb923c; margin-left: 12px;">📚 Book Reservation</a>
+                        </div>
+                    </div>
+                `
+            },
+            classes: {
+                titleKey: 'classes',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Online Classes & Lectures:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                            <strong>Google Meet Sessions</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Daily classes at 2:00 PM</p>
+                            <a href="#" style="color: #fb923c;">🔗 Join Today's Class</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                            <strong>YouTube Channel</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Recorded lectures & tutorials</p>
+                            <a href="https://youtube.com" target="_blank" style="color: #fb923c;">📹 Visit Channel</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <strong>Class Schedule</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Mon-Fri: 2:00 PM - 3:30 PM (Live)</p>
+                            <p style="margin: 4px 0; font-size: 12px;">Sat: 10:00 AM - 11:30 AM (Recorded)</p>
+                        </div>
+                    </div>
+                `
+            },
+            methodology: {
+                titleKey: 'methodology',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Research Methodology:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                            <a href="#" style="color: #fb923c; text-decoration: none;">📖 Research Methods Guide (PDF)</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Complete guide for research projects</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                            <a href="#" style="color: #fb923c; text-decoration: none;">📊 SPSS Tutorial (Video)</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Statistical analysis using SPSS</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                            <a href="#" style="color: #fb923c; text-decoration: none;">📚 Citation Formats (APA, MLA, Chicago)</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Proper citation guidelines</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <a href="mailto:bishnu.sharma@tu.edu.np" style="color: #fb923c;">📧 Schedule Research Consultation</a>
+                        </div>
+                    </div>
+                `
+            },
+            topics: {
+                titleKey: 'topics',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Available Research Topics:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>History & Archaeology:</strong>
+                            <ul style="margin: 8px 0; padding-left: 20px; font-size: 12px;">
+                                <li>Buddhist Heritage Sites of Kapilvastu</li>
+                                <li>Ancient Trade Routes in Lumbini</li>
+                            </ul>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>Literature & Language:</strong>
+                            <ul style="margin: 8px 0; padding-left: 20px; font-size: 12px;">
+                                <li>Nepali Literature in Digital Age</li>
+                                <li>Language Preservation & Technology</li>
+                            </ul>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <a href="#" style="color: #fb923c;">📋 View All Topics & Apply</a>
+                        </div>
+                    </div>
+                `
+            },
+            tools: {
+                titleKey: 'tools',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Research Tools & Software:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <a href="https://www.ibm.com/spss" target="_blank" style="color: #fb923c; text-decoration: none;">📊 SPSS (Statistical Analysis)</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Available in lab | License: Department</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <a href="https://www.mendeley.com" target="_blank" style="color: #fb923c; text-decoration: none;">📚 Mendeley (Reference Manager)</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Free | Organize research papers</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <a href="https://www.zotero.org" target="_blank" style="color: #fb923c; text-decoration: none;">📖 Zotero (Citation Tool)</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Free | Create bibliographies</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <a href="https://atlas.ti.com" target="_blank" style="color: #fb923c; text-decoration: none;">🔍 ATLAS.ti (Qualitative Analysis)</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Available in lab | Trial available</p>
+                        </div>
+                    </div>
+                `
+            },
+            publications: {
+                titleKey: 'publications',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Published Research & Papers:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>"Cultural Heritage Preservation in Nepal"</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Prof. Dr. Ram Prasad Sharma | Published 2023</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">📄 Read PDF</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>"Digital Humanities in Nepali Education"</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Bishnu Prasad Sharma | Published 2024</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">📄 Read PDF</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>"Nepali Linguistics & National Identity"</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Prof. Dr. Sita Adhikari | Published 2023</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">📄 Read PDF</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <a href="#" style="color: #fb923c;">📚 View All Publications</a>
+                        </div>
+                    </div>
+                `
+            },
+            aiTools: {
+                titleKey: 'aiTools',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">AI Tools for Learning:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <a href="https://www.chatgpt.com" target="_blank" style="color: #fb923c; text-decoration: none;">🤖 ChatGPT</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Content generation & tutoring</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <a href="https://claude.ai" target="_blank" style="color: #fb923c; text-decoration: none;">🧠 Claude AI</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Analysis & research assistance</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <a href="https://www.notion.ai" target="_blank" style="color: #fb923c; text-decoration: none;">📝 Notion AI</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Note-taking & organization</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <a href="https://www.grammarly.com" target="_blank" style="color: #fb923c; text-decoration: none;">✍️ Grammarly</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Writing improvement tool</p>
+                        </div>
+                    </div>
+                `
+            },
+            promptEng: {
+                titleKey: 'promptEng',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Prompt Engineering Tutorials:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <a href="#" style="color: #fb923c; text-decoration: none;">📖 Beginner's Guide to Prompts</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Learn the basics of effective prompting</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <a href="#" style="color: #fb923c; text-decoration: none;">🎥 Video Tutorials (YouTube)</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Step-by-step prompt engineering lessons</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <a href="https://sdrok2080.github.io" target="_blank" style="color: #fb923c; text-decoration: none;">💡 SDROK AI Resources</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Curated prompts & techniques</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <a href="mailto:hssd@tu.edu.np" style="color: #fb923c;">🎓 Join Workshop (Next: Oct 15)</a>
+                        </div>
+                    </div>
+                `
+            },
+            ethics: {
+                titleKey: 'ethics',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">AI Ethics & Responsible AI:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <a href="#" style="color: #fb923c; text-decoration: none;">📚 Ethics in AI: A Handbook</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Comprehensive guide to ethical AI use</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <a href="#" style="color: #fb923c; text-decoration: none;">📊 Bias & Fairness in AI</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Understanding algorithmic bias</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <a href="#" style="color: #fb923c; text-decoration: none;">🔐 Data Privacy & Security</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Protecting personal information</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <a href="mailto:hssd@tu.edu.np" style="color: #fb923c;">🎤 Ethics Seminar - Oct 20, 2024</a>
+                        </div>
+                    </div>
+                `
+            },
+            jobs: {
+                titleKey: 'jobs',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Job Opportunities:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>Teaching Positions</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Schools & Colleges across Kathmandu Valley</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">👨‍🎓 View 5 openings</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>NGO Positions</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Development & Social Work roles</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">🌍 View 3 openings</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>Government Jobs</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Public Service Commission (Lok Sewa) examinations</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">📋 View Notifications</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <a href="#" style="color: #fb923c;">📧 Subscribe to Job Updates</a>
+                        </div>
+                    </div>
+                `
+            },
+            internship: {
+                titleKey: 'internship',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Internship Programs:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>3-Month Internship Program</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Open for 2nd & 3rd year students</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">📝 Apply Now (Deadline: Sep 30)</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>Summer Internship 2024</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">NGOs, Government offices, Schools</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">🌟 8 organizations recruiting</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>International Internships</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">SAARC countries & beyond</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">🌐 Learn more</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <a href="mailto:hssd@tu.edu.np" style="color: #fb923c;">📞 Internship Coordination Office</a>
+                        </div>
+                    </div>
+                `
+            },
+            fellowship: {
+                titleKey: 'fellowship',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Fellowship Opportunities:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>Anthropic Fellowship (AI & Technology)</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">12-month research fellowship</p>
+                            <a href="https://www.anthropic.com" target="_blank" style="color: #fb923c; font-size: 12px;">🔗 Apply</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>Tribhuvan University Research Fellowship</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">For Master's & Doctoral research</p>
+                            <a href="https://tribhuvan-university.edu.np" target="_blank" style="color: #fb923c; font-size: 12px;">🔗 Learn more</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>Fulbright Scholarship</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Study abroad program</p>
+                            <a href="https://www.fulbright.org.np" target="_blank" style="color: #fb923c; font-size: 12px;">🔗 Explore</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <a href="mailto:bishnu.sharma@tu.edu.np" style="color: #fb923c;">✉️ Fellowship Inquiry</a>
+                        </div>
+                    </div>
+                `
+            },
+            higher: {
+                titleKey: 'higher',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Higher Studies Options:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>Master's Programs (TU Affiliated)</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">MA History, Literature, Sociology, Anthropology</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">📚 View Admission Info</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>PhD Programs (National)</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Research doctorate opportunities</p>
+                            <a href="https://tribhuvan-university.edu.np" target="_blank" style="color: #fb923c; font-size: 12px;">🔗 Tribhuvan University PhD</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>International Masters</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">European & Asian universities</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">🌐 Scholarship opportunities</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <a href="mailto:hssd@tu.edu.np" style="color: #fb923c;">👨‍🎓 Higher Studies Counseling</a>
+                        </div>
+                    </div>
+                `
+            },
+            seminar: {
+                titleKey: 'seminar',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Upcoming Seminars:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>📅 September 28, 2024</strong>
+                            <p style="margin: 4px 0; font-size: 12px;"><strong>"AI Ethics in Education"</strong></p>
+                            <p style="margin: 4px 0; font-size: 12px;">Speaker: Prof. Dr. Ram Prasad Sharma | 3:00 PM | Seminar Hall</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">📝 Register</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>📅 October 5, 2024</strong>
+                            <p style="margin: 4px 0; font-size: 12px;"><strong>"Digital Learning Platforms"</strong></p>
+                            <p style="margin: 4px 0; font-size: 12px;">Speaker: Bishnu Prasad Sharma | 2:30 PM</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">📝 Register</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <strong>📅 October 15, 2024</strong>
+                            <p style="margin: 4px 0; font-size: 12px;"><strong>"Research Methodology Workshop"</strong></p>
+                            <p style="margin: 4px 0; font-size: 12px;">Full day workshop | Registration required</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">📝 Register Now</a>
+                        </div>
+                    </div>
+                `
+            },
+            workshop: {
+                titleKey: 'workshop',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Professional Development Workshops:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>🔧 SPSS Data Analysis Workshop</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Dates: Oct 8-10, 2024 | Fee: Rs. 500</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">✏️ Enroll Now</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>✍️ Academic Writing Workshop</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Dates: Oct 18-19, 2024 | Free</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">✏️ Enroll Now</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>🤖 AI Tools for Research</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Dates: Oct 25-27, 2024 | Free</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">✏️ Enroll Now</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <a href="#" style="color: #fb923c;">📅 View All Workshops</a>
+                        </div>
+                    </div>
+                `
+            },
+            fieldVisit: {
+                titleKey: 'fieldVisit',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Scheduled Field Visits:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>🏛️ Pashupatinath World Heritage Site</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Date: September 30, 2024</p>
+                            <p style="margin: 4px 0; font-size: 12px;">For: B.A. History students | Seats: 60</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">📋 Register</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>🌾 Urban Sociology Study</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Date: October 12-14, 2024</p>
+                            <p style="margin: 4px 0; font-size: 12px;">For: B.A. Sociology students | Duration: 3 days</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">📋 Register</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <strong>📚 Museum & Archaeological Study</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Date: November 2-4, 2024</p>
+                            <p style="margin: 4px 0; font-size: 12px;">For: B.A. Anthropology students</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">📋 Register</a>
+                        </div>
+                    </div>
+                `
+            },
+            calendar: {
+                titleKey: 'calendar',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Academic Calendar 2024-2025:</h4>
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 12px;">
+                            <tr style="background: rgba(251, 146, 60, 0.1);">
+                                <th style="padding: 8px; text-align: left; border-bottom: 1px solid rgba(251, 146, 60, 0.3);">Event</th>
+                                <th style="padding: 8px; text-align: left; border-bottom: 1px solid rgba(251, 146, 60, 0.3);">Date</th>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(251, 146, 60, 0.2);">
+                                <td style="padding: 8px;">Admission Starts</td>
+                                <td style="padding: 8px;">August 1</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(251, 146, 60, 0.2);">
+                                <td style="padding: 8px;">Classes Begin</td>
+                                <td style="padding: 8px;">September 1</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(251, 146, 60, 0.2);">
+                                <td style="padding: 8px;">Exam Form Deadline</td>
+                                <td style="padding: 8px;">September 15</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(251, 146, 60, 0.2);">
+                                <td style="padding: 8px;">Midterm Exams</td>
+                                <td style="padding: 8px;">November 1-15</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(251, 146, 60, 0.2);">
+                                <td style="padding: 8px;">Final Exams</td>
+                                <td style="padding: 8px;">December 1-31</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px;">Results Declaration</td>
+                                <td style="padding: 8px;">January 30</td>
+                            </tr>
+                        </table>
+                    </div>
+                `
+            },
+            forms: {
+                titleKey: 'forms',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Download Required Forms:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <a href="#" style="color: #fb923c; text-decoration: none;">📋 Examination Form (PDF)</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">For semester exams | Updated: Aug 2024</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <a href="#" style="color: #fb923c; text-decoration: none;">📋 Leave Application (PDF)</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Student leave request form</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <a href="#" style="color: #fb923c; text-decoration: none;">📋 Transcript Request (PDF)</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Academic transcript application</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <a href="#" style="color: #fb923c; text-decoration: none;">📋 Character Certificate (PDF)</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">For higher education or jobs</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <a href="#" style="color: #fb923c; text-decoration: none;">📋 Hostel Accommodation (PDF)</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Hostel application form</p>
+                        </div>
+                    </div>
+                `
+            },
+            helpDesk: {
+                titleKey: 'helpDesk',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Help Desk & Support:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                            <strong>📞 Contact Information:</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Phone: <a href="tel:+97745123456" style="color: #fb923c;">+977-1-4330845</a></p>
+                            <p style="margin: 4px 0; font-size: 12px;">Email: <a href="mailto:hssd@tu.edu.np" style="color: #fb923c;">hssd@tu.edu.np</a></p>
+                            <p style="margin: 4px 0; font-size: 12px;">Hours: Mon-Fri, 9:00 AM - 5:00 PM</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                            <strong>📧 Email Support Departments:</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Academic: <a href="mailto:academic@tu.edu.np" style="color: #fb923c;">academic@tu.edu.np</a></p>
+                            <p style="margin: 4px 0; font-size: 12px;">Examination: <a href="mailto:exam@tu.edu.np" style="color: #fb923c;">exam@tu.edu.np</a></p>
+                            <p style="margin: 4px 0; font-size: 12px;">Students: <a href="mailto:students@tu.edu.np" style="color: #fb923c;">students@tu.edu.np</a></p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <a href="#" style="color: #fb923c;">💬 Live Chat Support</a> | <a href="#" style="color: #fb923c; margin-left: 12px;">📅 Book Appointment</a>
+                        </div>
+                    </div>
+                `
+            },
+            feedback: {
+                titleKey: 'feedback',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Feedback & Suggestions:</h4>
+                        <p style="margin-bottom: 16px;">We value your feedback. Help us improve our services!</p>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                            <a href="#" style="color: #fb923c; text-decoration: none;">📋 Online Feedback Form</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Anonymous feedback welcome</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                            <a href="mailto:feedback@tu.edu.np" style="color: #fb923c; text-decoration: none;">📧 Email Feedback</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Direct email to feedback department</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <a href="#" style="color: #fb923c; text-decoration: none;">📱 WhatsApp Messages</a>
+                            <p style="margin: 4px 0 0 0; font-size: 12px;">Message: +977-985-1234567</p>
+                        </div>
+                    </div>
+                `
+            },
+            scholarship: {
+                titleKey: 'scholarship',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">Scholarship & Financial Aid:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>KMC Merit Scholarship</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">For students with GPA 3.5+ | Up to 50% tuition</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">📝 Apply</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>Need-Based Financial Aid</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">For economically disadvantaged students</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">📝 Apply</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>Minority Scholarships</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">For marginalized communities</p>
+                            <a href="#" style="color: #fb923c; font-size: 12px;">📝 Apply</a>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <a href="mailto:scholarship@tu.edu.np" style="color: #fb923c;">📧 Scholarship Office</a> | <a href="#" style="color: #fb923c; margin-left: 12px;">📅 Information Session</a>
+                        </div>
+                    </div>
+                `
+            },
+            contact: {
+                titleKey: 'contact',
+                html: `
+                    <div style="text-align: left; max-width: 600px;">
+                        <h4 style="color: #fb923c;">KMC-HSSD Department Contact Information:</h4>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                            <strong>📍 Head Office</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Kapilvastu Multiple Campus</p>
+                            <p style="margin: 4px 0; font-size: 12px;">Taulihawa, Kapilvastu</p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                            <strong>📞 Phone Numbers:</strong>
+                            <p style="margin: 4px 0; font-size: 12px;"><strong>Department:</strong> <a href="tel:+9779805445683" style="color: #fb923c;">+977-1-4330845</a></p>
+                            <p style="margin: 4px 0; font-size: 12px;"><strong>Head (Bishnu Singh Rayamajhi):</strong> <a href="tel:+9779805445683" style="color: #fb923c;">+977-1-4330846</a></p>
+                            <p style="margin: 4px 0; font-size: 12px;"><strong>Research Cell Coordinator (Giriraj Pokhrel):</strong> <a href="tel:+9779847040662" style="color: #fb923c;">+977-1-4330847</a></p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                            <strong>📧 Email:</strong>
+                            <p style="margin: 4px 0; font-size: 12px;"><a href="mailto:bbsrm4591@gmail.com" style="color: #fb923c;">bbsrm4591@gmail.com</a></p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                            <strong>🌐 Online:</strong>
+                            <p style="margin: 4px 0; font-size: 12px;"><a href="https://tribhuvan-university.edu.np" target="_blank" style="color: #fb923c;">Visit KMC-HSSD</a></p>
+                            <p style="margin: 4px 0; font-size: 12px;"><a href="https://ucdlacademy.com" target="_blank" style="color: #fb923c;">UCDL Academy (Learning Resources)</a></p>
+                        </div>
+                        <div style="background: rgba(251, 146, 60, 0.08); padding: 12px; border-radius: 8px;">
+                            <strong>⏰ Office Hours:</strong>
+                            <p style="margin: 4px 0; font-size: 12px;">Monday - Friday: 9:00 AM - 5:00 PM</p>
+                            <p style="margin: 4px 0; font-size: 12px;">Saturday and Sunday: Holidays (Closed)</p>
+                            <p style="margin: 4px 0; font-size: 12px;">Public Holidays: Closed</p>
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        // Menu Structure
+        const menuStructure = [
+            { key: 'home', labelKey: 'home', icon: 'ti-home' },
+            { key: 'notices', labelKey: 'notices', icon: 'ti-bell' },
+            {
+                key: 'academic',
+                labelKey: 'academic',
+                icon: 'ti-book',
+                children: [
+                    { key: 'programs', labelKey: 'programs' },
+                    { key: 'syllabus', labelKey: 'syllabus' },
+                    { key: 'routine', labelKey: 'routine' },
+                    { key: 'faculty', labelKey: 'faculty' }
+                ]
+            },
+            {
+                key: 'examination',
+                labelKey: 'examination',
+                icon: 'ti-clipboard',
+                children: [
+                    { key: 'examForm', labelKey: 'examForm' },
+                    { key: 'examRoutine', labelKey: 'examRoutine' },
+                    { key: 'centre', labelKey: 'centre' },
+                    { key: 'admitCard', labelKey: 'admitCard' },
+                    { key: 'results', labelKey: 'results' }
+                ]
+            },
+            {
+                key: 'learning',
+                labelKey: 'learning',
+                icon: 'ti-books',
+                children: [
+                    { key: 'materials', labelKey: 'materials' },
+                    { key: 'assignments', labelKey: 'assignments' },
+                    { key: 'library', labelKey: 'library' },
+                    { key: 'classes', labelKey: 'classes' }
+                ]
+            },
+            {
+                key: 'research',
+                labelKey: 'research',
+                icon: 'ti-microscope',
+                children: [
+                    { key: 'methodology', labelKey: 'methodology' },
+                    { key: 'topics', labelKey: 'topics' },
+                    { key: 'tools', labelKey: 'tools' },
+                    { key: 'publications', labelKey: 'publications' }
+                ]
+            },
+            {
+                key: 'ai',
+                labelKey: 'ai',
+                icon: 'ti-brain',
+                children: [
+                    { key: 'aiTools', labelKey: 'aiTools' },
+                    { key: 'promptEng', labelKey: 'promptEng' },
+                    { key: 'ethics', labelKey: 'ethics' }
+                ]
+            },
+            {
+                key: 'career',
+                labelKey: 'career',
+                icon: 'ti-briefcase',
+                children: [
+                    { key: 'jobs', labelKey: 'jobs' },
+                    { key: 'internship', labelKey: 'internship' },
+                    { key: 'fellowship', labelKey: 'fellowship' },
+                    { key: 'higher', labelKey: 'higher' }
+                ]
+            },
+            {
+                key: 'events',
+                labelKey: 'events',
+                icon: 'ti-calendar-event',
+                children: [
+                    { key: 'seminar', labelKey: 'seminar' },
+                    { key: 'workshop', labelKey: 'workshop' },
+                    { key: 'fieldVisit', labelKey: 'fieldVisit' },
+                    { key: 'calendar', labelKey: 'calendar' }
+                ]
+            },
+            {
+                key: 'services',
+                labelKey: 'services',
+                icon: 'ti-help',
+                children: [
+                    { key: 'forms', labelKey: 'forms' },
+                    { key: 'helpDesk', labelKey: 'helpDesk' },
+                    { key: 'feedback', labelKey: 'feedback' },
+                    { key: 'scholarship', labelKey: 'scholarship' }
+                ]
+            },
+            { key: 'contact', labelKey: 'contact', icon: 'ti-phone' }
+        ];
+
+        // State
+        let currentLanguage = 'en';
+        let selectedPage = 'home';
+        let expandedSections = {};
+
+        // Initialize
+        function init() {
+            const savedLang = localStorage.getItem('kmc-portal-lang');
+            const savedPage = localStorage.getItem('kmc-portal-page');
+            
+            if (savedLang) {
+                currentLanguage = savedLang;
+            }
+            if (savedPage) {
+                selectedPage = savedPage;
+            }
+
+            renderMenu();
+            updateLanguageUI();
+            updateContent();
+        }
+
+        // Render Menu
+        function renderMenu() {
+            const container = document.getElementById('menuContainer');
+            container.innerHTML = '';
+
+            menuStructure.forEach(item => {
+                const menuItem = createMenuItemElement(item);
+                container.appendChild(menuItem);
+            });
+        }
+
+        // Create Menu Item Element
+        function createMenuItemElement(item) {
+            const wrapper = document.createElement('div');
+            const hasChildren = item.children && item.children.length > 0;
+
+            const button = document.createElement('button');
+            button.className = 'menu-item' + (selectedPage === item.key ? ' active' : '');
+            button.innerHTML = `
+                <i class="ti ${item.icon}"></i>
+                <span class="label">${translations[currentLanguage][item.labelKey]}</span>
+                ${hasChildren ? '<i class="ti ti-chevron-down chevron"></i>' : ''}
+            `;
+
+            button.onclick = () => {
+                if (hasChildren) {
+                    toggleSection(item.key);
+                } else {
+                    selectPage(item.key);
+                }
+            };
+
+            wrapper.appendChild(button);
+
+            // Add submenu if has children
+            if (hasChildren) {
+                const submenu = document.createElement('div');
+                submenu.className = 'submenu' + (expandedSections[item.key] ? '' : ' collapsed');
+                submenu.id = `submenu-${item.key}`;
+
+                item.children.forEach(child => {
+                    const childButton = document.createElement('button');
+                    childButton.className = 'submenu-item' + (selectedPage === child.key ? ' active' : '');
+                    childButton.innerHTML = `<span>• ${translations[currentLanguage][child.labelKey]}</span>`;
+                    childButton.onclick = () => selectPage(child.key);
+                    submenu.appendChild(childButton);
+                });
+
+                wrapper.appendChild(submenu);
+            }
+
+            return wrapper;
+        }
+
+        // Toggle Section
+        function toggleSection(key) {
+            expandedSections[key] = !expandedSections[key];
+            const submenu = document.getElementById(`submenu-${key}`);
+            
+            if (expandedSections[key]) {
+                submenu.classList.remove('collapsed');
+            } else {
+                submenu.classList.add('collapsed');
+            }
+
+            const button = event.target.closest('.menu-item');
+            const chevron = button.querySelector('.chevron');
+            if (chevron) {
+                chevron.classList.toggle('rotated');
+            }
+        }
+
+        // Select Page
+        function selectPage(key) {
+            selectedPage = key;
+            localStorage.setItem('kmc-portal-page', key);
+            
+            // Update active states
+            document.querySelectorAll('.menu-item, .submenu-item').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            document.querySelectorAll(`[data-page="${key}"]`).forEach(el => {
+                el.classList.add('active');
+            });
+
+            // Re-render to update active states
+            renderMenu();
+            updateContent();
+        }
+
+        // Update Content
+        function updateContent() {
+            const content = contentMap[selectedPage];
+            if (!content) return;
+
+            const titleKey = content.titleKey;
+            const pageTitle = document.getElementById('pageTitle');
+            const pageContent = document.getElementById('pageContent');
+
+            pageTitle.textContent = translations[currentLanguage][titleKey];
+
+            if (content.html) {
+                pageContent.innerHTML = content.html;
+                pageContent.className = 'content-html';
+            } else {
+                const contentText = content.content || translations[currentLanguage][content.contentKey] || 'Content not available';
+                pageContent.textContent = contentText;
+                pageContent.className = 'content-placeholder';
+            }
+        }
+
+        // Change Language
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            localStorage.setItem('kmc-portal-lang', lang);
+
+            document.getElementById('langEnBtn').classList.toggle('active', lang === 'en');
+            document.getElementById('langNeBtn').classList.toggle('active', lang === 'ne');
+
+            updateLanguageUI();
+            renderMenu();
+            updateContent();
+        }
+
+        // Update Language UI
+        function updateLanguageUI() {
+            document.getElementById('headerSubtitle').textContent = translations[currentLanguage].headerSubtitle;
+            document.getElementById('pageSubtitle').textContent = translations[currentLanguage].pageSubtitle;
+            document.getElementById('sidebarFooter').textContent = translations[currentLanguage].sidebarFooter;
+
+            // Update lang buttons
+            document.getElementById('langEnBtn').classList.toggle('active', currentLanguage === 'en');
+            document.getElementById('langNeBtn').classList.toggle('active', currentLanguage === 'ne');
+        }
+
+        // Add data-page attribute to menu items for easier selection
+        document.addEventListener('DOMContentLoaded', function() {
+            init();
+        });
+    </script>
+</body>
+</html>
