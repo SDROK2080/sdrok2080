@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kapilvastu Multiple Campus, Taulihawa | SDROK</title>
+<style>
+  :root {
+    --maroon: #7b1c2e;
+    --gold: #c9a227;
+    --gold-light: #f0d878;
+    --cream: #fdf8f0;
+    --dark: #1a1209;
+    --text: #2d2010;
+    --muted: #6b5c3e;
+    --panel-bg: #ffffff;
+    --border: #e8d9b5;
+    --shadow: 0 8px 40px rgba(123,28,46,0.13);
+    --radius: 14px;
+    --transition: 0.38s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    line-height: 1.65;
+  }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    background: var(--maroon);
+    display: flex; align-items: center; gap: 1rem;
+    padding: .6rem 1.5rem;
+    flex-wrap: wrap;
+  }
+  .top-nav a { color: #fff; text-decoration: none; font-size: .85rem; opacity:.85; transition:.2s; }
+  .top-nav a:hover { opacity:1; }
+  .logo-brand { display:flex; align-items:center; gap:.5rem; margin-right:auto; }
+  .logo-brand img { width:36px; height:36px; border-radius:50%; object-fit:cover; }
+  .logo-brand span { color:#fff; font-weight:700; font-size:1.1rem; letter-spacing:.03em; }
+
+  /* Admission Nav Button */
+  .nav-admission-btn {
+    background: var(--gold) !important;
+    color: var(--dark) !important;
+    font-weight: 800 !important;
+    padding: .38rem 1rem !important;
+    border-radius: 20px !important;
+    opacity: 1 !important;
+    font-size: .82rem !important;
+    letter-spacing: .03em;
+    box-shadow: 0 2px 10px rgba(201,162,39,.4);
+    transition: box-shadow .2s, transform .2s !important;
+    display: flex; align-items: center; gap: .3rem;
+    white-space: nowrap;
+  }
+  .nav-admission-btn:hover {
+    box-shadow: 0 4px 18px rgba(201,162,39,.6) !important;
+    transform: translateY(-1px);
+  }
+
+  /* ── ADMISSION BANNER ── */
+  .admission-banner {
+    background: linear-gradient(135deg, #1a1209 0%, #3d0e16 50%, #7b1c2e 100%);
+    padding: 1.4rem 1.5rem;
+    display: flex; align-items: center; justify-content: center;
+    flex-wrap: wrap; gap: 1.2rem;
+    border-bottom: 3px solid var(--gold);
+    position: relative; overflow: hidden;
+  }
+  .admission-banner::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(201,162,39,.04) 40px,
+      rgba(201,162,39,.04) 80px
+    );
+  }
+  .admission-banner-text {
+    color: #fff; font-size: 1rem; font-weight: 600;
+    display: flex; align-items: center; gap: .6rem; position: relative; z-index:1;
+  }
+  .admission-banner-text span { color: var(--gold-light); }
+  .admission-banner-btn {
+    background: linear-gradient(135deg, var(--gold), #e8b820);
+    color: var(--dark);
+    font-weight: 800; font-size: .95rem;
+    padding: .7rem 2rem;
+    border-radius: 30px;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: .5rem;
+    box-shadow: 0 4px 20px rgba(201,162,39,.5);
+    transition: all .25s;
+    position: relative; z-index:1;
+    letter-spacing: .02em;
+    border: 2px solid rgba(255,255,255,.25);
+    white-space: nowrap;
+    -webkit-user-drag: none;
+    user-drag: none;
+  }
+  .admission-banner-btn:hover {
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 8px 30px rgba(201,162,39,.65);
+  }
+  .admission-pulse {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #4ade80;
+    display: inline-block;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{ box-shadow: 0 0 0 0 rgba(74,222,128,.6); }
+    50%{ box-shadow: 0 0 0 6px rgba(74,222,128,0); }
+  }
+
+  /* ── HERO SLIDER ── */
+  .hero { position:relative; overflow:hidden; height:320px; background:#1a1209; }
+  .slides { display:flex; transition: transform .7s cubic-bezier(.4,0,.2,1); height:100%; }
+  .slide {
+    min-width:100%; height:100%;
+    display:flex; align-items:center; justify-content:center;
+    flex-direction:column; text-align:center; padding:2rem;
+    position:relative; overflow:hidden;
+  }
+  .slide img {
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; opacity:.35;
+  }
+  .slide-content { position:relative; z-index:1; color:#fff; }
+  .slide-content h2 { font-size:clamp(1.3rem,3vw,2rem); font-weight:700; margin-bottom:.4rem; text-shadow:0 2px 8px rgba(0,0,0,.5); }
+  .slide-content p { font-size:.95rem; opacity:.85; text-shadow:0 1px 4px rgba(0,0,0,.5); }
+  .slider-btn {
+    position:absolute; top:50%; transform:translateY(-50%);
+    background:rgba(255,255,255,.18); border:none; color:#fff;
+    font-size:1.5rem; width:42px; height:42px; border-radius:50%;
+    cursor:pointer; z-index:10; transition:.2s; backdrop-filter:blur(4px);
+  }
+  .slider-btn:hover { background:rgba(255,255,255,.35); }
+  .slider-btn.prev { left:12px; }
+  .slider-btn.next { right:12px; }
+  .slider-dots { position:absolute; bottom:12px; left:50%; transform:translateX(-50%); display:flex; gap:6px; z-index:10; }
+  .dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.4); cursor:pointer; transition:.2s; }
+  .dot.active { background:#fff; }
+
+  /* ── CONTENT TYPE BAR ── */
+  .content-bar {
+    background: var(--maroon);
+    padding: .75rem 1rem;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem;
+  }
+  .content-bar-label { color:rgba(255,255,255,.55); font-size:.78rem; display:flex; align-items:center; padding: 0 .2rem; }
+  .ct-btn {
+    background: transparent;
+    border: 1.5px solid rgba(255,255,255,.3);
+    color: #fff;
+    padding: .35rem .85rem;
+    border-radius: 20px;
+    font-size: .8rem;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 500;
+    letter-spacing: .02em;
+    white-space: nowrap;
+  }
+  .ct-btn:hover, .ct-btn.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(201,162,39,.35);
+  }
+
+  /* ── CONTENT DRAWER ── */
+  .content-drawer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .5s cubic-bezier(0.4,0,0.2,1), opacity .4s ease;
+    opacity: 0;
+    background: linear-gradient(135deg, #fff 0%, #fdf8f0 100%);
+    border-bottom: 3px solid var(--gold);
+    box-shadow: 0 6px 30px rgba(123,28,46,.1);
+  }
+  .content-drawer.open {
+    max-height: 900px;
+    opacity: 1;
+  }
+  .drawer-inner {
+    padding: 2rem 1.5rem 2.5rem;
+    max-width: 960px; margin: 0 auto;
+  }
+  .drawer-header {
+    display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;
+    padding-bottom: 1rem; border-bottom: 2px solid var(--border);
+  }
+  .drawer-icon { font-size: 2.2rem; }
+  .drawer-title { font-size: 1.4rem; font-weight: 700; color: var(--maroon); }
+  .drawer-subtitle { font-size: .9rem; color: var(--muted); margin-top: .15rem; }
+  .drawer-close {
+    margin-left: auto; background: none; border: none; cursor: pointer;
+    font-size: 1.4rem; color: var(--muted); padding:.3rem .6rem; border-radius:8px; transition:.2s;
+  }
+  .drawer-close:hover { background: #fee; color: var(--maroon); }
+
+  /* resource cards grid */
+  .res-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .res-card {
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.1rem 1rem;
+    background: #fff;
+    transition: var(--transition);
+    display: flex; flex-direction: column; gap: .4rem;
+  }
+  .res-card:hover { box-shadow: var(--shadow); border-color: var(--gold); transform: translateY(-2px); }
+  .res-card-icon { font-size: 1.5rem; }
+  .res-card-title { font-weight: 700; font-size: .95rem; color: var(--maroon); }
+  .res-card-desc { font-size: .82rem; color: var(--muted); flex:1; }
+  .res-card-link {
+    display: inline-flex; align-items: center; gap: .3rem;
+    color: var(--maroon); font-size: .82rem; font-weight: 600;
+    text-decoration: none; margin-top: .3rem;
+    transition: color .2s;
+  }
+  .res-card-link:hover { color: var(--gold); }
+
+  /* highlight box */
+  .highlight-box {
+    background: linear-gradient(135deg, #fef9ec, #fff8e1);
+    border-left: 4px solid var(--gold);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.2rem;
+    font-size: .9rem; color: var(--text);
+  }
+  .highlight-box strong { color: var(--maroon); }
+
+  /* tags */
+  .tag-list { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .5rem; }
+  .tag {
+    background: #f5ede0; color: var(--maroon); border: 1px solid #e8d0b0;
+    padding: .22rem .7rem; border-radius: 14px; font-size: .75rem; font-weight: 600;
+  }
+
+  /* ── MAIN PORTAL LAYOUT ── */
+  .site-header {
+    background: linear-gradient(135deg, var(--maroon) 0%, #3d0e16 100%);
+    color: #fff; text-align: center; padding: 2.5rem 1.5rem 2rem;
+  }
+  .site-header h1 { font-size: clamp(1.6rem,4vw,2.4rem); font-weight:800; }
+  .site-header p { opacity:.8; margin-top:.4rem; font-size:.95rem; }
+  .badge-row { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-top:1.2rem; }
+  .badge {
+    background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+    border-radius: 8px; padding: .45rem 1rem; font-size: .82rem;
+    display: flex; flex-direction: column; align-items: center; gap: .1rem;
+  }
+  .badge strong { font-size: 1.2rem; color: var(--gold-light); }
+
+  /* Header admission CTA */
+  .header-admission-cta {
+    margin-top: 1.4rem;
+    display: flex; justify-content: center;
+  }
+  .header-admission-cta a {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: linear-gradient(135deg, var(--gold), #e8b820);
+    color: var(--dark); font-weight: 800; font-size: 1rem;
+    padding: .75rem 2.2rem; border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(0,0,0,.35);
+    transition: all .25s;
+    border: 2px solid rgba(255,255,255,.3);
+    letter-spacing: .02em;
+    -webkit-user-drag: none; user-drag: none;
+  }
+  .header-admission-cta a:hover {
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 8px 30px rgba(201,162,39,.55);
+  }
+
+  /* section headings */
+  .section { padding: 2.5rem 1.5rem; max-width: 1100px; margin: 0 auto; }
+  .section-title {
+    font-size: 1.5rem; font-weight: 800; color: var(--maroon);
+    margin-bottom: 1.5rem; display: flex; align-items: center; gap: .6rem;
+  }
+  .section-title::after {
+    content:''; flex:1; height:2px;
+    background: linear-gradient(to right, var(--gold), transparent);
+  }
+
+  /* about */
+  .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  @media(max-width:600px){ .about-grid { grid-template-columns:1fr; } }
+  .about-card {
+    background:#fff; border-radius:var(--radius); padding:1.3rem;
+    border:1.5px solid var(--border); display:flex; flex-direction:column; gap:.5rem;
+  }
+  .about-card h3 { color:var(--maroon); font-size:1rem; font-weight:700; }
+  .about-card p { font-size:.88rem; color:var(--muted); }
+
+  /* year tabs */
+  .year-tabs { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:1.5rem; }
+  .year-tab {
+    background:#fff; border:2px solid var(--border); border-radius:10px;
+    padding:.5rem 1.2rem; cursor:pointer; font-weight:700; font-size:.9rem;
+    color:var(--muted); transition:var(--transition);
+  }
+  .year-tab:hover, .year-tab.active {
+    background:var(--maroon); color:#fff; border-color:var(--maroon);
+    box-shadow:0 4px 12px rgba(123,28,46,.25);
+  }
+  .year-panel { display:none; }
+  .year-panel.active { display:block; animation: fadeIn .3s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+
+  /* subject cards */
+  .subject-group { margin-bottom:1.5rem; }
+  .subject-group-title {
+    font-size:.78rem; font-weight:700; color:var(--muted); text-transform:uppercase;
+    letter-spacing:.08em; margin-bottom:.6rem; display:flex; align-items:center; gap:.5rem;
+  }
+  .subject-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:.8rem; }
+  .subject-card {
+    background:#fff; border:1.5px solid var(--border); border-radius:var(--radius);
+    padding:1rem; transition:var(--transition);
+  }
+  .subject-card:hover { box-shadow:var(--shadow); border-color:var(--gold); }
+  .subject-code { font-size:.73rem; color:var(--muted); font-weight:600; letter-spacing:.04em; }
+  .subject-name { font-size:.95rem; font-weight:700; color:var(--text); margin:.2rem 0 .5rem; }
+  .subject-marks { font-size:.78rem; color:var(--maroon); font-weight:700; margin-bottom:.7rem; }
+  .btn-row { display:flex; gap:.4rem; flex-wrap:wrap; }
+  .sbtn {
+    font-size:.72rem; padding:.3rem .65rem; border-radius:8px; border:none;
+    cursor:pointer; font-weight:700; transition:.18s;
+    text-decoration:none; display:inline-block;
+  }
+  .sbtn-syl { background:#f0ece0; color:var(--maroon); }
+  .sbtn-notes { background:#e8f0e8; color:#2d6e2d; }
+  .sbtn-vid { background:#fde8e8; color:#b02020; }
+  .sbtn-qp { background:#e8eef8; color:#1a3a8a; }
+  .sbtn:hover { filter:brightness(.92); transform:translateY(-1px); }
+
+  /* faculty */
+  .faculty-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1.2rem; }
+  .faculty-card {
+    background:#fff; border:1.5px solid var(--border); border-radius:var(--radius);
+    overflow:hidden; transition:var(--transition); display:flex; flex-direction:column;
+  }
+  .faculty-card:hover { box-shadow:var(--shadow); border-color:var(--gold); transform:translateY(-3px); }
+  .faculty-photo-wrap {
+    width:100%; height:200px; position:relative; overflow:hidden;
+    background: linear-gradient(135deg, #5a0f1e 0%, #c9a227 100%);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .faculty-photo-wrap img {
+    width:100%; height:100%; object-fit:cover; object-position:top center;
+    position:absolute; inset:0;
+    transition: transform .4s ease;
+  }
+  .faculty-card:hover .faculty-photo-wrap img { transform:scale(1.04); }
+  .faculty-initials {
+    width:100px; height:100px; border-radius:50%;
+    background: rgba(255,255,255,.18); border:3px solid rgba(255,255,255,.5);
+    display:flex; align-items:center; justify-content:center;
+    font-size:2.4rem; font-weight:800; color:#fff; letter-spacing:-.02em;
+    backdrop-filter:blur(4px); position:relative; z-index:1;
+    font-family:'Segoe UI',system-ui,sans-serif;
+    text-shadow:0 2px 8px rgba(0,0,0,.3);
+  }
+  .faculty-tag {
+    position:absolute; top:10px; right:10px; z-index:2;
+    background:var(--gold); color:var(--dark); font-size:.68rem; font-weight:800;
+    padding:.2rem .55rem; border-radius:20px; letter-spacing:.04em; text-transform:uppercase;
+  }
+  .faculty-body { padding:1.1rem 1.1rem 1.2rem; flex:1; display:flex; flex-direction:column; gap:.25rem; }
+  .faculty-name { font-weight:800; color:var(--maroon); font-size:1rem; line-height:1.25; }
+  .faculty-title { font-size:.78rem; font-weight:700; color:var(--gold); letter-spacing:.02em; margin-bottom:.1rem; }
+  .faculty-role { font-size:.8rem; color:var(--muted); }
+  .faculty-spec { font-size:.75rem; color:var(--text); margin-top:.35rem; }
+  .faculty-spec strong { color:var(--maroon); }
+  .faculty-email {
+    font-size:.74rem; color:var(--maroon); margin-top:.5rem;
+    display:inline-flex; align-items:center; gap:.3rem; font-weight:600;
+    text-decoration:none; transition:.2s;
+  }
+  .faculty-email:hover { color:var(--gold); }
+  .faculty-divider { height:1px; background:var(--border); margin:.5rem 0; }
+
+  /* resources */
+  .resource-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:.85rem; }
+  .resource-card {
+    background:#fff; border:1.5px solid var(--border); border-radius:var(--radius);
+    padding:1.1rem; display:flex; flex-direction:column; gap:.4rem; transition:var(--transition);
+  }
+  .resource-card:hover { box-shadow:var(--shadow); border-color:var(--gold); transform:translateY(-2px); }
+  .resource-icon { font-size:1.5rem; }
+  .resource-title { font-weight:700; font-size:.9rem; color:var(--text); }
+  .resource-desc { font-size:.8rem; color:var(--muted); flex:1; }
+  .resource-link {
+    font-size:.8rem; font-weight:700; color:var(--maroon);
+    text-decoration:none; display:inline-flex; align-items:center; gap:.3rem; margin-top:.3rem;
+  }
+  .resource-link:hover { color:var(--gold); }
+
+  /* contact */
+  .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  @media(max-width:600px){ .contact-grid { grid-template-columns:1fr; } }
+  .contact-card { background:#fff; border:1.5px solid var(--border); border-radius:var(--radius); padding:1.5rem; }
+  .contact-card h3 { color:var(--maroon); margin-bottom:1rem; }
+  .contact-row { display:flex; align-items:flex-start; gap:.6rem; margin-bottom:.6rem; font-size:.88rem; }
+  .contact-row span:first-child { font-size:1rem; }
+
+  /* ── ADMISSION SECTION ── */
+  .admission-section {
+    background: linear-gradient(135deg, #fdf8f0 0%, #fff8e8 100%);
+    border-top: 3px solid var(--gold);
+    border-bottom: 3px solid var(--gold);
+  }
+  .admission-inner {
+    max-width: 1100px; margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+    display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: center;
+  }
+  @media(max-width:640px){ .admission-inner { grid-template-columns: 1fr; text-align:center; } }
+  .admission-details h2 {
+    font-size: 1.6rem; font-weight: 800; color: var(--maroon); margin-bottom: .5rem;
+  }
+  .admission-details p { color: var(--muted); font-size: .92rem; margin-bottom: .9rem; }
+  .admission-features {
+    display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1rem;
+  }
+  .admission-feature {
+    background: #fff; border: 1.5px solid var(--border);
+    border-radius: 8px; padding: .3rem .8rem;
+    font-size: .78rem; font-weight: 700; color: var(--maroon);
+    display: flex; align-items: center; gap: .3rem;
+  }
+  .admission-cta-wrap { display:flex; flex-direction:column; align-items:center; gap:.6rem; }
+  .admission-main-btn {
+    display: inline-flex; align-items: center; gap: .6rem;
+    background: linear-gradient(135deg, var(--maroon), #a02035);
+    color: #fff; font-weight: 800; font-size: 1.05rem;
+    padding: .9rem 2.4rem; border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 6px 24px rgba(123,28,46,.4);
+    transition: all .25s;
+    border: 2px solid rgba(255,255,255,.2);
+    letter-spacing: .02em;
+    white-space: nowrap;
+    -webkit-user-drag: none; user-drag: none;
+  }
+  .admission-main-btn:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 10px 36px rgba(123,28,46,.55);
+    background: linear-gradient(135deg, #9b1f32, var(--maroon));
+  }
+  .admission-note { font-size: .74rem; color: var(--muted); text-align:center; }
+
+  /* footer */
+  footer {
+    background: var(--dark); color: rgba(255,255,255,.7);
+    text-align:center; padding:2rem 1rem; font-size:.82rem; margin-top:2rem;
+  }
+  footer a { color: var(--gold-light); text-decoration:none; }
+  .footer-links { display:flex; gap:1.2rem; justify-content:center; flex-wrap:wrap; margin-bottom:.8rem; }
+  .footer-admission-btn {
+    display: inline-flex; align-items: center; gap: .4rem;
+    background: var(--gold); color: var(--dark) !important;
+    font-weight: 800; padding: .45rem 1.3rem; border-radius: 20px;
+    font-size: .82rem; text-decoration: none;
+    box-shadow: 0 2px 10px rgba(201,162,39,.3);
+    transition: box-shadow .2s, transform .2s;
+    -webkit-user-drag: none; user-drag: none;
+  }
+  .footer-admission-btn:hover { box-shadow: 0 4px 18px rgba(201,162,39,.5); transform:translateY(-1px); }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:#f5ede0; }
+  ::-webkit-scrollbar-thumb { background:var(--maroon); border-radius:3px; }
+
+  /* ── ANTI-COPY & ANTI-DOWNLOAD PROTECTIONS ── */
+  body {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+  }
+  img, video, audio, embed, object {
+    -webkit-user-drag: none !important;
+    user-drag: none !important;
+    pointer-events: auto;
+  }
+  a, a * {
+    -webkit-user-drag: none !important;
+    user-drag: none !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+  }
+  @media print {
+    html, body { display: none !important; }
+  }
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="logo-brand">
+    <img src="https://sdrok2080.github.io/sdrok2080/imagekmclogo02.jpeg" alt="KMC Logo" onerror="this.style.display='none'" draggable="false">
+    <span>KMC-HSSD</span>
+  </div>
+  <a href="https://sdrok2080.github.io/sdrok2080/home.txt" draggable="false">🏠 Home</a>
+  <a href="https://sdrok2080.github.io/sdrok2080/about.txt" draggable="false">📍 About</a>
+  <a href="https://sdrok2080.github.io/sdrok2080/services.txt" draggable="false">🛩️ Services</a>
+  <a href="https://docs.google.com/document/d/14k5JDVxs5NVuNHUI-sLR05vr33rRQ5RaIArlCwdsrLM/edit?tab=t.0" draggable="false">HSSD Notice Board</a>
+  <a href="https://sdrok2080.github.io/sdrok2080/KMC-HSSDAdmissionForm.html" class="nav-admission-btn" draggable="false">📋 Apply Now</a>
+</nav>
+
+<!-- ADMISSION BANNER -->
+<div class="admission-banner">
+  <div class="admission-banner-text">
+    <span class="admission-pulse"></span>
+    <span>🎓 Admissions Open!</span>
+    KMC Humanities &amp; Social Sciences — B.A. Program <span>2081/82</span>
+  </div>
+  <a href="https://sdrok2080.github.io/sdrok2080/KMC-HSSDAdmissionForm.html"
+     class="admission-banner-btn" draggable="false">
+    📋 Fill Admission Form &rarr;
+  </a>
+</div>
+
+<!-- HERO SLIDER -->
+<div class="hero">
+  <div class="slides" id="slides">
+    <div class="slide">
+      <img src="https://sdrok2080.github.io/sdrok2080/ImageI.jpg" alt="" draggable="false">
+      <div class="slide-content">
+        <h2>Kapilvastu Multiple Campus, Taulihawa</h2>
+        <p>"Advancing Communities Through Insight &amp; Innovation"</p>
+      </div>
+    </div>
+    <div class="slide">
+      <img src="https://sdrok2080.github.io/sdrok2080/Imageii.jpg" alt="" draggable="false">
+      <div class="slide-content">
+        <h2>Empowering Communities Through Knowledge</h2>
+        <p>Research · Case Studies · Policy Insight</p>
+      </div>
+    </div>
+    <div class="slide">
+      <img src="https://sdrok2080.github.io/sdrok2080/ImageIII.webp" alt="" draggable="false">
+      <div class="slide-content">
+        <h2>Archaeological &amp; Life Science Frontiers</h2>
+        <p>Unearthing the past. Shaping the future.</p>
+      </div>
+    </div>
+    <div class="slide">
+      <img src="https://sdrok2080.github.io/sdrok2080/ImageIV.png" alt="" draggable="false">
+      <div class="slide-content">
+        <h2>NeuroScience &amp; Human Science</h2>
+        <p>Understanding behavior. Advancing humanity.</p>
+      </div>
+    </div>
+    <div class="slide">
+      <img src="https://sdrok2080.github.io/sdrok2080/ImageVI.jpeg" alt="" draggable="false">
+      <div class="slide-content">
+        <h2>Message from the Head of KMC-HSSD</h2>
+        <p>Transforming Classroom Learning towards Social Impact</p>
+        <p>Navigate Our Dynamic Platform — Anytime, Anywhere</p>
+      </div>
+    </div>
+  </div>
+  <button class="slider-btn prev" onclick="moveSlide(-1)">&#8249;</button>
+  <button class="slider-btn next" onclick="moveSlide(1)">&#8250;</button>
+  <div class="slider-dots" id="dots"></div>
+</div>
+
+<!-- CONTENT TYPE BAR -->
+<div class="content-bar">
+  <button class="ct-btn" onclick="openDrawer('research')">📄 Research Article</button>
+  <span class="content-bar-label">|</span>
+  <button class="ct-btn" onclick="openDrawer('casestudy')">📋 Case Study</button>
+  <span class="content-bar-label">|</span>
+  <button class="ct-btn" onclick="openDrawer('interviews')">🎙️ Interviews</button>
+  <span class="content-bar-label">|</span>
+  <button class="ct-btn" onclick="openDrawer('seminars')">🎓 Seminars &amp; Webinars</button>
+  <span class="content-bar-label">|</span>
+  <button class="ct-btn" onclick="openDrawer('community')">🤝 Community Engagement</button>
+  <span class="content-bar-label">|</span>
+  <button class="ct-btn" onclick="openDrawer('policy')">📜 Policy Insight</button>
+  <span class="content-bar-label">|</span>
+  <button class="ct-btn" onclick="openDrawer('archaeology')">🏺 Archaeological Investigation</button>
+  <span class="content-bar-label">|</span>
+  <button class="ct-btn" onclick="openDrawer('lifescience')">🔬 Life Science</button>
+  <span class="content-bar-label">|</span>
+  <button class="ct-btn" onclick="openDrawer('neuro')">🧠 NeuroScience</button>
+</div>
+
+<!-- CONTENT DRAWERS -->
+<div class="content-drawer" id="drawer-research">
+  <div class="drawer-inner">
+    <div class="drawer-header">
+      <div class="drawer-icon">📄</div>
+      <div>
+        <div class="drawer-title">Research Articles</div>
+        <div class="drawer-subtitle">Peer-reviewed academic research aligned with TU Humanities &amp; Social Sciences curriculum</div>
+      </div>
+      <button class="drawer-close" onclick="closeDrawer('research')">✕</button>
+    </div>
+    <div class="highlight-box">
+      <strong>What are Research Articles?</strong> Scholarly papers presenting original findings, methodologies, and theoretical frameworks. Essential for B.A. III &amp; IV students preparing theses and developing academic writing skills.
+    </div>
+    <div class="res-grid">
+      <div class="res-card"><div class="res-card-icon">🔍</div><div class="res-card-title">Google Scholar</div><div class="res-card-desc">Search millions of peer-reviewed articles across sociology, economics, history, political science, and more — free access.</div><a href="https://scholar.google.com" target="_blank" class="res-card-link" draggable="false">Open Google Scholar →</a></div>
+      <div class="res-card"><div class="res-card-icon">📚</div><div class="res-card-title">ResearchGate</div><div class="res-card-desc">Access full-text research papers, request articles from authors, and connect with the academic community.</div><a href="https://www.researchgate.net" target="_blank" class="res-card-link" draggable="false">Browse ResearchGate →</a></div>
+      <div class="res-card"><div class="res-card-icon">🌐</div><div class="res-card-title">DOAJ — Open Access Journals</div><div class="res-card-desc">Directory of Open Access Journals covering humanities, social sciences, and interdisciplinary research fields.</div><a href="https://www.doaj.org" target="_blank" class="res-card-link" draggable="false">Explore DOAJ →</a></div>
+      <div class="res-card"><div class="res-card-icon">📖</div><div class="res-card-title">Project MUSE</div><div class="res-card-desc">Scholarly journals in humanities and social sciences with open-access content available without subscription.</div><a href="https://muse.jhu.edu" target="_blank" class="res-card-link" draggable="false">Visit Project MUSE →</a></div>
+      <div class="res-card"><div class="res-card-icon">🇳🇵</div><div class="res-card-title">Nepali Journals Online (NepJOL)</div><div class="res-card-desc">Repository of Nepali academic journals — ideal for TU-specific research, local studies, and Nepal-focused articles.</div><a href="https://www.nepjol.info" target="_blank" class="res-card-link" draggable="false">Browse NepJOL →</a></div>
+      <div class="res-card"><div class="res-card-icon">🎓</div><div class="res-card-title">TU Research Repository</div><div class="res-card-desc">Access Tribhuvan University theses, dissertations, and institutional research publications.</div><a href="https://www.tuioex.edu.np" target="_blank" class="res-card-link" draggable="false">Visit TU Portal →</a></div>
+    </div>
+    <div class="tag-list">
+      <span class="tag">Sociology</span><span class="tag">Economics</span><span class="tag">History</span>
+      <span class="tag">Political Science</span><span class="tag">Anthropology</span><span class="tag">Rural Development</span>
+      <span class="tag">Open Access</span><span class="tag">Thesis Writing</span>
+    </div>
+  </div>
+</div>
+
+<div class="content-drawer" id="drawer-casestudy">
+  <div class="drawer-inner">
+    <div class="drawer-header">
+      <div class="drawer-icon">📋</div>
+      <div><div class="drawer-title">Case Studies</div><div class="drawer-subtitle">Real-world examples and in-depth analyses relevant to Nepal and South Asia</div></div>
+      <button class="drawer-close" onclick="closeDrawer('casestudy')">✕</button>
+    </div>
+    <div class="highlight-box"><strong>Learning through Case Studies:</strong> Case studies bridge theory and practice. Kapilvastu's unique position as the birthplace of Lord Buddha makes it a rich subject for sociological, archaeological, and development case analyses.</div>
+    <div class="res-grid">
+      <div class="res-card"><div class="res-card-icon">🏘️</div><div class="res-card-title">Kapilvastu Rural Development Cases</div><div class="res-card-desc">Local case studies on community development, agriculture, and livelihoods in Lumbini Province — directly relevant to RDS courses.</div><a href="https://scholar.google.com/scholar?q=Kapilvastu+rural+development" target="_blank" class="res-card-link" draggable="false">Search Cases →</a></div>
+      <div class="res-card"><div class="res-card-icon">💰</div><div class="res-card-title">Nepal Economic Policy Cases</div><div class="res-card-desc">Case analyses of Nepalese macroeconomic policy, trade, and development — useful for Econ.424–428 students.</div><a href="https://scholar.google.com/scholar?q=Nepal+economic+policy+case+study" target="_blank" class="res-card-link" draggable="false">Find Cases →</a></div>
+      <div class="res-card"><div class="res-card-icon">🏛️</div><div class="res-card-title">Harvard Business School Cases (Free)</div><div class="res-card-desc">Some HBS case studies are available free of charge — explore social enterprise, development, and governance cases.</div><a href="https://www.hbs.edu/faculty/pages/research.aspx" target="_blank" class="res-card-link" draggable="false">Browse HBS →</a></div>
+      <div class="res-card"><div class="res-card-icon">🌏</div><div class="res-card-title">World Bank Nepal Cases</div><div class="res-card-desc">Development case studies and project evaluations focused on Nepal's socioeconomic transformation.</div><a href="https://www.worldbank.org/en/country/nepal" target="_blank" class="res-card-link" draggable="false">Visit World Bank →</a></div>
+      <div class="res-card"><div class="res-card-icon">🗳️</div><div class="res-card-title">Political Science Nepal Cases</div><div class="res-card-desc">Governance, federalism, and policy implementation case studies from Nepal's democratic transition.</div><a href="https://scholar.google.com/scholar?q=Nepal+political+governance+case+study" target="_blank" class="res-card-link" draggable="false">Search →</a></div>
+      <div class="res-card"><div class="res-card-icon">👥</div><div class="res-card-title">UCDL Academy Study Materials</div><div class="res-card-desc">Case study notes in English and Nepali aligned with TU syllabus for B.A. students.</div><a href="https://sdrok2080.github.io" target="_blank" class="res-card-link" draggable="false">Visit SDROK →</a></div>
+    </div>
+    <div class="tag-list"><span class="tag">Nepal Context</span><span class="tag">Lumbini Province</span><span class="tag">Development Studies</span><span class="tag">Governance</span><span class="tag">Fieldwork</span><span class="tag">B.A. IV Thesis</span></div>
+  </div>
+</div>
+
+<div class="content-drawer" id="drawer-interviews">
+  <div class="drawer-inner">
+    <div class="drawer-header">
+      <div class="drawer-icon">🎙️</div>
+      <div><div class="drawer-title">Interviews</div><div class="drawer-subtitle">Academic conversations, expert talks, and oral history resources</div></div>
+      <button class="drawer-close" onclick="closeDrawer('interviews')">✕</button>
+    </div>
+    <div class="highlight-box"><strong>Why Interviews Matter:</strong> Interviews are a core qualitative research method in anthropology, sociology, and rural development studies. Learning to conduct, transcribe, and analyze interviews is essential for B.A. III research methodology and B.A. IV dissertations.</div>
+    <div class="res-grid">
+      <div class="res-card"><div class="res-card-icon">🎥</div><div class="res-card-title">TED Talks — Scholar Interviews</div><div class="res-card-desc">In-depth conversations with leading academics in sociology, economics, history, and social sciences.</div><a href="https://www.ted.com/talks" target="_blank" class="res-card-link" draggable="false">Watch Talks →</a></div>
+      <div class="res-card"><div class="res-card-icon">🎙️</div><div class="res-card-title">LSE Public Lectures &amp; Events</div><div class="res-card-desc">Free recorded lectures and expert interviews from the London School of Economics on social science topics.</div><a href="https://www.lse.ac.uk/Events" target="_blank" class="res-card-link" draggable="false">Browse LSE →</a></div>
+      <div class="res-card"><div class="res-card-icon">📻</div><div class="res-card-title">BBC World Service — Expert Interviews</div><div class="res-card-desc">Podcast-style interviews with scholars and practitioners on world history, politics, and society.</div><a href="https://www.bbc.co.uk/worldservice" target="_blank" class="res-card-link" draggable="false">Listen →</a></div>
+      <div class="res-card"><div class="res-card-icon">📖</div><div class="res-card-title">Oral History Society</div><div class="res-card-desc">Resources on conducting oral history interviews — methodology, ethics, and archiving for community research.</div><a href="https://www.ohs.org.uk" target="_blank" class="res-card-link" draggable="false">Learn Oral History →</a></div>
+      <div class="res-card"><div class="res-card-icon">🧑‍🎓</div><div class="res-card-title">Qualitative Research Interview Guide</div><div class="res-card-desc">Free resources on semi-structured and structured interview design for social science research projects.</div><a href="https://scholar.google.com/scholar?q=qualitative+interview+methodology" target="_blank" class="res-card-link" draggable="false">Study Method →</a></div>
+      <div class="res-card"><div class="res-card-icon">▶️</div><div class="res-card-title">UCDL Academy — Bilingual Lectures</div><div class="res-card-desc">English and Nepali video sessions covering TU research methodology curriculum with practical examples.</div><a href="https://www.youtube.com/c/UCDLAcademy" target="_blank" class="res-card-link" draggable="false">Watch →</a></div>
+    </div>
+    <div class="tag-list"><span class="tag">Qualitative Research</span><span class="tag">Oral History</span><span class="tag">Field Methods</span><span class="tag">AN.425</span><span class="tag">C.RES.403</span><span class="tag">Ethnography</span></div>
+  </div>
+</div>
+
+<div class="content-drawer" id="drawer-seminars">
+  <div class="drawer-inner">
+    <div class="drawer-header">
+      <div class="drawer-icon">🎓</div>
+      <div><div class="drawer-title">Seminars &amp; Webinars</div><div class="drawer-subtitle">Live and recorded academic seminars, online workshops, and skill-building webinars</div></div>
+      <button class="drawer-close" onclick="closeDrawer('seminars')">✕</button>
+    </div>
+    <div class="highlight-box"><strong>Seminar Skills in Your Curriculum:</strong> Seminar preparation (C.SEM.403) and the final B.A. IV Seminar &amp; Viva Voce (100 marks) require you to present, discuss, and defend your research. Use these resources to build confidence.</div>
+    <div class="res-grid">
+      <div class="res-card"><div class="res-card-icon">💻</div><div class="res-card-title">Coursera — Free Audit Courses</div><div class="res-card-desc">University webinar-style courses from Yale, Michigan, and others covering humanities and social sciences — audit for free.</div><a href="https://www.coursera.org" target="_blank" class="res-card-link" draggable="false">Browse Courses →</a></div>
+      <div class="res-card"><div class="res-card-icon">🏛️</div><div class="res-card-title">edX — Open Online Courses</div><div class="res-card-desc">Free access to lectures and seminars from Harvard, MIT, and global universities on social science subjects.</div><a href="https://www.edx.org" target="_blank" class="res-card-link" draggable="false">Explore edX →</a></div>
+      <div class="res-card"><div class="res-card-icon">🎤</div><div class="res-card-title">YouTube — KMC &amp; TU Seminars</div><div class="res-card-desc">Search for seminar recordings from Tribhuvan University and Nepal-based campus academic events.</div><a href="https://www.youtube.com/results?search_query=Tribhuvan+University+seminar" target="_blank" class="res-card-link" draggable="false">Search YouTube →</a></div>
+      <div class="res-card"><div class="res-card-icon">🌐</div><div class="res-card-title">JSTOR Daily — Weekly Academic Reads</div><div class="res-card-desc">Free short-form academic essays accompanying JSTOR articles — great for seminar discussion preparation.</div><a href="https://daily.jstor.org" target="_blank" class="res-card-link" draggable="false">Read JSTOR Daily →</a></div>
+      <div class="res-card"><div class="res-card-icon">📝</div><div class="res-card-title">Seminar Presentation Skills Guide</div><div class="res-card-desc">Tips for structuring academic presentations, managing viva voce nervousness, and Q&amp;A strategies.</div><a href="https://scholar.google.com/scholar?q=academic+seminar+presentation+skills" target="_blank" class="res-card-link" draggable="false">Learn Skills →</a></div>
+      <div class="res-card"><div class="res-card-icon">🏅</div><div class="res-card-title">Khan Academy — Study Skills</div><div class="res-card-desc">Free modules on note-taking, academic discussion, and critical thinking for seminar participation.</div><a href="https://www.khanacademy.org" target="_blank" class="res-card-link" draggable="false">Start Learning →</a></div>
+    </div>
+    <div class="tag-list"><span class="tag">C.SEM.403</span><span class="tag">Viva Voce</span><span class="tag">Presentation Skills</span><span class="tag">B.A. IV Seminar</span><span class="tag">Online Learning</span><span class="tag">Workshop</span></div>
+  </div>
+</div>
+
+<div class="content-drawer" id="drawer-community">
+  <div class="drawer-inner">
+    <div class="drawer-header">
+      <div class="drawer-icon">🤝</div>
+      <div><div class="drawer-title">Community Engagement</div><div class="drawer-subtitle">Community-based learning, participatory research, and social outreach resources</div></div>
+      <button class="drawer-close" onclick="closeDrawer('community')">✕</button>
+    </div>
+    <div class="highlight-box"><strong>KMC's Community Mission:</strong> Located in historic Kapilvastu, KMC serves as a knowledge bridge between the university and local communities. Community engagement is central to Rural Development Studies and Sociology programs.</div>
+    <div class="res-grid">
+      <div class="res-card"><div class="res-card-icon">🏘️</div><div class="res-card-title">Community Development Nepal</div><div class="res-card-desc">Resources on participatory approaches in Nepalese villages — useful for RDS field projects and community case studies.</div><a href="https://scholar.google.com/scholar?q=community+development+Nepal+participatory" target="_blank" class="res-card-link" draggable="false">Explore →</a></div>
+      <div class="res-card"><div class="res-card-icon">🌱</div><div class="res-card-title">UNDP Nepal — Community Programs</div><div class="res-card-desc">Development program data, reports, and best practices for community engagement in rural Nepal.</div><a href="https://www.undp.org/nepal" target="_blank" class="res-card-link" draggable="false">Visit UNDP →</a></div>
+      <div class="res-card"><div class="res-card-icon">📊</div><div class="res-card-title">CBS Nepal — Census &amp; Community Data</div><div class="res-card-desc">Central Bureau of Statistics — official Nepal census and community-level statistical data for research.</div><a href="https://cbs.gov.np" target="_blank" class="res-card-link" draggable="false">Access Data →</a></div>
+      <div class="res-card"><div class="res-card-icon">🤲</div><div class="res-card-title">Volunteerism &amp; Service Learning</div><div class="res-card-desc">Frameworks for integrating community service with academic learning in social science programs.</div><a href="https://scholar.google.com/scholar?q=service+learning+social+science" target="_blank" class="res-card-link" draggable="false">Learn Framework →</a></div>
+      <div class="res-card"><div class="res-card-icon">🌿</div><div class="res-card-title">Lumbini Development Trust</div><div class="res-card-desc">Resources on heritage conservation and community development in the Lumbini–Kapilvastu region.</div><a href="https://www.lumbinidevtrust.gov.np" target="_blank" class="res-card-link" draggable="false">Visit LDT →</a></div>
+      <div class="res-card"><div class="res-card-icon">🎓</div><div class="res-card-title">UCDL Academy Platform</div><div class="res-card-desc">Bilingual educational content supporting community learners in Kapilvastu and across Lumbini Province.</div><a href="https://sdrok2080.github.io" target="_blank" class="res-card-link" draggable="false">Visit SDROK →</a></div>
+    </div>
+    <div class="tag-list"><span class="tag">RDS421–428</span><span class="tag">So.426</span><span class="tag">Participatory Research</span><span class="tag">Lumbini Province</span><span class="tag">Field Work</span><span class="tag">Local Governance</span></div>
+  </div>
+</div>
+
+<div class="content-drawer" id="drawer-policy">
+  <div class="drawer-inner">
+    <div class="drawer-header">
+      <div class="drawer-icon">📜</div>
+      <div><div class="drawer-title">Policy Insight</div><div class="drawer-subtitle">Public policy analysis, governance frameworks, and Nepal-specific policy documents</div></div>
+      <button class="drawer-close" onclick="closeDrawer('policy')">✕</button>
+    </div>
+    <div class="highlight-box"><strong>Policy in Your Curriculum:</strong> Nepalese Economy &amp; Policy Analysis (Econ.426), Nepalese Politics &amp; Governance (Pol.Sc.425), and International Relations (Pol.Sc.424) all require understanding of policy frameworks and analysis methods.</div>
+    <div class="res-grid">
+      <div class="res-card"><div class="res-card-icon">🇳🇵</div><div class="res-card-title">Nepal Government Portal</div><div class="res-card-desc">Official government policies, acts, regulations, and white papers from the Government of Nepal.</div><a href="https://www.nepal.gov.np" target="_blank" class="res-card-link" draggable="false">Visit Portal →</a></div>
+      <div class="res-card"><div class="res-card-icon">🌐</div><div class="res-card-title">NPC Nepal — National Planning</div><div class="res-card-desc">National Planning Commission of Nepal — periodic plans, development goals, and policy research documents.</div><a href="https://npc.gov.np" target="_blank" class="res-card-link" draggable="false">Access NPC →</a></div>
+      <div class="res-card"><div class="res-card-icon">📈</div><div class="res-card-title">IMF — Nepal Country Reports</div><div class="res-card-desc">International Monetary Fund country reports on Nepal's economy, fiscal policies, and development indicators.</div><a href="https://www.imf.org/en/Countries/NPL" target="_blank" class="res-card-link" draggable="false">Read Reports →</a></div>
+      <div class="res-card"><div class="res-card-icon">🏛️</div><div class="res-card-title">South Asian Policy Network</div><div class="res-card-desc">Policy research and briefs on South Asian regional issues relevant to Pol.Sc. and International Relations courses.</div><a href="https://scholar.google.com/scholar?q=South+Asia+policy+analysis" target="_blank" class="res-card-link" draggable="false">Browse Research →</a></div>
+      <div class="res-card"><div class="res-card-icon">📋</div><div class="res-card-title">Constitution of Nepal 2015</div><div class="res-card-desc">Full text of the Constitution of Nepal — fundamental document for Political Science and Governance courses.</div><a href="https://www.lawcommission.gov.np/en/archives/category/documents/prevailing-law/constitution" target="_blank" class="res-card-link" draggable="false">Read Constitution →</a></div>
+      <div class="res-card"><div class="res-card-icon">🌍</div><div class="res-card-title">SAARC Policy Documents</div><div class="res-card-desc">South Asian regional cooperation frameworks, agreements, and policy documents from SAARC Secretariat.</div><a href="https://saarc-sec.org" target="_blank" class="res-card-link" draggable="false">Visit SAARC →</a></div>
+    </div>
+    <div class="tag-list"><span class="tag">Pol.Sc.425</span><span class="tag">Econ.426</span><span class="tag">Pol.Sc.424</span><span class="tag">Governance</span><span class="tag">Federalism</span><span class="tag">Nepal Policy</span></div>
+  </div>
+</div>
+
+<div class="content-drawer" id="drawer-archaeology">
+  <div class="drawer-inner">
+    <div class="drawer-header">
+      <div class="drawer-icon">🏺</div>
+      <div><div class="drawer-title">Archaeological Investigation</div><div class="drawer-subtitle">Kapilvastu's ancient heritage — the birthplace of Lord Buddha and its ongoing excavations</div></div>
+      <button class="drawer-close" onclick="closeDrawer('archaeology')">✕</button>
+    </div>
+    <div class="highlight-box"><strong>Kapilvastu's Unique Archaeological Significance:</strong> KMC is situated in Kapilvastu — the ancient kingdom of Prince Siddhartha Gautama. Hist.426 (Ancient Kapilvastu &amp; Buddhist Heritage) makes this department uniquely positioned to engage with live archaeological research.</div>
+    <div class="res-grid">
+      <div class="res-card"><div class="res-card-icon">🕌</div><div class="res-card-title">Lumbini — UNESCO World Heritage</div><div class="res-card-desc">UNESCO site information on Lumbini's archaeological zones, ongoing excavations, and conservation efforts.</div><a href="https://whc.unesco.org/en/list/666/" target="_blank" class="res-card-link" draggable="false">Explore UNESCO →</a></div>
+      <div class="res-card"><div class="res-card-icon">🏛️</div><div class="res-card-title">Department of Archaeology Nepal</div><div class="res-card-desc">Official Nepal Department of Archaeology — excavation reports, protected sites, and heritage conservation data.</div><a href="https://www.archaeology.gov.np" target="_blank" class="res-card-link" draggable="false">Visit DoA →</a></div>
+      <div class="res-card"><div class="res-card-icon">📜</div><div class="res-card-title">Ancient Kapilvastu Research</div><div class="res-card-desc">Scholarly articles on Kapilvastu archaeological excavations, Buddhist heritage, and Terai region history.</div><a href="https://scholar.google.com/scholar?q=ancient+Kapilvastu+archaeology+Buddhist" target="_blank" class="res-card-link" draggable="false">Search Research →</a></div>
+      <div class="res-card"><div class="res-card-icon">🌏</div><div class="res-card-title">JSTOR — Ancient South Asia</div><div class="res-card-desc">Archaeological and historical journal articles on ancient South Asian civilizations and Buddhist sites.</div><a href="https://www.jstor.org/action/doBasicSearch?Query=Kapilvastu+archaeology" target="_blank" class="res-card-link" draggable="false">Search JSTOR →</a></div>
+      <div class="res-card"><div class="res-card-icon">🗺️</div><div class="res-card-title">Internet Archive — Ancient Texts</div><div class="res-card-desc">Free access to digitized ancient manuscripts, colonial-era reports, and early archaeology surveys of Nepal.</div><a href="https://archive.org/search?query=Kapilvastu" target="_blank" class="res-card-link" draggable="false">Browse Archive →</a></div>
+      <div class="res-card"><div class="res-card-icon">🎥</div><div class="res-card-title">Documentary — Archaeology of Lumbini</div><div class="res-card-desc">YouTube documentaries on the archaeology of Kapilvastu, Lumbini excavations, and Buddhist heritage sites.</div><a href="https://www.youtube.com/results?search_query=Kapilvastu+Lumbini+archaeology+documentary" target="_blank" class="res-card-link" draggable="false">Watch Documentaries →</a></div>
+    </div>
+    <div class="tag-list"><span class="tag">Hist.426</span><span class="tag">Hist.421</span><span class="tag">Ancient Nepal</span><span class="tag">Buddhist Heritage</span><span class="tag">UNESCO</span><span class="tag">Lumbini Province</span></div>
+  </div>
+</div>
+
+<div class="content-drawer" id="drawer-lifescience">
+  <div class="drawer-inner">
+    <div class="drawer-header">
+      <div class="drawer-icon">🔬</div>
+      <div><div class="drawer-title">Life Science</div><div class="drawer-subtitle">Biological and life science resources intersecting with social sciences, public health, and environment</div></div>
+      <button class="drawer-close" onclick="closeDrawer('lifescience')">✕</button>
+    </div>
+    <div class="highlight-box"><strong>Life Sciences &amp; Social Science Intersection:</strong> Understanding biological and ecological systems enriches anthropological research, rural development (environment &amp; resources), and public health policy discussions in the TU B.A. curriculum.</div>
+    <div class="res-grid">
+      <div class="res-card"><div class="res-card-icon">🧬</div><div class="res-card-title">PubMed Central — Open Access</div><div class="res-card-desc">Free life science and biomedical research articles — especially useful for anthropological and health-related research.</div><a href="https://www.ncbi.nlm.nih.gov/pmc/" target="_blank" class="res-card-link" draggable="false">Browse PubMed →</a></div>
+      <div class="res-card"><div class="res-card-icon">🌿</div><div class="res-card-title">Biodiversity Nepal</div><div class="res-card-desc">Nepal's biodiversity data and environmental research — relevant for rural development and environment studies (RDS424).</div><a href="https://www.biodiversity.gov.np" target="_blank" class="res-card-link" draggable="false">Explore →</a></div>
+      <div class="res-card"><div class="res-card-icon">🌡️</div><div class="res-card-title">WHO — Nepal Public Health</div><div class="res-card-desc">World Health Organization Nepal data on public health, disease, nutrition, and community health programs.</div><a href="https://www.who.int/nepal" target="_blank" class="res-card-link" draggable="false">Visit WHO Nepal →</a></div>
+      <div class="res-card"><div class="res-card-icon">🌾</div><div class="res-card-title">FAO — Rural Agriculture &amp; Food</div><div class="res-card-desc">Food and Agriculture Organization resources on life science applications in Nepal's rural agricultural economy.</div><a href="https://www.fao.org/nepal/en/" target="_blank" class="res-card-link" draggable="false">Visit FAO →</a></div>
+      <div class="res-card"><div class="res-card-icon">🧪</div><div class="res-card-title">Khan Academy — Biology</div><div class="res-card-desc">Free foundational biology lessons covering cells, genetics, ecology, and evolution for interdisciplinary understanding.</div><a href="https://www.khanacademy.org/science/biology" target="_blank" class="res-card-link" draggable="false">Start Learning →</a></div>
+      <div class="res-card"><div class="res-card-icon">🎓</div><div class="res-card-title">OpenStax Biology</div><div class="res-card-desc">Free peer-reviewed biology textbooks covering life sciences concepts for social science students.</div><a href="https://openstax.org/subjects/science" target="_blank" class="res-card-link" draggable="false">Read Free →</a></div>
+    </div>
+    <div class="tag-list"><span class="tag">RDS424</span><span class="tag">AN.421</span><span class="tag">Public Health</span><span class="tag">Environment</span><span class="tag">Ecology</span><span class="tag">Interdisciplinary</span></div>
+  </div>
+</div>
+
+<div class="content-drawer" id="drawer-neuro">
+  <div class="drawer-inner">
+    <div class="drawer-header">
+      <div class="drawer-icon">🧠</div>
+      <div><div class="drawer-title">NeuroScience</div><div class="drawer-subtitle">Understanding brain, behavior, and human cognition through a social science lens</div></div>
+      <button class="drawer-close" onclick="closeDrawer('neuro')">✕</button>
+    </div>
+    <div class="highlight-box"><strong>Neuroscience in Humanities:</strong> Contemporary social science increasingly integrates neuroscience insights — in cognitive anthropology, behavioral economics, political psychology, and educational research. These resources bridge brain science with your B.A. studies.</div>
+    <div class="res-grid">
+      <div class="res-card"><div class="res-card-icon">🧠</div><div class="res-card-title">Crash Course Psychology</div><div class="res-card-desc">Free YouTube series covering neuroscience basics, human behavior, and psychological research — ideal for social science students.</div><a href="https://www.youtube.com/playlist?list=PL8dPuuaLjXtOPRKzVLY0jJY-uHOH9KVU6" target="_blank" class="res-card-link" draggable="false">Watch Series →</a></div>
+      <div class="res-card"><div class="res-card-icon">🎓</div><div class="res-card-title">Coursera — Behavioral Neuroscience</div><div class="res-card-desc">Free audit of university courses on the neuroscience of decision-making, social behavior, and cognition.</div><a href="https://www.coursera.org/search?query=neuroscience" target="_blank" class="res-card-link" draggable="false">Browse Courses →</a></div>
+      <div class="res-card"><div class="res-card-icon">📖</div><div class="res-card-title">PubMed — Social Neuroscience</div><div class="res-card-desc">Open-access research on social neuroscience, cognitive anthropology, and brain-behavior relationships.</div><a href="https://pubmed.ncbi.nlm.nih.gov/?term=social+neuroscience" target="_blank" class="res-card-link" draggable="false">Search PubMed →</a></div>
+      <div class="res-card"><div class="res-card-icon">🎤</div><div class="res-card-title">TED — Brain &amp; Behavior Talks</div><div class="res-card-desc">Curated TED talks from neuroscientists on memory, learning, emotion, and human social behavior.</div><a href="https://www.ted.com/topics/brain" target="_blank" class="res-card-link" draggable="false">Watch TED →</a></div>
+      <div class="res-card"><div class="res-card-icon">💡</div><div class="res-card-title">Behavioral Economics Resources</div><div class="res-card-desc">How neuroscience informs economic decision-making — directly relevant to Econ.421–428 and research methodology.</div><a href="https://scholar.google.com/scholar?q=behavioral+economics+neuroscience" target="_blank" class="res-card-link" draggable="false">Explore →</a></div>
+      <div class="res-card"><div class="res-card-icon">🌐</div><div class="res-card-title">Khan Academy — Brain &amp; Neurons</div><div class="res-card-desc">Clear, free introductory content on how the brain works — perfect starting point for social science students.</div><a href="https://www.khanacademy.org/science/health-and-medicine/nervous-system-and-sensory-infor" target="_blank" class="res-card-link" draggable="false">Start Learning →</a></div>
+    </div>
+    <div class="tag-list"><span class="tag">Behavioral Science</span><span class="tag">Cognitive Anthropology</span><span class="tag">Psychology</span><span class="tag">Econ.421</span><span class="tag">AN.421</span><span class="tag">Research Methods</span></div>
+  </div>
+</div>
+
+<!-- SCROLLING TICKER -->
+<div class="scrolling-container">
+  <div class="scrolling-text">
+    Welcome To Kapilvastu Multiple Campus (KMC-HSSD), Taulihawa — Education, Research, Innovation, Technology, Entrepreneurship, Impact &amp; Sustainable Development...
+  </div>
+</div>
+
+<style>
+.scrolling-container { width:100%; overflow:hidden; white-space:nowrap; background:#bf3434; padding:12px 0; }
+.scrolling-text { display:inline-block; padding-left:100%; animation:scroll-left 20s linear infinite; font-size:35px; font-weight:600; }
+@keyframes scroll-left { 0%{transform:translateX(0)} 100%{transform:translateX(-100%)} }
+</style>
+
+<!-- SITE HEADER -->
+<div class="site-header" id="home">
+  <h1>KMC Humanities &amp; Social Science</h1>
+  <p>Kapilvastu Multiple Campus · Taulihawa · Affiliated to Tribhuvan University</p>
+  <p style="font-size:.82rem;opacity:.6;margin-top:.3rem">📍 Taulihawa, Kapilvastu, Lumbini Province, Nepal</p>
+  <div class="badge-row">
+    <div class="badge"><strong>8+</strong><span>Major Subjects</span></div>
+    <div class="badge"><strong>4</strong><span>Years Program</span></div>
+    <div class="badge"><strong>2,000</strong><span>Total Marks</span></div>
+    <div class="badge"><strong>TU</strong><span>Affiliated</span></div>
+  </div>
+  <!-- Admission CTA inside header -->
+  <div class="header-admission-cta">
+    <a href="https://sdrok2080.github.io/sdrok2080/KMC-HSSDAdmissionForm.html" draggable="false">
+      📋 Apply for Admission — Fill the Form
+    </a>
+  </div>
+</div>
+
+<!-- ═══ ADMISSION SECTION ═══ -->
+<div class="admission-section" id="admission">
+  <div class="admission-inner">
+    <div class="admission-details">
+      <h2>🎓 Admissions Open — B.A. Program 2081/82</h2>
+      <p>Join the Department of Humanities &amp; Social Sciences at Kapilvastu Multiple Campus, Taulihawa. Begin your four-year journey in Sociology, Economics, History, Political Science, English, Nepali, Anthropology, or Rural Development Studies — affiliated to Tribhuvan University.</p>
+      <div class="admission-features">
+        <div class="admission-feature">✅ TU Affiliated</div>
+        <div class="admission-feature">📚 4-Year B.A. Program</div>
+        <div class="admission-feature">🌅 Morning &amp; Evening Batches</div>
+        <div class="admission-feature">🏛️ 8+ Major Subjects</div>
+        <div class="admission-feature">📍 Taulihawa, Kapilvastu</div>
+        <div class="admission-feature">🎓 2,000 Total Marks</div>
+      </div>
+    </div>
+    <div class="admission-cta-wrap">
+      <a href="https://sdrok2080.github.io/sdrok2080/KMC-HSSDAdmissionForm.html"
+         class="admission-main-btn" draggable="false">
+        📋 Fill Admission Form
+      </a>
+      <div class="admission-note">🟢 Admissions currently open &nbsp;|&nbsp; Free to apply</div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="section" id="about">
+  <div class="section-title">📍 About The Department</div>
+  <p style="margin-bottom:1.2rem;color:var(--muted);font-size:.93rem;">
+    The Department of Humanity &amp; Social Science at Kapilvastu Multiple Campus is committed to academic excellence and holistic student development. Located in the historic region of Taulihawa — the birthplace of Lord Buddha — our department offers a rich academic environment with comprehensive B.A. programs across four years (2,000 marks total) under Tribhuvan University curriculum.
+  </p>
+  <div class="about-grid">
+    <div class="about-card"><h3>🎯 Mission</h3><p>To foster critical thinking, research skills, and a deep understanding of human society, culture, and development through quality higher education.</p></div>
+    <div class="about-card"><h3>📍 Location Advantage</h3><p>Situated in ancient Kapilvastu — birthplace of Lord Buddha — providing unparalleled access to archaeological and cultural heritage study sites.</p></div>
+    <div class="about-card"><h3>📚 Comprehensive Curriculum</h3><p>Four-year B.A. program covering Sociology, Economics, History, Political Science, English, Nepali, Anthropology, and Rural Development Studies.</p></div>
+    <div class="about-card"><h3>🌐 Digital Learning</h3><p>Supported by UCDL Academy's bilingual (English/Nepali) digital platform — SDROK — making quality education accessible beyond campus boundaries.</p></div>
+  </div>
+</div>
+
+<!-- CURRICULUM -->
+<div class="section" id="curriculum">
+  <div class="section-title">📖 Complete B.A. Curriculum</div>
+  <p style="margin-bottom:1.2rem;color:var(--muted);font-size:.88rem;">Click <strong>Syllabus</strong>, <strong>Notes</strong>, <strong>Videos</strong>, or <strong>Q. Papers</strong> on any subject to access learning content.</p>
+  <div class="year-tabs">
+    <button class="year-tab active" onclick="showYear('y1',this)">B.A. I — Year 1</button>
+    <button class="year-tab" onclick="showYear('y2',this)">B.A. II — Year 2</button>
+    <button class="year-tab" onclick="showYear('y3',this)">B.A. III — Year 3</button>
+    <button class="year-tab" onclick="showYear('y4',this)">B.A. IV — Year 4</button>
+  </div>
+
+  <!-- YEAR 1 -->
+  <div class="year-panel active" id="y1">
+    <div class="subject-group">
+      <div class="subject-group-title">📝 A. Compulsory Subject</div>
+      <div class="subject-grid">
+        <div class="subject-card">
+          <div class="subject-code">C.Eng.401</div>
+          <div class="subject-name">Reading &amp; Writing in English</div>
+          <div class="subject-marks">70 + 30 Full Marks</div>
+          <div class="btn-row">
+            <a class="sbtn sbtn-syl" href="https://pmcpokhara.edu.np/wp-content/uploads/2023/07/DF4.pdf" target="_blank" draggable="false">📄 Syllabus</a>
+            <a class="sbtn sbtn-notes" href="https://sdrok2080.github.io" target="_blank" draggable="false">📖 Notes</a>
+            <a class="sbtn sbtn-vid" href="https://www.youtube.com/watch?v=OQDG3_TF9gM&list=PLk6lrrN3WgCb-213o6brklmPnbj36lf6l" target="_blank" draggable="false">🎥 Videos</a>
+            <a class="sbtn sbtn-qp" href="https://docs.google.com/document/d/1XhOBqaVCJbyFGVX2Aici1ZRaQj_Aery5uYbWne_u0zU/edit?tab=t.0" target="_blank" draggable="false">📊 Q.Papers</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="subject-group">
+      <div class="subject-group-title">🎓 B. Major Subjects (Choose 3–4)</div>
+      <div class="subject-grid" id="y1-majors"></div>
+    </div>
+  </div>
+
+  <!-- YEAR 2 -->
+  <div class="year-panel" id="y2">
+    <div class="subject-group">
+      <div class="subject-group-title">📝 A. Compulsory Subject</div>
+      <div class="subject-grid">
+        <div class="subject-card">
+          <div class="subject-code">C.Nep.402</div>
+          <div class="subject-name">नेपाली भाषा तथा साहित्य (अनिवार्य)</div>
+          <div class="subject-marks">70 + 30 पूर्णाङ्क</div>
+          <div class="btn-row">
+            <a class="sbtn sbtn-syl" href="https://www.tuioex.edu.np" target="_blank" draggable="false">📄 पाठ्यक्रम</a>
+            <a class="sbtn sbtn-notes" href="https://sdrok2080.github.io" target="_blank" draggable="false">📖 नोट्स</a>
+            <a class="sbtn sbtn-vid" href="https://www.youtube.com/c/UCDLAcademy" target="_blank" draggable="false">🎥 भिडियो</a>
+            <a class="sbtn sbtn-qp" href="https://www.tuioex.edu.np" target="_blank" draggable="false">📊 प्रश्नपत्र</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="subject-group">
+      <div class="subject-group-title">🎓 B. Major Subjects — Second Year</div>
+      <div class="subject-grid" id="y2-majors"></div>
+    </div>
+  </div>
+
+  <!-- YEAR 3 -->
+  <div class="year-panel" id="y3">
+    <div class="subject-group">
+      <div class="subject-group-title">📝 A. Compulsory &amp; Research Subjects</div>
+      <div class="subject-grid">
+        <div class="subject-card"><div class="subject-code">C.Eng.403</div><div class="subject-name">Advanced English &amp; Communication</div><div class="subject-marks">70 + 30 Full Marks</div><div class="btn-row"><a class="sbtn sbtn-syl" href="https://www.tuioex.edu.np" target="_blank" draggable="false">📄 Syllabus</a><a class="sbtn sbtn-notes" href="https://sdrok2080.github.io" target="_blank" draggable="false">📖 Notes</a><a class="sbtn sbtn-vid" href="https://www.youtube.com/c/UCDLAcademy" target="_blank" draggable="false">🎥 Videos</a><a class="sbtn sbtn-qp" href="https://www.tuioex.edu.np" target="_blank" draggable="false">📊 Q.Papers</a></div></div>
+        <div class="subject-card"><div class="subject-code">C.RES.403</div><div class="subject-name">Research Methods &amp; Statistics</div><div class="subject-marks">70 + 30 Full Marks</div><div class="btn-row"><a class="sbtn sbtn-syl" href="https://www.tuioex.edu.np" target="_blank" draggable="false">📄 Syllabus</a><a class="sbtn sbtn-notes" href="https://sdrok2080.github.io" target="_blank" draggable="false">📖 Notes</a><a class="sbtn sbtn-vid" href="https://www.youtube.com/c/UCDLAcademy" target="_blank" draggable="false">🎥 Videos</a><a class="sbtn sbtn-qp" href="https://www.tuioex.edu.np" target="_blank" draggable="false">📊 Q.Papers</a></div></div>
+        <div class="subject-card"><div class="subject-code">C.SEM.403</div><div class="subject-name">Seminar Preparation &amp; Presentation Skills</div><div class="subject-marks">70 + 30 Full Marks</div><div class="btn-row"><a class="sbtn sbtn-syl" href="https://www.tuioex.edu.np" target="_blank" draggable="false">📄 Syllabus</a><a class="sbtn sbtn-notes" href="https://sdrok2080.github.io" target="_blank" draggable="false">📖 Notes</a><a class="sbtn sbtn-vid" href="https://www.youtube.com/c/UCDLAcademy" target="_blank" draggable="false">🎥 Videos</a><a class="sbtn sbtn-qp" href="https://www.tuioex.edu.np" target="_blank" draggable="false">📊 Q.Papers</a></div></div>
+      </div>
+    </div>
+    <div class="subject-group">
+      <div class="subject-group-title">🎓 B. Major Subjects — Third Year (Specialisation)</div>
+      <div class="subject-grid" id="y3-majors"></div>
+    </div>
+  </div>
+
+  <!-- YEAR 4 -->
+  <div class="year-panel" id="y4">
+    <div class="subject-group">
+      <div class="subject-group-title">📚 A. Capstone Components</div>
+      <div class="subject-grid">
+        <div class="subject-card"><div class="subject-code">THESIS</div><div class="subject-name">Research Thesis / Dissertation</div><div class="subject-marks">200 Full Marks</div><div class="btn-row"><a class="sbtn sbtn-syl" href="https://www.tuioex.edu.np" target="_blank" draggable="false">📄 Guidelines</a><a class="sbtn sbtn-notes" href="https://sdrok2080.github.io" target="_blank" draggable="false">📖 Resources</a></div></div>
+        <div class="subject-card"><div class="subject-code">SEMINAR</div><div class="subject-name">Seminar &amp; Viva Voce</div><div class="subject-marks">100 Full Marks</div><div class="btn-row"><a class="sbtn sbtn-syl" href="https://www.tuioex.edu.np" target="_blank" draggable="false">📄 Format</a><a class="sbtn sbtn-notes" href="https://sdrok2080.github.io" target="_blank" draggable="false">📖 Tips</a></div></div>
+      </div>
+    </div>
+    <div class="subject-group">
+      <div class="subject-group-title">🎓 B. Final Major Subjects</div>
+      <div class="subject-grid" id="y4-majors"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MATERIALS -->
+<div style="background:#fff; border-top:3px solid var(--border);">
+<div class="section" id="materials">
+  <div class="section-title">📚 Learning Materials &amp; Resources</div>
+  <div class="resource-grid">
+    <div class="resource-card"><div class="resource-icon">📋</div><div class="resource-title">TU Official Syllabi</div><div class="resource-desc">Official TU-approved syllabi for all B.A. subjects across four years.</div><a class="resource-link" href="https://www.tuioex.edu.np" target="_blank" draggable="false">Visit TU Portal →</a></div>
+    <div class="resource-card"><div class="resource-icon">📖</div><div class="resource-title">Free E-Books &amp; Textbooks</div><div class="resource-desc">OpenStax, Project Gutenberg, and Open Textbook Library — free peer-reviewed academic books.</div><a class="resource-link" href="https://openstax.org" target="_blank" draggable="false">Browse OpenStax →</a></div>
+    <div class="resource-card"><div class="resource-icon">🎥</div><div class="resource-title">UCDL Academy Videos</div><div class="resource-desc">Free bilingual (English/Nepali) video lectures aligned with TU curriculum.</div><a class="resource-link" href="https://www.youtube.com/c/UCDLAcademy" target="_blank" draggable="false">Watch Videos →</a></div>
+    <div class="resource-card"><div class="resource-icon">📝</div><div class="resource-title">Google Scholar</div><div class="resource-desc">Peer-reviewed research papers, theses, and academic articles — free of cost.</div><a class="resource-link" href="https://scholar.google.com" target="_blank" draggable="false">Search Scholar →</a></div>
+    <div class="resource-card"><div class="resource-icon">📊</div><div class="resource-title">Past Question Papers</div><div class="resource-desc">5-year archive of TU and KMC examination papers — available through department office.</div><a class="resource-link" href="#contact" draggable="false">Request Papers →</a></div>
+    <div class="resource-card"><div class="resource-icon">🔗</div><div class="resource-title">Open Access Databases</div><div class="resource-desc">JSTOR Daily, Project MUSE, DOAJ, and open repositories for humanities research.</div><a class="resource-link" href="https://www.doaj.org" target="_blank" draggable="false">Explore DOAJ →</a></div>
+    <div class="resource-card"><div class="resource-icon">🎓</div><div class="resource-title">Coursera &amp; edX</div><div class="resource-desc">Free audit of university courses in history, economics, political science, sociology.</div><a class="resource-link" href="https://www.coursera.org" target="_blank" draggable="false">Browse Courses →</a></div>
+    <div class="resource-card"><div class="resource-icon">🌐</div><div class="resource-title">Khan Academy</div><div class="resource-desc">Free educational videos on social sciences, economics, history, and critical thinking.</div><a class="resource-link" href="https://www.khanacademy.org" target="_blank" draggable="false">Learn Now →</a></div>
+    <div class="resource-card"><div class="resource-icon">📚</div><div class="resource-title">Crash Course Humanities</div><div class="resource-desc">Free YouTube series covering world history, literature, sociology, and philosophy.</div><a class="resource-link" href="https://www.youtube.com/crashcourse" target="_blank" draggable="false">Watch Series →</a></div>
+    <div class="resource-card"><div class="resource-icon">💡</div><div class="resource-title">TED Talks &amp; TED-Ed</div><div class="resource-desc">Curated talks and animations on cultural, social, historical, and contemporary topics.</div><a class="resource-link" href="https://www.ted.com" target="_blank" draggable="false">Explore TED →</a></div>
+    <div class="resource-card"><div class="resource-icon">📖</div><div class="resource-title">SDROK Platform</div><div class="resource-desc">UCDL Academy's bilingual digital learning platform with structured courses and materials.</div><a class="resource-link" href="https://sdrok2080.github.io" target="_blank" draggable="false">Visit SDROK →</a></div>
+    <div class="resource-card"><div class="resource-icon">🔍</div><div class="resource-title">KMC Library Resources</div><div class="resource-desc">Institutional access to JSTOR, premium databases, and departmental resource collection.</div><a class="resource-link" href="#contact" draggable="false">Library Access →</a></div>
+  </div>
+</div>
+</div>
+
+<!-- FACULTY -->
+<div class="section" id="faculty">
+  <div class="section-title">👨‍🏫 Faculty Members</div>
+  <p style="margin-bottom:1.4rem;font-size:.85rem;color:var(--muted);">Dedicated educators and researchers committed to excellence in the Humanities and Social Sciences</p>
+  <div class="faculty-grid">
+
+    <div class="faculty-card">
+      <div class="faculty-photo-wrap">
+        <img src="https://sdrok2080.github.io/sdrok2080/image08.jpeg" alt="Bishnu Singh Rayamajhi" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" draggable="false">
+        <div class="faculty-initials" style="display:none;">BR</div>
+        <span class="faculty-tag">HOD</span>
+      </div>
+      <div class="faculty-body">
+        <a href="https://docs.google.com/document/d/1U9nY1J9zXGf0kAc-SD-6eZSFaoBwdtuvuDrrPy_YjyY/edit?tab=t.0#heading=h.yddi7sw8gowx" target="_blank" rel="noopener noreferrer" style="text-decoration:none;color:inherit;" draggable="false">
+          <div class="faculty-name">Bishnu Singh Rayamajhi</div>
+        </a>
+        <div class="faculty-title">Head of Department</div>
+        <div class="faculty-role">Mathematics Lecturer &amp; HSS Department Head</div>
+        <div class="faculty-divider"></div>
+        <div class="faculty-spec"><strong>Specialization:</strong> Mathematics and Educational Technology</div>
+        <div class="faculty-spec"><strong>Founder:</strong> UCDL Academy (bilingual educational platform)</div>
+        <div class="faculty-spec"><strong>Research:</strong> Mathematical Technology &amp; ICT Integration</div>
+        <a class="faculty-email" href="mailto:bbsrm4591@gmail.com" draggable="false">📧 bbsrm4591@gmail.com</a>
+        <a href="https://docs.google.com/document/d/1U9nY1J9zXGf0kAc-SD-6eZSFaoBwdtuvuDrrPy_YjyY/edit?tab=t.0#heading=h.yddi7sw8gowx" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:10px;padding:6px 14px;background:#2563eb;color:#fff;border-radius:6px;text-decoration:none;font-size:.85rem;font-weight:500;" draggable="false">📄 View Profile</a>
+      </div>
+    </div>
+
+    <div class="faculty-card">
+      <div class="faculty-photo-wrap">
+        <img src="https://sdrok2080.github.io/sdrok2080/ImageNareshKhanal.jpeg" alt="Naresh Khanal" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" draggable="false">
+        <div class="faculty-initials" style="display:none;">NK</div>
+        <span class="faculty-tag">Lecturer</span>
+      </div>
+      <div class="faculty-body">
+        <div class="faculty-name">Naresh Khanal</div>
+        <div class="faculty-title">Statistics &amp; Economic Studies</div>
+        <div class="faculty-role">Kapilvastu Multiple Campus (KMC), Taulihawa</div>
+        <div class="faculty-divider"></div>
+        <div class="faculty-spec"><strong>Specialization:</strong> Applied Statistics &amp; Microeconomics, Social Change</div>
+        <div class="faculty-spec"><strong>Research:</strong> Research Findings and Interpretation</div>
+        <a class="faculty-email" href="mailto:Nareshkhanal1411@gmail.com" draggable="false">📧 Nareshkhanal1411@gmail.com</a>
+      </div>
+    </div>
+
+    <div class="faculty-card">
+      <div class="faculty-photo-wrap">
+        <img src="https://sdrok2080.github.io/sdrok2080/image15.jpeg" alt="Giriraj Pokhrel" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" draggable="false">
+        <div class="faculty-initials" style="display:none;">GP</div>
+        <span class="faculty-tag">Lecturer</span>
+      </div>
+      <div class="faculty-body">
+        <div class="faculty-name">Giriraj Pokhrel</div>
+        <div class="faculty-title">English Lecturer</div>
+        <div class="faculty-role">Kapilvastu Multiple Campus (KMC), Taulihawa</div>
+        <div class="faculty-divider"></div>
+        <div class="faculty-spec"><strong>Specialization:</strong> ELT, Applied Linguistics, Literature</div>
+        <div class="faculty-spec"><strong>Research:</strong> ELT, Educational Innovation, Digital Tools &amp; Creativity</div>
+        <a class="faculty-email" href="mailto:kmckpl@gmail.com" draggable="false">📧 kmckpl@gmail.com</a>
+      </div>
+    </div>
+
+    <div class="faculty-card">
+      <div class="faculty-photo-wrap">
+        <img src="https://sdrok2080.github.io/sdrok2080/imagekmclogo02.jpeg" alt="Political Science Lecturer" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" draggable="false">
+        <div class="faculty-initials" style="display:none;">PS</div>
+        <span class="faculty-tag">Lecturer</span>
+      </div>
+      <div class="faculty-body">
+        <div class="faculty-name">Political Science Lecturer</div>
+        <div class="faculty-title">Public Administration, Democracy and Comparative Politics</div>
+        <div class="faculty-role">Lecturer, KMC Taulihawa</div>
+        <div class="faculty-divider"></div>
+        <div class="faculty-spec"><strong>Specialization:</strong> Political Theory, Governance, Democracy and International Relations</div>
+        <div class="faculty-spec"><strong>Research:</strong> Public Policy, Human Rights, Federalism and Local Governance</div>
+        <a class="faculty-email" href="mailto:kmckpl@gmail.com" draggable="false">📧 kmckpl@gmail.com</a>
+      </div>
+    </div>
+
+    <div class="faculty-card">
+      <div class="faculty-photo-wrap">
+        <img src="https://sdrok2080.github.io/sdrok2080/image16.jpeg" alt="Jivan Marasini" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" draggable="false">
+        <div class="faculty-initials" style="display:none;">JM</div>
+        <span class="faculty-tag">Lecturer</span>
+      </div>
+      <div class="faculty-body">
+        <div class="faculty-name">Jivan Marasini</div>
+        <div class="faculty-title">Population Lecturer</div>
+        <div class="faculty-role">Kapilvastu Multiple Campus (KMC), Taulihawa</div>
+        <div class="faculty-divider"></div>
+        <div class="faculty-spec"><strong>Specialization:</strong> Population Policy, Planning and Rural-Urban Data Analysis</div>
+        <div class="faculty-spec"><strong>Research:</strong> Population, Environment and Data-Driven Research</div>
+        <a class="faculty-email" href="mailto:kmckpl@gmail.com" draggable="false">📧 kmckpl@gmail.com</a>
+      </div>
+    </div>
+
+    <div class="faculty-card">
+      <div class="faculty-photo-wrap">
+        <img src="https://sdrok2080.github.io/sdrok2080/imagekmclogo02.jpeg" alt="Rural Development Lecturer" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" draggable="false">
+        <div class="faculty-initials" style="display:none;">RD</div>
+        <span class="faculty-tag">Lecturer</span>
+      </div>
+      <div class="faculty-body">
+        <div class="faculty-name">Rural Development Lecturer</div>
+        <div class="faculty-title">Rural Development &amp; Social Planning</div>
+        <div class="faculty-role">Lecturer, KMC Taulihawa</div>
+        <div class="faculty-divider"></div>
+        <div class="faculty-spec"><strong>Specialization:</strong> Sustainable Community Development</div>
+        <div class="faculty-spec"><strong>Research:</strong> Rural Livelihoods, Community Participation, Social Innovation</div>
+        <a class="faculty-email" href="mailto:kmckpl@gmail.com" draggable="false">📧 kmckpl@gmail.com</a>
+      </div>
+    </div>
+
+    <div class="faculty-card">
+      <div class="faculty-photo-wrap">
+        <img src="https://sdrok2080.github.io/sdrok2080/imagekmclogo02.jpeg" alt="Sociology Lecturer" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" draggable="false">
+        <div class="faculty-initials" style="display:none;">SL</div>
+        <span class="faculty-tag">Lecturer</span>
+      </div>
+      <div class="faculty-body">
+        <div class="faculty-name">Sociology Lecturer</div>
+        <div class="faculty-title">Social Transformation and Applied Sociology</div>
+        <div class="faculty-role">Lecturer, KMC Taulihawa</div>
+        <div class="faculty-divider"></div>
+        <div class="faculty-spec"><strong>Specialization:</strong> Sociology of Education, Social Change and Community Development</div>
+        <div class="faculty-spec"><strong>Research:</strong> Sustainable Development for Rural and Urban Community</div>
+        <a class="faculty-email" href="mailto:kmckpl@gmail.com" draggable="false">📧 kmckpl@gmail.com</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div style="background:#fff;border-top:3px solid var(--border);">
+<div class="section" id="contact">
+  <div class="section-title">📞 Contact &amp; Get in Touch</div>
+  <div class="contact-grid">
+    <div class="contact-card">
+      <h3>🏢 Department Office</h3>
+      <div class="contact-row"><span>📍</span><span>Humanities &amp; Social Science Building, KMC Campus, Taulihawa, Kapilvastu, Lumbini Province</span></div>
+      <div class="contact-row"><span>📞</span><span>076-560181</span></div>
+      <div class="contact-row"><span>📧</span><span>kmckpl@gmail.com</span></div>
+      <div class="contact-row"><span>🌐</span><span>www.kmc.edu.np</span></div>
+    </div>
+    <div class="contact-card">
+      <h3>🕐 Office Hours</h3>
+      <div class="contact-row"><span>📅</span><span><strong>Monday–Friday:</strong> 10:00 AM – 5:00 PM (NST)</span></div>
+      <div class="contact-row"><span>🌅</span><span><strong>Morning Classes:</strong> 6:00–11:00 AM</span></div>
+      <div class="contact-row"><span>🌆</span><span><strong>Evening Classes:</strong> 4:00–8:00 PM</span></div>
+      <div class="contact-row"><span>🔴</span><span><strong>Saturday &amp; Sunday:</strong> Holidays (Closed)</span></div>
+      <div style="margin-top:1rem;padding:.7rem;background:#fef9ec;border-radius:8px;font-size:.8rem;color:var(--muted);">
+        📲 <strong>Follow The Rule &amp; Regulation of KMC-Taulihawa:</strong> Also Include Free bilingual educational content on YouTube and SDROK platform.<br>
+        <a href="https://www.youtube.com/c/UCDLAcademy" target="_blank" style="color:var(--maroon);" draggable="false">YouTube: UCDL Academy</a> · <a href="https://sdrok2080.github.io" target="_blank" style="color:var(--maroon);" draggable="false">SDROK Platform</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <a href="#home" draggable="false">Home</a>
+    <a href="#about" draggable="false">About</a>
+    <a href="#curriculum" draggable="false">Curriculum</a>
+    <a href="#materials" draggable="false">Materials</a>
+    <a href="#faculty" draggable="false">Faculty</a>
+    <a href="#contact" draggable="false">Contact</a>
+    <a href="https://sdrok2080.github.io/sdrok2080/KMC-HSSDAdmissionForm.html" class="footer-admission-btn" target="_blank" draggable="false">📋 Admission Form</a>
+    <a href="https://www.tuioex.edu.np" target="_blank" draggable="false">Tribhuvan University</a>
+    <a href="https://sdrok2080.github.io/sdrok2080/NewSdrokTest2080.html" target="_blank" draggable="false">SDROK Platform</a>
+  </div>
+  <p>© 2024 Kapilvastu Multiple Campus, Taulihawa. All rights reserved.</p>
+  <p style="margin-top:.4rem;">Developed By Mr. Bishnu Singh Rayamajhi, Math Lecturer and Head of KMC-HSSD With 💜 by <a href="https://sdrok2080.github.io" draggable="false">UCDL Academy</a> &amp; KMC HSS Department</p>
+  <p style="margin-top:.4rem;opacity:.5;">Committed to accessible education in Kapilvastu</p>
+</footer>
+
+<script>
+// ── HERO SLIDER ──
+let current = 0;
+const slidesEl = document.getElementById('slides');
+const totalSlides = 5;
+const dotsEl = document.getElementById('dots');
+for(let i=0;i<totalSlides;i++){
+  const d = document.createElement('div');
+  d.className = 'dot' + (i===0?' active':'');
+  d.onclick = () => goSlide(i);
+  dotsEl.appendChild(d);
+}
+function goSlide(n){ current=(n+totalSlides)%totalSlides; slidesEl.style.transform=`translateX(-${current*100}%)`; document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current)); }
+function moveSlide(dir){ goSlide(current+dir); }
+setInterval(()=>moveSlide(1),4500);
+
+// ── CONTENT DRAWER LOGIC ──
+let activeDrawer = null;
+function openDrawer(id){
+  const drawer=document.getElementById('drawer-'+id);
+  const btn=event.currentTarget;
+  if(activeDrawer===id){ closeDrawer(id); btn.classList.remove('active'); return; }
+  if(activeDrawer){ document.getElementById('drawer-'+activeDrawer).classList.remove('open'); document.querySelectorAll('.ct-btn').forEach(b=>b.classList.remove('active')); }
+  activeDrawer=id; btn.classList.add('active'); drawer.classList.add('open');
+  setTimeout(()=>{ drawer.scrollIntoView({behavior:'smooth',block:'nearest'}); },50);
+}
+function closeDrawer(id){ document.getElementById('drawer-'+id).classList.remove('open'); document.querySelectorAll('.ct-btn').forEach(b=>b.classList.remove('active')); activeDrawer=null; }
+
+// ── YEAR TAB LOGIC ──
+function showYear(id,btn){ document.querySelectorAll('.year-panel').forEach(p=>p.classList.remove('active')); document.querySelectorAll('.year-tab').forEach(b=>b.classList.remove('active')); document.getElementById(id).classList.add('active'); btn.classList.add('active'); }
+
+// ── SUBJECT DATA ──
+const SUBJECTS={
+  y1:[
+    {code:'So.421',name:'Introduction to Sociology',marks:'70 + 30'},
+    {code:'So.422',name:'Dynamics of Nepali Society',marks:'70 + 30'},
+    {code:'Econ.421',name:'Microeconomics',marks:'100'},
+    {code:'Econ.422',name:'Math & Statistics for Economics',marks:'100'},
+    {code:'Hist.421',name:'History of Ancient & Medieval Nepal',marks:'100'},
+    {code:'Hist.422',name:'International History [1774–1990]',marks:'100'},
+    {code:'Pol.Sc.421',name:'Political Theory',marks:'70 + 30'},
+    {code:'Pol.Sc.422',name:'Political Thought',marks:'70 + 30'},
+    {code:'ENG421',name:'Reading, Writing & Thinking',marks:'70 + 30'},
+    {code:'ENG422',name:'History of English Literature & Criticism',marks:'70 + 30'},
+    {code:'नेपाली ४२१',name:'नेपाली कथा | नेपाली उपन्यास | नेपाली नाटक',marks:'100'},
+    {code:'नेपाली ४२२',name:'नेपाली फुटकर कविता | नेपाली खण्डकाव्य र महाकाब्य',marks:'100'},
+    {code:'AN.421',name:'Introduction to Anthropology',marks:'70 + 30'},
+    {code:'AN.422',name:'Theoretical Perspectives in Anthropology',marks:'70 + 30'},
+    {code:'RDS421',name:'Theories of Development',marks:'70 + 30'},
+    {code:'RDS422',name:'Basic Research Methods',marks:'70 + 30'},
+  ],
+  y2:[
+    {code:'So.423',name:'Sociological Theory',marks:'70 + 30'},
+    {code:'So.424',name:'Social Change and Development',marks:'70 + 30'},
+    {code:'Econ.423',name:'Macroeconomics',marks:'100'},
+    {code:'Econ.424',name:'Development Economics',marks:'100'},
+    {code:'Hist.423',name:'History of Modern Nepal [1743–1951]',marks:'100'},
+    {code:'Hist.424',name:'History of South Asia [1526–1947]',marks:'100'},
+    {code:'Pol.Sc.423',name:'Comparative Politics',marks:'70 + 30'},
+    {code:'Pol.Sc.424',name:'International Relations',marks:'70 + 30'},
+    {code:'ENG423',name:'Prose, Essays & Short Stories',marks:'70 + 30'},
+    {code:'ENG424',name:'Drama & Film Studies',marks:'70 + 30'},
+    {code:'नेपाली ४२३',name:'नेपाली निबन्ध र एकाङ्की | नेपाली आत्मकथा र जीवनी',marks:'100'},
+    {code:'नेपाली ४२४',name:'नेपाली भाषाविज्ञान र व्याकरण | नेपाली साहित्यको इतिहास',marks:'100'},
+    {code:'AN.423',name:'Nepalese Society and Culture',marks:'70 + 30'},
+    {code:'AN.424',name:'Economic Anthropology',marks:'70 + 30'},
+    {code:'RDS423',name:'Rural Economy and Agriculture',marks:'70 + 30'},
+    {code:'RDS424',name:'Rural Resources, Environment & Management',marks:'70 + 30'},
+  ],
+  y3:[
+    {code:'So.425',name:'Contemporary Social Issues in Nepal',marks:'70 + 30'},
+    {code:'So.426',name:'Urban Sociology & Migration Studies',marks:'70 + 30'},
+    {code:'Econ.425',name:'Econometrics & Quantitative Analysis',marks:'100'},
+    {code:'Econ.426',name:'Nepalese Economy & Policy Analysis',marks:'100'},
+    {code:'Hist.425',name:'Contemporary Nepal [1951–Present]',marks:'100'},
+    {code:'Hist.426',name:'Ancient Kapilvastu & Buddhist Heritage',marks:'100'},
+    {code:'Pol.Sc.425',name:'Nepalese Politics & Governance',marks:'70 + 30'},
+    {code:'Pol.Sc.426',name:'Diplomacy & South Asian Relations',marks:'70 + 30'},
+    {code:'ENG425',name:'Modern & Contemporary World Literature',marks:'70 + 30'},
+    {code:'ENG426',name:'Applied Linguistics & Language Teaching',marks:'70 + 30'},
+    {code:'नेपाली ४२५',name:'आधुनिक नेपाली साहित्य र लेखकहरू | नेपाली नाटक र प्रहसन',marks:'100'},
+    {code:'नेपाली ४२६',name:'समकालीन नेपाली साहित्य | नेपाली भाषामा अनुवाद',marks:'100'},
+    {code:'AN.425',name:'Ethnographic Research & Field Methods',marks:'70 + 30'},
+    {code:'AN.426',name:'Cultural Dynamics & Global Perspectives',marks:'70 + 30'},
+    {code:'RDS425',name:'Project Planning & Management',marks:'70 + 30'},
+    {code:'RDS426',name:'Community Development & Local Governance',marks:'70 + 30'},
+  ],
+  y4:[
+    {code:'So.427',name:'Advanced Sociological Research Seminar',marks:'70 + 30'},
+    {code:'So.428',name:'Comprehensive Sociology Examination',marks:'70 + 30'},
+    {code:'Econ.427',name:'Advanced Economic Research Seminar',marks:'100'},
+    {code:'Econ.428',name:'Comprehensive Economics Examination',marks:'100'},
+    {code:'Hist.427',name:'Historical Research Seminar & Historiography',marks:'100'},
+    {code:'Hist.428',name:'Comprehensive History Examination',marks:'100'},
+    {code:'Pol.Sc.427',name:'Advanced Political Analysis Seminar',marks:'70 + 30'},
+    {code:'Pol.Sc.428',name:'Comprehensive Political Science Examination',marks:'70 + 30'},
+    {code:'ENG427',name:'Advanced Literary Criticism & Theory',marks:'70 + 30'},
+    {code:'ENG428',name:'Comprehensive English Examination',marks:'70 + 30'},
+    {code:'नेपाली ४२७',name:'नेपाली साहित्य र समीक्षा (विशेष अध्ययन)',marks:'100'},
+    {code:'नेपाली ४२८',name:'नेपाली भाषा तथा साहित्यको व्यापक परीक्षा',marks:'100'},
+    {code:'AN.427',name:'Advanced Anthropological Research Project',marks:'70 + 30'},
+    {code:'AN.428',name:'Comprehensive Anthropology Examination',marks:'70 + 30'},
+    {code:'RDS427',name:'Integrated Rural Development Case Studies',marks:'70 + 30'},
+    {code:'RDS428',name:'Comprehensive Rural Development Examination',marks:'70 + 30'},
+  ]
+};
+function renderSubjects(){
+  ['y1','y2','y3','y4'].forEach(yr=>{
+    const el=document.getElementById(yr+'-majors');
+    if(!el) return;
+    el.innerHTML=SUBJECTS[yr].map(s=>`
+      <div class="subject-card">
+        <div class="subject-code">${s.code}</div>
+        <div class="subject-name">${s.name}</div>
+        <div class="subject-marks">${s.marks} Full Marks</div>
+        <div class="btn-row">
+          <a class="sbtn sbtn-syl" href="https://www.tuioex.edu.np" target="_blank" draggable="false">📄 Syllabus</a>
+          <a class="sbtn sbtn-notes" href="https://sdrok2080.github.io" target="_blank" draggable="false">📖 Notes</a>
+          <a class="sbtn sbtn-vid" href="https://www.youtube.com/c/UCDLAcademy" target="_blank" draggable="false">🎥 Videos</a>
+          <a class="sbtn sbtn-qp" href="https://www.tuioex.edu.np" target="_blank" draggable="false">📊 Q.Papers</a>
+        </div>
+      </div>
+    `).join('');
+  });
+}
+renderSubjects();
+</script>
+
+<!-- ANTI-COPY & ANTI-DOWNLOAD PROTECTIONS -->
+<script>
+(function(){
+  'use strict';
+  document.addEventListener('contextmenu',function(e){e.preventDefault();return false;},true);
+  document.addEventListener('selectstart',function(e){e.preventDefault();return false;},true);
+  document.addEventListener('dragstart',function(e){e.preventDefault();return false;},true);
+  document.addEventListener('copy',function(e){e.preventDefault();return false;},true);
+  document.addEventListener('cut',function(e){e.preventDefault();return false;},true);
+  document.addEventListener('keydown',function(e){
+    var key=e.key.toLowerCase();
+    var ctrl=e.ctrlKey||e.metaKey;
+    if(ctrl&&(key==='s'||key==='c'||key==='p'||key==='u'||key==='a')){e.preventDefault();e.stopPropagation();return false;}
+    if(key==='f12'||(ctrl&&e.shiftKey&&(key==='i'||key==='j'||key==='c'))){e.preventDefault();e.stopPropagation();return false;}
+  },true);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KMC-HSSD BA Student Support Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #DAA520;
+            --primary-dark: #B8860B;
+            --bg-dark: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --bg-tertiary: #3a3a3a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+            --border-color: #404040;
+            --accent-blue: #3b82f6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left h2 {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .header-left p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .status-indicator {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-indicator.online {
+            background-color: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #22c55e;
+        }
+
+        .status-indicator.offline {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .status-indicator.loading {
+            background-color: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #3b82f6;
+        }
+
+        .language-toggle {
+            padding: 6px 12px;
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .language-toggle:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        /* Main Content Area */
+        .main-wrapper {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 180px;
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            padding: 12px;
+        }
+
+        .nav-button {
+            width: 100%;
+            padding: 10px 12px;
+            background-color: transparent;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: left;
+            margin-bottom: 6px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 400;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-button:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        .nav-button.active {
+            background-color: rgba(218, 165, 32, 0.15);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .nav-button i {
+            font-size: 14px;
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Home Module */
+        .welcome-box {
+            background: linear-gradient(135deg, rgba(218, 165, 32, 0.2) 0%, rgba(218, 165, 32, 0.1) 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .welcome-box h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .welcome-box p {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        /* Metric Cards */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .metric-card {
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .metric-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            margin: 0;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .metric-value {
+            margin: 4px 0 0 0;
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .card h3 {
+            margin: 0 0 12px 0;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        /* Module Grid */
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .module-button {
+            padding: 16px;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s;
+            color: var(--text-primary);
+        }
+
+        .module-button:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .module-button-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .module-button-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Form */
+        .form-container {
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.25rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background-color: rgba(218, 165, 32, 0.05);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-primary:disabled {
+            background-color: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        .btn-debug {
+            background-color: transparent;
+            border: 1px solid #3b82f6;
+            color: #3b82f6;
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .btn-debug:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+
+        /* Quick Access Grid */
+        .quick-access-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .quick-access-btn {
+            padding: 10px 12px;
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            text-align: left;
+            transition: all 0.2s;
+            color: var(--text-primary);
+        }
+
+        .quick-access-btn:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        .quick-access-btn i {
+            margin-right: 6px;
+            font-size: 14px;
+        }
+
+        /* Profile Info */
+        .profile-info {
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+
+        .profile-info p {
+            margin: 6px 0;
+        }
+
+        .profile-info strong {
+            color: var(--text-primary);
+        }
+
+        /* Activities List */
+        .activities-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .activity-item {
+            padding: 8px 12px;
+            background-color: var(--bg-tertiary);
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .activity-item-text {
+            color: var(--text-secondary);
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+
+        .alert-success {
+            background-color: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #22c55e;
+        }
+
+        .alert-error {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .alert-warning {
+            background-color: rgba(251, 146, 60, 0.1);
+            border: 1px solid rgba(251, 146, 60, 0.3);
+            color: #fb923c;
+        }
+
+        .alert-info {
+            background-color: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #3b82f6;
+        }
+
+        /* Debug Panel */
+        .debug-panel {
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.25rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .debug-panel h4 {
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            color: #3b82f6;
+        }
+
+        .debug-item {
+            font-size: 12px;
+            margin: 6px 0;
+            font-family: monospace;
+            color: var(--text-secondary);
+        }
+
+        .debug-item.ok {
+            color: #22c55e;
+        }
+
+        .debug-item.error {
+            color: #ef4444;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 1rem;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 140px;
+                padding: 8px;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+
+            .module-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .welcome-box {
+                padding: 1.5rem;
+            }
+
+            .welcome-box h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <h2>🎓 <span id="headerTitle">KMC-HSSD BA Student Support Portal</span></h2>
+                <p>Kapilvastu Multiple Campus</p>
+            </div>
+            <div class="header-controls">
+                <div class="status-indicator" id="statusIndicator">
+                    <i class="fas fa-circle"></i>
+                    <span id="statusText">Initializing...</span>
+                </div>
+                <button class="language-toggle" onclick="toggleLanguage()">
+                    <span id="langBtn">नेपाली</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-wrapper">
+            <!-- Sidebar -->
+            <div class="sidebar" id="sidebar"></div>
+
+            <!-- Content -->
+            <div class="content" id="contentArea"></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Developed by Mr. Bishnu Singh Rayamajhi | Head of HSS Department | Kapilvastu Multiple Campus</p>
+        </div>
+    </div>
+
+    <script>
+        // ============ CONFIGURATION ============
+        // IMPORTANT: Replace this with your Google Apps Script deployment URL
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/d/YOUR_DEPLOYMENT_ID/usercopy';
+        
+        // Enable debug mode for troubleshooting
+        const DEBUG_MODE = true;
+
+        // ============ DEBUG LOGGING ============
+        const debugLog = [];
+        function addDebugLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logMessage = `[${timestamp}] ${message}`;
+            debugLog.push({ message: logMessage, type });
+            console.log(logMessage);
+        }
+
+        // ============ LANGUAGE DATA ============
+        const translations = {
+            en: {
+                headerTitle: 'KMC-HSSD BA Student Support Portal',
+                langBtn: 'नेपाली',
+                home: 'Home',
+                profile: 'Student Profile',
+                academic: 'Academic',
+                research: 'Research',
+                activities: 'Activities',
+                career: 'Career',
+                leadership: 'Leadership',
+                achievement: 'Achievement',
+                voice: 'Student Voice',
+                welcome: 'Welcome to KMC-HSSD',
+                subtitle: 'BA Student Development & Support Platform',
+                modules: 'Modules',
+                completed: 'Completed',
+                quickAccess: 'Quick Access',
+                recentActivities: 'Recent Activities',
+                profileInfo: 'Profile Information',
+                noProfile: 'No profile data yet',
+                registration: 'Student Registration',
+                interests: 'Interest & Talent',
+                skills: 'Skills Profile',
+                academicGoal: 'Academic Goal',
+                subjectPref: 'Subject Preference',
+                support: 'Academic Support',
+                resources: 'Learning Resources',
+                researchInterest: 'Research Interest',
+                researchProj: 'Research Project',
+                researchIdea: 'Research Idea',
+                article: 'Article Submission',
+                innovation: 'Innovation',
+                seminar: 'Seminar',
+                workshop: 'Workshop',
+                presentation: 'Presentation',
+                fieldVisit: 'Field Visit',
+                competition: 'Competition',
+                careerGoal: 'Career Goal',
+                skillsAssess: 'Skills Assessment',
+                internship: 'Internship',
+                clubs: 'Clubs',
+                volunteer: 'Volunteer',
+                leadershipRole: 'Leadership Role',
+                peerMentor: 'Peer Mentor',
+                socialService: 'Social Service',
+                achievementEntry: 'Achievement',
+                portfolio: 'Student Portfolio',
+                suggestion: 'Suggestion',
+                grievance: 'Grievance/Help',
+                feedback: 'Engagement Feedback',
+                submit: 'Submit',
+                save: 'Save',
+                cancel: 'Cancel',
+                add: 'Add',
+                fullName: 'Full Name',
+                email: 'Email',
+                details: 'Details',
+                addEntry: 'Add entry',
+                saving: 'Saving...',
+                loadingData: 'Loading data from Sheets...',
+                errorSaving: 'Error saving data',
+                successSave: 'Data saved successfully!',
+                errorLoading: 'Could not connect to Google Sheets',
+                usingLocalCache: 'Using local cache (offline mode)',
+                onlineMode: 'Connected to Google Sheets',
+                offlineMode: 'Offline Mode - Data only saved locally',
+                configError: 'Configuration Error',
+                checkConfig: 'Please check your Apps Script URL configuration',
+                debugInfo: 'Debug Information',
+                copyDebugInfo: 'Copy Debug Info'
+            },
+            ne: {
+                headerTitle: 'KMC-HSSD BA विद्यार्थी समर्थन पोर्टल',
+                langBtn: 'English',
+                home: 'गृह',
+                profile: 'विद्यार्थी प्रोफाइल',
+                academic: 'शैक्षणिक',
+                research: 'अनुसन्धान',
+                activities: 'गतिविधि',
+                career: 'क्यारियर',
+                leadership: 'नेतृत्व',
+                achievement: 'उपलब्धि',
+                voice: 'विद्यार्थी आवाज',
+                welcome: 'KMC-HSSD मा स्वागत',
+                subtitle: 'BA विद्यार्थी विकास र समर्थन मञ्च',
+                modules: 'मोड्यूलहरू',
+                completed: 'पूर्ण गरिएको',
+                quickAccess: 'द्रुत पहुँच',
+                recentActivities: 'हालको गतिविधि',
+                profileInfo: 'प्रोफाइल जानकारी',
+                noProfile: 'अझै कोही प्रोफाइल डेटा छैन',
+                registration: 'विद्यार्थी दर्ता',
+                interests: 'रुचि र प्रतिभा',
+                skills: 'कौशल प्रोफाइल',
+                academicGoal: 'शैक्षणिक लक्ष्य',
+                subjectPref: 'विषय वरीयता',
+                support: 'शैक्षणिक समर्थन',
+                resources: 'सिकाइ संसाधन',
+                researchInterest: 'अनुसन्धान रुचि',
+                researchProj: 'अनुसन्धान परियोजना',
+                researchIdea: 'अनुसन्धान विचार',
+                article: 'लेख प्रस्तुति',
+                innovation: 'नवाचार',
+                seminar: 'सेमिनार',
+                workshop: 'कार्यशाला',
+                presentation: 'प्रस्तुति',
+                fieldVisit: 'क्षेत्र भ्रमण',
+                competition: 'प्रतियोगिता',
+                careerGoal: 'क्यारियर लक्ष्य',
+                skillsAssess: 'कौशल मूल्यांकन',
+                internship: 'इन्टर्नशिप',
+                clubs: 'क्लब',
+                volunteer: 'स्वेच्छासेवक',
+                leadershipRole: 'नेतृत्व भूमिका',
+                peerMentor: 'समवयस्क मेन्टर',
+                socialService: 'सामाजिक सेवा',
+                achievementEntry: 'उपलब्धि',
+                portfolio: 'विद्यार्थी पोर्टफोलियो',
+                suggestion: 'सुझाव',
+                grievance: 'गुनासो/सहायता',
+                feedback: 'संलग्नता प्रतिक्रिया',
+                submit: 'जमा गर्नुहोस्',
+                save: 'बचाउनुहोस्',
+                cancel: 'रद्द गर्नुहोस्',
+                add: 'थप्नुहोस्',
+                fullName: 'पूरा नाम',
+                email: 'ईमेल',
+                details: 'विवरण',
+                addEntry: 'प्रविष्टि थप्नुहोस्',
+                saving: 'बचाइँदै...',
+                loadingData: 'Sheets बाट डेटा लोड गरिँदै...',
+                errorSaving: 'डेटा बचाउन त्रुटि',
+                successSave: 'डेटा सफलतापूर्वक बचाइयो!',
+                errorLoading: 'Google Sheets सँग जडान गर्न सकेन',
+                usingLocalCache: 'स्थानीय क्यास प्रयोग गरिँदै (अफलाइन मोड)',
+                onlineMode: 'Google Sheets सँग जडित',
+                offlineMode: 'अफलाइन मोड - डेटा केवल स्थानीय रूपमा सहेजिएको',
+                configError: 'कन्फिगरेशन त्रुटि',
+                checkConfig: 'कृपया आपको Apps Script URL कन्फिगरेशन जाँच गर्नुहोस्',
+                debugInfo: 'डिबग जानकारी',
+                copyDebugInfo: 'डिबग जानकारी प्रतिलिपि गर्नुहोस्'
+            }
+        };
+
+        const modules = [
+            { id: 'home', label: 'home', icon: 'fas fa-home' },
+            { id: 'profile', label: 'profile', icon: 'fas fa-user' },
+            { id: 'academic', label: 'academic', icon: 'fas fa-book' },
+            { id: 'research', label: 'research', icon: 'fas fa-microscope' },
+            { id: 'activities', label: 'activities', icon: 'fas fa-star' },
+            { id: 'career', label: 'career', icon: 'fas fa-briefcase' },
+            { id: 'leadership', label: 'leadership', icon: 'fas fa-users' },
+            { id: 'achievement', label: 'achievement', icon: 'fas fa-trophy' },
+            { id: 'voice', label: 'voice', icon: 'fas fa-comment-dots' }
+        ];
+
+        const subModules = {
+            profile: ['registration', 'interests', 'skills'],
+            academic: ['academicGoal', 'subjectPref', 'support', 'resources'],
+            research: ['researchInterest', 'researchProj', 'researchIdea', 'article', 'innovation'],
+            activities: ['seminar', 'workshop', 'presentation', 'fieldVisit', 'competition'],
+            career: ['careerGoal', 'skillsAssess', 'internship'],
+            leadership: ['clubs', 'volunteer', 'leadershipRole', 'peerMentor', 'socialService'],
+            achievement: ['achievementEntry', 'portfolio'],
+            voice: ['suggestion', 'grievance', 'feedback']
+        };
+
+        // ============ STATE MANAGEMENT ============
+        let currentLanguage = 'en';
+        let currentModule = 'home';
+        let activeForm = null;
+        let studentData = {};
+        let activities = [];
+        let isLoading = false;
+        let lastMessage = null;
+        let sheetsConnected = false;
+        let showDebugPanel = false;
+
+        // ============ INITIALIZATION ============
+        function init() {
+            addDebugLog('Portal initialized');
+            checkConfiguration();
+            loadDataFromSheets();
+            renderSidebar();
+            renderContent();
+            updateStatusIndicator();
+        }
+
+        // ============ CONFIGURATION CHECK ============
+        function checkConfiguration() {
+            if (APPS_SCRIPT_URL.includes('YOUR_DEPLOYMENT_ID')) {
+                addDebugLog('CONFIGURATION ERROR: Apps Script URL not set', 'error');
+                sheetsConnected = false;
+                return;
+            }
+            addDebugLog('Configuration check passed', 'ok');
+        }
+
+        // ============ STATUS INDICATOR ============
+        function updateStatusIndicator() {
+            const indicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+            
+            if (isLoading) {
+                indicator.className = 'status-indicator loading';
+                statusText.textContent = t('loadingData');
+            } else if (sheetsConnected) {
+                indicator.className = 'status-indicator online';
+                statusText.textContent = t('onlineMode');
+            } else {
+                indicator.className = 'status-indicator offline';
+                statusText.textContent = t('offlineMode');
+            }
+        }
+
+        // ============ TRANSLATION HELPER ============
+        function t(key) {
+            return translations[currentLanguage][key] || key;
+        }
+
+        // ============ LANGUAGE TOGGLE ============
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'ne' : 'en';
+            document.getElementById('langBtn').textContent = t('langBtn');
+            document.getElementById('headerTitle').textContent = t('headerTitle');
+            renderSidebar();
+            renderContent();
+        }
+
+        // ============ GOOGLE SHEETS INTEGRATION ============
+        async function loadDataFromSheets() {
+            isLoading = true;
+            updateStatusIndicator();
+
+            // First, try to load from Google Sheets
+            if (!APPS_SCRIPT_URL.includes('YOUR_DEPLOYMENT_ID')) {
+                try {
+                    addDebugLog('Attempting to connect to Google Sheets...');
+                    
+                    const response = await fetch(APPS_SCRIPT_URL, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    addDebugLog(`Fetch response status: ${response.status}`);
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        addDebugLog('Successfully loaded data from Google Sheets', 'ok');
+                        studentData = data.studentData || {};
+                        activities = data.activities || [];
+                        sheetsConnected = true;
+                    } else {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                } catch (error) {
+                    addDebugLog(`Failed to load from Sheets: ${error.message}`, 'error');
+                    loadFromLocalStorage();
+                    sheetsConnected = false;
+                }
+            } else {
+                addDebugLog('Apps Script URL not configured - using local storage only', 'warning');
+                loadFromLocalStorage();
+                sheetsConnected = false;
+            }
+
+            isLoading = false;
+            updateStatusIndicator();
+            renderContent();
+        }
+
+        function loadFromLocalStorage() {
+            addDebugLog('Loading data from local storage...');
+            const savedData = localStorage.getItem('kmc_student_data');
+            const savedActivities = localStorage.getItem('kmc_activities');
+            if (savedData) {
+                studentData = JSON.parse(savedData);
+                addDebugLog('Student data loaded from localStorage', 'ok');
+            }
+            if (savedActivities) {
+                activities = JSON.parse(savedActivities);
+                addDebugLog(`${activities.length} activities loaded from localStorage`, 'ok');
+            }
+        }
+
+        async function saveDataToSheets() {
+            // Always save to local storage first
+            saveToLocalStorage();
+
+            // Then try to save to Sheets if connected
+            if (sheetsConnected && !APPS_SCRIPT_URL.includes('YOUR_DEPLOYMENT_ID')) {
+                try {
+                    addDebugLog('Syncing data to Google Sheets...');
+                    
+                    const response = await fetch(APPS_SCRIPT_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            action: 'saveData',
+                            data: {
+                                studentData: studentData,
+                                activities: activities
+                            }
+                        })
+                    });
+
+                    addDebugLog(`Save response status: ${response.status}`);
+
+                    if (response.ok) {
+                        addDebugLog('Data synced to Google Sheets successfully', 'ok');
+                        return true;
+                    } else {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                } catch (error) {
+                    addDebugLog(`Failed to sync to Sheets: ${error.message}`, 'error');
+                    addDebugLog('Data saved locally (Sheets sync failed)');
+                    return true; // Still return true because local save succeeded
+                }
+            }
+            
+            return true;
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('kmc_student_data', JSON.stringify(studentData));
+            localStorage.setItem('kmc_activities', JSON.stringify(activities));
+            addDebugLog('Data saved to local storage');
+        }
+
+        // ============ UI HELPERS ============
+        function showMessage(message, type = 'success') {
+            lastMessage = { message, type, timestamp: Date.now() };
+            renderContent();
+            setTimeout(() => {
+                if (lastMessage && lastMessage.timestamp === (Date.now() - 3000)) {
+                    lastMessage = null;
+                    renderContent();
+                }
+            }, 3000);
+        }
+
+        // ============ RENDER FUNCTIONS ============
+        function renderSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.innerHTML = modules.map(m => `
+                <button class="nav-button ${currentModule === m.id ? 'active' : ''}" onclick="setModule('${m.id}')">
+                    <i class="${m.icon}"></i>
+                    <span>${t(m.label)}</span>
+                </button>
+            `).join('');
+        }
+
+        function setModule(moduleId) {
+            currentModule = moduleId;
+            activeForm = null;
+            renderSidebar();
+            renderContent();
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('contentArea');
+            
+            if (isLoading) {
+                contentArea.innerHTML = `
+                    <div class="alert alert-info">
+                        <i class="fas fa-spinner fa-spin"></i> ${t('loadingData')}
+                    </div>
+                `;
+                return;
+            }
+
+            let messageHtml = '';
+            if (lastMessage) {
+                const alertClass = lastMessage.type === 'success' ? 'alert-success' : 
+                                  lastMessage.type === 'error' ? 'alert-error' :
+                                  lastMessage.type === 'warning' ? 'alert-warning' : 'alert-info';
+                messageHtml = `<div class="alert ${alertClass}">${lastMessage.message}</div>`;
+            }
+
+            // Configuration error alert
+            let configAlert = '';
+            if (APPS_SCRIPT_URL.includes('YOUR_DEPLOYMENT_ID')) {
+                configAlert = `
+                    <div class="alert alert-warning">
+                        <strong>⚠️ ${t('configError')}</strong><br/>
+                        ${t('checkConfig')}<br/>
+                        <button class="btn btn-debug" onclick="showDebugPanel = !showDebugPanel; renderContent()">
+                            ${t('debugInfo')}
+                        </button>
+                    </div>
+                `;
+            }
+
+            // Debug panel
+            let debugPanel = '';
+            if (DEBUG_MODE && showDebugPanel) {
+                const debugHtml = debugLog.map(log => 
+                    `<div class="debug-item ${log.type}">${log.message}</div>`
+                ).join('');
+                
+                debugPanel = `
+                    <div class="debug-panel">
+                        <h4>🔍 ${t('debugInfo')}</h4>
+                        ${debugHtml}
+                        <button class="btn btn-debug" style="margin-top: 12px;" onclick="copyDebugInfo()">
+                            📋 ${t('copyDebugInfo')}
+                        </button>
+                    </div>
+                `;
+            }
+
+            let content = '';
+            switch(currentModule) {
+                case 'home':
+                    content = renderHome();
+                    break;
+                case 'profile':
+                    content = renderProfile();
+                    break;
+                case 'academic':
+                    content = renderModuleContent('academic');
+                    break;
+                case 'research':
+                    content = renderModuleContent('research');
+                    break;
+                case 'activities':
+                    content = renderModuleContent('activities');
+                    break;
+                case 'career':
+                    content = renderModuleContent('career');
+                    break;
+                case 'leadership':
+                    content = renderModuleContent('leadership');
+                    break;
+                case 'achievement':
+                    content = renderModuleContent('achievement');
+                    break;
+                case 'voice':
+                    content = renderModuleContent('voice');
+                    break;
+                default:
+                    content = renderHome();
+            }
+
+            contentArea.innerHTML = messageHtml + configAlert + debugPanel + content;
+        }
+
+        function renderHome() {
+            const completedCount = activities.length;
+            return `
+                <div>
+                    <div class="welcome-box">
+                        <h1>${t('welcome')} 👋</h1>
+                        <p>${t('subtitle')}</p>
+                    </div>
+
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-icon">📚</div>
+                            <p class="metric-label">${t('modules')}</p>
+                            <p class="metric-value">9</p>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">✅</div>
+                            <p class="metric-label">${t('completed')}</p>
+                            <p class="metric-value">${completedCount}</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>${t('quickAccess')}</h3>
+                        <div class="quick-access-grid">
+                            ${[1, 2, 3, 4].map(i => {
+                                const m = modules[i];
+                                return `
+                                    <button class="quick-access-btn" onclick="setModule('${m.id}')">
+                                        <i class="${m.icon}"></i> ${t(m.label)}
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    ${activities.length > 0 ? `
+                        <div class="card">
+                            <h3>${t('recentActivities')}</h3>
+                            <div class="activities-list">
+                                ${activities.slice(0, 5).map(act => `
+                                    <div class="activity-item">
+                                        <span class="activity-item-text">✓ ${act.type} - ${act.date}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        function renderProfile() {
+            if (activeForm) {
+                return `
+                    <div>
+                        <div class="form-container">
+                            <h3>Add ${t(activeForm)}</h3>
+                            <form onsubmit="handleFormSubmit(event, '${activeForm}')">
+                                <div class="form-group">
+                                    <label>${t('fullName')}</label>
+                                    <input type="text" id="formName" placeholder="Full Name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>${t('email')}</label>
+                                    <input type="email" id="formEmail" placeholder="Email (optional)">
+                                </div>
+                                <div class="form-group">
+                                    <label>${t('details')}</label>
+                                    <textarea id="formDetails" placeholder="Enter details..."></textarea>
+                                </div>
+                                <div class="form-buttons">
+                                    <button type="submit" class="btn btn-primary" id="submitBtn">${t('save')}</button>
+                                    <button type="button" class="btn btn-secondary" onclick="activeForm = null; renderContent()">${t('cancel')}</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                `;
+            }
+
+            return `
+                <div>
+                    <div class="card">
+                        <h3>${t('profileInfo')}</h3>
+                        ${studentData.name ? `
+                            <div class="profile-info">
+                                <p><strong>Name:</strong> ${studentData.name}</p>
+                                ${studentData.email ? `<p><strong>Email:</strong> ${studentData.email}</p>` : ''}
+                            </div>
+                        ` : `<p style="color: var(--text-muted);">${t('noProfile')}</p>`}
+                    </div>
+
+                    <div class="module-grid">
+                        ${subModules.profile.map(sub => `
+                            <button class="module-button" onclick="activeForm = '${sub}'; renderContent()">
+                                <div class="module-button-title">+ ${t(sub)}</div>
+                                <div class="module-button-desc">${t('addEntry')}</div>
+                            </button>
+                        `).join('')}
+                    </div>
+
+                    ${activities.length > 0 ? `
+                        <div class="card" style="margin-top: 2rem;">
+                            <h3>${t('recentActivities')}</h3>
+                            <div class="activities-list">
+                                ${activities.slice(0, 5).map(act => `
+                                    <div class="activity-item">
+                                        <span class="activity-item-text">✓ ${act.type} - ${act.date}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        function renderModuleContent(moduleName) {
+            if (activeForm) {
+                return `
+                    <div>
+                        <div class="form-container">
+                            <h3>Add ${t(activeForm)}</h3>
+                            <form onsubmit="handleFormSubmit(event, '${activeForm}')">
+                                <div class="form-group">
+                                    <label>${t('fullName')}</label>
+                                    <input type="text" id="formName" placeholder="Full Name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>${t('details')}</label>
+                                    <textarea id="formDetails" placeholder="Enter details..."></textarea>
+                                </div>
+                                <div class="form-buttons">
+                                    <button type="submit" class="btn btn-primary" id="submitBtn">${t('save')}</button>
+                                    <button type="button" class="btn btn-secondary" onclick="activeForm = null; renderContent()">${t('cancel')}</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                `;
+            }
+
+            const subs = subModules[moduleName] || [];
+            return `
+                <div class="module-grid">
+                    ${subs.map(sub => `
+                        <button class="module-button" onclick="activeForm = '${sub}'; renderContent()">
+                            <div class="module-button-title">+ ${t(sub)}</div>
+                            <div class="module-button-desc">${t('addEntry')}</div>
+                        </button>
+                    `).join('')}
+                </div>
+
+                ${activities.length > 0 ? `
+                    <div class="card" style="margin-top: 2rem;">
+                        <h3>${t('recentActivities')}</h3>
+                        <div class="activities-list">
+                            ${activities.slice(0, 5).map(act => `
+                                <div class="activity-item">
+                                    <span class="activity-item-text">✓ ${act.type} - ${act.date}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+            `;
+        }
+
+        // ============ FORM HANDLING ============
+        async function handleFormSubmit(event, formType) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = t('saving');
+
+            const name = document.getElementById('formName').value;
+            const details = document.getElementById('formDetails').value;
+            const email = document.getElementById('formEmail')?.value || '';
+
+            if (!name) {
+                showMessage(t('errorSaving'), 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = t('save');
+                return;
+            }
+
+            // Update student data
+            if (!studentData.name) {
+                studentData.name = name;
+            }
+            if (email) studentData.email = email;
+
+            // Add activity
+            const activity = {
+                id: Date.now(),
+                type: formType,
+                details: details,
+                date: new Date().toLocaleDateString()
+            };
+
+            activities.unshift(activity);
+
+            // Save data
+            const success = await saveDataToSheets();
+            
+            if (success) {
+                showMessage(t('successSave'), 'success');
+            }
+
+            activeForm = null;
+            submitBtn.disabled = false;
+            submitBtn.textContent = t('save');
+            renderContent();
+        }
+
+        // ============ DEBUG UTILITIES ============
+        function copyDebugInfo() {
+            const debugText = debugLog.map(log => log.message).join('\n');
+            navigator.clipboard.writeText(debugText).then(() => {
+                alert('Debug info copied to clipboard');
+            });
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
