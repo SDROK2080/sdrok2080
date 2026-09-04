@@ -40,6 +40,7 @@ button{padding:13px 25px;border:none;border-radius:7px;font-size:16px;font-weigh
 button:hover{opacity:.9;}
 button:disabled{opacity:.5;cursor:not-allowed;}
 .success{display:none;background:#dcfce7;border:1px solid #22c55e;color:#166534;padding:20px;border-radius:8px;margin-bottom:20px;text-align:center;}
+.error-msg{display:none;background:#fee2e2;border:1px solid #ef4444;color:#991b1b;padding:15px;border-radius:8px;margin-bottom:20px;text-align:center;}
 .footer{text-align:center;margin-top:20px;color:#64748b;font-size:14px;}
 @media(max-width:700px){
   .grid{grid-template-columns:1fr;}
@@ -73,6 +74,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
     <h2 id="applicantID"></h2>
     <p>Please save this Applicant ID for future reference.</p>
 </div>
+<div id="errorMessage" class="error-msg"></div>
 
 <form id="admissionForm">
 <!-- APPLICATION INFORMATION -->
@@ -362,7 +364,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
 </div>
 
 <script>
-const WEB_APP_URL = 'YOUR_WEB_APP_URL_HERE'; // <-- PASTE YOUR WEB APP URL HERE
+const WEB_APP_URL = 'YOUR_WEB_APP_URL_HERE';
 
 /* PHOTO PREVIEW */
 document.getElementById("photo").addEventListener("change", function(){
@@ -409,11 +411,11 @@ document.getElementById("admissionForm").addEventListener("submit", async functi
     const originalText = submitBtn.textContent;
     submitBtn.textContent = "Submitting...";
     submitBtn.disabled = true;
+    document.getElementById("errorMessage").style.display = "none";
     
     try {
         const applicantID = generateApplicantID();
         
-        // Gather files
         const photoFile = document.getElementById('photo').files[0];
         const seeMarkFile = document.getElementById('seeMarkSheet').files[0];
         const seeCharFile = document.getElementById('seeCharacter').files[0];
@@ -422,7 +424,6 @@ document.getElementById("admissionForm").addEventListener("submit", async functi
         const migrationFile = document.getElementById('migration').files[0];
         const citizenshipFile = document.getElementById('citizenshipDoc').files[0];
         
-        // Convert all files to base64
         const [photo, seeMarkSheet, seeCharacter, plus2Transcript, plus2Character, migration, citizenship] = await Promise.all([
             getBase64(photoFile),
             getBase64(seeMarkFile),
@@ -500,10 +501,12 @@ document.getElementById("admissionForm").addEventListener("submit", async functi
             document.getElementById("photoPreview").style.display = "none";
             document.getElementById("photoText").style.display = "block";
         } else {
-            alert('Server Error: ' + result.message);
+            document.getElementById("errorMessage").textContent = 'Server Error: ' + result.message;
+            document.getElementById("errorMessage").style.display = "block";
         }
     } catch (error) {
-        alert('Submission failed: ' + error.message);
+        document.getElementById("errorMessage").textContent = 'Submission failed: ' + error.message;
+        document.getElementById("errorMessage").style.display = "block";
     } finally {
         submitBtn.textContent = originalText;
         submitBtn.disabled = false;
@@ -514,6 +517,7 @@ document.getElementById("admissionForm").addEventListener("submit", async functi
 document.getElementById("admissionForm").addEventListener("reset", function(){
     setTimeout(function(){
         document.getElementById("successMessage").style.display = "none";
+        document.getElementById("errorMessage").style.display = "none";
         document.getElementById("photoPreview").style.display = "none";
         document.getElementById("photoText").style.display = "block";
     }, 100);
