@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KMC-HSSD BA Student Support Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #DAA520;
+            --primary-dark: #B8860B;
+            --bg-dark: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --bg-tertiary: #3a3a3a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+            --border-color: #404040;
+            --accent-blue: #3b82f6;
+            --success-green: #10b981;
+            --error-red: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left h2 {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .header-left p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .sync-status {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 4px;
+            background-color: var(--bg-tertiary);
+            color: var(--text-secondary);
+        }
+
+        .sync-status.synced {
+            color: var(--success-green);
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+
+        .sync-status.syncing {
+            color: var(--primary-color);
+            background-color: rgba(218, 165, 32, 0.1);
+        }
+
+        .sync-status.error {
+            color: var(--error-red);
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        .language-toggle {
+            padding: 6px 12px;
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .language-toggle:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid var(--border-color);
+            margin: 20px 0;
+        }
+
+        .modal h2 {
+            margin-bottom: 1rem;
+            font-size: 18px;
+        }
+
+        .modal-form-group {
+            margin-bottom: 12px;
+        }
+
+        .modal-form-group label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: var(--text-secondary);
+        }
+
+        .modal-form-group input {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .modal-form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .modal-form-group input.error {
+            border-color: var(--error-red);
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        .error-message {
+            font-size: 12px;
+            color: var(--error-red);
+            margin-top: 4px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+
+        .alert-success {
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success-green);
+            color: var(--success-green);
+        }
+
+        .alert-error {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error-red);
+            color: var(--error-red);
+        }
+
+        .alert-info {
+            background-color: rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: #000;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-primary:disabled {
+            background-color: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .help-link {
+            color: var(--accent-blue);
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .help-link:hover {
+            text-decoration: underline;
+        }
+
+        .diagnostic-info {
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 12px;
+            font-size: 12px;
+            font-family: monospace;
+            color: var(--text-secondary);
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .diagnostic-info strong {
+            color: var(--text-primary);
+        }
+
+        /* Main Content Area */
+        .main-wrapper {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 180px;
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            padding: 12px;
+        }
+
+        .nav-button {
+            width: 100%;
+            padding: 10px 12px;
+            background-color: transparent;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: left;
+            margin-bottom: 6px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 400;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-button:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        .nav-button.active {
+            background-color: rgba(218, 165, 32, 0.15);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .nav-button i {
+            font-size: 14px;
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .card h3 {
+            margin: 0 0 12px 0;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        /* Welcome Box */
+        .welcome-box {
+            background: linear-gradient(135deg, rgba(218, 165, 32, 0.2) 0%, rgba(218, 165, 32, 0.1) 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .welcome-box h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .welcome-box p {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        /* Metric Cards */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .metric-card {
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .metric-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            margin: 0;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .metric-value {
+            margin: 4px 0 0 0;
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        /* Module Grid */
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .module-button {
+            padding: 16px;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s;
+            color: var(--text-primary);
+        }
+
+        .module-button:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .module-button-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .module-button-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Form */
+        .form-container {
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.25rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background-color: rgba(218, 165, 32, 0.05);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 1rem;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 140px;
+                padding: 8px;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+
+            .modal-content {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <h2>🎓 <span id="headerTitle">KMC-HSSD BA Student Support Portal</span></h2>
+                <p>Kapilvastu Multiple Campus</p>
+            </div>
+            <div class="header-controls">
+                <div class="sync-status" id="syncStatus">Ready</div>
+                <button class="language-toggle" onclick="toggleLanguage()">
+                    <span id="langBtn">नेपाली</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Setup Modal -->
+        <div class="modal" id="setupModal">
+            <div class="modal-content">
+                <h2>⚙️ Setup Required</h2>
+                <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 1rem;">
+                    Connect to Google Sheets to store all data in the cloud.
+                </p>
+
+                <div id="setupAlerts"></div>
+
+                <div class="modal-form-group">
+                    <label>Google Apps Script Web App URL *</label>
+                    <input type="text" id="scriptUrl" placeholder="https://script.google.com/macros/d/..." />
+                    <div class="error-message" id="scriptUrlError"></div>
+                    <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">
+                        <strong>Format:</strong> Must start with https://script.google.com/macros/d/ and contain /usercopy
+                    </div>
+                </div>
+
+                <div class="modal-form-group">
+                    <label>Student Name *</label>
+                    <input type="text" id="studentName" placeholder="Your full name" />
+                    <div class="error-message" id="studentNameError"></div>
+                </div>
+
+                <div class="modal-form-group">
+                    <label>Email (Optional)</label>
+                    <input type="email" id="studentEmail" placeholder="your@email.com" />
+                </div>
+
+                <div class="modal-buttons">
+                    <button class="btn btn-primary" onclick="validateAndInitialize()">Start Using</button>
+                    <button class="btn btn-secondary btn-small" onclick="showSetupHelp()">
+                        <i class="fas fa-question-circle"></i> Help
+                    </button>
+                </div>
+
+                <div class="alert alert-info" style="margin-top: 1rem;">
+                    <strong>👉 New here?</strong> <span onclick="showSetupHelp()" class="help-link">Click here for setup instructions</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-wrapper">
+            <!-- Sidebar -->
+            <div class="sidebar" id="sidebar"></div>
+
+            <!-- Content -->
+            <div class="content" id="contentArea"></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Developed by Mr. Bishnu Singh Rayamajhi | Head of HSS Department | Kapilvastu Multiple Campus</p>
+            <p style="margin-top: 4px;">Cloud-Powered with Google Sheets ☁️</p>
+        </div>
+    </div>
+
+    <script>
+        // Comprehensive Translations
+        const translations = {
+            en: {
+                headerTitle: 'KMC-HSSD BA Student Support Portal',
+                langBtn: 'नेपाली',
+                home: 'Home',
+                profile: 'Student Profile',
+                academic: 'Academic',
+                research: 'Research',
+                activities: 'Activities',
+                career: 'Career',
+                leadership: 'Leadership',
+                achievement: 'Achievement',
+                voice: 'Student Voice',
+                welcome: 'Welcome to KMC-HSSD',
+                subtitle: 'BA Student Development & Support Platform',
+                modules: 'Modules',
+                completed: 'Completed',
+                quickAccess: 'Quick Access',
+                recentActivities: 'Recent Activities',
+                profileInfo: 'Profile Information',
+                registration: 'Student Registration',
+                interests: 'Interest & Talent',
+                skills: 'Skills Profile',
+                academicGoal: 'Academic Goal',
+                subjectPref: 'Subject Preference',
+                support: 'Academic Support',
+                resources: 'Learning Resources',
+                researchInterest: 'Research Interest',
+                researchProj: 'Research Project',
+                researchIdea: 'Research Idea',
+                article: 'Article Submission',
+                innovation: 'Innovation',
+                seminar: 'Seminar',
+                workshop: 'Workshop',
+                presentation: 'Presentation',
+                fieldVisit: 'Field Visit',
+                competition: 'Competition',
+                careerGoal: 'Career Goal',
+                skillsAssess: 'Skills Assessment',
+                internship: 'Internship',
+                clubs: 'Clubs',
+                volunteer: 'Volunteer',
+                leadershipRole: 'Leadership Role',
+                peerMentor: 'Peer Mentor',
+                socialService: 'Social Service',
+                achievementEntry: 'Achievement',
+                portfolio: 'Student Portfolio',
+                suggestion: 'Suggestion',
+                grievance: 'Grievance/Help',
+                feedback: 'Engagement Feedback',
+                save: 'Save',
+                cancel: 'Cancel',
+                fullName: 'Full Name',
+                email: 'Email',
+                details: 'Details',
+                addEntry: 'Add entry',
+                saving: 'Saving...',
+                saved: 'Saved to Google Sheets ✓',
+                error: 'Error saving data',
+                syncSuccess: 'Data synced successfully',
+                syncError: 'Sync failed - Check your connection'
+            },
+            ne: {
+                headerTitle: 'KMC-HSSD BA विद्यार्थी समर्थन पोर्टल',
+                langBtn: 'English',
+                home: 'गृह',
+                profile: 'विद्यार्थी प्रोफाइल',
+                academic: 'शैक्षणिक',
+                research: 'अनुसन्धान',
+                activities: 'गतिविधि',
+                career: 'क्यारियर',
+                leadership: 'नेतृत्व',
+                achievement: 'उपलब्धि',
+                voice: 'विद्यार्थी आवाज',
+                welcome: 'KMC-HSSD मा स्वागत',
+                subtitle: 'BA विद्यार्थी विकास र समर्थन मञ्च',
+                modules: 'मोड्यूलहरू',
+                completed: 'पूर्ण गरिएको',
+                quickAccess: 'द्रुत पहुँच',
+                recentActivities: 'हालको गतिविधि',
+                profileInfo: 'प्रोफाइल जानकारी',
+                registration: 'विद्यार्थी दर्ता',
+                interests: 'रुचि र प्रतिभा',
+                skills: 'कौशल प्रोफाइल',
+                academicGoal: 'शैक्षणिक लक्ष्य',
+                subjectPref: 'विषय वरीयता',
+                support: 'शैक्षणिक समर्थन',
+                resources: 'सिकाइ संसाधन',
+                researchInterest: 'अनुसन्धान रुचि',
+                researchProj: 'अनुसन्धान परियोजना',
+                researchIdea: 'अनुसन्धान विचार',
+                article: 'लेख प्रस्तुति',
+                innovation: 'नवाचार',
+                seminar: 'सेमिनार',
+                workshop: 'कार्यशाला',
+                presentation: 'प्रस्तुति',
+                fieldVisit: 'क्षेत्र भ्रमण',
+                competition: 'प्रतियोगिता',
+                careerGoal: 'क्यारियर लक्ष्य',
+                skillsAssess: 'कौशल मूल्यांकन',
+                internship: 'इन्टर्नशिप',
+                clubs: 'क्लब',
+                volunteer: 'स्वेच्छासेवक',
+                leadershipRole: 'नेतृत्व भूमिका',
+                peerMentor: 'समवयस्क मेन्टर',
+                socialService: 'सामाजिक सेवा',
+                achievementEntry: 'उपलब्धि',
+                portfolio: 'विद्यार्थी पोर्टफोलियो',
+                suggestion: 'सुझाव',
+                grievance: 'गुनासो/सहायता',
+                feedback: 'संलग्नता प्रतिक्रिया',
+                save: 'बचाउनुहोस्',
+                cancel: 'रद्द गर्नुहोस्',
+                fullName: 'पूरा नाम',
+                email: 'ईमेल',
+                details: 'विवरण',
+                addEntry: 'प्रविष्टि थप्नुहोस्',
+                saving: 'बचाउँदै...',
+                saved: 'Google Sheets मा बचाइयो ✓',
+                error: 'डेटा बचाउन त्रुटि',
+                syncSuccess: 'डेटा सफलतापूर्वक सिङ्क भयो',
+                syncError: 'सिङ्क असफल - आपनको जडान जाँच गर्नुहोस्'
+            }
+        };
+
+        const modules = [
+            { id: 'home', label: 'home', icon: 'fas fa-home' },
+            { id: 'profile', label: 'profile', icon: 'fas fa-user' },
+            { id: 'academic', label: 'academic', icon: 'fas fa-book' },
+            { id: 'research', label: 'research', icon: 'fas fa-microscope' },
+            { id: 'activities', label: 'activities', icon: 'fas fa-star' },
+            { id: 'career', label: 'career', icon: 'fas fa-briefcase' },
+            { id: 'leadership', label: 'leadership', icon: 'fas fa-users' },
+            { id: 'achievement', label: 'achievement', icon: 'fas fa-trophy' },
+            { id: 'voice', label: 'voice', icon: 'fas fa-comment-dots' }
+        ];
+
+        const subModules = {
+            profile: ['registration', 'interests', 'skills'],
+            academic: ['academicGoal', 'subjectPref', 'support', 'resources'],
+            research: ['researchInterest', 'researchProj', 'researchIdea', 'article', 'innovation'],
+            activities: ['seminar', 'workshop', 'presentation', 'fieldVisit', 'competition'],
+            career: ['careerGoal', 'skillsAssess', 'internship'],
+            leadership: ['clubs', 'volunteer', 'leadershipRole', 'peerMentor', 'socialService'],
+            achievement: ['achievementEntry', 'portfolio'],
+            voice: ['suggestion', 'grievance', 'feedback']
+        };
+
+        // State Management
+        let currentLanguage = 'en';
+        let currentModule = 'home';
+        let activeForm = null;
+        let studentData = {};
+        let activities = [];
+        let googleAppsScriptUrl = '';
+        let studentName = '';
+        let studentEmail = '';
+        let isConnected = false;
+
+        // Initialize
+        function init() {
+            loadFromStorage();
+            
+            if (!googleAppsScriptUrl || !studentName) {
+                showSetupModal();
+            } else {
+                loadDataFromSheets();
+                renderSidebar();
+                renderContent();
+            }
+        }
+
+        // Validation Functions
+        function validateScriptUrl(url) {
+            if (!url) return { valid: false, error: 'URL is required' };
+            if (!url.startsWith('https://script.google.com/macros/d/')) {
+                return { valid: false, error: 'URL must start with https://script.google.com/macros/d/' };
+            }
+            if (!url.includes('/usercopy')) {
+                return { valid: false, error: 'URL must contain /usercopy' };
+            }
+            return { valid: true };
+        }
+
+        function validateStudentName(name) {
+            if (!name || name.trim().length === 0) {
+                return { valid: false, error: 'Name is required' };
+            }
+            if (name.trim().length < 2) {
+                return { valid: false, error: 'Name must be at least 2 characters' };
+            }
+            return { valid: true };
+        }
+
+        // Setup Modal
+        function showSetupModal() {
+            document.getElementById('setupModal').classList.add('active');
+        }
+
+        // Validation and Initialize
+        function validateAndInitialize() {
+            const urlInput = document.getElementById('scriptUrl');
+            const nameInput = document.getElementById('studentName');
+
+            const urlValidation = validateScriptUrl(urlInput.value);
+            const nameValidation = validateStudentName(nameInput.value);
+
+            let hasErrors = false;
+
+            if (!urlValidation.valid) {
+                urlInput.classList.add('error');
+                document.getElementById('scriptUrlError').textContent = urlValidation.error;
+                document.getElementById('scriptUrlError').classList.add('show');
+                hasErrors = true;
+            } else {
+                urlInput.classList.remove('error');
+                document.getElementById('scriptUrlError').classList.remove('show');
+            }
+
+            if (!nameValidation.valid) {
+                nameInput.classList.add('error');
+                document.getElementById('studentNameError').textContent = nameValidation.error;
+                document.getElementById('studentNameError').classList.add('show');
+                hasErrors = true;
+            } else {
+                nameInput.classList.remove('error');
+                document.getElementById('studentNameError').classList.remove('show');
+            }
+
+            if (!hasErrors) {
+                initializeApp();
+            }
+        }
+
+        function initializeApp() {
+            googleAppsScriptUrl = document.getElementById('scriptUrl').value;
+            studentName = document.getElementById('studentName').value;
+            studentEmail = document.getElementById('studentEmail').value;
+
+            studentData.name = studentName;
+            studentData.email = studentEmail;
+
+            saveToStorage();
+            document.getElementById('setupModal').classList.remove('active');
+
+            testConnection();
+        }
+
+        // Test Connection
+        async function testConnection() {
+            updateSyncStatus('Testing...', 'syncing');
+            
+            try {
+                const response = await fetch(googleAppsScriptUrl + '?action=loadData&studentID=' + encodeURIComponent(studentName), {
+                    method: 'GET'
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const result = await response.json();
+                isConnected = true;
+                updateSyncStatus('Connected ✓', 'synced');
+                
+                loadDataFromSheets();
+                renderSidebar();
+                renderContent();
+            } catch (error) {
+                console.error('Connection test failed:', error);
+                isConnected = false;
+                updateSyncStatus('Connection Failed ❌', 'error');
+                
+                showConnectionError(error);
+            }
+        }
+
+        function showConnectionError(error) {
+            const alertsDiv = document.getElementById('setupAlerts');
+            alertsDiv.innerHTML = `
+                <div class="alert alert-error">
+                    <strong>❌ Connection Error:</strong><br/>
+                    ${error.message}<br/><br/>
+                    <strong>What to check:</strong>
+                    <ul style="margin: 8px 0 0 0; padding-left: 20px;">
+                        <li>URL format is correct (starts with https://script.google.com/macros/d/)</li>
+                        <li>Apps Script deployed as "Web app" (not "API executable")</li>
+                        <li>"Who has access" set to "Anyone"</li>
+                        <li>Internet connection is active</li>
+                    </ul>
+                    <a href="#" onclick="showFullSetupHelp()" class="help-link" style="display: inline-block; margin-top: 8px;">
+                        📖 View complete troubleshooting guide
+                    </a>
+                </div>
+            `;
+            
+            showSetupModal();
+        }
+
+        function showSetupHelp() {
+            alert(`⚙️ SETUP INSTRUCTIONS
+
+1. CREATE GOOGLE SHEET
+   - Go to sheets.google.com
+   - Create new sheet
+   - Copy the ID from URL
+
+2. DEPLOY APPS SCRIPT
+   - Extensions > Apps Script
+   - Paste code from google_apps_script.gs
+   - Update SHEET_ID with your ID
+   - Save (Ctrl+S)
+   - Deploy > New Deployment > Web app
+   - Set "Who has access" to "Anyone"
+   - Copy the Web App URL
+
+3. PASTE URL HERE
+   - Paste the Web App URL above
+   - Enter your name
+   - Click "Start Using"
+
+Need more help? See TROUBLESHOOTING_FETCH_ERROR.md file.`);
+        }
+
+        function showFullSetupHelp() {
+            alert(`DETAILED TROUBLESHOOTING
+
+❌ "Failed to fetch" Error?
+
+FIX 1: Check URL Format
+✓ Should be: https://script.google.com/macros/d/[ID]/usercopy
+✗ Wrong: https://script.google.com/macros/s/...
+✗ Wrong: Missing /usercopy
+
+FIX 2: Check Deployment
+1. Go to Google Apps Script
+2. Click Deploy button
+3. Verify "Web app" type
+4. Verify "Who has access" = "Anyone"
+5. If wrong, delete and create NEW deployment
+
+FIX 3: Check Sheet ID
+1. In Apps Script, find: const SHEET_ID = '...'
+2. Make sure it matches your sheet's ID
+3. Save and deploy again
+
+FIX 4: Try Fresh Setup
+1. Create NEW Google Sheet
+2. Create NEW Apps Script deployment
+3. Try again with new URL
+
+If still stuck, check browser console (F12 > Console tab) for error details.`);
+        }
+
+        // Translation Helper
+        function t(key) {
+            return translations[currentLanguage][key] || key;
+        }
+
+        // Language Toggle
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'ne' : 'en';
+            document.getElementById('langBtn').textContent = t('langBtn');
+            document.getElementById('headerTitle').textContent = t('headerTitle');
+            renderSidebar();
+            renderContent();
+        }
+
+        // Storage Functions
+        function saveToStorage() {
+            localStorage.setItem('kmc_scriptUrl', googleAppsScriptUrl);
+            localStorage.setItem('kmc_studentName', studentName);
+            localStorage.setItem('kmc_studentEmail', studentEmail);
+            localStorage.setItem('kmc_student_data', JSON.stringify(studentData));
+            localStorage.setItem('kmc_activities', JSON.stringify(activities));
+        }
+
+        function loadFromStorage() {
+            googleAppsScriptUrl = localStorage.getItem('kmc_scriptUrl') || '';
+            studentName = localStorage.getItem('kmc_studentName') || '';
+            studentEmail = localStorage.getItem('kmc_studentEmail') || '';
+            const savedData = localStorage.getItem('kmc_student_data');
+            const savedActivities = localStorage.getItem('kmc_activities');
+            if (savedData) studentData = JSON.parse(savedData);
+            if (savedActivities) activities = JSON.parse(savedActivities);
+        }
+
+        // Sync Status
+        function updateSyncStatus(message, type = 'syncing') {
+            const statusEl = document.getElementById('syncStatus');
+            statusEl.textContent = message;
+            statusEl.className = 'sync-status ' + type;
+            
+            if (type === 'synced') {
+                setTimeout(() => {
+                    if (isConnected) {
+                        statusEl.textContent = 'Connected ✓';
+                        statusEl.className = 'sync-status synced';
+                    }
+                }, 2000);
+            }
+        }
+
+        // Load Data from Google Sheets
+        async function loadDataFromSheets() {
+            if (!googleAppsScriptUrl || !isConnected) return;
+
+            try {
+                const response = await fetch(googleAppsScriptUrl + '?action=loadData&studentID=' + encodeURIComponent(studentName));
+                const result = await response.json();
+                
+                if (result.status === 'success' && result.data) {
+                    activities = result.data.map(d => ({
+                        id: d.id,
+                        type: d.subModule,
+                        details: d.details,
+                        date: d.date
+                    }));
+                    saveToStorage();
+                }
+            } catch (error) {
+                console.log('Warning: Could not load from Google Sheets:', error);
+            }
+        }
+
+        // Save to Google Sheets
+        async function saveToGoogleSheets(module, subModule, details) {
+            if (!googleAppsScriptUrl || !isConnected) {
+                updateSyncStatus('Offline Mode', 'error');
+                return true; // Save locally anyway
+            }
+
+            updateSyncStatus('Saving...', 'syncing');
+
+            try {
+                const response = await fetch(googleAppsScriptUrl, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'saveData',
+                        module: module,
+                        subModule: subModule,
+                        name: studentName,
+                        email: studentEmail,
+                        details: details
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    updateSyncStatus('Synced ✓', 'synced');
+                    return true;
+                } else {
+                    updateSyncStatus('Sync Error', 'error');
+                    console.error('Server error:', result.message);
+                    return false;
+                }
+            } catch (error) {
+                console.error('Save error:', error);
+                updateSyncStatus('Error', 'error');
+                return false;
+            }
+        }
+
+        // Render Sidebar
+        function renderSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.innerHTML = modules.map(m => `
+                <button class="nav-button ${currentModule === m.id ? 'active' : ''}" onclick="setModule('${m.id}')">
+                    <i class="${m.icon}"></i>
+                    <span>${t(m.label)}</span>
+                </button>
+            `).join('');
+        }
+
+        // Set Module
+        function setModule(moduleId) {
+            currentModule = moduleId;
+            activeForm = null;
+            renderSidebar();
+            renderContent();
+        }
+
+        // Render Content - Main Router
+        function renderContent() {
+            const contentArea = document.getElementById('contentArea');
+            
+            switch(currentModule) {
+                case 'home': contentArea.innerHTML = renderHome(); break;
+                case 'profile': contentArea.innerHTML = renderProfile(); break;
+                case 'academic': contentArea.innerHTML = renderModuleContent('academic'); break;
+                case 'research': contentArea.innerHTML = renderModuleContent('research'); break;
+                case 'activities': contentArea.innerHTML = renderModuleContent('activities'); break;
+                case 'career': contentArea.innerHTML = renderModuleContent('career'); break;
+                case 'leadership': contentArea.innerHTML = renderModuleContent('leadership'); break;
+                case 'achievement': contentArea.innerHTML = renderModuleContent('achievement'); break;
+                case 'voice': contentArea.innerHTML = renderModuleContent('voice'); break;
+                default: contentArea.innerHTML = renderHome();
+            }
+        }
+
+        // Home Module
+        function renderHome() {
+            return `
+                <div>
+                    <div class="welcome-box">
+                        <h1>${t('welcome')} 👋</h1>
+                        <p>${t('subtitle')}</p>
+                        <p style="margin-top: 10px; font-size: 13px; color: var(--text-primary);">
+                            <i class="fas fa-user"></i> ${studentName} | 
+                            <i class="fas ${isConnected ? 'fa-check-circle text-success' : 'fa-wifi-off'}"></i> 
+                            ${isConnected ? 'Cloud Connected' : 'Offline Mode'}
+                        </p>
+                    </div>
+
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-icon">📚</div>
+                            <p class="metric-label">${t('modules')}</p>
+                            <p class="metric-value">9</p>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">✅</div>
+                            <p class="metric-label">${t('completed')}</p>
+                            <p class="metric-value">${activities.length}</p>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">${isConnected ? '☁️' : '💾'}</div>
+                            <p class="metric-label">Sync Status</p>
+                            <p class="metric-value" style="color: ${isConnected ? 'var(--success-green)' : 'var(--text-secondary)'}">
+                                ${isConnected ? 'Live' : 'Local'}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>${t('quickAccess')}</h3>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+                            ${[1, 2, 3, 4].map(i => {
+                                const m = modules[i];
+                                return `
+                                    <button class="module-button" onclick="setModule('${m.id}')">
+                                        <i class="${m.icon}"></i> ${t(m.label)}
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    ${activities.length > 0 ? `
+                        <div class="card">
+                            <h3>${t('recentActivities')} 📊</h3>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                ${activities.slice(0, 5).map(act => `
+                                    <div style="padding: 8px 12px; background-color: var(--bg-tertiary); border-radius: 6px; font-size: 13px;">
+                                        ✓ ${act.type} - ${act.date}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        // Profile Module
+        function renderProfile() {
+            if (activeForm) {
+                return `
+                    <div>
+                        <div class="form-container">
+                            <h3>Add ${t(activeForm)}</h3>
+                            <form onsubmit="handleFormSubmit(event, '${activeForm}')">
+                                <div class="form-group">
+                                    <label>${t('fullName')}</label>
+                                    <input type="text" id="formName" value="${studentName}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>${t('details')}</label>
+                                    <textarea id="formDetails" placeholder="Enter details..."></textarea>
+                                </div>
+                                <div class="form-buttons">
+                                    <button type="submit" class="btn btn-primary" id="submitBtn">${t('save')}</button>
+                                    <button type="button" class="btn btn-secondary" onclick="activeForm = null; renderContent()">${t('cancel')}</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                `;
+            }
+
+            return `
+                <div>
+                    <div class="card">
+                        <h3>${t('profileInfo')}</h3>
+                        <div style="font-size: 15px; color: var(--text-secondary);">
+                            <p><strong>Name:</strong> ${studentData.name || studentName}</p>
+                            ${studentData.email ? `<p><strong>Email:</strong> ${studentData.email}</p>` : ''}
+                        </div>
+                    </div>
+
+                    <div class="module-grid">
+                        ${subModules.profile.map(sub => `
+                            <button class="module-button" onclick="activeForm = '${sub}'; renderContent()">
+                                <div class="module-button-title">+ ${t(sub)}</div>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Module Content
+        function renderModuleContent(moduleName) {
+            if (activeForm) {
+                return `
+                    <div>
+                        <div class="form-container">
+                            <h3>Add ${t(activeForm)}</h3>
+                            <form onsubmit="handleFormSubmit(event, '${activeForm}')">
+                                <div class="form-group">
+                                    <label>${t('fullName')}</label>
+                                    <input type="text" id="formName" value="${studentName}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>${t('details')}</label>
+                                    <textarea id="formDetails" placeholder="Enter details..."></textarea>
+                                </div>
+                                <div class="form-buttons">
+                                    <button type="submit" class="btn btn-primary" id="submitBtn">${t('save')}</button>
+                                    <button type="button" class="btn btn-secondary" onclick="activeForm = null; renderContent()">${t('cancel')}</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                `;
+            }
+
+            const subs = subModules[moduleName] || [];
+            return `
+                <div class="module-grid">
+                    ${subs.map(sub => `
+                        <button class="module-button" onclick="activeForm = '${sub}'; renderContent()">
+                            <div class="module-button-title">+ ${t(sub)}</div>
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Form Submission
+        async function handleFormSubmit(event, formType) {
+            event.preventDefault();
+            
+            const name = document.getElementById('formName').value;
+            const details = document.getElementById('formDetails').value;
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (!name) {
+                alert('Please enter a name');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = t('saving');
+
+            const saved = await saveToGoogleSheets(currentModule, formType, details);
+
+            if (saved || !isConnected) {
+                studentName = name;
+                studentData.name = name;
+
+                const activity = {
+                    id: Date.now(),
+                    type: formType,
+                    details: details,
+                    date: new Date().toLocaleDateString()
+                };
+
+                activities.unshift(activity);
+                saveToStorage();
+
+                activeForm = null;
+                renderContent();
+            } else {
+                submitBtn.disabled = false;
+                submitBtn.textContent = t('save');
+                alert(t('error'));
+            }
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
