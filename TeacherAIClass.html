@@ -1,0 +1,1617 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Teacher AI Class — Teach Mathematics Smarter with AI</title>
+<meta name="description" content="AI-powered Mathematics teaching platform for NEB, B.Ed., and B.Sc. — visualize, simulate, and teach smarter with AI." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          navy: '#001f3f',
+          navylight: '#003d66',
+          gold: '#ffc107',
+          goldlight: '#ffde59',
+          lightblue: '#e3f2fd',
+        },
+        fontFamily: {
+          sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          display: ['Poppins', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        }
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --bg: #ffffff; --bg-alt: #f5f7fa; --surface: #ffffff; --text: #0f172a; --text-muted: #64748b;
+    --border: #e2e8f0; --navy: #001f3f; --gold: #ffc107;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0a0f1a; --bg-alt: #0f172a; --surface: #111827; --text: #f1f5f9; --text-muted: #94a3b8; --border: #1e293b;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0a0f1a; --bg-alt: #0f172a; --surface: #111827; --text: #f1f5f9; --text-muted: #94a3b8; --border: #1e293b;
+  }
+  html, body { background: var(--bg); color: var(--text); font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
+  h1,h2,h3,h4,h5,h6 { font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg-alt); }
+  ::-webkit-scrollbar-thumb { background: var(--navy); border-radius: 9999px; }
+  .surface { background: var(--surface); border: 1px solid var(--border); }
+  .text-muted { color: var(--text-muted); }
+  .bg-app { background: var(--bg); }
+  .bg-app-alt { background: var(--bg-alt); }
+  .border-app { border-color: var(--border); }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px);} to { opacity: 1; transform: translateY(0);} }
+  .fade-in { animation: fadeIn .35s ease-out; }
+  .btn { font-weight: 600; border-radius: .6rem; padding: .6rem 1.4rem; transition: all .15s ease; display: inline-flex; align-items:center; gap:.4rem; cursor: pointer; border: none; }
+  .btn-primary { background: var(--navy); color: #fff; }
+  .btn-primary:hover { background: #003a63; box-shadow: 0 4px 14px rgba(0,31,63,.25); }
+  .btn-gold { background: var(--gold); color: var(--navy); }
+  .btn-gold:hover { background: #ffde59; box-shadow: 0 4px 14px rgba(255,193,7,.3); }
+  .btn-outline { background: transparent; border: 2px solid var(--navy); color: var(--navy); }
+  :root[data-theme="dark"] .btn-outline, @media (prefers-color-scheme: dark) { }
+  .btn-outline:hover { background: var(--navy); color: #fff; }
+  .btn-ghost { background: transparent; color: var(--navy); }
+  .btn-ghost:hover { background: rgba(0,31,63,.08); }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: .9rem; padding: 1.5rem; box-shadow: 0 1px 2px rgba(0,0,0,.04); transition: box-shadow .2s, border-color .2s; }
+  .card-hover:hover { box-shadow: 0 8px 24px rgba(0,0,0,.08); border-color: var(--navy); cursor: pointer; }
+  .input-field { width: 100%; padding: .55rem .9rem; border-radius: .6rem; border: 1px solid var(--border); background: var(--surface); color: var(--text); }
+  .input-field:focus { outline: 2px solid var(--navy); outline-offset: 1px; }
+  .badge { display:inline-flex; align-items:center; padding: .2rem .7rem; border-radius: 9999px; font-size: .75rem; font-weight: 700; }
+  .badge-gold { background: var(--gold); color: var(--navy); }
+  .badge-navy { background: var(--navy); color: #fff; }
+  .badge-soft { background: var(--lightblue, #e3f2fd); color: var(--navy); }
+  :root[data-theme="dark"] .badge-soft, .dark .badge-soft { background: #1e293b; color: var(--gold); }
+  .text-gradient { background: linear-gradient(90deg, var(--navy), #2563eb, var(--gold)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .grid-3 { display: grid; grid-template-columns: repeat(1,minmax(0,1fr)); gap: 1.5rem; }
+  @media (min-width: 768px) { .grid-3 { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+  @media (min-width: 1024px) { .grid-3 { grid-template-columns: repeat(3,minmax(0,1fr)); } }
+  .grid-2 { display: grid; grid-template-columns: repeat(1,minmax(0,1fr)); gap: 1.5rem; }
+  @media (min-width: 1024px) { .grid-2 { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+  .container-wide { max-width: 80rem; margin: 0 auto; padding: 3rem 1.25rem; }
+  .nav-link { padding: .5rem .65rem; font-size: .875rem; font-weight: 500; color: var(--text-muted); border-radius: .5rem; white-space: nowrap; }
+  .nav-link:hover { color: var(--navy); }
+  .dark .nav-link:hover { color: var(--gold); }
+  .nav-link.active { color: var(--navy); font-weight: 700; }
+  .dark .nav-link.active { color: var(--gold); }
+  table.data-table { width: 100%; font-size: .875rem; border-collapse: collapse; }
+  table.data-table th { text-align:left; padding: .8rem; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+  table.data-table td { padding: .8rem; border-bottom: 1px solid var(--border); }
+  .range-navy { accent-color: var(--navy); }
+  .step-num { width: 1.4rem; height: 1.4rem; border-radius: 9999px; background: var(--navy); color: #fff; font-size: .7rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .spin { animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body class="bg-app">
+<div id="app"></div>
+<script>
+// ============================================================
+// TEACHER AI CLASS — single-file application
+// ============================================================
+const ICONS = {
+  grid: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>',
+  arrowRight: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>',
+  chevLeft: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
+  sun: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>',
+  moon: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>',
+  menu: '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>',
+  close: '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>',
+  check: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>',
+  copy: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
+  refresh: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>',
+  save: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>',
+  download: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
+  star: (filled)=>'<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="'+(filled?'#ffc107':'none')+'" stroke="'+(filled?'#ffc107':'currentColor')+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+  play: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>',
+  pause: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>',
+  lock: '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>',
+  clock: '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+};
+
+// ---------- Demo data ----------
+const DEMO_COURSES = [
+  {id:'c1', title:'AI for Mathematics Teachers', category:'AI in Education', desc:'Integrate AI tools into daily mathematics teaching — from lesson planning to assessment generation.', lessons:['Introduction to AI in Education','Prompt Engineering for Teachers','AI-Assisted Lesson Planning']},
+  {id:'c2', title:'Mathematics Visualization & Simulation', category:'Visualization', desc:'Master interactive tools to visualize functions, geometry, calculus, and statistics.', lessons:['Function Graphing Fundamentals','Visualizing Limits and Derivatives','Simulating Probability Experiments']},
+  {id:'c3', title:'AI Lesson Planning', category:'AI Teaching Tools', desc:'Generate differentiated, standards-aligned lesson plans using AI in minutes.', lessons:['Structuring a Strong Lesson Plan','Differentiation with AI']},
+  {id:'c4', title:'AI Assessment', category:'Assessment', desc:'Generate worksheets, question papers, MCQs, and answer keys aligned with NEB and university syllabi.', lessons:['Designing Fair Assessments','Building Question Papers with AI']},
+  {id:'c5', title:'AI Digital Content Creation', category:'Content Creation', desc:'Create presentations, video scripts, and infographics for mathematics topics using AI.', lessons:['PPT Content with AI','Scripting Educational Videos']},
+  {id:'c6', title:'AI-Powered Smart Classroom', category:'Smart Classroom', desc:'Combine visualization, simulation, AI generation, and assessment in one classroom workflow.', lessons:['Designing a Smart Lesson Flow','Case Study: A Full Smart Class']},
+];
+
+const DEMO_RESOURCES = [
+  {id:'r1', title:'NEB Grade 11 — Quadratic Equations Notes', desc:'Complete notes covering quadratic equations, roots, and applications.', cat:'NEB Mathematics', type:'pdf'},
+  {id:'r2', title:'B.Ed. Mathematics — Calculus Worksheet Set', desc:'Differentiation and integration practice worksheets with solutions.', cat:'B.Ed. Mathematics', type:'worksheet'},
+  {id:'r3', title:'Trigonometry Identities — Presentation', desc:'A ready-to-teach slide deck on trigonometric identities and proofs.', cat:'Trigonometry', type:'ppt'},
+  {id:'r4', title:'B.Sc. Mathematics — Vector Spaces Question Bank', desc:'Question paper covering vector spaces, basis, and dimension.', cat:'B.Sc. Mathematics', type:'pdf'},
+  {id:'r5', title:'Understanding Limits — Explainer Video', desc:'A short video explaining the concept of limits using real motion examples.', cat:'Calculus', type:'video'},
+  {id:'r6', title:'Probability Basics Simulation Pack', desc:'Coin toss, dice roll, and card draw simulations for classroom demonstration.', cat:'Probability', type:'simulation'},
+  {id:'r7', title:'Statistics — Measures of Central Tendency Notes', desc:'Mean, median, mode with worked examples and NEB-style questions.', cat:'Statistics', type:'pdf'},
+  {id:'r8', title:'Higher Mathematics — Differential Equations Question Paper', desc:'Full-length practice paper with marking scheme.', cat:'Higher Mathematics', type:'pdf'},
+  {id:'r9', title:'Coordinate Geometry — Circle and Parabola Worksheet', desc:'Graded worksheet moving from basic to HOTS-level problems.', cat:'Geometry', type:'worksheet'},
+  {id:'r10', title:'AI in Mathematics Education — Research Brief', desc:'A short research brief on AI adoption in Nepali mathematics classrooms.', cat:'AI in Education', type:'pdf'},
+  {id:'r11', title:'Algebra Foundations — Full Notes', desc:'Polynomials, factoring, and algebraic identities for NEB Grade 9-10.', cat:'Algebra', type:'pdf'},
+  {id:'r12', title:'Research Methods in Mathematics Education', desc:'SPSS-based data analysis techniques for classroom action research.', cat:'Research Mathematics', type:'pdf'},
+];
+
+const DEMO_QUIZZES = [
+  {id:'q1', title:'Quadratic Equations Quiz', topic:'Algebra', timeLimit:300, questions:[
+    {q:'What are the roots of x² − 5x + 6 = 0?', options:['x = 2, 3','x = 1, 6','x = -2, -3','x = 2, -3'], correct:0, marks:2, exp:'Factoring gives (x−2)(x−3)=0, so x=2 or x=3.'},
+    {q:'The discriminant of ax² + bx + c = 0 is:', options:['b² − 4ac','b² + 4ac','4ac − b²','2b − 4ac'], correct:0, marks:1, exp:'The discriminant D = b² − 4ac determines the nature of the roots.'},
+    {q:'If the discriminant is negative, the roots are:', options:['Real and equal','Real and distinct','Complex (imaginary)','Zero'], correct:2, marks:1, exp:'A negative discriminant gives an imaginary square root, so the roots are complex.'},
+    {q:'The sum of roots of 2x² − 7x + 3 = 0 is:', options:['7/2','-7/2','3/2','2/7'], correct:0, marks:2, exp:'Sum of roots = −b/a = 7/2.'},
+    {q:'The product of roots of x² − 3x − 10 = 0 is:', options:['-10','10','3','-3'], correct:0, marks:2, exp:'Product of roots = c/a = −10.'},
+  ]},
+  {id:'q2', title:'Trigonometry Fundamentals', topic:'Trigonometry', timeLimit:240, questions:[
+    {q:'What is the value of sin(90°)?', options:['0','1','-1','1/2'], correct:1, marks:1, exp:'sin(90°) = 1, the maximum value of sine.'},
+    {q:'sin²θ + cos²θ equals:', options:['0','1','2','tan θ'], correct:1, marks:1, exp:'This is the Pythagorean identity, true for all θ.'},
+    {q:'What is tan(45°)?', options:['0','1','√3','Undefined'], correct:1, marks:1, exp:'tan(45°) = sin(45°)/cos(45°) = 1.'},
+    {q:'180° in radians equals:', options:['π/2','π','2π','π/4'], correct:1, marks:2, exp:'180° = π radians.'},
+  ]},
+  {id:'q3', title:'Differentiation Basics', topic:'Calculus', timeLimit:300, questions:[
+    {q:'The derivative of x³ is:', options:['3x²','x²','3x','x³/3'], correct:0, marks:2, exp:'Power rule: d/dx(xⁿ) = nxⁿ⁻¹, so d/dx(x³) = 3x².'},
+    {q:'The derivative of sin(x) is:', options:['cos(x)','-cos(x)','-sin(x)','tan(x)'], correct:0, marks:1, exp:'d/dx(sin x) = cos x.'},
+    {q:'A derivative geometrically represents:', options:['Area under a curve','Slope of the tangent line','The y-intercept','The domain'], correct:1, marks:2, exp:'The derivative gives the slope of the tangent at that point.'},
+  ]},
+];
+
+const DEMO_SIMULATIONS = [
+  {id:'s1', title:'Projectile Motion', cat:'Mechanics', desc:"Launch a projectile and observe range, height, and time of flight.", live:true},
+  {id:'s6', title:'Coin Toss', cat:'Probability', desc:'Run repeated coin flips and watch probability converge to 50%.', live:true},
+  {id:'s7', title:'Dice Experiment', cat:'Probability', desc:'Roll dice repeatedly and track outcome frequency.', live:true},
+  {id:'s5', title:'Compound Interest', cat:'Applied Math', desc:'Compare simple vs. compound interest growth over time.', live:true},
+  {id:'s2', title:'Simple Harmonic Motion', cat:'Mechanics', desc:'Visualize oscillation of a pendulum-like system over time.', live:false},
+  {id:'s3', title:'Pendulum', cat:'Mechanics', desc:'Explore how length and gravity affect pendulum period.', live:false},
+  {id:'s4', title:'Population Growth', cat:'Applied Math', desc:'Model exponential and logistic population growth.', live:false},
+  {id:'s8', title:'Probability Simulation', cat:'Probability', desc:'General-purpose probability experiment sandbox.', live:false},
+  {id:'s9', title:'Random Walk', cat:'Probability', desc:'Visualize a 1D random walk path over many steps.', live:false},
+  {id:'s10', title:'Normal Distribution', cat:'Statistics', desc:'Adjust mean and standard deviation to reshape the bell curve.', live:false},
+  {id:'s11', title:'Binomial Distribution', cat:'Statistics', desc:'Explore binomial probability across trials and success rate.', live:false},
+  {id:'s12', title:'Central Limit Theorem', cat:'Statistics', desc:'Watch sample means converge to a normal distribution.', live:false},
+  {id:'s13', title:'Sampling Simulation', cat:'Statistics', desc:'Draw repeated samples and study sampling variability.', live:false},
+  {id:'s14', title:'Regression Simulation', cat:'Statistics', desc:'Fit a line to scattered data and study residuals.', live:false},
+  {id:'s15', title:'Area Under Curve', cat:'Calculus', desc:'Approximate area under a curve using rectangles.', live:false},
+  {id:'s16', title:'Numerical Integration', cat:'Calculus', desc:"Compare trapezoidal and Simpson's rule approximations.", live:false},
+  {id:'s17', title:"Newton's Method", cat:'Calculus', desc:'Watch iterative root-finding converge on a function.', live:false},
+  {id:'s18', title:'Differential Equation Simulation', cat:'Calculus', desc:'Visualize solution curves of simple ODEs.', live:false},
+  {id:'s19', title:'Vector Motion', cat:'Mechanics', desc:'Combine velocity and acceleration vectors over time.', live:false},
+  {id:'s20', title:'Optimization Simulation', cat:'Calculus', desc:'Find maxima and minima interactively on a curve.', live:false},
+];
+
+const TEACHER_STATS = {lessons:34, worksheets:58, papers:21, ppts:17, sims:12, quizzes:26};
+const ADMIN_STATS = {users:1284, active:412, courses:DEMO_COURSES.length, resources:DEMO_RESOURCES.length, attempts:3067, gens:8921};
+
+// ---------- Math / stat utilities ----------
+function evalExpr(expr, x) {
+  try {
+    let s = expr.replace(/\^/g,'**').replace(/\bpi\b/gi, Math.PI.toString());
+    s = s.replace(/(\d)(x)/g, '$1*$2');
+    s = s.replace(/sin\(/g,'Math.sin(').replace(/cos\(/g,'Math.cos(').replace(/tan\(/g,'Math.tan(')
+         .replace(/sqrt\(/g,'Math.sqrt(').replace(/abs\(/g,'Math.abs(').replace(/log\(/g,'Math.log(')
+         .replace(/\be\*\*/g, Math.E+'**');
+    s = s.replace(/\bx\b/g, '('+x+')');
+    // eslint-disable-next-line no-new-func
+    return Function('Math', 'return ' + s)(Math);
+  } catch (e) { return NaN; }
+}
+function deriv(f, x, h) { h = h || 1e-4; return (f(x+h)-f(x-h))/(2*h); }
+function round(n, d) { const p = Math.pow(10, d); return Math.round(n*p)/p; }
+function mean(arr) { return arr.reduce((a,b)=>a+b,0)/arr.length; }
+function median(arr) { const s=[...arr].sort((a,b)=>a-b); const m=Math.floor(s.length/2); return s.length%2? s[m] : (s[m-1]+s[m])/2; }
+function modeOf(arr) { const f={}; let mx=0,md=arr[0]; arr.forEach(v=>{f[v]=(f[v]||0)+1; if(f[v]>mx){mx=f[v]; md=v;}}); return md; }
+function stdev(arr) { const m=mean(arr); return Math.sqrt(mean(arr.map(v=>(v-m)**2))); }
+function toRad(d){ return d*Math.PI/180; }
+function esc(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+// ---------- AI generation service (demo-mode templates) ----------
+function aiLessonPlan(inp) {
+  const topic = inp.topic || 'the selected topic';
+  return {
+    topic: inp.topic,
+    objectives: [
+      'Define and explain the key ideas of '+topic+'.',
+      'Solve standard problems involving '+topic+' using appropriate methods.',
+      'Apply '+topic+' to at least one real-world or exam-style context.'
+    ],
+    previousKnowledge: 'Students should already be comfortable with the prerequisite skills for '+inp.cls+' '+inp.subject+', including prior units leading into '+topic+'.',
+    introduction: 'Begin with a short warm-up question connected to students\' daily experience, then bridge into '+topic+' by asking what they already know.',
+    teacherActivity: 'Introduce '+topic+' using the '+(inp.method||'guided-example')+' method. Work through 2 model problems on the board, thinking aloud at each step.',
+    studentActivity: 'Students work in pairs on 2 guided practice problems related to '+topic+', then attempt 1 problem individually.',
+    aiActivity: 'Use the AI Math Assistant to generate 3 additional worked examples at varying difficulty, and the AI Worksheet Generator for a take-home practice set.',
+    visualization: 'Open the Visualization Lab to show '+topic+' graphically, letting students manipulate parameters to build intuition.',
+    examples: ['Worked Example 1: A foundational problem on '+topic+'.','Worked Example 2: A slightly harder variant with a common exam trap.','Worked Example 3 (Application): A real-world problem using '+topic+'.'],
+    assessment: 'Exit ticket: 2 short questions on '+topic+' completed in the last 5 minutes.',
+    homework: 'Assign 6 practice problems on '+topic+' (mix of direct application and one HOTS question).',
+    resources: ['Whiteboard / smart board', 'Teacher AI Class — Visualization Lab', inp.cls+' textbook, '+topic+' chapter', 'Printed worksheet'],
+    differentiation: 'For '+(inp.level||'mixed-level')+' learners: scaffold problems for students who need support, and offer one HOTS extension for early finishers.'
+  };
+}
+function aiWorksheet(inp) {
+  const n = inp.num||8, topic = inp.topic, diff = inp.difficulty||'medium';
+  const types = (inp.types && inp.types.length) ? inp.types : ['mcq','short','numeric'];
+  const gens = {
+    mcq: (i)=>({type:'MCQ', q:'Which statement best represents a key property of '+topic+'? ('+diff+')', opts:['Correct relationship','Common misconception','Partially correct','Unrelated concept'], marks: diff==='hard'?2:1, sol:'Option A correctly reflects the standard rule for '+topic+'.'}),
+    short: (i)=>({type:'Short Answer', q:'Briefly state and explain one key rule used when working with '+topic+'. ('+diff+')', marks:2, sol:'Model answer: state the rule precisely with one supporting example.'}),
+    numeric: (i)=>({type:'Numerical', q:'Solve a standard numerical problem involving '+topic+'. Show all working. ('+diff+')', marks: diff==='hard'?4:3, sol:'Step 1: Identify given values. Step 2: Apply the formula for '+topic+'. Step 3: Simplify.'}),
+    long: (i)=>({type:'Long Answer', q:'Derive a key result related to '+topic+', then apply it to solve a follow-up problem.', marks:5, sol:'Present the derivation in logical steps, then substitute given values.'}),
+    application: (i)=>({type:'Application', q:'A real-world scenario requiring '+topic+' to solve — set up and solve mathematically.', marks:4, sol:'Translate the scenario into a model using '+topic+', solve, and interpret.'}),
+    hots: (i)=>({type:'HOTS', q:'A higher-order thinking challenge combining '+topic+' with a related concept. Justify each step.', marks:5, sol:'Requires connecting '+topic+' with another concept; award marks for valid reasoning.'}),
+  };
+  const qs = [];
+  for (let i=0;i<n;i++){ const t = types[i%types.length]; qs.push(gens[t] ? gens[t](i+1) : gens.mcq(i+1)); }
+  return {title: topic+' — Practice Worksheet', questions: qs};
+}
+function aiQuestionPaper(inp) {
+  const n = inp.num || 12;
+  const mk = (count, text, marks) => Array.from({length: Math.max(1,count)}, (_,i)=>({num:i+1, text, marks}));
+  return {
+    subject: inp.subject, program: inp.program+', '+inp.yearSem, fullMarks: inp.fullMarks, time: inp.time,
+    sections: [
+      {name:'Section A', instr:'Very short answer questions. Attempt all questions.', qs: mk(Math.ceil(n*0.4), 'Define / state a key concept from '+inp.subject+'.', 1)},
+      {name:'Section B', instr:'Short-answer questions. Attempt any of the following.', qs: mk(Math.ceil(n*0.35), 'Solve a standard problem from '+inp.subject+' showing all steps.', 5)},
+      {name:'Section C', instr:'Long-answer / analytical questions. Attempt any of the following.', qs: mk(Math.max(1,Math.floor(n*0.25)), 'Derive the key result / solve the analytical problem from '+inp.subject+', and discuss its application.', 10)},
+    ]
+  };
+}
+function aiMCQs(topic, count, diff) {
+  return Array.from({length:count}, (_,i)=>({
+    q: '('+diff+') Which statement correctly applies to '+topic+'? [Question '+(i+1)+']',
+    opts: ['Correct application of '+topic, 'A common misconception about '+topic, 'An unrelated mathematical rule', 'A partially correct but incomplete statement'],
+    correct: 0,
+    exp: 'The first option correctly reflects the standard definition/rule governing '+topic+'.'
+  }));
+}
+const GENERIC_TEMPLATES = {
+  assignment: (t)=> '# Assignment: '+t+'\n\nInstructions: Complete all questions showing full working.\n\n1. Explain the core concept of '+t+' in your own words.\n2. Solve three standard problems on '+t+'.\n3. Solve one application-based problem connecting '+t+' to a real-world scenario.\n4. (Bonus/HOTS) Extend '+t+' to a more complex case and justify your reasoning.\n\nMarking: 20 marks total.',
+  explanation: (t)=> '# Understanding '+t+'\n\nConcept: '+t+' is a core idea connecting to earlier learning through pattern and structure.\n\nStep-by-step:\n1. Start from the definition of '+t+'.\n2. Identify the key rule or formula.\n3. Apply it to a simple example, narrating each step.\n4. Generalize into a reusable method.\n\nCommon mistakes: students often confuse related terms — always verify the result makes sense.\n\nExample: a worked example demonstrating '+t+' from first principles.',
+  activity: (t)=> '# Interactive Classroom Activity: '+t+'\n\nObjective: Reinforce '+t+' through hands-on group work.\n\nSetup (5 min): Groups of 3-4.\n\nActivity (20 min): Each group receives a real-world scenario card involving '+t+', models it mathematically, and checks their answer in the Visualization Lab.\n\nShare-out (10 min): One member per group presents.\n\nWrap-up (5 min): Teacher consolidates the common method.',
+  ppt: (t)=> '# Slide Deck: '+t+'\n\nSlide 1 — Title: '+t+'\nSlide 2 — Objectives\nSlide 3 — Concept & intuition\nSlide 4 — Key formula(s)\nSlide 5 — Worked example\nSlide 6 — Visualization\nSlide 7 — Practice (2 live problems)\nSlide 8 — Summary & homework',
+  video: (t)=> '# Video Script: '+t+'\n\nHook (0:00-0:15): Open with a surprising question connected to '+t+'.\nIntroduction (0:15-0:45): State what viewers will learn.\nConcept (0:45-2:30): Build up '+t+' from familiar ideas with on-screen visuals.\nWorked Example (2:30-4:00): Solve a problem on screen.\nQuick Quiz (4:00-4:30): Pose one question, pause, reveal the answer.\nSummary (4:30-5:00): Recap and preview next topic.',
+  infographic: (t)=> '# Infographic: '+t+'\n\nHeader: '+t+' at a Glance\nSection 1 — Definition (one sentence)\nSection 2 — Key Formula (large, centered)\nSection 3 — Visual diagram\nSection 4 — 3-step worked mini-example\nSection 5 — 3 quick tips / common pitfalls',
+};
+function aiSolve(question) {
+  const short = question.length > 60 ? question.slice(0,60)+'…' : question;
+  return {
+    concept: 'This problem involves core techniques for the expression/equation given: "'+short+'".',
+    method: 'Identify the structure of the problem, apply the relevant rule or formula, then simplify systematically.',
+    steps: [
+      'Read the problem and identify what is given and what is being asked.',
+      'Choose the appropriate rule, identity, or formula that applies.',
+      'Substitute the given values or apply the rule step-by-step.',
+      'Simplify the result, combining like terms or reducing fractions.',
+      'Verify the result makes sense (check domain, units, or substitute back).'
+    ],
+    answer: 'The final simplified result, following directly from the steps above.'
+  };
+}
+
+// ---------- State (persisted to localStorage — per-viewer only) ----------
+const DEMO_USERS = {
+  'teacher@example.com': {password:'teacher123', name:'Bishnu Singh Rayamajhi', role:'teacher', avatar:'👨‍🏫', institution:'Kapilvastu Multiple Campus'},
+  'student@example.com': {password:'student123', name:'Rajesh Kumar', role:'student', avatar:'👨‍🎓', institution:'Kapilvastu Multiple Campus'},
+  'admin@example.com': {password:'admin123', name:'Admin User', role:'admin', avatar:'👨‍💼', institution:'Tribhuvan University'},
+};
+const store = {
+  get(key, fallback) { try { const v = localStorage.getItem('tac:'+key); return v===null ? fallback : JSON.parse(v); } catch(e){ return fallback; } },
+  set(key, val) { try { localStorage.setItem('tac:'+key, JSON.stringify(val)); } catch(e){} },
+};
+let STATE = {
+  theme: store.get('theme', 'light'),
+  user: store.get('user', null),
+  favorites: store.get('favorites', []),
+  quizResults: store.get('quizResults', {}),
+};
+function applyTheme() {
+  document.documentElement.classList.toggle('dark', STATE.theme === 'dark');
+  document.documentElement.setAttribute('data-theme', STATE.theme);
+}
+function setTheme(t) { STATE.theme = t; store.set('theme', t); applyTheme(); }
+function setUser(u) { STATE.user = u; store.set('user', u); }
+function toggleFavorite(id) {
+  const i = STATE.favorites.indexOf(id);
+  if (i>-1) STATE.favorites.splice(i,1); else STATE.favorites.push(id);
+  store.set('favorites', STATE.favorites);
+}
+function saveQuizResult(quizId, pct) {
+  STATE.quizResults[quizId] = pct; store.set('quizResults', STATE.quizResults);
+}
+
+// ---------- Cleanup registry (for intervals/rAF between route changes) ----------
+let activeCleanup = null;
+function registerCleanup(fn) { activeCleanup = fn; }
+function runCleanup() { if (activeCleanup) { try { activeCleanup(); } catch(e){} activeCleanup = null; } }
+
+// ---------- Shared UI helpers ----------
+function Btn(label, opts) {
+  opts = opts || {};
+  const variant = opts.variant || 'primary';
+  const cls = {primary:'btn-primary', gold:'btn-gold', outline:'btn-outline', ghost:'btn-ghost'}[variant];
+  const extra = opts.class || '';
+  const attrs = opts.attrs || '';
+  const tag = opts.href ? 'a' : 'button';
+  const hrefAttr = opts.href ? ('href="#'+opts.href+'"') : '';
+  const disabled = opts.disabled ? 'disabled' : '';
+  return '<'+tag+' '+hrefAttr+' '+attrs+' '+disabled+' class="btn '+cls+' '+extra+'">'+label+'</'+tag+'>';
+}
+function Badge(text, variant) {
+  const cls = {gold:'badge-gold', navy:'badge-navy', soft:'badge-soft'}[variant||'soft'];
+  return '<span class="badge '+cls+'">'+text+'</span>';
+}
+function Card(inner, opts) {
+  opts = opts || {};
+  const hover = opts.hover ? ' card-hover' : '';
+  const extra = opts.class || '';
+  const attrs = opts.attrs || '';
+  return '<div '+attrs+' class="card'+hover+' '+extra+'">'+inner+'</div>';
+}
+function Input(label, id, opts) {
+  opts = opts || {};
+  const type = opts.type || 'text';
+  const val = opts.value !== undefined ? 'value="'+esc(opts.value)+'"' : '';
+  const ph = opts.placeholder ? 'placeholder="'+esc(opts.placeholder)+'"' : '';
+  const req = opts.required ? 'required' : '';
+  return '<div class="w-full">'+(label?'<label class="block text-sm font-semibold mb-1.5">'+label+'</label>':'')+
+    '<input id="'+id+'" type="'+type+'" '+val+' '+ph+' '+req+' class="input-field" /></div>';
+}
+function Select(label, id, options, opts) {
+  opts = opts || {};
+  const optsHtml = options.map(o => '<option value="'+esc(o.value)+'" '+(opts.value===o.value?'selected':'')+'>'+esc(o.label)+'</option>').join('');
+  return '<div class="w-full">'+(label?'<label class="block text-sm font-semibold mb-1.5">'+label+'</label>':'')+
+    '<select id="'+id+'" class="input-field">'+optsHtml+'</select></div>';
+}
+function Textarea(label, id, opts) {
+  opts = opts || {};
+  return '<div class="w-full">'+(label?'<label class="block text-sm font-semibold mb-1.5">'+label+'</label>':'')+
+    '<textarea id="'+id+'" rows="'+(opts.rows||4)+'" class="input-field resize-none">'+(opts.value?esc(opts.value):'')+'</textarea></div>';
+}
+function toast(msg) {
+  const el = document.createElement('div');
+  el.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 bg-navy text-white px-5 py-3 rounded-lg shadow-xl z-[100] fade-in text-sm font-medium';
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 2200);
+}
+function copyText(text) {
+  navigator.clipboard && navigator.clipboard.writeText(text).then(()=>toast('Copied to clipboard')).catch(()=>toast('Copy failed'));
+}
+function downloadText(filename, text) {
+  const blob = new Blob([text], {type:'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+  toast('Downloaded '+filename);
+}
+
+// ---------- Layout: Navbar + Footer ----------
+const NAV_LINKS = [
+  ['/', 'Home'], ['/ai-toolkit','AI Teaching Tools'], ['/visualization-lab','Math Visualization'],
+  ['/simulation-lab','Simulation Lab'], ['/ai-assistant','AI Math Assistant'], ['/courses','Courses'],
+  ['/resources','Resources'], ['/about','About'], ['/contact','Contact'],
+];
+const DASHBOARD_ROUTE = {teacher:'/teacher-dashboard', student:'/student-dashboard', admin:'/admin-dashboard'};
+
+function Navbar(route) {
+  const u = STATE.user;
+  const links = NAV_LINKS.map(([href,label]) =>
+    '<a href="#'+href+'" class="nav-link '+(route===href?'active':'')+'">'+label+'</a>'
+  ).join('');
+  const mobileLinks = NAV_LINKS.map(([href,label]) =>
+    '<a href="#'+href+'" onclick="closeMobileNav()" class="block px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-app-alt">'+label+'</a>'
+  ).join('');
+
+  const userArea = u ? (
+    '<div class="flex items-center gap-1.5">'+
+      '<a href="#'+DASHBOARD_ROUTE[u.role]+'" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-app-alt text-sm">'+
+        '<span>'+u.avatar+'</span><span class="hidden md:inline font-medium">'+u.name.split(' ')[0]+'</span></a>'+
+      '<button onclick="doLogout()" class="p-2 rounded-lg hover:bg-app-alt" title="Logout">'+
+        '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>'+
+    '</div>'
+  ) : (
+    '<div class="flex gap-2">'+Btn('Login',{variant:'outline', href:'/login', class:'!py-1.5 !px-4 text-sm'})+Btn('Get Started 🚀',{variant:'primary', href:'/register', class:'!py-1.5 !px-4 text-sm'})+'</div>'
+  );
+
+  return (
+  '<nav class="sticky top-0 z-40 surface border-b">'+
+    '<div class="max-w-7xl mx-auto px-4 sm:px-6"><div class="flex justify-between items-center h-16">'+
+      '<a href="#/" class="flex items-center gap-2 font-display text-xl font-bold text-gradient">📐 <span class="hidden sm:inline">Teacher AI Class</span></a>'+
+      '<div class="hidden xl:flex items-center gap-0.5">'+links+'</div>'+
+      '<div class="flex items-center gap-2">'+
+        '<button onclick="setTheme(STATE.theme===\'light\'?\'dark\':\'light\'); render();" class="p-2 rounded-lg hover:bg-app-alt" title="Toggle theme">'+(STATE.theme==='light'?ICONS.moon:ICONS.sun)+'</button>'+
+        userArea+
+        '<button onclick="toggleMobileNav()" class="xl:hidden p-2 rounded-lg hover:bg-app-alt">'+ICONS.menu+'</button>'+
+      '</div>'+
+    '</div></div>'+
+    '<div id="mobileNav" class="hidden xl:hidden border-t border-app px-4 py-3 space-y-0.5">'+mobileLinks+
+      (u? '<a href="#'+DASHBOARD_ROUTE[u.role]+'" onclick="closeMobileNav()" class="block px-4 py-2.5 text-sm font-bold text-navy dark:text-gold">My Dashboard</a><button onclick="doLogout()" class="w-full text-left px-4 py-2.5 text-sm font-medium text-red-500">Logout</button>' : '')+
+    '</div>'+
+  '</nav>'
+  );
+}
+function toggleMobileNav(){ document.getElementById('mobileNav').classList.toggle('hidden'); }
+function closeMobileNav(){ const el=document.getElementById('mobileNav'); if(el) el.classList.add('hidden'); }
+
+function Footer() {
+  return (
+  '<footer class="text-white py-14 mt-4" style="background:var(--navy)">'+
+    '<div class="max-w-7xl mx-auto px-4 sm:px-6">'+
+    '<div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">'+
+      '<div><div class="flex items-center gap-2 font-display text-xl font-bold mb-3">📐 Teacher AI Class</div>'+
+        '<p class="text-slate-300 text-sm mb-2"><strong>Math for NEB • B.Ed. • B.Sc.</strong></p>'+
+        '<p class="text-slate-400 text-sm">Transforming Mathematics education through AI, visualization, and interactive learning.</p></div>'+
+      '<div><h4 class="font-display font-bold mb-3">Platform</h4><ul class="space-y-1.5 text-slate-300 text-sm">'+
+        '<li><a href="#/ai-toolkit" class="hover:text-gold">AI Toolkit</a></li><li><a href="#/visualization-lab" class="hover:text-gold">Math Lab</a></li>'+
+        '<li><a href="#/simulation-lab" class="hover:text-gold">Simulations</a></li><li><a href="#/resources" class="hover:text-gold">Resources</a></li></ul></div>'+
+      '<div><h4 class="font-display font-bold mb-3">Resources</h4><ul class="space-y-1.5 text-slate-300 text-sm">'+
+        '<li><a href="#/courses" class="hover:text-gold">Courses</a></li><li><a href="#/about" class="hover:text-gold">About</a></li>'+
+        '<li><a href="#/contact" class="hover:text-gold">Contact</a></li></ul></div>'+
+      '<div><h4 class="font-display font-bold mb-3">Created By</h4><div class="text-slate-300 text-sm space-y-1">'+
+        '<p class="font-semibold text-white">Mr. Bishnu Singh Rayamajhi</p><p>Mathematics Lecturer</p><p>Kapilvastu Multiple Campus</p><p>Taulihawa, Kapilvastu, Nepal</p></div></div>'+
+    '</div>'+
+    '<div class="border-t border-slate-700 pt-6 text-center text-slate-400 text-sm">© 2024 Teacher AI Class. All rights reserved.</div>'+
+    '</div></footer>'
+  );
+}
+function Shell(route, contentHtml) {
+  return Navbar(route) + '<main class="min-h-[70vh]">' + contentHtml + '</main>' + Footer();
+}
+
+// ============================================================
+// PAGE: Home
+// ============================================================
+function pageHome() {
+  const features = [
+    ['📐','VISUALIZE','Turn abstract Mathematics into interactive visual learning.'],
+    ['🚀','SIMULATE','Explore mathematical concepts dynamically.'],
+    ['🧠','GENERATE','Create lesson plans, worksheets and assessments with AI.'],
+    ['📊','ANALYZE','Create graphs, charts and mathematical models.'],
+    ['🎬','CREATE','Develop presentations, videos and digital learning resources.'],
+    ['👨‍🏫','TEACH','Apply AI practically in everyday classroom teaching.'],
+  ];
+  const toolkitPreview = [
+    ['Lesson Plan Generator','/ai-toolkit/lesson-plan','📝'], ['Worksheet Generator','/ai-toolkit/worksheet','📄'],
+    ['Question Paper Generator','/ai-toolkit/question-paper','🗂️'], ['MCQ Generator','/ai-toolkit/mcq','✅'],
+  ];
+  return (
+  '<section class="relative overflow-hidden" style="background:linear-gradient(135deg, var(--navy), #003a63);">'+
+    '<div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle at 20% 30%, #fff 1px, transparent 1px), radial-gradient(circle at 80% 70%, #fff 1px, transparent 1px); background-size:40px 40px;"></div>'+
+    '<div class="container-wide relative text-center text-white !py-24">'+
+      '<div class="inline-block px-4 py-1.5 rounded-full bg-gold text-navy font-bold text-sm mb-6">Math for NEB • B.Ed. • B.Sc. Special 🚀</div>'+
+      '<h1 class="text-4xl md:text-6xl font-display font-bold mb-6 leading-tight">Teach Mathematics<br/>Smarter with <span style="color:var(--gold)">AI</span></h1>'+
+      '<p class="text-lg text-slate-200 max-w-2xl mx-auto mb-10">Transform complex mathematical concepts into interactive visualizations, simulations, digital lessons, worksheets, assessments, and engaging classroom experiences.</p>'+
+      '<div class="flex flex-wrap gap-3 justify-center">'+
+        Btn('Start Teaching with AI 🚀',{variant:'gold', href:'/ai-toolkit', class:'text-base'})+
+        Btn('Explore Math Visualization 📐',{variant:'outline', href:'/visualization-lab', class:'text-base !border-white !text-white hover:!bg-white hover:!text-navy'})+
+        Btn('Open Simulation Lab 🔬',{variant:'outline', href:'/simulation-lab', class:'text-base !border-white !text-white hover:!bg-white hover:!text-navy'})+
+      '</div>'+
+    '</div>'+
+  '</section>'+
+  '<section class="container-wide">'+
+    '<div class="text-center mb-4">'+Badge('Show → Explain → Visualize → Practice → Understand → Create','gold')+'</div>'+
+    '<h2 class="text-3xl font-display font-bold text-center mb-2">Traditional Teaching + AI + Visualization + Simulation + Interaction</h2>'+
+    '<p class="text-center text-muted mb-12">= Smart Teaching</p>'+
+    '<div class="grid-3">'+
+      features.map(([emoji,title,desc]) => Card(
+        '<div class="text-3xl mb-3">'+emoji+'</div><h3 class="font-display font-bold text-lg mb-1">'+title+'</h3><p class="text-muted text-sm">'+desc+'</p>'
+      )).join('')+
+    '</div>'+
+  '</section>'+
+  '<section class="bg-app-alt py-16">'+
+    '<div class="max-w-6xl mx-auto px-4 sm:px-6">'+
+      '<div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">'+
+        '<div><h2 class="text-2xl font-display font-bold">🧠 AI Teaching Toolkit</h2><p class="text-muted">10 tools to generate teaching content in minutes.</p></div>'+
+        Btn('View All Tools '+ICONS.arrowRight,{variant:'primary', href:'/ai-toolkit'})+
+      '</div>'+
+      '<div class="grid grid-cols-2 md:grid-cols-4 gap-4">'+
+        toolkitPreview.map(([label,href,emoji]) => '<a href="#'+href+'">'+Card('<div class="text-2xl mb-2">'+emoji+'</div><p class="font-semibold text-sm">'+label+'</p>', {hover:true})+'</a>').join('')+
+      '</div>'+
+    '</div>'+
+  '</section>'+
+  '<section class="container-wide text-center">'+
+    '<h2 class="text-2xl font-display font-bold mb-8">🚀 Become an AI-Powered Smart Teacher</h2>'+
+    '<div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto text-left">'+
+      ['📐 Visualize Mathematics','🚀 Simulate Complex Concepts','🎬 Create Visual Content','📊 Build Interactive Charts','🧠 Simplify Difficult Topics','📝 Generate Lesson Plans','📽️ Create PPTs & Videos','💡 Apply AI Practically']
+        .map(t => '<div class="flex items-center gap-2 text-sm font-medium p-3 rounded-lg surface">'+t+'</div>').join('')+
+    '</div>'+
+  '</section>'+
+  '<section class="max-w-3xl mx-auto px-4 sm:px-6 pb-20 text-center">'+
+    Card(
+      '<div class="text-4xl mb-3">👨‍🏫</div><p class="font-bold text-lg mb-1">Mr. Bishnu Singh Rayamajhi</p>'+
+      '<p class="text-muted text-sm mb-4">Mathematics Lecturer, Kapilvastu Multiple Campus, Taulihawa, Nepal</p>'+
+      Btn('Learn About Our Vision '+ICONS.arrowRight, {variant:'ghost', href:'/about'})
+    )+
+  '</section>'
+  );
+}
+
+// ============================================================
+// PAGE: About
+// ============================================================
+function pageAbout() {
+  const values = [
+    ['🎯','Purpose-Built','Every tool is designed specifically for NEB, B.Ed., and B.Sc. Mathematics classrooms in Nepal.'],
+    ['✨','AI + Visualization','Abstract mathematics becomes concrete when students can see it move, change, and respond.'],
+    ['📚','Free for Teachers','Access to the core teaching toolkit remains free for working mathematics educators in Nepal.'],
+  ];
+  return '<div class="container-wide max-w-5xl">'+
+    '<div class="text-center mb-14">'+Badge('About Teacher AI Class','gold')+
+      '<h1 class="text-4xl font-display font-bold my-4">Smart Teaching Starts with a Simple Idea</h1>'+
+      '<p class="text-muted max-w-xl mx-auto">Traditional Teaching + AI + Visualization + Simulation + Interaction = Smart Teaching</p></div>'+
+    Card(
+      '<div class="flex flex-col md:flex-row gap-8 items-start">'+
+        '<div class="w-28 h-28 rounded-2xl flex items-center justify-center text-5xl flex-shrink-0 mx-auto md:mx-0" style="background:linear-gradient(135deg,var(--navy),var(--gold))">👨‍🏫</div>'+
+        '<div>'+Badge('Founder','navy')+
+          '<h2 class="text-2xl font-display font-bold mt-2 mb-1">Mr. Bishnu Singh Rayamajhi</h2>'+
+          '<p class="font-semibold mb-4" style="color:var(--navy)">Mathematics Lecturer, Kapilvastu Multiple Campus</p>'+
+          '<p class="text-muted leading-relaxed mb-3">Teacher AI Class was founded by Mr. Bishnu Singh Rayamajhi, a Mathematics Lecturer at Kapilvastu Multiple Campus in Taulihawa, Nepal. After years of teaching NEB, B.Ed., and B.Sc. Mathematics, he set out to build a platform that closes the gap between traditional chalk-and-board teaching and visual, interactive learning.</p>'+
+          '<p class="text-muted leading-relaxed">The platform combines his classroom experience with practical AI tools — so any mathematics teacher can generate lesson plans, worksheets, and assessments in minutes, and bring concepts to life through visualization and simulation.</p>'+
+        '</div></div>', {class:'mb-14'}
+    )+
+    '<h2 class="text-2xl font-display font-bold mb-8 text-center">Our Educational Vision</h2>'+
+    '<div class="grid-3 mb-14">'+values.map(([e,t,d])=>Card('<div class="text-3xl mb-3">'+e+'</div><h3 class="font-bold mb-1">'+t+'</h3><p class="text-muted text-sm">'+d+'</p>')).join('')+'</div>'+
+    '<div class="rounded-2xl p-10 text-center text-white" style="background:var(--navy)">'+
+      '<h2 class="text-2xl font-display font-bold mb-2">Ready to teach smarter?</h2>'+
+      '<p class="text-slate-200 mb-6">Join Teacher AI Class and bring AI-powered visualization into your classroom.</p>'+
+      Btn('Get Started 🚀', {variant:'gold', href:'/register'})+
+    '</div>'+
+  '</div>';
+}
+
+// ============================================================
+// PAGE: Contact
+// ============================================================
+function pageContact() {
+  return '<div class="container-wide max-w-5xl">'+
+    '<div class="text-center mb-12">'+Badge('Contact Us','gold')+'<h1 class="text-4xl font-display font-bold my-4">Get in Touch</h1>'+
+    '<p class="text-muted">Questions, feedback, or interested in Teacher AI Class training for your campus?</p></div>'+
+    '<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">'+
+      '<div class="space-y-4">'+
+        Card('<p class="text-xs text-muted mb-1">Email</p><p class="font-semibold">info@teacherai.edu.np</p>')+
+        Card('<p class="text-xs text-muted mb-1">Location</p><p class="font-semibold">Kapilvastu Multiple Campus</p><p class="text-sm text-muted">Taulihawa, Kapilvastu, Nepal</p>')+
+        Card('<p class="text-xs text-muted mb-1">Phone</p><p class="font-semibold">+977-71-xxxxx</p>')+
+      '</div>'+
+      '<div class="lg:col-span-2">'+Card(
+        '<div id="contactForm" class="space-y-4">'+
+        '<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">'+Input('Name','ctName',{required:true})+Input('Email','ctEmail',{type:'email',required:true})+'</div>'+
+        Input('Institution','ctInst',{placeholder:'School / Campus name'})+
+        Input('Subject','ctSubject',{required:true})+
+        Textarea('Message','ctMessage',{rows:5})+
+        '<div class="flex flex-col sm:flex-row gap-3 pt-1">'+
+          Btn('Send Message',{variant:'primary', class:'flex-1 justify-center', attrs:'onclick="submitContact(false)"'})+
+          Btn('Request Teacher AI Training',{variant:'gold', class:'flex-1 justify-center', attrs:'onclick="submitContact(true)"'})+
+        '</div></div>'+
+        '<div id="contactSuccess" class="hidden text-center py-10">'+
+          '<div class="text-5xl mb-3">✅</div><h3 class="font-bold text-lg mb-1" id="contactSuccessTitle">Message Sent!</h3>'+
+          '<p class="text-muted mb-4">Thanks for reaching out. We\'ll get back to you within 1–2 business days.</p>'+
+          Btn('Send Another Message',{variant:'outline', attrs:'onclick="resetContact()"'})+
+        '</div>'
+      )+'</div>'+
+    '</div>'+
+  '</div>';
+}
+function submitContact(isTraining) {
+  document.getElementById('contactForm').classList.add('hidden');
+  document.getElementById('contactSuccessTitle').textContent = isTraining ? 'Training Request Sent!' : 'Message Sent!';
+  document.getElementById('contactSuccess').classList.remove('hidden');
+}
+function resetContact() { navigate('/contact'); }
+
+// ============================================================
+// PAGE: Courses
+// ============================================================
+function pageCourses(courseId) {
+  if (courseId) {
+    const c = DEMO_COURSES.find(c=>c.id===courseId);
+    if (!c) return '<div class="container-wide text-center py-20 text-muted">Course not found.</div>';
+    return '<div class="container-wide max-w-4xl">'+
+      '<a href="#/courses" class="inline-flex items-center gap-1 mb-6" style="color:var(--navy)">'+ICONS.chevLeft+' Back to Courses</a>'+
+      Badge(c.category,'navy')+'<h1 class="text-3xl font-display font-bold my-3">'+c.title+'</h1>'+
+      '<p class="text-muted mb-1">'+c.desc+'</p><p class="text-sm text-muted mb-8">Instructor: Bishnu Singh Rayamajhi</p>'+
+      '<h2 class="font-bold text-lg mb-4">Course Modules</h2><div class="space-y-3">'+
+      c.lessons.map((l,i)=>Card('<div class="flex items-center gap-4"><div class="step-num !w-8 !h-8 !text-sm">'+(i+1)+'</div><p class="font-semibold text-sm">'+l+'</p></div>')).join('')+
+      '</div></div>';
+  }
+  return '<div class="container-wide">'+
+    '<div class="text-center mb-12">'+Badge('📚 Courses','gold')+'<h1 class="text-4xl font-display font-bold my-4">Structured Learning Paths</h1>'+
+    '<p class="text-muted max-w-xl mx-auto">Six courses guiding teachers from AI fundamentals to a fully AI-powered smart classroom.</p></div>'+
+    '<div class="grid-3">'+DEMO_COURSES.map(c => '<a href="#/courses/'+c.id+'">'+Card(
+      '<div class="w-11 h-11 rounded-lg flex items-center justify-center mb-4 badge-soft">📘</div>'+
+      Badge(c.category,'gold')+'<h3 class="font-bold text-lg my-2">'+c.title+'</h3><p class="text-muted text-sm mb-4">'+c.desc+'</p>'+
+      '<div class="flex items-center justify-between text-sm text-muted pt-3 border-t border-app"><span>'+c.lessons.length+' lessons</span><span class="font-semibold flex items-center gap-1" style="color:var(--navy)">View Course '+ICONS.arrowRight+'</span></div>',
+      {hover:true}
+    )+'</a>').join('')+
+    '</div></div>';
+}
+
+// ============================================================
+// PAGE: Resources
+// ============================================================
+let resourceState = {search:'', cat:'All', favOnly:false};
+function pageResources() {
+  const cats = ['All', ...new Set(DEMO_RESOURCES.map(r=>r.cat))];
+  const typeIcon = {pdf:'📄', ppt:'📊', video:'🎬', worksheet:'📝', simulation:'🧪'};
+  const filtered = DEMO_RESOURCES.filter(r =>
+    (r.title.toLowerCase().includes(resourceState.search.toLowerCase()) || r.desc.toLowerCase().includes(resourceState.search.toLowerCase())) &&
+    (resourceState.cat==='All' || r.cat===resourceState.cat) &&
+    (!resourceState.favOnly || STATE.favorites.includes(r.id))
+  );
+  return '<div class="container-wide">'+
+    '<div class="text-center mb-10">'+Badge('📚 Digital Resource Library','gold')+'<h1 class="text-4xl font-display font-bold my-4">Notes, Worksheets, and More</h1>'+
+    '<p class="text-muted max-w-xl mx-auto">Browse Mathematics teaching resources across NEB, B.Ed., and B.Sc. curricula.</p></div>'+
+    '<div class="flex flex-col sm:flex-row gap-3 mb-6">'+
+      '<input id="resSearch" oninput="resourceState.search=this.value; rerenderResourceGrid();" placeholder="Search resources..." class="input-field flex-1" value="'+esc(resourceState.search)+'"/>'+
+      '<select id="resCat" onchange="resourceState.cat=this.value; rerenderResourceGrid();" class="input-field sm:w-56">'+cats.map(c=>'<option '+(resourceState.cat===c?'selected':'')+'>'+c+'</option>').join('')+'</select>'+
+      '<button onclick="resourceState.favOnly=!resourceState.favOnly; render();" class="px-4 py-2 rounded-lg font-semibold flex items-center gap-2 flex-shrink-0 '+(resourceState.favOnly?'btn-gold':'surface')+'">'+ICONS.star(resourceState.favOnly)+' Favorites</button>'+
+    '</div>'+
+    '<p class="text-sm text-muted mb-4" id="resCount">'+filtered.length+' resources found</p>'+
+    '<div id="resGrid" class="grid-3">'+filtered.map(r => Card(
+      '<div class="flex items-start justify-between mb-3"><div class="text-2xl">'+typeIcon[r.type]+'</div>'+
+      '<button onclick="toggleFavorite(\''+r.id+'\'); rerenderResourceGrid();" class="text-slate-300">'+ICONS.star(STATE.favorites.includes(r.id))+'</button></div>'+
+      Badge(r.cat,'soft')+'<h3 class="font-bold text-sm my-2">'+r.title+'</h3><p class="text-muted text-xs mb-4">'+r.desc+'</p>'+
+      '<button onclick="toast(\'Downloading '+r.title.replace(/'/g,"\\'")+'...\')" class="flex items-center gap-1 font-semibold text-sm pt-3 border-t border-app" style="color:var(--navy)">'+ICONS.download+' Download</button>'
+    )).join('')+'</div>'+
+    (filtered.length===0 ? '<p class="text-center py-16 text-muted">No resources match your search.</p>' : '')+
+  '</div>';
+}
+function rerenderResourceGrid() {
+  const cur = document.activeElement && document.activeElement.id;
+  const app = document.getElementById('app');
+  const scrollY = window.scrollY;
+  render();
+  window.scrollTo(0, scrollY);
+  if (cur) { const el = document.getElementById(cur); if (el) el.focus(); }
+}
+
+// ============================================================
+// PAGE: Login / Register
+// ============================================================
+function pageLogin() {
+  return '<div class="min-h-[75vh] flex items-center justify-center px-4 py-12">'+
+    '<div class="w-full max-w-md">'+
+    Card(
+      '<div class="text-center mb-6"><div class="text-3xl mb-2">📐</div><h1 class="text-2xl font-display font-bold">Welcome Back</h1><p class="text-muted text-sm">Log in to your Teacher AI Class account</p></div>'+
+      '<div id="loginError" class="hidden mb-4 p-3 rounded-lg text-sm" style="background:#fee2e2;color:#991b1b;"></div>'+
+      '<div class="space-y-4">'+
+        Input('Email','loginEmail',{type:'email', placeholder:'you@example.com'})+
+        Input('Password','loginPassword',{type:'password', placeholder:'••••••••'})+
+        Btn('Login',{variant:'primary', class:'w-full justify-center', attrs:'onclick="doLogin()" id="loginBtn"'})+
+      '</div>'+
+      '<div class="my-5 text-center text-xs text-muted">— or try a demo account —</div>'+
+      '<div class="grid grid-cols-3 gap-2 mb-5">'+
+        '<button onclick="fillDemo(\'teacher\')" class="text-xs py-2 rounded-lg surface font-medium">👨‍🏫 Teacher</button>'+
+        '<button onclick="fillDemo(\'student\')" class="text-xs py-2 rounded-lg surface font-medium">👨‍🎓 Student</button>'+
+        '<button onclick="fillDemo(\'admin\')" class="text-xs py-2 rounded-lg surface font-medium">👨‍💼 Admin</button>'+
+      '</div>'+
+      '<p class="text-center text-sm text-muted">No account? <a href="#/register" class="font-semibold" style="color:var(--navy)">Register here</a></p>'
+    )+'</div></div>';
+}
+function fillDemo(role) {
+  const map = {teacher:'teacher@example.com', student:'student@example.com', admin:'admin@example.com'};
+  document.getElementById('loginEmail').value = map[role];
+  document.getElementById('loginPassword').value = role+'123';
+}
+function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+  const password = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  const found = DEMO_USERS[email];
+  if (!found || found.password !== password) {
+    errEl.textContent = 'Invalid email or password. Try one of the demo accounts below.';
+    errEl.classList.remove('hidden');
+    return;
+  }
+  setUser({name:found.name, email, role:found.role, avatar:found.avatar, institution:found.institution});
+  toast('Welcome back, '+found.name.split(' ')[0]+'!');
+  navigate(DASHBOARD_ROUTE[found.role]);
+}
+function pageRegister() {
+  return '<div class="min-h-[75vh] flex items-center justify-center px-4 py-12">'+
+    '<div class="w-full max-w-md">'+
+    Card(
+      '<div class="text-center mb-6"><div class="text-3xl mb-2">📐</div><h1 class="text-2xl font-display font-bold">Create Your Account</h1><p class="text-muted text-sm">Join Teacher AI Class free</p></div>'+
+      '<div class="space-y-4">'+
+        Input('Full Name','regName')+
+        Input('Email','regEmail',{type:'email'})+
+        Input('Institution','regInst',{placeholder:'School / Campus name'})+
+        Select('I am a...','regRole',[{value:'teacher',label:'Teacher'},{value:'student',label:'Student'}], {value:'teacher'})+
+        Input('Password','regPassword',{type:'password'})+
+        Btn('Create Account 🚀',{variant:'primary', class:'w-full justify-center', attrs:'onclick="doRegister()"'})+
+      '</div>'+
+      '<p class="text-center text-sm text-muted mt-5">Already have an account? <a href="#/login" class="font-semibold" style="color:var(--navy)">Login</a></p>'
+    )+'</div></div>';
+}
+function doRegister() {
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim().toLowerCase();
+  const inst = document.getElementById('regInst').value.trim();
+  const role = document.getElementById('regRole').value;
+  if (!name || !email) { toast('Please fill in your name and email'); return; }
+  const avatar = role==='teacher' ? '👨‍🏫' : '👨‍🎓';
+  setUser({name, email, role, avatar, institution: inst});
+  toast('Account created — welcome, '+name.split(' ')[0]+'!');
+  navigate(DASHBOARD_ROUTE[role]);
+}
+function doLogout() { setUser(null); toast('Logged out'); navigate('/'); }
+
+// ============================================================
+// PAGE: Dashboards
+// ============================================================
+function requireAuth(role) {
+  if (!STATE.user) { navigate('/login'); return false; }
+  if (role && STATE.user.role !== role) { navigate(DASHBOARD_ROUTE[STATE.user.role]); return false; }
+  return true;
+}
+function pageTeacherDashboard() {
+  if (!requireAuth('teacher')) return '';
+  const u = STATE.user;
+  const actions = [
+    ['📝','Create Lesson Plan','/ai-toolkit/lesson-plan'], ['📄','Create Worksheet','/ai-toolkit/worksheet'],
+    ['🗂️','Create Question Paper','/ai-toolkit/question-paper'], ['✅','Generate MCQs','/ai-toolkit/mcq'],
+    ['📊','Create PPT','/ai-toolkit/ppt'], ['🎬','Create Video Script','/ai-toolkit/video-script'],
+    ['📐','Math Visualization','/visualization-lab'], ['🧪','Simulation Lab','/simulation-lab'], ['🧠','AI Math Assistant','/ai-assistant'],
+  ];
+  const stats = [['Lessons Created',TEACHER_STATS.lessons],['Worksheets',TEACHER_STATS.worksheets],['Question Papers',TEACHER_STATS.papers],['Presentations',TEACHER_STATS.ppts],['Simulations',TEACHER_STATS.sims],['Quizzes',TEACHER_STATS.quizzes]];
+  return '<div class="container-wide">'+
+    '<h1 class="text-2xl font-display font-bold mb-1">Welcome, '+u.name.split(' ')[0]+' 👋</h1><p class="text-muted mb-8">Here\'s what\'s happening in your classroom toolkit today.</p>'+
+    '<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-10">'+stats.map(([l,v])=>Card('<div class="text-2xl font-display font-bold text-center" style="color:var(--navy)">'+v+'</div><div class="text-xs text-muted text-center mt-1">'+l+'</div>')).join('')+'</div>'+
+    '<h2 class="font-bold text-lg mb-4">Quick Actions</h2><div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-10">'+
+    actions.map(([e,l,h])=>'<a href="#'+h+'">'+Card('<div class="flex items-center gap-3"><div class="text-xl">'+e+'</div><span class="font-semibold text-sm">'+l+'</span></div>',{hover:true})+'</a>').join('')+
+    '</div>'+
+    '<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">'+
+      '<div><h2 class="font-bold text-lg mb-4">Recent Resources</h2>'+Card(DEMO_RESOURCES.slice(0,4).map(r=>'<div class="flex items-center justify-between py-2.5 border-b border-app last:border-0"><div><p class="font-medium text-sm">'+r.title+'</p><p class="text-xs text-muted">'+r.cat+'</p></div><span class="badge badge-soft text-xs uppercase">'+r.type+'</span></div>').join(''), {class:'!p-4'})+'</div>'+
+      '<div><h2 class="font-bold text-lg mb-4">This Week</h2>'+Card('<p class="font-semibold text-green-600 mb-4">📈 12% more content generated than last week</p><div class="space-y-2 text-sm"><p>⭐ 3 worksheets saved to favorites</p><p>📝 2 lesson plans generated for next week</p><p>✅ 1 quiz assigned to students</p></div>')+'</div>'+
+    '</div></div>';
+}
+function pageStudentDashboard() {
+  if (!requireAuth('student')) return '';
+  const u = STATE.user;
+  const explore = [['📐','Visualization','Explore functions and geometry visually.','/visualization-lab'],['📚','Courses','Continue your structured learning path.','/courses'],['🧠','AI Tutor','Get step-by-step help on any problem.','/ai-assistant'],['✅','Practice Quizzes','Test yourself and track your score.','/quizzes']];
+  return '<div class="container-wide">'+
+    '<h1 class="text-2xl font-display font-bold mb-1">Welcome back, '+u.name.split(' ')[0]+' 👋</h1><p class="text-muted mb-8">Let\'s continue where you left off.</p>'+
+    '<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">'+
+      Card('<div class="text-center"><div class="text-xl mb-1">📚</div><div class="text-2xl font-display font-bold" style="color:var(--navy)">7</div><div class="text-xs text-muted">Lessons Completed</div></div>')+
+      Card('<div class="text-center"><div class="text-xl mb-1">🏆</div><div class="text-2xl font-display font-bold" style="color:var(--navy)">82%</div><div class="text-xs text-muted">Avg. Quiz Score</div></div>')+
+      Card('<div class="text-center"><div class="text-xl mb-1">⏱️</div><div class="text-2xl font-display font-bold" style="color:var(--navy)">14h</div><div class="text-xs text-muted">Learning Time</div></div>')+
+      Card('<div class="text-center"><div class="text-xl mb-1">🔥</div><div class="text-2xl font-display font-bold" style="color:var(--navy)">5</div><div class="text-xs text-muted">Day Streak</div></div>')+
+    '</div>'+
+    '<h2 class="font-bold text-lg mb-4">Explore Math</h2><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">'+
+    explore.map(([e,t,d,h])=>'<a href="#'+h+'">'+Card('<div class="text-xl mb-2">'+e+'</div><h3 class="font-bold text-sm mb-1">'+t+'</h3><p class="text-xs text-muted">'+d+'</p>',{hover:true})+'</a>').join('')+'</div>'+
+    '<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">'+
+      '<div><h2 class="font-bold text-lg mb-4">My Courses</h2><div class="space-y-3">'+
+        DEMO_COURSES.slice(0,3).map((c,i)=>{const pct=[40,65,20][i]; return Card('<div class="flex justify-between text-sm mb-2"><span class="font-semibold">'+c.title+'</span><span class="text-muted">'+pct+'%</span></div><div class="w-full h-2 rounded-full bg-app-alt overflow-hidden"><div class="h-full" style="width:'+pct+'%;background:var(--navy)"></div></div>', {class:'!p-4'});}).join('')+
+      '</div></div>'+
+      '<div><h2 class="font-bold text-lg mb-4">Practice Quizzes</h2>'+Card(DEMO_QUIZZES.map(q=>'<a href="#/quizzes/'+q.id+'" class="flex items-center justify-between py-2.5 border-b border-app last:border-0"><div><p class="font-medium text-sm">'+q.title+'</p><p class="text-xs text-muted">'+q.questions.length+' questions</p></div><span class="badge badge-navy text-xs">Start</span></a>').join(''), {class:'!p-4'})+'</div>'+
+    '</div></div>';
+}
+function pageAdminDashboard() {
+  if (!requireAuth('admin')) return '';
+  const stats = [['👥 Total Users',ADMIN_STATS.users],['✅ Active Users',ADMIN_STATS.active],['📚 Courses',ADMIN_STATS.courses],['📄 Resources',ADMIN_STATS.resources],['✅ Quiz Attempts',ADMIN_STATS.attempts],['✨ AI Generations',ADMIN_STATS.gens]];
+  const areas = [['Users & Roles','Manage teacher, student, and admin accounts.'],['Courses',DEMO_COURSES.length+' courses across 6 categories.'],['Resources',DEMO_RESOURCES.length+' resources in the digital library.'],['Quizzes & Simulations','Review and moderate published assessments.'],['Blog Posts','Manage platform announcements and articles.'],['AI Usage','Monitor generation volume across all tools.']];
+  return '<div class="container-wide">'+
+    '<h1 class="text-2xl font-display font-bold mb-1">Admin Dashboard 👨‍💼</h1><p class="text-muted mb-8">Platform-wide overview and management.</p>'+
+    '<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-10">'+stats.map(([l,v])=>Card('<div class="text-lg font-display font-bold text-center" style="color:var(--navy)">'+v.toLocaleString()+'</div><div class="text-xs text-muted text-center mt-1">'+l+'</div>')).join('')+'</div>'+
+    '<h2 class="font-bold text-lg mb-4">Manage Platform</h2><div class="grid-3 mb-10">'+areas.map(([t,d])=>Card('<h3 class="font-bold mb-1">'+t+'</h3><p class="text-muted text-sm">'+d+'</p>',{hover:true})).join('')+'</div>'+
+    '<h2 class="font-bold text-lg mb-4">Courses</h2>'+Card('<div class="overflow-x-auto"><table class="data-table"><thead><tr><th>Title</th><th>Category</th><th>Lessons</th><th>Status</th></tr></thead><tbody>'+
+      DEMO_COURSES.map(c=>'<tr><td class="font-medium">'+c.title+'</td><td>'+c.category+'</td><td>'+c.lessons.length+'</td><td>'+Badge('Published','soft')+'</td></tr>').join('')+
+    '</tbody></table></div>', {class:'!p-0'})+
+  '</div>';
+}
+
+// ============================================================
+// PAGE: AI Toolkit Hub
+// ============================================================
+const TOOLKIT_TOOLS = [
+  ['lesson-plan','📝','AI Lesson Plan Generator','Generate complete, structured lesson plans in minutes.'],
+  ['worksheet','📄','AI Worksheet Generator','Create editable practice worksheets with answer keys.'],
+  ['question-paper','🗂️','AI Question Paper Generator','Build full examination papers with sections and marks.'],
+  ['mcq','✅','AI MCQ Generator','Generate multiple-choice questions with explanations.'],
+  ['assignment','📋','AI Assignment Generator','Create graded homework assignments instantly.'],
+  ['explanation','💡','AI Explanation Generator','Get clear, step-by-step topic explanations.'],
+  ['activity','🎲','AI Teaching Activity Generator','Design interactive classroom activities.'],
+  ['ppt','📊','AI PPT Content Generator','Structure slide-ready lesson content.'],
+  ['video-script','🎬','AI Video Script Generator','Script engaging educational videos.'],
+  ['infographic','🖼️','AI Infographic Generator','Generate structured infographic content.'],
+];
+function pageAIToolkitHub() {
+  return '<div class="container-wide">'+
+    '<div class="text-center mb-12">'+Badge('🧠 AI Teaching Toolkit','gold')+'<h1 class="text-4xl font-display font-bold my-4">10 Tools to Save You Hours</h1>'+
+    '<p class="text-muted max-w-xl mx-auto">Generate lesson plans, worksheets, assessments, and content — all AI-assisted, fully editable.</p></div>'+
+    '<div class="grid-3">'+TOOLKIT_TOOLS.map(([id,emoji,title,desc])=>'<a href="#/ai-toolkit/'+id+'">'+Card(
+      '<div class="text-3xl mb-3">'+emoji+'</div><h3 class="font-bold mb-1">'+title+'</h3><p class="text-muted text-sm mb-4">'+desc+'</p>'+
+      '<span class="font-semibold text-sm flex items-center gap-1" style="color:var(--navy)">Open Tool '+ICONS.arrowRight+'</span>', {hover:true}
+    )+'</a>').join('')+'</div></div>';
+}
+function toolHeader(emoji, title, desc) {
+  return '<a href="#/ai-toolkit" class="inline-flex items-center gap-1 mb-6" style="color:var(--navy)">'+ICONS.chevLeft+' Back to AI Toolkit</a>'+
+    '<h1 class="text-2xl font-display font-bold mb-1">'+emoji+' '+title+'</h1><p class="text-muted mb-8">'+desc+'</p>';
+}
+function resultActions(getTextFn, filename) {
+  return '<div class="flex flex-wrap gap-2 mt-6 pt-4 border-t border-app">'+
+    Btn(ICONS.copy+' Copy',{variant:'outline', class:'text-sm', attrs:'onclick=\'copyText('+getTextFn+')\''})+
+    Btn(ICONS.download+' Export',{variant:'outline', class:'text-sm', attrs:'onclick=\'downloadText("'+filename+'", '+getTextFn+')\''})+
+    Btn(ICONS.save+' Save',{variant:'outline', class:'text-sm', attrs:'onclick="toast(\'Saved to your resources\')"'})+
+  '</div>';
+}
+
+// ---------- Lesson Plan Generator ----------
+function pageLessonPlan() {
+  return '<div class="container-wide max-w-4xl">'+toolHeader('📝','AI Lesson Plan Generator','Generate a complete, classroom-ready lesson plan.')+
+  '<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">'+
+  Card('<div class="space-y-4">'+
+    Select('Class','lpClass',[{value:'Grade 9',label:'Grade 9'},{value:'Grade 10',label:'Grade 10'},{value:'Grade 11',label:'Grade 11 (NEB)'},{value:'Grade 12',label:'Grade 12 (NEB)'},{value:'B.Ed. First Year',label:'B.Ed. First Year'},{value:'B.Sc. First Year',label:'B.Sc. First Year'}])+
+    Input('Subject','lpSubject',{value:'Mathematics'})+
+    Input('Topic','lpTopic',{placeholder:'e.g. Quadratic Equations', value:'Quadratic Equations'})+
+    Input('Duration (minutes)','lpDuration',{type:'number', value:'45'})+
+    Select('Teaching Method','lpMethod',[{value:'guided-example',label:'Guided Example'},{value:'inquiry-based',label:'Inquiry-Based'},{value:'flipped-classroom',label:'Flipped Classroom'},{value:'collaborative',label:'Collaborative Group Work'}])+
+    Select('Student Level','lpLevel',[{value:'mixed-level',label:'Mixed Level'},{value:'beginner',label:'Beginner'},{value:'advanced',label:'Advanced'}])+
+    Btn('Generate Lesson Plan ✨',{variant:'primary', class:'w-full justify-center', attrs:'onclick="genLessonPlan()" id="lpBtn"'})+
+  '</div>')+
+  '<div id="lpResult">'+Card('<p class="text-muted text-center py-10">Fill in the form and click Generate to see your lesson plan here.</p>')+'</div>'+
+  '</div></div>';
+}
+function genLessonPlan() {
+  const btn = document.getElementById('lpBtn'); btn.disabled = true; btn.innerHTML = '<span class="spin inline-block">⏳</span> Generating...';
+  const inp = {cls:val('lpClass'), subject:val('lpSubject'), topic:val('lpTopic'), duration:val('lpDuration'), method:val('lpMethod'), level:val('lpLevel')};
+  setTimeout(()=>{
+    const p = aiLessonPlan(inp);
+    const html =
+      section('Topic', p.topic)+
+      section('Learning Objectives', '<ul class="list-disc pl-5 space-y-1">'+p.objectives.map(o=>'<li>'+o+'</li>').join('')+'</ul>')+
+      section('Previous Knowledge', p.previousKnowledge)+
+      section('Introduction', p.introduction)+
+      section('Teacher Activity', p.teacherActivity)+
+      section('Student Activity', p.studentActivity)+
+      section('AI Activity', p.aiActivity)+
+      section('Visualization Activity', p.visualization)+
+      section('Examples', '<ul class="list-disc pl-5 space-y-1">'+p.examples.map(e=>'<li>'+e+'</li>').join('')+'</ul>')+
+      section('Assessment', p.assessment)+
+      section('Homework', p.homework)+
+      section('Teaching Resources', '<ul class="list-disc pl-5 space-y-1">'+p.resources.map(r=>'<li>'+r+'</li>').join('')+'</ul>')+
+      section('Differentiation', p.differentiation);
+    window.__lpText = 'LESSON PLAN: '+p.topic+'\n\n'+
+      'Objectives:\n'+p.objectives.map(o=>'- '+o).join('\n')+'\n\nPrevious Knowledge: '+p.previousKnowledge+
+      '\n\nIntroduction: '+p.introduction+'\n\nTeacher Activity: '+p.teacherActivity+'\n\nStudent Activity: '+p.studentActivity+
+      '\n\nAI Activity: '+p.aiActivity+'\n\nVisualization: '+p.visualization+'\n\nExamples:\n'+p.examples.map(e=>'- '+e).join('\n')+
+      '\n\nAssessment: '+p.assessment+'\n\nHomework: '+p.homework+'\n\nResources:\n'+p.resources.map(r=>'- '+r).join('\n')+
+      '\n\nDifferentiation: '+p.differentiation;
+    document.getElementById('lpResult').innerHTML = Card('<div class="max-h-[600px] overflow-y-auto pr-1">'+html+'</div>'+resultActions('window.__lpText', 'lesson-plan.txt'));
+    btn.disabled = false; btn.innerHTML = 'Regenerate ✨';
+  }, 700);
+}
+function section(title, body) { return '<div class="mb-4"><h4 class="font-bold text-sm mb-1" style="color:var(--navy)">'+title+'</h4><div class="text-sm text-muted leading-relaxed">'+body+'</div></div>'; }
+function val(id) { const el = document.getElementById(id); return el ? el.value : ''; }
+
+// ---------- Worksheet Generator ----------
+function pageWorksheet() {
+  const typeOpts = [['mcq','MCQ'],['short','Short Answer'],['numeric','Numerical'],['long','Long Answer'],['application','Application'],['hots','HOTS']];
+  return '<div class="container-wide max-w-4xl">'+toolHeader('📄','AI Worksheet Generator','Create an editable practice worksheet with an answer key.')+
+  '<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">'+
+  Card('<div class="space-y-4">'+
+    Input('Topic','wsTopic',{value:'Trigonometric Identities'})+
+    Input('Number of Questions','wsNum',{type:'number', value:'6'})+
+    Select('Difficulty','wsDiff',[{value:'easy',label:'Easy'},{value:'medium',label:'Medium'},{value:'hard',label:'Hard'}],{value:'medium'})+
+    '<div><label class="block text-sm font-semibold mb-2">Question Types</label><div class="flex flex-wrap gap-2">'+
+      typeOpts.map(([v,l])=>'<label class="flex items-center gap-1.5 text-sm surface px-3 py-1.5 rounded-lg cursor-pointer"><input type="checkbox" class="wsType" value="'+v+'" '+(v==='mcq'||v==='short'?'checked':'')+'/> '+l+'</label>').join('')+
+    '</div></div>'+
+    Btn('Generate Worksheet ✨',{variant:'primary', class:'w-full justify-center', attrs:'onclick="genWorksheet()" id="wsBtn"'})+
+  '</div>')+
+  '<div id="wsResult">'+Card('<p class="text-muted text-center py-10">Fill in the form and click Generate.</p>')+'</div>'+
+  '</div></div>';
+}
+function genWorksheet() {
+  const btn = document.getElementById('wsBtn'); btn.disabled = true; btn.innerHTML = '⏳ Generating...';
+  const types = Array.from(document.querySelectorAll('.wsType:checked')).map(c=>c.value);
+  const inp = {topic: val('wsTopic'), num: parseInt(val('wsNum'))||6, difficulty: val('wsDiff'), types};
+  setTimeout(()=>{
+    const w = aiWorksheet(inp);
+    let showKey = false;
+    const renderQs = () => w.questions.map((q,i)=>
+      '<div class="mb-4 pb-4 border-b border-app last:border-0"><p class="font-semibold text-sm mb-1">Q'+(i+1)+'. ['+q.type+', '+q.marks+' marks] '+q.q+'</p>'+
+      (q.opts ? '<ul class="text-sm text-muted pl-5 list-[lower-alpha]">'+q.opts.map(o=>'<li>'+o+'</li>').join('')+'</ul>' : '')+
+      (showKey ? '<p class="text-xs mt-1 p-2 rounded" style="background:var(--lightblue,#e3f2fd);color:var(--navy)"><strong>Answer:</strong> '+q.sol+'</p>' : '')+
+      '</div>'
+    ).join('');
+    window.__wsToggleKey = function(){ showKey = !showKey; document.getElementById('wsQList').innerHTML = renderQs(); document.getElementById('wsKeyBtn').textContent = showKey ? 'Hide Answer Key' : 'Show Answer Key'; };
+    window.__wsText = w.title+'\n\n'+w.questions.map((q,i)=>'Q'+(i+1)+'. ['+q.type+', '+q.marks+' marks] '+q.q+(q.opts?'\n'+q.opts.map((o,j)=>'  '+String.fromCharCode(97+j)+') '+o).join('\n'):'')).join('\n\n')+
+      '\n\n--- ANSWER KEY ---\n'+w.questions.map((q,i)=>'Q'+(i+1)+': '+q.sol).join('\n');
+    document.getElementById('wsResult').innerHTML = Card(
+      '<div class="flex items-center justify-between mb-4"><h3 class="font-bold">'+w.title+'</h3>'+
+      '<button id="wsKeyBtn" onclick="__wsToggleKey()" class="text-xs font-semibold px-3 py-1.5 rounded-lg surface">Show Answer Key</button></div>'+
+      '<div id="wsQList" class="max-h-[420px] overflow-y-auto pr-1">'+renderQs()+'</div>'+
+      resultActions('window.__wsText', 'worksheet.txt')
+    );
+    btn.disabled = false; btn.innerHTML = 'Regenerate ✨';
+  }, 700);
+}
+
+// ---------- Question Paper Generator ----------
+function pageQuestionPaper() {
+  return '<div class="container-wide max-w-4xl">'+toolHeader('🗂️','AI Question Paper Generator','Build a full examination paper with sections and marks distribution.')+
+  '<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">'+
+  Card('<div class="space-y-4">'+
+    Select('Program','qpProgram',[{value:'NEB Grade 11',label:'NEB Grade 11'},{value:'NEB Grade 12',label:'NEB Grade 12'},{value:'B.Ed.',label:'B.Ed.'},{value:'B.Sc.',label:'B.Sc.'}])+
+    Input('Year/Semester','qpYear',{value:'First Year'})+
+    Input('Subject','qpSubject',{value:'Mathematics'})+
+    '<div class="grid grid-cols-2 gap-4">'+Input('Full Marks','qpMarks',{type:'number', value:'75'})+Input('Time','qpTime',{value:'3 hrs'})+'</div>'+
+    Input('Total Number of Questions','qpNum',{type:'number', value:'12'})+
+    Btn('Generate Question Paper ✨',{variant:'primary', class:'w-full justify-center', attrs:'onclick="genQuestionPaper()" id="qpBtn"'})+
+  '</div>')+
+  '<div id="qpResult">'+Card('<p class="text-muted text-center py-10">Fill in the form and click Generate.</p>')+'</div>'+
+  '</div></div>';
+}
+function genQuestionPaper() {
+  const btn = document.getElementById('qpBtn'); btn.disabled = true; btn.innerHTML = '⏳ Generating...';
+  const inp = {program: val('qpProgram'), yearSem: val('qpYear'), subject: val('qpSubject'), fullMarks: val('qpMarks'), time: val('qpTime'), num: parseInt(val('qpNum'))||12};
+  setTimeout(()=>{
+    const p = aiQuestionPaper(inp);
+    const html = '<div class="text-center mb-4 pb-4 border-b border-app"><p class="font-bold">'+p.subject+' — Examination</p><p class="text-xs text-muted">'+p.program+' · Full Marks: '+p.fullMarks+' · Time: '+p.time+'</p></div>'+
+      p.sections.map(s => '<div class="mb-4"><p class="font-bold text-sm mb-1" style="color:var(--navy)">'+s.name+'</p><p class="text-xs text-muted italic mb-2">'+s.instr+'</p>'+
+        s.qs.map(q=>'<p class="text-sm mb-1">'+q.num+'. '+q.text+' <span class="text-muted">['+q.marks+']</span></p>').join('')+'</div>').join('');
+    window.__qpText = p.subject+' — Examination\n'+p.program+' | Full Marks: '+p.fullMarks+' | Time: '+p.time+'\n\n'+
+      p.sections.map(s=>s.name+'\n'+s.instr+'\n'+s.qs.map(q=>q.num+'. '+q.text+' ['+q.marks+']').join('\n')).join('\n\n');
+    document.getElementById('qpResult').innerHTML = Card('<div class="max-h-[500px] overflow-y-auto pr-1">'+html+'</div>'+resultActions('window.__qpText','question-paper.txt'));
+    btn.disabled = false; btn.innerHTML = 'Regenerate ✨';
+  }, 700);
+}
+
+// ---------- MCQ Generator ----------
+function pageMCQ() {
+  return '<div class="container-wide max-w-4xl">'+toolHeader('✅','AI MCQ Generator','Generate multiple-choice questions with explanations.')+
+  '<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">'+
+  Card('<div class="space-y-4">'+
+    Input('Topic','mcqTopic',{value:'Probability'})+
+    Input('Number of Questions','mcqNum',{type:'number', value:'5'})+
+    Select('Difficulty','mcqDiff',[{value:'easy',label:'Easy'},{value:'medium',label:'Medium'},{value:'hard',label:'Hard'}],{value:'medium'})+
+    Btn('Generate MCQs ✨',{variant:'primary', class:'w-full justify-center', attrs:'onclick="genMCQ()" id="mcqBtn"'})+
+  '</div>')+
+  '<div id="mcqResult">'+Card('<p class="text-muted text-center py-10">Fill in the form and click Generate.</p>')+'</div>'+
+  '</div></div>';
+}
+function genMCQ() {
+  const btn = document.getElementById('mcqBtn'); btn.disabled = true; btn.innerHTML = '⏳ Generating...';
+  const topic = val('mcqTopic'), num = parseInt(val('mcqNum'))||5, diff = val('mcqDiff');
+  setTimeout(()=>{
+    const qs = aiMCQs(topic, num, diff);
+    const html = qs.map((q,i)=>'<div class="mb-4 pb-4 border-b border-app last:border-0"><p class="font-semibold text-sm mb-2">Q'+(i+1)+'. '+q.q+'</p>'+
+      '<ul class="text-sm space-y-1">'+q.opts.map((o,j)=>'<li class="'+(j===q.correct?'font-semibold':'')+'" style="'+(j===q.correct?'color:var(--navy)':'')+'">'+String.fromCharCode(97+j)+') '+o+(j===q.correct?' '+ICONS.check:'')+'</li>').join('')+'</ul>'+
+      '<p class="text-xs text-muted mt-2 italic">'+q.exp+'</p></div>').join('');
+    window.__mcqText = qs.map((q,i)=>'Q'+(i+1)+'. '+q.q+'\n'+q.opts.map((o,j)=>String.fromCharCode(97+j)+') '+o).join('\n')+'\nAnswer: '+String.fromCharCode(97+q.correct)+') — '+q.exp).join('\n\n');
+    document.getElementById('mcqResult').innerHTML = Card('<div class="max-h-[500px] overflow-y-auto pr-1">'+html+'</div>'+resultActions('window.__mcqText','mcqs.txt'));
+    btn.disabled = false; btn.innerHTML = 'Regenerate ✨';
+  }, 700);
+}
+
+// ---------- Generic tool template (Assignment, Explanation, Activity, PPT, Video Script, Infographic) ----------
+const GENERIC_TOOL_META = {
+  assignment: {emoji:'📋', title:'AI Assignment Generator', desc:'Create a graded homework assignment instantly.', label:'Topic', placeholder:'Factoring Polynomials'},
+  explanation: {emoji:'💡', title:'AI Explanation Generator', desc:'Get a clear, step-by-step topic explanation.', label:'Concept to Explain', placeholder:'The Chain Rule'},
+  activity: {emoji:'🎲', title:'AI Teaching Activity Generator', desc:'Design an interactive classroom activity.', label:'Topic', placeholder:'Probability with Dice'},
+  ppt: {emoji:'📊', title:'AI PPT Content Generator', desc:'Structure slide-ready lesson content.', label:'Topic', placeholder:'Introduction to Vectors'},
+  'video-script': {emoji:'🎬', title:'AI Video Script Generator', desc:'Script an engaging educational video.', label:'Topic', placeholder:'Understanding Derivatives'},
+  infographic: {emoji:'🖼️', title:'AI Infographic Generator', desc:'Generate structured infographic content.', label:'Topic', placeholder:'The Pythagorean Theorem'},
+};
+function pageGenericTool(tool) {
+  const m = GENERIC_TOOL_META[tool];
+  if (!m) return '<div class="container-wide text-center py-20 text-muted">Tool not found.</div>';
+  return '<div class="container-wide max-w-3xl">'+toolHeader(m.emoji, m.title, m.desc)+
+  Card('<div class="flex flex-col sm:flex-row gap-3 mb-2">'+
+    '<div class="flex-1">'+Input(m.label, 'gtTopic', {placeholder:m.placeholder, value:m.placeholder})+'</div>'+
+    '<div class="flex items-end">'+Btn('Generate ✨',{variant:'primary', attrs:'onclick="genGeneric(\''+tool+'\')" id="gtBtn"'})+'</div>'+
+  '</div>')+
+  '<div id="gtResult" class="mt-6">'+Card('<p class="text-muted text-center py-10">Enter a topic and click Generate.</p>')+'</div>'+
+  '</div>';
+}
+function genGeneric(tool) {
+  const btn = document.getElementById('gtBtn'); btn.disabled = true; btn.innerHTML = '⏳ Generating...';
+  const topic = val('gtTopic') || 'the selected topic';
+  setTimeout(()=>{
+    const text = GENERIC_TEMPLATES[tool](topic);
+    window.__gtText = text;
+    const html = text.split('\n').map(line=>{
+      if (line.startsWith('# ')) return '<h3 class="font-display font-bold text-lg mb-2" style="color:var(--navy)">'+line.slice(2)+'</h3>';
+      if (line.trim()==='') return '<div class="h-2"></div>';
+      return '<p class="text-sm text-muted mb-1">'+line+'</p>';
+    }).join('');
+    document.getElementById('gtResult').innerHTML = Card('<div class="max-h-[450px] overflow-y-auto pr-1">'+html+'</div>'+resultActions('window.__gtText', tool+'.txt'));
+    btn.disabled = false; btn.innerHTML = 'Regenerate ✨';
+  }, 700);
+}
+
+// ============================================================
+// PAGE: AI Math Assistant
+// ============================================================
+let chatHistory = [];
+function pageAIAssistant() {
+  chatHistory = [];
+  const samples = ['Solve x² − 5x + 6 = 0', 'Differentiate x³ + 2x', 'Find the integral of 2x', 'Simplify sin²θ + cos²θ'];
+  return '<div class="container-wide max-w-3xl">'+
+    '<div class="text-center mb-6">'+Badge('🧠 AI Mathematics Tutor','gold')+'<h1 class="text-3xl font-display font-bold my-3">AI Math Assistant</h1>'+
+    '<p class="text-muted">Ask any Mathematics question — get Problem → Concept → Method → Steps → Answer.</p></div>'+
+    '<div class="flex flex-wrap gap-2 justify-center mb-6">'+samples.map(s=>'<button onclick="askSample(\''+s.replace(/'/g,"\\'")+'\')" class="text-xs px-3 py-1.5 rounded-full surface font-medium">'+s+'</button>').join('')+'</div>'+
+    Card('<div id="chatLog" class="space-y-4 max-h-[500px] overflow-y-auto mb-4 pr-1"><p class="text-muted text-sm text-center py-8">Ask a question to get started.</p></div>'+
+      '<div class="flex gap-2"><input id="chatInput" onkeydown="if(event.key===\'Enter\') sendChat()" placeholder="Type your Mathematics question..." class="input-field flex-1"/>'+
+      Btn('Ask',{variant:'primary', attrs:'onclick="sendChat()" id="chatBtn"'})+'</div>'
+    )+
+  '</div>';
+}
+function askSample(q) { document.getElementById('chatInput').value = q; sendChat(); }
+function sendChat() {
+  const inputEl = document.getElementById('chatInput');
+  const q = inputEl.value.trim();
+  if (!q) return;
+  chatHistory.push({role:'user', text:q});
+  renderChat();
+  inputEl.value = '';
+  const btn = document.getElementById('chatBtn'); btn.disabled = true;
+  chatHistory.push({role:'thinking'});
+  renderChat();
+  setTimeout(()=>{
+    chatHistory.pop();
+    const s = aiSolve(q);
+    chatHistory.push({role:'assistant', data:s});
+    renderChat();
+    btn.disabled = false;
+  }, 800);
+}
+function renderChat() {
+  const log = document.getElementById('chatLog');
+  if (chatHistory.length===0) { log.innerHTML = '<p class="text-muted text-sm text-center py-8">Ask a question to get started.</p>'; return; }
+  log.innerHTML = chatHistory.map(m => {
+    if (m.role==='user') return '<div class="flex justify-end"><div class="max-w-[80%] px-4 py-2 rounded-xl rounded-tr-none text-white text-sm" style="background:var(--navy)">'+esc(m.text)+'</div></div>';
+    if (m.role==='thinking') return '<div class="flex justify-start"><div class="px-4 py-2 rounded-xl rounded-tl-none surface text-sm text-muted">Thinking<span class="spin inline-block ml-1">⏳</span></div></div>';
+    const s = m.data;
+    return '<div class="flex justify-start"><div class="max-w-[90%] px-4 py-3 rounded-xl rounded-tl-none surface text-sm space-y-2">'+
+      '<p><strong style="color:var(--navy)">Concept:</strong> '+s.concept+'</p>'+
+      '<p><strong style="color:var(--navy)">Method:</strong> '+s.method+'</p>'+
+      '<div><strong style="color:var(--navy)">Steps:</strong><ol class="list-decimal pl-5 mt-1 space-y-0.5">'+s.steps.map(st=>'<li>'+st+'</li>').join('')+'</ol></div>'+
+      '<p class="pt-2 border-t border-app"><strong style="color:var(--navy)">Answer:</strong> '+s.answer+'</p>'+
+    '</div></div>';
+  }).join('');
+  log.scrollTop = log.scrollHeight;
+}
+
+// ============================================================
+// PAGE: Visualization Lab
+// ============================================================
+const VIZ_MODULES = [
+  ['function-grapher','📈','Function Grapher','Plot and explore functions interactively.', true],
+  ['trigonometry','⭕','Trigonometry Lab','Interactive unit circle with sin, cos, tan.', true],
+  ['derivatives','📉','Derivatives','Visualize tangent lines and slope at a point.', true],
+  ['statistics','📊','Statistics Lab','Compute mean, median, mode, and view histograms.', true],
+  ['transformations','🔄','Function Transformations','Translation, reflection, scaling with sliders.', false],
+  ['coordinate-geometry','📍','Coordinate Geometry','Points, lines, circles, and conics.', false],
+  ['limits','➡️','Limits','Animated left/right-hand limit approach.', false],
+  ['integration','∫','Integration','Area under the curve, definite integrals.', false],
+  ['vectors','➗','Vector Lab','Vector addition, magnitude, and direction.', false],
+  ['matrix','🔲','Matrix Transformation','Rotation, reflection, scaling, shearing.', false],
+];
+function pageVizHub() {
+  return '<div class="container-wide">'+
+    '<div class="text-center mb-12">'+Badge('📐 Mathematics Visualization Lab','gold')+'<h1 class="text-4xl font-display font-bold my-4">See the Mathematics</h1>'+
+    '<p class="text-muted max-w-xl mx-auto">10 interactive modules across algebra, trigonometry, calculus, and statistics.</p></div>'+
+    '<div class="grid-3">'+VIZ_MODULES.map(([id,e,t,d,live])=>{
+      const inner = '<div class="flex items-start justify-between mb-3"><div class="text-2xl">'+e+'</div>'+(!live?'<span class="text-muted">'+ICONS.lock+'</span>':'')+'</div>'+
+        '<h3 class="font-bold mb-1">'+t+'</h3><p class="text-muted text-sm mb-3">'+d+'</p>'+
+        (live ? '<span class="font-semibold text-sm flex items-center gap-1" style="color:var(--navy)">Open '+ICONS.arrowRight+'</span>' : '<span class="text-xs text-muted font-medium">Coming soon</span>');
+      return live ? '<a href="#/visualization-lab/'+id+'">'+Card(inner,{hover:true})+'</a>' : Card(inner,{class:'opacity-60'});
+    }).join('')+'</div></div>';
+}
+function vizHeader(emoji, title, desc) {
+  return '<a href="#/visualization-lab" class="inline-flex items-center gap-1 mb-6" style="color:var(--navy)">'+ICONS.chevLeft+' Back to Visualization Lab</a>'+
+    '<h1 class="text-2xl font-display font-bold mb-1">'+emoji+' '+title+'</h1><p class="text-muted mb-8">'+desc+'</p>';
+}
+
+// ---------- SVG graph helper ----------
+function svgFunctionPlot(fns, opts) {
+  opts = opts || {};
+  const w = opts.w||600, h = opts.h||360, pad = 30, scale = opts.scale||30;
+  const cx = w/2, cy = h/2;
+  const toX = x => cx + x*scale, toY = y => cy - y*scale;
+  let grid = '';
+  for (let gx = Math.ceil((-cx/scale)); gx <= Math.floor((cx/scale)); gx++) {
+    grid += '<line x1="'+toX(gx)+'" y1="0" x2="'+toX(gx)+'" y2="'+h+'" stroke="currentColor" class="text-slate-200 dark:text-slate-800" stroke-width="'+(gx===0?0:1)+'"/>';
+  }
+  for (let gy = Math.ceil((-cy/scale)); gy <= Math.floor((cy/scale)); gy++) {
+    grid += '<line x1="0" y1="'+toY(gy)+'" x2="'+w+'" y2="'+toY(gy)+'" stroke="currentColor" class="text-slate-200 dark:text-slate-800" stroke-width="'+(gy===0?0:1)+'"/>';
+  }
+  const paths = fns.map(fn => {
+    let d = '', started = false;
+    for (let sx=0; sx<=w; sx+=2) {
+      const x = (sx-cx)/scale;
+      const y = evalExpr(fn.expr, x);
+      if (isFinite(y) && Math.abs(y) < (h/scale)*3) {
+        const sy = toY(y);
+        d += (started?'L':'M')+' '+sx+' '+sy+' ';
+        started = true;
+      } else started = false;
+    }
+    return '<path d="'+d+'" fill="none" stroke="'+fn.color+'" stroke-width="2.5" stroke-linecap="round"/>';
+  }).join('');
+  let extra = opts.extra || '';
+  return '<svg viewBox="0 0 '+w+' '+h+'" class="w-full h-auto rounded-lg surface">'+grid+
+    '<line x1="0" y1="'+cy+'" x2="'+w+'" y2="'+cy+'" stroke="currentColor" class="text-slate-400" stroke-width="1.5"/>'+
+    '<line x1="'+cx+'" y1="0" x2="'+cx+'" y2="'+h+'" stroke="currentColor" class="text-slate-400" stroke-width="1.5"/>'+
+    paths + extra + '</svg>';
+}
+
+// ---------- Function Grapher ----------
+let fgFunctions = [{expr:'x^2', color:'#001f3f'}, {expr:'sin(x)*3', color:'#ffc107'}];
+function pageFunctionGrapher() {
+  return '<div class="container-wide max-w-5xl">'+vizHeader('📈','Function Grapher','Enter one or more equations to plot. Try presets or write your own.')+
+  '<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">'+
+    Card('<h3 class="font-bold mb-3 text-sm">Functions</h3><div id="fgList" class="space-y-2 mb-3">'+fgListHtml()+'</div>'+
+      Btn('+ Add Function',{variant:'outline', class:'w-full justify-center text-sm', attrs:'onclick="fgAdd()"'})+
+      '<div class="mt-4 pt-4 border-t border-app"><p class="text-xs font-semibold mb-2">Presets</p><div class="flex flex-wrap gap-1.5">'+
+      ['x^2','sin(x)','cos(x)','x^3','sqrt(x)'].map(p=>'<button onclick="fgPreset(\''+p+'\')" class="text-xs px-2.5 py-1 rounded surface font-mono">'+p+'</button>').join('')+
+      '</div></div>', {class:'h-fit'})+
+    '<div class="lg:col-span-2" id="fgGraph">'+svgFunctionPlot(fgFunctions)+'</div>'+
+  '</div></div>';
+}
+function fgListHtml() {
+  return fgFunctions.map((f,i)=>'<div class="flex items-center gap-2">'+
+    '<div class="w-3 h-3 rounded-full flex-shrink-0" style="background:'+f.color+'"></div>'+
+    '<input value="'+esc(f.expr)+'" oninput="fgUpdate('+i+',this.value)" class="input-field !py-1.5 text-sm font-mono flex-1"/>'+
+    (fgFunctions.length>1?'<button onclick="fgRemove('+i+')" class="text-red-400 text-sm px-1">✕</button>':'')+
+  '</div>').join('');
+}
+function fgRedraw() { document.getElementById('fgGraph').innerHTML = svgFunctionPlot(fgFunctions); document.getElementById('fgList').innerHTML = fgListHtml(); }
+function fgUpdate(i, v) { fgFunctions[i].expr = v; document.getElementById('fgGraph').innerHTML = svgFunctionPlot(fgFunctions); }
+function fgAdd() { const colors=['#001f3f','#ffc107','#dc2626','#059669','#7c3aed']; fgFunctions.push({expr:'x', color:colors[fgFunctions.length%colors.length]}); fgRedraw(); }
+function fgRemove(i) { fgFunctions.splice(i,1); fgRedraw(); }
+function fgPreset(p) { fgFunctions[0].expr = p; fgRedraw(); }
+
+// ---------- Trigonometry Lab ----------
+let trigAngle = 45;
+function pageTrig() {
+  return '<div class="container-wide max-w-4xl">'+vizHeader('⭕','Trigonometry Lab','Drag the angle slider to explore the unit circle.')+
+  '<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">'+
+    Card('<div id="trigSvg">'+trigSvgHtml()+'</div>')+
+    Card('<div id="trigStats">'+trigStatsHtml()+'</div>'+
+      '<div class="mt-4"><label class="text-sm font-semibold">Angle: <span id="trigAngleLabel">'+trigAngle+'°</span></label>'+
+      '<input type="range" min="0" max="360" value="'+trigAngle+'" oninput="trigUpdate(this.value)" class="w-full range-navy mt-1"/></div>')+
+  '</div></div>';
+}
+function trigSvgHtml() {
+  const r = 120, cx=160, cy=160;
+  const rad = toRad(trigAngle);
+  const px = cx + r*Math.cos(rad), py = cy - r*Math.sin(rad);
+  return '<svg viewBox="0 0 320 320" class="w-full h-auto">'+
+    '<line x1="0" y1="'+cy+'" x2="320" y2="'+cy+'" stroke="currentColor" class="text-slate-300 dark:text-slate-700"/>'+
+    '<line x1="'+cx+'" y1="0" x2="'+cx+'" y2="320" stroke="currentColor" class="text-slate-300 dark:text-slate-700"/>'+
+    '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="currentColor" class="text-slate-400" stroke-width="1.5"/>'+
+    '<line x1="'+cx+'" y1="'+cy+'" x2="'+px+'" y2="'+py+'" stroke="var(--navy)" stroke-width="2.5"/>'+
+    '<line x1="'+px+'" y1="'+py+'" x2="'+px+'" y2="'+cy+'" stroke="#dc2626" stroke-width="2" stroke-dasharray="4 3"/>'+
+    '<line x1="'+cx+'" y1="'+cy+'" x2="'+px+'" y2="'+cy+'" stroke="#059669" stroke-width="2" stroke-dasharray="4 3"/>'+
+    '<circle cx="'+px+'" cy="'+py+'" r="5" fill="var(--gold)" stroke="var(--navy)" stroke-width="1.5"/>'+
+  '</svg>';
+}
+function trigStatsHtml() {
+  const rad = toRad(trigAngle);
+  return '<div class="grid grid-cols-3 gap-3 text-center">'+
+    ['sin θ = '+round(Math.sin(rad),3), 'cos θ = '+round(Math.cos(rad),3), 'tan θ = '+(Math.abs(Math.cos(rad))<0.001?'undef.':round(Math.tan(rad),3))]
+    .map(s=>'<div class="p-3 rounded-lg surface"><p class="font-mono font-bold text-sm">'+s+'</p></div>').join('')+
+  '</div><p class="text-sm text-muted mt-3">θ = '+trigAngle+'° = '+round(rad,3)+' rad</p>';
+}
+function trigUpdate(v) { trigAngle = parseInt(v); document.getElementById('trigAngleLabel').textContent = v+'°'; document.getElementById('trigSvg').innerHTML = trigSvgHtml(); document.getElementById('trigStats').innerHTML = trigStatsHtml(); }
+
+// ---------- Derivatives ----------
+let derivFn = 'x^2', derivX = 1;
+function pageDerivatives() {
+  return '<div class="container-wide max-w-5xl">'+vizHeader('📉','Derivatives','Move the point to see the tangent line and its slope.')+
+  '<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">'+
+    Card('<label class="text-sm font-semibold">Function</label><select id="derivFnSel" onchange="derivFn=this.value; derivRedraw();" class="input-field mt-1 mb-4">'+
+      ['x^2','x^3','sin(x)*3','cos(x)*3'].map(f=>'<option '+(f===derivFn?'selected':'')+'>'+f+'</option>').join('')+'</select>'+
+      '<label class="text-sm font-semibold">Point x: <span id="derivXLabel">'+derivX+'</span></label>'+
+      '<input type="range" min="-4" max="4" step="0.1" value="'+derivX+'" oninput="derivUpdate(this.value)" class="w-full range-navy mt-1 mb-4"/>'+
+      '<div id="derivOut" class="p-3 rounded-lg surface text-sm space-y-1">'+derivOutHtml()+'</div>', {class:'h-fit'})+
+    '<div class="lg:col-span-2" id="derivGraph">'+derivGraphHtml()+'</div>'+
+  '</div></div>';
+}
+function derivGraphHtml() {
+  const f = x => evalExpr(derivFn, x);
+  const slope = deriv(f, derivX);
+  const y0 = f(derivX);
+  const scale = 30, cx=300, cy=180;
+  const toX = x=>cx+x*scale, toY = y=>cy-y*scale;
+  const x1=derivX-2.5, x2=derivX+2.5;
+  const line = '<line x1="'+toX(x1)+'" y1="'+toY(y0+slope*(x1-derivX))+'" x2="'+toX(x2)+'" y2="'+toY(y0+slope*(x2-derivX))+'" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="5 3"/>'+
+    '<circle cx="'+toX(derivX)+'" cy="'+toY(y0)+'" r="6" fill="#dc2626"/>';
+  return svgFunctionPlot([{expr:derivFn, color:'#001f3f'}], {extra:line});
+}
+function derivOutHtml() {
+  const f = x => evalExpr(derivFn, x);
+  const slope = deriv(f, derivX);
+  return '<p>f('+derivX+') = <strong>'+round(f(derivX),3)+'</strong></p><p>f\'('+derivX+') = <strong style="color:var(--navy)">'+round(slope,3)+'</strong></p><p class="text-muted text-xs">Slope of the tangent line at this point.</p>';
+}
+function derivRedraw() { document.getElementById('derivGraph').innerHTML = derivGraphHtml(); document.getElementById('derivOut').innerHTML = derivOutHtml(); }
+function derivUpdate(v) { derivX = parseFloat(v); document.getElementById('derivXLabel').textContent = v; derivRedraw(); }
+
+// ---------- Statistics Lab ----------
+let statsData = [12,15,18,15,21,19,15,24,18,20];
+function pageStatistics() {
+  return '<div class="container-wide max-w-5xl">'+vizHeader('📊','Statistics Lab','Enter data to compute descriptive statistics and view the distribution.')+
+  '<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">'+
+    Card('<h3 class="font-bold text-sm mb-2">Data ('+statsData.length+' values)</h3>'+
+      '<div class="flex gap-2 mb-3"><input id="statsInput" type="number" placeholder="Add value" class="input-field flex-1" onkeydown="if(event.key===\'Enter\') statsAdd()"/>'+
+      '<button onclick="statsAdd()" class="btn btn-primary !px-3">+</button></div>'+
+      '<div id="statsList" class="max-h-52 overflow-y-auto space-y-1 mb-3">'+statsListHtml()+'</div>'+
+      Btn('Clear All',{variant:'outline', class:'w-full justify-center text-sm', attrs:'onclick="statsData=[]; statsRedraw();"'}), {class:'h-fit'})+
+    '<div class="lg:col-span-2 space-y-4" id="statsResult">'+statsResultHtml()+'</div>'+
+  '</div></div>';
+}
+function statsListHtml() { return statsData.map((v,i)=>'<div class="flex justify-between px-3 py-1 rounded surface text-sm"><span class="font-mono">'+v+'</span><button onclick="statsRemove('+i+')" class="text-red-400">✕</button></div>').join(''); }
+function statsResultHtml() {
+  if (statsData.length===0) return Card('<p class="text-muted text-center py-10">Add data to see statistics.</p>');
+  const m = mean(statsData), md = median(statsData), mo = modeOf(statsData), sd = stdev(statsData);
+  const cards = [['Mean',round(m,2)],['Median',round(md,2)],['Mode',round(mo,2)],['Std Dev',round(sd,2)],['Min',Math.min(...statsData)],['Max',Math.max(...statsData)]];
+  const maxV = Math.max(...statsData), minV = Math.min(...statsData);
+  const buckets = 6, size = (maxV-minV)/buckets || 1;
+  const hist = Array.from({length:buckets},(_,i)=>({label: round(minV+i*size,1)+'-'+round(minV+(i+1)*size,1), count:0}));
+  statsData.forEach(v=>{ let idx = Math.min(buckets-1, Math.max(0,Math.floor((v-minV)/size))); hist[idx].count++; });
+  const maxCount = Math.max(...hist.map(b=>b.count),1);
+  return '<div class="grid grid-cols-3 sm:grid-cols-6 gap-2">'+cards.map(([l,v])=>'<div class="p-2.5 rounded-lg surface text-center"><div class="font-display font-bold" style="color:var(--navy)">'+v+'</div><div class="text-[10px] text-muted">'+l+'</div></div>').join('')+'</div>'+
+    Card('<h4 class="font-bold text-sm mb-3">Histogram</h4><div class="flex items-end gap-2 h-40">'+
+      hist.map(b=>'<div class="flex-1 flex flex-col items-center justify-end gap-1 h-full"><span class="text-xs font-semibold" style="color:var(--navy)">'+b.count+'</span><div class="w-full rounded-t" style="height:'+((b.count/maxCount)*100)+'%;min-height:'+(b.count>0?'4px':'0')+';background:var(--navy)"></div><span class="text-[9px] text-muted text-center">'+b.label+'</span></div>').join('')+
+    '</div>');
+}
+function statsRedraw() { document.getElementById('statsList').innerHTML = statsListHtml(); document.getElementById('statsResult').innerHTML = statsResultHtml(); }
+function statsAdd() { const el = document.getElementById('statsInput'); const v = parseFloat(el.value); if (!isNaN(v)) { statsData.push(v); el.value=''; statsRedraw(); } }
+function statsRemove(i) { statsData.splice(i,1); statsRedraw(); }
+
+// ============================================================
+// PAGE: Simulation Lab
+// ============================================================
+function pageSimHub() {
+  return '<div class="container-wide">'+
+    '<div class="text-center mb-12">'+Badge('🚀 Mathematics Simulation Lab','gold')+'<h1 class="text-4xl font-display font-bold my-4">Learn by Running the Experiment</h1>'+
+    '<p class="text-muted max-w-xl mx-auto">'+DEMO_SIMULATIONS.length+' interactive simulations across mechanics, probability, statistics, and calculus.</p></div>'+
+    '<div class="grid-3">'+DEMO_SIMULATIONS.map(s=>{
+      const inner = '<div class="flex items-start justify-between mb-3">'+Badge(s.cat,'soft')+(!s.live?ICONS.lock:'')+'</div>'+
+        '<h3 class="font-bold mb-1">'+s.title+'</h3><p class="text-muted text-sm mb-3">'+s.desc+'</p>'+
+        (s.live ? '<span class="font-semibold text-sm flex items-center gap-1" style="color:var(--navy)">Run '+ICONS.arrowRight+'</span>' : '<span class="text-xs text-muted font-medium">Coming soon</span>');
+      return s.live ? '<a href="#/simulation-lab/'+s.id+'">'+Card(inner,{hover:true})+'</a>' : Card(inner,{class:'opacity-60'});
+    }).join('')+'</div></div>';
+}
+function simHeader(emoji, title, desc) {
+  return '<a href="#/simulation-lab" class="inline-flex items-center gap-1 mb-6" style="color:var(--navy)">'+ICONS.chevLeft+' Back to Simulation Lab</a>'+
+    '<h1 class="text-2xl font-display font-bold mb-1">'+emoji+' '+title+'</h1><p class="text-muted mb-8">'+desc+'</p>';
+}
+function simLayout(controlsHtml, canvasHtml, objective) {
+  return '<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">'+
+    Card('<div class="space-y-4">'+controlsHtml+'</div><div class="mt-4 p-3 rounded-lg surface text-xs text-muted"><strong>Learning objective:</strong> '+objective+'</div>', {class:'h-fit'})+
+    '<div class="lg:col-span-2"><div class="card !p-3" id="simCanvas">'+canvasHtml+'</div></div>'+
+  '</div>';
+}
+
+// ---------- Projectile Motion ----------
+let pmVelocity=30, pmAngle=45, pmT=0, pmRunning=false, pmRaf=null, pmLast=null;
+function pagePMotion() {
+  pmT = 0; pmRunning = false;
+  return '<div class="container-wide max-w-6xl">'+simHeader('🚀','Projectile Motion','Launch a projectile and observe range, height, and flight time.')+
+    simLayout(
+      '<div><label class="text-sm font-semibold">Velocity: <span id="pmVLabel">'+pmVelocity+'</span> m/s</label><input type="range" min="10" max="60" value="'+pmVelocity+'" oninput="pmVelocity=+this.value; pmVLabel.textContent=this.value; pmReset();" class="w-full range-navy" id="pmVSlider"/></div>'+
+      '<div><label class="text-sm font-semibold">Angle: <span id="pmALabel">'+pmAngle+'</span>°</label><input type="range" min="5" max="85" value="'+pmAngle+'" oninput="pmAngle=+this.value; pmALabel.textContent=this.value; pmReset();" class="w-full range-navy" id="pmASlider"/></div>'+
+      '<div class="flex gap-2 pt-2">'+Btn('Start',{variant:'primary', class:'flex-1 justify-center', attrs:'onclick="pmToggle()" id="pmBtn"'})+Btn('Reset',{variant:'outline', attrs:'onclick="pmReset()"'})+'</div>'+
+      '<div id="pmOut" class="p-3 rounded-lg surface text-sm space-y-1 mt-2">'+pmOutHtml()+'</div>',
+      pmSvgHtml(),
+      "Understand how launch angle and speed determine a projectile's range, height, and flight time."
+    )+'</div>';
+}
+function pmCalc() {
+  const rad = toRad(pmAngle), g=9.8;
+  const vx = pmVelocity*Math.cos(rad), vy = pmVelocity*Math.sin(rad);
+  const flight = 2*vy/g, range = (pmVelocity*pmVelocity*Math.sin(2*rad))/g, maxH = (vy*vy)/(2*g);
+  return {vx,vy,flight,range,maxH};
+}
+function pmSvgHtml() {
+  const {vx,vy,flight,range,maxH} = pmCalc();
+  const w=600,h=340,pad=30;
+  const scale = Math.min((w-pad*2)/Math.max(range,1), (h-pad*2)/Math.max(maxH,1), 15);
+  const toX = x=>pad+x*scale, toY = y=>h-pad-y*scale;
+  const x = vx*pmT, y = Math.max(0, vy*pmT-4.9*pmT*pmT);
+  let traj='';
+  for (let i=0;i<=50;i++){ const ti=flight*i/50; const xi=vx*ti; const yi=Math.max(0,vy*ti-4.9*ti*ti); traj += (i===0?'M':'L')+toX(xi)+' '+toY(yi)+' '; }
+  return '<svg viewBox="0 0 '+w+' '+h+'" class="w-full h-auto surface rounded-lg">'+
+    '<line x1="'+pad+'" y1="'+(h-pad)+'" x2="'+(w-pad)+'" y2="'+(h-pad)+'" stroke="currentColor" class="text-slate-400" stroke-width="2"/>'+
+    '<path d="'+traj+'" fill="none" stroke="var(--gold)" stroke-width="2" stroke-dasharray="4 3" opacity="0.7"/>'+
+    '<circle cx="'+toX(x)+'" cy="'+toY(y)+'" r="8" fill="var(--navy)"/>'+
+    '<circle cx="'+toX(0)+'" cy="'+toY(0)+'" r="4" fill="#dc2626"/>'+
+  '</svg>';
+}
+function pmOutHtml() { const {flight,range,maxH} = pmCalc(); return '<div class="flex justify-between"><span>Range</span><strong>'+round(range,1)+' m</strong></div><div class="flex justify-between"><span>Max Height</span><strong>'+round(maxH,1)+' m</strong></div><div class="flex justify-between"><span>Flight Time</span><strong>'+round(flight,2)+' s</strong></div><div class="flex justify-between"><span>Current t</span><strong style="color:var(--navy)">'+round(pmT,2)+' s</strong></div>'; }
+function pmToggle() {
+  pmRunning = !pmRunning;
+  document.getElementById('pmBtn').textContent = pmRunning ? 'Pause' : 'Start';
+  if (pmRunning) { pmLast=null; pmRaf = requestAnimationFrame(pmStep); registerCleanup(()=>{ if(pmRaf) cancelAnimationFrame(pmRaf); }); }
+  else if (pmRaf) cancelAnimationFrame(pmRaf);
+}
+function pmStep(ts) {
+  if (pmLast===null) pmLast=ts;
+  const dt = (ts-pmLast)/1000; pmLast=ts;
+  const {flight} = pmCalc();
+  pmT += dt;
+  if (pmT >= flight) { pmT = flight; pmRunning = false; document.getElementById('pmBtn').textContent = 'Start'; }
+  document.getElementById('simCanvas').innerHTML = pmSvgHtml();
+  document.getElementById('pmOut').innerHTML = pmOutHtml();
+  if (pmRunning) pmRaf = requestAnimationFrame(pmStep);
+}
+function pmReset() { pmT=0; pmRunning=false; if(pmRaf) cancelAnimationFrame(pmRaf); const btn=document.getElementById('pmBtn'); if(btn) btn.textContent='Start'; const c=document.getElementById('simCanvas'); if(c) c.innerHTML=pmSvgHtml(); const o=document.getElementById('pmOut'); if(o) o.innerHTML=pmOutHtml(); }
+
+// ---------- Coin Toss ----------
+let ctHeads=0, ctTails=0, ctLast=null, ctRunning=false, ctInterval=null, ctHistory=[];
+function pageCoinToss() {
+  ctHeads=0; ctTails=0; ctLast=null; ctRunning=false; ctHistory=[];
+  return '<div class="container-wide max-w-6xl">'+simHeader('🪙','Coin Toss','Flip repeatedly and watch experimental probability converge to 50%.')+
+    simLayout(
+      Btn('Flip Once',{variant:'gold', class:'w-full justify-center', attrs:'onclick="ctFlip()"'})+
+      '<p class="text-xs text-muted text-center">Or press Start for continuous flips</p>'+
+      '<div class="flex gap-2 pt-2">'+Btn('Start',{variant:'primary', class:'flex-1 justify-center', attrs:'onclick="ctToggle()" id="ctBtn"'})+Btn('Reset',{variant:'outline', attrs:'onclick="ctReset()"'})+'</div>'+
+      '<div id="ctOut" class="p-3 rounded-lg surface text-sm space-y-1 mt-2">'+ctOutHtml()+'</div>',
+      '<div id="ctCanvasInner">'+ctCanvasHtml()+'</div>',
+      'See the Law of Large Numbers — as trials increase, observed frequency approaches theoretical probability.'
+    )+'</div>';
+}
+function ctCanvasHtml() {
+  const total = ctHeads+ctTails;
+  const pct = total>0 ? (ctHeads/total*100) : 50;
+  ctHistory.push(pct); if (ctHistory.length>50) ctHistory.shift();
+  const pts = ctHistory.map((p,i)=> (i/(Math.max(ctHistory.length-1,1))*300)+','+(80-(p/100)*80)).join(' ');
+  return '<div class="flex flex-col items-center py-6">'+
+    '<div class="w-28 h-28 rounded-full flex items-center justify-center text-4xl font-bold text-white mb-6" style="background:'+(ctLast==='H'?'var(--navy)':ctLast==='T'?'var(--gold)':'#cbd5e1')+';color:'+(ctLast==='T'?'var(--navy)':'#fff')+'">'+(ctLast||'?')+'</div>'+
+    '<div class="w-full max-w-xs space-y-2">'+
+      '<div><div class="flex justify-between text-xs mb-1"><span>Heads</span><span>'+ctHeads+'</span></div><div class="h-3 rounded-full bg-app-alt overflow-hidden"><div class="h-full" style="width:'+(total>0?ctHeads/total*100:0)+'%;background:var(--navy)"></div></div></div>'+
+      '<div><div class="flex justify-between text-xs mb-1"><span>Tails</span><span>'+ctTails+'</span></div><div class="h-3 rounded-full bg-app-alt overflow-hidden"><div class="h-full" style="width:'+(total>0?ctTails/total*100:0)+'%;background:var(--gold)"></div></div></div>'+
+    '</div>'+
+    (ctHistory.length>1 ? '<svg viewBox="0 0 300 80" class="w-full max-w-xs mt-5"><line x1="0" y1="40" x2="300" y2="40" stroke="currentColor" class="text-slate-300" stroke-dasharray="3 3"/><polyline points="'+pts+'" fill="none" stroke="var(--navy)" stroke-width="2"/></svg>' : '')+
+  '</div>';
+}
+function ctOutHtml() { const total=ctHeads+ctTails; return '<div class="flex justify-between"><span>Total Tosses</span><strong>'+total+'</strong></div><div class="flex justify-between"><span>P(Heads)</span><strong style="color:var(--navy)">'+(total>0?round(ctHeads/total*100,1):50)+'%</strong></div>'; }
+function ctFlip() { ctLast = Math.random()<0.5?'H':'T'; if(ctLast==='H') ctHeads++; else ctTails++; document.getElementById('ctCanvasInner').innerHTML=ctCanvasHtml(); document.getElementById('ctOut').innerHTML=ctOutHtml(); }
+function ctToggle() {
+  ctRunning = !ctRunning; document.getElementById('ctBtn').textContent = ctRunning?'Pause':'Start';
+  if (ctRunning) { ctInterval = setInterval(ctFlip, 150); registerCleanup(()=>clearInterval(ctInterval)); }
+  else clearInterval(ctInterval);
+}
+function ctReset() { ctHeads=0;ctTails=0;ctLast=null;ctHistory=[];ctRunning=false; clearInterval(ctInterval); const btn=document.getElementById('ctBtn'); if(btn) btn.textContent='Start'; document.getElementById('ctCanvasInner').innerHTML=ctCanvasHtml(); document.getElementById('ctOut').innerHTML=ctOutHtml(); }
+
+// ---------- Dice Experiment ----------
+let diceCounts=[0,0,0,0,0,0], diceLast=null, diceRunning=false, diceInterval=null;
+const DICE_FACES=['⚀','⚁','⚂','⚃','⚄','⚅'];
+function pageDice() {
+  diceCounts=[0,0,0,0,0,0]; diceLast=null; diceRunning=false;
+  return '<div class="container-wide max-w-6xl">'+simHeader('🎲','Dice Experiment','Roll repeatedly and compare frequency to the theoretical 1/6 probability.')+
+    simLayout(
+      Btn('Roll Once',{variant:'gold', class:'w-full justify-center', attrs:'onclick="diceRoll()"'})+
+      '<div class="flex gap-2 pt-2">'+Btn('Start',{variant:'primary', class:'flex-1 justify-center', attrs:'onclick="diceToggle()" id="diceBtn"'})+Btn('Reset',{variant:'outline', attrs:'onclick="diceReset()"'})+'</div>'+
+      '<div id="diceOut" class="p-3 rounded-lg surface text-sm mt-2">'+diceOutHtml()+'</div>',
+      '<div id="diceCanvasInner">'+diceCanvasHtml()+'</div>',
+      'Compare empirical frequency to theoretical uniform probability as sample size grows.'
+    )+'</div>';
+}
+function diceCanvasHtml() {
+  const total = diceCounts.reduce((a,b)=>a+b,0), maxC = Math.max(...diceCounts,1);
+  return '<div class="flex flex-col items-center py-6"><div class="text-6xl mb-6">'+(diceLast!==null?DICE_FACES[diceLast]:'🎲')+'</div>'+
+    '<div class="w-full max-w-sm space-y-2">'+diceCounts.map((c,i)=>'<div class="flex items-center gap-3"><span class="w-5 text-sm font-semibold">'+(i+1)+'</span><div class="flex-1 h-5 rounded-full bg-app-alt overflow-hidden"><div class="h-full flex items-center justify-end pr-1" style="width:'+(c/maxC*100)+'%;background:var(--navy)"><span class="text-white text-[10px] font-bold">'+(c>0?c:'')+'</span></div></div><span class="w-12 text-xs text-muted text-right">'+(total>0?round(c/total*100,0):0)+'%</span></div>').join('')+
+    '</div></div>';
+}
+function diceOutHtml(){ const total=diceCounts.reduce((a,b)=>a+b,0); return '<div class="flex justify-between"><span>Total Rolls</span><strong>'+total+'</strong></div><div class="flex justify-between"><span>Theoretical P</span><strong>16.7%</strong></div>'; }
+function diceRoll() { diceLast = Math.floor(Math.random()*6); diceCounts[diceLast]++; document.getElementById('diceCanvasInner').innerHTML=diceCanvasHtml(); document.getElementById('diceOut').innerHTML=diceOutHtml(); }
+function diceToggle() { diceRunning=!diceRunning; document.getElementById('diceBtn').textContent=diceRunning?'Pause':'Start'; if(diceRunning){ diceInterval=setInterval(diceRoll,150); registerCleanup(()=>clearInterval(diceInterval)); } else clearInterval(diceInterval); }
+function diceReset() { diceCounts=[0,0,0,0,0,0]; diceLast=null; diceRunning=false; clearInterval(diceInterval); const b=document.getElementById('diceBtn'); if(b) b.textContent='Start'; document.getElementById('diceCanvasInner').innerHTML=diceCanvasHtml(); document.getElementById('diceOut').innerHTML=diceOutHtml(); }
+
+// ---------- Compound Interest ----------
+let ciPrincipal=10000, ciRate=8, ciYears=10, ciFreq=1;
+function pageCompoundInterest() {
+  return '<div class="container-wide max-w-6xl">'+simHeader('💰','Compound Interest','Compare simple vs. compound interest growth over time.')+
+    simLayout(
+      '<div><label class="text-sm font-semibold">Principal: रू<span id="ciPLabel">'+ciPrincipal.toLocaleString()+'</span></label><input type="range" min="1000" max="100000" step="1000" value="'+ciPrincipal+'" oninput="ciPrincipal=+this.value; ciPLabel.textContent=(+this.value).toLocaleString(); ciRedraw();" class="w-full range-navy"/></div>'+
+      '<div><label class="text-sm font-semibold">Rate: <span id="ciRLabel">'+ciRate+'</span>%</label><input type="range" min="1" max="20" step="0.5" value="'+ciRate+'" oninput="ciRate=+this.value; ciRLabel.textContent=this.value; ciRedraw();" class="w-full range-navy"/></div>'+
+      '<div><label class="text-sm font-semibold">Years: <span id="ciYLabel">'+ciYears+'</span></label><input type="range" min="1" max="30" value="'+ciYears+'" oninput="ciYears=+this.value; ciYLabel.textContent=this.value; ciRedraw();" class="w-full range-navy"/></div>'+
+      '<select onchange="ciFreq=+this.value; ciRedraw();" class="input-field"><option value="1">Annually</option><option value="4">Quarterly</option><option value="12">Monthly</option></select>'+
+      '<div id="ciOut" class="p-3 rounded-lg surface text-sm space-y-1 mt-2">'+ciOutHtml()+'</div>',
+      '<div id="ciCanvasInner">'+ciSvgHtml()+'</div>',
+      'Understand how compounding frequency and time cause exponential growth to outpace linear growth.'
+    )+'</div>';
+}
+function ciData() {
+  const pts=[]; for (let y=0;y<=ciYears;y++){ const c=ciPrincipal*Math.pow(1+ciRate/100/ciFreq, ciFreq*y); const s=ciPrincipal*(1+(ciRate/100)*y); pts.push({y,c,s}); } return pts;
+}
+function ciSvgHtml() {
+  const data = ciData(); const w=600,h=320,pad=45;
+  const maxV = Math.max(data[data.length-1].c, data[data.length-1].s);
+  const toX = yv => pad+(yv/ciYears)*(w-pad*2), toY = v => h-pad-(v/maxV)*(h-pad*2);
+  const cPath = data.map((d,i)=>(i===0?'M':'L')+toX(d.y)+' '+toY(d.c)).join(' ');
+  const sPath = data.map((d,i)=>(i===0?'M':'L')+toX(d.y)+' '+toY(d.s)).join(' ');
+  return '<svg viewBox="0 0 '+w+' '+h+'" class="w-full h-auto surface rounded-lg">'+
+    '<line x1="'+pad+'" y1="'+(h-pad)+'" x2="'+(w-pad)+'" y2="'+(h-pad)+'" stroke="currentColor" class="text-slate-400"/>'+
+    '<line x1="'+pad+'" y1="'+pad+'" x2="'+pad+'" y2="'+(h-pad)+'" stroke="currentColor" class="text-slate-400"/>'+
+    '<path d="'+sPath+'" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3"/>'+
+    '<path d="'+cPath+'" fill="none" stroke="var(--navy)" stroke-width="2.5"/>'+
+  '</svg>';
+}
+function ciOutHtml() { const data=ciData(); const last=data[data.length-1]; return '<div class="flex justify-between"><span>Compound</span><strong style="color:var(--navy)">रू'+Math.round(last.c).toLocaleString()+'</strong></div><div class="flex justify-between"><span>Simple</span><strong>रू'+Math.round(last.s).toLocaleString()+'</strong></div><div class="flex justify-between"><span>Difference</span><strong style="color:#059669">रू'+Math.round(last.c-last.s).toLocaleString()+'</strong></div>'; }
+function ciRedraw() { document.getElementById('ciCanvasInner').innerHTML = ciSvgHtml(); document.getElementById('ciOut').innerHTML = ciOutHtml(); }
+
+// ============================================================
+// PAGE: Quiz Engine
+// ============================================================
+function pageQuizList() {
+  return '<div class="container-wide">'+
+    '<div class="text-center mb-12">'+Badge('✅ Quiz Engine','gold')+'<h1 class="text-4xl font-display font-bold my-4">Test Your Understanding</h1>'+
+    '<p class="text-muted max-w-xl mx-auto">Timed multiple-choice quizzes with instant feedback and explanations.</p></div>'+
+    '<div class="grid-3">'+DEMO_QUIZZES.map(q=>{
+      const totalMarks = q.questions.reduce((s,qq)=>s+qq.marks,0);
+      const prevScore = STATE.quizResults[q.id];
+      return '<a href="#/quizzes/'+q.id+'">'+Card(
+        Badge(q.topic,'soft')+'<h3 class="font-bold text-lg my-2">'+q.title+'</h3>'+
+        '<div class="flex items-center gap-3 text-sm text-muted mb-4"><span>'+q.questions.length+' questions</span><span>'+totalMarks+' marks</span>'+(q.timeLimit?'<span>'+ICONS.clock+' '+Math.floor(q.timeLimit/60)+' min</span>':'')+'</div>'+
+        (prevScore!==undefined ? '<p class="text-xs text-muted mb-2">Last score: <strong style="color:var(--navy)">'+prevScore+'%</strong></p>' : '')+
+        '<div class="flex items-center text-sm font-semibold pt-3 border-t border-app" style="color:var(--navy)">Start Quiz '+ICONS.arrowRight+'</div>', {hover:true}
+      )+'</a>';
+    }).join('')+'</div></div>';
+}
+let quizState = null;
+function pageQuizTake(quizId) {
+  const quiz = DEMO_QUIZZES.find(q=>q.id===quizId);
+  if (!quiz) return '<div class="container-wide text-center py-20 text-muted">Quiz not found.</div>';
+  if (!quizState || quizState.quizId !== quizId) {
+    quizState = {quizId, current:0, answers:{}, showFeedback:false, finished:false, timeLeft:quiz.timeLimit||0};
+  }
+  return '<div class="container-wide max-w-2xl" id="quizContainer">'+quizContent(quiz)+'</div>';
+}
+function quizContent(quiz) {
+  if (quizState.finished) {
+    const total = quiz.questions.reduce((s,q)=>s+q.marks,0);
+    const earned = quiz.questions.reduce((s,q,i)=> s + (quizState.answers[i]===q.correct ? q.marks : 0), 0);
+    const correctCount = quiz.questions.filter((q,i)=>quizState.answers[i]===q.correct).length;
+    const pct = Math.round(earned/total*100);
+    saveQuizResult(quiz.id, pct);
+    return Card('<div class="text-center py-6"><div class="text-5xl mb-4">'+(pct>=70?'🎉':pct>=40?'👍':'📘')+'</div>'+
+      '<h1 class="text-2xl font-display font-bold mb-1">Quiz Complete!</h1><p class="text-muted mb-6">'+quiz.title+'</p>'+
+      '<div class="text-5xl font-display font-bold mb-2" style="color:var(--navy)">'+pct+'%</div>'+
+      '<p class="text-muted mb-8">'+correctCount+' of '+quiz.questions.length+' correct · '+earned+'/'+total+' marks</p>'+
+      '<div class="flex gap-3 justify-center">'+Btn('Retry Quiz',{variant:'outline', attrs:'onclick="quizRestart(\''+quiz.id+'\')"'})+Btn('Back to Quizzes',{variant:'primary', href:'/quizzes'})+'</div></div>');
+  }
+  const q = quiz.questions[quizState.current];
+  const selected = quizState.answers[quizState.current];
+  return '<a href="#/quizzes" class="inline-flex items-center gap-1 mb-6" style="color:var(--navy)">'+ICONS.chevLeft+' Back to Quizzes</a>'+
+    '<div class="flex items-center justify-between mb-3"><span class="text-sm font-semibold">Question '+(quizState.current+1)+' of '+quiz.questions.length+'</span>'+
+    (quiz.timeLimit ? '<span class="text-sm font-mono font-semibold" style="color:var(--navy)">'+ICONS.clock+' '+Math.floor(quizState.timeLeft/60)+':'+String(quizState.timeLeft%60).padStart(2,'0')+'</span>' : '')+'</div>'+
+    '<div class="w-full h-2 rounded-full bg-app-alt overflow-hidden mb-8"><div class="h-full" style="width:'+(quizState.current/quiz.questions.length*100)+'%;background:var(--navy)"></div></div>'+
+    Card('<h2 class="text-lg font-bold mb-6">'+q.q+'</h2><div class="space-y-3" id="quizOptions">'+quizOptionsHtml(q, selected)+'</div>'+
+      (quizState.showFeedback ? '<div class="mt-4 p-4 rounded-lg badge-soft text-sm"><strong>Explanation: </strong>'+q.exp+'</div>'+
+        Btn(quizState.current < quiz.questions.length-1 ? 'Next Question' : 'See Results', {variant:'primary', class:'w-full justify-center mt-6', attrs:'onclick="quizNext(\''+quiz.id+'\')"'}) : '')
+    );
+}
+function quizOptionsHtml(q, selected) {
+  return q.options.map((opt,i) => {
+    let style = 'border-app';
+    if (quizState.showFeedback) {
+      if (i===q.correct) style = 'style="border-color:#22c55e;background:#f0fdf4"';
+      else if (i===selected) style = 'style="border-color:#ef4444;background:#fef2f2"';
+      else style = 'class="opacity-60"';
+    }
+    const isStyleAttr = style.startsWith('style');
+    return '<button '+(quizState.showFeedback?'disabled':'onclick="quizSelect('+i+')"')+' '+(isStyleAttr?style:'')+' class="w-full text-left px-4 py-3 border-2 rounded-lg flex items-center justify-between '+(!isStyleAttr?style:'border-app')+'">'+
+      '<span>'+opt+'</span>'+(quizState.showFeedback && i===q.correct ? '<span style="color:#22c55e">'+ICONS.check+'</span>' : '')+
+    '</button>';
+  }).join('');
+}
+function quizSelect(i) {
+  quizState.answers[quizState.current] = i;
+  quizState.showFeedback = true;
+  render();
+}
+function quizNext(quizId) {
+  const quiz = DEMO_QUIZZES.find(q=>q.id===quizId);
+  quizState.showFeedback = false;
+  if (quizState.current < quiz.questions.length-1) quizState.current++;
+  else quizState.finished = true;
+  render();
+}
+function quizRestart(quizId) { quizState = {quizId, current:0, answers:{}, showFeedback:false, finished:false, timeLeft: (DEMO_QUIZZES.find(q=>q.id===quizId)||{}).timeLimit||0}; render(); }
+
+// ============================================================
+// PAGE: 404
+// ============================================================
+function pageNotFound() {
+  return '<div class="min-h-[70vh] flex items-center justify-center text-center px-4">'+
+    '<div><div class="text-6xl mb-4">📐</div><h1 class="text-4xl font-display font-bold mb-2" style="color:var(--navy)">404</h1>'+
+    '<p class="text-muted mb-8">This page doesn\'t add up — the equation has no solution here.</p>'+
+    Btn('Back to Home',{variant:'primary', href:'/'})+'</div></div>';
+}
+
+// ============================================================
+// ROUTER
+// ============================================================
+function navigate(path) { window.location.hash = '#'+path; }
+
+function resolveRoute(hash) {
+  const path = (hash || '#/').replace(/^#/, '') || '/';
+  const parts = path.split('/').filter(Boolean); // e.g. ['ai-toolkit','lesson-plan']
+
+  if (path === '/') return {fn: pageHome};
+  if (path === '/about') return {fn: pageAbout};
+  if (path === '/contact') return {fn: pageContact};
+  if (path === '/courses') return {fn: pageCourses};
+  if (parts[0]==='courses' && parts[1]) return {fn: ()=>pageCourses(parts[1])};
+  if (path === '/resources') return {fn: pageResources};
+  if (path === '/login') return {fn: pageLogin};
+  if (path === '/register') return {fn: pageRegister};
+  if (path === '/teacher-dashboard') return {fn: pageTeacherDashboard};
+  if (path === '/student-dashboard') return {fn: pageStudentDashboard};
+  if (path === '/admin-dashboard') return {fn: pageAdminDashboard};
+  if (path === '/ai-assistant') return {fn: pageAIAssistant};
+
+  if (path === '/ai-toolkit') return {fn: pageAIToolkitHub};
+  if (parts[0]==='ai-toolkit' && parts[1]) {
+    const tool = parts[1];
+    if (tool==='lesson-plan') return {fn: pageLessonPlan};
+    if (tool==='worksheet') return {fn: pageWorksheet};
+    if (tool==='question-paper') return {fn: pageQuestionPaper};
+    if (tool==='mcq') return {fn: pageMCQ};
+    if (GENERIC_TOOL_META[tool]) return {fn: ()=>pageGenericTool(tool)};
+    return {fn: pageNotFound};
+  }
+
+  if (path === '/visualization-lab') return {fn: pageVizHub};
+  if (parts[0]==='visualization-lab' && parts[1]) {
+    const mod = parts[1];
+    if (mod==='function-grapher') return {fn: pageFunctionGrapher};
+    if (mod==='trigonometry') return {fn: pageTrig};
+    if (mod==='derivatives') return {fn: pageDerivatives};
+    if (mod==='statistics') return {fn: pageStatistics};
+    return {fn: pageNotFound};
+  }
+
+  if (path === '/simulation-lab') return {fn: pageSimHub};
+  if (parts[0]==='simulation-lab' && parts[1]) {
+    const sim = parts[1];
+    if (sim==='projectile-motion') return {fn: pagePMotion};
+    if (sim==='coin-toss') return {fn: pageCoinToss};
+    if (sim==='dice-experiment') return {fn: pageDice};
+    if (sim==='compound-interest') return {fn: pageCompoundInterest};
+    return {fn: pageNotFound};
+  }
+
+  if (path === '/quizzes') return {fn: pageQuizList};
+  if (parts[0]==='quizzes' && parts[1]) return {fn: ()=>pageQuizTake(parts[1])};
+
+  return {fn: pageNotFound};
+}
+
+let currentRoutePath = '/';
+function render() {
+  const hash = window.location.hash || '#/';
+  currentRoutePath = hash.replace(/^#/, '') || '/';
+  const route = resolveRoute(hash);
+  const content = route.fn();
+  document.getElementById('app').innerHTML = Shell(currentRoutePath, content);
+}
+
+window.addEventListener('hashchange', () => {
+  runCleanup();
+  render();
+  window.scrollTo(0, 0);
+});
+
+// ============================================================
+// INIT
+// ============================================================
+applyTheme();
+if (!window.location.hash) window.location.hash = '#/';
+render();
+</script>
+</body>
+</html>
