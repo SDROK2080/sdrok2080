@@ -94,6 +94,7 @@
   .spin { animation: spin 1s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 </style>
+<base target="_blank">
 </head>
 <body class="bg-app">
 <div id="app"></div>
@@ -119,6 +120,7 @@ const ICONS = {
   pause: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>',
   lock: '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>',
   clock: '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  youtube: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4L15.8 12z"/></svg>',
 };
 
 // ---------- Demo data ----------
@@ -144,6 +146,13 @@ const DEMO_RESOURCES = [
   {id:'r10', title:'AI in Mathematics Education — Research Brief', desc:'A short research brief on AI adoption in Nepali mathematics classrooms.', cat:'AI in Education', type:'pdf'},
   {id:'r11', title:'Algebra Foundations — Full Notes', desc:'Polynomials, factoring, and algebraic identities for NEB Grade 9-10.', cat:'Algebra', type:'pdf'},
   {id:'r12', title:'Research Methods in Mathematics Education', desc:'SPSS-based data analysis techniques for classroom action research.', cat:'Research Mathematics', type:'pdf'},
+  // ---------- Teaching-Learning: linked YouTube tutorials & free PPT files ----------
+  {id:'tl1', title:'Pedagogy of Mathematics — Full YouTube Playlist', desc:'Complete free video classes on aims, methods and pedagogy of teaching mathematics (B.Ed.).', cat:'Teaching-Learning', type:'video', url:'https://www.youtube.com/playlist?list=PLIOUm6ZOMJ-pylw4jlBUGeGbCImTO7ZUu'},
+  {id:'tl2', title:'How to Lesson Plan Effectively — Free Webinar', desc:'Step-by-step lesson planning: standards, objectives, Bloom\'s taxonomy and ready templates.', cat:'Teaching-Learning', type:'video', url:'https://www.youtube.com/watch?v=avBIwuUiTbw'},
+  {id:'tl3', title:'Build a Complete Lesson Plan with AI (Step-by-Step)', desc:'Tutorial on generating full lesson plans with ChatGPT-style AI prompts — pairs with our AI Lesson Plan tool.', cat:'Teaching-Learning', type:'video', url:'https://www.youtube.com/watch?v=akykzhYEBWU'},
+  {id:'tl4', title:'Lesson Planning — Teaching PPT (Free)', desc:'Comprehensive lesson planning presentation covering objectives, pre-planning and lesson structure.', cat:'Teaching-Learning', type:'ppt', url:'https://www.slideshare.net/slideshow/lesson-planning-249960464/249960464'},
+  {id:'tl5', title:'Free Lesson Plan PowerPoint Templates', desc:'SlidesCarnival — free for any use, no registration, no download limits. Edit in PowerPoint or Google Slides.', cat:'Teaching-Learning', type:'ppt', url:'https://www.slidescarnival.com/tag/lesson-plan'},
+  {id:'tl6', title:'Free Education Presentation Templates (PowerPoint)', desc:'Microsoft\'s free customizable education slide templates for classroom teaching and lectures.', cat:'Teaching-Learning', type:'ppt', url:'https://powerpoint.cloud.microsoft/create/en/education-templates/'},
 ];
 
 const DEMO_QUIZZES = [
@@ -659,7 +668,9 @@ function pageResources() {
       '<div class="flex items-start justify-between mb-3"><div class="text-2xl">'+typeIcon[r.type]+'</div>'+
       '<button onclick="toggleFavorite(\''+r.id+'\'); rerenderResourceGrid();" class="text-slate-300">'+ICONS.star(STATE.favorites.includes(r.id))+'</button></div>'+
       Badge(r.cat,'soft')+'<h3 class="font-bold text-sm my-2">'+r.title+'</h3><p class="text-muted text-xs mb-4">'+r.desc+'</p>'+
-      '<button onclick="toast(\'Downloading '+r.title.replace(/'/g,"\\'")+'...\')" class="flex items-center gap-1 font-semibold text-sm pt-3 border-t border-app" style="color:var(--navy)">'+ICONS.download+' Download</button>'
+      (r.url
+        ? '<a href="'+r.url+'" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 font-semibold text-sm pt-3 border-t border-app" style="color:var(--navy)">'+(r.type==='video' ? ICONS.play+' Watch on YouTube' : ICONS.download+' Get PPT (Free)')+'</a>'
+        : '<button onclick="toast(\'Downloading '+r.title.replace(/'/g,"\\'")+'...\')" class="flex items-center gap-1 font-semibold text-sm pt-3 border-t border-app" style="color:var(--navy)">'+ICONS.download+' Download</button>')
     )).join('')+'</div>'+
     (filtered.length===0 ? '<p class="text-center py-16 text-muted">No resources match your search.</p>' : '')+
   '</div>';
@@ -1089,12 +1100,12 @@ const VIZ_MODULES = [
   ['trigonometry','⭕','Trigonometry Lab','Interactive unit circle with sin, cos, tan.', true],
   ['derivatives','📉','Derivatives','Visualize tangent lines and slope at a point.', true],
   ['statistics','📊','Statistics Lab','Compute mean, median, mode, and view histograms.', true],
-  ['transformations','🔄','Function Transformations','Translation, reflection, scaling with sliders.', false],
-  ['coordinate-geometry','📍','Coordinate Geometry','Points, lines, circles, and conics.', false],
-  ['limits','➡️','Limits','Animated left/right-hand limit approach.', false],
-  ['integration','∫','Integration','Area under the curve, definite integrals.', false],
-  ['vectors','➗','Vector Lab','Vector addition, magnitude, and direction.', false],
-  ['matrix','🔲','Matrix Transformation','Rotation, reflection, scaling, shearing.', false],
+  ['transformations','🔄','Function Transformations','Translation, reflection, scaling with sliders.', true],
+  ['coordinate-geometry','📍','Coordinate Geometry','Points, lines, circles, and conics.', true],
+  ['limits','➡️','Limits','Animated left/right-hand limit approach.', true],
+  ['integration','∫','Integration','Area under the curve, definite integrals.', true],
+  ['vectors','➗','Vector Lab','Vector addition, magnitude, and direction.', true],
+  ['matrix','🔲','Matrix Transformation','Rotation, reflection, scaling, shearing.', true],
 ];
 function pageVizHub() {
   return '<div class="container-wide">'+
@@ -1268,6 +1279,324 @@ function statsResultHtml() {
 function statsRedraw() { document.getElementById('statsList').innerHTML = statsListHtml(); document.getElementById('statsResult').innerHTML = statsResultHtml(); }
 function statsAdd() { const el = document.getElementById('statsInput'); const v = parseFloat(el.value); if (!isNaN(v)) { statsData.push(v); el.value=''; statsRedraw(); } }
 function statsRemove(i) { statsData.splice(i,1); statsRedraw(); }
+
+
+// ============================================================
+// MODULE: Function Transformations
+// ============================================================
+let tfBase = 'x^2', tfA = 1, tfB = 1, tfH = 0, tfK = 0;
+function pageTransformations() {
+  return '<div class="container-wide max-w-5xl">'+vizHeader('🔄','Function Transformations','Explore translation, reflection and scaling. y = a·f(b(x − h)) + k')+
+  '<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">'+
+    Card('<label class="text-sm font-semibold">Base function f(x)</label><select onchange="tfBase=this.value; tfRedraw();" class="input-field mt-1 mb-4 font-mono">'+
+      ['x^2','x^3','sin(x)*3','abs(x)','sqrt(x)'].map(f=>'<option '+(f===tfBase?'selected':'')+'>'+f+'</option>').join('')+'</select>'+
+      '<div><label class="text-sm font-semibold">a (vertical stretch / reflect): <span id="tfALabel">'+tfA+'</span></label><input type="range" min="-3" max="3" step="0.1" value="'+tfA+'" oninput="tfA=+this.value; document.getElementById(\'tfALabel\').textContent=tfA; tfRedraw();" class="w-full range-navy"/></div>'+
+      '<div><label class="text-sm font-semibold">b (horizontal stretch / compress): <span id="tfBLabel">'+tfB+'</span></label><input type="range" min="0.25" max="3" step="0.05" value="'+tfB+'" oninput="tfB=+this.value; document.getElementById(\'tfBLabel\').textContent=tfB; tfRedraw();" class="w-full range-navy"/></div>'+
+      '<div><label class="text-sm font-semibold">h (shift right): <span id="tfHLabel">'+tfH+'</span></label><input type="range" min="-4" max="4" step="0.25" value="'+tfH+'" oninput="tfH=+this.value; document.getElementById(\'tfHLabel\').textContent=tfH; tfRedraw();" class="w-full range-navy"/></div>'+
+      '<div><label class="text-sm font-semibold">k (shift up): <span id="tfKLabel">'+tfK+'</span></label><input type="range" min="-4" max="4" step="0.25" value="'+tfK+'" oninput="tfK=+this.value; document.getElementById(\'tfKLabel\').textContent=tfK; tfRedraw();" class="w-full range-navy"/></div>'+
+      '<div id="tfOut" class="p-3 rounded-lg surface text-sm font-mono mt-2">'+tfOutHtml()+'</div>', {class:'h-fit'})+
+    '<div class="lg:col-span-2" id="tfGraph">'+tfGraphHtml()+'</div>'+
+  '</div></div>';
+}
+function tfExpr() {
+  const inner = tfBase.replace(/\bx\b/g, '('+tfB+'*(x-('+tfH+')))');
+  return '('+tfA+')*('+inner+')+('+tfK+')';
+}
+function tfOutHtml() {
+  return '<p class="text-xs text-muted">Transformed function</p><p class="text-sm mt-1" style="color:var(--navy)">y = '+tfA+' · f( '+tfB+'(x − '+tfH+') ) + '+tfK+'</p>';
+}
+function tfGraphHtml() {
+  return svgFunctionPlot([{expr: tfBase, color:'#94a3b8'}, {expr: tfExpr(), color:'#001f3f'}]);
+}
+function tfRedraw() {
+  const g=document.getElementById('tfGraph'); if(g) g.innerHTML=tfGraphHtml();
+  const o=document.getElementById('tfOut'); if(o) o.innerHTML=tfOutHtml();
+}
+
+// ============================================================
+// MODULE: Coordinate Geometry
+// ============================================================
+let cgAx=1, cgAy=2, cgBx=4, cgBy=5;
+function pageCoordGeometry() {
+  const ptInputs = (px,py,fx,fy) =>
+    '<div class="grid grid-cols-2 gap-3"><div><label class="block text-xs text-muted mb-1">x</label><input type="number" step="0.5" value="'+px+'" oninput="'+fx+'" class="input-field"/></div>'+
+    '<div><label class="block text-xs text-muted mb-1">y</label><input type="number" step="0.5" value="'+py+'" oninput="'+fy+'" class="input-field"/></div></div>';
+  return '<div class="container-wide max-w-5xl">'+vizHeader('📍','Coordinate Geometry','Enter two points to explore distance, midpoint, slope and the equation of the line through them.')+
+  '<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">'+
+    Card('<h3 class="font-bold text-sm mb-2">Point A 🔴</h3>'+ptInputs(cgAx,cgAy,'cgAx=parseFloat(this.value)||0; cgRedraw();','cgAy=parseFloat(this.value)||0; cgRedraw();')+
+      '<h3 class="font-bold text-sm mb-2 mt-4">Point B 🟢</h3>'+ptInputs(cgBx,cgBy,'cgBx=parseFloat(this.value)||0; cgRedraw();','cgBy=parseFloat(this.value)||0; cgRedraw();')+
+      '<div id="cgOut" class="p-3 rounded-lg surface text-sm space-y-1 mt-4">'+cgOutHtml()+'</div>', {class:'h-fit'})+
+    '<div class="lg:col-span-2" id="cgGraph">'+cgGraphHtml()+'</div>'+
+  '</div></div>';
+}
+function cgMetrics() {
+  const dx=cgBx-cgAx, dy=cgBy-cgAy;
+  const dist=Math.sqrt(dx*dx+dy*dy);
+  const mid={x:(cgAx+cgBx)/2, y:(cgAy+cgBy)/2};
+  const vertical = Math.abs(dx)<1e-9;
+  const m = vertical ? null : dy/dx;
+  const c = vertical ? null : cgAy - m*cgAx;
+  return {dist,mid,vertical,m,c};
+}
+function cgGraphHtml() {
+  const {mid,vertical,m,c}=cgMetrics();
+  const w=600,h=360,scale=30,cx=w/2,cy=h/2;
+  const toX=x=>cx+x*scale, toY=y=>cy-y*scale;
+  let extra='';
+  if (!vertical) {
+    const x1=-(cx/scale)-1, x2=(cx/scale)+1;
+    extra += '<line x1="'+toX(x1)+'" y1="'+toY(m*x1+c)+'" x2="'+toX(x2)+'" y2="'+toY(m*x2+c)+'" stroke="#001f3f" stroke-width="2.5"/>';
+  } else {
+    extra += '<line x1="'+toX(cgAx)+'" y1="0" x2="'+toX(cgAx)+'" y2="'+h+'" stroke="#001f3f" stroke-width="2.5"/>';
+  }
+  extra += '<circle cx="'+toX(cgAx)+'" cy="'+toY(cgAy)+'" r="6" fill="#dc2626"/><circle cx="'+toX(cgBx)+'" cy="'+toY(cgBy)+'" r="6" fill="#059669"/>'+
+    '<circle cx="'+toX(mid.x)+'" cy="'+toY(mid.y)+'" r="5" fill="#ffc107" stroke="#001f3f" stroke-width="1.5"/>'+
+    '<text x="'+toX(cgAx)+'" y="'+(toY(cgAy)-12)+'" font-size="13" font-weight="bold" fill="#dc2626" text-anchor="middle">A</text>'+
+    '<text x="'+toX(cgBx)+'" y="'+(toY(cgBy)-12)+'" font-size="13" font-weight="bold" fill="#059669" text-anchor="middle">B</text>';
+  return svgFunctionPlot([], {extra:extra});
+}
+function cgOutHtml() {
+  const {dist,mid,vertical,m,c}=cgMetrics();
+  return '<div class="flex justify-between"><span>Distance AB</span><strong style="color:var(--navy)">'+round(dist,2)+'</strong></div>'+
+    '<div class="flex justify-between"><span>Midpoint</span><strong>('+round(mid.x,2)+', '+round(mid.y,2)+')</strong></div>'+
+    (vertical ? '<div class="flex justify-between"><span>Line</span><strong>vertical: x = '+cgAx+'</strong></div>'
+      : '<div class="flex justify-between"><span>Slope m</span><strong>'+round(m,3)+'</strong></div>'+
+        '<div class="flex justify-between"><span>Equation</span><strong>y = '+round(m,2)+'x + '+round(c,2)+'</strong></div>');
+}
+function cgRedraw(){ const g=document.getElementById('cgGraph'); if(g) g.innerHTML=cgGraphHtml(); const o=document.getElementById('cgOut'); if(o) o.innerHTML=cgOutHtml(); }
+
+// ============================================================
+// MODULE: Limits
+// ============================================================
+const LIM_FNS = [
+  {label:'sin(x) / x   at x → 0', expr:'sin(x)/x', c:0},
+  {label:'(x² − 1) / (x − 1)   at x → 1', expr:'(x^2-1)/(x-1)', c:1},
+  {label:'(x³ − 8) / (x − 2)   at x → 2', expr:'(x^3-8)/(x-2)', c:2},
+  {label:'(1 − cos x) / x²   at x → 0', expr:'(1-cos(x))/x^2', c:0},
+];
+let lmSel=0, lmStep=10, lmTimer=null;
+function pageLimits() {
+  lmStep = 10;
+  return '<div class="container-wide max-w-5xl">'+vizHeader('➡️','Limits','Watch the function value converge as x approaches the target from the left and the right.')+
+  '<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">'+
+    Card('<label class="text-sm font-semibold">Function</label><select onchange="lmSel=+this.value; lmStep=10; lmStop(); lmRedraw();" class="input-field mt-1 mb-4">'+LIM_FNS.map((f,i)=>'<option value="'+i+'" '+(i===lmSel?'selected':'')+'>'+f.label+'</option>').join('')+'</select>'+
+      '<div><label class="text-sm font-semibold">Approach step: <span id="lmStepLabel">'+lmStep+'</span></label><input type="range" min="1" max="40" value="'+lmStep+'" oninput="lmStep=+this.value; lmStop(); lmRedraw();" class="w-full range-navy"/></div>'+
+      '<div class="flex gap-2 pt-2"><button onclick="lmToggleAnim()" id="lmAnimBtn" class="btn btn-primary flex-1 justify-center">'+ICONS.play+' Animate</button><button onclick="lmStop(); lmStep=10; lmRedraw();" class="btn btn-outline">Reset</button></div>'+
+      '<div id="lmOut" class="p-3 rounded-lg surface text-sm space-y-1 mt-4">'+lmOutHtml()+'</div>', {class:'h-fit'})+
+    '<div class="lg:col-span-2 space-y-4"><div id="lmGraph">'+lmGraphHtml()+'</div><div id="lmTable">'+lmTableHtml()+'</div></div>'+
+  '</div></div>';
+}
+function lmCur(){ return LIM_FNS[lmSel]; }
+function lmDist(){ return 2*Math.pow(0.87, lmStep-1); }
+function lmLimitVal(){ const c=lmCur().c; return evalExpr(lmCur().expr, c+1e-4); }
+function lmGraphHtml(){
+  const f=lmCur(); const d=lmDist(); const L=lmLimitVal();
+  const w=600,h=360,scale=30,cx=w/2,cy=h/2;
+  const toX=x=>cx+x*scale, toY=y=>cy-y*scale;
+  const xl=f.c-d, xr=f.c+d;
+  let extra='<line x1="'+toX(f.c)+'" y1="0" x2="'+toX(f.c)+'" y2="'+h+'" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5 4"/>';
+  if (isFinite(L)) extra += '<circle cx="'+toX(f.c)+'" cy="'+toY(L)+'" r="7" fill="none" stroke="#ffc107" stroke-width="2.5"/>';
+  const yl=evalExpr(f.expr,xl), yr=evalExpr(f.expr,xr);
+  if (isFinite(yl)) extra += '<circle cx="'+toX(xl)+'" cy="'+toY(yl)+'" r="6" fill="#001f3f"/>';
+  if (isFinite(yr)) extra += '<circle cx="'+toX(xr)+'" cy="'+toY(yr)+'" r="6" fill="#059669"/>';
+  return svgFunctionPlot([{expr:f.expr, color:'#2563eb'}], {extra:extra});
+}
+function lmTableHtml(){
+  const f=lmCur(); let rows='';
+  for (let s=Math.max(1,lmStep-3); s<=lmStep; s++){
+    const d=2*Math.pow(0.87,s-1);
+    rows += '<tr><td>'+s+'</td><td class="font-mono">'+round(f.c-d,5)+'</td><td class="font-mono">'+round(evalExpr(f.expr,f.c-d),5)+'</td><td class="font-mono">'+round(f.c+d,5)+'</td><td class="font-mono">'+round(evalExpr(f.expr,f.c+d),5)+'</td></tr>';
+  }
+  return Card('<h4 class="font-bold text-sm mb-2">Approach table — watch both sides converge</h4><div class="overflow-x-auto"><table class="data-table"><thead><tr><th>Step</th><th>x (left)</th><th>f(x) left</th><th>x (right)</th><th>f(x) right</th></tr></thead><tbody>'+rows+'</tbody></table></div>', {class:'!p-4'});
+}
+function lmOutHtml(){
+  const f=lmCur(); const d=lmDist();
+  return '<div class="flex justify-between"><span>x → from left</span><strong>'+round(f.c-d,5)+'</strong></div>'+
+    '<div class="flex justify-between"><span>f(x) left</span><strong>'+round(evalExpr(f.expr,f.c-d),5)+'</strong></div>'+
+    '<div class="flex justify-between"><span>x → from right</span><strong>'+round(f.c+d,5)+'</strong></div>'+
+    '<div class="flex justify-between"><span>f(x) right</span><strong>'+round(evalExpr(f.expr,f.c+d),5)+'</strong></div>'+
+    '<div class="flex justify-between pt-2 border-t border-app mt-2"><span>Limit</span><strong style="color:var(--navy)">'+round(lmLimitVal(),5)+'</strong></div>';
+}
+function lmRedraw(){ const m={lmGraph:lmGraphHtml(), lmTable:lmTableHtml(), lmOut:lmOutHtml()}; for(const k in m){const e=document.getElementById(k); if(e) e.innerHTML=m[k];} const l=document.getElementById('lmStepLabel'); if(l) l.textContent=lmStep; }
+function lmStop(){ if(lmTimer){ clearInterval(lmTimer); lmTimer=null; } const b=document.getElementById('lmAnimBtn'); if(b) b.innerHTML=ICONS.play+' Animate'; }
+function lmToggleAnim(){
+  if (lmTimer){ lmStop(); return; }
+  lmStep = 1; lmRedraw();
+  lmTimer = setInterval(()=>{ lmStep++; if(lmStep>=40){ lmStep=40; lmStop(); } lmRedraw(); }, 160);
+  registerCleanup(lmStop);
+  const b=document.getElementById('lmAnimBtn'); if(b) b.innerHTML=ICONS.pause+' Pause';
+}
+
+// ============================================================
+// MODULE: Integration
+// ============================================================
+let intgFn='x^2', intgA=0, intgB=3, intgN=12, intgMethod='left';
+function pageIntegration() {
+  return '<div class="container-wide max-w-5xl">'+vizHeader('∫','Integration — Area Under the Curve','Approximate definite integrals with Riemann sums and trapezoids, and compare with the exact area.')+
+  '<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">'+
+    Card('<label class="text-sm font-semibold">Function f(x)</label><select onchange="intgFn=this.value; intgRedraw();" class="input-field mt-1 mb-4 font-mono">'+
+      ['x^2','sin(x)+2','sqrt(x)','x^3-2*x'].map(f=>'<option '+(f===intgFn?'selected':'')+'>'+f+'</option>').join('')+'</select>'+
+      '<div><label class="text-sm font-semibold">a (lower limit): <span id="intgALabel">'+intgA+'</span></label><input type="range" min="-4" max="4" step="0.5" value="'+intgA+'" oninput="intgA=+this.value; document.getElementById(\'intgALabel\').textContent=intgA; intgRedraw();" class="w-full range-navy"/></div>'+
+      '<div><label class="text-sm font-semibold">b (upper limit): <span id="intgBLabel">'+intgB+'</span></label><input type="range" min="-4" max="4" step="0.5" value="'+intgB+'" oninput="intgB=+this.value; document.getElementById(\'intgBLabel\').textContent=intgB; intgRedraw();" class="w-full range-navy"/></div>'+
+      '<div><label class="text-sm font-semibold">n (slices): <span id="intgNLabel">'+intgN+'</span></label><input type="range" min="2" max="60" value="'+intgN+'" oninput="intgN=+this.value; document.getElementById(\'intgNLabel\').textContent=intgN; intgRedraw();" class="w-full range-navy"/></div>'+
+      '<label class="text-sm font-semibold">Method</label><select onchange="intgMethod=this.value; intgRedraw();" class="input-field mt-1">'+
+        ['left','midpoint','trapezoid'].map(m=>'<option value="'+m+'" '+(m===intgMethod?'selected':'')+'>'+m.charAt(0).toUpperCase()+m.slice(1)+'</option>').join('')+'</select>'+
+      '<div id="intgOut" class="p-3 rounded-lg surface text-sm space-y-1 mt-4">'+intgOutHtml()+'</div>', {class:'h-fit'})+
+    '<div class="lg:col-span-2" id="intgGraph">'+intgGraphHtml()+'</div>'+
+  '</div></div>';
+}
+function intgRange(){ return intgA<=intgB ? [intgA,intgB] : [intgB,intgA]; }
+function intgExact(){
+  const rg=intgRange(); const n=1000; const h=(rg[1]-rg[0])/n; let s=0;
+  for(let i=0;i<n;i++){ s += evalExpr(intgFn, rg[0]+i*h+h/2)*h; }
+  return s;
+}
+function intgApprox(){
+  const rg=intgRange(); const n=intgN; const wdt=(rg[1]-rg[0])/n; let s=0;
+  for(let i=0;i<n;i++){
+    if(intgMethod==='left') s += evalExpr(intgFn, rg[0]+i*wdt)*wdt;
+    else if(intgMethod==='midpoint') s += evalExpr(intgFn, rg[0]+i*wdt+wdt/2)*wdt;
+    else s += (evalExpr(intgFn,rg[0]+i*wdt)+evalExpr(intgFn,rg[0]+(i+1)*wdt))/2*wdt;
+  }
+  return s;
+}
+function intgGraphHtml(){
+  const rg=intgRange(); const n=intgN; const wdt=(rg[1]-rg[0])/n;
+  const wpx=600,hpx=360,scale=30,cx=wpx/2,cy=hpx/2;
+  const toX=x=>cx+x*scale, toY=y=>cy-y*scale;
+  let bars='';
+  if (rg[1]>rg[0]) {
+    for(let i=0;i<n;i++){
+      const x0=rg[0]+i*wdt;
+      let y0,y1;
+      if(intgMethod==='left'){ y0=evalExpr(intgFn,x0); y1=y0; }
+      else if(intgMethod==='midpoint'){ y0=evalExpr(intgFn,x0+wdt/2); y1=y0; }
+      else { y0=evalExpr(intgFn,x0); y1=evalExpr(intgFn,x0+wdt); }
+      if(!isFinite(y0)||!isFinite(y1)) continue;
+      if(intgMethod==='trapezoid'){
+        bars += '<polygon points="'+toX(x0)+','+toY(Math.max(0,y0))+' '+toX(x0+wdt)+','+toY(Math.max(0,y1))+' '+toX(x0+wdt)+','+toY(Math.min(0,y1))+' '+toX(x0)+','+toY(Math.min(0,y0))+'" fill="#ffc107" fill-opacity="0.55" stroke="#001f3f" stroke-width="1"/>';
+      } else {
+        const top=Math.max(0,y0,y1), bot=Math.min(0,y0,y1);
+        bars += '<rect x="'+toX(x0)+'" y="'+toY(top)+'" width="'+Math.max(wdt*scale-0.5,0.5)+'" height="'+Math.max(toY(bot)-toY(top),0)+'" fill="#ffc107" fill-opacity="0.55" stroke="#001f3f" stroke-width="0.75"/>';
+      }
+    }
+  }
+  return svgFunctionPlot([{expr:intgFn, color:'#001f3f'}], {extra:bars});
+}
+function intgOutHtml(){
+  const ap=intgApprox(), ex=intgExact();
+  return '<div class="flex justify-between"><span>Approximate (∫)</span><strong style="color:var(--navy)">'+round(ap,4)+'</strong></div>'+
+    '<div class="flex justify-between"><span>Exact (Simpson)</span><strong>'+round(ex,4)+'</strong></div>'+
+    '<div class="flex justify-between"><span>Error</span><strong style="color:#dc2626">'+round(Math.abs(ap-ex),5)+'</strong></div>'+
+    '<p class="text-xs text-muted pt-2 border-t border-app mt-2">Increase n to watch the approximation converge.</p>';
+}
+function intgRedraw(){ const g=document.getElementById('intgGraph'); if(g) g.innerHTML=intgGraphHtml(); const o=document.getElementById('intgOut'); if(o) o.innerHTML=intgOutHtml(); }
+
+// ============================================================
+// MODULE: Vector Lab
+// ============================================================
+let vecA={x:3,y:2}, vecB={x:1,y:3};
+function pageVectors() {
+  const inp=(lbl,v,fn)=>'<div><label class="block text-xs text-muted mb-1">'+lbl+'</label><input type="number" step="0.5" min="-5" max="5" value="'+v+'" oninput="'+fn+'" class="input-field"/></div>';
+  return '<div class="container-wide max-w-5xl">'+vizHeader('➗','Vector Lab','Add vectors, find magnitudes and directions, and explore the dot product and the angle between vectors.')+
+  '<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">'+
+    Card('<h3 class="font-bold text-sm mb-2">Vector a (navy)</h3><div class="grid grid-cols-2 gap-3 mb-4">'+inp('aₓ',vecA.x,'vecA.x=parseFloat(this.value)||0; vecRedraw();')+inp('aᵧ',vecA.y,'vecA.y=parseFloat(this.value)||0; vecRedraw();')+'</div>'+
+      '<h3 class="font-bold text-sm mb-2">Vector b (green)</h3><div class="grid grid-cols-2 gap-3">'+inp('bₓ',vecB.x,'vecB.x=parseFloat(this.value)||0; vecRedraw();')+inp('bᵧ',vecB.y,'vecB.y=parseFloat(this.value)||0; vecRedraw();')+'</div>'+
+      '<div id="vecOut" class="p-3 rounded-lg surface text-sm space-y-1 mt-4">'+vecOutHtml()+'</div>', {class:'h-fit'})+
+    '<div class="lg:col-span-2" id="vecGraph">'+vecGraphHtml()+'</div>'+
+  '</div></div>';
+}
+function vecGraphHtml(){
+  const sx=vecA.x+vecB.x, sy=vecA.y+vecB.y;
+  const w=600,h=360,scale=30,cx=w/2,cy=h/2;
+  const toX=x=>cx+x*scale, toY=y=>cy-y*scale;
+  const arrow=(x1,y1,x2,y2,color)=>{
+    const X1=toX(x1),Y1=toY(y1),X2=toX(x2),Y2=toY(y2);
+    const ang=Math.atan2(Y2-Y1,X2-X1), ah=10;
+    return '<line x1="'+X1+'" y1="'+Y1+'" x2="'+X2+'" y2="'+Y2+'" stroke="'+color+'" stroke-width="2.5"/>'+
+      '<polygon points="'+X2+','+Y2+' '+(X2-ah*Math.cos(ang-0.42))+','+(Y2-ah*Math.sin(ang-0.42))+' '+(X2-ah*Math.cos(ang+0.42))+','+(Y2-ah*Math.sin(ang+0.42))+'" fill="'+color+'"/>';
+  };
+  let extra = arrow(0,0,vecA.x,vecA.y,'#001f3f') + arrow(0,0,vecB.x,vecB.y,'#059669') + arrow(0,0,sx,sy,'#dc2626');
+  extra += '<line x1="'+toX(vecA.x)+'" y1="'+toY(vecA.y)+'" x2="'+toX(sx)+'" y2="'+toY(sy)+'" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3"/>'+
+    '<line x1="'+toX(vecB.x)+'" y1="'+toY(vecB.y)+'" x2="'+toX(sx)+'" y2="'+toY(sy)+'" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3"/>';
+  return svgFunctionPlot([], {extra:extra});
+}
+function vecOutHtml(){
+  const mag=a=>Math.sqrt(a.x*a.x+a.y*a.y);
+  const dir=a=>Math.atan2(a.y,a.x)*180/Math.PI;
+  const dot=vecA.x*vecB.x+vecA.y*vecB.y;
+  const m1=mag(vecA), m2=mag(vecB);
+  const ang=(m1>0&&m2>0)?Math.acos(Math.max(-1,Math.min(1,dot/(m1*m2))))*180/Math.PI:0;
+  return '<div class="flex justify-between"><span>|a|</span><strong>'+round(m1,2)+'</strong></div>'+
+    '<div class="flex justify-between"><span>|b|</span><strong>'+round(m2,2)+'</strong></div>'+
+    '<div class="flex justify-between"><span>a + b (red)</span><strong style="color:var(--navy)">('+(vecA.x+vecB.x)+', '+(vecA.y+vecB.y)+')</strong></div>'+
+    '<div class="flex justify-between"><span>Direction of a</span><strong>'+round(dir(vecA),1)+'°</strong></div>'+
+    '<div class="flex justify-between"><span>a · b</span><strong>'+round(dot,2)+'</strong></div>'+
+    '<div class="flex justify-between"><span>Angle between</span><strong>'+round(ang,1)+'°</strong></div>';
+}
+function vecRedraw(){ const g=document.getElementById('vecGraph'); if(g) g.innerHTML=vecGraphHtml(); const o=document.getElementById('vecOut'); if(o) o.innerHTML=vecOutHtml(); }
+
+// ============================================================
+// MODULE: Matrix Transformation
+// ============================================================
+let mtx=[1,0,0,1];
+const MTX_PRESETS=[
+  ['Identity',[1,0,0,1]], ['Rotate 90°',[0,-1,1,0]], ['Reflect X-axis',[1,0,0,-1]], ['Reflect Y-axis',[-1,0,0,1]],
+  ['Scale ×2',[2,0,0,2]], ['Shear x (k=1)',[1,1,0,1]],
+];
+function pageMatrix() {
+  return '<div class="container-wide max-w-5xl">'+vizHeader('🔲','Matrix Transformation','Apply 2×2 matrices to the unit square and a point lattice. Watch rotation, reflection, scaling and shearing.')+
+  '<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">'+
+    Card('<p class="text-xs font-semibold mb-2">Presets</p><div class="flex flex-wrap gap-1.5 mb-4">'+MTX_PRESETS.map(p=>'<button onclick="mtx=['+p[1].join(',')+']; mtxRedraw();" class="text-xs px-2.5 py-1.5 rounded surface font-medium">'+p[0]+'</button>').join('')+'</div>'+
+      '<div class="grid grid-cols-2 gap-3 mb-3">'+
+      '<div><label class="block text-xs text-muted mb-1">m₁₁</label><input id="mtx11" type="number" step="0.1" value="'+mtx[0]+'" oninput="mtx[0]=parseFloat(this.value)||0; mtxRedraw();" class="input-field"/></div>'+
+      '<div><label class="block text-xs text-muted mb-1">m₁₂</label><input id="mtx12" type="number" step="0.1" value="'+mtx[1]+'" oninput="mtx[1]=parseFloat(this.value)||0; mtxRedraw();" class="input-field"/></div>'+
+      '<div><label class="block text-xs text-muted mb-1">m₂₁</label><input id="mtx21" type="number" step="0.1" value="'+mtx[2]+'" oninput="mtx[2]=parseFloat(this.value)||0; mtxRedraw();" class="input-field"/></div>'+
+      '<div><label class="block text-xs text-muted mb-1">m₂₂</label><input id="mtx22" type="number" step="0.1" value="'+mtx[3]+'" oninput="mtx[3]=parseFloat(this.value)||0; mtxRedraw();" class="input-field"/></div></div>'+
+      '<div><label class="text-sm font-semibold">Rotation angle: <span id="mtxAngLabel">0</span>°</label><input type="range" min="-180" max="180" value="0" oninput="mtxApplyRot(this.value)" class="w-full range-navy"/></div>'+
+      '<div id="mtxOut" class="p-3 rounded-lg surface text-sm space-y-1 mt-3">'+mtxOutHtml()+'</div>', {class:'h-fit'})+
+    '<div class="lg:col-span-2" id="mtxGraph">'+mtxGraphHtml()+'</div>'+
+  '</div></div>';
+}
+function mtxApplyRot(deg){
+  const r=toRad(parseFloat(deg));
+  mtx=[round(Math.cos(r),4), round(-Math.sin(r),4), round(Math.sin(r),4), round(Math.cos(r),4)];
+  ['mtx11','mtx12','mtx21','mtx22'].forEach((id,i)=>{const e=document.getElementById(id); if(e) e.value=mtx[i];});
+  const l=document.getElementById('mtxAngLabel'); if(l) l.textContent=deg;
+  mtxRedraw();
+}
+function mtxGraphHtml(){
+  const corners=[[0,0],[1,0],[1,1],[0,1]];
+  const tc=corners.map(p=>[mtx[0]*p[0]+mtx[1]*p[1], mtx[2]*p[0]+mtx[3]*p[1]]);
+  const w=420,h=380,ox=50,oy=330,sc=120;
+  const X=x=>ox+x*sc, Y=y=>oy-y*sc;
+  let dots='';
+  for(let i=0;i<=4;i++) for(let j=0;j<=4;j++){
+    const x=i*0.25,y=j*0.25;
+    dots += '<circle cx="'+X(mtx[0]*x+mtx[1]*y)+'" cy="'+Y(mtx[2]*x+mtx[3]*y)+'" r="2.5" fill="#ffc107"/>';
+  }
+  const poly=ps=>ps.map(p=>X(p[0])+','+Y(p[1])).join(' ');
+  return '<svg viewBox="0 0 '+w+' '+h+'" class="w-full h-auto surface rounded-lg">'+
+    '<line x1="'+ox+'" y1="'+oy+'" x2="'+(w-15)+'" y2="'+oy+'" stroke="currentColor" class="text-slate-400"/>'+
+    '<line x1="'+ox+'" y1="'+oy+'" x2="'+ox+'" y2="15" stroke="currentColor" class="text-slate-400"/>'+
+    dots+
+    '<polygon points="'+poly(corners)+'" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 4"/>'+
+    '<polygon points="'+poly(tc)+'" fill="#001f3f" fill-opacity="0.25" stroke="#001f3f" stroke-width="2.5"/>'+
+  '</svg>';
+}
+function mtxOutHtml(){
+  const det=mtx[0]*mtx[3]-mtx[1]*mtx[2];
+  return '<div class="flex justify-between"><span>Matrix</span><strong class="font-mono">[[ '+mtx.join(', ')+' ]]</strong></div>'+
+    '<div class="flex justify-between"><span>Determinant</span><strong style="color:var(--navy)">'+round(det,3)+'</strong></div>'+
+    (Math.abs(det)<1e-9
+      ? '<p class="text-xs" style="color:#dc2626">Determinant = 0: the square collapses onto a line or point.</p>'
+      : '<p class="text-xs text-muted">Areas scale by |det| = '+round(Math.abs(det),3)+'</p>');
+}
+function mtxRedraw(){
+  const g=document.getElementById('mtxGraph'); if(g) g.innerHTML=mtxGraphHtml();
+  const o=document.getElementById('mtxOut'); if(o) o.innerHTML=mtxOutHtml();
+  ['mtx11','mtx12','mtx21','mtx22'].forEach((id,i)=>{const e=document.getElementById(id); if(e && document.activeElement!==e) e.value=mtx[i];});
+}
 
 // ============================================================
 // PAGE: Simulation Lab
@@ -1572,6 +1901,12 @@ function resolveRoute(hash) {
     if (mod==='trigonometry') return {fn: pageTrig};
     if (mod==='derivatives') return {fn: pageDerivatives};
     if (mod==='statistics') return {fn: pageStatistics};
+    if (mod==='transformations') return {fn: pageTransformations};
+    if (mod==='coordinate-geometry') return {fn: pageCoordGeometry};
+    if (mod==='limits') return {fn: pageLimits};
+    if (mod==='integration') return {fn: pageIntegration};
+    if (mod==='vectors') return {fn: pageVectors};
+    if (mod==='matrix') return {fn: pageMatrix};
     return {fn: pageNotFound};
   }
 
