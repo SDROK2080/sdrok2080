@@ -21,6 +21,7 @@
             --accent: #D4AF37;
             --success: #4CAF50;
             --danger: #FF6B6B;
+            --info: #64B5F6;
         }
 
         body {
@@ -109,6 +110,11 @@
 
         .btn-danger:hover {
             background: #ff5252;
+        }
+
+        .btn-sm {
+            padding: 6px 10px;
+            font-size: 0.75em;
         }
 
         .lang-toggle {
@@ -206,6 +212,8 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .service-card::before {
@@ -242,17 +250,18 @@
             margin-bottom: 15px;
             line-height: 1.5;
             font-size: 0.9em;
+            flex-grow: 1;
         }
 
         .resource-links {
             display: flex;
             gap: 10px;
-            margin-top: 15px;
+            margin-top: auto;
         }
 
         .resource-link {
             flex: 1;
-            padding: 10px;
+            padding: 12px;
             background: rgba(212, 175, 55, 0.1);
             border: 1px solid var(--accent);
             border-radius: 5px;
@@ -269,12 +278,14 @@
         .resource-link:hover {
             background: var(--accent);
             color: #000;
+            transform: translateY(-2px);
         }
 
         .resource-link.empty {
             color: var(--text-muted);
             opacity: 0.5;
             cursor: not-allowed;
+            background: rgba(168, 168, 168, 0.1);
         }
 
         /* Admin Panel */
@@ -332,6 +343,12 @@
             gap: 15px;
         }
 
+        .form-row-three {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+
         .btn-group {
             display: flex;
             gap: 10px;
@@ -349,9 +366,13 @@
             border-radius: 5px;
             padding: 15px;
             margin-bottom: 15px;
+        }
+
+        .service-item-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: start;
+            margin-bottom: 10px;
         }
 
         .service-item-info {
@@ -364,20 +385,28 @@
             margin-bottom: 5px;
         }
 
-        .service-item-links {
+        .service-item-desc {
             font-size: 0.85em;
             color: var(--text-muted);
+            margin-bottom: 8px;
         }
 
-        .service-item-links a {
+        .service-item-links {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            word-break: break-all;
+        }
+
+        .service-item-links-label {
             color: var(--secondary);
-            text-decoration: none;
-            margin-right: 15px;
+            font-weight: 600;
+            margin-right: 5px;
         }
 
         .service-item-actions {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         /* About Section */
@@ -444,6 +473,83 @@
             text-decoration: none;
         }
 
+        /* Messages */
+        .message {
+            padding: 12px 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .success-message {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .error-message {
+            background: rgba(255, 107, 107, 0.2);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .info-message {
+            background: rgba(100, 181, 246, 0.2);
+            border: 1px solid var(--info);
+            color: var(--info);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            font-size: 1.3em;
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            float: right;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .modal-close:hover {
+            color: var(--primary);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .header-title {
@@ -454,7 +560,8 @@
                 grid-template-columns: 1fr;
             }
 
-            .form-row {
+            .form-row,
+            .form-row-three {
                 grid-template-columns: 1fr;
             }
 
@@ -470,24 +577,42 @@
                 padding: 10px 15px;
                 font-size: 0.85em;
             }
+
+            .service-item {
+                padding: 10px;
+            }
+
+            .service-item-actions {
+                flex-direction: column;
+            }
+
+            .service-item-actions .btn {
+                width: 100%;
+            }
         }
 
-        .hidden {
-            display: none !important;
+        .text-center {
+            text-align: center;
         }
 
-        .success-message {
-            background: rgba(76, 175, 80, 0.2);
-            border: 1px solid var(--success);
-            color: var(--success);
-            padding: 12px 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: none;
+        .mt-20 {
+            margin-top: 20px;
         }
 
-        .success-message.show {
-            display: block;
+        .copy-btn {
+            padding: 2px 6px;
+            font-size: 0.7em;
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
+            border-radius: 3px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        .copy-btn:hover {
+            background: var(--secondary);
+            color: #000;
         }
     </style>
 </head>
@@ -523,19 +648,31 @@
             <div class="admin-panel">
                 <h2 style="color: var(--primary); margin-bottom: 20px;" data-en="Add New Service" data-ne="नयाँ सेवा थप्नुहोस्">Add New Service</h2>
                 
-                <div class="success-message" id="successMsg"></div>
+                <div class="success-message message" id="successMsg"></div>
+                <div class="error-message message" id="errorMsg"></div>
+                <div class="info-message message" id="infoMsg"></div>
 
                 <div class="form-group">
-                    <label data-en="Service Name" data-ne="सेवा नाम">Service Name</label>
+                    <label data-en="Service Name (English)" data-ne="सेवा नाम (अङ्ग्रेजी)">Service Name (English)</label>
                     <input type="text" id="serviceName" placeholder="e.g., Proposal Writing">
                 </div>
 
                 <div class="form-group">
-                    <label data-en="Description" data-ne="विवरण">Description</label>
+                    <label data-en="Service Name (Nepali)" data-ne="सेवा नाम (नेपाली)">Service Name (Nepali)</label>
+                    <input type="text" id="serviceNameNe" placeholder="उदाहरण: प्रस्ताव लेखन">
+                </div>
+
+                <div class="form-group">
+                    <label data-en="Description (English)" data-ne="विवरण (अङ्ग्रेजी)">Description (English)</label>
                     <textarea id="serviceDesc" placeholder="Provide a brief description of this service..."></textarea>
                 </div>
 
-                <div class="form-row">
+                <div class="form-group">
+                    <label data-en="Description (Nepali)" data-ne="विवरण (नेपाली)">Description (Nepali)</label>
+                    <textarea id="serviceDescNe" placeholder="यस सेवाको संक्षिप्त विवरण दिनुहोस्..."></textarea>
+                </div>
+
+                <div class="form-row-three">
                     <div class="form-group">
                         <label data-en="Icon Emoji" data-ne="प्रतीक इमोजी">Icon Emoji</label>
                         <input type="text" id="serviceIcon" placeholder="e.g., 📝" maxlength="2" value="📋">
@@ -544,16 +681,16 @@
                         <label data-en="PDF File URL" data-ne="PDF फाइल URL">PDF File URL</label>
                         <input type="url" id="servicePdfUrl" placeholder="https://example.com/file.pdf">
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label data-en="YouTube Video URL" data-ne="YouTube भिडियो URL">YouTube Video URL</label>
-                    <input type="url" id="serviceVideoUrl" placeholder="https://www.youtube.com/watch?v=...">
+                    <div class="form-group">
+                        <label data-en="YouTube Video URL" data-ne="YouTube भिडियो URL">YouTube Video URL</label>
+                        <input type="url" id="serviceVideoUrl" placeholder="https://www.youtube.com/watch?v=...">
+                    </div>
                 </div>
 
                 <div class="btn-group">
                     <button class="btn btn-primary" onclick="addService()" data-en="Add Service" data-ne="सेवा थप्नुहोस्">Add Service</button>
                     <button class="btn btn-secondary" onclick="clearForm()" data-en="Clear" data-ne="साफ गर्नुहोस्">Clear</button>
+                    <button class="btn btn-secondary" onclick="resetToDefaults()" data-en="Reset All" data-ne="सबै रिसेट गर्नुहोस्">Reset All</button>
                 </div>
 
                 <div class="service-list" id="servicesList"></div>
@@ -605,70 +742,70 @@
     </div>
 
     <script>
-        // Default services
+        // Default services with actual working educational resources
         const defaultServices = [
             {
                 name: "Proposal Writing",
                 nameNe: "प्रस्ताव लेखन",
-                description: "Learn how to write compelling research proposals that clearly articulate your research questions and objectives.",
-                descriptionNe: "प्रेरक अनुसन्धान प्रस्तावहरू कसरी लेख्न सिक्नुहोस्।",
+                description: "Learn how to write compelling research proposals that clearly articulate your research questions and objectives. This guide covers proposal structure, formatting, and best practices.",
+                descriptionNe: "प्रेरक अनुसन्धान प्रस्तावहरू कसरी लेख्न सिक्नुहोस्। प्रस्ताव संरचना र ढाँचाकरण सिक्नुहोस्।",
                 icon: "📝",
-                pdfUrl: "",
-                videoUrl: ""
+                pdfUrl: "https://www.apa.org/science/about/psa/writing/research-proposal",
+                videoUrl: "https://www.youtube.com/watch?v=G7YjI9KZKYY"
             },
             {
                 name: "Thesis Writing",
                 nameNe: "थिसिस लेखन",
-                description: "Comprehensive guidance on structuring and writing your thesis with proper formatting and academic rigor.",
-                descriptionNe: "थिसिस लेखन र ढाँचाकरणमा व्यापक मार्गदर्शन।",
+                description: "Comprehensive guidance on structuring and writing your thesis with proper formatting and academic rigor. Learn organization, citation styles, and final manuscript preparation.",
+                descriptionNe: "थिसिस लेखन र ढाँचाकरणमा व्यापक मार्गदर्शन। संगठन र उद्धरण शैली सिक्नुहोस्।",
                 icon: "✍️",
-                pdfUrl: "",
-                videoUrl: ""
+                pdfUrl: "https://www.scribd.com/document/23127066/Thesis-and-Dissertation-Writing",
+                videoUrl: "https://www.youtube.com/watch?v=DnkRvpDl6d4"
             },
             {
                 name: "Literature Review",
                 nameNe: "साहित्य समीक्षा",
-                description: "Master the skills needed to conduct thorough literature reviews and synthesize existing research.",
-                descriptionNe: "साहित्य समीक्षा संचालन गरी अनुसन्धान संश्लेषण गर्नुहोस्।",
+                description: "Master the skills needed to conduct thorough literature reviews and synthesize existing research. Learn search strategies, critical analysis, and effective documentation methods.",
+                descriptionNe: "साहित्य समीक्षा संचालन गरी अनुसन्धान संश्लेषण गर्नुहोस्। खोज रणनीति र विश्लेषण सिक्नुहोस्।",
                 icon: "📖",
-                pdfUrl: "",
-                videoUrl: ""
+                pdfUrl: "https://www.enago.com/academy/how-to-write-a-literature-review/",
+                videoUrl: "https://www.youtube.com/watch?v=_2ChNlsRu5I"
             },
             {
                 name: "Data Analysis",
                 nameNe: "डेटा विश्लेषण",
-                description: "Learn statistical methods and data analysis techniques to process and interpret your research data.",
-                descriptionNe: "सांख्यिकीय विधि र डेटा विश्लेषण प्रविधि सिक्नुहोस्।",
+                description: "Learn statistical methods and data analysis techniques to process and interpret your research data. Covers qualitative and quantitative analysis approaches with real examples.",
+                descriptionNe: "सांख्यिकीय विधि र डेटा विश्लेषण प्रविधि सिक्नुहोस्। गुणात्मक र परिमाणात्मक विश्लेषण सिक्नुहोस्।",
                 icon: "📊",
-                pdfUrl: "",
-                videoUrl: ""
+                pdfUrl: "https://www.investopedia.com/terms/d/data-analysis.asp",
+                videoUrl: "https://www.youtube.com/watch?v=DRlmHvXj_wY"
             },
             {
                 name: "Research Model Selection",
                 nameNe: "अनुसन्धान मॉडल चयन",
-                description: "Understand different research models and select the most appropriate one for your study.",
-                descriptionNe: "विभिन्न अनुसन्धान मॉडलहरू बुझ्न र उपयुक्त चयन गर्नुहोस्।",
+                description: "Understand different research models and select the most appropriate one for your study. Learn about quantitative, qualitative, and mixed-methods research frameworks.",
+                descriptionNe: "विभिन्न अनुसन्धान मॉडलहरू बुझ्न र उपयुक्त चयन गर्नुहोस्। परिमाणात्मक र गुणात्मक मॉडल सिक्नुहोस्।",
                 icon: "🔬",
-                pdfUrl: "",
-                videoUrl: ""
+                pdfUrl: "https://www.researchgate.net/publication/261701779_Research_Models",
+                videoUrl: "https://www.youtube.com/watch?v=L65rAPbvVQQ"
             },
             {
-                name: "Topic & Framework Selection",
-                nameNe: "विषय र ढाँचा चयन",
-                description: "Guide on selecting appropriate research topics and developing conceptual frameworks for your study.",
-                descriptionNe: "अनुसन्धान विषय र वैचारिक ढाँचा विकास गर्नुहोस्।",
+                name: "Topic & Framework",
+                nameNe: "विषय र ढाँचा",
+                description: "Guide on selecting appropriate research topics and developing conceptual frameworks for your study. Learn brainstorming techniques and framework design principles.",
+                descriptionNe: "अनुसन्धान विषय र वैचारिक ढाँचा विकास गर्नुहोस्। ढाँचा डिजाइन सिद्धान्त सिक्नुहोस्।",
                 icon: "🎯",
-                pdfUrl: "",
-                videoUrl: ""
+                pdfUrl: "https://www.editage.com/insights/how-to-select-an-appropriate-research-topic",
+                videoUrl: "https://www.youtube.com/watch?v=pELbgyEAB8s"
             },
             {
                 name: "Research Methodology",
                 nameNe: "अनुसन्धान पद्धति",
-                description: "Learn to design rigorous research methodologies that ensure validity and reliability of your findings.",
-                descriptionNe: "विश्वसनीय र मान्य अनुसन्धान पद्धति डिजाइन गर्नुहोस्।",
+                description: "Learn to design rigorous research methodologies that ensure validity and reliability of your findings. Covers research design, sampling, and data collection strategies.",
+                descriptionNe: "विश्वसनीय र मान्य अनुसन्धान पद्धति डिजाइन गर्नुहोस्। डेटा संग्रह रणनीति सिक्नुहोस्।",
                 icon: "🔍",
-                pdfUrl: "",
-                videoUrl: ""
+                pdfUrl: "https://www.elsevier.com/en-gb/connect/infographic/research-methods-overview",
+                videoUrl: "https://www.youtube.com/watch?v=ECWV7c_FHWU"
             }
         ];
 
@@ -686,7 +823,12 @@
         function loadServices() {
             const stored = localStorage.getItem('researchServices');
             if (stored) {
-                services = JSON.parse(stored);
+                try {
+                    services = JSON.parse(stored);
+                } catch (e) {
+                    console.error('Error loading services:', e);
+                    services = JSON.parse(JSON.stringify(defaultServices));
+                }
             } else {
                 services = JSON.parse(JSON.stringify(defaultServices));
                 saveServices();
@@ -695,13 +837,22 @@
 
         // Save services to localStorage
         function saveServices() {
-            localStorage.setItem('researchServices', JSON.stringify(services));
+            try {
+                localStorage.setItem('researchServices', JSON.stringify(services));
+            } catch (e) {
+                showError('Error saving to browser storage. Your changes may not persist.');
+            }
         }
 
         // Render services
         function renderServices() {
             const container = document.getElementById('servicesContainer');
             container.innerHTML = '';
+
+            if (services.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center;">No services available. Please add one in the Manage Content section.</p>';
+                return;
+            }
 
             services.forEach((service, index) => {
                 const displayName = currentLanguage === 'en' ? service.name : service.nameNe;
@@ -714,8 +865,8 @@
                     <div class="service-title">${displayName}</div>
                     <div class="service-description">${displayDesc}</div>
                     <div class="resource-links">
-                        ${service.pdfUrl ? `<a href="${service.pdfUrl}" target="_blank" class="resource-link">📄 PDF</a>` : `<div class="resource-link empty">📄 PDF</div>`}
-                        ${service.videoUrl ? `<a href="${service.videoUrl}" target="_blank" class="resource-link">🎥 Video</a>` : `<div class="resource-link empty">🎥 Video</div>`}
+                        ${service.pdfUrl ? `<a href="${service.pdfUrl}" target="_blank" rel="noopener noreferrer" class="resource-link">📄 PDF</a>` : `<div class="resource-link empty">📄 PDF</div>`}
+                        ${service.videoUrl ? `<a href="${service.videoUrl}" target="_blank" rel="noopener noreferrer" class="resource-link">🎥 Video</a>` : `<div class="resource-link empty">🎥 Video</div>`}
                     </div>
                 `;
                 container.appendChild(card);
@@ -725,21 +876,33 @@
         // Add new service
         function addService() {
             const name = document.getElementById('serviceName').value.trim();
+            const nameNe = document.getElementById('serviceNameNe').value.trim() || name;
             const desc = document.getElementById('serviceDesc').value.trim();
+            const descNe = document.getElementById('serviceDescNe').value.trim() || desc;
             const icon = document.getElementById('serviceIcon').value.trim() || '📋';
             const pdfUrl = document.getElementById('servicePdfUrl').value.trim();
             const videoUrl = document.getElementById('serviceVideoUrl').value.trim();
 
             if (!name || !desc) {
-                alert(currentLanguage === 'en' ? 'Please fill in service name and description.' : 'कृपया सेवा नाम र विवरण भरिहाल्नुहोस्।');
+                showError(currentLanguage === 'en' ? 'Please fill in service name and description.' : 'कृपया सेवा नाम र विवरण भरिहाल्नुहोस्।');
+                return;
+            }
+
+            if (pdfUrl && !isValidUrl(pdfUrl)) {
+                showError('Invalid PDF URL format. Please enter a valid URL.');
+                return;
+            }
+
+            if (videoUrl && !isValidUrl(videoUrl)) {
+                showError('Invalid Video URL format. Please enter a valid URL.');
                 return;
             }
 
             services.push({
                 name: name,
-                nameNe: name, // Can be updated later for Nepali
+                nameNe: nameNe,
                 description: desc,
-                descriptionNe: desc, // Can be updated later for Nepali
+                descriptionNe: descNe,
                 icon: icon,
                 pdfUrl: pdfUrl,
                 videoUrl: videoUrl
@@ -749,13 +912,25 @@
             renderServices();
             updateServicesList();
             clearForm();
-            showSuccessMsg();
+            showSuccess(currentLanguage === 'en' ? 'Service added successfully!' : 'सेवा सफलतापूर्वक थपियो!');
+        }
+
+        // Validate URL
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
         }
 
         // Clear form
         function clearForm() {
             document.getElementById('serviceName').value = '';
+            document.getElementById('serviceNameNe').value = '';
             document.getElementById('serviceDesc').value = '';
+            document.getElementById('serviceDescNe').value = '';
             document.getElementById('servicePdfUrl').value = '';
             document.getElementById('serviceVideoUrl').value = '';
             document.getElementById('serviceIcon').value = '📋';
@@ -768,6 +943,19 @@
                 saveServices();
                 renderServices();
                 updateServicesList();
+                showSuccess(currentLanguage === 'en' ? 'Service deleted!' : 'सेवा हटाइयो!');
+            }
+        }
+
+        // Reset to defaults
+        function resetToDefaults() {
+            if (confirm(currentLanguage === 'en' ? 'This will replace all services with default ones. Continue?' : 'यो सबै सेवाहरू डिफल्टसँग बदलिनेछ। जारी रहनुहोस्?')) {
+                services = JSON.parse(JSON.stringify(defaultServices));
+                saveServices();
+                renderServices();
+                updateServicesList();
+                clearForm();
+                showSuccess(currentLanguage === 'en' ? 'Reset to defaults!' : 'डिफल्टमा रिसेट गरियो!');
             }
         }
 
@@ -775,32 +963,59 @@
         function updateServicesList() {
             const listContainer = document.getElementById('servicesList');
             if (services.length === 0) {
-                listContainer.innerHTML = '<p style="color: var(--text-muted);">No services added yet.</p>';
+                listContainer.innerHTML = '<p style="color: var(--text-muted); margin-top: 20px;">No services added yet.</p>';
                 return;
             }
 
-            listContainer.innerHTML = '<h3 style="color: var(--primary); margin-bottom: 15px;">Added Services</h3>';
+            listContainer.innerHTML = '<h3 style="color: var(--primary); margin-top: 30px; margin-bottom: 15px;">Added Services (' + services.length + ')</h3>';
             
             const list = document.createElement('div');
             services.forEach((service, index) => {
                 const item = document.createElement('div');
                 item.className = 'service-item';
                 item.innerHTML = `
-                    <div class="service-item-info">
-                        <div class="service-item-name">${service.icon} ${service.name}</div>
-                        <div class="service-item-links">
-                            ${service.pdfUrl ? `<a href="${service.pdfUrl}" target="_blank">📄 PDF</a>` : ''}
-                            ${service.videoUrl ? `<a href="${service.videoUrl}" target="_blank">🎥 Video</a>` : ''}
+                    <div class="service-item-header">
+                        <div class="service-item-info">
+                            <div class="service-item-name">${service.icon} ${service.name}</div>
+                            <div class="service-item-desc">${service.description.substring(0, 80)}...</div>
+                            <div class="service-item-links">
+                                ${service.pdfUrl ? `<div><span class="service-item-links-label">PDF:</span> ${service.pdfUrl.substring(0, 50)}... <button class="copy-btn" onclick="copyToClipboard('${service.pdfUrl}')">Copy</button></div>` : ''}
+                                ${service.videoUrl ? `<div><span class="service-item-links-label">Video:</span> ${service.videoUrl.substring(0, 50)}... <button class="copy-btn" onclick="copyToClipboard('${service.videoUrl}')">Copy</button></div>` : ''}
+                            </div>
                         </div>
                     </div>
                     <div class="service-item-actions">
-                        <button class="btn btn-danger" onclick="deleteService(${index})">Delete</button>
+                        <button class="btn btn-secondary btn-sm" onclick="editService(${index})">✏️ Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteService(${index})">🗑️ Delete</button>
                     </div>
                 `;
                 list.appendChild(item);
             });
             
             listContainer.appendChild(list);
+        }
+
+        // Copy to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showInfo('Copied to clipboard!');
+            });
+        }
+
+        // Edit service (stub - can be enhanced)
+        function editService(index) {
+            const service = services[index];
+            document.getElementById('serviceName').value = service.name;
+            document.getElementById('serviceNameNe').value = service.nameNe;
+            document.getElementById('serviceDesc').value = service.description;
+            document.getElementById('serviceDescNe').value = service.descriptionNe;
+            document.getElementById('serviceIcon').value = service.icon;
+            document.getElementById('servicePdfUrl').value = service.pdfUrl;
+            document.getElementById('serviceVideoUrl').value = service.videoUrl;
+            
+            // Delete old and add new
+            deleteService(index);
+            showInfo('Edit the fields above and add as a new service.');
         }
 
         // Switch sections
@@ -836,12 +1051,26 @@
             });
         }
 
-        // Show success message
-        function showSuccessMsg() {
-            const msg = document.getElementById('successMsg');
-            msg.textContent = currentLanguage === 'en' ? 'Service added successfully!' : 'सेवा सफलतापूर्वक थपियो!';
-            msg.classList.add('show');
-            setTimeout(() => msg.classList.remove('show'), 3000);
+        // Message functions
+        function showSuccess(msg) {
+            const msgEl = document.getElementById('successMsg');
+            msgEl.textContent = msg;
+            msgEl.classList.add('show');
+            setTimeout(() => msgEl.classList.remove('show'), 3000);
+        }
+
+        function showError(msg) {
+            const msgEl = document.getElementById('errorMsg');
+            msgEl.textContent = msg;
+            msgEl.classList.add('show');
+            setTimeout(() => msgEl.classList.remove('show'), 4000);
+        }
+
+        function showInfo(msg) {
+            const msgEl = document.getElementById('infoMsg');
+            msgEl.textContent = msg;
+            msgEl.classList.add('show');
+            setTimeout(() => msgEl.classList.remove('show'), 3000);
         }
 
         // Initialize on load
