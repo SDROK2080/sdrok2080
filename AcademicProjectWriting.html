@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Project Writing - Complete Teaching & Learning App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --secondary: #7c3aed;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --light-bg: #f8fafc;
+            --dark-text: #1e293b;
+            --border: #e2e8f0;
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body {
+            padding: 15px;
+            overflow: hidden;
+        }
+
+        .container {
+            height: 100%;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1em;
+            opacity: 0.95;
+        }
+
+        .progress-wrapper {
+            padding: 15px 30px;
+            background: white;
+            border-bottom: 2px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: var(--dark-text);
+            font-size: 0.95em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        /* MAIN CONTENT AREA */
+        .content-wrapper {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 260px;
+            background: var(--light-bg);
+            border-right: 2px solid var(--border);
+            overflow-y: auto;
+            padding: 15px;
+            flex-shrink: 0;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: var(--border);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .step-item {
+            padding: 12px 15px;
+            margin: 6px 0;
+            background: white;
+            border-left: 4px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: var(--dark-text);
+            line-height: 1.4;
+        }
+
+        .step-item:hover {
+            background: var(--light-bg);
+            border-left-color: var(--primary);
+            transform: translateX(3px);
+        }
+
+        .step-item.active {
+            background: var(--primary);
+            color: white;
+            border-left-color: var(--secondary);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .step-item.completed {
+            border-left-color: var(--success);
+        }
+
+        .step-item.completed::before {
+            content: "✓ ";
+            color: var(--success);
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        /* CONTENT AREA */
+        .content {
+            flex: 1;
+            padding: 35px;
+            overflow-y: auto;
+            background: white;
+        }
+
+        .content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .content::-webkit-scrollbar-track {
+            background: var(--light-bg);
+        }
+
+        .content::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        .content h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.9em;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 10px;
+        }
+
+        .content h3 {
+            color: var(--secondary);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .content p {
+            color: var(--dark-text);
+            line-height: 1.8;
+            margin-bottom: 15px;
+            font-size: 0.98em;
+        }
+
+        .content ul, .content ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        .content li {
+            color: var(--dark-text);
+            line-height: 1.8;
+            margin-bottom: 8px;
+            font-size: 0.98em;
+        }
+
+        .example-box {
+            background: linear-gradient(135deg, #fff5e6 0%, #fffaef 100%);
+            border-left: 5px solid var(--warning);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(217, 119, 6, 0.1);
+        }
+
+        .example-box strong {
+            color: var(--warning);
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+            border-left: 5px solid var(--success);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+        }
+
+        .danger-box {
+            background: linear-gradient(135deg, #fef2f2 0%, #fef5f5 100%);
+            border-left: 5px solid var(--danger);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .video-card {
+            background: linear-gradient(135deg, #f0f4ff 0%, #faf5ff 100%);
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .video-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .video-card h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.05em;
+            font-weight: 600;
+        }
+
+        .video-card p {
+            font-size: 0.9em;
+            color: #64748b;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .video-card a {
+            color: white;
+            background: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .video-card a:hover {
+            background: var(--secondary);
+            transform: translateX(3px);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 11px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #6d28d9;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #047857;
+        }
+
+        .table-box {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+            color: var(--dark-text);
+        }
+
+        tr:hover {
+            background: var(--light-bg);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .badge-primary {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-success {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 20px 30px;
+            border-top: 2px solid var(--border);
+            text-align: center;
+            font-size: 0.9em;
+            color: var(--dark-text);
+            flex-shrink: 0;
+        }
+
+        .footer p {
+            margin: 4px 0;
+        }
+
+        .footer strong {
+            color: var(--primary);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .content {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .content-wrapper {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                max-height: 200px;
+                border-right: none;
+                border-bottom: 2px solid var(--border);
+                display: flex;
+                overflow-x: auto;
+                padding: 10px;
+                flex-direction: row;
+            }
+
+            .step-item {
+                white-space: nowrap;
+                flex-shrink: 0;
+                margin: 6px 5px;
+            }
+
+            .content {
+                padding: 20px;
+                flex: 1;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .header p {
+                font-size: 0.9em;
+            }
+        }
+
+        /* PRINT */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .content {
+                height: auto;
+                overflow: visible;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Academic Project Writing Guide</h1>
+            <p>Complete Teaching & Learning App | 23 Steps to Research Success</p>
+        </div>
+
+        <div class="progress-wrapper">
+            <div class="progress-text">
+                <span id="progressText">Progress: 0/23 Steps Completed</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="content-wrapper">
+            <div class="sidebar" id="stepsList"></div>
+            <div class="content" id="contentArea"></div>
+        </div>
+
+        <div class="footer">
+            <p>📖 <strong>Developed for Kapilvastu Multiple Campus (KMC)</strong> | Tribhuvan University</p>
+            <p>Free Educational Resource by <strong>UCDL Academy</strong> | Nepal</p>
+        </div>
+    </div>
+
+    <script>
+        const steps = [
+            {
+                title: "1. Select the Project Area",
+                content: `
+                    <h2>Step 1: Select the Project Area</h2>
+                    <p>Choose a broad area related to your subject, course, discipline, or local problem. This is your starting point and should be interesting and researchable.</p>
+                    
+                    <h3>Examples by Discipline:</h3>
+                    <ul>
+                        <li><strong>Education:</strong> AI in teaching and learning, Student engagement, Digital literacy</li>
+                        <li><strong>Sociology:</strong> Social media and youth, Community development, Gender issues</li>
+                        <li><strong>History:</strong> Heritage conservation, Cultural preservation, Local history</li>
+                        <li><strong>Mathematics:</strong> Mathematics achievement, Critical thinking, Problem-solving</li>
+                        <li><strong>Environmental Science:</strong> Climate change, Waste management, Sustainability</li>
+                        <li><strong>Health:</strong> Public health issues, Disease prevention, Wellness programs</li>
+                    </ul>
+
+                    <div class="success-box">
+                        <strong>✓ Good Selection Criteria:</strong>
+                        <ul>
+                            <li>Relevant to your field of study</li>
+                            <li>Manageable in scope and resources</li>
+                            <li>Researchable with available methods</li>
+                            <li>Interesting and engaging to you and your audience</li>
+                            <li>Addresses a gap or problem</li>
+                        </ul>
+                    </div>
+
+                    <h3>📹 Video Tutorials:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>Choosing a Research Topic</h4>
+                            <p>Learn how to select a research topic that is relevant, manageable, and engaging.</p>
+                            <a href="https://youtu.be/dQw4w9WgXcQ" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                        <div class="video-card">
+                            <h4>Research Interests & Feasibility</h4>
+                            <p>Understand the balance between your interests and practical feasibility.</p>
+                            <a href="https://youtu.be/a0f8Yg0ztWo" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "2. Identify Specific Problem",
+                content: `
+                    <h2>Step 2: Identify the Specific Problem</h2>
+                    <p>Convert your broad area into a specific, researchable problem. This is crucial—it narrows your focus and makes research manageable.</p>
+                    
+                    <h3>From Broad to Specific:</h3>
+                    <div class="example-box">
+                        <strong>❌ Too Broad:</strong> "Artificial Intelligence in Higher Education"
+                    </div>
+                    <div class="example-box">
+                        <strong>✓ Specific Problem:</strong> "Factors influencing students' adoption of AI tools for academic learning at undergraduate level"
+                    </div>
+
+                    <h3>Ask These Key Questions:</h3>
+                    <ul>
+                        <li>What is currently happening in this area?</li>
+                        <li>What specific problem exists?</li>
+                        <li>Who is affected by this problem?</li>
+                        <li>Where does the problem occur (location/context)?</li>
+                        <li>What is not yet sufficiently understood about this problem?</li>
+                        <li>Why is this problem worth investigating?</li>
+                    </ul>
+
+                    <h3>📹 Video Resources:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>Defining Your Research Problem</h4>
+                            <p>Step-by-step guide to narrowing your research focus.</p>
+                            <a href="https://youtu.be/p_iBfXpNZmw" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                        <div class="video-card">
+                            <h4>Problem Identification Process</h4>
+                            <p>Techniques to identify and articulate research problems.</p>
+                            <a href="https://youtu.be/OPZOomyTDu8" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "3. Develop Project Title",
+                content: `
+                    <h2>Step 3: Develop the Project Title</h2>
+                    <p>A good title communicates major variables, population, location, and sometimes the research design. It should be clear and specific.</p>
+                    
+                    <h3>Title Components:</h3>
+                    <ul>
+                        <li><strong>Variables:</strong> What you are studying (concepts/factors)</li>
+                        <li><strong>Population:</strong> Who you are studying (students, teachers, community)</li>
+                        <li><strong>Location:</strong> Where the study occurs (institution, region, country)</li>
+                        <li><strong>Design (optional):</strong> Type of research (survey, case study, experimental)</li>
+                    </ul>
+
+                    <div class="example-box">
+                        <strong>Good Example:</strong> <br>"Students' Adoption of Artificial Intelligence Tools for Academic Learning: A Survey Study of Undergraduate Students at Kapilvastu Multiple Campus"
+                    </div>
+
+                    <h3>Title Writing Guidelines:</h3>
+                    <ul>
+                        <li>✓ Aim for 10-15 words (not too long, not too short)</li>
+                        <li>✓ Be specific and clear, avoid vague language</li>
+                        <li>✓ Use simple, direct language</li>
+                        <li>✓ Avoid jargon that limits understanding</li>
+                        <li>✗ Don't use question format (usually)</li>
+                        <li>✗ Avoid unnecessary words like "A Study of"</li>
+                    </ul>
+
+                    <h3>📹 Video Tutorials:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>Writing Effective Research Titles</h4>
+                            <a href="https://youtu.be/8qxwZ_7iXpc" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "4. Background of Study",
+                content: `
+                    <h2>Step 4: Prepare the Background of the Study</h2>
+                    <p>Move from general → national/local → specific problem. This creates context for why your research matters.</p>
+                    
+                    <h3>The Pyramid Structure:</h3>
+                    <div class="example-box">
+                        <strong>Level 1 - Global Context:</strong> Artificial Intelligence has increasingly become part of higher education worldwide<br><br>
+                        <strong>Level 2 - National Context:</strong> Nepalese universities are also experiencing increased use of AI tools<br><br>
+                        <strong>Level 3 - Institutional Context:</strong> Students at Kapilvastu Multiple Campus use AI tools in various ways<br><br>
+                        <strong>Level 4 - Research Problem:</strong> However, systematic evidence about factors influencing adoption is limited<br><br>
+                        <strong>Level 5 - Research Gap:</strong> This study addresses that gap
+                    </div>
+
+                    <h3>Key Points to Include:</h3>
+                    <ul>
+                        <li>Recent developments in your field</li>
+                        <li>Why this topic is important now</li>
+                        <li>How it affects the local context</li>
+                        <li>What is already known</li>
+                        <li>What remains unknown (the gap)</li>
+                    </ul>
+
+                    <h3>📹 Video Resources:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>Writing Study Background</h4>
+                            <a href="https://youtu.be/V6S2CYV_Bvg" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "5. Problem Statement",
+                content: `
+                    <h2>Step 5: Write the Problem Statement</h2>
+                    <p>Clearly explain what problem your project intends to investigate. This is your research justification.</p>
+                    
+                    <h3>A Strong Problem Statement Must Answer:</h3>
+                    <ol>
+                        <li><strong>What is the existing situation?</strong> (Current state)</li>
+                        <li><strong>What is the problem?</strong> (The gap or issue)</li>
+                        <li><strong>What evidence indicates this problem?</strong> (Data/facts)</li>
+                        <li><strong>Why does the problem matter?</strong> (Significance)</li>
+                        <li><strong>What knowledge gap exists?</strong> (What's unknown)</li>
+                        <li><strong>Why is this study necessary?</strong> (Purpose)</li>
+                    </ol>
+
+                    <h3>Problem Statement Template:</h3>
+                    <div class="example-box">
+                        <strong>[Existing situation].</strong> However, <strong>[specific problem exists].</strong> 
+                        This is evident from <strong>[evidence].</strong> This problem matters because <strong>[significance].</strong> 
+                        Current research lacks <strong>[knowledge gap].</strong> Therefore, this study is necessary to <strong>[purpose].</strong>
+                    </div>
+
+                    <h3>Example Problem Statement:</h3>
+                    <div class="example-box">
+                        "Artificial Intelligence tools have become increasingly accessible to students in higher education institutions. However, adoption rates and factors influencing their use remain poorly understood, particularly in developing countries like Nepal. This is evident from the absence of systematic research on AI adoption in Nepali universities. Understanding these factors is important because it can help institutions design better support systems for technology integration. Current research lacks evidence about which factors—including perceived usefulness, ease of use, social influence, and digital literacy—most strongly influence AI adoption among undergraduate students. Therefore, this study is necessary to identify these factors and provide recommendations for institutional policy and practice."
+                    </div>
+
+                    <h3>📹 Video Tutorials:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>Crafting Problem Statements</h4>
+                            <a href="https://youtu.be/L9tKqZ9pFkw" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "6. Research Questions",
+                content: `
+                    <h2>Step 6: Formulate Research Questions</h2>
+                    <p>Research questions should directly correspond to your identified problem and guide your entire research process.</p>
+                    
+                    <h3>Characteristics of Good Research Questions:</h3>
+                    <ul>
+                        <li>✓ Clear, concise, and well-defined</li>
+                        <li>✓ Researchable with available methods and time</li>
+                        <li>✓ Related to the problem statement and objectives</li>
+                        <li>✓ Open-ended (for qualitative) or measurable (for quantitative)</li>
+                        <li>✓ Neither too broad nor too narrow</li>
+                        <li>✓ Avoid yes/no questions that limit exploration</li>
+                    </ul>
+
+                    <div class="example-box">
+                        <strong>Example Research Questions:</strong>
+                        <ol>
+                            <li>What AI tools are most commonly used by undergraduate students for academic purposes?</li>
+                            <li>How frequently do students use AI tools in their academic work?</li>
+                            <li>What factors influence students' adoption of AI tools?</li>
+                            <li>What challenges do students experience while using AI tools for learning?</li>
+                            <li>How does digital literacy level affect AI adoption among students?</li>
+                        </ol>
+                    </div>
+
+                    <h3>Main Question → Sub-questions Approach:</h3>
+                    <div class="success-box">
+                        <strong>Main Question:</strong> What factors influence students' adoption of AI tools for academic learning?<br><br>
+                        <strong>Sub-questions:</strong><br>
+                        1. What is the current level of AI tool adoption?<br>
+                        2. What factors facilitate adoption?<br>
+                        3. What barriers exist to adoption?<br>
+                        4. How does context affect adoption?
+                    </div>
+
+                    <h3>📹 Video Resources:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>Developing Research Questions</h4>
+                            <a href="https://youtu.be/gVd8t-nMlrE" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "7. Research Objectives",
+                content: `
+                    <h2>Step 7: Establish Research Objectives</h2>
+                    <p>Objectives state what your research aims to achieve. Divide into one general objective and multiple specific objectives.</p>
+                    
+                    <h3>General Objective (Overall Purpose):</h3>
+                    <p>The general objective provides the overarching aim of your study.</p>
+                    <div class="example-box">
+                        <strong>Example:</strong> To examine the factors influencing students' adoption of Artificial Intelligence tools for academic learning at the undergraduate level.
+                    </div>
+
+                    <h3>Specific Objectives (Measurable Action Verbs):</h3>
+                    <p>Use these action verbs to write specific, measurable objectives:</p>
+                    <ul>
+                        <li>To <strong>identify</strong>... (what tools are used)</li>
+                        <li>To <strong>examine</strong>... (relationships or patterns)</li>
+                        <li>To <strong>assess</strong>... (levels or degrees)</li>
+                        <li>To <strong>compare</strong>... (differences between groups)</li>
+                        <li>To <strong>analyze</strong>... (components or factors)</li>
+                        <li>To <strong>determine</strong>... (causation or relationships)</li>
+                        <li>To <strong>explore</strong>... (perceptions or experiences)</li>
+                        <li>To <strong>evaluate</strong>... (effectiveness or quality)</li>
+                    </ul>
+
+                    <div class="example-box">
+                        <strong>Example Specific Objectives:</strong>
+                        <ol>
+                            <li>To identify the AI tools most commonly used by undergraduate students for academic purposes</li>
+                            <li>To assess the frequency and patterns of AI tool usage among students</li>
+                            <li>To examine factors (perceived usefulness, ease of use, social influence) that influence AI adoption</li>
+                            <li>To identify barriers and challenges students face when using AI tools</li>
+                            <li>To determine the relationship between digital literacy and AI adoption</li>
+                        </ol>
+                    </div>
+
+                    <h3>📹 Video Tutorials:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>Writing Research Objectives</h4>
+                            <a href="https://youtu.be/hqLe5_0_6kY" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "8. Develop Hypotheses",
+                content: `
+                    <h2>Step 8: Develop Hypotheses (If Required)</h2>
+                    <p>For quantitative projects, formulate testable hypotheses. Qualitative studies typically don't require hypotheses.</p>
+                    
+                    <h3>What is a Hypothesis?</h3>
+                    <p>A testable prediction about the relationship between variables based on theory or previous research.</p>
+
+                    <h3>Types of Hypotheses:</h3>
+                    <div class="example-box">
+                        <strong>Research Hypothesis (H₁):</strong> A prediction that a relationship exists<br>
+                        "Perceived usefulness significantly influences students' intention to use AI tools."
+                    </div>
+                    <div class="example-box">
+                        <strong>Null Hypothesis (H₀):</strong> States no relationship or effect<br>
+                        "Perceived usefulness does NOT significantly influence students' intention to use AI tools."
+                    </div>
+
+                    <h3>More Examples:</h3>
+                    <ul>
+                        <li>H₁: Students with higher digital literacy levels adopt AI tools more readily than those with lower literacy</li>
+                        <li>H₀: There is no difference in AI tool adoption between students with different digital literacy levels</li>
+                    </ul>
+
+                    <h3>When to Use Hypotheses:</h3>
+                    <div class="success-box">
+                        <strong>✓ Use Hypotheses:</strong>
+                        <ul>
+                            <li>Quantitative research (surveys, experiments)</li>
+                            <li>Testing specific relationships between variables</li>
+                            <li>Hypothesis-testing research designs</li>
+                        </ul>
+                    </div>
+                    <div class="danger-box">
+                        <strong>✗ Don't Use Hypotheses:</strong>
+                        <ul>
+                            <li>Qualitative/exploratory research</li>
+                            <li>Descriptive studies</li>
+                            <li>Unless methodology specifically requires them</li>
+                        </ul>
+                    </div>
+
+                    <h3>📹 Video Resources:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>Understanding Research Hypotheses</h4>
+                            <a href="https://youtu.be/ECAqy3OUdZg" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "9. Review Literature",
+                content: `
+                    <h2>Step 9: Review Previous Literature</h2>
+                    <p>Search for and synthesize relevant research to understand what's known and identify your research gap.</p>
+                    
+                    <h3>Sources to Search:</h3>
+                    <ul>
+                        <li>Peer-reviewed journal articles (most important)</li>
+                        <li>Books and book chapters</li>
+                        <li>Theses and dissertations from universities</li>
+                        <li>Government and policy reports</li>
+                        <li>Institutional research reports</li>
+                        <li>Official statistics and data</li>
+                        <li>Conference papers and proceedings</li>
+                    </ul>
+
+                    <h3>Create a Literature Matrix:</h3>
+                    <div class="table-box">
+                        <table>
+                            <tr>
+                                <th>Author/Year</th>
+                                <th>Topic</th>
+                                <th>Method</th>
+                                <th>Sample</th>
+                                <th>Major Finding</th>
+                                <th>Research Gap</th>
+                            </tr>
+                            <tr>
+                                <td>Author A (2023)</td>
+                                <td>AI adoption</td>
+                                <td>Survey</td>
+                                <td>200 students</td>
+                                <td>AI usefulness was important predictor</td>
+                                <td>Limited to one institution</td>
+                            </tr>
+                            <tr>
+                                <td>Author B (2022)</td>
+                                <td>Student AI use</td>
+                                <td>Interview</td>
+                                <td>30 students</td>
+                                <td>Students reported barriers to use</td>
+                                <td>Needs quantitative confirmation</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <h3>Key Literature Review Principles:</h3>
+                    <ul>
+                        <li>✗ Don't just summarize articles</li>
+                        <li>✓ Compare findings across sources</li>
+                        <li>✓ Synthesize patterns and themes</li>
+                        <li>✓ Identify contradictions and agreements</li>
+                        <li>✓ Clearly identify research gaps</li>
+                        <li>✓ Show how your study fills the gap</li>
+                    </ul>
+
+                    <h3>📹 Video Tutorials:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>Literature Review Process</h4>
+                            <a href="https://youtu.be/L9tKqZ9pFkw" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                        <div class="video-card">
+                            <h4>Finding Academic Sources</h4>
+                            <a href="https://youtu.be/gVd8t-nMlrE" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+
+                    <h3>Recommended Research Databases:</h3>
+                    <div class="btn-group">
+                        <a href="https://scholar.google.com" target="_blank" class="btn btn-primary">Google Scholar</a>
+                        <a href="https://www.researchgate.net" target="_blank" class="btn btn-primary">ResearchGate</a>
+                        <a href="https://www.sciencedirect.com" target="_blank" class="btn btn-primary">Science Direct</a>
+                        <a href="https://www.jstor.org" target="_blank" class="btn btn-primary">JSTOR</a>
+                    </div>
+                `
+            },
+            {
+                title: "10. Conceptual Framework",
+                content: `
+                    <h2>Step 10: Construct the Conceptual Framework</h2>
+                    <p>Show visually or textually how major concepts or variables are connected and related.</p>
+                    
+                    <h3>What is a Conceptual Framework?</h3>
+                    <p>A visual or written representation of how key variables, concepts, and theories relate to each other in your research. It's like a map of your research.</p>
+
+                    <h3>Example Framework Structure:</h3>
+                    <div class="example-box">
+                        <strong>Independent Variables (Factors that influence):</strong><br>
+                        • Perceived Usefulness<br>
+                        • Perceived Ease of Use<br>
+                        • Social Influence<br>
+                        • Digital Literacy<br>
+                        • Institutional Support<br>
+                        ↓<br>
+                        <strong>Dependent Variable (What is influenced):</strong><br>
+                        ↓<br>
+                        • Student AI Adoption
+                    </div>
+
+                    <h3>Benefits of a Conceptual Framework:</h3>
+                    <ul>
+                        <li>Connects your literature review to research questions</li>
+                        <li>Guides selection of variables to study</li>
+                        <li>Structures data collection and measurement</li>
+                        <li>Supports systematic data analysis</li>
+                        <li>Clarifies the logic of your research</li>
+                        <li>Helps readers understand your theoretical approach</li>
+                    </ul>
+
+                    <h3>How to Create Your Framework:</h3>
+                    <ol>
+                        <li>Identify main variables from literature review</li>
+                        <li>Determine which are independent and dependent</li>
+                        <li>Show relationships with arrows or descriptions</li>
+                        <li>Include moderating variables if applicable</li>
+                        <li>Draw or create a visual representation</li>
+                    </ol>
+
+                    <h3>📹 Video Resources:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>Building Conceptual Frameworks</h4>
+                            <a href="https://youtu.be/V6S2CYV_Bvg" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "11. Research Methodology",
+                content: `
+                    <h2>Step 11: Choose the Research Methodology</h2>
+                    <p>Specify your research approach, design, and all methodological elements in detail.</p>
+                    
+                    <h3>Key Methodological Components:</h3>
+                    <ul>
+                        <li><strong>Research Approach:</strong> Quantitative, Qualitative, or Mixed Methods</li>
+                        <li><strong>Research Design:</strong> Survey, Experimental, Case Study, Longitudinal, etc.</li>
+                        <li><strong>Study Area:</strong> Geographic location and setting</li>
+                        <li><strong>Population:</strong> All members you could potentially study</li>
+                        <li><strong>Sample Size:</strong> How many participants you will study</li>
+                        <li><strong>Sampling Technique:</strong> How you'll select participants</li>
+                        <li><strong>Data Sources:</strong> Primary (you collect) or Secondary (existing data)</li>
+                        <li><strong>Data Collection Instruments:</strong> Tools you'll use (questionnaire, interview, observation)</li>
+                        <li><strong>Data Collection Procedure:</strong> Step-by-step process</li>
+                        <li><strong>Data Analysis Techniques:</strong> How you'll analyze the data</li>
+                        <li><strong>Ethical Considerations:</strong> Protection of participants</li>
+                    </ul>
+
+                    <h3>Methodological Flow Chart:</h3>
+                    <div class="example-box">
+                        Research Problem → Research Questions → Design Selection → 
+                        Population Definition → Sample Selection → Instrument Development → 
+                        Data Collection → Analysis → Interpretation → Conclusion
+                    </div>
+
+                    <h3>📹 Video Tutorials:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>Research Methodology Basics</h4>
+                            <a href="https://youtu.be/8qxwZ_7iXpc" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                        <div class="video-card">
+                            <h4>Quantitative vs Qualitative Research</h4>
+                            <a href="https://youtu.be/dQw4w9WgXcQ" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "12. Research Instrument",
+                content: `
+                    <h2>Step 12: Prepare the Research Instrument</h2>
+                    <p>Develop tools to collect your data, depending on your research design and methodology.</p>
+                    
+                    <h3>Common Research Instruments:</h3>
+                    <ul>
+                        <li><strong>Questionnaire:</strong> Closed-ended and open-ended questions for surveys</li>
+                        <li><strong>Interview Schedule:</strong> Structured or semi-structured interview guide</li>
+                        <li><strong>Observation Checklist:</strong> For systematic observation of behavior</li>
+                        <li><strong>Focus Group Guide:</strong> Questions for group discussions</li>
+                        <li><strong>Document Analysis Form:</strong> Template for analyzing documents</li>
+                        <li><strong>Achievement Test:</strong> To measure knowledge or skills</li>
+                        <li><strong>Rating Scale or Rubric:</strong> For evaluating quality</li>
+                    </ul>
+
+                    <h3>Example Questionnaire Structure:</h3>
+                    <div class="example-box">
+                        <strong>Section A: Demographic Information</strong><br>
+                        Age, gender, year of study, field of study<br><br>
+                        <strong>Section B: Technology Access</strong><br>
+                        Internet access, device ownership, experience with technology<br><br>
+                        <strong>Section C: AI Tool Usage</strong><br>
+                        Which tools do you use, how often, for what purposes<br><br>
+                        <strong>Section D: Perceived Usefulness</strong><br>
+                        Likert-scale questions about perceived benefits<br><br>
+                        <strong>Section E: Perceived Ease of Use</strong><br>
+                        Likert-scale questions about difficulty/ease<br><br>
+                        <strong>Section F: Barriers and Challenges</strong><br>
+                        What obstacles do you face<br><br>
+                        <strong>Section G: Future Intentions</strong><br>
+                        Will you continue using AI tools
+                    </div>
+
+                    <h3>Instrument Design Tips:</h3>
+                    <ul>
+                        <li>✓ Use clear, simple language</li>
+                        <li>✓ Organize questions logically</li>
+                        <li>✓ Avoid double-barreled questions</li>
+                        <li>✓ Provide clear response options</li>
+                        <li>✓ Keep questionnaire reasonably short</li>
+                        <li>✗ Avoid leading questions</li>
+                        <li>✗ Avoid overly technical language</li>
+                    </ul>
+
+                    <h3>📹 Video Tutorials:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>Designing Questionnaires</h4>
+                            <a href="https://youtu.be/p_iBfXpNZmw" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "13. Pilot Testing",
+                content: `
+                    <h2>Step 13: Pilot Test the Instrument</h2>
+                    <p>Test your instrument with a small sample before full-scale data collection to identify problems and improve it.</p>
+                    
+                    <h3>Pilot Testing Steps:</h3>
+                    <ol>
+                        <li>Select a small test group (10-30 people similar to your target population)</li>
+                        <li>Administer the instrument and collect responses</li>
+                        <li>Identify unclear, ambiguous, or problematic questions</li>
+                        <li>Review response options and formatting</li>
+                        <li>Examine reliability using appropriate tests</li>
+                        <li>Revise and improve the instrument based on feedback</li>
+                    </ol>
+
+                    <h3>Reliability Testing - Cronbach's Alpha:</h3>
+                    <p>For Likert-scale instruments, use Cronbach's Alpha (α) to measure internal consistency.</p>
+                    <div class="example-box">
+                        <strong>Interpretation:</strong><br>
+                        • α ≥ 0.70 = Acceptable/Good reliability<br>
+                        • α ≥ 0.80 = Excellent reliability<br>
+                        • α < 0.70 = Revise the instrument
+                    </div>
+
+                    <h3>Key Questions During Pilot Testing:</h3>
+                    <ul>
+                        <li>Is the language clear and understandable?</li>
+                        <li>Are technical terms explained adequately?</li>
+                        <li>Are response options appropriate and complete?</li>
+                        <li>Did respondents have difficulty with any questions?</li>
+                        <li>Is the order of questions logical and flowing?</li>
+                        <li>Did it take too long to complete?</li>
+                        <li>Are there any biased or leading questions?</li>
+                        <li>Is the layout and formatting clear?</li>
+                    </ul>
+
+                    <h3>🔧 Tools for Analysis:</h3>
+                    <div class="btn-group">
+                        <a href="https://www.ibm.com/products/spss-statistics" target="_blank" class="btn btn-primary">IBM SPSS</a>
+                        <a href="https://www.jamovi.org" target="_blank" class="btn btn-primary">Jamovi (Free)</a>
+                        <a href="https://www.r-project.org" target="_blank" class="btn btn-primary">R Statistics</a>
+                    </div>
+
+                    <h3>📹 Video Resources:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>Pilot Testing Your Instruments</h4>
+                            <a href="https://youtu.be/OPZOomyTDu8" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "14. Collect Data",
+                content: `
+                    <h2>Step 14: Collect Data</h2>
+                    <p>Follow consistent procedures to gather your research data while maintaining ethical standards.</p>
+                    
+                    <h3>Quantitative Data Collection Flow:</h3>
+                    <div class="example-box">
+                        Select sample → Prepare instruments → Distribute questionnaires → 
+                        Collect responses → Screen data → Prepare dataset
+                    </div>
+
+                    <h3>Qualitative Data Collection Flow:</h3>
+                    <div class="example-box">
+                        Select participants → Prepare interview guide → Conduct interviews → 
+                        Record data → Transcribe → Prepare for analysis
+                    </div>
+
+                    <h3>Data Collection Best Practices:</h3>
+                    <ul>
+                        <li>✓ Maintain consistent procedures across all data collection</li>
+                        <li>✓ Use standardized instructions for all participants</li>
+                        <li>✓ Document any deviations from protocol</li>
+                        <li>✓ Keep accurate records of data collection</li>
+                        <li>✓ Maintain research ethics throughout</li>
+                        <li>✓ Build rapport with participants</li>
+                        <li>✓ Ensure data quality and completeness</li>
+                        <li>✓ Secure data and maintain confidentiality</li>
+                        <li>✗ Don't pressure participants</li>
+                        <li>✗ Don't influence responses</li>
+                    </ul>
+
+                    <h3>Ethical Considerations:</h3>
+                    <div class="success-box">
+                        <strong>✓ Always:</strong>
+                        <ul>
+                            <li>Obtain informed consent from participants</li>
+                            <li>Explain the study purpose and procedures</li>
+                            <li>Ensure voluntary participation</li>
+                            <li>Maintain confidentiality and anonymity</li>
+                            <li>Minimize potential harm or discomfort</li>
+                            <li>Have ethical clearance/approval</li>
+                        </ul>
+                    </div>
+
+                    <h3>📹 Video Tutorials:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>Data Collection Methods</h4>
+                            <a href="https://youtu.be/V6S2CYV_Bvg" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                        <div class="video-card">
+                            <h4>Interview Techniques</h4>
+                            <a href="https://youtu.be/8qxwZ_7iXpc" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "15. Organize & Clean Data",
+                content: `
+                    <h2>Step 15: Organize and Clean the Data</h2>
+                    <p>Before analysis, ensure your data is accurate, complete, and properly formatted. This is critical for quality results.</p>
+                    
+                    <h3>Data Cleaning Checklist:</h3>
+                    <ul>
+                        <li>✓ Check for missing values and handle appropriately</li>
+                        <li>✓ Remove duplicate responses</li>
+                        <li>✓ Identify and address inconsistent responses</li>
+                        <li>✓ Code categorical variables numerically</li>
+                        <li>✓ Label all variables clearly with descriptions</li>
+                        <li>✓ Check data entry for errors</li>
+                        <li>✓ Verify data ranges are reasonable</li>
+                        <li>✓ Enter or import data into analysis software</li>
+                    </ul>
+
+                    <h3>Data Organization Steps:</h3>
+                    <ol>
+                        <li><strong>Data Entry:</strong> Input data from questionnaires into spreadsheet or database</li>
+                        <li><strong>Coding:</strong> Assign numerical codes to categorical responses</li>
+                        <li><strong>Labeling:</strong> Create clear variable names and value labels</li>
+                        <li><strong>Validation:</strong> Check that data falls within expected ranges</li>
+                        <li><strong>Documentation:</strong> Create a data dictionary explaining all variables</li>
+                    </ol>
+
+                    <h3>⚠️ The Golden Rule of Data:</h3>
+                    <div class="danger-box">
+                        <strong>Garbage In → Garbage Out</strong><br>
+                        Good statistical analysis cannot compensate for poor-quality data. 
+                        Spend time ensuring your data is clean and accurate.
+                    </div>
+
+                    <h3>Data Entry Software:</h3>
+                    <div class="btn-group">
+                        <a href="https://www.microsoft.com/en-us/microsoft-365/excel" target="_blank" class="btn btn-primary">Microsoft Excel</a>
+                        <a href="https://www.ibm.com/products/spss-statistics" target="_blank" class="btn btn-primary">SPSS</a>
+                        <a href="https://www.jamovi.org" target="_blank" class="btn btn-primary">Jamovi</a>
+                        <a href="https://www.r-project.org" target="_blank" class="btn btn-primary">R</a>
+                    </div>
+
+                    <h3>📹 Video Resources:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>Data Preparation & Cleaning</h4>
+                            <a href="https://youtu.be/gVd8t-nMlrE" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "16. Analyze Data",
+                content: `
+                    <h2>Step 16: Analyze the Data</h2>
+                    <p>Apply appropriate statistical or qualitative techniques to extract meaning from your data and answer research questions.</p>
+                    
+                    <h3>Quantitative Analysis Techniques:</h3>
+                    <div class="success-box">
+                        <strong>Descriptive Statistics:</strong>
+                        <ul>
+                            <li>Frequency and percentage (how many, what proportion)</li>
+                            <li>Mean and standard deviation (average and spread)</li>
+                            <li>Median and mode (middle value, most common value)</li>
+                            <li>Range (minimum to maximum values)</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <strong>Inferential Statistics:</strong>
+                        <ul>
+                            <li><strong>t-test:</strong> Comparing means between two groups</li>
+                            <li><strong>ANOVA:</strong> Comparing means among multiple groups</li>
+                            <li><strong>Chi-square:</strong> Testing relationships in categorical data</li>
+                            <li><strong>Correlation:</strong> Measuring relationships between variables</li>
+                            <li><strong>Regression:</strong> Predicting one variable from others</li>
+                            <li><strong>Factor Analysis:</strong> Identifying underlying patterns</li>
+                            <li><strong>SEM/PLS-SEM:</strong> Complex model testing</li>
+                        </ul>
+                    </div>
+
+                    <h3>Qualitative Analysis Process:</h3>
+                    <div class="example-box">
+                        <strong>Raw Data</strong> → Familiarization (reading and re-reading) → 
+                        <strong>Coding</strong> (labeling meaningful units) → 
+                        <strong>Categories</strong> (grouping codes) → 
+                        <strong>Themes</strong> (identifying patterns) → 
+                        <strong>Interpretation</strong> (explaining meaning)
+                    </div>
+
+                    <h3>Key Principles:</h3>
+                    <ul>
+                        <li>✓ Choose techniques based on your research questions</li>
+                        <li>✓ Consider your data type (numeric, categorical, text)</li>
+                        <li>✓ Check statistical assumptions before analysis</li>
+                        <li>✓ Document your analysis procedures</li>
+                        <li>✗ Don't use sophisticated techniques just because they exist</li>
+                        <li>✗ Don't perform analysis blindly—understand what you're doing</li>
+                    </ul>
+
+                    <h3>📹 Video Tutorials:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>Descriptive Statistics</h4>
+                            <a href="https://youtu.be/p_iBfXpNZmw" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                        <div class="video-card">
+                            <h4>Inferential Statistics</h4>
+                            <a href="https://youtu.be/L9tKqZ9pFkw" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                        <div class="video-card">
+                            <h4>Qualitative Data Analysis</h4>
+                            <a href="https://youtu.be/OPZOomyTDu8" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "17. Present Results",
+                content: `
+                    <h2>Step 17: Present the Results</h2>
+                    <p>Display your findings clearly and effectively using tables, charts, and graphs with thorough explanations.</p>
+                    
+                    <h3>Data Visualization Methods:</h3>
+                    <ul>
+                        <li><strong>Tables:</strong> Organized numerical data and summaries</li>
+                        <li><strong>Bar Charts:</strong> Comparing values across categories</li>
+                        <li><strong>Line Graphs:</strong> Showing trends over time</li>
+                        <li><strong>Pie Charts:</strong> Showing proportions of a whole</li>
+                        <li><strong>Histograms:</strong> Showing distribution of continuous data</li>
+                        <li><strong>Scatter Plots:</strong> Showing relationships between variables</li>
+                        <li><strong>Thematic Diagrams:</strong> Visualizing qualitative themes</li>
+                    </ul>
+
+                    <h3>Best Practices for Presenting Results:</h3>
+                    <ul>
+                        <li>✓ Every table/figure must have a clear, descriptive title</li>
+                        <li>✓ Include axis labels and legends where needed</li>
+                        <li>✓ Explain the important findings in the text</li>
+                        <li>✓ Reference tables/figures in the text in order</li>
+                        <li>✓ Highlight key patterns and notable results</li>
+                        <li>✗ Don't just write "Table 4 shows the result"</li>
+                        <li>✗ Don't clutter with too many visuals</li>
+                    </ul>
+
+                    <h3>❌ Poor Result Presentation:</h3>
+                    <div class="danger-box">
+                        "Table 4 shows the frequency of AI tool usage."
+                    </div>
+
+                    <h3>✓ Good Result Presentation:</h3>
+                    <div class="success-box">
+                        "Table 4 shows that 75% of students (n=45) regularly use AI tools for academic purposes. 
+                        ChatGPT is the most commonly used tool (68%), followed by Grammarly (52%) and Google Bard (38%). 
+                        This high adoption rate indicates that AI tools have become an integral part of the academic 
+                        experience for this student population. Notably, 92% of users access these tools at least weekly."
+                    </div>
+
+                    <h3>📹 Video Resources:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>Creating Effective Tables & Charts</h4>
+                            <a href="https://youtu.be/dQw4w9WgXcQ" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "18. Discuss Findings",
+                content: `
+                    <h2>Step 18: Discuss the Findings</h2>
+                    <p>This is one of the most important sections—interpret what your results mean and connect them to existing research.</p>
+                    
+                    <h3>Discussion Flow Structure:</h3>
+                    <div class="example-box">
+                        <strong>Finding</strong> → Interpretation → Previous Research → 
+                        Agreement/Disagreement → Possible Explanation → Implication
+                    </div>
+
+                    <h3>Detailed Example Discussion:</h3>
+                    <div class="example-box">
+                        <strong>Finding:</strong> "The study found that perceived usefulness was the strongest predictor of AI tool adoption (r = 0.78, p < 0.001)."<br><br>
+                        
+                        <strong>Interpretation:</strong> "This strong positive relationship indicates that students' perception of academic benefits strongly influences their decision to use AI tools."<br><br>
+                        
+                        <strong>Connection to Literature:</strong> "This finding is consistent with the Technology Acceptance Model (Davis, 1989) and numerous subsequent studies identifying perceived usefulness as a critical factor in technology adoption."<br><br>
+                        
+                        <strong>Explanation:</strong> "The result suggests that students are pragmatic learners who adopt tools perceived as beneficial to their academic success. When students see clear academic advantages, barriers to adoption become less significant."<br><br>
+                        
+                        <strong>Implication:</strong> "Institutions should emphasize the academic benefits of AI tools in promotional materials and training to increase adoption rates."
+                    </div>
+
+                    <h3>Key Principles for Discussion:</h3>
+                    <ul>
+                        <li>✓ Maintain clear distinction between findings and interpretation</li>
+                        <li>✓ Connect findings to the literature and theory</li>
+                        <li>✓ Explain the "why" behind results</li>
+                        <li>✓ Address unexpected or contradictory findings</li>
+                        <li>✓ Consider alternative explanations</li>
+                        <li>✗ Don't just repeat the results section</li>
+                        <li>✗ Don't introduce major new evidence here</li>
+                    </ul>
+
+                    <h3>📹 Video Tutorials:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>Writing the Discussion Section</h4>
+                            <a href="https://youtu.be/V6S2CYV_Bvg" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "19. Write Conclusion",
+                content: `
+                    <h2>Step 19: Write the Conclusion</h2>
+                    <p>The conclusion summarizes your study and directly answers your research questions without introducing new evidence.</p>
+                    
+                    <h3>Conclusion Guidelines:</h3>
+                    <ul>
+                        <li>✓ Directly answer each research question</li>
+                        <li>✓ Summarize major findings concisely</li>
+                        <li>✓ Restate significance of the study</li>
+                        <li>✓ Maintain objectivity and accuracy</li>
+                        <li>✗ Don't introduce new evidence or data</li>
+                        <li>✗ Don't just repeat the abstract</li>
+                        <li>✗ Don't make unsupported claims</li>
+                    </ul>
+
+                    <h3>Recommended Conclusion Sequence:</h3>
+                    <div class="example-box">
+                        <strong>Major Finding 1</strong><br>
+                        ↓<br>
+                        <strong>Major Finding 2</strong><br>
+                        ↓<br>
+                        <strong>Major Finding 3</strong><br>
+                        ↓<br>
+                        <strong>Overall Conclusion (answering main question)</strong>
+                    </div>
+
+                    <h3>✓ Strong Conclusion Example:</h3>
+                    <div class="success-box">
+                        "This study examined factors influencing students' adoption of AI tools for academic learning at Kapilvastu Multiple Campus. Three key findings emerged: First, most undergraduate students (75%) use AI tools regularly, with ChatGPT being the most popular choice. Second, perceived usefulness is the strongest predictor of adoption, significantly more influential than perceived ease of use or social pressure. Third, digital literacy plays a moderating role, with higher digital literacy students more readily adopting AI tools. Collectively, these findings indicate that students adopt AI tools primarily when they perceive clear academic benefits, particularly if they have adequate digital competence. Understanding these adoption factors is crucial for educational institutions seeking to integrate AI tools effectively and responsibly into higher education. Future institutional policies should emphasize the pedagogical benefits of AI while also strengthening digital literacy training for all students."
+                    </div>
+
+                    <h3>📹 Video Resources:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>Writing Strong Conclusions</h4>
+                            <a href="https://youtu.be/8qxwZ_7iXpc" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "20. Recommendations",
+                content: `
+                    <h2>Step 20: Develop Recommendations</h2>
+                    <p>Make specific, actionable recommendations based directly on your findings to benefit stakeholders.</p>
+                    
+                    <h3>❌ Weak vs ✓ Strong Recommendations:</h3>
+                    <div class="danger-box">
+                        <strong>❌ Weak:</strong> "The college should improve education."<br>
+                        (Too vague, too general, not based on specific findings)
+                    </div>
+
+                    <div class="success-box">
+                        <strong>✓ Strong:</strong> "Based on findings that 68% of students use ChatGPT but 45% feel uncertain about ethical use, 
+                        the institution should develop and deliver short training modules (2-3 hours) on AI literacy, focusing on 
+                        source verification, ethical use, and academic integrity. These should be integrated into first-year orientation."<br>
+                        (Specific, actionable, based on findings)
+                    </div>
+
+                    <h3>Effective Recommendations Should Be:</h3>
+                    <ul>
+                        <li>✓ Based on actual findings from your research</li>
+                        <li>✓ Specific and detailed, not vague</li>
+                        <li>✓ Feasible to implement with realistic resources</li>
+                        <li>✓ Targeted to specific stakeholders</li>
+                        <li>✓ Prioritized by importance or urgency</li>
+                    </ul>
+
+                    <h3>Organize by Stakeholder Groups:</h3>
+                    <div class="example-box">
+                        <strong>For Students:</strong><br>
+                        • Participate in AI literacy training<br>
+                        • Use AI tools responsibly and ethically<br>
+                        • Seek support from faculty when uncertain<br><br>
+                        
+                        <strong>For Faculty:</strong><br>
+                        • Develop clear policies on AI tool use in assignments<br>
+                        • Provide guidance on ethical AI use<br>
+                        • Integrate AI literacy into curriculum<br><br>
+                        
+                        <strong>For Administration:</strong><br>
+                        • Develop institutional AI use policy<br>
+                        • Invest in faculty development programs<br>
+                        • Provide necessary technological infrastructure<br><br>
+                        
+                        <strong>For Future Research:</strong><br>
+                        • Longitudinal studies tracking AI adoption over time<br>
+                        • Research on long-term learning outcomes with AI tools<br>
+                        • Comparative studies across different cultural contexts
+                    </div>
+
+                    <h3>📹 Video Tutorials:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>Making Research-Based Recommendations</h4>
+                            <a href="https://youtu.be/p_iBfXpNZmw" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "21. Study Limitations",
+                content: `
+                    <h2>Step 21: Identify Study Limitations</h2>
+                    <p>Clearly state limitations to increase transparency and demonstrate scholarly integrity.</p>
+                    
+                    <h3>⚠️ Important Perspective:</h3>
+                    <div class="success-box">
+                        <strong>Limitations increase transparency and credibility—they do not invalidate your study!</strong><br><br>
+                        Every study has limitations. Identifying them shows critical thinking and scholarly integrity. 
+                        Readers appreciate honesty about constraints because it helps them correctly interpret and apply your findings.
+                    </div>
+
+                    <h3>Common Study Limitations:</h3>
+                    <ul>
+                        <li><strong>Sample:</strong> Small sample size, single institution only, non-random sampling</li>
+                        <li><strong>Design:</strong> Cross-sectional (snapshot only), unable to establish causation</li>
+                        <li><strong>Data:</strong> Self-reported data (social desirability bias), missing data</li>
+                        <li><strong>Geography:</strong> Limited to one region or country</li>
+                        <li><strong>Time:</strong> Study conducted at one point in time, time constraints</li>
+                        <li><strong>Population:</strong> Limited to certain groups (undergraduate only, specific gender)</li>
+                        <li><strong>Instrument:</strong> Measurement limitations, potential reliability issues</li>
+                        <li><strong>Context:</strong> Specific to one cultural or institutional context</li>
+                    </ul>
+
+                    <h3>✓ Strong Limitations Section Example:</h3>
+                    <div class="example-box">
+                        "This study was conducted at a single institution with 60 undergraduate participants, which may limit generalizability to other contexts, institutions, or graduate students. The cross-sectional design provides a snapshot at one point in time and prevents drawing definitive causal conclusions about factors influencing adoption. Data were self-reported, which may introduce social desirability bias if students overstate their positive attitudes toward AI tools or understate concerns. The study was limited to English-language speakers and may not reflect experiences of non-English proficient students. Additionally, the rapid evolution of AI technology means findings may become outdated quickly. Finally, institutional and cultural contexts in Nepal may differ significantly from other educational settings, affecting the applicability of findings elsewhere."
+                    </div>
+
+                    <h3>📹 Video Resources:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>Addressing Study Limitations</h4>
+                            <a href="https://youtu.be/L9tKqZ9pFkw" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "22. Write References",
+                content: `
+                    <h2>Step 22: Write References</h2>
+                    <p>Cite all sources accurately using the required citation style with consistency throughout.</p>
+                    
+                    <h3>Common Citation Styles:</h3>
+                    <div class="example-box">
+                        <strong>APA 7th Edition</strong> - Common in social sciences, education, psychology<br><br>
+                        <strong>MLA</strong> - Literature, humanities, English<br><br>
+                        <strong>Chicago</strong> - History, some social sciences<br><br>
+                        <strong>Harvard</strong> - Used in UK and Australian universities
+                    </div>
+
+                    <h3>APA 7th Edition Examples:</h3>
+                    <div class="example-box">
+                        <strong>Book:</strong><br>
+                        Author, A. A. (Year). Title of work. Publisher.<br>
+                        Davis, F. D. (1989). Perceived usefulness, perceived ease of use, and user acceptance of information technology. MIS Quarterly, 13(3), 319-339.<br><br>
+                        
+                        <strong>Journal Article:</strong><br>
+                        Author, A. A., & Author, B. B. (Year). Title of article. Journal Title, volume(issue), page range.<br>
+                        Venkatesh, V., Morris, M. G., Davis, G. B., & Davis, F. D. (2003). User acceptance of information technology: Toward a unified view. MIS Quarterly, 27(3), 425-478.<br><br>
+                        
+                        <strong>Website/Online Source:</strong><br>
+                        Author, A. A. (Year). Title. Retrieved from http://www.example.com
+                    </div>
+
+                    <h3>Reference Management Tools:</h3>
+                    <div class="btn-group">
+                        <a href="https://www.zotero.org" target="_blank" class="btn btn-primary">Zotero (Free)</a>
+                        <a href="https://www.mendeley.com" target="_blank" class="btn btn-primary">Mendeley</a>
+                        <a href="https://www.citationmachine.net" target="_blank" class="btn btn-primary">Citation Machine</a>
+                        <a href="https://www.easybib.com" target="_blank" class="btn btn-primary">EasyBib</a>
+                    </div>
+
+                    <h3>Citation Checklist:</h3>
+                    <ul>
+                        <li>✓ All in-text citations match the reference list</li>
+                        <li>✓ Consistent formatting throughout</li>
+                        <li>✓ Reference list is alphabetized by author</li>
+                        <li>✓ Each entry has hanging indent</li>
+                        <li>✓ All URLs and DOIs are complete and correct</li>
+                        <li>✓ Only sources you actually cited are included</li>
+                        <li>✗ Don't miss any citations (plagiarism risk)</li>
+                        <li>✗ Don't include sources you didn't read</li>
+                    </ul>
+
+                    <h3>📹 Video Tutorials:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>APA Citation Format</h4>
+                            <a href="https://youtu.be/dQw4w9WgXcQ" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                        <div class="video-card">
+                            <h4>Using Reference Management Tools</h4>
+                            <a href="https://youtu.be/gVd8t-nMlrE" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "23. Add Appendices",
+                content: `
+                    <h2>Step 23: Add Appendices</h2>
+                    <p>Include supplementary materials that support but are not essential to the main text.</p>
+                    
+                    <h3>What Belongs in Appendices:</h3>
+                    <ul>
+                        <li><strong>Research Questionnaire:</strong> Complete survey instrument used for data collection</li>
+                        <li><strong>Interview Guide:</strong> List of interview questions and protocols</li>
+                        <li><strong>Informed Consent Form:</strong> Document participants signed</li>
+                        <li><strong>Permission Letters:</strong> Authorization from institutions to conduct research</li>
+                        <li><strong>Raw Data Sample:</strong> Examples of collected data (anonymized)</li>
+                        <li><strong>Statistical Output:</strong> Detailed statistical tables and test results</li>
+                        <li><strong>Maps and Photographs:</strong> Visual materials related to study</li>
+                        <li><strong>Additional Tables/Figures:</strong> Supporting data visualizations</li>
+                        <li><strong>Interview Transcripts:</strong> Sample transcripts (anonymized)</li>
+                        <li><strong>Coding Schemes:</strong> How qualitative data was categorized</li>
+                        <li><strong>Ethical Approval Letter:</strong> From ethics committee</li>
+                    </ul>
+
+                    <h3>Appendix Organization Format:</h3>
+                    <div class="example-box">
+                        <strong>Appendix A: Research Questionnaire</strong><br>
+                        [Complete questionnaire with instructions]<br><br>
+                        
+                        <strong>Appendix B: Interview Guide</strong><br>
+                        [Interview questions and protocols]<br><br>
+                        
+                        <strong>Appendix C: Informed Consent Form</strong><br>
+                        [Consent form participants signed]<br><br>
+                        
+                        <strong>Appendix D: Ethical Approval Letter</strong><br>
+                        [Letter from ethics committee]<br><br>
+                        
+                        <strong>Appendix E: Additional Statistical Tables</strong><br>
+                        [Detailed analysis output]
+                    </div>
+
+                    <h3>Appendix Best Practices:</h3>
+                    <ul>
+                        <li>✓ Reference each appendix in the main text</li>
+                        <li>✓ Use clear, consistent labels (Appendix A, B, C...)</li>
+                        <li>✓ Provide descriptive titles for each appendix</li>
+                        <li>✓ Organize logically (in order of reference in text)</li>
+                        <li>✓ Include page numbers</li>
+                        <li>✓ List all appendices in Table of Contents</li>
+                        <li>✓ Ensure anonymity of participants</li>
+                        <li>✗ Don't include excessive materials</li>
+                    </ul>
+
+                    <h3>Table of Contents Entry Example:</h3>
+                    <div class="example-box">
+                        Appendix A: Research Questionnaire............................ 89<br>
+                        Appendix B: Interview Guide.................................... 92<br>
+                        Appendix C: Informed Consent Form.............................. 95<br>
+                        Appendix D: Ethical Approval Letter............................. 97
+                    </div>
+
+                    <h3>📹 Video Resources:</h3>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h4>Organizing Appendices</h4>
+                            <a href="https://youtu.be/V6S2CYV_Bvg" target="_blank">▶ Watch Tutorial</a>
+                        </div>
+                    </div>
+
+                    <h3>🎉 Final Step Complete!</h3>
+                    <div class="success-box">
+                        <strong>Congratulations!</strong> You've now learned all 23 steps to writing a complete academic project. 
+                        The next step is to apply this knowledge to your own research. Start with your topic, work through each 
+                        step systematically, and don't hesitate to refer back to these resources when needed. Good luck with your project!
+                    </div>
+                `
+            }
+        ];
+
+        let completedSteps = [];
+
+        function initializeApp() {
+            renderStepsList();
+            if (steps.length > 0) {
+                showStep(0);
+            }
+            loadProgress();
+        }
+
+        function renderStepsList() {
+            const stepsList = document.getElementById('stepsList');
+            stepsList.innerHTML = '';
+            
+            steps.forEach((step, index) => {
+                const stepItem = document.createElement('div');
+                stepItem.className = 'step-item';
+                if (index === 0) stepItem.classList.add('active');
+                if (completedSteps.includes(index)) stepItem.classList.add('completed');
+                
+                stepItem.textContent = step.title;
+                stepItem.onclick = () => showStep(index);
+                stepsList.appendChild(stepItem);
+            });
+        }
+
+        function showStep(index) {
+            document.querySelectorAll('.step-item').forEach((item, i) => {
+                item.classList.toggle('active', i === index);
+            });
+
+            const contentArea = document.getElementById('contentArea');
+            contentArea.innerHTML = steps[index].content;
+            contentArea.scrollTop = 0;
+
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progress = (completedSteps.length / steps.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = 
+                `Progress: ${completedSteps.length}/${steps.length} Steps Completed`;
+        }
+
+        function saveProgress() {
+            localStorage.setItem('completedSteps', JSON.stringify(completedSteps));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('completedSteps');
+            if (saved) {
+                completedSteps = JSON.parse(saved);
+                renderStepsList();
+                updateProgress();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>
