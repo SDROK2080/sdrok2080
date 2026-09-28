@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Mastery Course - Learning Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .navbar {
+            display: flex;
+            gap: 0;
+            background: #f8f9fa;
+            border-bottom: 2px solid #667eea;
+            overflow-x: auto;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+
+        .nav-btn:hover {
+            background: #e9ecef;
+            color: #667eea;
+        }
+
+        .nav-btn.active {
+            background: white;
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .content {
+            padding: 30px;
+            display: none;
+        }
+
+        .content.active {
+            display: block;
+        }
+
+        .module {
+            margin-bottom: 25px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .module-header {
+            padding: 20px;
+            background: #f0f1ff;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            transition: all 0.3s ease;
+        }
+
+        .module-header:hover {
+            background: #e8eaff;
+        }
+
+        .module-header h3 {
+            font-size: 1.3em;
+            color: #667eea;
+        }
+
+        .toggle-icon {
+            font-size: 1.5em;
+            color: #667eea;
+            transition: transform 0.3s ease;
+        }
+
+        .module.expanded .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .module-content {
+            padding: 20px;
+            display: none;
+        }
+
+        .module.expanded .module-content {
+            display: block;
+        }
+
+        .topic {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 3px solid #764ba2;
+        }
+
+        .topic h4 {
+            color: #764ba2;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .resource-list {
+            list-style: none;
+            margin: 10px 0;
+        }
+
+        .resource-item {
+            padding: 10px;
+            margin: 8px 0;
+            background: #f0f1ff;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .resource-item a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            flex: 1;
+            word-break: break-word;
+        }
+
+        .resource-item a:hover {
+            text-decoration: underline;
+            color: #764ba2;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .badge-video {
+            background: #ffe8e8;
+            color: #e74c3c;
+        }
+
+        .badge-pdf {
+            background: #e8f4ff;
+            color: #3498db;
+        }
+
+        .badge-project {
+            background: #e8ffe8;
+            color: #27ae60;
+        }
+
+        .project-card {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .project-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .project-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .learning-path {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .week-item {
+            padding: 15px;
+            background: white;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .week-item h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .week-item ul {
+            margin-left: 20px;
+            color: #666;
+        }
+
+        .week-item li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .reference-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .reference-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .reference-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .reference-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .reference-card h4 {
+            color: #764ba2;
+            margin-bottom: 10px;
+        }
+
+        .reference-card p {
+            font-size: 0.95em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .btn-resource {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-resource:hover {
+            background: #764ba2;
+            transform: translateX(3px);
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .navbar {
+                flex-wrap: wrap;
+            }
+
+            .nav-btn {
+                flex: 1 1 48%;
+                min-width: 120px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .reference-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 AI Mastery Course</h1>
+            <p>Advanced AI Agents, RAG, LangChain & LLM Optimization</p><br>
+        </header>
+
+        <div class="navbar">
+            <button class="nav-btn active" onclick="switchTab('overview')">Overview</button>
+            <button class="nav-btn" onclick="switchTab('syllabus')">Syllabus</button>
+            <button class="nav-btn" onclick="switchTab('projects')">Projects</button>
+            <button class="nav-btn" onclick="switchTab('resources')">Resources</button>
+        </div>
+
+        <!-- OVERVIEW TAB -->
+        <div id="overview" class="content active">
+            <h2 style="color: #667eea; margin-bottom: 20px;">Course Overview</h2>
+            
+            <div class="learning-path">
+                <h3>Why Take This Course?</h3>
+                <p style="margin: 15px 0; line-height: 1.8;">
+                    ✅ Industry-relevant skills to boost your AI career<br>
+                    ✅ Hands-on projects and real-world applications<br>
+                    ✅ Certification upon completion<br>
+                    ✅ Access to mentorship & learning community
+                </p>
+            </div>
+
+            <div class="learning-path">
+                <h3>Who Should Take This Course?</h3>
+                <p style="margin: 15px 0; line-height: 1.8;">
+                    ✅ <strong>Aspiring AI developers</strong> looking to build GenAI applications<br>
+                    ✅ <strong>Software engineers</strong> wanting to expand into AI/ML<br>
+                    ✅ <strong>Students & researchers</strong> exploring AI-powered solutions<br>
+                    ✅ <strong>Product managers & startup founders</strong> interested in AI-driven innovation
+                </p>
+            </div>
+
+            <div class="learning-path">
+                <h3>Course Progress</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%;"></div>
+                </div>
+                <p style="color: #666; margin-top: 10px;">Start your journey today!</p>
+            </div>
+
+            <div style="background: #e8f4ff; padding: 20px; border-radius: 10px; margin-top: 20px;">
+                <h3 style="color: #667eea; margin-bottom: 15px;">Quick Stats</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 2em; color: #667eea; font-weight: bold;">6 Weeks</div>
+                        <div style="color: #666;">Course Duration</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2em; color: #667eea; font-weight: bold;">50+</div>
+                        <div style="color: #666;">Video Tutorials</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2em; color: #667eea; font-weight: bold;">6</div>
+                        <div style="color: #666;">Hands-On Projects</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2em; color: #667eea; font-weight: bold;">30+</div>
+                        <div style="color: #666;">PDF Resources</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SYLLABUS TAB -->
+        <div id="syllabus" class="content">
+            <h2 style="color: #667eea; margin-bottom: 20px;">Course Syllabus</h2>
+            
+            <div class="module">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <h3>Week 1: Advanced AI Agents</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="module-content">
+                    <ul class="resource-list">
+                        <li class="resource-item">
+                            <span>📌 Multi-step agent workflows</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Tool and function calling</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Planning and reasoning patterns</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Memory strategies</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Error handling and recovery</span>
+                        </li>
+                    </ul>
+                    <div class="topic" style="margin-top: 15px;">
+                        <h4>📺 Video Tutorials</h4>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <a href="https://www.youtube.com/results?search_query=AI+agents+tutorial" target="_blank">AI Agents Fundamentals</a>
+                                <span class="badge badge-video">Video</span>
+                            </li>
+                            <li class="resource-item">
+                                <a href="https://www.youtube.com/results?search_query=agentic+workflows" target="_blank">Agentic Workflows</a>
+                                <span class="badge badge-video">Video</span>
+                            </li>
+                            <li class="resource-item">
+                                <a href="https://www.youtube.com/results?search_query=tool+calling+LLM" target="_blank">Tool Calling Patterns</a>
+                                <span class="badge badge-video">Video</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <h3>Week 2: Advanced RAG Architecture</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="module-content">
+                    <ul class="resource-list">
+                        <li class="resource-item">
+                            <span>📌 Chunking strategies</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Embedding selection</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Vector database design</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Hybrid and semantic search</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Query rewriting and context compression</span>
+                        </li>
+                    </ul>
+                    <div class="topic" style="margin-top: 15px;">
+                        <h4>📺 Video Tutorials</h4>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <a href="https://www.youtube.com/results?search_query=RAG+retrieval+augmented+generation" target="_blank">RAG Systems Explained</a>
+                                <span class="badge badge-video">Video</span>
+                            </li>
+                            <li class="resource-item">
+                                <a href="https://www.youtube.com/results?search_query=vector+embeddings+search" target="_blank">Vector Embeddings & Search</a>
+                                <span class="badge badge-video">Video</span>
+                            </li>
+                            <li class="resource-item">
+                                <a href="https://www.youtube.com/results?search_query=vector+database+pinecone+weaviate" target="_blank">Vector Databases</a>
+                                <span class="badge badge-video">Video</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <h3>Week 3: RAG Evaluation and Optimization</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="module-content">
+                    <ul class="resource-list">
+                        <li class="resource-item">
+                            <span>📌 Hallucination detection</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Retrieval evaluation strategies</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Latency vs accuracy trade-offs</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Prompt tuning vs retrieval tuning</span>
+                        </li>
+                    </ul>
+                    <div class="topic" style="margin-top: 15px;">
+                        <h4>📺 Video Tutorials</h4>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <a href="https://www.youtube.com/results?search_query=RAG+evaluation+metrics" target="_blank">RAG Evaluation Metrics</a>
+                                <span class="badge badge-video">Video</span>
+                            </li>
+                            <li class="resource-item">
+                                <a href="https://www.youtube.com/results?search_query=hallucination+detection+LLM" target="_blank">Detecting Hallucinations</a>
+                                <span class="badge badge-video">Video</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <h3>Week 4: Fine-Tuning LLMs</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="module-content">
+                    <ul class="resource-list">
+                        <li class="resource-item">
+                            <span>📌 When fine-tuning is appropriate</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Dataset preparation</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Instruction vs task fine-tuning</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Cost, maintenance, and trade-offs</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Fine-tuning vs RAG vs prompting</span>
+                        </li>
+                    </ul>
+                    <div class="topic" style="margin-top: 15px;">
+                        <h4>📺 Video Tutorials</h4>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <a href="https://www.youtube.com/results?search_query=LLM+fine+tuning+tutorial" target="_blank">Fine-Tuning Fundamentals</a>
+                                <span class="badge badge-video">Video</span>
+                            </li>
+                            <li class="resource-item">
+                                <a href="https://www.youtube.com/results?search_query=lora+adapters+fine+tuning" target="_blank">LoRA and Adapters</a>
+                                <span class="badge badge-video">Video</span>
+                            </li>
+                            <li class="resource-item">
+                                <a href="https://www.youtube.com/results?search_query=dataset+preparation+LLM" target="_blank">Dataset Preparation</a>
+                                <span class="badge badge-video">Video</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <h3>Week 5: Production and Deployment</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="module-content">
+                    <ul class="resource-list">
+                        <li class="resource-item">
+                            <span>📌 Cost optimization</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Security and data privacy</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Rate limits and scaling</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Monitoring and logging</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Prompt and model versioning</span>
+                        </li>
+                    </ul>
+                    <div class="topic" style="margin-top: 15px;">
+                        <h4>📺 Video Tutorials</h4>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <a href="https://www.youtube.com/results?search_query=deploying+LLM+applications" target="_blank">Deploying LLM Apps</a>
+                                <span class="badge badge-video">Video</span>
+                            </li>
+                            <li class="resource-item">
+                                <a href="https://www.youtube.com/results?search_query=monitoring+logging+AI+systems" target="_blank">Monitoring & Logging</a>
+                                <span class="badge badge-video">Video</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <h3>Week 6: Capstone Project</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="module-content">
+                    <ul class="resource-list">
+                        <li class="resource-item">
+                            <span>📌 Design and implementation</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Testing and optimization</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Final presentation and demo</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Building a simple chatbot using static documents</span>
+                        </li>
+                        <li class="resource-item">
+                            <span>📌 Limitations of basic RAG systems</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROJECTS TAB -->
+        <div id="projects" class="content">
+            <h2 style="color: #667eea; margin-bottom: 20px;">Hands-On Projects</h2>
+            
+            <div class="project-card">
+                <h3>🤖 Project 1: Build a ChatGPT-Powered AI Assistant</h3>
+                <p>Create an intelligent conversational assistant using OpenAI APIs with multi-turn conversation support, context management, and natural language understanding.</p>
+                <div style="margin: 15px 0;">
+                    <span class="badge badge-project">Advanced AI Agents</span>
+                </div>
+                <a href="https://www.youtube.com/results?search_query=chatgpt+api+tutorial+python" target="_blank" class="btn-resource">📺 Video Tutorials</a>
+                <a href="#" class="btn-resource" style="margin-left: 10px;">📄 Project Guide (PDF)</a>
+            </div>
+
+            <div class="project-card">
+                <h3>📚 Project 2: Develop a RAG-Based Knowledge Retrieval System</h3>
+                <p>Build a complete RAG system that retrieves and augments responses with relevant documents. Implement chunking strategies, embedding selection, and vector search optimization.</p>
+                <div style="margin: 15px 0;">
+                    <span class="badge badge-project">RAG Architecture</span>
+                </div>
+                <a href="https://www.youtube.com/results?search_query=langchain+rag+retrieval+tutorial" target="_blank" class="btn-resource">📺 Video Tutorials</a>
+                <a href="#" class="btn-resource" style="margin-left: 10px;">📄 Project Guide (PDF)</a>
+            </div>
+
+            <div class="project-card">
+                <h3>🔗 Project 3: Create a LangChain-Powered AI Application</h3>
+                <p>Leverage LangChain framework to build a sophisticated AI application with chaining, memory management, and multiple integrations with various tools and APIs.</p>
+                <div style="margin: 15px 0;">
+                    <span class="badge badge-project">LangChain Integration</span>
+                </div>
+                <a href="https://www.youtube.com/results?search_query=langchain+tutorial+beginner" target="_blank" class="btn-resource">📺 Video Tutorials</a>
+                <a href="https://python.langchain.com/docs" target="_blank" class="btn-resource" style="margin-left: 10px;">📄 LangChain Docs</a>
+            </div>
+
+            <div class="project-card">
+                <h3>⚙️ Project 4: Optimize and Evaluate a Generative AI Model</h3>
+                <p>Implement evaluation metrics for RAG systems, detect hallucinations, optimize latency-accuracy trade-offs, and fine-tune models for your specific use case.</p>
+                <div style="margin: 15px 0;">
+                    <span class="badge badge-project">Optimization & Evaluation</span>
+                </div>
+                <a href="https://www.youtube.com/results?search_query=LLM+evaluation+metrics+tutorial" target="_blank" class="btn-resource">📺 Video Tutorials</a>
+            </div>
+
+            <div class="project-card">
+                <h3>🚀 Project 5: Deploy AI Application to Production</h3>
+                <p>Take your AI application live with proper security, monitoring, rate limiting, cost optimization, and versioning strategies. Learn deployment best practices.</p>
+                <div style="margin: 15px 0;">
+                    <span class="badge badge-project">Production Deployment</span>
+                </div>
+                <a href="https://www.youtube.com/results?search_query=deploying+python+app+docker+kubernetes" target="_blank" class="btn-resource">📺 Video Tutorials</a>
+            </div>
+
+            <div class="project-card" style="border-color: #27ae60; border-width: 3px;">
+                <h3>🏆 Project 6: Capstone - Practical AI Assistant (Final Project)</h3>
+                <p><strong>Theme:</strong> Build one of the following AI applications:</p>
+                <ul style="margin: 15px 0; margin-left: 20px; color: #666;">
+                    <li>FAQ or customer support chatbot</li>
+                    <li>Resume or content generation assistant</li>
+                    <li>Simple document question-answering bot</li>
+                    <li>No-code or hybrid AI assistant for a real-world task</li>
+                </ul>
+                <p style="color: #27ae60; font-weight: bold; margin-top: 15px;">✅ Final deliverables: Design, implementation, testing, optimization, presentation & demo</p>
+                <a href="https://www.youtube.com/results?search_query=capstone+project+ideas+AI" target="_blank" class="btn-resource">📺 Inspiration Videos</a>
+            </div>
+        </div>
+
+        <!-- RESOURCES TAB -->
+        <div id="resources" class="content">
+            <h2 style="color: #667eea; margin-bottom: 20px;">Learning Resources</h2>
+            
+            <div class="reference-section">
+                <h3>📚 Recommended PDF Resources</h3>
+                <div class="reference-grid">
+                    <div class="reference-card">
+                        <h4>RAG Systems</h4>
+                        <p>Complete guide to Retrieval-Augmented Generation systems, architecture design, and optimization techniques.</p>
+                        <a href="https://arxiv.org/pdf/2005.11401.pdf" target="_blank" class="btn-resource">📄 Read PDF</a>
+                    </div>
+                    <div class="reference-card">
+                        <h4>LLM Fine-Tuning Guide</h4>
+                        <p>Best practices for fine-tuning large language models with practical examples and cost analysis.</p>
+                        <a href="#" class="btn-resource">📄 Download PDF</a>
+                    </div>
+                    <div class="reference-card">
+                        <h4>Prompt Engineering</h4>
+                        <p>Techniques for effective prompt design, few-shot learning, and chain-of-thought reasoning.</p>
+                        <a href="https://arxiv.org/pdf/2312.16171.pdf" target="_blank" class="btn-resource">📄 Read PDF</a>
+                    </div>
+                    <div class="reference-card">
+                        <h4>AI Agents & Tools</h4>
+                        <p>Comprehensive guide to building autonomous AI agents with tool use and planning strategies.</p>
+                        <a href="#" class="btn-resource">📄 Download PDF</a>
+                    </div>
+                    <div class="reference-card">
+                        <h4>Production Deployment</h4>
+                        <p>Checklist and best practices for deploying AI systems with monitoring and security.</p>
+                        <a href="#" class="btn-resource">📄 Download PDF</a>
+                    </div>
+                    <div class="reference-card">
+                        <h4>Evaluation Metrics</h4>
+                        <p>Methods for evaluating RAG systems, LLM outputs, and detecting hallucinations.</p>
+                        <a href="#" class="btn-resource">📄 Download PDF</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reference-section">
+                <h3>🎥 Popular YouTube Channels</h3>
+                <div class="reference-grid">
+                    <div class="reference-card">
+                        <h4>Hugging Face</h4>
+                        <p>Official tutorials on transformers, NLP, and model fine-tuning</p>
+                        <a href="https://www.youtube.com/@huggingface" target="_blank" class="btn-resource">Visit Channel</a>
+                    </div>
+                    <div class="reference-card">
+                        <h4>DeepLearning.AI</h4>
+                        <p>Short courses on LangChain, prompt engineering, and RAG systems</p>
+                        <a href="https://www.youtube.com/@deeplearningai" target="_blank" class="btn-resource">Visit Channel</a>
+                    </div>
+                    <div class="reference-card">
+                        <h4>Andrej Karpathy</h4>
+                        <p>In-depth explanations of neural networks and LLM fundamentals</p>
+                        <a href="https://www.youtube.com/@andreykarpathy" target="_blank" class="btn-resource">Visit Channel</a>
+                    </div>
+                    <div class="reference-card">
+                        <h4>Jeremy Howard - Fast.ai</h4>
+                        <p>Practical deep learning courses and code-first approach to AI</p>
+                        <a href="https://www.youtube.com/@howardjeremyp" target="_blank" class="btn-resource">Visit Channel</a>
+                    </div>
+                    <div class="reference-card">
+                        <h4>Code Parrot</h4>
+                        <p>Machine learning, Python, and data science tutorials</p>
+                        <a href="https://www.youtube.com/@codeparrot" target="_blank" class="btn-resource">Visit Channel</a>
+                    </div>
+                    <div class="reference-card">
+                        <h4>Full Stack Deep Learning</h4>
+                        <p>End-to-end ML/AI systems and production practices</p>
+                        <a href="https://www.youtube.com/@fullstackdeeplearning" target="_blank" class="btn-resource">Visit Channel</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reference-section">
+                <h3>🔗 Documentation & Tools</h3>
+                <div class="reference-grid">
+                    <div class="reference-card">
+                        <h4>LangChain Documentation</h4>
+                        <p>Official docs for building AI applications with LangChain framework</p>
+                        <a href="https://python.langchain.com/docs" target="_blank" class="btn-resource">Visit Docs</a>
+                    </div>
+                    <div class="reference-card">
+                        <h4>OpenAI API Reference</h4>
+                        <p>Complete API documentation for GPT models and embeddings</p>
+                        <a href="https://platform.openai.com/docs" target="_blank" class="btn-resource">Visit Docs</a>
+                    </div>
+                    <div class="reference-card">
+                        <h4>Pinecone Vector DB</h4>
+                        <p>Vector database platform for similarity search and RAG systems</p>
+                        <a href="https://docs.pinecone.io" target="_blank" class="btn-resource">Visit Docs</a>
+                    </div>
+                    <div class="reference-card">
+                        <h4>ChromaDB</h4>
+                        <p>Lightweight vector database for AI applications</p>
+                        <a href="https://docs.trychroma.com" target="_blank" class="btn-resource">Visit Docs</a>
+                    </div>
+                    <div class="reference-card">
+                        <h4>Hugging Face Hub</h4>
+                        <p>Repository of pre-trained models and datasets</p>
+                        <a href="https://huggingface.co" target="_blank" class="btn-resource">Visit Hub</a>
+                    </div>
+                    <div class="reference-card">
+                        <h4>GitHub - Awesome AI</h4>
+                        <p>Curated list of awesome AI projects and resources</p>
+                        <a href="https://github.com/topics/generative-ai" target="_blank" class="btn-resource">Explore</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // Hide all content
+            document.querySelectorAll('.content').forEach(el => {
+                el.classList.remove('active');
+            });
+            // Deactivate all buttons
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('active');
+            });
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            // Activate button
+            event.target.classList.add('active');
+        }
+
+        function toggleModule(header) {
+            const module = header.parentElement;
+            module.classList.toggle('expanded');
+        }
+
+        // Auto-expand modules on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstModule = document.querySelector('.module');
+            if (firstModule) {
+                firstModule.classList.add('expanded');
+            }
+        });
+    </script>
+</body>
+</html>
