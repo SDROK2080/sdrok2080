@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Generative AI Engineer 2026 – Teaching & Learning App</title>
+<style>
+:root{--bg:#0f1117;--card:#1a1d27;--tx:#e8e6df;--mu:#9a9788;--ac:#f5a623;--ok:#3ecf8e;--bd:#2c3040;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme="light"]{--bg:#faf7f0;--card:#fff;--tx:#1e1e1e;--mu:#6b675c;--bd:#e3ddcd;--ac:#c77800}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,sans-serif}
+header{padding:18px 14px;text-align:center;border-bottom:2px solid var(--ac)}
+h1{margin:0;font-size:1.35rem;color:var(--ac)}header p{margin:4px 0;color:var(--mu);font-size:.85rem}
+.bar{display:flex;gap:8px;flex-wrap:wrap;padding:10px 14px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5}
+input,select,button{background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:8px;padding:8px 10px;font:inherit}
+input{flex:1;min-width:140px}button{cursor:pointer}
+.prog{height:8px;background:var(--bd);margin:0 14px;border-radius:5px;overflow:hidden}.prog i{display:block;height:100%;background:var(--ok);width:0;transition:.3s}
+.stat{margin:4px 14px 8px;font-size:.8rem;color:var(--mu)}
+main{padding:0 14px 20px;max-width:900px;margin:auto}
+h2{font-size:.95rem;color:var(--ac);margin:18px 0 6px}
+.m{background:var(--card);border:1px solid var(--bd);border-radius:10px;margin:8px 0;padding:10px 12px}
+.m.done{border-color:var(--ok)}.top{display:flex;gap:8px;align-items:flex-start}
+.top b{flex:1;cursor:pointer}.top input{flex:none;min-width:0;width:20px;height:20px}
+.d{display:none;margin-top:8px;color:var(--mu);font-size:.88rem}.m.open .d{display:block}
+.d a{display:inline-block;margin:6px 6px 0 0;padding:5px 10px;border-radius:6px;background:var(--bd);color:var(--tx);text-decoration:none;font-size:.82rem}
+.d a:hover{background:var(--ac);color:#000}
+footer{text-align:center;padding:16px;font-size:.78rem;color:var(--mu);border-top:1px solid var(--bd)}
+</style></head><body>
+<header><h1>🤖 Generative AI Engineer – Course 2026</h1>
+<p>Professional / Advanced · 6–12 months · Python · Theory + Lab + Projects + Research</p>
+<p>LLMs → RAG → Fine-tuning → Agents → MCP/A2A → Evaluation → Security → LLMOps → Deployment</p></header>
+<div class="bar"><input id="q" placeholder="Search modules or topics…">
+<select id="f"><option value="">All parts</option></select>
+<button id="t">🌓</button><button id="r">Reset</button></div>
+<div class="prog"><i id="pb"></i></div><div class="stat" id="st"></div>
+<main id="app"></main>
+<footer>Prepared By: <b>Mr. Bishnu Singh Rayamajhi</b><br>Math Lecturer &amp; Department Head, Humanities and Social Sciences (KMC-HSSD)<br>Kapilvastu Multiple Campus, Taulihawa · Tribhuvan University · UCDL Academy · SDROK<br>
+Links open free YouTube searches and free PDF/book searches for each module.</footer>
+<script>
+const P=["I · AI & Programming Foundations","II · Machine Learning & Deep Learning","III · Generative AI & LLMs","IV · Prompt & Context Engineering","V · LLM Application Engineering","VI · Embeddings, Vector DB & RAG","VII · Model Adaptation","VIII · Multimodal Generative AI","IX · AI Agents","X · Evaluation & Reliability","XI · Security, Safety & Governance","XII · LLMOps & Production","XIII · AI Automation & Applications","XIV · Research & Career","XV · Capstone"];
+// [part, title, topics, search query]
+const M=[
+[0,"AI Foundations","Evolution of AI; AI vs ML vs DL vs GenAI; agents; knowledge representation; search; ethics; responsible AI","artificial intelligence foundations"],
+[0,"Mathematics for AI","Vectors, matrices, linear algebra, probability, Bayes' theorem, derivatives, gradients, gradient descent, loss functions","mathematics for machine learning"],
+[0,"Python for AI Engineering","Python basics, OOP, exceptions, files, NumPy, Pandas, Matplotlib, Colab, Git/GitHub","python for AI NumPy Pandas"],
+[1,"Machine Learning","Supervised/unsupervised/RL, regression, classification, clustering, cross-validation, scikit-learn, pipelines","machine learning scikit-learn"],
+[1,"Deep Learning","Perceptron, activations, backpropagation, optimizers, CNN, RNN, LSTM, GRU, autoencoders, PyTorch, TensorFlow","deep learning PyTorch"],
+[1,"Natural Language Processing","Tokenization, stemming, TF-IDF, embeddings, NER, sentiment analysis, NLP pipelines","natural language processing"],
+[2,"Generative AI Foundations","Foundation models, LLMs, image/audio/video generation, hallucination, context windows, AI safety","generative AI foundations"],
+[2,"Transformer Architecture","Attention, self-attention, Q/K/V, multi-head, positional encoding, BERT, GPT, implementation","transformer attention explained"],
+[2,"Large Language Models","Pre-training, instruction tuning, SFT, RLHF, reasoning models, SLMs, open vs closed, local LLMs","large language models LLM"],
+[3,"Prompt Engineering","Zero/few-shot, role and system prompts, templates, JSON output, chaining, optimization, prompt security","prompt engineering"],
+[3,"Context Engineering","Context selection/compression, short and long-term memory, tool context, isolation, security","context engineering LLM"],
+[4,"LLM APIs & Model Integration","API keys, providers, Ollama, Hugging Face, routing, streaming, function calling, rate limits, cost","LLM API function calling Ollama"],
+[4,"Structured Generation","JSON schema, Pydantic, validation, function schemas, reliable extraction, typed AI apps","structured outputs Pydantic LLM"],
+[5,"Embeddings & Semantic Search","Text/image embeddings, cosine similarity, ANN search, hybrid search, multilingual embeddings","embeddings semantic search"],
+[5,"Vector Databases","FAISS, Chroma, Pinecone, Weaviate, Milvus, indexing, metadata filtering, optimization","vector database FAISS Chroma"],
+[5,"Retrieval-Augmented Generation (RAG)","Ingestion, parsing, chunking, indexing, retrieval, reranking, citations, conversational and production RAG","RAG retrieval augmented generation"],
+[5,"Advanced RAG","Query transformation, HyDE, corrective/self-reflective/agentic RAG, GraphRAG, knowledge graphs, RAG evaluation","advanced RAG GraphRAG"],
+[6,"Fine-Tuning LLMs","Datasets, SFT, LoRA, QLoRA, PEFT, quantization, model merging, limited hardware","fine-tuning LLM LoRA QLoRA"],
+[7,"Multimodal AI","Vision-language models, OCR, document intelligence, TTS, STT, multimodal embeddings and RAG","multimodal AI vision language models"],
+[7,"Generative Image & Video AI","GANs, VAEs, diffusion models, diffusion transformers, image editing, video generation, copyright","diffusion models generative image"],
+[8,"AI Agents","Agent loop, planning, reasoning, memory, tools, ReAct, reflection, human-in-the-loop, safety","AI agents LLM tutorial"],
+[8,"Agent Frameworks","LangChain, LangGraph, LlamaIndex, CrewAI, AutoGen, state management, multi-agent systems","LangGraph LangChain CrewAI"],
+[8,"MCP, A2A & Agentic Ecosystems","Model Context Protocol, servers, tools, resources, A2A, agent identity, permissions, security","Model Context Protocol MCP"],
+[9,"Generative AI Evaluation","Faithfulness, groundedness, retrieval metrics, LLM-as-a-Judge, benchmarking, regression testing","LLM evaluation RAG evaluation"],
+[9,"AI Testing & Quality Engineering","Prompt/RAG/agent testing, adversarial testing, load/latency testing, A/B tests, CI/CD quality gates","testing LLM applications"],
+[10,"Generative AI Security","Prompt injection, jailbreaking, data leakage, tool abuse, RAG/agent security, threat modelling","LLM security prompt injection"],
+[10,"Responsible AI","Bias, fairness, transparency, explainability, privacy, copyright, governance, risk management","responsible AI ethics governance"],
+[11,"LLMOps","Prompt/dataset versioning, experiment tracking, registry, monitoring, tracing, observability","LLMOps observability"],
+[11,"Deployment & Cloud","FastAPI, REST, Docker, CI/CD, Kubernetes, GPU infrastructure, model serving, scaling, caching","FastAPI Docker deploy LLM"],
+[11,"Performance & Cost Optimization","Token optimization, routing, quantization, caching, batch inference, latency, cost estimation","LLM inference optimization cost"],
+[12,"AI Workflow Automation","n8n, Make, Zapier, webhooks, email/WhatsApp/Telegram AI, Google Sheets, approval workflows","n8n AI automation"],
+[12,"AI Application Development","Chatbot, AI tutor, research/PDF assistant, RAG system, coding/voice assistant, multi-agent system","build AI chatbot RAG project"],
+[13,"Generative AI Research","Literature review, hypotheses, dataset construction, experiments, statistics, reproducibility, paper writing","how to write research paper machine learning"],
+[13,"AI Entrepreneurship & Career","AI SaaS, consulting, freelancing, MVP, pricing, portfolio, interviews, system design","AI engineer career roadmap"],
+[14,"Final Capstone Project","User → Frontend → API → LLM → RAG → Vector DB → Tools → Agent → Evaluation → Security → Monitoring → Cloud","generative AI capstone project end to end"]
+];
+const A=document.getElementById('app'),S=document.getElementById('st'),PB=document.getElementById('pb');
+let done={};try{done=JSON.parse(localStorage.getItem('gai26')||'{}')}catch(e){}
+const save=()=>{try{localStorage.setItem('gai26',JSON.stringify(done))}catch(e){}};
+const yt=q=>'https://www.youtube.com/results?search_query='+encodeURIComponent(q+' full course tutorial free');
+const pdf=q=>'https://www.google.com/search?q='+encodeURIComponent(q+' filetype:pdf lecture notes free');
+const bk=q=>'https://www.google.com/search?q='+encodeURIComponent(q+' free online book')
+const F=document.getElementById('f');P.forEach((p,i)=>F.add(new Option(p,i)));
+function render(){
+ const q=document.getElementById('q').value.toLowerCase(),f=F.value;let h='',last=-1;
+ M.forEach((m,i)=>{
+  if(f!==''&&+f!==m[0])return;
+  if(q&&!(m[1]+m[2]).toLowerCase().includes(q))return;
+  if(m[0]!==last){h+=`<h2>${P[m[0]]}</h2>`;last=m[0]}
+  h+=`<div class="m ${done[i]?'done':''}" id="m${i}"><div class="top"><input type="checkbox" data-i="${i}" ${done[i]?'checked':''} aria-label="Mark done"><b data-o="${i}">Module ${i+1}. ${m[1]}</b></div>
+  <div class="d">${m[2]}.<br><a target="_blank" rel="noopener" href="${yt(m[3])}">▶ YouTube videos</a><a target="_blank" rel="noopener" href="${pdf(m[3])}">📄 PDF notes</a><a target="_blank" rel="noopener" href="${bk(m[3])}">📘 Free book</a></div></div>`});
+ A.innerHTML=h||'<p>No modules found.</p>';
+ const n=Object.values(done).filter(Boolean).length;PB.style.width=n/M.length*100+'%';
+ S.textContent=`Completed ${n} of ${M.length} modules (${Math.round(n/M.length*100)}%)`;
+}
+A.onclick=e=>{const o=e.target.dataset.o;if(o!==undefined)document.getElementById('m'+o).classList.toggle('open')};
+A.onchange=e=>{const i=e.target.dataset.i;if(i!==undefined){done[i]=e.target.checked;save();render()}};
+document.getElementById('q').oninput=render;F.onchange=render;
+document.getElementById('r').onclick=()=>{if(confirm('Reset progress?')){done={};save();render()}};
+document.getElementById('t').onclick=()=>{const r=document.documentElement;r.dataset.theme=r.dataset.theme==='light'?'dark':'light'};
+render();
+</script></body></html>
