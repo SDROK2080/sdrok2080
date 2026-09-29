@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced AI Systems for Nepal - Complete Course Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1e3c72;
+            --primary-light: #2a5298;
+            --accent: #ff9800;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --info: #3498db;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            transform: translate(100px, -100px);
+        }
+
+        header h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .course-info {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .info-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.15);
+            padding: 12px 20px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+
+        .info-badge strong {
+            font-size: 1.3em;
+        }
+
+        .navbar {
+            display: flex;
+            gap: 0;
+            background: #f8f9fa;
+            border-bottom: 3px solid var(--primary);
+            overflow-x: auto;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            min-width: 140px;
+            white-space: nowrap;
+        }
+
+        .nav-btn:hover {
+            background: #e9ecef;
+            color: var(--primary);
+        }
+
+        .nav-btn.active {
+            background: white;
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .content {
+            padding: 40px;
+            display: none;
+        }
+
+        .content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 30px;
+            font-size: 2em;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 15px;
+        }
+
+        h3 {
+            color: var(--primary);
+            margin: 25px 0 15px 0;
+            font-size: 1.4em;
+        }
+
+        .module {
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            border-left: 5px solid var(--primary);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .module-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #f0f1ff 0%, #e8eaff 100%);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            transition: all 0.3s ease;
+        }
+
+        .module-header:hover {
+            background: linear-gradient(135deg, #e8eaff 0%, #dfe2ff 100%);
+            box-shadow: 0 5px 15px rgba(42, 82, 152, 0.1);
+        }
+
+        .module-header h4 {
+            font-size: 1.2em;
+            color: var(--primary);
+            margin: 0;
+        }
+
+        .toggle-icon {
+            font-size: 1.5em;
+            color: var(--primary);
+            transition: transform 0.3s ease;
+        }
+
+        .module.expanded .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .module-content {
+            padding: 25px;
+            display: none;
+            background: white;
+        }
+
+        .module.expanded .module-content {
+            display: block;
+        }
+
+        .explanation-box {
+            background: linear-gradient(135deg, #f3e5f5 0%, #ede7f6 100%);
+            border-left: 5px solid #7b1fa2;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .explanation-box h5 {
+            color: #4a148c;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+
+        .explanation-box p {
+            color: #6a1b9a;
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+
+        .nepal-context {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 5px solid #1976d2;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .nepal-context h5 {
+            color: #0d47a1;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+
+        .nepal-context p {
+            color: #1565c0;
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+
+        .nepal-example {
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe8cc 100%);
+            border-left: 5px solid #ff9800;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .nepal-example h5 {
+            color: #e65100;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+
+        .nepal-example p {
+            color: #d84315;
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+
+        .key-points {
+            background: #f5f5f5;
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .key-points h5 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.05em;
+        }
+
+        .key-points ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .key-points li {
+            padding: 10px 0 10px 30px;
+            position: relative;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .key-points li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .resource-list {
+            margin: 20px 0;
+        }
+
+        .resource-item {
+            padding: 12px 15px;
+            margin: 10px 0;
+            background: #f0f1ff;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .resource-item a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            flex: 1;
+            word-break: break-word;
+        }
+
+        .resource-item a:hover {
+            text-decoration: underline;
+            color: var(--primary-light);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .badge-video {
+            background: #ffe8e8;
+            color: #e74c3c;
+        }
+
+        .badge-pdf {
+            background: #e8f4ff;
+            color: #3498db;
+        }
+
+        .badge-project {
+            background: #e8ffe8;
+            color: #27ae60;
+        }
+
+        .badge-nepal {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(42, 82, 152, 0.3);
+        }
+
+        .project-card {
+            background: white;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            box-shadow: 0 10px 30px rgba(42, 82, 152, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .project-card h4 {
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 1.25em;
+        }
+
+        .project-card p {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: white;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 25px rgba(42, 82, 152, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .card h5 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .card p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+
+        .learning-path {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid var(--primary);
+        }
+
+        .learning-path h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .learning-path ol {
+            margin-left: 20px;
+            line-height: 2;
+            color: #555;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #fff9e6 0%, #ffeccc 100%);
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 5px solid var(--accent);
+            margin: 20px 0;
+        }
+
+        .highlight h4 {
+            color: #e65100;
+            margin-bottom: 10px;
+        }
+
+        .highlight p {
+            color: #d84315;
+            line-height: 1.7;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: 10px;
+            border: 2px solid var(--info);
+        }
+
+        .stat-box .number {
+            font-size: 2.2em;
+            color: var(--primary);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-box .label {
+            color: #666;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .course-info {
+                gap: 20px;
+            }
+
+            .navbar {
+                flex-wrap: wrap;
+            }
+
+            .nav-btn {
+                flex: 1 1 45%;
+                min-width: 120px;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .footer {
+            background: #f8f9fa;
+            border-top: 2px solid var(--primary);
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Advanced Generative AI Systems</h1>
+            <p class="subtitle">Agents, RAG & Fine-Tuning for Nepal's Future</p>
+            <p style="opacity: 0.95; margin-top: 15px; font-size: 1em;">
+                🎓 Kapilvastu Multiple Campus (KMC-HSSD) | 📚 UCDL Academy<br>
+                <strong>Prepared By: Mr. Bishnu Singh Rayamajhi, Math Lecturer and Department Head of Humanities & Social Sciences (KMC-HSSD)</strong>
+            </p>
+            <div class="course-info">
+                <div class="info-badge">
+                    <strong>6 Weeks</strong>
+                    <span>Duration</span>
+                </div>
+                <div class="info-badge">
+                    <strong>6</strong>
+                    <span>Major Projects</span>
+                </div>
+                <div class="info-badge">
+                    <strong>∞</strong>
+                    <span>Possibilities</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="navbar">
+            <button class="nav-btn active" onclick="switchTab('overview')">🎯 Overview</button>
+            <button class="nav-btn" onclick="switchTab('fundamentals')">📖 Fundamentals</button>
+            <button class="nav-btn" onclick="switchTab('advanced')">⚙️ Advanced Topics</button>
+            <button class="nav-btn" onclick="switchTab('nepal-apps')">🇳🇵 Nepal Context</button>
+            <button class="nav-btn" onclick="switchTab('syllabus')">📚 Full Syllabus</button>
+            <button class="nav-btn" onclick="switchTab('projects')">🚀 Projects</button>
+        </div>
+
+        <!-- OVERVIEW TAB -->
+        <div id="overview" class="content active">
+            <h2>Course Overview</h2>
+
+            <div class="highlight">
+                <h4>What You'll Learn</h4>
+                <p>Master the cutting-edge AI techniques used by companies like OpenAI, Google, and Meta. Build intelligent systems that understand context, retrieve information, and learn from feedback.</p>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h5>✅ Why Take This Course?</h5>
+                    <p>
+                        • Industry-relevant AI skills<br>
+                        • Hands-on project experience<br>
+                        • Real-world Nepal applications<br>
+                        • Build your AI portfolio<br>
+                        • Join Nepal's AI revolution
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h5>🎯 Who Should Enroll?</h5>
+                    <p>
+                        • Aspiring AI developers<br>
+                        • Software engineers<br>
+                        • Students & researchers<br>
+                        • Entrepreneurs & startups<br>
+                        • Anyone curious about AI
+                    </p>
+                </div>
+            </div>
+
+            <div class="learning-path">
+                <h4>📊 Course Structure</h4>
+                <ol>
+                    <li><strong>Week 1:</strong> Advanced AI Agents - Autonomous systems that plan and act</li>
+                    <li><strong>Week 2:</strong> RAG Architecture - Combining LLMs with knowledge retrieval</li>
+                    <li><strong>Week 3:</strong> RAG Optimization - Making systems faster and smarter</li>
+                    <li><strong>Week 4:</strong> Fine-Tuning LLMs - Adapting models for specific tasks</li>
+                    <li><strong>Week 5:</strong> Production Deployment - Making AI systems live and scalable</li>
+                    <li><strong>Week 6:</strong> Capstone Project - Build your own AI solution</li>
+                </ol>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="number">6</div>
+                    <div class="label">Weeks of Learning</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">50+</div>
+                    <div class="label">Video Tutorials</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">6</div>
+                    <div class="label">Capstone Ideas</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">∞</div>
+                    <div class="label">Career Options</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FUNDAMENTALS TAB -->
+        <div id="fundamentals" class="content">
+            <h2>AI Fundamentals - Student-Friendly</h2>
+
+            <div class="module">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <h4>🧠 What is AI, Really?</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="module-content">
+                    <div class="explanation-box">
+                        <h5>Simple Explanation</h5>
+                        <p>Imagine teaching a child by showing many examples. After seeing 1000 pictures of cats, a child learns to recognize cats. AI works similarly - we show it many examples, and it learns patterns.</p>
+                    </div>
+
+                    <div class="nepal-example">
+                        <h5>🇳🇵 Nepal Real-Life Example</h5>
+                        <p>A Nepali farmer learns over time that tomato prices go up in winter and down after harvest. AI can learn this pattern from historical market data and predict future prices - helping farmers decide when to sell!</p>
+                    </div>
+
+                    <div class="key-points">
+                        <h5>Three Types of Learning</h5>
+                        <ul>
+                            <li><strong>Supervised Learning:</strong> Learn from labeled examples (like learning from a textbook with answers)</li>
+                            <li><strong>Unsupervised Learning:</strong> Find patterns without labels (like discovering that students naturally group by abilities)</li>
+                            <li><strong>Reinforcement Learning:</strong> Learn by getting rewards (like learning a game by playing and winning rewards)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <h4>🤖 Language Models & ChatGPT</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="module-content">
+                    <div class="explanation-box">
+                        <h5>How ChatGPT Works</h5>
+                        <p>Imagine someone has read every book, website, and article on the internet. When you ask a question, they remember similar things they've read and make an educated guess about what words should come next.</p>
+                        <p>ChatGPT is trained similarly - it's learned patterns from billions of words, so it can predict what response makes sense for your question.</p>
+                    </div>
+
+                    <div class="nepal-context">
+                        <h5>💡 Important for Nepal</h5>
+                        <p>Most LLMs work best in English. They understand Nepali less well because there's less Nepali text on the internet compared to English. This is why <strong>building Nepali AI is so important</strong> - we need models trained on Nepali language and culture!</p>
+                    </div>
+
+                    <div class="key-points">
+                        <h5>LLM Capabilities & Limits</h5>
+                        <ul>
+                            <li>Can write essays, answer questions, and have conversations</li>
+                            <li>Can sometimes "hallucinate" - make up facts that sound real</li>
+                            <li>Doesn't truly "understand" - just predicts word patterns</li>
+                            <li>Reflects biases in training data (may not represent all cultures equally)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <h4>⚡ Data: The Foundation of AI</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="module-content">
+                    <div class="explanation-box">
+                        <h5>Why Data Matters</h5>
+                        <p>You could have the best AI algorithm in the world, but if your data is garbage, your AI will be garbage. It's like building a beautiful house on sand - the foundation is everything!</p>
+                    </div>
+
+                    <div class="nepal-context">
+                        <h5>🚨 The Data Challenge in Nepal</h5>
+                        <p>Nepal doesn't have much digitized data compared to developed countries. To build great Nepali AI:</p>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>We need to collect and digitize Nepali text, images, and information</li>
+                            <li>We must ensure data represents all Nepali communities fairly</li>
+                            <li>Data must be owned and controlled by Nepal, not foreign companies</li>
+                        </ul>
+                    </div>
+
+                    <div class="key-points">
+                        <h5>Data Quality Checklist</h5>
+                        <ul>
+                            <li><strong>Accurate:</strong> Information must be correct</li>
+                            <li><strong>Complete:</strong> No missing critical information</li>
+                            <li><strong>Representative:</strong> Includes diverse examples</li>
+                            <li><strong>Fair:</strong> Doesn't systematically favor one group over another</li>
+                            <li><strong>Secure:</strong> Privacy and safety are protected</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADVANCED TOPICS TAB -->
+        <div id="advanced" class="content">
+            <h2>⚙️ Advanced AI Techniques</h2>
+
+            <div class="module">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <h4>🤖 Week 1: Advanced AI Agents</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="module-content">
+                    <div class="explanation-box">
+                        <h5>What Are AI Agents?</h5>
+                        <p>An AI Agent is like hiring an employee who can think, plan, and take actions. It can understand goals, break them into steps, and execute them - even using tools (like calculators or APIs).</p>
+                    </div>
+
+                    <div class="key-points">
+                        <h5>Key Agent Concepts</h5>
+                        <ul>
+                            <li><strong>Planning:</strong> Breaking goals into logical steps</li>
+                            <li><strong>Tool Use:</strong> Using APIs, calculators, search engines</li>
+                            <li><strong>Memory:</strong> Remembering conversation history</li>
+                            <li><strong>Reasoning:</strong> Thinking through problems step-by-step</li>
+                            <li><strong>Error Recovery:</strong> Fixing mistakes automatically</li>
+                        </ul>
+                    </div>
+
+                    <div class="nepal-example">
+                        <h5>🇳🇵 Nepal Use Case: Tourist Guide Agent</h5>
+                        <p>An AI agent could plan a complete Nepal tour:</p>
+                        <p style="margin-top: 10px;">1. Ask traveler their budget and interests<br>2. Check weather in different regions<br>3. Look up available flights and hotels<br>4. Plan optimal route (Kathmandu → Pokhara → Himalayas)<br>5. Get real-time prices and book<br>6. Handle changes if plans shift</p>
+                    </div>
+
+                    <div class="resource-list">
+                        <div class="resource-item">
+                            <a href="https://www.youtube.com/results?search_query=AI+agents+planning+tutorial" target="_blank">AI Agents & Planning Explained</a>
+                            <span class="badge badge-video">Video</span>
+                        </div>
+                        <div class="resource-item">
+                            <a href="https://www.youtube.com/results?search_query=tool+use+function+calling+LLM" target="_blank">Tool Calling for AI Agents</a>
+                            <span class="badge badge-video">Video</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <h4>📚 Week 2: RAG - Retrieval-Augmented Generation</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="module-content">
+                    <div class="explanation-box">
+                        <h5>What is RAG?</h5>
+                        <p>RAG = Smart Database + AI Conversation</p>
+                        <p style="margin-top: 10px;">Imagine ChatGPT having access to your personal library. It can search your documents to find relevant information, then generate answers based on what it found. This solves the hallucination problem!</p>
+                    </div>
+
+                    <div class="nepal-context">
+                        <h5>💡 Why RAG for Nepal</h5>
+                        <p>RAG allows creating AI systems that:</p>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Answer questions about Nepali history & culture accurately</li>
+                            <li>Reference official government documents</li>
+                            <li>Provide information specific to Nepal's context</li>
+                            <li>Work in low-resource languages like Nepali</li>
+                        </ul>
+                    </div>
+
+                    <div class="key-points">
+                        <h5>RAG Pipeline Steps</h5>
+                        <ul>
+                            <li><strong>Indexing:</strong> Convert documents into searchable format (embeddings)</li>
+                            <li><strong>Retrieval:</strong> Find relevant documents matching user question</li>
+                            <li><strong>Generation:</strong> Use LLM to answer based on retrieved documents</li>
+                            <li><strong>Evaluation:</strong> Check if answer is accurate and relevant</li>
+                        </ul>
+                    </div>
+
+                    <div class="nepal-example">
+                        <h5>🇳🇵 Practical Example: Nepali Constitution Assistant</h5>
+                        <p>Users can ask questions about Nepal's constitution in Nepali or English. The system retrieves relevant articles and explains them clearly. Developers, students, and citizens benefit!</p>
+                    </div>
+
+                    <div class="resource-list">
+                        <div class="resource-item">
+                            <a href="https://www.youtube.com/results?search_query=RAG+retrieval+augmented+generation+tutorial" target="_blank">RAG Systems Explained</a>
+                            <span class="badge badge-video">Video</span>
+                        </div>
+                        <div class="resource-item">
+                            <a href="https://www.youtube.com/results?search_query=embeddings+vector+search" target="_blank">Embeddings & Vector Search</a>
+                            <span class="badge badge-video">Video</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <h4>⚡ Week 3: RAG Optimization & Evaluation</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="module-content">
+                    <div class="explanation-box">
+                        <h5>Making RAG Better</h5>
+                        <p>RAG systems can fail in specific ways. We need to:</p>
+                        <p style="margin-top: 10px;"><strong>Detect Hallucinations:</strong> When AI makes up information even with documents<br>
+                        <strong>Improve Retrieval:</strong> Make search more accurate<br>
+                        <strong>Balance Speed vs Accuracy:</strong> Faster responses vs more correct answers<br>
+                        <strong>Optimize Prompts:</strong> Better questions = better answers</p>
+                    </div>
+
+                    <div class="key-points">
+                        <h5>Optimization Techniques</h5>
+                        <ul>
+                            <li><strong>Chunking Strategy:</strong> How to split documents</li>
+                            <li><strong>Embedding Selection:</strong> Which model to convert text to vectors</li>
+                            <li><strong>Semantic Search:</strong> Understanding meaning, not just keywords</li>
+                            <li><strong>Query Rewriting:</strong> Improving user questions automatically</li>
+                            <li><strong>Latency-Accuracy Tradeoff:</strong> Choosing what matters more</li>
+                        </ul>
+                    </div>
+
+                    <div class="nepal-example">
+                        <h5>🇳🇵 Example: Tourism Information System</h5>
+                        <p><strong>Hallucination Problem:</strong> User asks "Can I hike Mt. Sagarmatha in February?" System might make up an answer.</p>
+                        <p><strong>Solution:</strong> Use RAG with real trekking guides, weather data, and expert information. System retrieves facts instead of guessing.</p>
+                    </div>
+
+                    <div class="resource-list">
+                        <div class="resource-item">
+                            <a href="https://www.youtube.com/results?search_query=RAG+evaluation+metrics+testing" target="_blank">Evaluating RAG Systems</a>
+                            <span class="badge badge-video">Video</span>
+                        </div>
+                        <div class="resource-item">
+                            <a href="https://www.youtube.com/results?search_query=hallucination+detection+LLM" target="_blank">Detecting AI Hallucinations</a>
+                            <span class="badge badge-video">Video</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <h4>🎯 Week 4: Fine-Tuning Large Language Models</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="module-content">
+                    <div class="explanation-box">
+                        <h5>What is Fine-Tuning?</h5>
+                        <p>Like hiring someone trained at Harvard, then teaching them your specific business. ChatGPT is the Harvard grad - fine-tuning teaches it your specific domain or language.</p>
+                    </div>
+
+                    <div class="nepal-context">
+                        <h5>💡 Critical for Nepali AI</h5>
+                        <p>Fine-tuning LLMs on Nepali data would create models that:</p>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Understand Nepali grammar, slang, and context</li>
+                            <li>Generate better Nepali text</li>
+                            <li>Cost less to run (smaller models)</li>
+                            <li>Keep data within Nepal</li>
+                        </ul>
+                    </div>
+
+                    <div class="key-points">
+                        <h5>When to Fine-Tune</h5>
+                        <ul>
+                            <li>✅ Domain-specific language (medical Nepali, legal Nepali)</li>
+                            <li>✅ Specific writing style or tone</li>
+                            <li>✅ Limited resources in your language</li>
+                            <li>❌ Generic general knowledge (use prompt engineering instead)</li>
+                            <li>❌ When you have small amount of data</li>
+                        </ul>
+                    </div>
+
+                    <div class="key-points" style="margin-top: 20px;">
+                        <h5>Fine-Tuning Options</h5>
+                        <ul>
+                            <li><strong>LoRA:</strong> Cheap, fast, for small teams</li>
+                            <li><strong>Full Fine-tuning:</strong> Powerful but expensive</li>
+                            <li><strong>Instruction Fine-tuning:</strong> Teaching specific tasks</li>
+                        </ul>
+                    </div>
+
+                    <div class="nepal-example">
+                        <h5>🇳🇵 Use Case: Nepali Poetry Generator</h5>
+                        <p>Fine-tune on thousands of Nepali poems to create a model that generates poetry in Nepali style. Much better than English-trained models!</p>
+                    </div>
+
+                    <div class="resource-list">
+                        <div class="resource-item">
+                            <a href="https://www.youtube.com/results?search_query=fine+tuning+LLM+tutorial" target="_blank">Fine-Tuning LLMs Explained</a>
+                            <span class="badge badge-video">Video</span>
+                        </div>
+                        <div class="resource-item">
+                            <a href="https://www.youtube.com/results?search_query=LoRA+efficient+fine+tuning" target="_blank">LoRA: Efficient Fine-Tuning</a>
+                            <span class="badge badge-video">Video</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <h4>🚀 Week 5: Production & Deployment</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="module-content">
+                    <div class="explanation-box">
+                        <h5>Going Live with AI</h5>
+                        <p>Building AI in a notebook is fun. Making it work for millions of users 24/7 is hard! Deployment means solving real-world problems like:</p>
+                        <p style="margin-top: 10px;">💰 How much does it cost?<br>🔒 Is user data secure?<br>⚡ Is it fast enough?<br>📊 Can we handle peak traffic?</p>
+                    </div>
+
+                    <div class="key-points">
+                        <h5>Deployment Considerations</h5>
+                        <ul>
+                            <li><strong>Cost Optimization:</strong> Use cheaper models, cache responses</li>
+                            <li><strong>Security:</strong> Encrypt data, authenticate users, prevent attacks</li>
+                            <li><strong>Scalability:</strong> Handle 10x more users without breaking</li>
+                            <li><strong>Monitoring:</strong> Track errors and performance in real-time</li>
+                            <li><strong>Versioning:</strong> Safely update models without breaking users</li>
+                        </ul>
+                    </div>
+
+                    <div class="nepal-example">
+                        <h5>🇳🇵 Cost Reality in Nepal</h5>
+                        <p><strong>Challenge:</strong> Using APIs like OpenAI's ChatGPT is expensive for Nepal (they charge in USD).</p>
+                        <p><strong>Solution:</strong> Run open-source models locally, build regional servers, partner with other South Asian countries to share costs.</p>
+                    </div>
+
+                    <div class="resource-list">
+                        <div class="resource-item">
+                            <a href="https://www.youtube.com/results?search_query=deploying+ML+models+production" target="_blank">Production Deployment Basics</a>
+                            <span class="badge badge-video">Video</span>
+                        </div>
+                        <div class="resource-item">
+                            <a href="https://www.youtube.com/results?search_query=API+scaling+monitoring" target="_blank">Scaling APIs at Scale</a>
+                            <span class="badge badge-video">Video</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEPAL CONTEXT TAB -->
+        <div id="nepal-apps" class="content">
+            <h2>🇳🇵 AI Applications for Nepal's Future</h2>
+
+            <div class="highlight">
+                <h4>Why Nepal Needs AI Now</h4>
+                <p>Nepal faces unique challenges: mountain terrain, limited infrastructure, agricultural economy, and growing digital divide. AI can be a game-changer if built by and for Nepali people.</p>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h5>🌾 Agriculture & Farming</h5>
+                    <p>
+                        <strong>Problems:</strong> Crop diseases, unpredictable weather, market uncertainty<br><br>
+                        <strong>AI Solutions:</strong><br>
+                        • Disease detection from photos<br>
+                        • Weather forecasting<br>
+                        • Price prediction<br>
+                        • Soil quality analysis
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h5>🏥 Healthcare Access</h5>
+                    <p>
+                        <strong>Problems:</strong> Limited doctors in rural areas<br><br>
+                        <strong>AI Solutions:</strong><br>
+                        • Medical image analysis<br>
+                        • Symptom checkers<br>
+                        • Medicine recommendations<br>
+                        • Telemedicine support
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h5>✈️ Tourism Industry</h5>
+                    <p>
+                        <strong>Problems:</strong> Incomplete tourist information<br><br>
+                        <strong>AI Solutions:</strong><br>
+                        • Smart travel recommendations<br>
+                        • Multi-language guides<br>
+                        • Virtual site tours<br>
+                        • Real-time translation
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h5>📚 Education Quality</h5>
+                    <p>
+                        <strong>Problems:</strong> Unequal access to quality education<br><br>
+                        <strong>AI Solutions:</strong><br>
+                        • Personalized learning<br>
+                        • Nepali tutoring bots<br>
+                        • Progress tracking<br>
+                        • Affordable education at scale
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h5>💼 Small Business Growth</h5>
+                    <p>
+                        <strong>Problems:</strong> Difficulty competing and reaching customers<br><br>
+                        <strong>AI Solutions:</strong><br>
+                        • Customer recommendations<br>
+                        • Automated support<br>
+                        • Fraud detection<br>
+                        • Inventory optimization
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h5>🌍 Disaster Prevention</h5>
+                    <p>
+                        <strong>Problems:</strong> Earthquakes, floods, landslides<br><br>
+                        <strong>AI Solutions:</strong><br>
+                        • Early warning systems<br>
+                        • Flood prediction<br>
+                        • Air quality monitoring<br>
+                        • Forest fire detection
+                    </p>
+                </div>
+            </div>
+
+            <div class="learning-path">
+                <h4>Nepal's AI Opportunity</h4>
+                <p>Nepal can become a regional AI hub by:</p>
+                <ol>
+                    <li><strong>Training local talent:</strong> Courses like this one create developers who understand Nepal</li>
+                    <li><strong>Building Nepali data:</strong> Digitize Nepali books, documents, and knowledge</li>
+                    <li><strong>Creating Nepali models:</strong> Train AI specifically for Nepali language and context</li>
+                    <li><strong>Solving Nepal's problems:</strong> Build AI for agriculture, health, tourism</li>
+                    <li><strong>Exporting expertise:</strong> Help other South Asian countries, earn revenue</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- SYLLABUS TAB -->
+        <div id="syllabus" class="content">
+            <h2>📚 Complete Course Syllabus</h2>
+
+            <div class="module">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <h4>📖 Week 1: Advanced AI Agents</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="module-content">
+                    <div class="key-points">
+                        <h5>Topics Covered</h5>
+                        <ul>
+                            <li>Multi-step agent workflows and planning</li>
+                            <li>Tool and function calling</li>
+                            <li>Planning and reasoning patterns</li>
+                            <li>Memory strategies for agents</li>
+                            <li>Error handling and recovery mechanisms</li>
+                        </ul>
+                    </div>
+                    <div class="resource-list">
+                        <div class="resource-item">
+                            <a href="https://www.youtube.com/results?search_query=AI+agents+workflow+planning" target="_blank">AI Agents & Workflow Planning</a>
+                            <span class="badge badge-video">Video</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <h4>🔍 Week 2: Advanced RAG Architecture</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="module-content">
+                    <div class="key-points">
+                        <h5>Topics Covered</h5>
+                        <ul>
+                            <li>Chunking strategies for documents</li>
+                            <li>Embedding selection and optimization</li>
+                            <li>Vector database design</li>
+                            <li>Hybrid and semantic search</li>
+                            <li>Query rewriting and context compression</li>
+                        </ul>
+                    </div>
+                    <div class="resource-list">
+                        <div class="resource-item">
+                            <a href="https://www.youtube.com/results?search_query=vector+database+design+RAG" target="_blank">Vector Database Design</a>
+                            <span class="badge badge-video">Video</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <h4>⚡ Week 3: RAG Evaluation & Optimization</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="module-content">
+                    <div class="key-points">
+                        <h5>Topics Covered</h5>
+                        <ul>
+                            <li>Hallucination detection techniques</li>
+                            <li>Retrieval evaluation strategies</li>
+                            <li>Latency vs accuracy trade-offs</li>
+                            <li>Prompt tuning vs retrieval tuning</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <h4>🎯 Week 4: Fine-Tuning LLMs</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="module-content">
+                    <div class="key-points">
+                        <h5>Topics Covered</h5>
+                        <ul>
+                            <li>When fine-tuning is appropriate</li>
+                            <li>Dataset preparation for fine-tuning</li>
+                            <li>Instruction vs task fine-tuning</li>
+                            <li>Cost, maintenance, and trade-offs</li>
+                            <li>Fine-tuning vs RAG vs prompting comparison</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <h4>🚀 Week 5: Production & Deployment</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="module-content">
+                    <div class="key-points">
+                        <h5>Topics Covered</h5>
+                        <ul>
+                            <li>Cost optimization strategies</li>
+                            <li>Security and data privacy</li>
+                            <li>Rate limits and scaling</li>
+                            <li>Monitoring and logging systems</li>
+                            <li>Prompt and model versioning</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <h4>🏆 Week 6: Capstone Project</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="module-content">
+                    <div class="key-points">
+                        <h5>Capstone Requirements</h5>
+                        <ul>
+                            <li>Design and implementation</li>
+                            <li>Testing and optimization</li>
+                            <li>Final presentation and demo</li>
+                            <li>Building simple chatbot with static documents</li>
+                            <li>Understanding RAG system limitations</li>
+                        </ul>
+                    </div>
+                    <div class="nepal-example">
+                        <h5>🇳🇵 Nepal Capstone Ideas</h5>
+                        <p>✅ Nepal Tourism Assistant (RAG-based)<br>
+                        ✅ Agricultural Price Predictor<br>
+                        ✅ Nepali Constitution QA Bot<br>
+                        ✅ Disease Identification System<br>
+                        ✅ Nepali Language Tutor<br>
+                        ✅ Local Business Advisor</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROJECTS TAB -->
+        <div id="projects" class="content">
+            <h2>🚀 Hands-On Projects</h2>
+
+            <div class="project-card">
+                <h4>1️⃣ Build a ChatGPT-Powered AI Assistant</h4>
+                <p><strong>Difficulty:</strong> Beginner-Intermediate</p>
+                <p>Create an intelligent conversational assistant with conversation history, context awareness, and natural language understanding.</p>
+                <button class="btn-primary" onclick="openResource('https://www.youtube.com/results?search_query=chatgpt+api+python+tutorial')">📺 Video Tutorial</button>
+                <button class="btn-primary" onclick="openResource('#')">📄 Project Guide</button>
+                <span class="badge badge-project">Core Skill</span>
+            </div>
+
+            <div class="project-card">
+                <h4>2️⃣ Develop RAG-Based Knowledge Retrieval System</h4>
+                <p><strong>Difficulty:</strong> Intermediate</p>
+                <p>Build a system that retrieves relevant documents and generates answers. Implement chunking, embeddings, and vector search.</p>
+                <button class="btn-primary" onclick="openResource('https://www.youtube.com/results?search_query=langchain+rag+tutorial')">📺 Video Tutorial</button>
+                <button class="btn-primary" onclick="openResource('#')">📄 Project Guide</button>
+                <span class="badge badge-nepal">Nepal Ready</span>
+            </div>
+
+            <div class="project-card">
+                <h4>3️⃣ Create a LangChain-Powered AI Application</h4>
+                <p><strong>Difficulty:</strong> Intermediate-Advanced</p>
+                <p>Leverage LangChain framework for sophisticated AI with chaining, memory, and multiple tool integrations.</p>
+                <button class="btn-primary" onclick="openResource('https://www.youtube.com/results?search_query=langchain+tutorial')">📺 Video Tutorial</button>
+                <button class="btn-primary" onclick="openResource('https://python.langchain.com')">📚 Documentation</button>
+                <span class="badge badge-project">Framework</span>
+            </div>
+
+            <div class="project-card">
+                <h4>4️⃣ Optimize & Evaluate Generative AI Model</h4>
+                <p><strong>Difficulty:</strong> Intermediate-Advanced</p>
+                <p>Implement evaluation metrics, detect hallucinations, optimize latency-accuracy tradeoffs, and fine-tune models.</p>
+                <button class="btn-primary" onclick="openResource('https://www.youtube.com/results?search_query=LLM+evaluation+metrics')">📺 Video Tutorial</button>
+                <span class="badge badge-project">Advanced</span>
+            </div>
+
+            <div class="project-card">
+                <h4>5️⃣ Deploy AI Application to Production</h4>
+                <p><strong>Difficulty:</strong> Advanced</p>
+                <p>Take your AI live with security, monitoring, rate limiting, cost optimization, and versioning strategies.</p>
+                <button class="btn-primary" onclick="openResource('https://www.youtube.com/results?search_query=deploying+ml+model+production')">📺 Video Tutorial</button>
+                <span class="badge badge-project">Deployment</span>
+            </div>
+
+            <div class="project-card" style="border-color: var(--success); border-width: 3px;">
+                <h4>🏆 Capstone: Your Own Nepal AI Solution</h4>
+                <p><strong>Difficulty:</strong> All Levels (Custom)</p>
+                <p><strong>Your Mission:</strong> Identify a real problem in Nepal that AI can solve. Build a working solution that helps your community.</p>
+
+                <div class="nepal-example">
+                    <h5>🇳🇵 Capstone Project Ideas</h5>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Nepali Crop Disease Detector:</strong> Upload plant photo → get disease diagnosis</li>
+                        <li><strong>Nepal Tourism Chatbot:</strong> Answer questions about treks, hotels, restaurants</li>
+                        <li><strong>Kathmandu Market Price Predictor:</strong> Predict vegetable prices for farmers</li>
+                        <li><strong>Nepali Health Symptom Checker:</strong> Basic health guidance for rural areas</li>
+                        <li><strong>Nepali Language Learning Game:</strong> Interactive Nepali teaching tool</li>
+                        <li><strong>Disaster Warning System:</strong> Predict floods, earthquakes, landslides</li>
+                    </ul>
+                </div>
+
+                <div class="key-points" style="margin-top: 20px;">
+                    <h5>Capstone Success Checklist</h5>
+                    <ul>
+                        <li>✅ Solves a real Nepal problem</li>
+                        <li>✅ Works with Nepali data/language</li>
+                        <li>✅ Demonstrates learned skills (Agents/RAG/Fine-tuning)</li>
+                        <li>✅ Includes testing and evaluation</li>
+                        <li>✅ Professional presentation with demo</li>
+                        <li>✅ Code shared on GitHub</li>
+                    </ul>
+                </div>
+
+                <button class="btn-primary" onclick="openResource('https://github.com')">💻 Share on GitHub</button>
+                <button class="btn-primary" onclick="openResource('https://www.youtube.com')">📺 Post Demo Video</button>
+            </div>
+
+            <div class="highlight" style="margin-top: 30px;">
+                <h4>💡 Project Development Tips</h4>
+                <p><strong>Start Small:</strong> Build a minimal version first, then add features<br>
+                <strong>Test Continuously:</strong> Don't wait until the end<br>
+                <strong>Get Feedback:</strong> Show friends, teachers, community members<br>
+                <strong>Document Well:</strong> Write clear README and comments<br>
+                <strong>Deploy Somewhere:</strong> Make it available to real users<br>
+                <strong>Iterate:</strong> Improve based on feedback</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>🎓 Advanced Generative AI Systems | 🇳🇵 Made for Nepal's Future | 📚 Kapilvastu Multiple Campus (KMC-HSSD)</p>
+            <p style="margin-top: 10px;">Prepared By: <strong>Mr. Bishnu Singh Rayamajhi, Math Lecturer and Head of HSSD at KMC, Taulihawa</strong> | Platform: <strong>UCDL Academy</strong></p>
+            <p style="margin-top: 10px; font-size: 0.85em; opacity: 0.8;">Last Updated: September 2026 | Version: 2.0</p>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            document.querySelectorAll('.content').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function toggleModule(header) {
+            const module = header.parentElement;
+            module.classList.toggle('expanded');
+        }
+
+        function openResource(url) {
+            if (url && url !== '#') {
+                window.open(url, '_blank');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const modules = document.querySelectorAll('.module');
+            if (modules.length > 0) {
+                modules[0].classList.add('expanded');
+            }
+        });
+    </script>
+</body>
+</html>
