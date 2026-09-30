@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KMC-HSSD Student Research Management System</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f6f4ee;--card:#fff;--tx:#1d2a26;--mu:#66736e;--ac:#0f6b57;--ac2:#e8f3ef;--bd:#dcd8cc;--wa:#b8620a;--er:#b3261e;--ok:#0f6b57}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14191a;--card:#1d2425;--tx:#e9efec;--mu:#9aa9a3;--ac:#4cc3a4;--ac2:#1f3a33;--bd:#33403d;--wa:#f0a95a;--er:#ff8f86;--ok:#4cc3a4}}
+:root[data-theme="dark"]{--bg:#14191a;--card:#1d2425;--tx:#e9efec;--mu:#9aa9a3;--ac:#4cc3a4;--ac2:#1f3a33;--bd:#33403d;--wa:#f0a95a;--er:#ff8f86;--ok:#4cc3a4}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 Georgia,'Times New Roman',serif}
+h1,h2,h3,nav button,.k,th,.tag,label{font-family:system-ui,-apple-system,'Segoe UI',sans-serif}
+header{padding:18px 16px 10px;max-width:980px;margin:auto}
+header small{color:var(--mu);letter-spacing:.08em;text-transform:uppercase;font:600 11px system-ui}
+h1{font-size:21px;margin:2px 0 0}
+nav{display:flex;gap:6px;overflow-x:auto;padding:8px 16px;max-width:980px;margin:auto;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5}
+nav button{flex:none;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:8px 14px;border-radius:20px;font-size:13px;cursor:pointer}
+nav button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+main{max-width:980px;margin:auto;padding:8px 16px 40px}
+section{display:none}section.on{display:block}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin:10px 0}
+h2{font-size:17px;margin:14px 0 6px}h3{font-size:14px;margin:0 0 6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.k{background:var(--ac2);border-radius:10px;padding:10px}.k b{display:block;font-size:24px;color:var(--ac)}.k span{font-size:12px;color:var(--mu)}
+.flow{display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.flow div{background:var(--ac2);padding:5px 12px;border-radius:8px;font:13px system-ui}
+.flow i{color:var(--mu);font-style:normal;padding-left:14px;font-size:12px}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px;border-bottom:1px solid var(--bd);white-space:nowrap}th{color:var(--mu);font-size:12px}
+select,input{font:14px system-ui;padding:9px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);width:100%;max-width:340px}
+button.a{font:600 12px system-ui;border:1px solid var(--ac);background:none;color:var(--ac);border-radius:6px;padding:5px 9px;cursor:pointer;margin:2px 2px 2px 0}
+button.a.r{border-color:var(--wa);color:var(--wa)}button.a.x{border-color:var(--er);color:var(--er)}
+.tag{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--ac2);color:var(--ac)}
+.tag.Revision{background:#f7e3cc;color:#8a4a06}.tag.Rejected{background:#f8d9d6;color:var(--er)}
+.bar{height:12px;background:var(--bd);border-radius:6px;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:var(--ac)}
+ul.st{list-style:none;padding:0;margin:0}ul.st li{padding:4px 0}ul.st .d{color:var(--ok)}ul.st .n{color:var(--mu)}
+.chips span{display:inline-block;border:1px solid var(--bd);border-radius:14px;padding:3px 10px;margin:3px 3px 0 0;font:12px system-ui}
+pre{background:var(--ac2);padding:10px;border-radius:8px;overflow-x:auto;font-size:12px;margin:6px 0}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.hit{border-bottom:1px solid var(--bd);padding:10px 0}.hit:last-child{border:0}.hit small{color:var(--mu);font-family:system-ui}
+</style></head><body>
+<header><small>Kapilvastu Multiple Campus · HSS Department</small><h1>KMC-HSSD Student Research Management System</h1></header>
+<nav id="nav"></nav>
+<main>
+<section id="overview"></section><section id="student"></section><section id="supervisor"></section>
+<section id="dept"></section><section id="repo"></section><section id="auto"></section>
+</main>
+<script>
+const STAGES=["Profile Completed","Topic Submitted","Proposal Submitted","Supervisor Review","Department Approval","Data Collection","Final Submission"];
+const SUPS=["Dr. A. Sharma","Dr. B. Koirala"];
+const D=[
+{id:"KMC-HSSD-RES-2026-001",name:"Sita Tharu",prog:"BA Humanities",area:"Heritage",title:"Heritage Tourism Potential of Kapilvastu",sup:SUPS[0],s:3,st:"Pending Review",kw:"heritage, tourism",yr:2026},
+{id:"KMC-HSSD-RES-2026-002",name:"Ram KC",prog:"BA Social Science",area:"Mathematics",title:"Mathematics Anxiety among Campus Students",sup:SUPS[0],s:5,st:"Approved",kw:"anxiety, mathematics",yr:2026,no:"APP-2026-002"},
+{id:"KMC-HSSD-RES-2026-003",name:"Gita Chaudhary",prog:"BA Social Science",area:"Sociology",title:"Migration and Household Change in Taulihawa",sup:SUPS[1],s:2,st:"Revision Required",kw:"migration, household",yr:2026},
+{id:"KMC-HSSD-RES-2026-004",name:"Hari Yadav",prog:"BA Humanities",area:"History",title:"Oral Histories of the Lumbini Region",sup:SUPS[1],s:4,st:"Dept Pending",kw:"oral history, Lumbini",yr:2026},
+{id:"KMC-HSSD-RES-2026-005",name:"Maya Pun",prog:"BA Social Science",area:"Governance",title:"Women's Participation in Local Governance",sup:SUPS[0],s:7,st:"Completed",kw:"women, governance",yr:2026,no:"APP-2026-005"},
+{id:"KMC-HSSD-RES-2026-006",name:"Anil Gupta",prog:"Other Programs",area:"Archaeology",title:"Public Awareness of Archaeological Sites",sup:SUPS[1],s:3,st:"Pending Review",kw:"archaeology, awareness",yr:2026}];
+const LOG=[];let cur="overview",selStu=D[0].id,selSup=SUPS[0],q="";
+const $=id=>document.getElementById(id);
+const tabs=[["overview","Overview"],["student","Student"],["supervisor","Supervisor"],["dept","Department"],["repo","Repository"],["auto","Automation"]];
+const tag=s=>`<span class="tag ${s.split(' ')[0]}">${s}</span>`;
+const pct=p=>Math.round(p.s/7*100);
+const cnt=(a,f)=>a.filter(f).length;
+function nav(){ $("nav").innerHTML=tabs.map(t=>`<button class="${t[0]==cur?'on':''}" onclick="go('${t[0]}')">${t[1]}</button>`).join("");
+ tabs.forEach(t=>$(t[0]).className=t[0]==cur?"on":""); }
+function go(t){cur=t;nav();render();window.scrollTo(0,0)}
+function review(id,dec){const p=D.find(x=>x.id==id);
+ if(dec=="Approved"){p.s=4;p.st="Dept Pending"}else if(dec=="Revision Required"){p.s=2;p.st="Revision Required"}else{p.st="Rejected"}
+ LOG.unshift(`Supervisor ${p.sup}: ${dec} → ${id}`);render()}
+function decide(id,dec){const p=D.find(x=>x.id==id);
+ if(dec=="Approved"){p.s=5;p.st="Approved";p.no="APP-2026-"+id.slice(-3)}else if(dec=="Revision Required"){p.s=2;p.st="Revision Required"}else{p.st="Rejected"}
+ LOG.unshift(`Department: ${dec} → ${id}`);render()}
+function render(){
+ $("overview").innerHTML=`
+ <div class="card"><h3>Overall Architecture</h3><div class="flow"><div>5 Google Forms</div><i>↓</i><div>Google Sheets Database</div><i>↓</i><div>Apps Script / n8n Automation</div><i>↓</i><div>Role-based Web Dashboards</div><i>↓</i><div>Google Drive Research Repository</div></div></div>
+ <div class="card"><h3>The 10 Phases</h3><ol style="margin:0;padding-left:20px">
+ <li>Create the 5 Google Forms</li><li>Google Sheets central database (13 worksheets)</li><li>Research ID + Google Drive automation</li><li>Supervisor approval workflow</li><li>Student dashboard</li><li>Supervisor dashboard</li><li>Department approval dashboard</li><li>Research repository</li><li>n8n / Apps Script automation</li><li>Complete system</li></ol></div>
+ <div class="card"><h3>Research Lifecycle</h3><div class="chips">${["Student Profile","Research Interest","Topic & Problem","Proposal","Supervisor Review","Department Approval","Research Progress","Final Submission","Evaluation","Final Approval","Research Repository","Publication / Dissemination"].map((x,i)=>`<span>${String(i+1).padStart(2,"0")} ${x}</span>`).join("")}</div></div>
+ <div class="card"><h3>Data Model</h3><div class="flow"><div>STUDENT</div><i>└</i><div>RESEARCH PROJECT</div><i>├ Topic · Supervisor · Proposal · Literature Review · Dataset</i><i>└ Statistical Analysis · Progress · Final Report · Evaluation · Publication</i></div></div>
+ <p style="color:var(--mu);font:13px system-ui">Try the Student, Supervisor and Department tabs: a decision made in one updates the others (demo data).</p>`;
+ const sp=D.find(x=>x.id==selStu);
+ $("student").innerHTML=`<h2>Student Research Dashboard</h2>
+ <select onchange="selStu=this.value;render()">${D.map(x=>`<option value="${x.id}" ${x.id==selStu?'selected':''}>${x.id} — ${x.name}</option>`).join("")}</select>
+ <div class="card"><h3>Welcome, ${sp.name}</h3><div>Research ID: <b>${sp.id}</b></div><div>Research Title: ${sp.title}</div><div>Supervisor: ${sp.sup}</div>
+ <div>Current Stage: ${sp.st=="Revision Required"?"Revision Required":STAGES[Math.min(sp.s,6)]} ${tag(sp.st)}</div>
+ <div class="bar"><i style="width:${pct(sp)}%"></i></div><b style="font:600 13px system-ui">Progress ${pct(sp)}%</b></div>
+ <div class="two"><div class="card"><h3>Status</h3><ul class="st">${STAGES.map((x,i)=>`<li class="${i<sp.s?'d':'n'}">${i<sp.s?'✓':'○'} ${x}</li>`).join("")}</ul></div>
+ <div class="card"><h3>Menu</h3><div class="chips">${["My Profile","My Research","Research Topic","Proposal","Supervisor","Progress","Feedback","Approvals","Documents","Final Submission","Repository"].map(x=>`<span>${x}</span>`).join("")}</div></div></div>`;
+ const mine=D.filter(x=>x.sup==selSup);
+ $("supervisor").innerHTML=`<h2>Supervisor Dashboard</h2><select onchange="selSup=this.value;render()">${SUPS.map(x=>`<option ${x==selSup?'selected':''}>${x}</option>`).join("")}</select>
+ <div class="grid" style="margin-top:10px"><div class="k"><b>${mine.length}</b><span>Total Students</span></div><div class="k"><b>${cnt(mine,x=>x.st=="Pending Review")}</b><span>Pending Reviews</span></div><div class="k"><b>${cnt(mine,x=>x.st=="Revision Required")}</b><span>Revision Required</span></div><div class="k"><b>${cnt(mine,x=>x.st=="Approved"||x.st=="Dept Pending")}</b><span>Approved</span></div><div class="k"><b>${cnt(mine,x=>x.st=="Completed")}</b><span>Completed</span></div></div>
+ <div class="card tw"><table><tr><th>Research ID</th><th>Student</th><th>Topic</th><th>Stage</th><th>Status</th><th>Action</th></tr>${mine.map(x=>`<tr><td>${x.id.slice(-7)}</td><td>${x.name}</td><td>${x.area}</td><td>${STAGES[Math.min(x.s,6)]}</td><td>${tag(x.st)}</td><td>${x.st=="Pending Review"?`<button class="a" onclick="review('${x.id}','Approved')">Approve</button><button class="a r" onclick="review('${x.id}','Revision Required')">Revise</button><button class="a x" onclick="review('${x.id}','Not Recommended')">Reject</button>`:"—"}</td></tr>`).join("")}</table></div>`;
+ $("dept").innerHTML=`<h2>Department Research Dashboard</h2>
+ <div class="grid"><div class="k"><b>${D.length}</b><span>Total Research</span></div><div class="k"><b>${cnt(D,x=>x.st=="Dept Pending")}</b><span>Pending Approval</span></div><div class="k"><b>${cnt(D,x=>x.st=="Approved")}</b><span>Approved</span></div><div class="k"><b>${cnt(D,x=>x.st=="Revision Required")}</b><span>Revision Required</span></div><div class="k"><b>${cnt(D,x=>x.st=="Completed")}</b><span>Completed</span></div></div>
+ <div class="card tw"><table><tr><th>Research ID</th><th>Student</th><th>Title</th><th>Supervisor</th><th>Decision</th><th>Approval No.</th></tr>${D.map(x=>`<tr><td>${x.id.slice(-7)}</td><td>${x.name}</td><td>${x.title}</td><td>${x.sup}</td><td>${x.st=="Dept Pending"?`<button class="a" onclick="decide('${x.id}','Approved')">Approve</button><button class="a r" onclick="decide('${x.id}','Revision Required')">Revise</button><button class="a x" onclick="decide('${x.id}','Rejected')">Reject</button>`:tag(x.st)}</td><td>${x.no||"—"}</td></tr>`).join("")}</table></div>
+ <div class="card"><h3>Activity Log</h3>${LOG.length?LOG.map(l=>`<div style="font:13px system-ui">${l}</div>`).join(""):'<span style="color:var(--mu);font:13px system-ui">No actions yet.</span>'}</div>`;
+ const hits=D.filter(x=>(x.st=="Approved"||x.st=="Completed")&&(x.title+x.name+x.area+x.prog+x.sup+x.kw+x.yr).toLowerCase().includes(q.toLowerCase()));
+ $("repo").innerHTML=`<h2>KMC-HSSD Research Repository</h2><input id="qi" placeholder="Search title, author, area, program, year, supervisor, keywords" value="${q}" oninput="q=this.value;render();const i=$('qi');i.focus();i.setSelectionRange(q.length,q.length)">
+ <div class="card">${hits.length?hits.map(x=>`<div class="hit"><b>${x.title}</b><br><small>${x.name} · ${x.prog} · ${x.yr} · Supervisor: ${x.sup}<br>Keywords: ${x.kw} · ${tag(x.st)}</small></div>`).join(""):"No approved research matches."}</div>
+ <div class="chips">${["Research Projects","Research Reports","Theses","Research Articles","Case Studies","Datasets","Publications"].map(x=>`<span>${x}</span>`).join("")}</div><p style="color:var(--mu);font:13px system-ui">Only approved research is shown, per the department's sharing policy.</p>`;
+ $("auto").innerHTML=`<h2>Forms, Database & Automation</h2>
+ <div class="card"><h3>5 Google Forms</h3><div class="chips"><span>1 Research Profile & Interest</span><span>2 Topic & Problem</span><span>3 Proposal Submission</span><span>4 Progress / Final</span><span>5 Evaluation</span></div></div>
+ <div class="card"><h3>Google Sheets: KMC-HSSD Research Management Database</h3><div class="chips">${["01_Students","02_Research_Projects","03_Topics","04_Supervisors","05_Assignments","06_Proposals","07_Progress","08_Approvals","09_Evaluations","10_Repository","11_Users","12_Notifications","13_Activity_Log"].map(x=>`<span>${x}</span>`).join("")}</div><p>Research ID format: <b>KMC-HSSD-RES-2026-001</b></p></div>
+ <div class="card"><h3>Drive Structure</h3><pre>KMC-HSSD Research Repository
+├── 2026
+│   ├── BA Humanities
+│   ├── BA Social Science
+│   └── Other Programs
+└── 2027
+KMC-HSSD-RES-2026-001
+├── 01_Profile  ├── 02_Topic
+├── 03_Proposal ├── 04_Literature
+├── 05_Data     ├── 06_Progress
+├── 07_Final_Report
+└── 08_Evaluation</pre></div>
+ <div class="two">${[["1 · New Student","Google Form → Sheet → Generate Research ID → Create Drive Folder → Send Email"],["2 · Proposal","Proposal Form → Database → Supervisor Notification → Supervisor Review"],["3 · Revision","Revision Required → Student Notification → Student Resubmits → Supervisor"],["4 · Department Approval","Supervisor Approved → Department Notification → Review → Approval → Student Notification"],["5 · Final Research","Final Submission → Supervisor Evaluation → Committee → Final Approval → Drive Repository"]].map(a=>`<div class="card"><h3>Automation ${a[0]}</h3><div style="font:13px system-ui">${a[1]}</div></div>`).join("")}</div>
+ <div class="card"><h3>Apps Script starter (Automation 1)</h3><pre>function onFormSubmit(e){
+ const ss=SpreadsheetApp.getActive();
+ const sh=ss.getSheetByName('01_Students');
+ const n=sh.getLastRow(); // header = row 1
+ const id='KMC-HSSD-RES-2026-'+String(n).padStart(3,'0');
+ const root=DriveApp.getFoldersByName('KMC-HSSD Research Repository').next();
+ const f=root.createFolder(id);
+ ['01_Profile','02_Topic','03_Proposal','04_Literature',
+  '05_Data','06_Progress','07_Final_Report','08_Evaluation']
+  .forEach(s=>f.createFolder(s));
+ MailApp.sendEmail(e.namedValues['Email'][0],
+  'Research ID '+id,'Your research ID is '+id);
+ ss.getSheetByName('13_Activity_Log')
+  .appendRow([new Date(),id,'Student registered']);
+}</pre></div>`;
+}
+nav();render();
+</script>
+</body>
+</html>
