@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Agent Engineering — Teaching & Learning App</title>
+<style>
+:root{--bg:#12100d;--panel:#1c1913;--line:#3a3326;--tx:#f1e9d8;--mu:#a99d85;--ac:#e8a93a;--ac2:#f07b2a;--ok:#6cc08b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#faf5e9;--panel:#fff;--line:#dccfb2;--tx:#2a2418;--mu:#6e634b;--ac:#b3700a;--ac2:#c4570f;--ok:#237a45}}
+:root[data-theme="light"]{--bg:#faf5e9;--panel:#fff;--line:#dccfb2;--tx:#2a2418;--mu:#6e634b;--ac:#b3700a;--ac2:#c4570f;--ok:#237a45}
+:root[data-theme="dark"]{--bg:#12100d;--panel:#1c1913;--line:#3a3326;--tx:#f1e9d8;--mu:#a99d85;--ac:#e8a93a;--ac2:#f07b2a;--ok:#6cc08b}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.6 Georgia,"Noto Serif Devanagari","Times New Roman",serif}
+header{padding:20px 16px 12px;border-bottom:1px solid var(--line)}
+h1{margin:0;font-size:1.5rem;line-height:1.2;color:var(--ac)}
+.sub{color:var(--mu);font-size:.9rem;margin:4px 0 12px}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--ac),var(--ac2));transition:width .3s}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+button,input{font:inherit;color:var(--tx)}
+button{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer}
+button:hover{border-color:var(--ac)}button:focus-visible,input:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+button.on{background:var(--ac);color:#1a1205;border-color:var(--ac)}
+input{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:6px 10px;flex:1;min-width:140px}
+nav{display:flex;gap:6px;padding:10px 16px;overflow-x:auto;border-bottom:1px solid var(--line)}nav button{white-space:nowrap}
+main{max-width:860px;margin:0 auto;padding:16px}
+.part{margin:0 0 22px}.part h2{font-size:1.1rem;margin:0 0 8px;color:var(--ac);display:flex;justify-content:space-between;gap:8px}
+.part h2 small{color:var(--mu);font-weight:normal}
+details{background:var(--panel);border:1px solid var(--line);border-radius:8px;margin:0 0 8px}
+details.done{border-left:4px solid var(--ok)}
+summary{padding:10px 12px;cursor:pointer;display:flex;gap:10px;align-items:center}
+summary b{flex:1;font-weight:600}
+.body{padding:0 14px 12px}.body ol{margin:6px 0 10px;padding-left:32px;columns:2 220px}.body li{margin:2px 0;break-inside:avoid}
+pre{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:10px;overflow-x:auto;font-size:.82rem;line-height:1.45;color:var(--ac)}
+.note{color:var(--mu);font-size:.9rem}
+.q{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px;margin:0 0 12px}.q p{margin:0 0 8px;font-weight:600}
+.q button{display:block;width:100%;text-align:left;margin:4px 0}.q .good{border-color:var(--ok);color:var(--ok)}.q .bad{border-color:var(--ac2);color:var(--ac2)}
+.score{font-size:1.1rem;color:var(--ac)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}.chips span{border:1px solid var(--line);border-radius:14px;padding:2px 10px;font-size:.85rem}
+.foot{padding:20px 16px;text-align:center;color:var(--mu);font-size:.8rem;border-top:1px solid var(--line)}
+.lk{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.lk a{border:1px solid var(--ac);color:var(--ac);border-radius:6px;padding:4px 12px;text-decoration:none;font-size:.9rem}.lk a:hover{background:var(--ac);color:#1a1205}.mi{margin-left:6px;font-size:.78rem;white-space:nowrap}.mi a{color:var(--mu);text-decoration:none;border-bottom:1px dotted var(--mu);margin-right:5px}.mi a:hover{color:var(--ac)}
+@media(max-width:520px){.body ol{columns:1}}
+</style></head>
+<body>
+<header>
+<h1 id="t"></h1><div class="sub" id="st"></div><div class="note" id="nt"></div>
+<div class="bar"><i id="pb"></i></div><div class="note" id="pt"></div>
+<div class="row"><input id="s" type="search"><button id="lg"></button><button id="th"></button><button id="rs"></button></div>
+</header>
+<nav id="nv"></nav>
+<main id="m"></main>
+<div class="foot" id="ft"></div>
+<script>
+var L={en:{t:"AI Agent Engineering",st:"Building Production-Ready AI Agents — a teaching & learning app",done:"completed",ch:"chapters",s:"Search topics…",learn:"Learn",path:"Learning path",cap:"Capstones",quiz:"Self-check",mark:"Mark complete",unmark:"Completed ✓",reset:"Reset progress",rc:"Reset all progress?",none:"No chapters match your search.",score:"Score",theme:"Theme",ft:"Prepared by Mr. Bishnu Singh Rayamajhi · KMC-HSSD · UCDL Academy · SDROK · Tribhuvan University",yt:"Free YouTube tutorials",pf:"Free PDF files",formula:"Core engineering formula",cs:"Case study: KMC-HSSD Research Agent",chk:"Production readiness checklist"},
+ne:{t:"एआई एजेन्ट इन्जिनियरिङ",st:"उत्पादन-तयार एआई एजेन्टहरू निर्माण — शिक्षण तथा सिकाइ एप",done:"पूरा",ch:"अध्याय",s:"विषय खोज्नुहोस्…",learn:"सिक्नुहोस्",path:"सिकाइ मार्ग",cap:"क्यापस्टोन",quiz:"आत्म-परीक्षण",mark:"पूरा भयो चिन्ह लगाउनुहोस्",unmark:"पूरा ✓",reset:"प्रगति रिसेट",rc:"सबै प्रगति रिसेट गर्ने?",none:"खोजसँग मिल्ने अध्याय छैन।",score:"अंक",theme:"थिम",ft:"तयारकर्ता: श्री विष्णु सिंह रायमाझी · केएमसी-एचएसएसडी · यूसीडीएल एकेडेमी · एसडीआरओके · त्रिभुवन विश्वविद्यालय",yt:"निःशुल्क युट्युब ट्युटोरियल",pf:"निःशुल्क PDF फाइल",formula:"मूल इन्जिनियरिङ सूत्र",cs:"केस स्टडी: KMC-HSSD अनुसन्धान एजेन्ट",chk:"उत्पादन-तयारी चेकलिस्ट"}};
+var P=[
+["I","Foundations of AI Agent Engineering",[
+[1,"Introduction to AI Agents","What is an AI agent?;Agent vs chatbot vs LLM application;Agentic AI vs generative AI;Anatomy of an agent;Perception, reasoning, planning, action, memory;Agent environments;Single- and multi-agent systems;Deterministic workflows vs autonomous agents;When not to use an agent;Real-world applications"],
+[2,"AI Agent Engineering Principles","From prompt to agent engineering;Requirements engineering;Reliability-first design;Human-centered design;Bounded autonomy;Least-privilege tool access;Fail-safe behavior;Explainability and traceability;Cost-aware engineering;Production-readiness criteria"],
+[3,"Large Language Models for Agents","Transformer fundamentals;Tokens and context windows;System, developer and user instructions;Structured outputs;Function/tool calling;Reasoning and planning;Model selection;Temperature and sampling;Context management;Model routing;Small vs large models;Local vs cloud models"]]],
+["II","Agent Architecture",[
+[4,"Anatomy of a Production AI Agent","Agent loop;State machine architecture;Event-driven architecture;Workflow-based architecture;ReAct-style agents;Planner–executor;Router;Supervisor;Hierarchical agents;Multi-agent systems","Input → Perception → Context → Reasoning → Planning → Tool Selection → Action → Observation → Verification → Memory → Response"]]],
+["III","Agent Design",[
+[5,"Agent Requirements Engineering","Define the business problem;Define users;Define responsibilities;Define prohibited actions;Define tools;Define inputs and outputs;Define success criteria;Define failure conditions;Define human intervention;Define SLAs and SLOs","Agent: KMC Research Assistant\nPurpose: Research workflow assistance\nUsers: Students, supervisors\nTools: Search, database, Drive\nKnowledge: Institutional research repository\nHuman approval: Required for final submission\nRisk level: Medium | Audit: Required"]]],
+["IV","Prompt and Context Engineering",[
+[6,"System Instruction Engineering","Agent identity;Mission;Responsibilities;Constraints;Tool-use rules;Output schema;Error handling;Escalation rules;Safety rules;Refusal behavior","IDENTITY · MISSION · SCOPE · AVAILABLE TOOLS · TOOL RULES · KNOWLEDGE SOURCES · WORKFLOW · DECISION RULES · OUTPUT FORMAT · SAFETY CONSTRAINTS · ERROR HANDLING · ESCALATION · AUDIT REQUIREMENTS"],
+[7,"Context Engineering","Context selection;Context compression;Context prioritization;Conversation state;Working memory;Long-term memory;User profile context;Task context;Retrieved context;Context-window optimization"]]],
+["V","Memory Engineering",[
+[8,"AI Agent Memory","Short-term memory;Working memory;Episodic memory;Semantic memory;Procedural memory;Persistent memory;Memory retrieval;Memory summarization;Memory expiration;Memory privacy","User → Conversation State → Working Memory → Memory Retrieval → Relevant Context → LLM → New Information → Memory Evaluation → Persistent Memory"]]],
+["VI","Tool Engineering",[
+[9,"Tool-Using Agents","What is an AI tool?;Function calling;Tool schemas;Tool descriptions;Tool selection;Tool validation;Tool execution;Tool errors;Tool timeouts;Tool permissions"],
+[10,"Tool Design Patterns","Read-only tools;Write tools;Destructive tools;Approval-required tools;Idempotent tools;Transactional tools;Async tools","Rule: the more consequential the action, the stronger the authorization and verification requirements should be."]]],
+["VII","Knowledge and RAG",[
+[11,"Retrieval-Augmented Generation","Why agents need external knowledge;Documents;Web knowledge;Institutional knowledge;Databases;APIs;Vector databases;Embeddings;Chunking;Metadata"],
+[12,"Advanced RAG","Semantic search;Keyword search;Hybrid search;Query rewriting;Query decomposition;Reranking;Multi-query retrieval;Context filtering;Citation generation;Retrieval evaluation","Documents → Parsing → Chunking → Embedding → Vector DB → Query → Retrieval → Reranking → Context → LLM → Grounded Answer"]]],
+["VIII","Planning and Reasoning",[
+[13,"Agent Planning","Task decomposition;Goal definition;Subtasks;Dependency graphs;Planning horizons;Replanning;Backtracking;Verification;Reflection;Stop conditions","Goal → Decompose → Prioritize → Execute → Observe → Evaluate → Replan if necessary → Complete"]]],
+["IX","Agent Orchestration",[
+[14,"Single-Agent Systems","Basic agent loop;Tool-using agent;Stateful agent;RAG agent;Workflow agent"],
+[15,"Multi-Agent Systems","Why multiple agents?;Specialist agents;Supervisor agent;Researcher agent;Writer agent;Reviewer agent;Planner agent;Executor agent;Debate systems;Agent communication","Supervisor → Researcher / Analyst / Reviewer → Writer → Human"]]],
+["X","Workflow Engineering",[
+[16,"Agent Workflows","Sequential;Parallel;Conditional;Loop;Human-in-the-loop;Approval;Retry;Compensation;Scheduled;Event-driven"]]],
+["XI","Human-in-the-Loop",[
+[17,"Human Oversight","Human-in-the-loop;Human-on-the-loop;Human-in-command;Approval gates;Confidence thresholds;Escalation;Manual override;Sensitive decisions;High-impact actions;Audit trails","Agent proposes action → Risk assessment → Low risk: Execute | High risk: Human approval → Execute / Reject"]]],
+["XII","Security Engineering",[
+[18,"AI Agent Security","Threat modeling;Authentication;Authorization;Identity management;API security;Secrets management;Encryption;Data isolation;Prompt injection;Indirect prompt injection;Tool abuse;Data exfiltration;Privilege escalation;Supply-chain risks"],
+[19,"Secure Agent Architecture","User;Authentication;Policy engine;Agent;Tool permission layer;Tool;External system"]]],
+["XIII","Guardrails",[
+[20,"Agent Guardrails","Input guardrails;Output guardrails;Tool guardrails;Data guardrails;Policy guardrails;Rate limits;Budget limits;Time limits;Action limits","IF action == DELETE THEN require human approval\nIF external_email == TRUE THEN validate recipient + content\nIF cost > budget THEN stop and request approval"]]],
+["XIV","Reliability Engineering",[
+[21,"Production Reliability","Failure modes;Retry mechanisms;Exponential backoff;Circuit breakers;Timeouts;Fallback models;Fallback workflows;Idempotency;State recovery;Graceful degradation","Principle: never assume that the LLM, tool, network, database, or external API will always work."]]],
+["XV","Evaluation",[
+[22,"Evaluating AI Agents","Why evaluation matters;Offline evaluation;Online evaluation;Human evaluation;Automated evaluation;Benchmark datasets;Golden datasets;Regression testing;Adversarial testing;Trajectory evaluation","Metrics: task success rate, tool-call accuracy, retrieval precision/recall, groundedness, factual accuracy, hallucination rate, latency, cost per task, failure rate, escalation rate"]]],
+["XVI","Observability",[
+[23,"Agent Observability","Logs;Metrics;Traces;Agent trajectories;Prompt tracing;Tool tracing;Token monitoring;Latency monitoring;Cost monitoring;Error monitoring","Request → Agent → LLM Call #1 → Tool Call #1 → Tool Result → LLM Call #2 → Tool Call #2 → Verification → Final Response"]]],
+["XVII","Cost Engineering",[
+[24,"AI Agent Economics","Token economics;Model pricing;Tool costs;Search costs;Database costs;Compute costs;Cost per task;Budget enforcement;Model routing;Caching","Simple task → small model · Complex task → large model · Repeated query → cache · Large context → compress · Expensive action → approval"]]],
+["XVIII","Data Engineering",[
+[25,"Agent Data Architecture","Structured data;Unstructured data;Metadata;Data pipelines;ETL/ELT;Data validation;Data lineage;Data governance;Data retention;Data deletion"]]],
+["XIX–XXI","Backend, Frontend and API Engineering",[
+[26,"Building the Agent Backend","Python, TypeScript/JavaScript;FastAPI, Node.js;PostgreSQL, Redis;Vector databases;REST, GraphQL, WebSockets;Message queues;Docker, Kubernetes","Frontend → API Gateway → Agent Service (LLM, Memory, RAG, Tools, Policy Engine, Observability) → Databases / External APIs"],
+[27,"Agent User Interfaces","Chat interfaces;Task interfaces;Agent dashboards;Progress indicators;Approval interfaces;Tool activity display;Source citations;Error messages;Human override;Accessibility"],
+[28,"Agent APIs","REST APIs;Authentication;API keys;OAuth;Webhooks;Streaming responses;Async jobs;Rate limiting;Versioning;API documentation"]]],
+["XXII–XXIII","Deployment and Testing",[
+[29,"Production Deployment","Local development;Development environment;Testing environment;Staging;Production;Containers;Cloud deployment;CI/CD;Environment variables;Secrets management","Developer → Git → Automated tests → Security scan → Build → Staging → Evaluation → Approval → Production"],
+[30,"AI Agent Testing","Unit;Integration;API;Tool;Prompt;RAG;Security;Load;Chaos;Regression"]]],
+["XXIV–XXV","Governance and AgentOps",[
+[31,"AI Governance","Responsible AI;Data governance;Privacy;Transparency;Accountability;Human oversight;Documentation;Risk classification;Model governance;Incident management"],
+[32,"AgentOps","Agent lifecycle;Version management;Prompt versioning;Model versioning;Tool versioning;Evaluation pipelines;Monitoring;Incident response;Rollback;Continuous improvement"]]],
+["XXVI–XXVII","Advanced and Specialized Agents",[
+[33,"Advanced Agent Patterns","Reflection;Self-correction;Self-evaluation;Planning and replanning;Delegation;Tool discovery;Dynamic tool selection;Agent memory;Simulation;Collaboration;Negotiation;Hierarchical agents;Autonomous workflows"],
+[34,"Research Agent","Research question;Literature search;Source validation;Evidence extraction;Synthesis;Citation;Research report;Human review"],
+[35,"Education Agent","Student tutoring;Lesson planning;Question generation;Assignment assistance;Assessment;Feedback;Research support;Academic resource retrieval"],
+[36,"Coding Agent","Requirement analysis;Code generation;Testing;Debugging;Documentation;Repository analysis;Deployment assistance"],
+[37,"Data Analysis Agent","Dataset;Validation;Exploratory analysis;Statistical analysis;Visualization;Interpretation;Report"]]],
+["XXVIII–XXIX","Case Study and Production Blueprint",[
+[38,"Complete Production Architecture","User → Web/Mobile UI → API Gateway;Authentication → Authorization → Policy engine;Agent orchestrator (planner, memory, RAG) → LLM;Tool selection (database, search, external API);Verification → Safety guardrail → Human approval*;Response;Logging, metrics, tracing → AgentOps","* Human approval is required only for actions whose risk or policy requires it."]]]
+];
+var CAP=["Personal Research Assistant Agent","KMC-HSSD Student Research Agent","AI Literature Review Agent","AI Statistical Analysis Assistant","AI Academic Writing Assistant","Multi-Agent Research System","AI Tutor Agent","AI University Helpdesk Agent","AI Data Analysis Agent","Production-Ready Autonomous Research Management Platform"];
+var PATH=["Python / JavaScript","LLM Fundamentals","Prompt Engineering","Structured Outputs","Tool Calling","RAG","Memory","Agent Workflows","Multi-Agent Systems","Security","Evaluation","Observability","Deployment","AgentOps","Production AI Agent"];
+var CS="Student → Research Form → Research Database → AI Agent → Supervisor → Research Workflow\n\nThe agent can support: student registration, research ID generation, topic identification, problem formulation, proposal submission, supervisor assignment, literature organization, progress tracking, data-analysis guidance, draft review, citation checking, final submission, evaluation, research archive.\n\nKMC-HSSD → Research Portal → Student / Supervisor → AI Research Agent → (Research Database · RAG Knowledge · Google APIs tools) → Activity Log → AI Dashboard";
+var CK=["Architecture: clear purpose, defined boundaries, explicit workflows, failure handling, state management","Model: appropriate model, structured output, context limits handled, fallback","Tools: validated schemas, authentication, least privilege, timeouts, error handling","Security: threat model, prompt-injection defenses, access control, secrets, data protection","Reliability: retry strategy, timeout, circuit breaker, idempotency, recovery","Evaluation: golden dataset, automated tests, human evaluation, regression, adversarial testing","Observability: logs, metrics, traces, cost monitoring, error monitoring","Governance: privacy, documentation, human oversight, audit trail, incident response"];
+var FORMULA="Production AI Agent = Model + Context + Tools + Memory + Knowledge + Workflow + Guardrails + Human Oversight + Evaluation + Observability + Security + Deployment";
+var Q=[
+["Which design lets an agent act only within limits it was given?",["Bounded autonomy","Unlimited tool access","Higher temperature","Longer prompts"],0],
+["For a destructive action such as DELETE, the guardrail example says to…",["Retry three times","Require human approval","Use a smaller model","Cache the result"],1],
+["In a RAG pipeline, which step comes right after retrieval?",["Parsing","Chunking","Reranking","Embedding documents"],2],
+["Retrying a failing tool call with growing delays is called…",["Exponential backoff","Compensation","Routing","Reflection"],0],
+["Which is a prompt-related attack where malicious text hides inside retrieved content?",["Indirect prompt injection","Model routing","Idempotency","Chunking"],0],
+["A golden dataset is mainly used for…",["Reducing token cost","Regression and quality evaluation","Rendering the UI","Storing secrets"],1],
+["Which pairing correctly follows the cost-optimization rule?",["Simple task → large model","Repeated query → cache","Large context → ignore","Expensive action → auto-run"],1],
+["Which is NOT part of the core engineering formula?",["Guardrails","Observability","Human oversight","Social media marketing"],3]];
+var lang="en",tab="learn",key="aae.v1",st={d:{},q:{}};
+function ld(){try{var r=localStorage.getItem(key);if(r)st=JSON.parse(r);var l=localStorage.getItem("aae.lang");if(l)lang=l}catch(e){}}
+function sv(){try{localStorage.setItem(key,JSON.stringify(st));localStorage.setItem("aae.lang",lang)}catch(e){}}
+function $(i){return document.getElementById(i)}
+function yt(q){return 'https://www.youtube.com/results?search_query='+encodeURIComponent(q+' tutorial')}
+function pdf(q){return 'https://www.google.com/search?q='+encodeURIComponent(q+' filetype:pdf')}
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+var TOTAL=0;P.forEach(function(p){TOTAL+=p[2].length});
+function prog(){var n=Object.keys(st.d).filter(function(k){return st.d[k]}).length;$("pb").style.width=(n/TOTAL*100)+"%";$("pt").textContent=n+" / "+TOTAL+" "+L[lang].ch+" "+L[lang].done+" ("+Math.round(n/TOTAL*100)+"%)"}
+function chrome(){var t=L[lang];$("t").textContent=t.t;$("st").textContent=t.st;$("s").placeholder=t.s;$("lg").textContent=lang=="en"?"नेपाली":"English";$("th").textContent=t.theme;$("rs").textContent=t.reset;$("ft").textContent=t.ft;document.documentElement.lang=lang;
+var tabs=[["learn",t.learn],["path",t.path],["cap",t.cap],["quiz",t.quiz]];$("nv").innerHTML=tabs.map(function(x){return '<button data-t="'+x[0]+'" class="'+(tab==x[0]?"on":"")+'">'+x[1]+'</button>'}).join("")}
+function learn(){var q=$("s").value.toLowerCase(),h="";
+P.forEach(function(p){var cs=p[2].filter(function(c){return !q||(c[1]+" "+c[2]+" "+p[1]).toLowerCase().indexOf(q)>-1});if(!cs.length)return;
+var dn=cs.filter(function(c){return st.d[c[0]]}).length;
+h+='<section class="part"><h2><span>Part '+p[0]+' — '+p[1]+'</span><small>'+dn+'/'+cs.length+'</small></h2>';
+cs.forEach(function(c){var d=st.d[c[0]];h+='<details class="'+(d?"done":"")+'"'+(q?" open":"")+'><summary><b>'+c[0]+'. '+c[1]+'</b><span>'+(d?"✓":"")+'</span></summary><div class="body"><div class="lk"><a href="'+yt(c[1]+' AI agents')+'" target="_blank" rel="noopener">▶ '+L[lang].yt+'</a><a href="'+pdf(c[1]+' AI agents')+'" target="_blank" rel="noopener">📄 '+L[lang].pf+'</a></div><ol>'+c[2].split(";").map(function(x){var q=x+' '+c[1]+' AI agents';return "<li>"+esc(x)+'<span class="mi"><a href="'+yt(q)+'" target="_blank" rel="noopener" title="YouTube">▶ video</a><a href="'+pdf(q)+'" target="_blank" rel="noopener" title="PDF">📄 pdf</a></span></li>'}).join("")+'</ol>'+(c[3]?'<pre>'+esc(c[3])+'</pre>':"")+'<button data-c="'+c[0]+'" class="'+(d?"on":"")+'">'+(d?L[lang].unmark:L[lang].mark)+'</button></div></details>'});
+h+='</section>'});
+$("m").innerHTML=h||'<p class="note">'+L[lang].none+'</p>'}
+function path(){$("m").innerHTML='<h2>'+L[lang].path+'</h2><div class="chips">'+PATH.map(function(x,i){return '<span>'+(i+1)+'. '+x+'</span>'}).join("")+'</div><h2>'+L[lang].formula+'</h2><pre>'+esc(FORMULA.replace(/ \+ /g,"\n+ "))+'</pre><h2>'+L[lang].chk+'</h2><ul>'+CK.map(function(x){return "<li>"+esc(x)+"</li>"}).join("")+'</ul>'}
+function cap(){$("m").innerHTML='<h2>'+L[lang].cap+'</h2><ol>'+CAP.map(function(x){return "<li>"+x+"</li>"}).join("")+'</ol><h2>'+L[lang].cs+'</h2><pre>'+esc(CS)+'</pre>'}
+function quiz(){var n=0,a=0;Q.forEach(function(x,i){if(st.q[i]!==undefined){a++;if(st.q[i]==x[2])n++}});
+$("m").innerHTML='<p class="score">'+L[lang].score+': '+n+' / '+Q.length+'</p>'+Q.map(function(x,i){var r=st.q[i];return '<div class="q"><p>'+(i+1)+'. '+x[0]+'</p>'+x[1].map(function(o,j){var c="";if(r!==undefined){if(j==x[2])c="good";else if(j==r)c="bad"}return '<button data-q="'+i+'" data-o="'+j+'" class="'+c+'">'+o+'</button>'}).join("")+'</div>'}).join("")}
+function render(){chrome();prog();({learn:learn,path:path,cap:cap,quiz:quiz})[tab]()}
+document.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;
+if(b.dataset.t){tab=b.dataset.t;render();window.scrollTo(0,0)}
+else if(b.dataset.c){st.d[b.dataset.c]=!st.d[b.dataset.c];sv();var o=[].map.call(document.querySelectorAll("details[open]"),function(d){return d.querySelector("b").textContent});render();[].forEach.call(document.querySelectorAll("details"),function(d){if(o.indexOf(d.querySelector("b").textContent)>-1)d.open=true})}
+else if(b.dataset.q){if(st.q[b.dataset.q]===undefined){st.q[b.dataset.q]=+b.dataset.o;sv();quiz()}}
+else if(b.id=="lg"){lang=lang=="en"?"ne":"en";sv();render()}
+else if(b.id=="th"){var r=document.documentElement,c=r.getAttribute("data-theme")||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");r.setAttribute("data-theme",c=="dark"?"light":"dark")}
+else if(b.id=="rs"){if(confirm(L[lang].rc)){st={d:{},q:{}};sv();render()}}});
+$("s").addEventListener("input",function(){if(tab!="learn"){tab="learn";chrome()}learn()});
+ld();render();
+</script></body></html>
