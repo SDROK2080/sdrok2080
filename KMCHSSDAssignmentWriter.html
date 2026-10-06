@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KMC-HSSD Assignment Writer</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f6f4ee;--card:#fff;--tx:#1d2733;--mu:#5f6b7a;--ac:#1f5f8b;--ac2:#b8860b;--bd:#ddd8cb}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14181d;--card:#1d242c;--tx:#e8ecf0;--mu:#9aa6b3;--ac:#5fa8d8;--ac2:#e0b84a;--bd:#34404b}}
+:root[data-theme="dark"]{--bg:#14181d;--card:#1d242c;--tx:#e8ecf0;--mu:#9aa6b3;--ac:#5fa8d8;--ac2:#e0b84a;--bd:#34404b}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{background:var(--ac);color:#fff;padding:18px 16px}
+header h1{margin:0;font:700 1.25rem Georgia,"Times New Roman",serif}
+header p{margin:2px 0 0;opacity:.9;font-size:.85rem}
+nav{display:flex;gap:4px;overflow-x:auto;background:var(--card);border-bottom:1px solid var(--bd);padding:6px 10px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+nav button{flex:none;border:0;background:none;color:var(--mu);padding:9px 14px;border-radius:8px;font:600 .9rem inherit;cursor:pointer}
+nav button.on{background:var(--ac);color:#fff}
+main{max-width:860px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:14px}
+h2{font:700 1.15rem Georgia,serif;margin:0 0 10px}
+h3{margin:0 0 6px;font-size:1rem}
+label{display:block;font-size:.8rem;color:var(--mu);margin:10px 0 3px;font-weight:600}
+input,textarea{width:100%;padding:9px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit}
+textarea{min-height:130px;resize:vertical}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+.hint{font-size:.85rem;color:var(--mu);margin:0 0 6px}
+.meta{display:flex;justify-content:space-between;font-size:.78rem;color:var(--mu);margin-top:4px}
+.bar{height:10px;background:var(--bd);border-radius:6px;overflow:hidden;margin:6px 0}
+.bar i{display:block;height:100%;width:0;background:var(--ac2);transition:width .3s}
+.btn{border:0;background:var(--ac);color:#fff;padding:10px 16px;border-radius:8px;font:600 .9rem inherit;cursor:pointer;margin:4px 6px 4px 0}
+.btn.alt{background:var(--card);color:var(--ac);border:1px solid var(--ac)}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+td,th{border-bottom:1px solid var(--bd);padding:7px 6px;text-align:left}
+.flow{display:flex;flex-wrap:wrap;gap:6px;font-size:.85rem}
+.flow span{background:var(--bg);border:1px solid var(--bd);border-radius:20px;padding:4px 10px}
+a{color:var(--ac)}
+.res{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--bd)}
+.res:last-child{border:0}
+.tag{flex:none;font-size:.7rem;font-weight:700;padding:3px 8px;border-radius:5px;color:#fff;background:#b3261e}
+.tag.pdf{background:#2d7a4b}
+.tab{display:none}.tab.on{display:block}
+#doc{display:none}
+.paper{background:#fff;color:#000;font:12pt/1.5 "Times New Roman",Times,serif;text-align:justify;padding:24px;border:1px solid var(--bd);border-radius:6px;overflow-x:auto}
+.paper h1,.paper h2{font-size:15pt;text-align:left;margin:18px 0 6px;font-family:inherit}
+.paper .cv{text-align:center;min-height:60vh}
+.paper .cv h1{text-align:center;font-size:16pt}
+.paper .cv p{text-align:center;margin:6px 0}
+.paper .pb{border-top:1px dashed #aaa;margin:20px 0}
+@page{size:A4;margin:1in}
+@media print{
+ header,nav,main>.tab,.noprint{display:none!important}
+ body{background:#fff}main{padding:0;max-width:none}
+ .paper{border:0;padding:0}
+ #prev{display:block!important}
+ .paper .pb{border:0;page-break-after:always;margin:0}
+}
+</style></head><body>
+<header><h1>KMC-HSSD Assignment Writer</h1><p>Kapilvastu Multiple Campus · Dept. of Humanities &amp; Social Sciences · Taulihawa, Kapilvastu</p></header>
+<nav id="nav"></nav>
+<main>
+<section class="tab on" id="t-write">
+ <div class="card"><h2>1. Cover Page details</h2>
+  <div class="grid" id="cf"></div></div>
+ <div class="card"><h2>Progress</h2>
+  <div class="bar"><i id="pb"></i></div>
+  <div class="meta"><span id="wc">0 words</span><span>Target: 1,500–3,000 words</span></div></div>
+ <div id="secs"></div>
+ <button class="btn" onclick="show('prev')">Preview &amp; Print / PDF</button>
+ <button class="btn alt" onclick="resetAll()">Clear draft</button>
+</section>
+
+<section class="tab" id="t-guide">
+ <div class="card"><h2>Assignment structure</h2>
+  <div class="flow"><span>Cover</span><span>→ Contents</span><span>→ Introduction</span><span>→ Objectives</span><span>→ Background</span><span>→ Main Discussion</span><span>→ Local Context</span><span>→ Analysis</span><span>→ Conclusion</span><span>→ Recommendations</span><span>→ References</span><span>→ Appendices</span></div></div>
+ <div class="card"><h2>Principles</h2>
+  <p><b>Learn → Read → Think → Research → Analyze → Write → Reference → Reflect</b></p>
+  <p>Show your own understanding. Interpret and analyze; do not copy from books or websites. Relate the topic to Taulihawa, Kapilvastu or your own community.</p></div>
+ <div class="card"><h2>Formatting guidelines</h2>
+  <table>
+  <tr><th>Component</th><th>Recommendation</th></tr>
+  <tr><td>Language</td><td>Clear academic English/Nepali as instructed</td></tr>
+  <tr><td>Font</td><td>Times New Roman, 12 pt</td></tr>
+  <tr><td>Heading</td><td>14–16 pt, bold</td></tr>
+  <tr><td>Line spacing</td><td>1.5</td></tr>
+  <tr><td>Alignment</td><td>Justified</td></tr>
+  <tr><td>Page / margins</td><td>A4 / 1 inch</td></tr>
+  <tr><td>Referencing</td><td>APA 7th</td></tr>
+  <tr><td>Sources</td><td>Books, journals, reports, credible websites</td></tr>
+  <tr><td>Word count</td><td>1,500–3,000 (depending on course)</td></tr>
+  <tr><td>Submission</td><td>Printed/PDF as instructed by the department</td></tr></table></div>
+ <div class="card"><h2>APA 7th examples</h2>
+  <p><b>Book:</b> Giddens, A. (2017). <i>Sociology</i>. Polity Press.</p>
+  <p><b>Journal:</b> Author, A. A. (2024). Title of the article. <i>Journal Name, 10</i>(2), 25–40.</p>
+  <p><b>Website:</b> Organization Name. (2025). <i>Title of webpage</i>. URL</p></div>
+ <div class="card"><h2>Final checklist</h2><div id="chk"></div></div>
+</section>
+
+<section class="tab" id="t-res">
+ <div class="card"><h2>Videos</h2>
+  <p class="hint">These open YouTube searches so you always get current, working videos.</p>
+  <div id="vids"></div></div>
+ <div class="card"><h2>PDF guides</h2><div id="pdfs"></div></div>
+ <div class="card"><h2>Add your own link</h2>
+  <p class="hint">Add a department PDF or a teacher's video link (kept on this device).</p>
+  <div class="grid"><div><label>Title</label><input id="ut"></div><div><label>URL (https://…)</label><input id="uu"></div></div>
+  <button class="btn" onclick="addRes()">Add</button><div id="mine"></div></div>
+</section>
+
+<section class="tab" id="t-prev"><div id="prev">
+ <div class="noprint card"><button class="btn" onclick="window.print()">Print / Save as PDF</button>
+ <button class="btn alt" onclick="copyAll()">Copy text</button><span id="msg" class="hint"></span>
+ <p class="hint">In the print dialog choose "Save as PDF", paper A4. Page numbers: enable "Headers and footers".</p></div>
+ <div class="paper" id="paper"></div></div></section>
+</main>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const tabs=[['write','Write'],['guide','Guide'],['res','Videos & PDFs'],['prev','Preview']];
+const cover=[['title','Title'],['course','Course / Subject'],['code','Course Code'],['year','Year / Semester'],['to','Submitted To'],['by','Submitted By'],['roll','Roll No.'],['date','Date of Submission']];
+const secs=[
+['intro','2. Introduction','What is the topic? Why is it important? What is the context? What will you discuss? (1–2 pages)'],
+['obj','3. Objectives','Write 3–5 clear objectives, one per line. Start each with "To…" (e.g. To explain the concept of social change).'],
+['bg','4. Conceptual / Theoretical Background','Explain the concept using relevant scholars and sources.'],
+['main','5. Main Discussion','Core of the assignment. Use logical headings and subheadings (e.g. causes: education, technology, urbanization, migration, economic development, political change).'],
+['local','6. Local / Practical Context','Connect to Nepal, and to Taulihawa, Kapilvastu or your community.'],
+['ana','7. Analysis and Findings','Interpret, do not copy. Use observation, interview, questionnaire, secondary data, tables, case studies.'],
+['con','8. Conclusion','Return to the topic, summarize findings, give your overall understanding. No new information. (1–2 paragraphs)'],
+['rec','9. Recommendations','Practical suggestions, one per line.'],
+['ref','10. References','Only sources you actually used, in APA 7th. One per line.'],
+['app','Appendices (if required)','Questionnaires, tables, charts, photos list, etc.']];
+const vids=[
+['How to write a university assignment (structure)','how to write a university assignment introduction body conclusion'],
+['Writing an introduction and objectives','how to write introduction and objectives for assignment'],
+['Writing a strong conclusion','how to write a conclusion for an academic essay'],
+['APA 7th edition referencing for beginners','APA 7th edition referencing tutorial'],
+['Avoid plagiarism and paraphrase properly','how to paraphrase and avoid plagiarism students'],
+['Social change in Nepal (sample topic)','social change in Nepal sociology'],
+['Format a Word document: Times New Roman 12, 1.5 spacing, justified, A4','format assignment in Word table of contents page numbers']];
+const pdfs=[
+['APA 7 Student Paper Setup Guide','https://apastyle.apa.org/instructional-aids/student-paper-setup-guide.pdf'],
+['APA Style – Reference examples (web page)','https://apastyle.apa.org/style-grammar-guidelines/references/examples'],
+['Purdue OWL – APA 7th formatting guide','https://owl.purdue.edu/owl/research_and_citation/apa_style/apa_formatting_and_style_guide/general_format.html']];
+const chk=['Cover page complete (all fields)','Table of contents with page numbers','Introduction answers what, why, context, scope','3–5 clear objectives','Headings and subheadings are logical','Linked to Nepal and Kapilvastu/Taulihawa','Own analysis, not copied text','Conclusion adds no new information','Recommendations are practical','References in APA 7th, all cited sources listed','Times New Roman 12, 1.5 spacing, justified, A4, 1-inch margins','Word count within 1,500–3,000'];
+let S={c:{},s:{},mine:[],k:{}};
+try{const x=localStorage.getItem('kmc-asg');if(x)S=Object.assign(S,JSON.parse(x))}catch(e){}
+const save=()=>{try{localStorage.setItem('kmc-asg',JSON.stringify(S))}catch(e){}};
+$('nav').innerHTML=tabs.map(t=>`<button data-t="${t[0]}" onclick="show('${t[0]}')">${t[1]}</button>`).join('');
+function show(n){document.querySelectorAll('.tab').forEach(e=>e.classList.toggle('on',e.id==='t-'+n));
+ document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===n));
+ if(n==='prev')build();scrollTo(0,0)}
+$('cf').innerHTML=cover.map(f=>`<div><label>${f[1]}</label><input data-c="${f[0]}"></div>`).join('');
+$('secs').innerHTML=secs.map(s=>`<div class="card"><h3>${s[1]}</h3><p class="hint">${s[2]}</p><textarea data-s="${s[0]}"></textarea><div class="meta"><span id="w-${s[0]}">0 words</span></div></div>`).join('');
+$('chk').innerHTML=chk.map((c,i)=>`<label style="display:flex;gap:8px;align-items:center;font-size:.9rem;color:var(--tx);font-weight:400"><input type="checkbox" style="width:auto" data-k="${i}">${c}</label>`).join('');
+$('vids').innerHTML=vids.map(v=>`<div class="res"><span class="tag">VIDEO</span><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=${encodeURIComponent(v[1])}">${v[0]}</a></div>`).join('');
+$('pdfs').innerHTML=pdfs.map(v=>`<div class="res"><span class="tag pdf">PDF</span><a target="_blank" rel="noopener" href="${v[1]}">${v[0]}</a></div>`).join('');
+const wcount=t=>(t.trim().match(/\S+/g)||[]).length;
+function stats(){let t=0;secs.forEach(s=>{if(s[0]==='ref'||s[0]==='app')return;const n=wcount(S.s[s[0]]||'');t+=n;$('w-'+s[0]).textContent=n+' words'});
+ ['ref','app'].forEach(k=>$('w-'+k).textContent=wcount(S.s[k]||'')+' words');
+ $('wc').textContent=t+' words (excl. references)';$('pb').style.width=Math.min(100,t/1500*100)+'%'}
+document.querySelectorAll('[data-c]').forEach(e=>{e.value=S.c[e.dataset.c]||'';e.oninput=()=>{S.c[e.dataset.c]=e.value;save()}});
+document.querySelectorAll('[data-s]').forEach(e=>{e.value=S.s[e.dataset.s]||'';e.oninput=()=>{S.s[e.dataset.s]=e.value;save();stats()}});
+document.querySelectorAll('[data-k]').forEach(e=>{e.checked=!!S.k[e.dataset.k];e.onchange=()=>{S.k[e.dataset.k]=e.checked;save()}});
+function renderMine(){$('mine').innerHTML=S.mine.map((m,i)=>`<div class="res"><span class="tag ${/\.pdf($|\?)/i.test(m.u)?'pdf':''}">${/\.pdf($|\?)/i.test(m.u)?'PDF':'LINK'}</span><a target="_blank" rel="noopener" href="${esc(m.u)}">${esc(m.t)}</a> <a href="#" onclick="S.mine.splice(${i},1);save();renderMine();return false">✕</a></div>`).join('')}
+function addRes(){const t=$('ut').value.trim(),u=$('uu').value.trim();if(!t||!/^https?:\/\//i.test(u))return alert('Enter a title and a URL starting with https://');S.mine.push({t,u});save();$('ut').value=$('uu').value='';renderMine()}
+function resetAll(){if(!confirm('Clear all cover details and written text?'))return;S.c={};S.s={};save();location.reload()}
+const lines=t=>(t||'').split('\n').filter(x=>x.trim());
+function body(k){const t=S.s[k]||'';if(k==='obj'||k==='rec'){const l=lines(t);return l.length?'<ol>'+l.map(x=>`<li>${esc(x.replace(/^\s*(\d+[.)]|[-•])\s*/,''))}</li>`).join('')+'</ol>':''}
+ return lines(t).map(x=>`<p>${esc(x)}</p>`).join('')}
+function build(){const c=S.c,g=k=>esc(c[k]||'__________________');
+ let h=`<div class="cv"><h1>KAPILVASTU MULTIPLE CAMPUS (KMC)</h1><p><b>Department of Humanities and Social Sciences (KMC-HSSD)</b></p><p>Taulihawa, Kapilvastu, Nepal</p><br><h1>ASSIGNMENT</h1><br>
+ <p><b>Title:</b> ${g('title')}</p><p><b>Course/Subject:</b> ${g('course')}</p><p><b>Course Code:</b> ${g('code')}</p><p><b>Program:</b> BA</p><p><b>Year/Semester:</b> ${g('year')}</p><p><b>Submitted To:</b> ${g('to')}</p><p><b>Submitted By:</b> ${g('by')}</p><p><b>Roll No.:</b> ${g('roll')}</p><p><b>Date of Submission:</b> ${g('date')}</p></div><div class="pb"></div>`;
+ const used=secs.filter(s=>(S.s[s[0]]||'').trim());
+ h+=`<h1>Table of Contents</h1><ol style="list-style:none;padding:0">${used.map(s=>`<li>${s[1].replace(/^\d+\.\s*/,'')}</li>`).join('')}</ol><p style="font-size:10pt">(Add page numbers in your final document.)</p><div class="pb"></div>`;
+ used.forEach(s=>{h+=`<h2>${s[1]}</h2>`+(s[0]==='ref'?lines(S.s.ref).map(x=>`<p style="padding-left:.5in;text-indent:-.5in">${esc(x)}</p>`).join(''):body(s[0]))});
+ $('paper').innerHTML=h;$('prev').style.display='block'}
+async function copyAll(){build();const t=$('paper').innerText;try{await navigator.clipboard.writeText(t);$('msg').textContent=' Copied.'}catch(e){$('msg').textContent=' Copy blocked here; select the text manually.'}}
+renderMine();stats();show('write');
+</script></body></html>
