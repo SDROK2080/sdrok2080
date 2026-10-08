@@ -4,16 +4,16 @@
 <title>Our Culture, Our Identity – KMC-HSSD Documentary Workbook</title>
 <link href="https://fonts.googleapis.com/css2?family=Literata:wght@400;600;700&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f2f4f6;--card:#fff;--ink:#1c2338;--mut:#5d667c;--line:#d8dde6;--pri:#243a6b;--acc:#d9951a;--ok:#2c7a55;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12161f;--card:#1a2030;--ink:#e8ebf3;--mut:#9aa3b8;--line:#2b3347;--pri:#8fa8e6;--acc:#f0b43f;--ok:#5cc596}}
-:root[data-theme="dark"]{--bg:#12161f;--card:#1a2030;--ink:#e8ebf3;--mut:#9aa3b8;--line:#2b3347;--pri:#8fa8e6;--acc:#f0b43f;--ok:#5cc596}
+:root{--bg:#f2f4f6;--card:#fff;--ink:#1c2338;--mut:#5d667c;--line:#d8dde6;--pri:#243a6b;--acc:#d9951a;--ok:#2c7a55;--err:#b3261e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12161f;--card:#1a2030;--ink:#e8ebf3;--mut:#9aa3b8;--line:#2b3347;--pri:#8fa8e6;--acc:#f0b43f;--ok:#5cc596;--err:#f2897f}}
+:root[data-theme="dark"]{--bg:#12161f;--card:#1a2030;--ink:#e8ebf3;--mut:#9aa3b8;--line:#2b3347;--pri:#8fa8e6;--acc:#f0b43f;--ok:#5cc596;--err:#f2897f}
 *{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 'Public Sans',system-ui,sans-serif}
 h1,h2,h3{font-family:Literata,Georgia,serif;margin:0}
 .app{display:grid;grid-template-columns:270px 1fr;min-height:100vh}
 nav{background:var(--card);border-right:1px solid var(--line);padding:20px 14px;position:sticky;top:0;height:100vh;overflow:auto}
 nav h1{font-size:20px;line-height:1.2;margin-bottom:4px}nav p{margin:0 0 14px;color:var(--mut);font-size:13px}
-.bar{height:6px;background:var(--line);border-radius:3px;margin-bottom:14px}.bar i{display:block;height:100%;background:var(--acc);border-radius:3px;width:0}
+.bar{height:6px;background:var(--line);border-radius:3px;margin-bottom:14px}.bar i{display:block;height:100%;background:var(--acc);border-radius:3px;width:0;transition:width .3s}
 nav button{display:flex;gap:8px;width:100%;text-align:left;background:none;border:0;color:var(--ink);padding:7px 10px;border-radius:6px;font:inherit;font-size:14px;cursor:pointer}
 nav button:hover{background:var(--bg)}nav button.on{background:var(--pri);color:var(--card);font-weight:600}
 nav button span{opacity:.6;min-width:22px}
@@ -25,7 +25,7 @@ h2{font-size:28px;color:var(--pri);margin-bottom:6px}
 .blk h3{font-size:17px;margin-bottom:8px}
 .rule{border-left:4px solid var(--acc);padding:10px 14px;background:var(--card);margin-bottom:16px;font-size:14px}
 label.f{display:block;font-weight:600;font-size:14px;margin:10px 0 4px}
-textarea,input[type=text],input[type=number]{width:100%;font:inherit;font-size:15px;padding:9px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+textarea,input[type=text],input[type=url],input[type=number]{width:100%;font:inherit;font-size:15px;padding:9px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
 textarea{min-height:84px;resize:vertical}
 :focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .ck{display:flex;gap:10px;align-items:flex-start;padding:5px 0;cursor:pointer}.ck input{margin-top:5px;width:18px;height:18px;accent-color:var(--ok)}
@@ -34,12 +34,13 @@ th{font-size:13px;text-align:left;padding:6px;border-bottom:2px solid var(--line
 td{padding:4px;vertical-align:top;min-width:130px}td textarea{min-height:56px;font-size:14px}
 button.b{background:var(--pri);color:var(--card);border:0;border-radius:6px;padding:8px 14px;font:inherit;font-weight:600;cursor:pointer;margin:8px 8px 0 0}
 button.b.g{background:none;color:var(--pri);border:1px solid var(--pri)}
+button.b:disabled{opacity:.5;cursor:not-allowed}
 .wc{font-size:13px;color:var(--mut);margin-top:4px}.wc.ok{color:var(--ok);font-weight:600}
 .pg{display:flex;justify-content:space-between;margin-top:22px}
 .top{display:flex;gap:8px;justify-content:flex-end;margin-bottom:10px;flex-wrap:wrap}
 .tot{font-family:Literata,serif;font-size:30px;color:var(--pri)}
 .rr{display:grid;grid-template-columns:1fr 90px;gap:10px;align-items:center;padding:4px 0}
-#out{display:none}
+.msg{margin-top:12px;font-weight:600}.msg.ok{color:var(--ok)}.msg.err{color:var(--err)}
 @media(max-width:800px){.app{display:block}nav{display:none}.sel{display:block;width:100%;padding:12px;margin:0;border:0;border-bottom:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:600}h2{font-size:24px}}
 </style></head><body>
 <div class="app">
@@ -47,7 +48,11 @@ button.b.g{background:none;color:var(--pri);border:1px solid var(--pri)}
 <div><select class="sel" id="sel" aria-label="Choose step"></select><main id="main"></main></div>
 </div>
 <script>
+/* ===== CONFIG: your Google Apps Script web-app URL ===== */
+const GOOGLE_SHEET_API="https://script.google.com/macros/s/AKfycbwja9xV8THDuJ_zUV_DV-zIMTtrSf0oU40XDHtgvWJOOdarCe-KLrIYxKQTkFjTTUYIhg/exec";
+
 const R=(t,a)=>({k:'area',key:t,label:t,ph:a||''});
+const SUBF=[['studentName','Student name','text',1],['studentId','Student ID / Roll no.','text',1],['program','Program (e.g. BA 3rd year)','text',1],['cultureCategory','Culture category','text',1],['title','Culture / heritage title','text',1],['description','Describe the culture or heritage','area',1],['municipality','Municipality','text'],['location','Location','text'],['photoUrl','Photo URL (optional)','url'],['videoUrl','YouTube / video URL (optional)','url']];
 const STEPS=[
 {t:'Start here by KMC-HSSD Students',intro:'Answer the five starting questions. Your answers shape everything that follows.',
  rule:'Academic rule: you do the fieldwork. This workbook only helps you plan and organize. Never invent quotes, names, dates, places, statistics or observations. If you are unsure, mark it “verify”.',
@@ -85,52 +90,84 @@ const STEPS=[
 {t:'Report',intro:'Fill each section from your own evidence. Leave blanks rather than guess.',
  b:['Title','Introduction','Background','Research problem','Objectives','Research questions','Methodology','Study area','Participants / interviewees','Findings','Cultural analysis','Changes observed','Challenges','Conclusion','Recommendations','References','Appendix: interview questions'].map((t,i)=>R((i+1)+'. '+t))},
 {t:'Reflection',intro:'Answer the prompts, then write 300–500 words in your own voice.',
- b:['What surprised you during the fieldwork?','What did you learn that you did not know before?','Did your opinion about local culture change?','What cultural practice should be preserved?','What changes are positive?','What changes concern you?','What role can young people play?','What did you learn about research?','What did you learn about interviewing?','What did you learn about using AI responsibly?'].map(R).concat([{k:'area',key:'REFLECTION (300–500 words)',label:'My personal reflection (300–500 words)',wc:1}])},
+ b:['What surprised you during the fieldwork?','What did you learn that you did not know before?','Did your opinion about local culture change?','What cultural practice should be preserved?','What changes are positive?','What changes concern you?','What role can young people play?','What did you learn about research?','What did you learn about interviewing?','What did you learn about using AI responsibly?'].map(t=>R(t)).concat([{k:'area',key:'REFLECTION (300–500 words)',label:'My personal reflection (300–500 words)',wc:1}])},
 {t:'Presentation',intro:'A 5-minute presentation for KMC-HSSD. About 35–40 seconds per point.',
- b:['Why I selected the topic','What I investigated','How I conducted fieldwork','What I discovered','What the documentary shows','Challenges I faced','What I learned','Why this culture matters'].map(R)},
+ b:['Why I selected the topic','What I investigated','How I conducted fieldwork','What I discovered','What the documentary shows','Challenges I faced','What I learned','Why this culture matters'].map(t=>R(t))},
 {t:'Quality check',intro:'Score yourself honestly, then improve the lowest areas before submitting.',
- b:[{k:'rub'},R('What I will improve before submitting')]}
+ b:[{k:'rub'},R('What I will improve before submitting')]},
+{t:'Submit to KMC-HSSD',intro:'When your culture or heritage entry is ready, send it to the department. Your answers are also saved on this device.',
+ b:[{k:'sub'}]}
 ];
 const RUB=[['Originality of idea',15],['Quality of field research',20],['Use of authentic evidence',15],['Humanities analysis',15],['Creativity / storytelling',15],['Documentary production',10],['Presentation',5],['Personal reflection',5]];
-let D={},cur=0;
-try{D=JSON.parse(localStorage.getItem('kmc-doc')||'{}')}catch(e){}
+let D={},cur=0,sending=false;
+try{D=JSON.parse(localStorage.getItem('kmc-doc')||'{}')||{}}catch(e){D={}}
 const save=()=>{try{localStorage.setItem('kmc-doc',JSON.stringify(D))}catch(e){}prog()};
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const wc=s=>(s||'').trim()?(s||'').trim().split(/\s+/).length:0;
-function done(i){const b=STEPS[i].b;let n=0,t=0;b.forEach(x=>{if(x.k==='area'){t++;if(D[x.key])n++}else if(x.k==='check'){t++;if(Object.keys(D[x.key]||{}).some(k=>D[x.key][k]))n++}else if(x.k==='table'){t++;if((D[x.key]||[]).some(r=>r.some(c=>c)))n++}else if(x.k==='rub'){t++;if(D.rub)n++}});return t?n/t:1}
-function prog(){let s=0;STEPS.forEach((_,i)=>s+=done(i));$('.bar i').style.width=(s/STEPS.length*100)+'%';STEPS.forEach((_,i)=>{const b=document.querySelector('#nav button[data-i="'+i+'"]');if(b)b.querySelector('span').textContent=done(i)>=1?'✓':(i+1)})}
+function done(i){let n=0,t=0;STEPS[i].b.forEach(x=>{
+ if(x.k==='area'){t++;if(D[x.key])n++}
+ else if(x.k==='check'){t++;if(Object.keys(D[x.key]||{}).some(k=>D[x.key][k]))n++}
+ else if(x.k==='table'){t++;if((D[x.key]||[]).some(r=>r.some(c=>c)))n++}
+ else if(x.k==='rub'){t++;if(D.rub&&Object.keys(D.rub).length)n++}
+ else if(x.k==='sub'){t++;if(D.submitted)n++}});return t?n/t:1}
+function prog(){let s=0;STEPS.forEach((_,i)=>s+=done(i));const bar=$('.bar i');if(bar)bar.style.width=(s/STEPS.length*100)+'%';
+ STEPS.forEach((_,i)=>{const b=document.querySelector('#nav button[data-i="'+i+'"]');if(b)b.querySelector('span').textContent=done(i)>=1?'✓':(i+1)})}
 function nav(){$('#nav').innerHTML='<h1>Our Culture, Our Identity</h1><p>KMC-HSSD Humanities documentary workbook</p><div class="bar"><i></i></div>'+STEPS.map((s,i)=>'<button data-i="'+i+'"><span>'+(i+1)+'</span>'+esc(s.t)+'</button>').join('');
-$('#sel').innerHTML=STEPS.map((s,i)=>'<option value="'+i+'">'+(i+1)+'. '+esc(s.t)+'</option>').join('')}
+ $('#sel').innerHTML=STEPS.map((s,i)=>'<option value="'+i+'">'+(i+1)+'. '+esc(s.t)+'</option>').join('')}
 function row(key,cols,r){return '<tr>'+cols.map((c,j)=>'<td><textarea aria-label="'+esc(c)+'" data-t="'+key+'" data-c="'+j+'">'+esc(r[j])+'</textarea></td>').join('')+'</tr>'}
 function render(){const s=STEPS[cur];let h='<div class="top"><button class="b g" id="th">Dark / light</button><button class="b g" id="ex">Export all my work</button></div><h2>'+esc(s.t)+'</h2><p class="intro">'+esc(s.intro)+'</p>';
 if(s.rule)h+='<div class="rule">'+esc(s.rule)+'</div>';
 s.b.forEach(x=>{
-if(x.k==='area'){const v=D[x.key]||'';h+='<div class="blk"><label class="f" for="a'+esc(x.key.length+x.key.slice(0,6))+'">'+esc(x.label)+'</label><textarea data-a="'+esc(x.key)+'" placeholder="'+esc(x.ph||'')+'"'+(x.wc?' data-wc="1" style="min-height:260px"':'')+'>'+esc(v)+'</textarea>'+(x.wc?'<div class="wc" id="wc"></div>':'')+'</div>'}
-else if(x.k==='check'){const c=D[x.key]||{};h+='<div class="blk"><h3>'+esc(x.h)+'</h3>'+x.items.map((it,i)=>'<label class="ck"><input type="checkbox" data-k="'+x.key+'" data-i="'+i+'"'+(c[i]?' checked':'')+'><span>'+esc(it)+'</span></label>').join('')+'</div>'}
-else if(x.k==='table'){const rows=D[x.key]&&D[x.key].length?D[x.key]:[[]];h+='<div class="blk"><h3>'+esc(x.h)+'</h3><div class="tw"><table><thead><tr>'+x.cols.map(c=>'<th>'+esc(c)+'</th>').join('')+'</tr></thead><tbody data-b="'+x.key+'">'+rows.map(r=>row(x.key,x.cols,r)).join('')+'</tbody></table></div><button class="b g" data-add="'+x.key+'">Add row</button><button class="b g" data-del="'+x.key+'">Remove last row</button></div>'}
-else if(x.k==='time'){h+='<div class="blk tw"><table><thead><tr><th>Time</th><th>Section</th><th>What goes here</th></tr></thead>'+x.items.map(i=>'<tr><td><b>'+i[0]+'</b></td><td>'+i[1]+'</td><td>'+i[2]+'</td></tr>').join('')+'</table></div>'}
-else if(x.k==='rub'){const r=D.rub||{};h+='<div class="blk"><h3>Self-assessment</h3>'+RUB.map((c,i)=>'<div class="rr"><label for="r'+i+'">'+c[0]+' (max '+c[1]+')</label><input id="r'+i+'" type="number" min="0" max="'+c[1]+'" data-r="'+i+'" value="'+esc(r[i])+'"></div>').join('')+'<p>Total: <span class="tot" id="tot"></span> / 100</p></div>'}
+ if(x.k==='area'){h+='<div class="blk"><label class="f">'+esc(x.label)+'<textarea data-a="'+esc(x.key)+'" placeholder="'+esc(x.ph||'')+'"'+(x.wc?' data-wc="1" style="min-height:260px"':'')+'>'+esc(D[x.key]||'')+'</textarea></label>'+(x.wc?'<div class="wc" id="wc"></div>':'')+'</div>'}
+ else if(x.k==='check'){const c=D[x.key]||{};h+='<div class="blk"><h3>'+esc(x.h)+'</h3>'+x.items.map((it,i)=>'<label class="ck"><input type="checkbox" data-k="'+x.key+'" data-i="'+i+'"'+(c[i]?' checked':'')+'><span>'+esc(it)+'</span></label>').join('')+'</div>'}
+ else if(x.k==='table'){const rows=D[x.key]&&D[x.key].length?D[x.key]:[[]];h+='<div class="blk"><h3>'+esc(x.h)+'</h3><div class="tw"><table><thead><tr>'+x.cols.map(c=>'<th>'+esc(c)+'</th>').join('')+'</tr></thead><tbody>'+rows.map(r=>row(x.key,x.cols,r)).join('')+'</tbody></table></div><button class="b g" data-add="'+x.key+'">Add row</button><button class="b g" data-del="'+x.key+'">Remove last row</button></div>'}
+ else if(x.k==='time'){h+='<div class="blk tw"><table><thead><tr><th>Time</th><th>Section</th><th>What goes here</th></tr></thead>'+x.items.map(i=>'<tr><td><b>'+i[0]+'</b></td><td>'+i[1]+'</td><td>'+i[2]+'</td></tr>').join('')+'</table></div>'}
+ else if(x.k==='rub'){const r=D.rub||{};h+='<div class="blk"><h3>Self-assessment</h3>'+RUB.map((c,i)=>'<div class="rr"><label for="r'+i+'">'+c[0]+' (max '+c[1]+')</label><input id="r'+i+'" type="number" min="0" max="'+c[1]+'" data-r="'+i+'" value="'+esc(r[i])+'"></div>').join('')+'<p>Total: <span class="tot" id="tot"></span> / 100</p></div>'}
+ else if(x.k==='sub'){const v=D.sub||{};h+='<div class="blk"><h3>Culture / heritage entry</h3>'+SUBF.map(f=>{const id='s_'+f[0],req=f[3]?' required':'',lab='<label class="f" for="'+id+'">'+esc(f[1])+(f[3]?' *':'')+'</label>';
+  return lab+(f[2]==='area'?'<textarea id="'+id+'" data-s="'+f[0]+'"'+req+'>'+esc(v[f[0]])+'</textarea>':'<input id="'+id+'" type="'+f[2]+'" data-s="'+f[0]+'"'+req+' value="'+esc(v[f[0]])+'">')}).join('')+
+  '<button class="b" id="subbtn">Submit culture</button><div class="msg'+(D.submitted?' ok':'')+'" id="msg" role="status" aria-live="polite">'+(D.submitted?'Submitted. Culture ID: '+esc(D.submitted):'')+'</div></div>'}
 });
 h+='<div class="pg"><button class="b g" id="pv"'+(cur?'':' disabled')+'>Back</button><button class="b" id="nx"'+(cur<STEPS.length-1?'':' disabled')+'>Next step</button></div><div id="exo" class="blk" style="display:none"><h3>Your work (select all and copy)</h3><textarea id="exa" style="min-height:300px" readonly></textarea></div>';
 $('#main').innerHTML=h;
 document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',+b.dataset.i===cur));$('#sel').value=cur;prog();upd();window.scrollTo(0,0)}
 function upd(){const a=$('[data-wc]');if(a){const n=wc(a.value),w=$('#wc');w.textContent=n+' words (aim for 300–500)';w.className='wc'+(n>=300&&n<=500?' ok':'')}
-const t=$('#tot');if(t){const r=D.rub||{};t.textContent=RUB.reduce((s,c,i)=>s+Math.min(c[1],Math.max(0,+r[i]||0)),0)}}
-function exportAll(){let o='OUR CULTURE, OUR IDENTITY – KMC-HSSD\n\n';STEPS.forEach((s,i)=>{o+='== '+(i+1)+'. '+s.t+' ==\n';s.b.forEach(x=>{if(x.k==='area'&&D[x.key])o+='\n'+x.label+'\n'+D[x.key]+'\n';
-if(x.k==='check'){const c=D[x.key]||{};o+='\n'+x.h+'\n'+x.items.map((it,j)=>(c[j]?'[x] ':'[ ] ')+it).join('\n')+'\n'}
-if(x.k==='table'&&(D[x.key]||[]).some(r=>r.some(c=>c)))o+='\n'+x.h+'\n'+D[x.key].map(r=>x.cols.map((c,j)=>c+': '+(r[j]||'')).join(' | ')).join('\n')+'\n'});o+='\n'});return o}
+ const t=$('#tot');if(t){const r=D.rub||{};t.textContent=RUB.reduce((s,c,i)=>s+Math.min(c[1],Math.max(0,+r[i]||0)),0)}}
+function exportAll(){let o='OUR CULTURE, OUR IDENTITY – KMC-HSSD\n\n';STEPS.forEach((s,i)=>{o+='== '+(i+1)+'. '+s.t+' ==\n';s.b.forEach(x=>{
+ if(x.k==='area'&&D[x.key])o+='\n'+x.label+'\n'+D[x.key]+'\n';
+ if(x.k==='check'){const c=D[x.key]||{};o+='\n'+x.h+'\n'+x.items.map((it,j)=>(c[j]?'[x] ':'[ ] ')+it).join('\n')+'\n'}
+ if(x.k==='table'&&(D[x.key]||[]).some(r=>r.some(c=>c)))o+='\n'+x.h+'\n'+D[x.key].map(r=>x.cols.map((c,j)=>c+': '+(r[j]||'')).join(' | ')).join('\n')+'\n';
+ if(x.k==='sub'&&D.sub)o+='\n'+SUBF.map(f=>f[1]+': '+(D.sub[f[0]]||'')).join('\n')+'\n'});o+='\n'});return o}
+async function submitCulture(){
+ if(sending)return;const msg=$('#msg'),btn=$('#subbtn'),v=D.sub||{};
+ const miss=SUBF.filter(f=>f[3]&&!(v[f[0]]||'').trim());
+ const say=(t,c)=>{msg.textContent=t;msg.className='msg '+c};
+ if(miss.length){say('Please fill: '+miss.map(f=>f[1]).join(', '),'err');const el=$('#s_'+miss[0][0]);if(el)el.focus();return}
+ for(const k of ['photoUrl','videoUrl']){if(v[k]&&!/^https?:\/\//i.test(v[k].trim())){say('Please enter a full link starting with https:// in '+k.replace('Url',' URL'),'err');return}}
+ if(!GOOGLE_SHEET_API||GOOGLE_SHEET_API.indexOf('XXXX')>-1){say('Submission link is not configured.','err');return}
+ sending=true;btn.disabled=true;say('Submitting…','');
+ const data={};SUBF.forEach(f=>data[f[0]]=(v[f[0]]||'').trim());
+ try{
+  const res=await fetch(GOOGLE_SHEET_API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)});
+  const r=await res.json();
+  if(r&&r.status==='success'){D.submitted=r.cultureId||'saved';save();say('Successfully submitted! Culture ID: '+D.submitted,'ok');prog()}
+  else say('Submission failed: '+((r&&r.message)||'unknown error'),'err')
+ }catch(err){say('Connection error. Check your internet and try again. Your answers are safe on this device.','err')}
+ sending=false;btn.disabled=false}
 document.addEventListener('input',e=>{const t=e.target;
-if(t.dataset.a!==undefined){D[t.dataset.a]=t.value;save();upd()}
-else if(t.dataset.t){const k=t.dataset.t,tr=t.closest('tr'),i=[...tr.parentNode.children].indexOf(tr);D[k]=D[k]||[];while(D[k].length<=i)D[k].push([]);D[k][i][+t.dataset.c]=t.value;save()}
-else if(t.dataset.r!==undefined){D.rub=D.rub||{};D.rub[t.dataset.r]=t.value;save();upd()}});
+ if(t.dataset.a!==undefined){D[t.dataset.a]=t.value;save();upd()}
+ else if(t.dataset.t){const k=t.dataset.t,tr=t.closest('tr'),i=[...tr.parentNode.children].indexOf(tr);D[k]=D[k]||[];while(D[k].length<=i)D[k].push([]);D[k][i][+t.dataset.c]=t.value;save()}
+ else if(t.dataset.r!==undefined){D.rub=D.rub||{};D.rub[t.dataset.r]=t.value;save();upd()}
+ else if(t.dataset.s!==undefined){D.sub=D.sub||{};D.sub[t.dataset.s]=t.value;save()}});
 document.addEventListener('change',e=>{const t=e.target;if(t.id==='sel'){cur=+t.value;render()}if(t.dataset.k){D[t.dataset.k]=D[t.dataset.k]||{};D[t.dataset.k][t.dataset.i]=t.checked;save()}});
 document.addEventListener('click',e=>{const t=e.target.closest('button');if(!t)return;
-if(t.dataset.i!==undefined&&t.closest('nav')){cur=+t.dataset.i;render()}
-else if(t.id==='nx'){cur++;render()}else if(t.id==='pv'){cur--;render()}
-else if(t.dataset.add){const k=t.dataset.add;D[k]=D[k]&&D[k].length?D[k]:[[]];D[k].push([]);save();render()}
-else if(t.dataset.del){const k=t.dataset.del;if(D[k]&&D[k].length>1){D[k].pop();save();render()}}
-else if(t.id==='th'){const r=document.documentElement,d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=d?'light':'dark'}
-else if(t.id==='ex'){$('#exo').style.display='block';const a=$('#exa');a.value=exportAll();a.focus();a.select();try{navigator.clipboard.writeText(a.value)}catch(_){}a.scrollIntoView({behavior:'smooth'})}});
+ if(t.dataset.i!==undefined&&t.closest('nav')){cur=+t.dataset.i;render()}
+ else if(t.id==='nx'){cur++;render()}else if(t.id==='pv'){cur--;render()}
+ else if(t.dataset.add){const k=t.dataset.add;D[k]=D[k]&&D[k].length?D[k]:[[]];D[k].push([]);save();render()}
+ else if(t.dataset.del){const k=t.dataset.del;if(D[k]&&D[k].length>1){D[k].pop();save();render()}}
+ else if(t.id==='th'){const r=document.documentElement,d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=d?'light':'dark'}
+ else if(t.id==='subbtn'){submitCulture()}
+ else if(t.id==='ex'){$('#exo').style.display='block';const a=$('#exa');a.value=exportAll();a.focus();a.select();try{navigator.clipboard.writeText(a.value)}catch(_){}a.scrollIntoView({behavior:'smooth'})}});
 nav();render();
-</script></body></html>
+</script>
+</body></html>
