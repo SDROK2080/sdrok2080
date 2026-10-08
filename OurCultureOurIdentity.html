@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Our Culture, Our Identity – KMC-HSSD Documentary Workbook</title>
+<link href="https://fonts.googleapis.com/css2?family=Literata:wght@400;600;700&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f4f6;--card:#fff;--ink:#1c2338;--mut:#5d667c;--line:#d8dde6;--pri:#243a6b;--acc:#d9951a;--ok:#2c7a55;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12161f;--card:#1a2030;--ink:#e8ebf3;--mut:#9aa3b8;--line:#2b3347;--pri:#8fa8e6;--acc:#f0b43f;--ok:#5cc596}}
+:root[data-theme="dark"]{--bg:#12161f;--card:#1a2030;--ink:#e8ebf3;--mut:#9aa3b8;--line:#2b3347;--pri:#8fa8e6;--acc:#f0b43f;--ok:#5cc596}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 'Public Sans',system-ui,sans-serif}
+h1,h2,h3{font-family:Literata,Georgia,serif;margin:0}
+.app{display:grid;grid-template-columns:270px 1fr;min-height:100vh}
+nav{background:var(--card);border-right:1px solid var(--line);padding:20px 14px;position:sticky;top:0;height:100vh;overflow:auto}
+nav h1{font-size:20px;line-height:1.2;margin-bottom:4px}nav p{margin:0 0 14px;color:var(--mut);font-size:13px}
+.bar{height:6px;background:var(--line);border-radius:3px;margin-bottom:14px}.bar i{display:block;height:100%;background:var(--acc);border-radius:3px;width:0}
+nav button{display:flex;gap:8px;width:100%;text-align:left;background:none;border:0;color:var(--ink);padding:7px 10px;border-radius:6px;font:inherit;font-size:14px;cursor:pointer}
+nav button:hover{background:var(--bg)}nav button.on{background:var(--pri);color:var(--card);font-weight:600}
+nav button span{opacity:.6;min-width:22px}
+main{padding:28px clamp(16px,4vw,48px);max-width:860px;width:100%}
+.sel{display:none}
+h2{font-size:28px;color:var(--pri);margin-bottom:6px}
+.intro{color:var(--mut);margin:0 0 20px}
+.blk{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:16px}
+.blk h3{font-size:17px;margin-bottom:8px}
+.rule{border-left:4px solid var(--acc);padding:10px 14px;background:var(--card);margin-bottom:16px;font-size:14px}
+label.f{display:block;font-weight:600;font-size:14px;margin:10px 0 4px}
+textarea,input[type=text],input[type=number]{width:100%;font:inherit;font-size:15px;padding:9px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+textarea{min-height:84px;resize:vertical}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.ck{display:flex;gap:10px;align-items:flex-start;padding:5px 0;cursor:pointer}.ck input{margin-top:5px;width:18px;height:18px;accent-color:var(--ok)}
+.tw{overflow-x:auto}table{border-collapse:collapse;min-width:100%}
+th{font-size:13px;text-align:left;padding:6px;border-bottom:2px solid var(--line);color:var(--mut)}
+td{padding:4px;vertical-align:top;min-width:130px}td textarea{min-height:56px;font-size:14px}
+button.b{background:var(--pri);color:var(--card);border:0;border-radius:6px;padding:8px 14px;font:inherit;font-weight:600;cursor:pointer;margin:8px 8px 0 0}
+button.b.g{background:none;color:var(--pri);border:1px solid var(--pri)}
+.wc{font-size:13px;color:var(--mut);margin-top:4px}.wc.ok{color:var(--ok);font-weight:600}
+.pg{display:flex;justify-content:space-between;margin-top:22px}
+.top{display:flex;gap:8px;justify-content:flex-end;margin-bottom:10px;flex-wrap:wrap}
+.tot{font-family:Literata,serif;font-size:30px;color:var(--pri)}
+.rr{display:grid;grid-template-columns:1fr 90px;gap:10px;align-items:center;padding:4px 0}
+#out{display:none}
+@media(max-width:800px){.app{display:block}nav{display:none}.sel{display:block;width:100%;padding:12px;margin:0;border:0;border-bottom:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:600}h2{font-size:24px}}
+</style></head><body>
+<div class="app">
+<nav id="nav"></nav>
+<div><select class="sel" id="sel" aria-label="Choose step"></select><main id="main"></main></div>
+</div>
+<script>
+const R=(t,a)=>({k:'area',key:t,label:t,ph:a||''});
+const STEPS=[
+{t:'Start here by KMC-HSSD Students',intro:'Answer the five starting questions. Your answers shape everything that follows.',
+ rule:'Academic rule: you do the fieldwork. This workbook only helps you plan and organize. Never invent quotes, names, dates, places, statistics or observations. If you are unsure, mark it “verify”.',
+ b:[R('1. What is your local area / community?'),R('2. Which cultural topic interests you most?'),R('3. How much time do you have for the project?'),R('4. What equipment do you have? (phone, camera, computer…)'),R('5. Can you interview local people? Who could you reach?')]},
+{t:'Select topic',intro:'Shortlist 5–10 topics. For each, think through the five points. Pick one that you can actually reach in your community.',
+ b:[{k:'check',key:'tc',h:'A good topic…',items:['is locally relevant','can be researched in my community','has real people or cultural evidence I can access','suits a Humanities student','fits in 5–10 minutes','allows comparison, analysis or storytelling']},
+ {k:'table',key:'topics',h:'Topic shortlist',cols:['Topic','Why interesting','What I could investigate','Who to interview','Evidence to collect','Challenges']},
+ R('My chosen topic and why')]},
+{t:'Research questions',intro:'One clear main question, then 5–8 supporting questions you can answer in the field.',
+ b:[R('Main research question','One clear question…'),R('History / background'),R('Present practice'),R("People's experiences"),R('Cultural meaning'),R('Changes over time'),R('Challenges'),R("Young people's perspectives"),R('Future possibilities')]},
+{t:'Fieldwork plan',intro:'Plan who, what to ask, what to observe and what to collect.',
+ b:[{k:'check',key:'ppl',h:'People to interview (tick the categories you can reach)',items:['Elderly community members','Cultural practitioners','Local historians','Teachers','Parents','Community leaders','Young people','Artists','Traditional workers']},
+ {k:'table',key:'who',h:'My interviewees (real people only)',cols:['Name','Role / category','Contact / date planned','Consent given?']},
+ R('Interview questions (open-ended)','Start with “Tell me about…”, “How did…”, “What do you remember about…”, “Why do you think…”'),
+ {k:'check',key:'obs',h:'Observation checklist',items:['Places','Objects','Clothing','Food','Rituals','Language','Music','Activities','Tools','Symbols','Changes in practice']},
+ {k:'check',key:'evd',h:'Evidence collection list',items:['Photographs','Video clips','Audio recordings','Interview recordings','Documents','Newspaper / archive material','Personal stories','Historical photographs']}]},
+{t:'Ethics & consent',intro:'Complete this before every interview.',
+ b:[{k:'check',key:'eth',h:'Before I interview anyone I will…',items:['Introduce myself and KMC-HSSD','Explain the purpose of the documentary','Ask permission before recording','Respect privacy','Avoid sensitive questions unless appropriate','Represent people’s views accurately','Get permission before publishing identifiable recordings or photos','Never edit someone’s words to change their meaning, or present opinions as facts']}]},
+{t:'Field notes',intro:'After fieldwork, enter only your own real evidence. Sort each piece under a theme.',
+ b:[{k:'table',key:'notes',h:'Evidence table',cols:['Evidence','Source','Theme','What it tells us','Verification needed']}]},
+{t:'Cultural change',intro:'Compare past and present. Label each statement as evidence, interpretation or opinion.',
+ b:[R('What has remained'),R('What has changed'),R('Why it changed'),R('Positive effects'),R('Negative effects'),R('Effect of technology'),R('Effect of migration'),R('Effect of education'),R('Effect of modernization'),R("Young people's attitudes"),
+ {k:'table',key:'eio',h:'Evidence vs interpretation vs opinion',cols:['Statement','Type (Evidence / Interpretation / Opinion)','Support']}]},
+{t:'Structure',intro:'Adjust these timings to match your actual evidence.',
+ b:[{k:'time',items:[['0:00–0:30','Hook','A question, scene, quote or cultural moment'],['0:30–1:30','Introduction','The community and cultural topic'],['1:30–3:00','Background','History and context from verified sources'],['3:00–6:00','Voices from the community','Real interview clips and observations'],['6:00–8:00','Change and challenges','How the culture is changing'],['8:00–9:30','Young generation','Young people’s perspectives'],['9:30–10:00','Conclusion','Reflection on the future']]},
+ R('My plan for each section')]},
+{t:'Script',intro:'Use only your real quotations and verified facts. Use permitted or royalty-free background audio.',
+ b:[{k:'table',key:'script',h:'Script',cols:['Time','Visual','Audio / Interview','Narration','Text on screen']}]},
+{t:'Storyboard',intro:'Keep it realistic for a smartphone.',
+ b:[{k:'table',key:'sb',h:'Storyboard',cols:['Scene #','Location','Shot type','Visual content','Narration','Interview / audio','Duration','Footage needed']}]},
+{t:'Editing plan',intro:'Use a simple tool such as CapCut, DaVinci Resolve or your phone’s editor.',
+ b:[{k:'check',key:'ed',h:'Editing checklist',items:['Arrange clips following the structure','Place interviews in the community section','Use photographs for background and history','Record and add narration','Add subtitles','Use simple transitions only','Credit interviewees and sources','Make opening and closing titles','Check audio is clear','Check all music is permitted']},R('Tool I will use and my workflow')]},
+{t:'Title',intro:'Short, meaningful, respectful. Write 10 ideas, then circle your favourite.',
+ b:[R('10 title ideas (one per line)'),R('My final title')]},
+{t:'Report',intro:'Fill each section from your own evidence. Leave blanks rather than guess.',
+ b:['Title','Introduction','Background','Research problem','Objectives','Research questions','Methodology','Study area','Participants / interviewees','Findings','Cultural analysis','Changes observed','Challenges','Conclusion','Recommendations','References','Appendix: interview questions'].map((t,i)=>R((i+1)+'. '+t))},
+{t:'Reflection',intro:'Answer the prompts, then write 300–500 words in your own voice.',
+ b:['What surprised you during the fieldwork?','What did you learn that you did not know before?','Did your opinion about local culture change?','What cultural practice should be preserved?','What changes are positive?','What changes concern you?','What role can young people play?','What did you learn about research?','What did you learn about interviewing?','What did you learn about using AI responsibly?'].map(R).concat([{k:'area',key:'REFLECTION (300–500 words)',label:'My personal reflection (300–500 words)',wc:1}])},
+{t:'Presentation',intro:'A 5-minute presentation for KMC-HSSD. About 35–40 seconds per point.',
+ b:['Why I selected the topic','What I investigated','How I conducted fieldwork','What I discovered','What the documentary shows','Challenges I faced','What I learned','Why this culture matters'].map(R)},
+{t:'Quality check',intro:'Score yourself honestly, then improve the lowest areas before submitting.',
+ b:[{k:'rub'},R('What I will improve before submitting')]}
+];
+const RUB=[['Originality of idea',15],['Quality of field research',20],['Use of authentic evidence',15],['Humanities analysis',15],['Creativity / storytelling',15],['Documentary production',10],['Presentation',5],['Personal reflection',5]];
+let D={},cur=0;
+try{D=JSON.parse(localStorage.getItem('kmc-doc')||'{}')}catch(e){}
+const save=()=>{try{localStorage.setItem('kmc-doc',JSON.stringify(D))}catch(e){}prog()};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const wc=s=>(s||'').trim()?(s||'').trim().split(/\s+/).length:0;
+function done(i){const b=STEPS[i].b;let n=0,t=0;b.forEach(x=>{if(x.k==='area'){t++;if(D[x.key])n++}else if(x.k==='check'){t++;if(Object.keys(D[x.key]||{}).some(k=>D[x.key][k]))n++}else if(x.k==='table'){t++;if((D[x.key]||[]).some(r=>r.some(c=>c)))n++}else if(x.k==='rub'){t++;if(D.rub)n++}});return t?n/t:1}
+function prog(){let s=0;STEPS.forEach((_,i)=>s+=done(i));$('.bar i').style.width=(s/STEPS.length*100)+'%';STEPS.forEach((_,i)=>{const b=document.querySelector('#nav button[data-i="'+i+'"]');if(b)b.querySelector('span').textContent=done(i)>=1?'✓':(i+1)})}
+function nav(){$('#nav').innerHTML='<h1>Our Culture, Our Identity</h1><p>KMC-HSSD Humanities documentary workbook</p><div class="bar"><i></i></div>'+STEPS.map((s,i)=>'<button data-i="'+i+'"><span>'+(i+1)+'</span>'+esc(s.t)+'</button>').join('');
+$('#sel').innerHTML=STEPS.map((s,i)=>'<option value="'+i+'">'+(i+1)+'. '+esc(s.t)+'</option>').join('')}
+function row(key,cols,r){return '<tr>'+cols.map((c,j)=>'<td><textarea aria-label="'+esc(c)+'" data-t="'+key+'" data-c="'+j+'">'+esc(r[j])+'</textarea></td>').join('')+'</tr>'}
+function render(){const s=STEPS[cur];let h='<div class="top"><button class="b g" id="th">Dark / light</button><button class="b g" id="ex">Export all my work</button></div><h2>'+esc(s.t)+'</h2><p class="intro">'+esc(s.intro)+'</p>';
+if(s.rule)h+='<div class="rule">'+esc(s.rule)+'</div>';
+s.b.forEach(x=>{
+if(x.k==='area'){const v=D[x.key]||'';h+='<div class="blk"><label class="f" for="a'+esc(x.key.length+x.key.slice(0,6))+'">'+esc(x.label)+'</label><textarea data-a="'+esc(x.key)+'" placeholder="'+esc(x.ph||'')+'"'+(x.wc?' data-wc="1" style="min-height:260px"':'')+'>'+esc(v)+'</textarea>'+(x.wc?'<div class="wc" id="wc"></div>':'')+'</div>'}
+else if(x.k==='check'){const c=D[x.key]||{};h+='<div class="blk"><h3>'+esc(x.h)+'</h3>'+x.items.map((it,i)=>'<label class="ck"><input type="checkbox" data-k="'+x.key+'" data-i="'+i+'"'+(c[i]?' checked':'')+'><span>'+esc(it)+'</span></label>').join('')+'</div>'}
+else if(x.k==='table'){const rows=D[x.key]&&D[x.key].length?D[x.key]:[[]];h+='<div class="blk"><h3>'+esc(x.h)+'</h3><div class="tw"><table><thead><tr>'+x.cols.map(c=>'<th>'+esc(c)+'</th>').join('')+'</tr></thead><tbody data-b="'+x.key+'">'+rows.map(r=>row(x.key,x.cols,r)).join('')+'</tbody></table></div><button class="b g" data-add="'+x.key+'">Add row</button><button class="b g" data-del="'+x.key+'">Remove last row</button></div>'}
+else if(x.k==='time'){h+='<div class="blk tw"><table><thead><tr><th>Time</th><th>Section</th><th>What goes here</th></tr></thead>'+x.items.map(i=>'<tr><td><b>'+i[0]+'</b></td><td>'+i[1]+'</td><td>'+i[2]+'</td></tr>').join('')+'</table></div>'}
+else if(x.k==='rub'){const r=D.rub||{};h+='<div class="blk"><h3>Self-assessment</h3>'+RUB.map((c,i)=>'<div class="rr"><label for="r'+i+'">'+c[0]+' (max '+c[1]+')</label><input id="r'+i+'" type="number" min="0" max="'+c[1]+'" data-r="'+i+'" value="'+esc(r[i])+'"></div>').join('')+'<p>Total: <span class="tot" id="tot"></span> / 100</p></div>'}
+});
+h+='<div class="pg"><button class="b g" id="pv"'+(cur?'':' disabled')+'>Back</button><button class="b" id="nx"'+(cur<STEPS.length-1?'':' disabled')+'>Next step</button></div><div id="exo" class="blk" style="display:none"><h3>Your work (select all and copy)</h3><textarea id="exa" style="min-height:300px" readonly></textarea></div>';
+$('#main').innerHTML=h;
+document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',+b.dataset.i===cur));$('#sel').value=cur;prog();upd();window.scrollTo(0,0)}
+function upd(){const a=$('[data-wc]');if(a){const n=wc(a.value),w=$('#wc');w.textContent=n+' words (aim for 300–500)';w.className='wc'+(n>=300&&n<=500?' ok':'')}
+const t=$('#tot');if(t){const r=D.rub||{};t.textContent=RUB.reduce((s,c,i)=>s+Math.min(c[1],Math.max(0,+r[i]||0)),0)}}
+function exportAll(){let o='OUR CULTURE, OUR IDENTITY – KMC-HSSD\n\n';STEPS.forEach((s,i)=>{o+='== '+(i+1)+'. '+s.t+' ==\n';s.b.forEach(x=>{if(x.k==='area'&&D[x.key])o+='\n'+x.label+'\n'+D[x.key]+'\n';
+if(x.k==='check'){const c=D[x.key]||{};o+='\n'+x.h+'\n'+x.items.map((it,j)=>(c[j]?'[x] ':'[ ] ')+it).join('\n')+'\n'}
+if(x.k==='table'&&(D[x.key]||[]).some(r=>r.some(c=>c)))o+='\n'+x.h+'\n'+D[x.key].map(r=>x.cols.map((c,j)=>c+': '+(r[j]||'')).join(' | ')).join('\n')+'\n'});o+='\n'});return o}
+document.addEventListener('input',e=>{const t=e.target;
+if(t.dataset.a!==undefined){D[t.dataset.a]=t.value;save();upd()}
+else if(t.dataset.t){const k=t.dataset.t,tr=t.closest('tr'),i=[...tr.parentNode.children].indexOf(tr);D[k]=D[k]||[];while(D[k].length<=i)D[k].push([]);D[k][i][+t.dataset.c]=t.value;save()}
+else if(t.dataset.r!==undefined){D.rub=D.rub||{};D.rub[t.dataset.r]=t.value;save();upd()}});
+document.addEventListener('change',e=>{const t=e.target;if(t.id==='sel'){cur=+t.value;render()}if(t.dataset.k){D[t.dataset.k]=D[t.dataset.k]||{};D[t.dataset.k][t.dataset.i]=t.checked;save()}});
+document.addEventListener('click',e=>{const t=e.target.closest('button');if(!t)return;
+if(t.dataset.i!==undefined&&t.closest('nav')){cur=+t.dataset.i;render()}
+else if(t.id==='nx'){cur++;render()}else if(t.id==='pv'){cur--;render()}
+else if(t.dataset.add){const k=t.dataset.add;D[k]=D[k]&&D[k].length?D[k]:[[]];D[k].push([]);save();render()}
+else if(t.dataset.del){const k=t.dataset.del;if(D[k]&&D[k].length>1){D[k].pop();save();render()}}
+else if(t.id==='th'){const r=document.documentElement,d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=d?'light':'dark'}
+else if(t.id==='ex'){$('#exo').style.display='block';const a=$('#exa');a.value=exportAll();a.focus();a.select();try{navigator.clipboard.writeText(a.value)}catch(_){}a.scrollIntoView({behavior:'smooth'})}});
+nav();render();
+</script></body></html>
