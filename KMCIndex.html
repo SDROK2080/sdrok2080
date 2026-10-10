@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kapilvastu Multiple Campus – KMC</title>
+<meta name="description" content="Kapilvastu Multiple Campus (KMC), Taulihawa — a pillar of higher education in Kapilvastu district since 2037 BS (1980 AD). Tribhuvan University affiliated programs.">
+<link rel="stylesheet" href="style.css">
+
+<style>
+    /* ===== Base ===== */
+:root {
+  --primary: #8a1538;        /* deep maroon */
+  --primary-dark: #6d102c;
+  --accent: #f2a900;         /* gold */
+  --ink: #222;
+  --muted: #666;
+  --bg: #fff;
+  --bg-alt: #f7f4ef;
+  --radius: 12px;
+  --shadow: 0 8px 24px rgba(0,0,0,.08);
+  --font: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font); color: var(--ink); background: var(--bg); line-height: 1.6; }
+img { max-width: 100%; display: block; }
+a { text-decoration: none; color: inherit; }
+.container { width: min(1140px, 92%); margin: 0 auto; }
+
+/* ===== Top bar ===== */
+.topbar { background: var(--primary-dark); color: #f3e3e8; font-size: .82rem; }
+.topbar-inner { display: flex; justify-content: space-between; align-items: center; padding: .45rem 0; flex-wrap: wrap; gap: .4rem; }
+.topbar-contact span { margin-right: 1.2rem; }
+.topbar-links a { margin-left: 1rem; opacity: .85; transition: opacity .2s; }
+.topbar-links a:hover { opacity: 1; color: var(--accent); }
+
+/* ===== Header ===== */
+.site-header { background: var(--primary); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,.15); }
+.header-inner { display: flex; align-items: center; justify-content: space-between; padding: .7rem 0; }
+.brand { display: flex; align-items: center; gap: .7rem; color: #fff; }
+.brand-logo { width: 46px; height: 46px; border-radius: 50%; background: #fff; object-fit: cover; }
+.brand-text strong { display: block; font-size: 1.05rem; line-height: 1.2; }
+.brand-text small { font-size: .72rem; color: var(--accent); }
+.main-nav ul { display: flex; gap: 1.4rem; list-style: none; }
+.main-nav a { color: #fff; font-size: .92rem; padding: .35rem 0; border-bottom: 2px solid transparent; transition: .2s; }
+.main-nav a:hover, .main-nav a.active { color: var(--accent); border-color: var(--accent); }
+.nav-toggle { display: none; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
+
+/* ===== Hero ===== */
+.hero { position: relative; }
+.slides { position: relative; min-height: 78vh; }
+.slide {
+  position: absolute; inset: 0; display: flex; align-items: center;
+  opacity: 0; transition: opacity .8s ease; background-size: cover; background-position: center;
+}
+.slide.active { opacity: 1; z-index: 1; }
+.slide-1 { background-image: linear-gradient(135deg, #6d102c, #a32a4d); }
+.slide-2 { background-image: linear-gradient(135deg, #12355b, #2f6fb2); }
+.slide-3 { background-image: linear-gradient(135deg, #7a5200, #c9920e); }
+.slide-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.35); }
+.slide-content { position: relative; z-index: 2; color: #fff; max-width: 700px; }
+.slide-content h1 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.15; margin-bottom: 1rem; }
+.slide-content p { font-size: 1.1rem; margin-bottom: 1.6rem; opacity: .92; }
+.slide-dots { position: absolute; bottom: 1.4rem; left: 50%; transform: translateX(-50%); display: flex; gap: .5rem; z-index: 5; }
+.slide-dots button { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff; background: transparent; cursor: pointer; }
+.slide-dots button.active { background: var(--accent); border-color: var(--accent); }
+
+/* ===== Buttons ===== */
+.btn { display: inline-block; padding: .7rem 1.5rem; border-radius: 30px; font-weight: 600; font-size: .92rem; transition: .2s; margin-right: .6rem; }
+.btn-primary { background: var(--accent); color: #3a2800; }
+.btn-primary:hover { background: #ffc233; transform: translateY(-2px); }
+.btn-ghost { border: 2px solid #fff; color: #fff; }
+.btn-ghost:hover { background: rgba(255,255,255,.15); }
+.btn-outline { border: 2px solid var(--primary); color: var(--primary); }
+.btn-outline:hover { background: var(--primary); color: #fff; }
+.btn-light { background: #fff; color: var(--primary); }
+
+/* ===== Sections ===== */
+.section { padding: 4.5rem 0; }
+.section-alt { background: var(--bg-alt); }
+.kicker { display: inline-block; color: var(--accent); text-transform: uppercase; letter-spacing: .12em; font-size: .78rem; font-weight: 700; margin-bottom: .5rem; }
+.section h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); color: var(--primary-dark); margin-bottom: 1rem; }
+.section-head { max-width: 760px; margin: 0 auto 2.5rem; text-align: center; }
+.section-head p { color: var(--muted); }
+.section-head.light h2, .section-head.light p { color: #fff; }
+
+/* ===== About ===== */
+.about-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 2.5rem; align-items: start; }
+.about-media img { border-radius: var(--radius); box-shadow: var(--shadow); width: 100%; height: 100%; object-fit: cover; min-height: 320px; }
+.img-fallback-building { min-height: 320px; border-radius: var(--radius);
+  background: linear-gradient(160deg, #b34a2e, #e0b06a), repeating-linear-gradient(90deg, transparent 0 38px, rgba(0,0,0,.08) 38px 40px); }
+.about-text p { color: var(--muted); margin-bottom: 1rem; }
+.feature-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.4rem; }
+.feature-card { background: #fff; border-left: 4px solid var(--accent); padding: 1rem; border-radius: 8px; box-shadow: var(--shadow); }
+.feature-card h3 { font-size: .98rem; color: var(--primary); margin-bottom: .3rem; }
+.feature-card p { font-size: .85rem; color: var(--muted); margin: 0; }
+
+/* ===== Split sections ===== */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+.split-text p { color: var(--muted); margin-bottom: 1.2rem; }
+.split-media img { border-radius: var(--radius); box-shadow: var(--shadow); }
+.img-fallback-student, .img-fallback-garden { min-height: 340px; border-radius: var(--radius); box-shadow: var(--shadow); }
+.img-fallback-student { background: linear-gradient(160deg, #2f6fb2, #9ec6ea); }
+.img-fallback-garden { background: linear-gradient(160deg, #3e7c4f, #b5d99c); }
+.check-list { list-style: none; margin-bottom: 1.5rem; }
+.check-list li { padding-left: 1.8rem; position: relative; margin-bottom: .55rem; color: var(--ink); }
+.check-list li::before { content: "✔"; position: absolute; left: 0; color: var(--accent); font-weight: bold; }
+
+/* ===== Stats ===== */
+.stats-section { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: #fff; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; text-align: center; margin-top: 2.5rem; }
+.stat-num { display: block; font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 800; color: var(--accent); }
+.stat-label { font-size: .9rem; opacity: .9; }
+.stats-tagline { text-align: center; margin-top: 2.5rem; font-style: italic; opacity: .85; }
+
+/* ===== Programs ===== */
+.program-tabs { display: flex; justify-content: center; gap: .6rem; flex-wrap: wrap; margin-bottom: 2rem; }
+.tab-btn { padding: .65rem 1.4rem; border: 2px solid var(--primary); background: transparent; color: var(--primary); border-radius: 30px; cursor: pointer; font-weight: 600; font-size: .88rem; transition: .2s; }
+.tab-btn.active, .tab-btn:hover { background: var(--primary); color: #fff; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadeUp .4s ease; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.program-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+.program-card { background: #fff; border-radius: var(--radius); padding: 1.6rem; box-shadow: var(--shadow); border-top: 4px solid var(--accent); }
+.program-card h3 { color: var(--primary-dark); margin-bottom: .6rem; font-size: 1.1rem; }
+.program-card p { color: var(--muted); font-size: .92rem; margin-bottom: 1rem; }
+.badge { display: inline-block; background: var(--bg-alt); color: var(--primary); font-size: .75rem; font-weight: 700; padding: .3rem .8rem; border-radius: 20px; }
+
+/* ===== CTA ===== */
+.cta-banner { background: var(--accent); }
+.cta-inner { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 2.5rem 0; flex-wrap: wrap; }
+.cta-inner h2 { color: #3a2800; font-size: 1.6rem; }
+.cta-inner p { color: #5a4400; }
+
+/* ===== Footer ===== */
+.site-footer { background: #2a1118; color: #e8d5db; }
+.footer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; padding: 3.5rem 0 2.5rem; }
+.footer-col h4 { color: var(--accent); margin-bottom: .9rem; font-size: 1rem; }
+.footer-col p, .footer-col li { font-size: .88rem; margin-bottom: .5rem; list-style: none; }
+.footer-col a:hover { color: var(--accent); }
+.socials a { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.1); margin-right: .5rem; transition: .2s; }
+.socials a:hover { background: var(--accent); color: #2a1118; }
+.footer-note { opacity: .7; font-size: .8rem !important; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,.1); padding: 1rem 0; text-align: center; font-size: .82rem; opacity: .8; }
+
+/* ===== Back to top ===== */
+.back-to-top { position: fixed; right: 1.2rem; bottom: 1.2rem; width: 44px; height: 44px; border-radius: 50%; border: none; background: var(--primary); color: #fff; font-size: 1.2rem; cursor: pointer; opacity: 0; pointer-events: none; transition: .3s; z-index: 90; }
+.back-to-top.show { opacity: 1; pointer-events: auto; }
+.back-to-top:hover { background: var(--primary-dark); }
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .about-grid, .split { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: repeat(2, 1fr); }
+  .main-nav { position: fixed; top: 0; right: -100%; width: min(300px, 80vw); height: 100vh; background: var(--primary); padding: 4rem 2rem; transition: right .3s ease; }
+  .main-nav.open { right: 0; }
+  .main-nav ul { flex-direction: column; gap: 1.2rem; }
+  .nav-toggle { display: block; z-index: 110; }
+}
+@media (max-width: 560px) {
+  .feature-cards { grid-template-columns: 1fr; }
+  .stats-grid, .footer-grid { grid-template-columns: 1fr; }
+  .topbar-contact span { display: block; margin: 0; }
+  .slides { min-height: 66vh; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Top utility bar ===== -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <div class="topbar-contact">
+      <span>📍 Taulihawa, Kapilvastu, Lumbini Province, Nepal</span>
+      <span>✉️ info@kmctlw.edu.np</span>
+      <span>📞 +977-076-XXXXXX</span>
+    </div>
+    <div class="topbar-links">
+      <a href="#">Student Portal</a>
+      <a href="#">e-Library</a>
+      <a href="#">Notices</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Header / Nav ===== -->
+<header class="site-header" id="siteHeader">
+  <div class="container header-inner">
+    <a href="index.html" class="brand">
+      <img src="images/logo.png" alt="KMC Logo" class="brand-logo" onerror="this.style.display='none'">
+      <span class="brand-text">
+        <strong>Kapilvastu Multiple Campus</strong>
+        <small>Tribhuvan University Affiliated · Est. 2037 BS</small>
+      </span>
+    </a>
+    <nav class="main-nav" id="mainNav">
+      <ul>
+        <li><a href="#home" class="active">Home</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#programs">Programs</a></li>
+        <li><a href="#campus">Campus Life</a></li>
+        <li><a href="#stats">Achievements</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+  </div>
+</header>
+
+<!-- ===== Hero slider ===== -->
+<section class="hero" id="home">
+  <div class="slides">
+    <div class="slide slide-1 active">
+      <div class="slide-overlay"></div>
+      <div class="container slide-content">
+        <h1>Welcome to Kapilvastu Multiple Campus</h1>
+        <p>A legacy of education in the land of the Buddha — shaping minds since 1980.</p>
+        <a href="#programs" class="btn btn-primary">Explore Programs</a>
+        <a href="#about" class="btn btn-ghost">Learn More</a>
+      </div>
+    </div>
+    <div class="slide slide-2">
+      <div class="slide-overlay"></div>
+      <div class="container slide-content">
+        <h1>Study at KMC</h1>
+        <p>Experience a dynamic learning environment where students think critically, innovate, and collaborate.</p>
+        <a href="#campus" class="btn btn-primary">Campus Life</a>
+      </div>
+    </div>
+    <div class="slide slide-3">
+      <div class="slide-overlay"></div>
+      <div class="container slide-content">
+        <h1>Master's Programs at KMC</h1>
+        <p>M.Ed. and MBS programs approved by Tribhuvan University — the first in the region.</p>
+        <a href="#programs" class="btn btn-primary">Apply Now</a>
+      </div>
+    </div>
+  </div>
+  <div class="slide-dots" id="slideDots"></div>
+</section>
+
+<!-- ===== About / Who we are ===== -->
+<section class="section" id="about">
+  <div class="container about-grid">
+    <div class="about-media">
+      <img src="images/campus-building.jpg" alt="KMC Main Building" onerror="this.parentElement.classList.add('img-fallback-building')">
+    </div>
+    <div class="about-text">
+      <span class="kicker">Who we are</span>
+      <h2>A Legacy of Education in the Land of the Buddha</h2>
+      <p>Kapilvastu Multiple Campus (KMC) stands as a pillar of education in Kapilvastu district, Lumbini Province, Nepal. Established in <strong>2037 BS (1980 AD)</strong>, our journey began with a vision to bridge the gap in higher education opportunities within the region.</p>
+      <p>Nestled in Taulihawa, approximately 500 meters southeast of <strong>Tilaurakot</strong>, the sacred birthplace of Lord Buddha, KMC carries a unique legacy.</p>
+      <div class="feature-cards">
+        <div class="feature-card">
+          <h3>40+ Years of History</h3>
+          <p>Four decades of uninterrupted service to higher education in the region.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Career Outcomes</h3>
+          <p>Our graduates are highly sought after by top employers.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Industry Connections</h3>
+          <p>Strong partnerships ensure our students are well-prepared for the workforce.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Practical Skills</h3>
+          <p>A curriculum designed to equip students for today's competitive job market.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Study at KMC ===== -->
+<section class="section section-alt" id="study">
+  <div class="container split">
+    <div class="split-text">
+      <span class="kicker">Why KMC</span>
+      <h2>Study at KMC</h2>
+      <p>Experience a world-class education in the heart of Kapilvastu. At KMC, we offer a dynamic learning environment where students are encouraged to think critically, innovate, and collaborate.</p>
+      <ul class="check-list">
+        <li>Tribhuvan University affiliated programs</li>
+        <li>Experienced and dedicated faculty</li>
+        <li>Affordable, accessible education for all</li>
+        <li>Library, labs and modern learning facilities</li>
+      </ul>
+      <a href="#contact" class="btn btn-primary">Get in Touch</a>
+    </div>
+    <div class="split-media">
+      <img src="images/student-reading.jpg" alt="Student at KMC" onerror="this.parentElement.classList.add('img-fallback-student')">
+    </div>
+  </div>
+</section>
+
+<!-- ===== Campus Life ===== -->
+<section class="section" id="campus">
+  <div class="container split split-reverse">
+    <div class="split-media">
+      <img src="images/campus-life.jpg" alt="Campus Life at KMC" onerror="this.parentElement.classList.add('img-fallback-garden')">
+    </div>
+    <div class="split-text">
+      <span class="kicker">Community</span>
+      <h2>Campus Life &amp; Community</h2>
+      <p>At Kapilvastu Multiple Campus, we believe in fostering a holistic learning experience. Our campus is a hub of academic excellence and social opportunities — from student clubs and sports to cultural programs and community outreach.</p>
+      <a href="#contact" class="btn btn-outline">Visit Our Campus</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Stats ===== -->
+<section class="section stats-section" id="stats">
+  <div class="container">
+    <div class="section-head light">
+      <span class="kicker">By the numbers</span>
+      <h2>KMC: A Data-Driven Journey of Excellence</h2>
+      <p>Kapilvastu Multiple Campus is more than just an institution; it's a vibrant community dedicated to shaping the future of education.</p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat">
+        <span class="stat-num" data-target="95" data-suffix="%">0%</span>
+        <span class="stat-label">Undergrads from the State</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num" data-target="4" data-suffix="+">0+</span>
+        <span class="stat-label">Average Years to Degree</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num" data-target="88" data-suffix="%">0%</span>
+        <span class="stat-label">Freshman Graduation Rate</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num" data-target="40" data-suffix="+">0+</span>
+        <span class="stat-label">Years of Service</span>
+      </div>
+    </div>
+    <p class="stats-tagline">Global thinkers, engaged leaders — we'll take you higher.</p>
+  </div>
+</section>
+
+<!-- ===== Programs ===== -->
+<section class="section section-alt" id="programs">
+  <div class="container">
+    <div class="section-head">
+      <span class="kicker">Academics</span>
+      <h2>Majors, Minors &amp; Graduate Programs</h2>
+      <p>KMC became the first institution in the region to offer Master's level programs. In 2069 BS (2012 AD), we received approval from Tribhuvan University to launch a Master of Education (M.Ed.) program, followed by the Master of Business Studies (MBS) program in 2073 BS (2016 AD).</p>
+    </div>
+
+    <div class="program-tabs" id="programTabs">
+      <button class="tab-btn active" data-tab="masters">Master's Degree</button>
+      <button class="tab-btn" data-tab="bachelors">Bachelor's Degree</button>
+      <button class="tab-btn" data-tab="associate">Associate's Degree</button>
+    </div>
+
+    <div class="tab-panels">
+      <div class="tab-panel active" id="tab-masters">
+        <div class="program-grid">
+          <article class="program-card">
+            <h3>Master of Business Studies (MBS)</h3>
+            <p>A rigorous two-year program designed to equip students with the theoretical knowledge and practical skills necessary to excel in the dynamic world of business. Core courses cover fundamental business principles, followed by specializations in finance, marketing, human resource management, and operations management.</p>
+            <span class="badge">Since 2073 BS · TU Affiliated</span>
+          </article>
+          <article class="program-card">
+            <h3>Master of Education (M.Ed.)</h3>
+            <p>Approved by Tribhuvan University in 2069 BS (2012 AD), the M.Ed. program provides local students the opportunity to pursue postgraduate studies in education without leaving the region.</p>
+            <span class="badge">Since 2069 BS · TU Affiliated</span>
+          </article>
+        </div>
+      </div>
+      <div class="tab-panel" id="tab-bachelors">
+        <div class="program-grid">
+          <article class="program-card">
+            <h3>Bachelor of Business Studies (BBS)</h3>
+            <p>A four-year undergraduate program covering management, accounting, economics, and business law, preparing students for careers in business and entrepreneurship.</p>
+            <span class="badge">TU Affiliated</span>
+          </article>
+          <article class="program-card">
+            <h3>Bachelor of Education (B.Ed.)</h3>
+            <p>A comprehensive teacher-education program focused on pedagogy, educational psychology, and subject specialization.</p>
+            <span class="badge">TU Affiliated</span>
+          </article>
+          <article class="program-card">
+            <h3>Bachelor of Arts (BA)</h3>
+            <p>A flexible humanities and social sciences program with majors in Nepali, English, sociology, political science, and more.</p>
+            <span class="badge">TU Affiliated</span>
+          </article>
+        </div>
+      </div>
+      <div class="tab-panel" id="tab-associate">
+        <div class="program-grid">
+          <article class="program-card">
+            <h3>+2 Science / Management / Humanities</h3>
+            <p>Two-year intermediate programs under the National Examinations Board (NEB), providing a strong foundation for further study.</p>
+            <span class="badge">NEB Affiliated</span>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA banner ===== -->
+<section class="cta-banner">
+  <div class="container cta-inner">
+    <div>
+      <h2>Ready to begin your journey at KMC?</h2>
+      <p>Admissions are open for the new academic session. Apply today and become part of a 40-year legacy.</p>
+    </div>
+    <a href="#contact" class="btn btn-light">Apply Now</a>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="site-footer" id="contact">
+  <div class="container footer-grid">
+    <div class="footer-col">
+      <h4>Kapilvastu Multiple Campus</h4>
+      <p>Taulihawa Municipality, Kapilvastu<br>Lumbini Province, Nepal</p>
+      <p>Est. 2037 BS (1980 AD)<br>Tribhuvan University Affiliated</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#programs">Programs</a></li>
+        <li><a href="#stats">Achievements</a></li>
+        <li><a href="#campus">Campus Life</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li>📞 +977-076-XXXXXX</li>
+        <li>✉️ info@kmctlw.edu.np</li>
+        <li>🕘 Sun – Fri · 10:00 AM – 5:00 PM</li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <div class="socials">
+        <a href="#" aria-label="Facebook">f</a>
+        <a href="#" aria-label="YouTube">▶</a>
+        <a href="#" aria-label="Email">✉</a>
+      </div>
+      <p class="footer-note">Follow us for notices, results and campus news.</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <p>© <span id="year"></span> Kapilvastu Multiple Campus. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
+<script src="script.js">
+    
+    // ===== Mobile nav =====
+const navToggle = document.getElementById('navToggle');
+const mainNav = document.getElementById('mainNav');
+navToggle.addEventListener('click', () => mainNav.classList.toggle('open'));
+mainNav.querySelectorAll('a').forEach(a =>
+  a.addEventListener('click', () => mainNav.classList.remove('open'))
+);
+
+// ===== Hero slider =====
+const slides = document.querySelectorAll('.slide');
+const dotsWrap = document.getElementById('slideDots');
+let current = 0;
+
+slides.forEach((_, i) => {
+  const b = document.createElement('button');
+  if (i === 0) b.classList.add('active');
+  b.addEventListener('click', () => goTo(i));
+  dotsWrap.appendChild(b);
+});
+const dots = dotsWrap.querySelectorAll('button');
+
+function goTo(i) {
+  slides[current].classList.remove('active');
+  dots[current].classList.remove('active');
+  current = i;
+  slides[current].classList.add('active');
+  dots[current].classList.add('active');
+}
+setInterval(() => goTo((current + 1) % slides.length), 6000);
+
+// ===== Program tabs =====
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ===== Animated counters =====
+const counters = document.querySelectorAll('.stat-num');
+let counted = false;
+function animateCounters() {
+  counters.forEach(el => {
+    const target = +el.dataset.target;
+    const suffix = el.dataset.suffix || '';
+    const dur = 1600;
+    const start = performance.now();
+    function step(now) {
+      const p = Math.min((now - start) / dur, 1);
+      el.textContent = Math.round(target * p) + suffix;
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+}
+window.addEventListener('scroll', () => {
+  const stats = document.getElementById('stats');
+  if (!counted && stats.getBoundingClientRect().top < window.innerHeight - 100) {
+    counted = true;
+    animateCounters();
+  }
+});
+
+// ===== Back to top =====
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  backToTop.classList.toggle('show', window.scrollY > 400);
+});
+backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+// ===== Footer year =====
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
+
+
