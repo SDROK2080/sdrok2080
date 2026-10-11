@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Academic Smart Hub — Dashboard Specification &amp; Development Plan</title>
+<style>
+:root{
+  --bg:#14110d; --panel:#1e1a14; --panel2:#272118; --line:#3a3226;
+  --text:#f0e7d5; --muted:#a09580; --gold:#e3a72f; --orange:#ea7a2d; --tint:#2a2418;
+}
+@media (prefers-color-scheme: light){
+  :root{--bg:#f6f1e6;--panel:#fffdf8;--panel2:#f0e9d8;--line:#ddd2b8;--text:#2a2216;--muted:#76694f;--gold:#b47a0a;--orange:#c75a14;--tint:#efe6cf}
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:17px/1.65 "Mukta",system-ui,-apple-system,"Segoe UI","Noto Sans Devanagari",sans-serif;
+  padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+main{max-width:860px;margin:0 auto;padding:28px 18px 70px}
+h1,h2{font-family:Georgia,"Noto Serif Devanagari",serif;line-height:1.2}
+h1{font-size:clamp(26px,5vw,38px);margin:0 0 10px;color:var(--gold)}
+h2{font-size:clamp(21px,3.4vw,26px);margin:44px 0 10px;padding-top:18px;border-top:1px solid var(--line)}
+p{margin:0 0 14px}
+.byline{color:var(--muted);font-size:15px;margin-bottom:22px}
+.lead{font-size:18.5px}
+a{color:var(--gold)}
+ul{padding-left:22px;margin:0 0 14px}
+li{margin:5px 0}
+.tw{overflow-x:auto;margin:0 0 16px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:15px;line-height:1.5}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-top:1px solid var(--line)}
+thead th{border-top:0;background:var(--panel2);color:var(--gold);font-weight:700;white-space:nowrap}
+td:first-child{font-weight:600}
+.fig{margin:16px 0 8px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;overflow-x:auto}
+.fig svg{display:block;width:100%;min-width:560px;height:auto}
+.cap{color:var(--muted);font-size:14px;margin-bottom:14px}
+.check{list-style:none;padding-left:0}
+.check li{display:flex;gap:10px;align-items:flex-start}
+.check input{margin-top:7px;accent-color:var(--gold);width:17px;height:17px;flex:none}
+.sources{color:var(--muted);font-size:14px}
+svg text{font-family:inherit}
+.e{stroke:var(--muted);fill:none;stroke-width:1.25}
+.box{fill:none;stroke:var(--muted);stroke-width:1.25}
+.hot{fill:var(--gold);fill-fillOpacity:.12;fill-opacity:.14;stroke:var(--gold);stroke-width:2}
+.ink{fill:var(--text)}
+.qt{fill:var(--muted)}
+.gate{fill:var(--tint);stroke:var(--muted);stroke-width:1.25}
+@media print{
+  :root{--bg:#fff;--panel:#fff;--panel2:#f3efe4;--line:#cfc6ae;--text:#1c170d;--muted:#5d5340;--gold:#8a5d00;--tint:#eee6d0}
+  body{font-size:12.5pt}
+  main{max-width:none;padding:0}
+  h2{break-after:avoid}
+  .tw,.fig{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<main>
+
+<h1>Academic Smart Hub — Dashboard Specification &amp; Development Plan</h1>
+<div class="byline">Prepared for Mr. Bishnu Singh Rayamajhi · Mathematics Lecturer and Head, Department of Humanities and Social Sciences · Kapilvastu Multiple Campus, Taulihawa, Nepal · 11 October 2026</div>
+
+<p class="lead">The Academic Smart Hub is one bilingual (English/Nepali) dashboard from which Mr. Rayamajhi runs teaching, student submissions, research supervision, content publishing and announcements. It replaces switching between Google Docs, Forms, Sheets, GitHub pages, YouTube, Facebook and LinkedIn with a single workspace for the Department of Humanities and Social Sciences at Kapilvastu Multiple Campus.</p>
+
+<h2>Purpose and vision</h2>
+<p>Today the department's work is spread across many tools that were each built well but do not talk to each other. The Hub connects them without replacing them: every Google Form, Sheet, video and page stays where it is, and the Hub becomes the place that knows about all of it.</p>
+<p><strong>Goals</strong></p>
+<ul>
+  <li>Find any academic resource in under 10 seconds from one searchable hub.</li>
+  <li>See submission and evaluation status for every assignment without opening each response sheet.</li>
+  <li>Follow each student research project from idea to completion.</li>
+  <li>Plan, publish and share content and announcements from one place.</li>
+  <li>Work equally well on a phone in Taulihawa and a laptop on campus.</li>
+  <li>Keep all data in Mr. Rayamajhi's own Google account, with no paid server.</li>
+</ul>
+
+<h2>Users and roles</h2>
+<p>The Hub has one owner with full control, and students interact only through the Google Forms and public pages that already exist.</p>
+<div class="tw"><table>
+<thead><tr><th>Role</th><th>Who</th><th>What they do</th><th>Access</th></tr></thead>
+<tbody>
+<tr><td>Owner</td><td>Mr. Rayamajhi</td><td>Manages links, assignments, research, content and announcements; connects Sheets sync</td><td>Full, protected by a secret token</td></tr>
+<tr><td>Co-faculty (optional)</td><td>HSS Department colleagues</td><td>View status; later, update evaluation columns in shared Sheets</td><td>Via Google Sheet sharing, not the dashboard</td></tr>
+<tr><td>Students</td><td>BA and other KMC-HSSD students</td><td>Submit assignments and research forms; read announcements and videos</td><td>Public Google Forms and public pages only</td></tr>
+</tbody></table></div>
+<p>Students never log in to the dashboard, so no student personal data is held by the app itself. Their responses stay in the Google Form response sheets the owner already controls.</p>
+
+<h2>Platform integrations</h2>
+<p>Google Workspace and your own HTML pages can be fully connected today; the social platforms can be linked and shared to now, with automatic posting only after each platform approves an API application.</p>
+<div class="tw"><table>
+<thead><tr><th>Platform</th><th>Phase 1 (built)</th><th>Phase 2 and later</th><th>Needs approval?</th></tr></thead>
+<tbody>
+<tr><td>Google Sheets</td><td>Stores all dashboard data; counts live form responses</td><td>Marks and student-level views</td><td>No</td></tr>
+<tr><td>Google Forms</td><td>Link, open and count responses via the response Sheet</td><td>Auto-create assignment forms from a template</td><td>No</td></tr>
+<tr><td>Google Docs</td><td>Link and open</td><td>List documents from a Drive folder</td><td>No (Drive permission)</td></tr>
+<tr><td>HTML repositories and websites</td><td>Link, open, group by project (for example SDROK)</td><td>Check that pages are online</td><td>No</td></tr>
+<tr><td>YouTube</td><td>Link videos, plan content, copy titles and descriptions</td><td>Read channel and video statistics</td><td>Google API setup</td></tr>
+<tr><td>Facebook</td><td>Share link and copied text from announcements</td><td>Post to a Page automatically</td><td>Yes, Meta app review (approximate; check current terms)</td></tr>
+<tr><td>LinkedIn</td><td>Prefilled share of announcement text</td><td>Post automatically to a profile</td><td>Yes, LinkedIn developer product access (approximate; check current terms)</td></tr>
+</tbody></table></div>
+<p>Automatic posting to Facebook and LinkedIn is deliberately a later phase. It depends on third-party approval that is outside our control, and the Phase 1 share buttons already cover the daily need.</p>
+
+<h2>Core modules</h2>
+<p>The Hub has seven modules; the first six already exist in the Academic Command Center and the seventh is planned.</p>
+<div class="tw"><table>
+<thead><tr><th>Module</th><th>What it does</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>Overview</td><td>Counts of resources, submissions to evaluate, active research and content ready; due-soon list; pinned links</td><td>Built</td></tr>
+<tr><td>Platform Hub</td><td>Searchable, filterable cards for every Doc, Form, Sheet, repo, site and social page, with pin, copy and open</td><td>Built</td></tr>
+<tr><td>Assignments</td><td>Per-assignment submitted and evaluated counts, progress bar, overdue flag; live counts from a Form responses Sheet</td><td>Built</td></tr>
+<tr><td>Research</td><td>Student projects moved through Idea, Proposal, Data collection, Analysis, Drafting, Review, Completed</td><td>Built</td></tr>
+<tr><td>Content</td><td>Board with Idea, Drafting, Ready and Published columns for videos, posts and articles</td><td>Built</td></tr>
+<tr><td>Announcements</td><td>Write once; copy, or share to WhatsApp, LinkedIn and Facebook</td><td>Built</td></tr>
+<tr><td>Evaluation and analytics</td><td>Student-by-student marks, class averages, late-submission trends, export for result sheets</td><td>Planned</td></tr>
+</tbody></table></div>
+<p><strong>Cross-cutting features:</strong> English/Nepali switch, dark and light themes, offline copy in the browser, JSON backup and restore, and Google Sheets sync with a status indicator.</p>
+
+<h2>Architecture</h2>
+<p>The system has no server of its own: a single HTML file talks to your Apps Script, and only the script can touch your Sheet.</p>
+<div class="fig">
+<svg viewBox="0 0 760 322" role="img" aria-label="The dashboard reaches your Google Sheet only through your own Apps Script" font-size="13">
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor" style="color:var(--muted)"/></marker></defs>
+  <text x="24" y="34" font-size="15" font-weight="600" class="ink">The dashboard reaches your Google Sheet only through your own Apps Script</text>
+  <g class="e">
+    <path d="M236 118H274" marker-start="url(#ar)" marker-end="url(#ar)"/>
+    <path d="M486 118H524" marker-start="url(#ar)" marker-end="url(#ar)"/>
+    <path d="M130 154V226" marker-end="url(#ar)"/>
+    <path d="M380 154V226" marker-end="url(#ar)"/>
+  </g>
+  <g><rect class="box" x="24" y="82" width="212" height="72" rx="8"/>
+    <text x="130" y="106" text-anchor="middle" font-weight="600" class="ink">Dashboard (one HTML file)</text>
+    <text x="130" y="124" text-anchor="middle" font-size="11.5" class="qt">Hosted on your own site</text>
+    <text x="130" y="140" text-anchor="middle" font-size="11.5" class="qt">Local copy in the browser</text></g>
+  <g><rect class="hot" x="274" y="82" width="212" height="72" rx="8"/>
+    <text x="380" y="106" text-anchor="middle" font-weight="600" class="ink">Apps Script web app</text>
+    <text x="380" y="124" text-anchor="middle" font-size="11.5" class="qt">Checks the secret token</text>
+    <text x="380" y="140" text-anchor="middle" font-size="11.5" class="qt">Reads and writes the Sheet</text></g>
+  <g><rect class="box" x="524" y="82" width="212" height="72" rx="8"/>
+    <text x="630" y="106" text-anchor="middle" font-weight="600" class="ink">Google Sheet (your data)</text>
+    <text x="630" y="124" text-anchor="middle" font-size="11.5" class="qt">links, assignments, research</text>
+    <text x="630" y="140" text-anchor="middle" font-size="11.5" class="qt">content, announcements</text></g>
+  <g><rect class="box" x="24" y="226" width="212" height="72" rx="8"/>
+    <text x="130" y="250" text-anchor="middle" font-weight="600" class="ink">Your platforms</text>
+    <text x="130" y="268" text-anchor="middle" font-size="11.5" class="qt">Docs, Forms, Sheets, sites</text>
+    <text x="130" y="284" text-anchor="middle" font-size="11.5" class="qt">YouTube, Facebook, LinkedIn</text></g>
+  <g><rect class="box" x="274" y="226" width="212" height="72" rx="8"/>
+    <text x="380" y="250" text-anchor="middle" font-weight="600" class="ink">Form response sheets</text>
+    <text x="380" y="268" text-anchor="middle" font-size="11.5" class="qt">Submitted = filled rows</text>
+    <text x="380" y="284" text-anchor="middle" font-size="11.5" class="qt">Evaluated = Marks filled</text></g>
+  <text x="142" y="196" font-size="11.5" class="qt">open and share links</text>
+  <text x="392" y="196" font-size="11.5" class="qt">counts rows, read only</text>
+</svg></div>
+<p class="cap">Architecture · 3 layers, 2 data sources</p>
+<p>The dashboard sends every request with the secret token. The script checks it, then reads or writes the five data tabs and counts rows in the Form response sheets. The social platforms are reached through links and share buttons, not through the script.</p>
+
+<h2>Data model</h2>
+<p>All data lives in one Google Sheet with five tabs, one per collection, so it can be read, filtered and corrected by hand as well as through the dashboard.</p>
+<div class="tw"><table>
+<thead><tr><th>Tab</th><th>Columns</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>links</td><td>id, title, url, type, note, pinned, updated</td><td>type is one of docs, forms, sheets, html, website, youtube, facebook, linkedin, other</td></tr>
+<tr><td>assignments</td><td>id, course, title, due, total, submitted, evaluated, link, responsesUrl, tab, markCol, updated</td><td>When responsesUrl is set, submitted and evaluated are counted from that sheet</td></tr>
+<tr><td>research</td><td>id, student, title, stage, note, link, updated</td><td>stage moves from Idea to Completed</td></tr>
+<tr><td>content</td><td>id, title, platform, status, date, link, updated</td><td>status is Idea, Drafting, Ready or Published</td></tr>
+<tr><td>announcements</td><td>id, title, body, link, date</td><td>link is the page or video the announcement points to</td></tr>
+</tbody></table></div>
+<p><strong>Live counting rule:</strong> submitted is the number of non-empty response rows; evaluated is the number of rows where the Marks column (name configurable) is filled. Dates are stored as plain text (YYYY-MM-DD) so Sheets does not reformat them.</p>
+
+<h2>Interface and experience</h2>
+<p>The interface is mobile-first, because most daily checks happen on a phone, and follows the dark theme with gold and orange accents used across your other apps.</p>
+<ul>
+  <li><strong>Navigation:</strong> a left sidebar on laptops and a bottom bar on phones, with the same eight sections: Overview, Platform Hub, Assignments, Research, Content, Announce, Sync, Setup.</li>
+  <li><strong>Language:</strong> one tap switches every label between English and Nepali; content you type stays as written.</li>
+  <li><strong>Theme:</strong> dark by default, with a light option for bright rooms.</li>
+  <li><strong>Speed:</strong> a single HTML file with no build step, so it opens quickly on a weak connection and can be uploaded to GitHub Pages like your other apps.</li>
+  <li><strong>Clarity:</strong> each action uses one consistent verb (Add, Edit, Delete, Save, Open, Copy), and empty screens say what to add first.</li>
+  <li><strong>Accessibility:</strong> visible keyboard focus, readable contrast in both themes, and reduced motion respected.</li>
+</ul>
+
+<h2>Security and privacy</h2>
+<p>The main protection is that data stays in your own Google account and the backend rejects any request without your secret token.</p>
+<ul>
+  <li><strong>Token:</strong> a long random secret is set in the Apps Script and typed once into the dashboard. It is stored only in your browser and is excluded from backups.</li>
+  <li><strong>Public file, private data:</strong> the dashboard HTML contains no links, tokens or student data, so hosting it publicly on GitHub Pages is safe.</li>
+  <li><strong>Web app access:</strong> the Apps Script must be deployed as accessible to anyone so the page can reach it; the token is what blocks strangers. Use a long token and change it if it is ever shared.</li>
+  <li><strong>Student data:</strong> names and marks stay in Google Form response sheets, shared only with people you choose. Do not paste student personal data into announcements.</li>
+  <li><strong>Backups:</strong> download a JSON backup regularly; Google Sheets version history is the second safety net.</li>
+  <li><strong>Permissions:</strong> the script asks only to read and write your spreadsheets. Review them when approving.</li>
+  <li><strong>Compliance note:</strong> if the campus has rules on storing student records, confirm them before adding marks views (planned Phase 3).</li>
+</ul>
+
+<h2>Development plan</h2>
+<p>The work runs in four phases, and each phase starts only when the gate before it is met.</p>
+<div class="fig">
+<svg viewBox="0 0 760 300" role="img" aria-label="Two phases are built; marks views and posting automation come next" font-size="13">
+  <text x="24" y="34" font-size="15" font-weight="600" class="ink">Two phases are built; marks views and posting automation come next</text>
+
+  <g><rect class="hot" x="24" y="64" width="160" height="120" rx="8"/>
+    <text x="40" y="88" font-weight="600" class="ink">1 Foundation</text>
+    <text x="40" y="106" font-size="11.5" class="qt">Built</text>
+    <text x="40" y="132" font-size="11.5" class="ink">Platform Hub</text>
+    <text x="40" y="148" font-size="11.5" class="ink">Assignments, Research</text>
+    <text x="40" y="164" font-size="11.5" class="ink">Content, Announce</text></g>
+  <g><rect class="hot" x="208" y="64" width="160" height="120" rx="8"/>
+    <text x="224" y="88" font-weight="600" class="ink">2 Connect</text>
+    <text x="224" y="106" font-size="11.5" class="qt">Built; you deploy it</text>
+    <text x="224" y="132" font-size="11.5" class="ink">Google Sheets sync</text>
+    <text x="224" y="148" font-size="11.5" class="ink">Live form counts</text>
+    <text x="224" y="164" font-size="11.5" class="ink">Setup tab</text></g>
+  <g><rect class="box" x="392" y="64" width="160" height="120" rx="8"/>
+    <text x="408" y="88" font-weight="600" class="ink">3 Evaluate</text>
+    <text x="408" y="106" font-size="11.5" class="qt">Planned</text>
+    <text x="408" y="132" font-size="11.5" class="ink">Student marks view</text>
+    <text x="408" y="148" font-size="11.5" class="ink">Class averages</text>
+    <text x="408" y="164" font-size="11.5" class="ink">Late-submission view</text></g>
+  <g><rect class="box" x="576" y="64" width="160" height="120" rx="8"/>
+    <text x="592" y="88" font-weight="600" class="ink">4 Automate</text>
+    <text x="592" y="106" font-size="11.5" class="qt">Needs API approval</text>
+    <text x="592" y="132" font-size="11.5" class="ink">YouTube statistics</text>
+    <text x="592" y="148" font-size="11.5" class="ink">Facebook Page posting</text>
+    <text x="592" y="164" font-size="11.5" class="ink">LinkedIn posting</text></g>
+
+  <g><line class="e" x1="196" y1="132" x2="196" y2="212" stroke-dasharray="3 3"/>
+    <path class="gate" d="M196 116l8 8l-8 8l-8 -8z"/>
+    <text x="196" y="230" text-anchor="middle" font-size="11.5" class="ink">Dashboard hosted,</text>
+    <text x="196" y="246" text-anchor="middle" font-size="11.5" class="ink">Sheet connected</text></g>
+  <g><line class="e" x1="380" y1="132" x2="380" y2="212" stroke-dasharray="3 3"/>
+    <path class="gate" d="M380 116l8 8l-8 8l-8 -8z"/>
+    <text x="380" y="230" text-anchor="middle" font-size="11.5" class="ink">Live counts match</text>
+    <text x="380" y="246" text-anchor="middle" font-size="11.5" class="ink">the response sheets</text></g>
+  <g><line class="e" x1="564" y1="132" x2="564" y2="212" stroke-dasharray="3 3"/>
+    <path class="gate" d="M564 116l8 8l-8 8l-8 -8z"/>
+    <text x="564" y="230" text-anchor="middle" font-size="11.5" class="ink">Marks view tested</text>
+    <text x="564" y="246" text-anchor="middle" font-size="11.5" class="ink">with real data</text></g>
+
+  <text x="24" y="284" font-size="11.5" class="qt">Filled phase = built. Outlined = planned. Diamond = what must be true before the next phase starts.</text>
+</svg></div>
+<p class="cap">Roadmap · 4 phases, 3 gates</p>
+<p>Phases 1 and 2 are finished in the Academic Command Center. Phase 3 needs real response sheets with a Marks column to test against. Phase 4 starts only after you decide to apply for the Facebook and LinkedIn access it depends on.</p>
+
+<h2>Risks and limits</h2>
+<p>The biggest risks are third-party approvals for social posting and a leaked token; both have simple fallbacks.</p>
+<div class="tw"><table>
+<thead><tr><th>Risk</th><th>Effect</th><th>Fallback</th></tr></thead>
+<tbody>
+<tr><td>Facebook or LinkedIn API approval is slow or refused</td><td>No automatic posting</td><td>Keep share buttons and copy-paste; revisit later</td></tr>
+<tr><td>Token shared or guessed</td><td>Strangers could read or overwrite data</td><td>Change TOKEN in the script, redeploy, re-enter in the dashboard</td></tr>
+<tr><td>Apps Script daily quotas reached</td><td>Sync fails for the rest of the day</td><td>Sync only on change (already built); the local copy keeps working</td></tr>
+<tr><td>Response sheet columns renamed</td><td>Evaluated count shows zero</td><td>Keep the Marks column name; set markCol per assignment</td></tr>
+<tr><td>Two devices edit at once</td><td>Latest save wins</td><td>Sync before editing; Sheet version history can restore</td></tr>
+<tr><td>Data held only in one browser</td><td>Loss if browser data is cleared</td><td>Connect Sheets sync and download backups</td></tr>
+</tbody></table></div>
+<p><strong>Known limit:</strong> the published preview in Claude cannot reach Google; sync works only from the file hosted on your own site.</p>
+
+<h2>Success measures and next steps</h2>
+<p>The Hub succeeds if you can run a normal week from it without opening the individual tools first.</p>
+<p><strong>Measures</strong></p>
+<ul>
+  <li>Every active Form, Sheet, Doc, repository and social page is listed in the Platform Hub.</li>
+  <li>Each current assignment shows live submitted and evaluated counts.</li>
+  <li>Every research project has a current stage.</li>
+  <li>Announcements go out from the Hub for one full month.</li>
+</ul>
+<p><strong>Next steps</strong></p>
+<ul class="check">
+  <li><label><input type="checkbox"> Host the all-in-one HTML file on GitHub Pages</label></li>
+  <li><label><input type="checkbox"> Create the Google Sheet and deploy the Apps Script from the Setup tab</label></li>
+  <li><label><input type="checkbox"> Add all existing links to the Platform Hub</label></li>
+  <li><label><input type="checkbox"> Link the response sheet of each current assignment form and add a Marks column</label></li>
+  <li><label><input type="checkbox"> Decide whether to apply for Facebook and LinkedIn API access</label></li>
+  <li><label><input type="checkbox"> Choose the first Phase 3 feature: student-by-student marks view or channel statistics</label></li>
+</ul>
+<p class="sources">Facebook and LinkedIn approval requirements are approximate and should be checked against each platform's current developer terms before applying.</p>
+
+</main>
+</body>
+</html>
