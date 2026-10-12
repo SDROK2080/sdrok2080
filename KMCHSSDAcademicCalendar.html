@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KMC-HSSD Academic Calendar 2027/28</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,700&family=Mukta:wght@400;600;700&family=Noto+Serif+Devanagari:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#081628; --surface:#0e2340; --surface-2:#143059; --ink:#eaf0f8; --muted:#a3b5cc; --line:#2a4a75;
+  --accent:#d4af37; --accent-ink:#0b1f3a; --accent-text:#e8c85a; --wine:#8b1538;
+  --c-academic:#6aa7ff; --c-seminar:#b79bff; --c-research:#3ccfb0; --c-community:#f2a65a;
+  --c-holiday:#ff7a95; --c-exam:#f0cf62; --c-review:#9fb3c8;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#edf2f8; --surface:#ffffff; --surface-2:#e2eaf5; --ink:#0b1f3a; --muted:#46597a; --line:#c3d1e4;
+    --accent-text:#7a5a00;
+    --c-academic:#1b5cc0; --c-seminar:#6236c4; --c-research:#0a7f6b; --c-community:#a85a0a;
+    --c-holiday:#b0143e; --c-exam:#7d6000; --c-review:#475b73;
+    --shadow:0 8px 24px rgba(11,31,58,.12); color-scheme:light;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#edf2f8; --surface:#ffffff; --surface-2:#e2eaf5; --ink:#0b1f3a; --muted:#46597a; --line:#c3d1e4;
+  --accent-text:#7a5a00;
+  --c-academic:#1b5cc0; --c-seminar:#6236c4; --c-research:#0a7f6b; --c-community:#a85a0a;
+  --c-holiday:#b0143e; --c-exam:#7d6000; --c-review:#475b73;
+  --shadow:0 8px 24px rgba(11,31,58,.12); color-scheme:light;
+}
+:root[data-theme="dark"]{color-scheme:dark}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Mukta','Noto Sans Devanagari','Segoe UI',system-ui,sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.55;font-size:16px;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+h1,h2,h3{font-family:'Literata','Noto Serif Devanagari',Georgia,serif;line-height:1.25}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
+input,select,textarea{font:inherit;color:var(--ink)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}
+.skip{position:absolute;left:-999px;top:0;background:var(--accent);color:var(--accent-ink);padding:8px 14px;z-index:99}
+.skip:focus{left:8px;top:8px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- Hero ---------- */
+.hero{
+  --c-academic:#6aa7ff;--c-seminar:#b79bff;--c-research:#3ccfb0;--c-community:#f2a65a;
+  --c-holiday:#ff7a95;--c-exam:#f0cf62;--c-review:#9fb3c8;
+  background:linear-gradient(135deg,#0b1f3a 0%,#1b3b6f 48%,#6b1230 100%);
+  color:#fff;padding:calc(14px + env(safe-area-inset-top,0px)) 16px 22px;
+}
+.wrap{max-width:1240px;margin:0 auto}
+.hero-bar{display:flex;gap:12px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}
+.brand{display:flex;flex-direction:column;max-width:640px}
+.brand b{font-size:1.05rem}
+.brand span{font-size:.9rem;opacity:.85}
+.actions{display:flex;gap:8px;align-items:center}
+.seg{display:inline-flex;border:1px solid rgba(255,255,255,.35);border-radius:999px;overflow:hidden}
+.seg button{padding:6px 14px;font-weight:600}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.ghost{border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:6px 14px;font-weight:600;color:#fff}
+.ghost:hover{background:rgba(255,255,255,.12)}
+.hero h1{font-size:clamp(1.9rem,5vw,3.1rem);margin:20px 0 4px;letter-spacing:-.01em}
+.hero .tag{opacity:.9;max-width:60ch}
+#status{margin-top:10px;font-weight:600;color:#f3dd8a}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:18px}
+.card{
+  text-align:left;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.2);
+  border-radius:12px;padding:12px 14px;color:#fff;display:block;width:100%;
+}
+button.card:hover{background:rgba(255,255,255,.16)}
+.card .k{font-size:.85rem;opacity:.8}
+.card .v{font-family:'Literata','Noto Serif Devanagari',Georgia,serif;font-weight:700;font-size:1.1rem;margin:2px 0}
+.card .s{font-size:.88rem;opacity:.9}
+
+.ribbon-wrap{margin-top:20px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:12px 14px 10px}
+.ribbon-wrap h2{font-size:1rem;margin-bottom:8px}
+.ribbon{position:relative;height:96px}
+.rb-m{position:absolute;top:0;height:22px;font-size:.68rem;color:#fff;opacity:.85;border-left:1px solid rgba(255,255,255,.25);padding:2px 0 0 3px;overflow:hidden;white-space:nowrap;text-overflow:clip;text-align:left}
+.rb-m:hover{background:rgba(255,255,255,.14);opacity:1}
+.rb{position:absolute;height:14px;border-radius:7px}
+.rb-term{background:color-mix(in srgb,var(--c-academic) 70%,transparent);top:28px}
+.rb-exam{background:var(--c-exam);top:28px;z-index:2}
+.rb-open{background:repeating-linear-gradient(90deg,var(--c-exam) 0 6px,transparent 6px 10px);top:28px;z-index:2}
+.rb-hol{background:var(--c-holiday);top:50px;min-width:5px}
+.rb-dl{top:70px;width:12px;height:12px;border-radius:2px;transform:rotate(45deg) translateX(-4px);background:var(--c-research)}
+.rb-dl.exam{background:var(--c-exam)}
+.rb-today{position:absolute;top:22px;bottom:0;width:2px;background:#fff;z-index:3}
+.rb-today span{position:absolute;top:-2px;left:5px;font-size:.68rem;font-weight:700;background:#fff;color:#0b1f3a;border-radius:4px;padding:0 4px;white-space:nowrap}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.8rem;margin-top:6px;opacity:.95}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+
+/* ---------- Toolbar ---------- */
+main{padding:18px 16px 40px}
+.tabs{display:flex;gap:4px;border-bottom:2px solid var(--line);flex-wrap:wrap}
+.tab{padding:10px 18px;font-weight:700;border-radius:8px 8px 0 0;color:var(--muted)}
+.tab[aria-selected="true"]{color:var(--ink);background:var(--surface);box-shadow:inset 0 -3px 0 var(--accent)}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0}
+.search{flex:1 1 220px;min-width:180px;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.fchip{
+  display:inline-flex;gap:6px;align-items:center;padding:5px 11px;border-radius:999px;font-size:.88rem;
+  border:1px solid var(--line);background:var(--surface);
+}
+.fchip[aria-pressed="true"]{background:color-mix(in srgb,var(--cc,var(--accent)) 28%,var(--surface));border-color:var(--cc,var(--accent));font-weight:700}
+.btn{padding:8px 14px;border-radius:10px;font-weight:700;border:1px solid var(--line);background:var(--surface)}
+.btn:hover{background:var(--surface-2)}
+.btn.pri{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.pri:hover{filter:brightness(1.07)}
+details.checks{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:14px}
+details.checks summary{cursor:pointer;font-weight:700}
+details.checks p{color:var(--muted);font-size:.92rem;margin:8px 0}
+.chk{display:block;width:100%;text-align:left;padding:8px 10px;border-radius:8px;border-left:4px solid var(--c-exam);background:var(--surface-2);margin-top:6px}
+.chk:hover{filter:brightness(1.1)}
+
+/* ---------- Month ---------- */
+.mhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.mhead h2{font-size:1.5rem;flex:1 1 220px}
+.mhead small{display:block;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-weight:400;font-size:.85rem;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.wd{padding:6px 2px;text-align:center;font-weight:700;font-size:.82rem;color:var(--muted)}
+.wd.sat{color:var(--c-holiday)}
+.cell{
+  min-height:98px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:5px;
+  display:flex;flex-direction:column;gap:3px;min-width:0;
+}
+.cell:hover{border-color:var(--accent)}
+.cell.out{opacity:.42}
+.cell.sat{background:color-mix(in srgb,var(--c-holiday) 7%,var(--surface))}
+.cell.today{outline:2px solid var(--accent);outline-offset:-2px}
+.ch{display:flex;justify-content:space-between;align-items:baseline;gap:4px}
+.gd{font-weight:700}
+.bd{font-size:.68rem;color:var(--muted);white-space:nowrap;overflow:hidden}
+.evs{display:flex;flex-direction:column;gap:2px;min-width:0}
+.ce{
+  display:block;font-size:.74rem;line-height:1.25;padding:2px 5px;border-radius:4px;border-left:3px solid var(--cc);
+  background:color-mix(in srgb,var(--cc) 20%,var(--surface));overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+}
+.more{font-size:.72rem;color:var(--muted)}
+.ongoing{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.ongoing h3{font-size:1.05rem;margin-bottom:6px}
+.orow{display:flex;gap:10px;align-items:baseline;width:100%;text-align:left;padding:7px 8px;border-radius:8px;flex-wrap:wrap}
+.orow:hover{background:var(--surface-2)}
+.orow .rng{color:var(--muted);font-size:.88rem}
+
+/* ---------- Agenda ---------- */
+.amonth{margin-bottom:22px}
+.amonth h3{font-size:1.15rem;padding:6px 0;border-bottom:2px solid var(--line);margin-bottom:8px}
+.row{display:flex;gap:8px;align-items:stretch;margin-bottom:8px}
+.row-main{
+  flex:1;display:flex;gap:14px;text-align:left;padding:10px 12px;background:var(--surface);
+  border:1px solid var(--line);border-left:5px solid var(--cc);border-radius:10px;min-width:0;
+}
+.row-main:hover{background:var(--surface-2)}
+.row.past .row-main{opacity:.55}
+.dblock{min-width:64px;text-align:center}
+.dblock b{display:block;font-family:'Literata','Noto Serif Devanagari',serif;font-size:1.25rem;line-height:1.1}
+.dblock span{display:block;font-size:.78rem;color:var(--muted)}
+.rbody{min-width:0}
+.rbody .t{font-weight:700}
+.rbody .m{font-size:.88rem;color:var(--muted)}
+.rbody .d{font-size:.92rem;margin-top:2px}
+.star{width:44px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:1.2rem}
+.star:hover{background:var(--surface-2)}
+.star[aria-pressed="true"]{color:var(--c-exam)}
+.badge{display:inline-block;font-size:.74rem;padding:1px 8px;border-radius:999px;border:1px solid var(--line);margin:3px 4px 0 0;background:var(--surface-2)}
+.badge.cat{border-color:var(--cc);background:color-mix(in srgb,var(--cc) 22%,var(--surface))}
+.badge.warn{border-color:var(--c-exam);color:var(--c-exam)}
+.empty{padding:28px;text-align:center;color:var(--muted)}
+
+/* ---------- Pillars & targets ---------- */
+.ptabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.ptab{padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-weight:700}
+.ptab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+.panel h2{font-size:1.6rem}
+.panel .tg{color:var(--accent-text);font-weight:700;margin:2px 0 8px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:14px}
+.pb{background:var(--surface-2);border-radius:10px;padding:12px 14px}
+.pb h3{font-size:1.05rem;margin-bottom:6px}
+.pb ul,.pb ol{margin-left:20px}
+.pb li{margin:3px 0}
+.pb.policy{border-left:5px solid var(--accent)}
+.kchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.kchip{padding:4px 12px;border-radius:999px;border:1px solid var(--accent);font-size:.9rem}
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.kcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px}
+.kcard h3{font-size:1.02rem}
+.kcard .tgt{color:var(--muted);font-size:.9rem}
+.kcard label{display:block;font-size:.88rem;margin-top:10px}
+.kcard input{width:100%;margin-top:4px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg)}
+.bar{position:relative;height:12px;border-radius:6px;background:var(--surface-2);margin-top:10px;overflow:visible}
+.bar i{display:block;height:100%;border-radius:6px;background:var(--c-research)}
+.bar b{position:absolute;top:-3px;bottom:-3px;width:3px;background:var(--accent);border-radius:2px}
+.kst{font-size:.88rem;margin-top:6px;min-height:1.4em}
+.note{color:var(--muted);font-size:.9rem;margin:10px 0}
+
+/* ---------- Dialogs ---------- */
+dialog{
+  border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);padding:0;
+  width:min(580px,94vw);max-height:88vh;box-shadow:var(--shadow);margin:auto;
+}
+dialog::backdrop{background:rgba(3,10,20,.62)}
+.din{padding:18px;overflow:auto;max-height:88vh}
+.dh{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.dh h2{font-size:1.25rem}
+.dh small{display:block;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-weight:400;color:var(--muted);font-size:.88rem}
+.x{font-size:1.6rem;line-height:1;width:40px;height:40px;border-radius:10px;border:1px solid var(--line)}
+.eb{border-left:5px solid var(--cc);background:var(--surface-2);border-radius:10px;padding:12px 14px;margin-bottom:12px}
+.eb h3{font-size:1.15rem;margin:4px 0}
+.eb p{margin:4px 0}
+.eb .dt{color:var(--muted);font-size:.92rem}
+.eb ul{margin:6px 0 0 18px;color:var(--c-exam)}
+.eb .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.eb .acts a{text-decoration:none;display:inline-block}
+form .f{display:block;margin-bottom:12px}
+form .f span{display:block;font-weight:600;font-size:.92rem;margin-bottom:3px}
+form input,form select,form textarea{width:100%;padding:9px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg)}
+.err{color:var(--c-holiday);min-height:1.3em;font-weight:600}
+.tools{display:grid;gap:10px}
+.toast{
+  position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);
+  background:var(--accent);color:var(--accent-ink);font-weight:700;padding:9px 16px;border-radius:999px;
+  box-shadow:var(--shadow);z-index:50;max-width:92vw;opacity:0;pointer-events:none;transition:opacity .2s
+}
+.toast.on{opacity:1}
+
+footer{border-top:2px solid var(--line);padding:20px 16px calc(24px + env(safe-area-inset-bottom,0px));color:var(--muted);font-size:.92rem;text-align:center}
+footer p{margin:4px auto;max-width:900px}
+footer a{color:var(--accent-text)}
+
+@media (max-width:700px){
+  main{padding:14px 10px 30px}
+  .cell{min-height:60px;padding:4px}
+  .bd{display:none}
+  .evs{flex-direction:row;flex-wrap:wrap;gap:3px}
+  .ce{font-size:0;padding:0;width:8px;height:8px;border:0;border-radius:50%;background:var(--cc)}
+  .row-main{flex-direction:column;gap:4px}
+  .dblock{text-align:left;display:flex;gap:8px;align-items:baseline}
+  .tab{padding:9px 12px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{
+  .hero-bar .actions,.ribbon-wrap,.tabs,.filters,.checks,.star,dialog,.toast,.cards,.mhead button,footer .noprint{display:none!important}
+  body{background:#fff;color:#000}
+  .hero{background:#fff;color:#000;padding:0}
+  .row-main,.amonth h3{border-color:#999;background:#fff;color:#000}
+  .rbody .m,.dblock span{color:#333}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Skip to calendar</a>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-bar">
+      <div class="brand">
+        <b data-i18n="inst"></b>
+        <span data-i18n="dept"></span>
+      </div>
+      <div class="actions">
+        <div class="seg" role="group" aria-label="Language / भाषा">
+          <button data-a="lang" data-v="en" aria-pressed="true">EN</button>
+          <button data-a="lang" data-v="ne" aria-pressed="false">ने</button>
+        </div>
+        <button class="ghost" data-a="theme" id="btnTheme"></button>
+      </div>
+    </div>
+    <h1 id="h1"></h1>
+    <p class="tag" data-i18n="tagline"></p>
+    <p id="status"></p>
+    <div class="cards" id="cards"></div>
+    <section class="ribbon-wrap" aria-labelledby="rbT">
+      <h2 id="rbT" data-i18n="ribbonTitle"></h2>
+      <div class="ribbon" id="ribbon"></div>
+      <div class="legend" id="legend"></div>
+    </section>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+  <div class="tabs" role="tablist" id="tabs">
+    <button class="tab" role="tab" data-a="tab" data-v="month" data-i18n="tabMonth"></button>
+    <button class="tab" role="tab" data-a="tab" data-v="agenda" data-i18n="tabAgenda"></button>
+    <button class="tab" role="tab" data-a="tab" data-v="pillars" data-i18n="tabPillars"></button>
+    <button class="tab" role="tab" data-a="tab" data-v="kpi" data-i18n="tabTargets"></button>
+  </div>
+
+  <div class="filters" id="filters">
+    <input class="search" id="q" type="search" data-i18n-ph="search" data-i18n-aria="search" autocomplete="off">
+    <div class="chips" id="chips" role="group"></div>
+    <button class="fchip" id="fStar" data-a="fstar" aria-pressed="false"></button>
+    <button class="btn pri" data-a="add" data-i18n="add"></button>
+    <button class="btn" data-a="tools" data-i18n="share"></button>
+  </div>
+
+  <details class="checks" id="checks"></details>
+
+  <section id="v-month" hidden></section>
+  <section id="v-agenda" hidden></section>
+  <section id="v-pillars" hidden></section>
+  <section id="v-kpi" hidden></section>
+</main>
+
+<footer>
+  <p data-i18n="bsNote"></p>
+  <p>© 2027/28 Kapilvastu Multiple Campus, HSSD, Taulihawa, Kapilvastu, Lumbini Province, Nepal</p>
+  <p><span data-i18n="updates"></span> <a href="https://www.kmc.edu.np" target="_blank" rel="noopener">www.kmc.edu.np</a> / <a href="https://fohss.tu.edu.np/" target="_blank" rel="noopener">fohss.tu.edu.np</a></p>
+  <p data-i18n="platform"></p>
+  <p data-i18n="devBy"></p>
+</footer>
+
+<dialog id="dlg" aria-labelledby="dlgT"><div class="din" id="dlgBody"></div></dialog>
+
+<dialog id="addDlg" aria-labelledby="addT">
+  <div class="din">
+    <div class="dh"><h2 id="addT" data-i18n="addTitle"></h2><button class="x" data-a="close" data-v="addDlg" data-i18n-aria="close">×</button></div>
+    <form id="addForm" novalidate>
+      <label class="f"><span data-i18n="fTitle"></span><input name="evTitle" maxlength="120" required></label>
+      <label class="f"><span data-i18n="fStart"></span><input name="evStart" type="date" required></label>
+      <label class="f"><span data-i18n="fEnd"></span><input name="evEnd" type="date"></label>
+      <label class="f"><span data-i18n="fCat"></span><select name="evCat" id="evCat"></select></label>
+      <label class="f"><span data-i18n="fNote"></span><textarea name="evNote" rows="3" maxlength="400"></textarea></label>
+      <p class="err" id="addErr" role="alert"></p>
+      <div class="acts" style="display:flex;gap:8px;justify-content:flex-end">
+        <button type="button" class="btn" data-a="close" data-v="addDlg" data-i18n="fCancel"></button>
+        <button type="submit" class="btn pri" data-i18n="fSave"></button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<dialog id="toolsDlg" aria-labelledby="toolsT">
+  <div class="din">
+    <div class="dh"><h2 id="toolsT" data-i18n="toolsTitle"></h2><button class="x" data-a="close" data-v="toolsDlg" data-i18n-aria="close">×</button></div>
+    <div class="tools">
+      <button class="btn pri" data-a="icsAll" data-i18n="dlAll"></button>
+      <button class="btn" data-a="icsStar" data-i18n="dlStar"></button>
+      <button class="btn" data-a="share" data-i18n="shareUp"></button>
+      <button class="btn" data-a="print" data-i18n="printBtn"></button>
+    </div>
+    <p class="note" data-i18n="toolsNote"></p>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* =====================================================================
+   1. DATA  (edit this block each academic year)
+   ===================================================================== */
+const YEAR = { label:'2027/28', rangeStart:'2027-09-01', rangeEnd:'2028-09-30', termStart:'2027-09-18', termEnd:'2028-05-15' };
+
+const FORM = u => 'https://forms.gle/' + u;
+// mk(id, start, end|null, category, pillar, [en title, en desc], [ne title, ne desc], options)
+// options: win = month-level window, tent = date to be confirmed, dl = deadline, link, lk = 'form' | 'ref'
+const BASE = [
+ ['classes-begin','2027-09-18',null,'academic','learn',['Classes begin','KMC-HSSD classes officially start for academic year 2027/28.'],['कक्षा सुरु','शैक्षिक वर्ष २०२७/२८ का लागि KMC-HSSD को कक्षा औपचारिक रूपमा सुरु।']],
+ ['constitution','2027-09-19',null,'holiday',null,['Constitution Day','Public holiday.'],['संविधान दिवस','सार्वजनिक बिदा।']],
+ ['community-survey','2027-09-18','2027-09-30','community','collaborate',['Community survey','Baseline assessment of local needs. Exact dates to be announced.'],['सामुदायिक सर्वेक्षण','स्थानीय आवश्यकताको आधारभूत मूल्याङ्कन। मिति तोकिन बाँकी।'],{win:1,tent:1,link:'https://www.scribd.com/document/863941423/Introduction-to-Community-Surveys'}],
+ ['sem10','2027-09-25',null,'seminar','learn',['Seminar 10: Digital literacy and information security','For 1st Year students.'],['सेमिनार १०: डिजिटल साक्षरता तथा सूचना सुरक्षा','प्रथम वर्षका विद्यार्थीका लागि।']],
+ ['sem1','2027-10-01',null,'seminar','research',['Seminar 1: Research methodology and SMART research design',''],['सेमिनार १: अनुसन्धान विधि तथा SMART अनुसन्धान ढाँचा','']],
+ ['form1','2027-10-05',null,'research','research',['Research Form 1: Student profile','Student profile and research interest submission deadline.'],['अनुसन्धान फारम १: विद्यार्थी प्रोफाइल','विद्यार्थी प्रोफाइल तथा अनुसन्धान रुचि बुझाउने अन्तिम मिति।'],{dl:1,lk:'form',link:FORM('6tAzMEoLZfXwR5Rq7')}],
+ ['sem2','2027-10-10',null,'seminar','learn',['Seminar 2: Academic writing and citation standards',''],['सेमिनार २: शैक्षिक लेखन तथा उद्धरण मापदण्ड','']],
+ ['dashain','2027-10-17','2027-10-23','holiday',null,['Dashain holidays','Seven-day festival break. Dates follow the official notice.'],['दशैं बिदा','सात दिने चाडपर्व बिदा। मिति आधिकारिक सूचना अनुसार।'],{tent:1}],
+ ['form2','2027-10-20',null,'research','research',['Research Form 2: Topic selection','Research topic and problem identification.'],['अनुसन्धान फारम २: विषय छनोट','अनुसन्धान विषय तथा समस्या पहिचान।'],{dl:1,lk:'form',link:FORM('mnG2icKv8sqNaUeJ8')}],
+ ['sem11','2027-10-25',null,'seminar','collaborate',['Seminar 11: Critical thinking and debate skills','Structured peer discussion.'],['सेमिनार ११: आलोचनात्मक चिन्तन तथा वादविवाद सीप','संरचित सहपाठी छलफल।']],
+ ['heritage','2027-10-01','2028-03-31','community','impact',['Heritage documentation','Collaborative local history project to preserve the cultural legacy of Kapilvastu. Runs October to March.'],['सम्पदा अभिलेखीकरण','कपिलवस्तुको सांस्कृतिक विरासत जोगाउन स्थानीय इतिहास सम्बन्धी सामूहिक परियोजना। असोज–चैत होइन, अक्टोबरदेखि मार्चसम्म सञ्चालन।'],{win:1,tent:1,link:'https://evergreenorigins.in/resources/heritage-documentation-guide'}],
+ ['sem3','2027-11-05',null,'seminar','innovate',['Seminar 3: AI literacy for humanities scholars','Ethics, tools and best practices for responsible AI use.'],['सेमिनार ३: मानविकी अध्येताका लागि एआई साक्षरता','जिम्मेवार एआई प्रयोगका लागि नैतिकता, उपकरण र उत्तम अभ्यास।'],{link:'https://ldi.njit.edu/sites/ldi/files/AI%20Literacy%20for%20Everyone_0.pdf'}],
+ ['digital-campaign','2027-11-01','2027-11-30','community','impact',['Digital literacy campaign','Community skill-building. Exact dates to be announced.'],['डिजिटल साक्षरता अभियान','सामुदायिक सीप विकास। मिति तोकिन बाँकी।'],{win:1,tent:1,link:'https://ashrafifoundation.in/case/digital-literacy-campaigns/'}],
+ ['tihar','2027-11-08','2027-11-12','holiday',null,['Tihar holidays','Five-day festival break. Dates follow the official notice.'],['तिहार बिदा','पाँच दिने चाडपर्व बिदा। मिति आधिकारिक सूचना अनुसार।'],{tent:1}],
+ ['sem4','2027-11-15',null,'seminar','innovate',['Seminar 4: Zotero reference management',''],['सेमिनार ४: जोटेरो सन्दर्भ व्यवस्थापन','']],
+ ['midterm','2027-11-18','2027-11-28','exam','learn',['Mid-term tests','Mid-term internal assessments.'],['मध्यावधि परीक्षा','मध्यावधि आन्तरिक मूल्याङ्कन।']],
+ ['sem7','2027-11-20',null,'seminar','research',['Seminar 7: Research ethics and informed consent',''],['सेमिनार ७: अनुसन्धान नैतिकता तथा सूचित सहमति','']],
+ ['sem5','2027-12-01',null,'seminar','innovate',['Seminar 5: Qualitative data analysis','NVivo and ATLAS.ti hands-on training.'],['सेमिनार ५: गुणात्मक तथ्याङ्क विश्लेषण','NVivo र ATLAS.ti को प्रयोगात्मक तालिम।'],{link:'https://www.quirkos.com/learn-qualitative/workshops.html'}],
+ ['awareness','2027-12-01','2027-12-31','community','impact',['Social awareness program','Health, education and environmental issues. Exact dates to be announced.'],['सामाजिक सचेतना कार्यक्रम','स्वास्थ्य, शिक्षा र वातावरणीय विषय। मिति तोकिन बाँकी।'],{win:1,tent:1,link:'https://sasane.org.np/programs/school-awareness-program/'}],
+ ['sem6','2027-12-10',null,'seminar','innovate',['Seminar 6: Quantitative analysis','SPSS and Jamovi data analysis.'],['सेमिनार ६: परिमाणात्मक विश्लेषण','SPSS र Jamovi मार्फत तथ्याङ्क विश्लेषण।'],{link:'https://www.uriux.com/quantitative-research-training-workshops/'}],
+ ['form3','2027-12-31',null,'research','research',['Research Form 3: Proposal due','Full research proposal (3 to 5 pages).'],['अनुसन्धान फारम ३: प्रस्ताव बुझाउने मिति','पूर्ण अनुसन्धान प्रस्ताव (३ देखि ५ पृष्ठ)।'],{dl:1,lk:'form',link:FORM('ZmTSTkYxpmmJBU1V8')}],
+ ['form4','2028-01-01','2028-02-29','research','research',['Research Form 4: Monthly progress reports','Progress tracking reports are submitted monthly in January and February.'],['अनुसन्धान फारम ४: मासिक प्रगति प्रतिवेदन','जनवरी र फेब्रुअरीमा मासिक रूपमा प्रगति अनुगमन प्रतिवेदन बुझाउने।'],{win:1,tent:1,lk:'form',link:FORM('Ju2WqrTCjpvEUEdg9')}],
+ ['local-knowledge','2028-01-01','2028-02-29','community','impact',['Local knowledge documentation','Oral history and cultural preservation. Exact dates to be announced.'],['स्थानीय ज्ञान अभिलेखीकरण','मौखिक इतिहास तथा सांस्कृतिक संरक्षण। मिति तोकिन बाँकी।'],{win:1,tent:1,link:'https://scholar.google.com/scholar?q=Local+Knowledge+Documentation&hl=en&as_sdt=0&as_vis=1&oi=scholart'}],
+ ['sem8','2028-01-15',null,'seminar','learn',['Seminar 8: Career development and professional communication','For final-year students.'],['सेमिनार ८: करिअर विकास तथा व्यावसायिक सञ्चार','अन्तिम वर्षका विद्यार्थीका लागि।']],
+ ['sem9','2028-02-05',null,'seminar','innovate',['Seminar 9: Entrepreneurship and social innovation','Social innovation and business ideas.'],['सेमिनार ९: उद्यमशीलता तथा सामाजिक नवप्रवर्तन','सामाजिक नवप्रवर्तन तथा व्यवसाय विचार।'],{link:'https://www.slideshare.net/slideshow/seminar-on-entreprenship/236807668'}],
+ ['dev-projects','2028-02-01','2028-04-30','community','impact',['Student-led development projects','Student-led solutions to local problems. Exact dates to be announced.'],['विद्यार्थी नेतृत्वका विकास परियोजना','स्थानीय समस्याका विद्यार्थी नेतृत्वका समाधान। मिति तोकिन बाँकी।'],{win:1,tent:1,link:'https://popp.undp.org/taxonomy/term/6036'}],
+ ['outreach','2028-03-01','2028-03-31','community','impact',['Educational outreach','School mentoring and support. Exact dates to be announced.'],['शैक्षिक पहुँच कार्यक्रम','विद्यालयमा मार्गदर्शन तथा सहयोग। मिति तोकिन बाँकी।'],{win:1,tent:1,link:'https://www.goeco.org/area/volunteer-in-asia/nepal/educational-outreach-in-kathmandu/'}],
+ ['sem12','2028-03-10',null,'seminar','collaborate',['Seminar 12: Community engagement and social responsibility','Cross-program collaboration.'],['सेमिनार १२: सामुदायिक सहभागिता तथा सामाजिक उत्तरदायित्व','कार्यक्रमहरूबीच सहकार्य।'],{link:'https://scholar.google.com/scholar?q=Community+Engagement+Seminar&hl=en&as_sdt=0&as_vis=1&oi=scholart'}],
+ ['examform','2028-03-25',null,'exam','impact',['TU exam form submission deadline','Target: 100% of students submit.'],['त्रि.वि. परीक्षा फारम बुझाउने अन्तिम मिति','लक्ष्य: सबै विद्यार्थीले बुझाउने (१००%)।'],{dl:1}],
+ ['form5','2028-03-31',null,'research','research',['Research Form 5: Final submission','Complete research and evaluation.'],['अनुसन्धान फारम ५: अन्तिम पेश','पूर्ण अनुसन्धान तथा मूल्याङ्कन।'],{dl:1,lk:'form',link:FORM('UqsLWLdRKcm8KyRL7')}],
+ ['dissemination','2028-04-01','2028-04-30','research','impact',['Research dissemination seminar (Form 6)','Public seminar and community sharing of findings. Exact date to be announced.'],['अनुसन्धान प्रसार सेमिनार (फारम ६)','निष्कर्षहरूको सार्वजनिक सेमिनार तथा सामुदायिक आदानप्रदान। मिति तोकिन बाँकी।'],{win:1,tent:1,lk:'form',link:FORM('XQHeTGbRWsvQyHXC6')}],
+ ['sem13','2028-04-05',null,'seminar','impact',['Seminar 13: Heritage preservation and digital humanities',''],['सेमिनार १३: सम्पदा संरक्षण तथा डिजिटल मानविकी','']],
+ ['classes-end','2028-05-15',null,'academic','learn',['Classes end','Regular classes end for academic year 2027/28.'],['कक्षा समाप्त','शैक्षिक वर्ष २०२७/२८ को नियमित कक्षा समाप्त।']],
+ ['evaluation','2028-05-01','2028-06-30','review','impact',['Annual evaluation','Comprehensive evaluation of the year against the KPIs (May to June).'],['वार्षिक मूल्याङ्कन','केपीआईका आधारमा वर्षको समग्र मूल्याङ्कन (मे–जुन)।'],{win:1,tent:1}],
+ ['tu-finals','2028-06-10',null,'exam','learn',['TU final examinations begin','Tribhuvan University final examinations start. Dates follow the TU notice.'],['त्रि.वि. वार्षिक परीक्षा सुरु','त्रिभुवन विश्वविद्यालयको वार्षिक परीक्षा सुरु। मिति त्रि.वि. सूचना अनुसार।'],{tent:1}],
+ ['planning','2028-05-01','2028-08-31','review','impact',['Plan 2028/29 initiatives','Plan next year\'s initiatives (May to August) and refine strategies for 2028/29 (June to August).'],['२०२८/२९ का पहलको योजना','आगामी वर्षका पहलको योजना (मे–अगस्ट) र २०२८/२९ का रणनीति परिमार्जन (जुन–अगस्ट)।'],{win:1,tent:1}],
+ ['review-report','2028-09-01','2028-09-30','review','impact',['Annual academic review report','Documents achievements, challenges and recommendations for continuous improvement.'],['वार्षिक शैक्षिक समीक्षा प्रतिवेदन','उपलब्धि, चुनौती र सुधारका सिफारिस समावेश गरिने प्रतिवेदन।'],{win:1,tent:1}],
+ ['results','2028-09-01','2028-09-30','exam','learn',['Results expected','Examination results are expected this month.'],['नतिजा अपेक्षित','यस महिना परीक्षाको नतिजा अपेक्षित।'],{win:1,tent:1}]
+];
+
+const CATS = ['academic','seminar','research','community','holiday','exam','review'];
+const ICON = {academic:'📖',seminar:'🎤',research:'🔬',community:'🤝',holiday:'🎉',exam:'📝',review:'📊'};
+
+const KPIS = [
+ ['attendance','Student attendance','विद्यार्थी उपस्थिति',90,'≥ 90%'],
+ ['assignment','Assignment completion','असाइनमेन्ट सम्पन्नता',90,'≥ 90%'],
+ ['classcomp','Class completion rate','कक्षा सम्पन्न दर',100,'100%'],
+ ['midterm','Mid-term pass rate','मध्यावधि उत्तीर्ण दर',85,'≥ 85%'],
+ ['research','Research participation','अनुसन्धान सहभागिता',100,'100%'],
+ ['satisfaction','Student satisfaction','विद्यार्थी सन्तुष्टि',65,'65%'],
+ ['workshops','Workshops delivered','सञ्चालित कार्यशाला',55,'55%'],
+ ['examform','Exam form submission (by 25 Mar 2028)','परीक्षा फारम बुझाउने (२५ मार्च २०२८ सम्म)',100,'100%']
+].map(k=>({id:k[0],en:k[1],ne:k[2],target:k[3],txt:k[4]}));
+
+const PIL = [
+ {id:'learn',icon:'📚',
+  en:{n:'Learn',tag:'Build knowledge through critical learning',sum:'Critical reading, classroom engagement, interdisciplinary learning and digital literacy across six B.A. programs.'},
+  ne:{n:'सिक्नुहोस्',tag:'आलोचनात्मक सिकाइमार्फत ज्ञान निर्माण',sum:'छ वटा बी.ए. कार्यक्रममा आलोचनात्मक अध्ययन, कक्षा सहभागिता, अन्तरविषयक सिकाइ र डिजिटल साक्षरता।'},
+  blocks:[
+   {en:['B.A. programs',['Nepali','English','Sociology','History & Culture','Economics','Rural Development']],ne:['बी.ए. कार्यक्रमहरू',['नेपाली','अङ्ग्रेजी','समाजशास्त्र','इतिहास तथा संस्कृति','अर्थशास्त्र','ग्रामीण विकास']]},
+   {en:['Key learning activities',['Interactive classroom sessions (Sep to May)','Assigned readings and critical reviews','Collaborative group discussions','Mid-term assessments (18 to 28 Nov)','Digital literacy seminars (Sep to Oct)','Academic writing workshops (Oct)']],
+    ne:['मुख्य सिकाइ गतिविधि',['अन्तरक्रियात्मक कक्षा सञ्चालन (सेप्टेम्बर–मे)','तोकिएका पठन तथा आलोचनात्मक समीक्षा','सामूहिक छलफल','मध्यावधि मूल्याङ्कन (नोभेम्बर १८–२८)','डिजिटल साक्षरता सेमिनार (सेप्टेम्बर–अक्टोबर)','शैक्षिक लेखन कार्यशाला (अक्टोबर)']]}
+  ],kpis:['attendance','assignment']},
+ {id:'research',icon:'🔬',
+  en:{n:'Research',tag:'Generate evidence-based understanding',sum:'All B.A. students carry out original research, from problem identification to a written thesis, poster or oral presentation.'},
+  ne:{n:'अनुसन्धान',tag:'प्रमाणमा आधारित बुझाइ निर्माण',sum:'सबै बी.ए. विद्यार्थीले समस्या पहिचानदेखि लिखित शोधपत्र, पोस्टर वा मौखिक प्रस्तुतिसम्म मौलिक अनुसन्धान गर्छन्।'},
+  blocks:[
+   {ord:1,en:['8-milestone research cycle',['Idea generation','Problem identification','Literature review','Question formulation','Method design','Data collection','Analysis and interpretation','Findings presentation']],ne:['८ चरणको अनुसन्धान चक्र',['विचार सिर्जना','समस्या पहिचान','साहित्य समीक्षा','अनुसन्धान प्रश्न निर्माण','विधि ढाँचा','तथ्याङ्क सङ्कलन','विश्लेषण तथा व्याख्या','निष्कर्ष प्रस्तुति']]},
+   {para:1,en:['Research support','The research coordinator guides students on methodology, ethics, literature databases and digital tools. Library resources and online databases (Google Scholar, JSTOR, ResearchGate) are available.'],ne:['अनुसन्धान सहयोग','अनुसन्धान संयोजकले विधि, नैतिकता, साहित्य डाटाबेस र डिजिटल उपकरणबारे मार्गदर्शन गर्नुहुन्छ। पुस्तकालय स्रोत तथा अनलाइन डाटाबेस (Google Scholar, JSTOR, ResearchGate) उपलब्ध छन्।']}
+  ],kpis:['research']},
+ {id:'innovate',icon:'💡',
+  en:{n:'Innovate',tag:'Create new possibilities and solutions',sum:'AI-assisted learning, digital humanities, creative problem-solving and entrepreneurial thinking.'},
+  ne:{n:'नवप्रवर्तन',tag:'नयाँ सम्भावना र समाधान सिर्जना',sum:'एआई-सहयोगी सिकाइ, डिजिटल मानविकी, सिर्जनात्मक समस्या समाधान र उद्यमशील सोच।'},
+  blocks:[
+   {en:['Approved tools',['Literature discovery: Zotero, Mendeley, Google Scholar','Qualitative analysis: NVivo, ATLAS.ti, MAXQDA','Quantitative analysis: SPSS, Jamovi, R, Python','Data visualization: Power BI, Tableau, Canva','Generative AI: ChatGPT, Claude, Gemini (with transparency)','Digital humanities: QGIS mapping, digital archives','Writing support: Grammarly, Turnitin']],
+    ne:['स्वीकृत उपकरण',['साहित्य खोज: Zotero, Mendeley, Google Scholar','गुणात्मक विश्लेषण: NVivo, ATLAS.ti, MAXQDA','परिमाणात्मक विश्लेषण: SPSS, Jamovi, R, Python','तथ्याङ्क दृश्यीकरण: Power BI, Tableau, Canva','जेनेरेटिभ एआई: ChatGPT, Claude, Gemini (पारदर्शिताका साथ)','डिजिटल मानविकी: QGIS नक्सा, डिजिटल अभिलेख','लेखन सहयोग: Grammarly, Turnitin']]},
+   {para:1,policy:1,en:['AI policy','AI tools should support learning and research, not replace students\' independent academic work. All use of generative AI must be transparently disclosed and cited.'],ne:['एआई नीति','एआई उपकरणले सिकाइ र अनुसन्धानलाई सहयोग गर्नुपर्छ, विद्यार्थीको स्वतन्त्र शैक्षिक कार्यलाई प्रतिस्थापन गर्नु हुँदैन। जेनेरेटिभ एआईको सबै प्रयोग पारदर्शी रूपमा खुलाउनुपर्छ र उद्धृत गर्नुपर्छ।']}
+  ],kpis:['workshops']},
+ {id:'collaborate',icon:'🤝',
+  en:{n:'Collaborate',tag:'Connect people and ideas',sum:'Faculty-student partnerships, peer learning, community engagement, interdepartmental initiatives and alumni networks.'},
+  ne:{n:'सहकार्य',tag:'मान्छे र विचारलाई जोड्ने',sum:'शिक्षक–विद्यार्थी साझेदारी, सहपाठी सिकाइ, सामुदायिक सहभागिता, अन्तरविभागीय पहल र पूर्वविद्यार्थी सञ्जाल।'},
+  blocks:[
+   {en:['Collaborative learning',['Peer review sessions','Group research projects','Faculty-student mentorship','Study circles','Seminar presentations']],ne:['सहकार्यात्मक सिकाइ',['सहपाठी समीक्षा सत्र','समूह अनुसन्धान परियोजना','शिक्षक–विद्यार्थी मार्गदर्शन','अध्ययन समूह','सेमिनार प्रस्तुति']]},
+   {para:1,en:['Interdepartmental collaboration','KMC-HSSD works with the TU Faculty of Humanities & Social Sciences, campus administration, local government and community organizations.'],ne:['अन्तरविभागीय सहकार्य','KMC-HSSD ले त्रि.वि. मानविकी तथा सामाजिक शास्त्र सङ्काय, क्याम्पस प्रशासन, स्थानीय सरकार र सामुदायिक संस्थासँग सहकार्य गर्छ।']}
+  ],kpis:['satisfaction']},
+ {id:'impact',icon:'🌟',
+  en:{n:'Create impact',tag:'Transform knowledge into social value',sum:'Community service, research dissemination, heritage preservation and evidence-based social change.'},
+  ne:{n:'प्रभाव सिर्जना',tag:'ज्ञानलाई सामाजिक मूल्यमा रूपान्तरण',sum:'सामुदायिक सेवा, अनुसन्धान प्रसार, सम्पदा संरक्षण र प्रमाणमा आधारित सामाजिक रूपान्तरण।'},
+  blocks:[
+   {en:['Kapilvastu heritage impact',['Document and preserve Buddhist heritage','Create digital archives of local history','Support sustainable heritage tourism','Strengthen community pride in cultural legacy','Contribute to UNESCO World Heritage conservation at Tilaurakot']],ne:['कपिलवस्तु सम्पदा प्रभाव',['बौद्ध सम्पदाको अभिलेखीकरण तथा संरक्षण','स्थानीय इतिहासको डिजिटल अभिलेख निर्माण','दिगो सम्पदा पर्यटनलाई सहयोग','सांस्कृतिक विरासतप्रति सामुदायिक गौरव अभिवृद्धि','तिलौराकोटमा युनेस्को विश्व सम्पदा संरक्षणमा योगदान']]},
+   {ord:1,en:['Annual review cycle',['Plan: May to Aug 2028, plan next year\'s initiatives','Implement: Sep 2027 to May 2028, run the programs','Monitor: track progress against the KPIs every month','Evaluate: May to Jun 2028, comprehensive evaluation','Improve: Jun to Aug 2028, refine strategies for 2028/29']],
+    ne:['वार्षिक समीक्षा चक्र',['योजना: मे–अगस्ट २०२८, आगामी वर्षका पहलको योजना','कार्यान्वयन: सेप्टेम्बर २०२७–मे २०२८, कार्यक्रम सञ्चालन','अनुगमन: केपीआईका आधारमा हरेक महिना प्रगति अनुगमन','मूल्याङ्कन: मे–जुन २०२८, समग्र मूल्याङ्कन','सुधार: जुन–अगस्ट २०२८, २०२८/२९ का रणनीति परिमार्जन']]}
+  ],kpis:['examform','classcomp','attendance','midterm','research','satisfaction','workshops']}
+];
+
+/* =====================================================================
+   2. TEXT (English / Nepali)
+   ===================================================================== */
+const T = {
+ en:{
+  inst:'Kapilvastu Multiple Campus', dept:'Department of Humanities & Social Sciences (KMC-HSSD)',
+  title:'Academic Calendar', tagline:'Academic Excellence & Research Ecosystem', skip:'Skip to calendar',
+  tabMonth:'Month', tabAgenda:'Agenda', tabPillars:'Pillars', tabTargets:'Targets',
+  search:'Search events', starred:'★ Starred', add:'Add event', share:'Share and export',
+  checks:'Schedule check', checksNote:'Automatic checks of the dates in this calendar. They are prompts to confirm, not errors.', noChecks:'No issues found.',
+  stBefore:'Classes begin in {n} days.', stDuring:'Day {d} of {n} of the teaching term, {p}% complete.', stAfter:'The teaching term ended on {date}.',
+  cToday:'Today', cNext:'Next up', cDeadline:'Next deadline', none:'Nothing upcoming',
+  today:'Today', tomorrow:'Tomorrow', inDays:'in {n} days', daysAgo:'{n} days ago', ongoing:'Ongoing', days:'{n} days',
+  mPrev:'Previous month', mNext:'Next month', mToday:'Today', runMonth:'Running this month', noEvents:'No events on this day.', addOnDay:'Add an event on this day',
+  tent:'Date to be confirmed', warnBadge:'Check dates', openRef:'Open reference', openForm:'Open form', gcal:'Add to Google Calendar',
+  star:'Star', unstar:'Remove star', del:'Delete my event', mine:'My event', close:'Close',
+  ribbonTitle:'Year at a glance', legTerm:'Teaching term', legExam:'Exams', legHol:'Holidays', legDl:'Deadlines', legToday:'Today',
+  addTitle:'Add your own event', fTitle:'Title', fStart:'Date', fEnd:'End date (optional)', fCat:'Category', fNote:'Note (optional)', fSave:'Save event', fCancel:'Cancel',
+  errTitle:'Enter a title.', errDate:'Choose a date.', errRange:'The end date cannot be before the start date.',
+  toolsTitle:'Share and export', dlAll:'Download all events (.ics)', dlStar:'Download starred events (.ics)', shareUp:'Share upcoming events', printBtn:'Print agenda',
+  toolsNote:'Stars, your own events and target values are saved on this device only. The .ics file opens in Google Calendar, Outlook and Apple Calendar.',
+  copied:'Copied to clipboard', shared:'Shared', dlDone:'Calendar file downloaded', dlFail:'Download is not available here. Copied the file text instead.', noStar:'You have no starred events yet.', saved:'Event saved', removed:'Event deleted',
+  upHead:'KMC-HSSD upcoming events', noUp:'No upcoming events.',
+  kpiNote:'Enter the current value for each target. Values are saved on this device only.', kpiCur:'Current value (%)', kpiTarget:'Target', kpiMet:'Target met', kpiBelow:'{n} points below the target', kpiEmpty:'Enter a value to see progress', kpiDl:'{n} days to the deadline',
+  linked:'Linked events', targets:'Targets', 
+  cat_academic:'Academic', cat_seminar:'Seminars and workshops', cat_research:'Research', cat_community:'Community', cat_holiday:'Holidays', cat_exam:'Exams and forms', cat_review:'Review',
+  chkSat:'{t} falls on a Saturday (weekly holiday). Confirm this is intended.', chkHol:'{t} falls during {h}.', chkMid:'{t} overlaps the mid-term tests.',
+  bsNote:'Nepali (B.S.) dates are calculated approximately and can differ by a day. Follow the official TU and government notices.',
+  updates:'For updates, visit', platform:'Digital platform: UCDL Academy and SDROK. Affiliated with Tribhuvan University.',
+  devBy:'Developed by Mr. Bishnu Singh Rayamajhi, Math Lecturer and Department Head of Humanities & Social Sciences (KMC-HSSD)',
+  theme:'Theme', bsLabel:'B.S.', tgtShort:'Target'
+ },
+ ne:{
+  inst:'कपिलवस्तु बहुमुखी क्याम्पस', dept:'मानविकी तथा सामाजिक शास्त्र विभाग (KMC-HSSD)',
+  title:'शैक्षिक पात्रो', tagline:'शैक्षिक उत्कृष्टता तथा अनुसन्धान पारिस्थितिकी', skip:'पात्रोमा जानुहोस्',
+  tabMonth:'महिना', tabAgenda:'सूची', tabPillars:'स्तम्भ', tabTargets:'लक्ष्य',
+  search:'कार्यक्रम खोज्नुहोस्', starred:'★ तारांकित', add:'कार्यक्रम थप्नुहोस्', share:'सेयर तथा एक्सपोर्ट',
+  checks:'तालिका जाँच', checksNote:'यस पात्रोका मितिहरूको स्वचालित जाँच। यी पुष्टि गर्नुपर्ने सङ्केत हुन्, त्रुटि होइनन्।', noChecks:'कुनै समस्या भेटिएन।',
+  stBefore:'कक्षा सुरु हुन {n} दिन बाँकी।', stDuring:'कक्षा अवधिको {n} दिनमध्ये {d} औँ दिन, {p}% पूरा।', stAfter:'कक्षा अवधि {date} मा सकियो।',
+  cToday:'आज', cNext:'आगामी कार्यक्रम', cDeadline:'आगामी अन्तिम मिति', none:'आगामी केही छैन',
+  today:'आज', tomorrow:'भोलि', inDays:'{n} दिनमा', daysAgo:'{n} दिन अघि', ongoing:'जारी', days:'{n} दिन',
+  mPrev:'अघिल्लो महिना', mNext:'अर्को महिना', mToday:'आज', runMonth:'यस महिना चल्ने', noEvents:'यो दिन कुनै कार्यक्रम छैन।', addOnDay:'यो दिनमा कार्यक्रम थप्नुहोस्',
+  tent:'मिति पुष्टि हुन बाँकी', warnBadge:'मिति जाँच्नुहोस्', openRef:'सन्दर्भ खोल्नुहोस्', openForm:'फारम खोल्नुहोस्', gcal:'Google Calendar मा थप्नुहोस्',
+  star:'तारा लगाउनुहोस्', unstar:'तारा हटाउनुहोस्', del:'मेरो कार्यक्रम हटाउनुहोस्', mine:'मेरो कार्यक्रम', close:'बन्द गर्नुहोस्',
+  ribbonTitle:'वर्षको एक झलक', legTerm:'कक्षा अवधि', legExam:'परीक्षा', legHol:'बिदा', legDl:'अन्तिम मिति', legToday:'आज',
+  addTitle:'आफ्नो कार्यक्रम थप्नुहोस्', fTitle:'शीर्षक', fStart:'मिति', fEnd:'अन्तिम मिति (ऐच्छिक)', fCat:'वर्ग', fNote:'टिप्पणी (ऐच्छिक)', fSave:'कार्यक्रम सुरक्षित गर्नुहोस्', fCancel:'रद्द गर्नुहोस्',
+  errTitle:'शीर्षक लेख्नुहोस्।', errDate:'मिति छान्नुहोस्।', errRange:'अन्तिम मिति सुरु मितिभन्दा अघि हुन सक्दैन।',
+  toolsTitle:'सेयर तथा एक्सपोर्ट', dlAll:'सबै कार्यक्रम डाउनलोड (.ics)', dlStar:'तारांकित कार्यक्रम डाउनलोड (.ics)', shareUp:'आगामी कार्यक्रम सेयर गर्नुहोस्', printBtn:'सूची प्रिन्ट गर्नुहोस्',
+  toolsNote:'तारा, तपाईंका आफ्नै कार्यक्रम र लक्ष्यका मान यही उपकरणमा मात्र सुरक्षित हुन्छन्। .ics फाइल Google Calendar, Outlook र Apple Calendar मा खुल्छ।',
+  copied:'क्लिपबोर्डमा कपी भयो', shared:'सेयर भयो', dlDone:'पात्रो फाइल डाउनलोड भयो', dlFail:'यहाँ डाउनलोड उपलब्ध छैन। फाइलको पाठ कपी गरियो।', noStar:'अहिलेसम्म कुनै तारांकित कार्यक्रम छैन।', saved:'कार्यक्रम सुरक्षित भयो', removed:'कार्यक्रम हटाइयो',
+  upHead:'KMC-HSSD का आगामी कार्यक्रम', noUp:'आगामी कार्यक्रम छैन।',
+  kpiNote:'हरेक लक्ष्यको हालको मान लेख्नुहोस्। मान यही उपकरणमा मात्र सुरक्षित हुन्छ।', kpiCur:'हालको मान (%)', kpiTarget:'लक्ष्य', kpiMet:'लक्ष्य पूरा भयो', kpiBelow:'लक्ष्यभन्दा {n} अंक कम', kpiEmpty:'प्रगति हेर्न मान लेख्नुहोस्', kpiDl:'अन्तिम मितिसम्म {n} दिन',
+  linked:'सम्बन्धित कार्यक्रम', targets:'लक्ष्य',
+  cat_academic:'शैक्षिक', cat_seminar:'सेमिनार तथा कार्यशाला', cat_research:'अनुसन्धान', cat_community:'सामुदायिक', cat_holiday:'बिदा', cat_exam:'परीक्षा तथा फारम', cat_review:'समीक्षा',
+  chkSat:'{t} शनिबार (साप्ताहिक बिदा) परेको छ। यही चाहेको हो भनी पुष्टि गर्नुहोस्।', chkHol:'{t} {h} को अवधिमा परेको छ।', chkMid:'{t} मध्यावधि परीक्षासँग मिल्न गएको छ।',
+  bsNote:'नेपाली (वि.सं.) मिति अनुमानित रूपमा गणना गरिएको हो र एक दिन फरक पर्न सक्छ। त्रि.वि. तथा सरकारको आधिकारिक सूचना पालना गर्नुहोस्।',
+  updates:'अद्यावधिकका लागि हेर्नुहोस्', platform:'डिजिटल प्लेटफर्म: UCDL Academy र SDROK। त्रिभुवन विश्वविद्यालयसँग आबद्ध।',
+  devBy:'विकासकर्ता: श्री विष्णु सिंह रायमाझी, गणित प्रध्यापक तथा विभागीय प्रमुख, मानविकी तथा सामाजिक शास्त्र (KMC-HSSD)',
+  theme:'थिम', bsLabel:'वि.सं.', tgtShort:'लक्ष्य'
+ }
+};
+
+const MON = {en:['January','February','March','April','May','June','July','August','September','October','November','December'],
+             ne:['जनवरी','फेब्रुअरी','मार्च','अप्रिल','मे','जुन','जुलाई','अगस्ट','सेप्टेम्बर','अक्टोबर','नोभेम्बर','डिसेम्बर']};
+const MONS = {en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+              ne:['जन','फेब','मार्','अप्र','मे','जुन','जुल','अग','सेप','अक्','नोभ','डिस']};
+const WD  = {en:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+             ne:['आइतबार','सोमबार','मंगलबार','बुधबार','बिहीबार','शुक्रबार','शनिबार']};
+const WDS = {en:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],ne:['आइत','सोम','मंगल','बुध','बिहि','शुक्र','शनि']};
+const BSM = {en:['Baisakh','Jestha','Ashadh','Shrawan','Bhadra','Ashwin','Kartik','Mangsir','Poush','Magh','Falgun','Chaitra'],
+             ne:['बैशाख','जेठ','असार','श्रावण','भदौ','असोज','कार्तिक','मंसिर','पुष','माघ','फागुन','चैत']};
+
+/* =====================================================================
+   3. STATE, DATES, HELPERS
+   ===================================================================== */
+const KEY='kmchssd.calendar.2027-28';
+const S={lang:(navigator.language||'').toLowerCase().startsWith('ne')?'ne':'en',theme:'auto',view:'month',pillar:'learn',starred:[],custom:[],kpi:{}};
+try{Object.assign(S,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){}
+const F={cats:new Set(),star:false,q:''};
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const DAY=864e5;
+const dn=s=>{const a=s.split('-').map(Number);return Math.round(Date.UTC(a[0],a[1]-1,a[2])/DAY)};
+const parts=n=>{const x=new Date(n*DAY);return{y:x.getUTCFullYear(),m:x.getUTCMonth(),d:x.getUTCDate(),w:x.getUTCDay()}};
+const pad=n=>String(n).padStart(2,'0');
+const iso=n=>{const p=parts(n);return p.y+'-'+pad(p.m+1)+'-'+pad(p.d)};
+const dstr=n=>iso(n).replace(/-/g,'');
+const now=new Date();
+const todayN=Math.round(Date.UTC(now.getFullYear(),now.getMonth(),now.getDate())/DAY);
+const RS=dn(YEAR.rangeStart),RE=dn(YEAR.rangeEnd),TS=dn(YEAR.termStart),TE=dn(YEAR.termEnd);
+
+const t=(k,p)=>{let s=(T[S.lang]&&T[S.lang][k])||T.en[k]||k;if(p)for(const x in p)s=s.split('{'+x+'}').join(p[x]);return s};
+const nd=n=>S.lang==='ne'?String(n).replace(/\d/g,x=>'०१२३४५६७८९'[x]):String(n);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+// Approximate Bikram Sambat conversion (anchor: Baisakh 1, 2084 = 14 Apr 2027). Month lengths are typical, not official.
+const BS_ANCHOR=dn('2027-04-14'),BS_LEN=[31,31,31,32,31,31,30,29,30,29,30,30];
+function toBS(n){let off=n-BS_ANCHOR,y=2084;while(off<0){y--;off+=365}while(off>=365){off-=365;y++}let m=0;while(off>=BS_LEN[m]){off-=BS_LEN[m];m++}return{y,m,d:off+1}}
+const bsTxt=n=>{const b=toBS(n);return nd(b.d)+' '+BSM[S.lang][b.m]+' '+nd(b.y)};
+const fmtD=n=>{const p=parts(n);return nd(p.d)+' '+MON[S.lang][p.m]+' '+nd(p.y)};
+const fmtDate=n=>WD[S.lang][parts(n).w]+', '+fmtD(n);
+
+function mk(a){const o=a[7]||{};return Object.assign({id:a[0],s:dn(a[1]),e:dn(a[2]||a[1]),cat:a[3],pillar:a[4],en:{t:a[5][0],d:a[5][1]||''},ne:{t:a[6][0],d:a[6][1]||''}},o)}
+const BASEV=BASE.map(mk);
+const normC=c=>({id:c.id,s:dn(c.start),e:dn(c.end||c.start),cat:c.cat,pillar:null,en:{t:c.t,d:c.d},ne:{t:c.t,d:c.d},custom:1});
+const all=()=>BASEV.concat(S.custom.map(normC));
+const byId=id=>all().find(e=>e.id===id);
+const title=e=>e[S.lang].t||e.en.t;
+const descr=e=>e[S.lang].d||e.en.d;
+const rangeTxt=e=>e.s===e.e?fmtDate(e.s):fmtD(e.s)+' – '+fmtD(e.e);
+const bsRange=e=>e.s===e.e?bsTxt(e.s):bsTxt(e.s)+' – '+bsTxt(e.e);
+const dur=e=>t('days',{n:nd(e.e-e.s+1)});
+function rel(e){
+  if(todayN>=e.s&&todayN<=e.e)return e.s===e.e?t('today'):t('ongoing');
+  if(e.s>todayN){const n=e.s-todayN;return n===1?t('tomorrow'):t('inDays',{n:nd(n)})}
+  return t('daysAgo',{n:nd(todayN-e.e)});
+}
+const sorted=l=>l.slice().sort((a,b)=>a.s-b.s||a.e-b.e);
+const timed=()=>sorted(all().filter(e=>!e.win));
+const nextEv=()=>timed().find(e=>e.e>=todayN);
+const nextDl=()=>sorted(all().filter(e=>e.dl&&e.s>=todayN))[0];
+const isStar=id=>S.starred.includes(id);
+function vis(e){
+  if(F.cats.size&&!F.cats.has(e.cat))return false;
+  if(F.star&&!isStar(e.id))return false;
+  if(F.q){const h=(e.en.t+' '+e.en.d+' '+e.ne.t+' '+e.ne.d).toLowerCase();if(!h.includes(F.q.toLowerCase()))return false}
+  return true;
+}
+
+/* ---------- schedule checks ---------- */
+function computeChecks(){
+  const evs=all(),list=[],hol=evs.filter(x=>x.cat==='holiday'&&!x.win),mid=evs.find(x=>x.id==='midterm');
+  evs.forEach(e=>{
+    if(e.win||e.cat==='holiday')return;
+    if(e.s===e.e&&parts(e.s).w===6)list.push({id:e.id,k:'sat'});
+    hol.forEach(h=>{if(h.id!==e.id&&e.s<=h.e&&e.e>=h.s)list.push({id:e.id,k:'hol',h:h})});
+    if(mid&&e.id!==mid.id&&e.cat!=='exam'&&e.s<=mid.e&&e.e>=mid.s)list.push({id:e.id,k:'mid'});
+  });
+  return list;
+}
+function chkMsg(c){
+  const e=byId(c.id);if(!e)return'';
+  if(c.k==='sat')return t('chkSat',{t:title(e)});
+  if(c.k==='hol')return t('chkHol',{t:title(e),h:title(c.h)});
+  return t('chkMid',{t:title(e)});
+}
+let CHK=[];
+
+/* =====================================================================
+   4. RENDERING
+   ===================================================================== */
+let cur=(()=>{const n=Math.min(Math.max(todayN,RS),RE);const p=parts(n);return{y:p.y,m:p.m}})();
+
+function applyI18n(){
+  document.documentElement.lang=S.lang;
+  $$('[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n)});
+  $$('[data-i18n-ph]').forEach(el=>{el.placeholder=t(el.dataset.i18nPh)});
+  $$('[data-i18n-aria]').forEach(el=>{el.setAttribute('aria-label',t(el.dataset.i18nAria))});
+  $('#h1').textContent=t('title')+' '+nd(YEAR.label)+(S.lang==='ne'?' (वि.सं. '+nd('2084/85')+')':'');
+  document.title='KMC-HSSD '+t('title')+' '+YEAR.label;
+  $$('.seg button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===S.lang)));
+  $('#btnTheme').textContent='◐ '+t('theme');
+  $('#fStar').textContent=t('starred');
+  $('#fStar').setAttribute('aria-pressed',String(F.star));
+  $$('#tabs .tab').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.v===S.view)));
+  $('#evCat').innerHTML=CATS.map(c=>'<option value="'+c+'">'+ICON[c]+' '+esc(t('cat_'+c))+'</option>').join('');
+}
+
+function renderChips(){
+  $('#chips').innerHTML=CATS.map(c=>'<button class="fchip" style="--cc:var(--c-'+c+')" data-a="chip" data-v="'+c+'" aria-pressed="'+F.cats.has(c)+'">'+ICON[c]+' '+esc(t('cat_'+c))+'</button>').join('');
+}
+
+function relCard(label,e){
+  if(!e)return'<div class="card"><div class="k">'+esc(label)+'</div><div class="v">'+esc(t('none'))+'</div></div>';
+  return '<button class="card" data-a="ev" data-v="'+esc(e.id)+'"><div class="k">'+esc(label)+'</div><div class="v">'+esc(title(e))+'</div><div class="s">'+esc(rangeTxt(e))+'</div><div class="s">'+esc(rel(e))+'</div></button>';
+}
+
+function renderHero(){
+  const total=TE-TS+1;let st;
+  if(todayN<TS)st=t('stBefore',{n:nd(TS-todayN)});
+  else if(todayN<=TE){const d=todayN-TS+1;st=t('stDuring',{d:nd(d),n:nd(total),p:nd(Math.round(d/total*100))})}
+  else st=t('stAfter',{date:fmtD(TE)});
+  $('#status').textContent=st;
+  $('#cards').innerHTML=
+    '<div class="card"><div class="k">'+esc(t('cToday'))+'</div><div class="v">'+esc(fmtDate(todayN))+'</div><div class="s">'+esc(t('bsLabel'))+' ≈ '+esc(bsTxt(todayN))+'</div></div>'+
+    relCard(t('cNext'),nextEv())+relCard(t('cDeadline'),nextDl());
+  renderRibbon();
+}
+
+function renderRibbon(){
+  const total=RE-RS+1,pct=n=>((n-RS)/total*100);
+  let h='';
+  let y=2027,m=8;
+  while(y<2028||(y===2028&&m<=8)){
+    const ms=dn(y+'-'+pad(m+1)+'-01'),ny=m===11?y+1:y,nm=(m+1)%12,ne=dn(ny+'-'+pad(nm+1)+'-01');
+    h+='<button class="rb-m" style="left:'+pct(ms)+'%;width:'+((ne-ms)/total*100)+'%" data-a="gotoMonth" data-v="'+y+'-'+m+'" aria-label="'+esc(MON[S.lang][m]+' '+nd(y))+'">'+esc(MONS[S.lang][m])+'</button>';
+    m++;if(m>11){m=0;y++}
+  }
+  const bar=(s,e,cls,tt)=>'<span class="rb '+cls+'" style="left:'+pct(s)+'%;width:'+Math.max((e-s+1)/total*100,.6)+'%" title="'+esc(tt)+'"></span>';
+  h+=bar(TS,TE,'rb-term',t('legTerm')+': '+fmtD(TS)+' – '+fmtD(TE));
+  all().forEach(e=>{
+    if(e.custom)return;
+    if(e.id==='midterm')h+=bar(e.s,e.e,'rb-exam',title(e)+': '+rangeTxt(e));
+    if(e.id==='tu-finals')h+=bar(e.s,e.s+11,'rb-open',title(e)+': '+fmtD(e.s));
+    if(e.cat==='holiday')h+=bar(e.s,e.e,'rb-hol',title(e)+': '+rangeTxt(e));
+    if(e.dl)h+='<span class="rb rb-dl'+(e.cat==='exam'?' exam':'')+'" style="left:'+(pct(e.s)+.15)+'%" title="'+esc(title(e)+': '+fmtD(e.s))+'"></span>';
+  });
+  if(todayN>=RS&&todayN<=RE)h+='<span class="rb-today" style="left:'+pct(todayN)+'%"><span>'+esc(t('legToday'))+'</span></span>';
+  $('#ribbon').innerHTML=h;
+  $('#legend').innerHTML=
+    '<span><i style="background:color-mix(in srgb,var(--c-academic) 70%,transparent)"></i>'+esc(t('legTerm'))+'</span>'+
+    '<span><i style="background:var(--c-exam)"></i>'+esc(t('legExam'))+'</span>'+
+    '<span><i style="background:var(--c-holiday)"></i>'+esc(t('legHol'))+'</span>'+
+    '<span><i style="background:var(--c-research);transform:rotate(45deg) scale(.8)"></i>'+esc(t('legDl'))+'</span>';
+}
+
+function renderChecks(){
+  CHK=computeChecks();
+  const d=$('#checks'),open=d.open;
+  d.innerHTML='<summary>⚠ '+esc(t('checks'))+' ('+nd(CHK.length)+')</summary><p>'+esc(t('checksNote'))+'</p>'+
+    (CHK.length?CHK.map(c=>'<button class="chk" data-a="ev" data-v="'+esc(c.id)+'">'+esc(chkMsg(c))+'</button>').join(''):'<p>'+esc(t('noChecks'))+'</p>');
+  d.open=open;
+}
+
+/* ---------- Month view ---------- */
+function evsOn(n){return sorted(all().filter(e=>!e.win&&e.s<=n&&n<=e.e&&vis(e))).sort((a,b)=>(a.cat==='holiday'?0:1)-(b.cat==='holiday'?0:1))}
+function renderMonth(){
+  const first=dn(cur.y+'-'+pad(cur.m+1)+'-01'),fp=parts(first);
+  const dim=parts(dn((cur.m===11?cur.y+1:cur.y)+'-'+pad((cur.m+1)%12+1)+'-01')-1).d,last=first+dim-1;
+  const b1=toBS(first),b2=toBS(last);
+  const bsLbl=BSM[S.lang][b1.m]+(b1.m!==b2.m?' – '+BSM[S.lang][b2.m]:'')+' '+(b1.y!==b2.y?nd(b1.y)+'/'+nd(b2.y):nd(b2.y));
+  let h='<div class="mhead"><h2>'+esc(MON[S.lang][cur.m]+' '+nd(cur.y))+'<small>'+esc(t('bsLabel'))+' ≈ '+esc(bsLbl)+'</small></h2>'+
+    '<button class="btn" data-a="mPrev" aria-label="'+esc(t('mPrev'))+'">‹</button>'+
+    '<button class="btn" data-a="mToday">'+esc(t('mToday'))+'</button>'+
+    '<button class="btn" data-a="mNext" aria-label="'+esc(t('mNext'))+'">›</button></div>';
+  h+='<div class="grid" role="grid">';
+  WDS[S.lang].forEach((w,i)=>{h+='<div class="wd'+(i===6?' sat':'')+'" role="columnheader">'+esc(w)+'</div>'});
+  const start=first-fp.w;
+  for(let i=0;i<42;i++){
+    const n=start+i,p=parts(n),b=toBS(n),out=p.m!==cur.m;
+    if(i>=35&&out&&parts(start+35).m!==cur.m)break;
+    const ev=evsOn(n);
+    const cls='cell'+(out?' out':'')+(p.w===6?' sat':'')+(n===todayN?' today':'');
+    const bsl=b.d===1?BSM[S.lang][b.m]:nd(b.d);
+    h+='<button class="'+cls+'" role="gridcell" data-a="day" data-v="'+n+'" aria-label="'+esc(fmtDate(n)+(ev.length?', '+ev.length+' '+(S.lang==='ne'?'कार्यक्रम':'events'):''))+'">'+
+      '<span class="ch"><span class="gd">'+nd(p.d)+'</span><span class="bd">'+esc(bsl)+'</span></span><span class="evs">'+
+      ev.slice(0,2).map(e=>'<span class="ce" style="--cc:var(--c-'+e.cat+')">'+(isStar(e.id)?'★ ':'')+esc(title(e))+'</span>').join('')+
+      (ev.length>2?'<span class="more">+'+nd(ev.length-2)+'</span>':'')+'</span></button>';
+  }
+  h+='</div>';
+  const wins=sorted(all().filter(e=>e.win&&e.s<=last&&e.e>=first&&vis(e)));
+  if(wins.length){
+    h+='<div class="ongoing"><h3>'+esc(t('runMonth'))+'</h3>'+wins.map(e=>
+      '<button class="orow" data-a="ev" data-v="'+esc(e.id)+'"><span class="badge cat" style="--cc:var(--c-'+e.cat+')">'+ICON[e.cat]+' '+esc(t('cat_'+e.cat))+'</span><strong>'+esc(title(e))+'</strong><span class="rng">'+esc(fmtD(e.s)+' – '+fmtD(e.e))+'</span>'+(e.tent?'<span class="badge">'+esc(t('tent'))+'</span>':'')+'</button>').join('')+'</div>';
+  }
+  $('#v-month').innerHTML=h;
+}
+
+/* ---------- Agenda ---------- */
+function warnFor(id){return CHK.filter(c=>c.id===id)}
+function renderAgenda(){
+  const list=sorted(all().filter(vis));
+  if(!list.length){$('#v-agenda').innerHTML='<p class="empty">'+esc(F.star?t('noStar'):t('noEvents'))+'</p>';return}
+  const groups=[];
+  list.forEach(e=>{const p=parts(e.s),k=p.y+'-'+p.m;let g=groups[groups.length-1];if(!g||g.k!==k){g={k,p,l:[]};groups.push(g)}g.l.push(e)});
+  $('#v-agenda').innerHTML=groups.map(g=>'<div class="amonth"><h3>'+esc(MON[S.lang][g.p.m]+' '+nd(g.p.y))+'</h3>'+g.l.map(e=>{
+    const p=parts(e.s),pe=parts(e.e);
+    const dayTxt=e.s===e.e?nd(p.d):nd(p.d)+(e.win?'':'–'+nd(pe.d));
+    const sub=e.win?esc(MONS[S.lang][p.m]):esc(WDS[S.lang][p.w]);
+    return '<div class="row'+(e.e<todayN?' past':'')+'" style="--cc:var(--c-'+e.cat+')">'+
+      '<button class="row-main" data-a="ev" data-v="'+esc(e.id)+'"><span class="dblock"><b>'+dayTxt+'</b><span>'+sub+'</span></span>'+
+      '<span class="rbody"><span class="t">'+esc(title(e))+'</span><span class="m" style="display:block">'+esc(rangeTxt(e))+' ('+esc(rel(e))+')</span>'+
+      (descr(e)?'<span class="d" style="display:block">'+esc(descr(e))+'</span>':'')+
+      '<span class="badge cat">'+ICON[e.cat]+' '+esc(t('cat_'+e.cat))+'</span>'+
+      (e.tent?'<span class="badge">'+esc(t('tent'))+'</span>':'')+
+      (e.custom?'<span class="badge">'+esc(t('mine'))+'</span>':'')+
+      (warnFor(e.id).length?'<span class="badge warn">⚠ '+esc(t('warnBadge'))+'</span>':'')+'</span></button>'+
+      '<button class="star" data-a="star" data-v="'+esc(e.id)+'" aria-pressed="'+isStar(e.id)+'" aria-label="'+esc(isStar(e.id)?t('unstar'):t('star'))+'">'+(isStar(e.id)?'★':'☆')+'</button></div>';
+  }).join('')+'</div>').join('');
+}
+
+/* ---------- Pillars ---------- */
+function renderPillars(){
+  const p=PIL.find(x=>x.id===S.pillar)||PIL[0],L=S.lang;
+  let h='<div class="ptabs" role="tablist">'+PIL.map(x=>'<button class="ptab" role="tab" data-a="pillar" data-v="'+x.id+'" aria-selected="'+(x.id===p.id)+'">'+x.icon+' '+esc(x[L].n)+'</button>').join('')+'</div>';
+  h+='<div class="panel"><h2>'+p.icon+' '+esc(p[L].n)+'</h2><p class="tg">'+esc(p[L].tag)+'</p><p>'+esc(p[L].sum)+'</p><div class="pgrid">';
+  p.blocks.forEach(b=>{
+    const c=b[L];
+    if(b.para)h+='<div class="pb'+(b.policy?' policy':'')+'"><h3>'+esc(c[0])+'</h3><p>'+esc(c[1])+'</p></div>';
+    else{const tag=b.ord?'ol':'ul';h+='<div class="pb"><h3>'+esc(c[0])+'</h3><'+tag+'>'+c[1].map(i=>'<li>'+esc(i)+'</li>').join('')+'</'+tag+'></div>'}
+  });
+  const linked=sorted(all().filter(e=>e.pillar===p.id&&!e.custom));
+  if(linked.length)h+='<div class="pb"><h3>'+esc(t('linked'))+'</h3>'+linked.map(e=>'<button class="orow" data-a="ev" data-v="'+esc(e.id)+'"><strong>'+esc(title(e))+'</strong><span class="rng">'+esc(e.win?fmtD(e.s)+' – '+fmtD(e.e):rangeTxt(e))+'</span></button>').join('')+'</div>';
+  h+='</div><div class="kchips" aria-label="'+esc(t('targets'))+'">'+p.kpis.map(id=>{const k=KPIS.find(x=>x.id===id);return '<span class="kchip">'+esc(k[L])+': '+esc(k.txt)+'</span>'}).join('')+'</div></div>';
+  $('#v-pillars').innerHTML=h;
+}
+
+/* ---------- Targets ---------- */
+function kStatus(k){
+  const v=S.kpi[k.id];
+  if(v===undefined||v===''||v===null)return t('kpiEmpty');
+  const n=Number(v);return n>=k.target?'✓ '+t('kpiMet'):t('kpiBelow',{n:nd(Math.round((k.target-n)*10)/10)});
+}
+function renderKPI(){
+  const ef=byId('examform');
+  $('#v-kpi').innerHTML='<p class="note">'+esc(t('kpiNote'))+'</p><div class="kgrid">'+KPIS.map(k=>{
+    const v=S.kpi[k.id]===undefined?'':S.kpi[k.id];
+    return '<div class="kcard" data-k="'+k.id+'"><h3>'+esc(k[S.lang])+'</h3><div class="tgt">'+esc(t('kpiTarget'))+': '+esc(k.txt)+'</div>'+
+      (k.id==='examform'&&ef&&ef.s>=todayN?'<div class="tgt">'+esc(t('kpiDl',{n:nd(ef.s-todayN)}))+'</div>':'')+
+      '<label>'+esc(t('kpiCur'))+'<input type="number" inputmode="decimal" min="0" max="100" step="any" value="'+esc(v)+'" data-k="'+k.id+'"></label>'+
+      '<div class="bar"><i style="width:'+Math.min(100,Number(v)||0)+'%"></i><b style="left:calc('+k.target+'% - 1px)"></b></div><div class="kst">'+esc(kStatus(k))+'</div></div>';
+  }).join('')+'</div>';
+}
+
+/* ---------- Dialog ---------- */
+const dlg=$('#dlg');let ctx=null;
+function block(e){
+  const w=warnFor(e.id);
+  return '<section class="eb" style="--cc:var(--c-'+e.cat+')">'+
+    '<span class="badge cat">'+ICON[e.cat]+' '+esc(t('cat_'+e.cat))+'</span>'+(e.tent?'<span class="badge">'+esc(t('tent'))+'</span>':'')+(e.custom?'<span class="badge">'+esc(t('mine'))+'</span>':'')+
+    '<h3>'+esc(title(e))+'</h3>'+
+    '<p class="dt">'+esc(rangeTxt(e))+' ('+esc(dur(e))+', '+esc(rel(e))+')</p>'+
+    '<p class="dt">'+esc(t('bsLabel'))+' ≈ '+esc(bsRange(e))+'</p>'+
+    (descr(e)?'<p>'+esc(descr(e))+'</p>':'')+
+    (w.length?'<ul>'+w.map(c=>'<li>'+esc(chkMsg(c))+'</li>').join('')+'</ul>':'')+
+    '<div class="acts">'+
+      (e.link?'<a class="btn pri" href="'+esc(e.link)+'" target="_blank" rel="noopener">'+esc(t(e.lk==='form'?'openForm':'openRef'))+'</a>':'')+
+      '<button class="btn" data-a="star" data-v="'+esc(e.id)+'" aria-pressed="'+isStar(e.id)+'">'+(isStar(e.id)?'★ '+esc(t('unstar')):'☆ '+esc(t('star')))+'</button>'+
+      '<a class="btn" href="'+esc(gcalUrl(e))+'" target="_blank" rel="noopener">'+esc(t('gcal'))+'</a>'+
+      (e.custom?'<button class="btn" data-a="del" data-v="'+esc(e.id)+'">'+esc(t('del'))+'</button>':'')+
+    '</div></section>';
+}
+function renderDlg(){
+  if(!ctx)return;let head,body;
+  if(ctx.type==='ev'){
+    const e=byId(ctx.id);if(!e){dlg.close();return}
+    head='<h2 id="dlgT">'+esc(rangeTxt(e))+'</h2>';body=block(e);
+  }else{
+    const n=ctx.n,list=sorted(all().filter(e=>e.s<=n&&n<=e.e));
+    head='<h2 id="dlgT">'+esc(fmtDate(n))+'<small>'+esc(t('bsLabel'))+' ≈ '+esc(bsTxt(n))+'</small></h2>';
+    body=list.length?list.map(block).join(''):'<p class="empty">'+esc(t('noEvents'))+'</p>';
+    body+='<button class="btn" data-a="addOn" data-v="'+n+'">'+esc(t('addOnDay'))+'</button>';
+  }
+  $('#dlgBody').innerHTML='<div class="dh">'+head+'<button class="x" data-a="close" data-v="dlg" aria-label="'+esc(t('close'))+'">×</button></div>'+body;
+}
+function openCtx(c){ctx=c;renderDlg();if(!dlg.open)dlg.showModal()}
+
+/* ---------- master render ---------- */
+function renderView(){
+  ['month','agenda','pillars','kpi'].forEach(v=>{$('#v-'+v).hidden=S.view!==v});
+  $('#filters').hidden=!(S.view==='month'||S.view==='agenda');
+  $('#checks').hidden=!(S.view==='month'||S.view==='agenda');
+  if(S.view==='month')renderMonth();
+  else if(S.view==='agenda')renderAgenda();
+  else if(S.view==='pillars')renderPillars();
+  else renderKPI();
+}
+function renderAll(){applyI18n();renderChips();renderChecks();renderHero();renderView();if(dlg.open)renderDlg()}
+
+/* =====================================================================
+   5. ACTIONS
+   ===================================================================== */
+function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('on'),2400)}
+function gcalUrl(e){
+  return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(title(e))+
+    '&dates='+dstr(e.s)+'/'+dstr(e.e+1)+'&details='+encodeURIComponent(descr(e)+(e.link?'\n'+e.link:''));
+}
+function icsEsc(s){return String(s).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n')}
+function buildICS(list){
+  const stamp=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'');
+  const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//KMC-HSSD//Academic Calendar '+YEAR.label+'//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:KMC-HSSD Academic Calendar '+YEAR.label];
+  list.forEach(e=>{
+    L.push('BEGIN:VEVENT','UID:'+e.id+'@kmc-hssd-calendar','DTSTAMP:'+stamp,'DTSTART;VALUE=DATE:'+dstr(e.s),'DTEND;VALUE=DATE:'+dstr(e.e+1),
+      'SUMMARY:'+icsEsc(title(e)),'DESCRIPTION:'+icsEsc(descr(e)+(e.link?' '+e.link:'')),'CATEGORIES:'+e.cat.toUpperCase());
+    if(e.tent)L.push('STATUS:TENTATIVE');
+    if(isStar(e.id)&&!e.win)L.push('BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+icsEsc(title(e)),'TRIGGER:-P1D','END:VALARM');
+    L.push('END:VEVENT');
+  });
+  L.push('END:VCALENDAR');return L.join('\r\n');
+}
+function copyText(txt,okMsg){
+  const fallback=()=>{const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast(okMsg)}catch(e){}ta.remove()};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(()=>toast(okMsg),fallback);else fallback();
+}
+function download(list){
+  if(!list.length){toast(t('noStar'));return}
+  const txt=buildICS(list);
+  try{
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/calendar;charset=utf-8'}));
+    a.download='kmc-hssd-academic-calendar-'+YEAR.label.replace('/','-')+'.ics';document.body.appendChild(a);a.click();
+    setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);toast(t('dlDone'));
+  }catch(e){copyText(txt,t('dlFail'))}
+}
+function shareText(){
+  const up=timed().filter(e=>e.e>=todayN).slice(0,8);
+  if(!up.length)return t('noUp');
+  return t('upHead')+'\n'+up.map(e=>'- '+rangeTxt(e)+': '+title(e)).join('\n');
+}
+function setView(v){S.view=v;save();renderAll();window.scrollTo({top:$('#main').offsetTop-8})}
+function toggleStar(id){const i=S.starred.indexOf(id);if(i>=0)S.starred.splice(i,1);else S.starred.push(id);save();renderAll()}
+function openAdd(dateN){
+  const f=$('#addForm');f.reset();$('#addErr').textContent='';
+  f.elements.evStart.value=iso(dateN!==undefined?dateN:Math.min(Math.max(todayN,RS),RE));
+  if(dlg.open)dlg.close();
+  $('#addDlg').showModal();
+}
+
+document.addEventListener('click',ev=>{
+  if(ev.target.tagName==='DIALOG'){ev.target.close();return}
+  const el=ev.target.closest('[data-a]');if(!el)return;
+  const a=el.dataset.a,v=el.dataset.v;
+  switch(a){
+    case 'lang':S.lang=v;save();renderAll();break;
+    case 'theme':{
+      const dark=document.documentElement.dataset.theme?document.documentElement.dataset.theme==='dark':!matchMedia('(prefers-color-scheme: light)').matches;
+      S.theme=dark?'light':'dark';save();document.documentElement.dataset.theme=S.theme;break;}
+    case 'tab':setView(v);break;
+    case 'chip':F.cats.has(v)?F.cats.delete(v):F.cats.add(v);renderChips();renderView();break;
+    case 'fstar':F.star=!F.star;$('#fStar').setAttribute('aria-pressed',String(F.star));renderView();break;
+    case 'mPrev':cur.m--;if(cur.m<0){cur.m=11;cur.y--}renderMonth();break;
+    case 'mNext':cur.m++;if(cur.m>11){cur.m=0;cur.y++}renderMonth();break;
+    case 'mToday':{const p=parts(Math.min(Math.max(todayN,RS),RE));cur={y:p.y,m:p.m};renderMonth();break;}
+    case 'gotoMonth':{const x=v.split('-');cur={y:+x[0],m:+x[1]};S.view='month';save();renderAll();$('#main').scrollIntoView();break;}
+    case 'day':openCtx({type:'day',n:+v});break;
+    case 'ev':openCtx({type:'ev',id:v});break;
+    case 'star':toggleStar(v);break;
+    case 'del':S.custom=S.custom.filter(c=>c.id!==v);S.starred=S.starred.filter(i=>i!==v);save();dlg.close();renderAll();toast(t('removed'));break;
+    case 'close':$('#'+v).close();break;
+    case 'add':openAdd();break;
+    case 'addOn':openAdd(+v);break;
+    case 'tools':$('#toolsDlg').showModal();break;
+    case 'pillar':S.pillar=v;save();renderPillars();break;
+    case 'icsAll':download(sorted(all()));break;
+    case 'icsStar':download(sorted(all().filter(e=>isStar(e.id))));break;
+    case 'share':{
+      const txt=shareText();
+      if(navigator.share)navigator.share({title:t('upHead'),text:txt}).then(()=>toast(t('shared')),()=>{});
+      else copyText(txt,t('copied'));
+      break;}
+    case 'print':$('#toolsDlg').close();S.view='agenda';renderAll();setTimeout(()=>window.print(),150);break;
+  }
+});
+
+$('#q').addEventListener('input',e=>{F.q=e.target.value.trim();renderView()});
+
+$('#addForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const f=e.target.elements,ttl=f.evTitle.value.trim(),s=f.evStart.value,en=f.evEnd.value,err=$('#addErr');
+  if(!ttl){err.textContent=t('errTitle');return}
+  if(!s){err.textContent=t('errDate');return}
+  if(en&&dn(en)<dn(s)){err.textContent=t('errRange');return}
+  S.custom.push({id:'u'+Date.now().toString(36),start:s,end:en||s,cat:f.evCat.value,t:ttl,d:f.evNote.value.trim()});
+  save();$('#addDlg').close();
+  const p=parts(dn(s));cur={y:p.y,m:p.m};
+  renderAll();toast(t('saved'));
+});
+
+document.addEventListener('input',e=>{
+  const inp=e.target.closest('input[data-k]');if(!inp)return;
+  const k=KPIS.find(x=>x.id===inp.dataset.k);let v=inp.value;
+  if(v!==''){v=Math.max(0,Math.min(100,Number(v)))}
+  S.kpi[k.id]=v;save();
+  const card=inp.closest('.kcard');
+  card.querySelector('.bar i').style.width=(Number(v)||0)+'%';
+  card.querySelector('.kst').textContent=kStatus(k);
+});
+
+/* =====================================================================
+   6. START
+   ===================================================================== */
+if(S.theme==='light'||S.theme==='dark')document.documentElement.dataset.theme=S.theme;
+if(!['month','agenda','pillars','kpi'].includes(S.view))S.view='month';
+renderAll();
+})();
+</script>
+</body>
+</html>
