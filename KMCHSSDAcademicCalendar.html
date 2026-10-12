@@ -35,7 +35,12 @@
 :root[data-theme="dark"]{color-scheme:dark}
 
 *{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+@keyframes panelIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.panel{animation:panelIn .45s ease both}
+.tu-ref a{color:var(--accent-text);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.tu-ref li{list-style:none;margin-left:0}
+.tu-ref ul{margin-left:0}
 body{
   font-family:'Mukta','Noto Sans Devanagari','Segoe UI',system-ui,sans-serif;
   background:var(--bg);color:var(--ink);line-height:1.55;font-size:16px;
@@ -313,7 +318,7 @@ footer a{color:var(--accent-text)}
 <footer>
   <p data-i18n="bsNote"></p>
   <p>© 2027/28 Kapilvastu Multiple Campus, HSSD, Taulihawa, Kapilvastu, Lumbini Province, Nepal</p>
-  <p><span data-i18n="updates"></span> <a href="https://www.kmc.edu.np" target="_blank" rel="noopener">www.kmc.edu.np</a> / <a href="https://fohss.tu.edu.np/" target="_blank" rel="noopener">fohss.tu.edu.np</a></p>
+  <p><span data-i18n="updates"></span> <a href="https://www.kmctlw.edu.np" target="_blank" rel="noopener">www.kmc.edu.np</a> / <a href="https://fohss.tu.edu.np/" target="_blank" rel="noopener">fohss.tu.edu.np</a></p>
   <p data-i18n="platform"></p>
   <p data-i18n="devBy"></p>
 </footer>
@@ -521,6 +526,33 @@ const T = {
   devBy:'विकासकर्ता: श्री विष्णु सिंह रायमाझी, गणित प्रध्यापक तथा विभागीय प्रमुख, मानविकी तथा सामाजिक शास्त्र (KMC-HSSD)',
   theme:'थिम', bsLabel:'वि.सं.', tgtShort:'लक्ष्य'
  }
+};
+
+/* Official Tribhuvan University / FoHSS references, shown inside each pillar when opened.
+   Verify each link and date against the current TU notice before relying on it. */
+const TU_REF = {
+  note:{
+    en:'Latest published TU annual calendar (2082 BS, bachelor annual programs including BA): first year admission Shrawan to Mangsir 2082, classes begin Mangsir 2082, exam form Baisakh 2083, classes end Asar 2083, exam end Shrawan 2083. The 2084 BS (2027/28) calendar is not yet published, so the dates in this app follow the KMC-HSSD plan until TU releases it.',
+    ne:'त्रि.वि.को सबैभन्दा नयाँ प्रकाशित वार्षिक पात्रो (२०८२ वि.सं., बी.ए. सहित स्नातक वार्षिक कार्यक्रम): प्रथम वर्ष भर्ना श्रावण देखि मंसिर २०८२, कक्षा मंसिर २०८२ मा सुरु, परीक्षा फारम वैशाख २०८३, कक्षा असार २०८३ मा समाप्त, परीक्षा श्रावण अन्त्य २०८३। २०८४ वि.सं. (२०२७/२८) को पात्रो अहिलेसम्म प्रकाशित छैन, त्यसैले त्रि.वि.ले जारी नगरेसम्म यस एपका मिति KMC-HSSD योजना अनुसार हुन्।'
+  },
+  learn:[
+    {en:'TU Academic Calendar 2082 for bachelor annual programs (EduSanjal)', ne:'त्रि.वि. वार्षिक स्नातक पात्रो २०८२ (EduSanjal)', url:'https://edusanjal.com/news/tu-academic-calendar-for-bachelor-program/'},
+    {en:'TU academic calendar notice and framework (EduSanjal)', ne:'त्रि.वि. शैक्षिक पात्रो सूचना (EduSanjal)', url:'https://edusanjal.com/news/tu-academic-calendar/'}
+  ],
+  research:[
+    {en:'FoHSS Tribhuvan University, official site', ne:'त्रि.वि. मानविकी तथा सामाजिक शास्त्र सङ्काय, आधिकारिक वेबसाइट', url:'https://fohss.tu.edu.np/'}
+  ],
+  innovate:[
+    {en:'FoHSS Tribhuvan University, official site', ne:'त्रि.वि. मानविकी तथा सामाजिक शास्त्र सङ्काय, आधिकारिक वेबसाइट', url:'https://fohss.tu.edu.np/'}
+  ],
+  collaborate:[
+    {en:'FoHSS Tribhuvan University, official site', ne:'त्रि.वि. मानविकी तथा सामाजिक शास्त्र सङ्काय, आधिकारिक वेबसाइट', url:'https://fohss.tu.edu.np/'},
+    {en:'KMC official website', ne:'KMC आधिकारिक वेबसाइट', url:'https://www.kmc.edu.np'}
+  ],
+  impact:[
+    {en:'FoHSS Tribhuvan University, official site', ne:'त्रि.वि. मानविकी तथा सामाजिक शास्त्र सङ्काय, आधिकारिक वेबसाइट', url:'https://fohss.tu.edu.np/'},
+    {en:'KMC official website', ne:'KMC आधिकारिक वेबसाइट', url:'https://www.kmc.edu.np'}
+  ]
 };
 
 const MON = {en:['January','February','March','April','May','June','July','August','September','October','November','December'],
@@ -756,6 +788,12 @@ function renderPillars(){
   });
   const linked=sorted(all().filter(e=>e.pillar===p.id&&!e.custom));
   if(linked.length)h+='<div class="pb"><h3>'+esc(t('linked'))+'</h3>'+linked.map(e=>'<button class="orow" data-a="ev" data-v="'+esc(e.id)+'"><strong>'+esc(title(e))+'</strong><span class="rng">'+esc(e.win?fmtD(e.s)+' – '+fmtD(e.e):rangeTxt(e))+'</span></button>').join('')+'</div>';
+  const refs=TU_REF[p.id]||[];
+  if(refs.length){
+    h+='<div class="pb policy tu-ref"><h3>'+esc(S.lang==='ne'?'त्रि.वि. आधिकारिक स्रोत':'TU official references')+'</h3>'+
+      (p.id==='learn'?'<p>'+esc(S.lang==='ne'?TU_REF.note.ne:TU_REF.note.en)+'</p>':'')+
+      '<ul>'+refs.map(r=>'<li><a href="'+esc(r.url)+'" target="_blank" rel="noopener">'+esc(S.lang==='ne'?r.ne:r.en)+' ↗</a></li>').join('')+'</ul></div>';
+  }
   h+='</div><div class="kchips" aria-label="'+esc(t('targets'))+'">'+p.kpis.map(id=>{const k=KPIS.find(x=>x.id===id);return '<span class="kchip">'+esc(k[L])+': '+esc(k.txt)+'</span>'}).join('')+'</div></div>';
   $('#v-pillars').innerHTML=h;
 }
@@ -894,7 +932,11 @@ document.addEventListener('click',ev=>{
     case 'add':openAdd();break;
     case 'addOn':openAdd(+v);break;
     case 'tools':$('#toolsDlg').showModal();break;
-    case 'pillar':S.pillar=v;save();renderPillars();break;
+    case 'pillar':{
+      S.pillar=v;save();renderPillars();
+      const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+      $('#v-pillars').scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
+      break;}
     case 'icsAll':download(sorted(all()));break;
     case 'icsStar':download(sorted(all().filter(e=>isStar(e.id))));break;
     case 'share':{
