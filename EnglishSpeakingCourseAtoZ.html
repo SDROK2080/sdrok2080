@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>English Speaking Course: A to Z — SMART App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;700&family=Bitter:wght@600;700;800&display=swap">
+<style>
+:root{
+  --bg:#14110d;--surface:#1e1a14;--surface2:#2a241a;--text:#f3ead8;--muted:#b5a88f;
+  --gold:#e9b44c;--orange:#f08a3c;--ok:#6fcf97;--bad:#ef6f6c;--line:#3a3226;--on-gold:#1a1408;
+  --body:"Mukta","Noto Sans Devanagari","Segoe UI",system-ui,sans-serif;
+  --head:"Bitter","Noto Serif Devanagari",Georgia,serif;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]){--bg:#fbf6ea;--surface:#fffdf7;--surface2:#f3ead3;--text:#2a2216;--muted:#6b5e45;--gold:#b87a0a;--orange:#c85a12;--ok:#1f8a4c;--bad:#c0392b;--line:#e3d8bf;--on-gold:#fffdf7}
+}
+:root[data-theme="light"]{--bg:#fbf6ea;--surface:#fffdf7;--surface2:#f3ead3;--text:#2a2216;--muted:#6b5e45;--gold:#b87a0a;--orange:#c85a12;--ok:#1f8a4c;--bad:#c0392b;--line:#e3d8bf;--on-gold:#fffdf7}
+:root[data-theme="dark"]{--bg:#14110d;--surface:#1e1a14;--surface2:#2a241a;--text:#f3ead8;--muted:#b5a88f;--gold:#e9b44c;--orange:#f08a3c;--ok:#6fcf97;--bad:#ef6f6c;--line:#3a3226;--on-gold:#1a1408}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-text-size-adjust:100%}
+h1,h2,h3{font-family:var(--head);line-height:1.25;margin:0 0 .4em}
+h1{font-size:1.9rem}h2{font-size:1.35rem}h3{font-size:1.1rem}
+p{margin:.3em 0 .8em}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:10px 14px}
+.brand{font-family:var(--head);font-weight:800;font-size:1.05rem;color:var(--gold);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip{background:var(--surface2);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:.9rem;font-weight:600;min-height:36px}
+.chip[aria-pressed="true"],.chip.on{background:var(--gold);color:var(--on-gold);border-color:var(--gold)}
+main{max-width:760px;margin:0 auto;padding:16px 14px 110px}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);display:flex;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px))}
+nav.tabs button{flex:1;background:none;border:0;padding:6px 2px;font-size:.78rem;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:0;border-radius:10px;min-height:52px}
+nav.tabs button span.i{font-size:1.25rem;line-height:1.2}
+nav.tabs button.on{color:var(--gold);font-weight:700}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:0 0 14px}
+.card.flat{border-radius:6px}
+.muted{color:var(--muted)}
+.ne{color:var(--muted);font-size:.95em}
+.btn{background:var(--gold);color:var(--on-gold);border:0;border-radius:10px;padding:10px 18px;font-weight:700;min-height:44px}
+.btn.alt{background:var(--surface2);color:var(--text);border:1px solid var(--line)}
+.btn.warn{background:var(--orange);color:var(--on-gold)}
+.btn[disabled]{opacity:.5;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.sp{flex:1}
+.hero{padding:6px 2px 14px}
+.hero p.lead{font-size:1.05rem;max-width:34em}
+/* speaking ladder: the memorable element */
+.ladder{display:flex;flex-direction:column;gap:7px;margin:14px 0 4px}
+.rung{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:0;text-align:left}
+.rung .bar{height:34px;border-radius:4px 10px 10px 4px;background:linear-gradient(90deg,var(--orange),var(--gold));display:flex;align-items:center;padding:0 10px;color:var(--on-gold);font-weight:700;font-size:.9rem;white-space:nowrap;min-width:76px;position:relative;overflow:hidden}
+.rung .bar i{position:absolute;left:0;top:0;bottom:0;background:rgba(0,0,0,.28);width:0}
+.rung .bar b{position:relative}
+.rung .lab{font-size:.88rem;color:var(--muted);flex:1;min-width:0}
+.vgrid{display:grid;gap:12px}
+.vcard{display:block;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--gold);border-radius:6px 16px 16px 6px;padding:12px 14px}
+.vcard h3{margin-bottom:2px}
+.prog{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;margin-top:8px}
+.prog>i{display:block;height:100%;background:linear-gradient(90deg,var(--orange),var(--gold));border-radius:99px}
+.lesson-item{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;min-height:56px}
+.lesson-item .ck{flex:none;width:28px;height:28px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:.9rem}
+.lesson-item.done .ck{background:var(--ok);border-color:var(--ok);color:#06220f}
+.phr{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--line)}
+.phr:last-child{border-bottom:0}
+.say{flex:none;width:42px;height:42px;border-radius:50%;border:1px solid var(--gold);background:var(--surface2);font-size:1.1rem}
+.model{background:var(--surface2);border-left:4px solid var(--orange);border-radius:4px 10px 10px 4px;padding:12px 14px;font-size:1.05rem}
+.task{padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:var(--surface)}
+.opt{display:block;width:100%;text-align:left;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;min-height:46px}
+.opt.right{border-color:var(--ok);background:rgba(111,207,151,.16)}
+.opt.wrong{border-color:var(--bad);background:rgba(239,111,108,.16)}
+.timer{font-family:var(--head);font-size:3.6rem;font-weight:800;text-align:center;color:var(--gold);letter-spacing:.02em;margin:6px 0}
+.band{position:relative;height:18px;background:var(--surface2);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.band .zone{position:absolute;top:0;bottom:0;background:rgba(111,207,151,.28)}
+.band .fill{position:absolute;left:0;top:0;bottom:0;background:var(--gold);width:0}
+.zonetxt{text-align:center;font-weight:700;min-height:1.7em;margin-top:8px}
+.live{min-height:3.2em;background:var(--surface2);border-radius:10px;padding:8px 12px;color:var(--muted);font-style:italic;margin-top:10px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.stat b{display:block;font-family:var(--head);font-size:1.5rem;color:var(--gold)}
+.badge{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:4px 12px;margin:0 6px 8px 0;font-size:.9rem;background:var(--surface)}
+.badge.off{opacity:.45;filter:grayscale(1)}
+.crumb{background:none;border:0;color:var(--gold);padding:6px 0;font-weight:700;min-height:40px}
+.tag{display:inline-block;background:var(--surface2);border:1px solid var(--line);border-radius:6px;padding:0 8px;font-size:.85rem;color:var(--muted)}
+footer.credit{margin-top:24px;padding-top:14px;border-top:1px solid var(--line);font-size:.88rem;color:var(--muted)}
+a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.vid{border-left:6px solid var(--orange);border-radius:6px 14px 14px 6px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media (min-width:700px){.vgrid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand" id="brand">English Speaking A–Z</div>
+  <button class="chip" data-act="lang" id="langBtn" aria-label="Switch language">EN | नेपा</button>
+  <button class="chip" data-act="theme" id="themeBtn" aria-label="Switch light or dark theme">◐</button>
+</header>
+<main id="main"></main>
+<nav class="tabs" id="tabs" aria-label="Main"></nav>
+
+<script>
+"use strict";
+/* ================= DATA ================= */
+const VOL = [
+{ n:1, icon:"🌱", t:"Speaking from Zero", s:"नेपाली सिकारुहरूका लागि बिल्कुलै शून्यबाट सुरु गर्ने तरिका", target:[10,30], lab:"10–30 seconds",
+ lessons:[
+ { t:["Greetings & Introducing Yourself","अभिवादन र आफ्नो परिचय"], g:["Say hello and introduce yourself in four short sentences.","नमस्ते भन्ने र चार छोटा वाक्यमा आफ्नो परिचय दिने।"],
+  p:[["Hello! How are you?","नमस्ते! तपाईंलाई कस्तो छ?"],["I am fine, thank you.","म ठीक छु, धन्यवाद।"],["My name is ___.","मेरो नाम ___ हो।"],["I am from Taulihawa.","म तौलिहवाबाट आएको हुँ।"],["Nice to meet you.","तपाईंलाई भेटेर खुसी लाग्यो।"]],
+  m:"Hello! My name is Sita. I am from Kapilvastu, Nepal. I am a student. I study at Kapilvastu Multiple Campus. I like reading and music. Nice to meet you.",
+  mn:"नमस्ते! मेरो नाम सीता हो। म कपिलवस्तु, नेपालकी हुँ। म विद्यार्थी हुँ। म कपिलवस्तु बहुमुखी क्याम्पसमा पढ्छु। मलाई पढ्न र सङ्गीत मन पर्छ।",
+  k:[["Introduce yourself: name, place, work or study, one hobby.","आफ्नो परिचय दिनुहोस्: नाम, ठाउँ, काम/अध्ययन, एउटा रुचि।"],["Greet a new classmate and ask two questions.","नयाँ सहपाठीलाई अभिवादन गरी दुई प्रश्न सोध्नुहोस्।"]],
+  q:{q:"Which sentence is correct?",o:["I am name Ram.","My name is Ram.","I name is Ram."],a:1,n:"नाम भन्दा 'My name is ...' प्रयोग गरिन्छ।"} },
+ { t:["Family & Home","परिवार र घर"], g:["Describe your family and your home in simple sentences.","सरल वाक्यमा आफ्नो परिवार र घरको वर्णन गर्ने।"],
+  p:[["This is my mother.","यो मेरी आमा हुन्।"],["I have two brothers and one sister.","मेरा दुई भाइ र एक बहिनी छन्।"],["We live in a small house.","हामी सानो घरमा बस्छौँ।"],["My father is a farmer.","मेरो बुबा किसान हुनुहुन्छ।"],["I love my family.","मलाई मेरो परिवार मन पर्छ।"]],
+  m:"There are five people in my family. My father is a farmer and my mother is a housewife. I have one brother and one sister. We live in a small house near the market. I love my family very much.",
+  mn:"मेरो परिवारमा पाँच जना छन्। बुबा किसान र आमा गृहिणी हुनुहुन्छ। मेरो एक भाइ र एक बहिनी छन्। हामी बजारनजिकै सानो घरमा बस्छौँ।",
+  k:[["Describe your family in five sentences.","आफ्नो परिवारबारे पाँच वाक्य भन्नुहोस्।"],["Describe your room in four sentences.","आफ्नो कोठाबारे चार वाक्य भन्नुहोस्।"]],
+  q:{q:"She ___ my sister.",o:["is","are","am"],a:0,n:"She / He / It सँग 'is' प्रयोग हुन्छ।"} },
+ { t:["Daily Routine","दैनिक दिनचर्या"], g:["Talk about your day in order, using first, then, after that.","पहिले, त्यसपछि जस्ता शब्द प्रयोग गरी दिनचर्या क्रमैसँग भन्ने।"],
+  p:[["I wake up at six o'clock.","म छ बजे उठ्छु।"],["I brush my teeth and take a bath.","म दाँत माझ्छु र नुहाउँछु।"],["I go to college by bus.","म बसमा कलेज जान्छु।"],["I have lunch at one.","म एक बजे खाना खान्छु।"],["I go to bed at ten.","म दश बजे सुत्न जान्छु।"]],
+  m:"I wake up at six. First, I wash my face and have tea. Then I go to college at nine. I study until three. In the evening, I help my mother and read a book. I go to bed at ten.",
+  mn:"म छ बजे उठ्छु। पहिले मुख धोएर चिया खान्छु। त्यसपछि नौ बजे कलेज जान्छु। साँझ आमालाई सघाउँछु र किताब पढ्छु। दश बजे सुत्छु।",
+  k:[["Tell your morning routine with first, then, after that.","पहिले, त्यसपछि प्रयोग गरी बिहानको दिनचर्या भन्नुहोस्।"],["Tell what you do on Sunday.","आइतबार के गर्नुहुन्छ भन्नुहोस्।"]],
+  q:{q:"He ___ to college every day.",o:["go","goes","going"],a:1,n:"He / She सँग simple present मा verb मा -s/-es लाग्छ।"} },
+ { t:["Likes & Dislikes","मनपर्ने र नपर्ने कुरा"], g:["Say what you like and dislike, and give one small reason.","के मन पर्छ र पर्दैन, एउटा सानो कारणसहित भन्ने।"],
+  p:[["I like cricket.","मलाई क्रिकेट मन पर्छ।"],["I don't like spicy food.","मलाई पिरो खाना मन पर्दैन।"],["My favourite colour is blue.","मेरो मनपर्ने रङ निलो हो।"],["I enjoy listening to songs.","मलाई गीत सुन्न रमाइलो लाग्छ।"],["What about you?","तपाईंलाई चाहिँ?"]],
+  m:"I like momo and dal bhat. I don't like bitter food. My favourite sport is football. In the evening, I enjoy listening to songs. What about you?",
+  mn:"मलाई मोमो र दालभात मन पर्छ। तितो खाना मन पर्दैन। मनपर्ने खेल फुटबल हो। साँझमा गीत सुन्न रमाइलो लाग्छ। तपाईंलाई चाहिँ?",
+  k:[["Say three things you like and two you don't.","तीओटा मन पर्ने र दुईओटा नपर्ने कुरा भन्नुहोस्।"],["Describe your favourite food in 20 seconds.","आफ्नो मनपर्ने खाना २० सेकेन्डमा वर्णन गर्नुहोस्।"]],
+  q:{q:"I ___ like coffee.",o:["don't","doesn't","not"],a:0,n:"I सँग negative बनाउन 'don't' प्रयोग हुन्छ।"} },
+ { t:["Numbers, Time & Days","सङ्ख्या, समय र दिन"], g:["Tell the time, the day and a date without hesitation.","समय, वार र मिति बिना हिच्किचाहट भन्ने।"],
+  p:[["What time is it?","कति बज्यो?"],["It's half past five.","साढे पाँच बज्यो।"],["Today is Monday.","आज सोमबार हो।"],["My birthday is in May.","मेरो जन्मदिन मे महिनामा पर्छ।"],["The class starts at ten.","कक्षा दश बजे सुरु हुन्छ।"]],
+  m:"Today is Monday. My class starts at ten o'clock. It finishes at half past two. My birthday is in May. I was born on the fifth of May.",
+  mn:"आज सोमबार हो। मेरो कक्षा दश बजे सुरु भएर साढे दुई बजे सकिन्छ। मेरो जन्मदिन मे महिनामा पर्छ।",
+  k:[["Say your weekly class timetable.","साप्ताहिक कक्षा तालिका भन्नुहोस्।"],["Say your birthday and the birthdays of two family members.","आफ्नो र परिवारका दुई जनाको जन्मदिन भन्नुहोस्।"]],
+  q:{q:"How do we say 7:30?",o:["Half past seven","Half to seven","Seven past half"],a:0,n:"३० मिनेट बितेको समयलाई 'half past' भनिन्छ।"} },
+ { t:["Asking & Answering Simple Questions","सरल प्रश्न सोध्ने र जवाफ दिने"], g:["Ask polite questions and ask people to repeat.","विनम्र प्रश्न सोध्ने र दोहोर्‍याउन अनुरोध गर्ने।"],
+  p:[["Where do you live?","तपाईं कहाँ बस्नुहुन्छ?"],["What do you do?","तपाईं के गर्नुहुन्छ?"],["How much is this?","यो कतिमा हो?"],["Can you help me, please?","कृपया मलाई मद्दत गर्न सक्नुहुन्छ?"],["Could you say that again?","कृपया फेरि भन्न सक्नुहुन्छ?"]],
+  m:"Excuse me, where do you live? I live in Taulihawa. What do you do? I am a teacher. Could you say that again, please? Sure. I am a teacher. Thank you!",
+  mn:"एउटा सानो संवाद: कहाँ बस्नुहुन्छ, के गर्नुहुन्छ भनेर सोध्ने र फेरि भन्न अनुरोध गर्ने।",
+  k:[["Ask a friend five questions about daily life.","साथीलाई दैनिक जीवनबारे पाँचओटा प्रश्न सोध्नुहोस्।"],["Ask a stranger for help politely.","अपरिचितसँग विनम्रतापूर्वक मद्दत माग्नुहोस्।"]],
+  q:{q:"Which sentence is the most polite?",o:["Give me water.","Could I have some water, please?","Water give me."],a:1,n:"'Could I ... please?' विनम्र अनुरोध हो।"} }
+ ]},
+{ n:2, icon:"💬", t:"Daily Conversation Mastery", s:"दैनिक कुराकानी र व्यवहारिक बोलचालमा पकड जमाउने अभ्यास", target:[30,60], lab:"30–60 seconds",
+ lessons:[
+ { t:["Shopping & Bargaining","किनमेल र मोलमोलाइ"], g:["Ask prices, bargain politely and pay.","मूल्य सोध्ने, विनम्र मोलमोलाइ गर्ने र भुक्तानी गर्ने।"],
+  p:[["How much does this cost?","यसको मूल्य कति हो?"],["That's too expensive. Can you reduce the price?","यो धेरै महँगो भयो। अलि घटाउन सक्नुहुन्छ?"],["Do you have a smaller size?","तपाईंसँग अलि सानो साइज छ?"],["I'll take two kilos.","म दुई किलो लिन्छु।"],["Can I pay by mobile wallet?","के म मोबाइल वालेटबाट तिर्न सक्छु?"]],
+  m:"Customer: How much are these oranges? Shopkeeper: One hundred rupees a kilo. Customer: That's a bit expensive. Can you reduce the price? Shopkeeper: Okay, ninety. Customer: Fine, I'll take two kilos. Can I pay by mobile wallet? Shopkeeper: Yes, of course.",
+  mn:"ग्राहकले सुन्तलाको मूल्य सोध्छ, अलि घटाउन भन्छ, दुई किलो किन्छ र मोबाइल वालेटबाट तिर्छ।",
+  k:[["Role-play buying a shirt in a shop for 45 seconds.","पसलमा सर्ट किन्ने भूमिका-अभिनय ४५ सेकेन्ड गर्नुहोस्।"],["Describe the last thing you bought and why.","पछिल्लोपटक के किन्नुभयो र किन भन्नुहोस्।"]],
+  q:{q:"To ask for a lower price we say:",o:["Can you reduce the price?","Why price is high?","Reduce it now."],a:0,n:"'Can you reduce the price?' विनम्र तरिका हो।"} },
+ { t:["Food & Restaurant","खाना र रेस्टुराँ"], g:["Order food, make requests and ask for the bill.","खाना अर्डर गर्ने, अनुरोध गर्ने र बिल माग्ने।"],
+  p:[["Could we have the menu, please?","कृपया मेनु दिनुहोस् न।"],["I'd like a plate of veg momo.","मलाई एक प्लेट भेज मोमो चाहियो।"],["Not too spicy, please.","धेरै पिरो नगर्नुहोला।"],["The food was delicious.","खाना साह्रै मिठो थियो।"],["Could I have the bill, please?","बिल दिनुहोस् न।"]],
+  m:"Good evening. Could we have the menu, please? I'd like a plate of veg momo and a cup of tea. Not too spicy, please. ... The food was delicious. Could I have the bill, please? Thank you very much.",
+  mn:"रेस्टुराँमा मेनु माग्ने, मोमो र चिया अर्डर गर्ने, खाना मिठो भनेर बिल माग्ने।",
+  k:[["Order a full meal for two people.","दुई जनाका लागि पूरा खाना अर्डर गर्नुहोस्।"],["Tell about the best meal you ever had.","आफूले खाएको सबैभन्दा मिठो खानाबारे भन्नुहोस्।"]],
+  q:{q:"Which is the polite way to order?",o:["I want food.","I'd like a plate of momo, please.","Give momo fast."],a:1,n:"'I'd like ...' विनम्र अर्डर गर्ने तरिका हो।"} },
+ { t:["Transport & Directions","यातायात र दिशा"], g:["Ask for directions and give them clearly.","बाटो सोध्ने र स्पष्टसँग बताउने।"],
+  p:[["Excuse me, how do I get to the bus park?","माफ गर्नुहोस्, बसपार्क कसरी पुग्ने?"],["Go straight and turn left.","सिधा जानुहोस् र बायाँ मोडिनुहोस्।"],["It's about ten minutes' walk.","यो करिब दश मिनेटको पैदल दूरी हो।"],["Does this bus go to Butwal?","के यो बस बुटवल जान्छ?"],["Please drop me here.","कृपया मलाई यहीँ ओरालिदिनुहोस्।"]],
+  m:"Excuse me, how do I get to the bus park? Go straight for two hundred metres, then turn left at the temple. It is about ten minutes on foot. You will see it on your right. Thank you so much!",
+  mn:"बसपार्क जाने बाटो सोध्ने र उत्तरमा सिधा गएर मन्दिरमा बायाँ मोडिने निर्देशन।",
+  k:[["Explain the way from your home to your college.","घरबाट कलेज पुग्ने बाटो बताउनुहोस्।"],["Tell how you travel to the nearest city.","नजिकको सहर कसरी जानुहुन्छ भन्नुहोस्।"]],
+  q:{q:"'Turn left' means:",o:["बायाँ मोडिनुहोस्","दायाँ मोडिनुहोस्","सिधा जानुहोस्"],a:0,n:"Left = बायाँ, right = दायाँ, straight = सिधा।"} },
+ { t:["Health & Doctor","स्वास्थ्य र डाक्टर"], g:["Describe symptoms and understand simple advice.","लक्षण वर्णन गर्ने र सरल सल्लाह बुझ्ने।"],
+  p:[["I have a headache and a fever.","मलाई टाउको दुखेको र ज्वरो आएको छ।"],["Since when have you felt this way?","कहिलेदेखि यस्तो महसुस भएको?"],["Take this medicine twice a day.","यो औषधि दिनको दुई पटक खानुहोस्।"],["I need to see a doctor.","मैले डाक्टरलाई देखाउनुपर्छ।"],["Get well soon.","चाँडै निको हुनुहोस्।"]],
+  m:"Doctor: What is the problem? Patient: I have a headache and a fever since yesterday. Doctor: Take this medicine twice a day and drink plenty of water. Rest for two days. Patient: Thank you, doctor.",
+  mn:"बिरामीले हिजोदेखिको टाउको दुखाइ र ज्वरो बताउँछ; डाक्टरले औषधि र आराम सुझाउँछ।",
+  k:[["Role-play a visit to a doctor for 40 seconds.","डाक्टरकहाँ जाने भूमिका-अभिनय ४० सेकेन्ड गर्नुहोस्।"],["Give a friend three tips to stay healthy.","स्वस्थ रहन साथीलाई तीनओटा सुझाव दिनुहोस्।"]],
+  q:{q:"I ___ a headache.",o:["have","am","do"],a:0,n:"लक्षण भन्दा 'I have a ...' प्रयोग हुन्छ।"} },
+ { t:["Phone Calls & Making Plans","फोन कुराकानी र योजना बनाउने"], g:["Make a call, take a message and plan to meet.","फोन गर्ने, सन्देश लिने र भेट्ने योजना बनाउने।"],
+  p:[["Hello, may I speak to Mr. Sharma?","हेलो, के शर्मा सरसँग कुरा गर्न सकिन्छ?"],["Can I take a message?","म सन्देश लिन सक्छु?"],["Are you free on Saturday?","शनिबार तपाईं फुर्सदमा हुनुहुन्छ?"],["Let's meet at four.","चार बजे भेटौँ।"],["I'm sorry, I can't make it.","माफ गर्नुहोस्, म आउन सक्दिनँ।"]],
+  m:"Hello, may I speak to Mr. Sharma? He is not here right now. Can I take a message? Yes, please tell him Ram called. Are you free on Saturday? Let's meet at four near the campus gate.",
+  mn:"फोन गरेर शर्मा सरलाई खोज्ने, सन्देश छाड्ने र शनिबार भेट्ने योजना बनाउने।",
+  k:[["Role-play a phone call to a friend to plan a trip.","साथीलाई फोन गरी यात्राको योजना बनाउने अभिनय गर्नुहोस्।"],["Leave a short voice message.","छोटो भ्वाइस सन्देश छाड्नुहोस्।"]],
+  q:{q:"Polite way to refuse an invitation:",o:["I won't come.","I'm sorry, I can't make it.","No, I don't want."],a:1,n:"'I'm sorry, I can't make it.' विनम्र इन्कार हो।"} },
+ { t:["Weather, Festivals & Culture","मौसम, चाडपर्व र संस्कृति"], g:["Talk about weather and your festivals in one minute.","मौसम र चाडपर्वबारे एक मिनेट बोल्ने।"],
+  p:[["It's very hot today.","आज धेरै गर्मी छ।"],["We celebrate Dashain in autumn.","हामी शरद ऋतुमा दशैँ मनाउँछौँ।"],["People receive tika and blessings from elders.","मानिसहरूले ठूलाबडाबाट टीका र आशीर्वाद पाउँछन्।"],["It is my favourite festival.","यो मेरो मनपर्ने चाड हो।"],["Buddha was born in Lumbini.","बुद्धको जन्म लुम्बिनीमा भएको थियो।"]],
+  m:"Dashain is the biggest festival in Nepal. We celebrate it in autumn. Families come together and eat special food. Young people receive tika and blessings from elders. It is my favourite festival because everyone is happy.",
+  mn:"दशैँ नेपालको ठूलो चाड हो; परिवार जुटेर खाना खान्छन् र ठूलाबडाबाट टीका लगाउँछन्।",
+  k:[["Describe your favourite festival for 50 seconds.","मनपर्ने चाडबारे ५० सेकेन्ड बोल्नुहोस्।"],["Describe today's weather and what you will wear.","आजको मौसम र के लगाउनुहुन्छ भन्नुहोस्।"]],
+  q:{q:"We ___ Dashain in autumn.",o:["celebrate","celebrates","celebrating"],a:0,n:"We सँग verb को base form: celebrate।"} }
+ ]},
+{ n:3, icon:"🌊", t:"Natural Spoken English & Fluency", s:"प्राकृतिक रूपमा नअड्किई धाराप्रवाह बोल्ने कला र अभ्यास", target:[60,120], lab:"1–2 minutes",
+ lessons:[
+ { t:["Fillers & Connectors","जोड्ने शब्द र समय किन्ने वाक्यांश"], g:["Use natural linking words so you never go silent.","मौन नबस्न प्राकृतिक जोड्ने शब्द प्रयोग गर्ने।"],
+  p:[["Well, let me think...","हुन त, सोचौँ त..."],["You know, it's like this.","थाहै छ, कुरा यस्तो हो।"],["Actually, I think so.","वास्तवमा, मलाई त्यस्तै लाग्छ।"],["First of all... besides that... in the end...","सबैभन्दा पहिले... त्यसबाहेक... अन्त्यमा..."],["Anyway, let me continue.","जे होस्, म अगाडि बढाउँछु।"]],
+  m:"Well, let me think. Actually, my best holiday was in Pokhara. First of all, the lake was so calm. Besides that, the food was great and the people were friendly. You know, I felt completely relaxed. Anyway, in the end, I promised myself to go back next year.",
+  mn:"जोड्ने शब्द (well, actually, besides that, anyway) प्रयोग गरी पोखरा यात्राको कुरा।",
+  k:[["Talk about your best holiday for 1 minute using at least four connectors.","कम्तीमा चारओटा जोड्ने शब्द प्रयोग गरी मनपर्ने बिदाबारे १ मिनेट बोल्नुहोस्।"],["Describe your village or city for 1 minute.","आफ्नो गाउँ वा सहरबारे १ मिनेट बोल्नुहोस्।"]],
+  q:{q:"Which phrase gives you time to think?",o:["Well, let me think...","Stop talking.","I no know."],a:0,n:"'Well, let me think...' ले सोच्ने समय दिन्छ।"} },
+ { t:["Telling a Story","कथा सुनाउने"], g:["Tell a past event in order: beginning, problem, ending.","विगतको घटना क्रमैसँग: सुरु, समस्या, अन्त्य भन्ने।"],
+  p:[["Last year, I went to Lumbini.","गत वर्ष म लुम्बिनी गएँ।"],["At first, I was nervous.","सुरुमा म नर्भस थिएँ।"],["Suddenly, the bus stopped.","अचानक बस रोकियो।"],["Luckily, a man helped us.","सौभाग्यवश, एक जना मान्छेले हामीलाई सहयोग गर्‍यो।"],["In the end, we reached safely.","अन्त्यमा हामी सुरक्षित पुग्यौँ।"]],
+  m:"Last year, I went to Lumbini with my friends. At first, we were very excited. Suddenly, the bus stopped on the road. Everyone was worried. Luckily, a driver stopped and helped us fix it. After two hours, we reached Lumbini. In the end, it became a memory we still laugh about.",
+  mn:"लुम्बिनी यात्रामा बस बिग्रिएपछि एक जना चालकले सहयोग गरेको कथा।",
+  k:[["Tell a funny or scary memory for 90 seconds.","रमाइलो वा डरलाग्दो सम्झना ९० सेकेन्ड सुनाउनुहोस्।"],["Tell the story of your first day at college.","कलेजको पहिलो दिनको कथा सुनाउनुहोस्।"]],
+  q:{q:"Which word shows an unexpected event?",o:["Suddenly","Usually","Always"],a:0,n:"'Suddenly' = अचानक, अप्रत्याशित घटनामा प्रयोग हुन्छ।"} },
+ { t:["Expressing Opinions","विचार व्यक्त गर्ने"], g:["Give an opinion with a reason and an example.","विचार, कारण र उदाहरणसहित बोल्ने।"],
+  p:[["In my opinion, ...","मेरो विचारमा..."],["I strongly believe that...","मलाई दृढ विश्वास छ कि..."],["On the one hand... on the other hand...","एकातिर... अर्कातिर..."],["The main reason is...","मुख्य कारण..."],["That's why I think...","त्यसैले मलाई लाग्छ..."]],
+  m:"In my opinion, students should learn English speaking from the first year. The main reason is that confidence takes time. For example, my friend started early and now he can speak in public easily. That's why I think speaking practice should be daily.",
+  mn:"विद्यार्थीले पहिलो वर्षदेखि नै अंग्रेजी बोल्ने अभ्यास गर्नुपर्छ भन्ने विचार र कारण।",
+  k:[["Give your opinion on mobile phones in class (90 sec).","कक्षामा मोबाइलबारे आफ्नो विचार ९० सेकेन्ड भन्नुहोस्।"],["Village life or city life: choose one and explain.","गाउँ वा सहर: एउटा छानेर कारण बताउनुहोस्।"]],
+  q:{q:"Best way to start an opinion:",o:["In my opinion, ...","Because yes.","I don't know why."],a:0,n:"'In my opinion' ले विचार स्पष्ट सुरु गर्छ।"} },
+ { t:["Agreeing, Disagreeing & Interrupting","सहमति, असहमति र बीचमा बोल्ने"], g:["Disagree and interrupt politely in a conversation.","कुराकानीमा विनम्रतापूर्वक असहमत हुने र बीचमा बोल्ने।"],
+  p:[["I totally agree with you.","म तपाईंसँग पूर्ण रूपमा सहमत छु।"],["I see your point, but...","तपाईंको कुरा बुझेँ, तर..."],["I'm afraid I disagree.","माफ गर्नुहोस्, म सहमत छैन।"],["Sorry to interrupt, but...","बीचमा बोलेकोमा माफ गर्नुहोस्, तर..."],["Could I add something?","मैले केही थप्न सक्छु?"]],
+  m:"I see your point, but I'm afraid I disagree. Online classes are useful, but students lose focus at home. Sorry to interrupt, but could I add something? In a real classroom, we can ask questions at once. So, I think both methods should be mixed.",
+  mn:"अनलाइन कक्षाबारे विनम्र असहमति र बीचमा बोल्ने तरिका।",
+  k:[["Pair practice: debate 'Homework is useful' for 90 sec.","जोडीमा 'गृहकार्य उपयोगी छ' विषयमा ९० सेकेन्ड बहस गर्नुहोस्।"],["Disagree politely with three statements.","तीनओटा कथनसँग विनम्रतापूर्वक असहमत हुनुहोस्।"]],
+  q:{q:"To interrupt politely:",o:["Shut up.","Sorry to interrupt, but...","Wait, you are wrong."],a:1,n:"'Sorry to interrupt, but...' विनम्र तरिका हो।"} },
+ { t:["Describing People & Places","व्यक्ति र ठाउँको वर्णन"], g:["Describe a person and a place with rich details.","व्यक्ति र ठाउँको विस्तृत वर्णन गर्ने।"],
+  p:[["She is tall, friendly and very hardworking.","उनी अग्ली, मिलनसार र धेरै मेहनती छिन्।"],["He looks like his father.","ऊ आफ्नो बुबा जस्तै देखिन्छ।"],["My village is surrounded by green fields.","मेरो गाउँ हरिया खेतहरूले घेरिएको छ।"],["It is famous for...","यो ... का लागि प्रसिद्ध छ।"],["What I like most about it is...","मलाई यसमा सबैभन्दा मन पर्ने कुरा..."]],
+  m:"My teacher is a tall and friendly man. He is very hardworking and always smiles. What I like most about him is that he explains difficult things in a simple way. My town, Taulihawa, is famous for its history. It is surrounded by green fields, and the people are kind.",
+  mn:"मनपर्ने शिक्षक र आफ्नो सहरको वर्णन।",
+  k:[["Describe the person you admire most (90 sec).","सबैभन्दा प्रशंसा गर्ने व्यक्तिको वर्णन ९० सेकेन्ड गर्नुहोस्।"],["Describe a famous place near you.","नजिकको प्रसिद्ध ठाउँको वर्णन गर्नुहोस्।"]],
+  q:{q:"Which sentence is correct?",o:["She is tall and friendly.","She are tall and friendly.","She tall and friendly is."],a:0,n:"She सँग 'is' र शब्दक्रम: subject + is + adjective।"} },
+ { t:["Keep Talking Without Stopping","नअड्किई बोलिरहने कला"], g:["Rescue yourself when you forget a word and keep the flow.","शब्द बिर्सँदा रोकिनुको सट्टा वाक्य जोगाएर बोल्ने।"],
+  p:[["What I mean is...","मैले भन्न खोजेको..."],["Let me put it another way.","अर्को तरिकाले भनौँ।"],["How can I say this...","कसरी भनौँ यो..."],["The thing is...","कुरा के हो भने..."],["To sum up...","सारांशमा भन्नुपर्दा..."]],
+  m:"The thing is, I forgot the English word, but let me put it another way. It is a place where people borrow books. What I mean is, a library. To sum up, when you forget a word, explain it with simple words and keep going.",
+  mn:"शब्द बिर्सिए सरल शब्दमा व्याख्या गरेर बोल्न जारी राख्ने उदाहरण।",
+  k:[["Explain five objects without saying their names (2 min).","पाँचओटा वस्तुको नाम नभनी वर्णन गर्नुहोस् (२ मिनेट)।"],["Speak non-stop on 'My dream' for 2 minutes.","'मेरो सपना' विषयमा २ मिनेट नरोकिई बोल्नुहोस्।"]],
+  q:{q:"If you forget a word you should:",o:["Stop and stay silent","Say 'Let me put it another way' and explain","Switch to Nepali completely"],a:1,n:"शब्द बिर्सिए अर्को तरिकाले व्याख्या गर्नुहोस्; रोकिनुहुँदैन।"} }
+ ]},
+{ n:4, icon:"🎓", t:"Real-Life, Academic & Professional English", s:"दैनिक जीवन, शैक्षिक परिवेश र कार्यक्षेत्र/अफिसमा चाहिने अंग्रेजी", target:[120,180], lab:"2–3 minutes",
+ lessons:[
+ { t:["Classroom & Campus English","कक्षाकोठा र क्याम्पस अंग्रेजी"], g:["Ask, answer and discuss ideas in class and with teachers.","कक्षामा र शिक्षकसँग प्रश्न, जवाफ र छलफल गर्ने।"],
+  p:[["May I come in, sir?","सर, म भित्र आउन सक्छु?"],["Could you please explain it once more?","कृपया एक पटक फेरि बुझाइदिनुहुन्छ?"],["I would like to submit my assignment.","म मेरो असाइनमेन्ट बुझाउन चाहन्छु।"],["Our research topic is...","हाम्रो अनुसन्धानको विषय ... हो।"],["I have a doubt regarding this concept.","यो अवधारणाबारे मलाई जिज्ञासा छ।"]],
+  m:"Good morning, sir. May I come in? I would like to submit my assignment on social change in Kapilvastu. Could you please explain the deadline once more? Also, I have a doubt regarding the research method. Our group wants to use a short questionnaire. Could you please guide us on the sample size? Thank you for your time, sir.",
+  mn:"शिक्षकसँग असाइनमेन्ट र अनुसन्धान विधिबारे विनम्र कुराकानी।",
+  k:[["Explain your assignment or research topic for 2 minutes.","आफ्नो असाइनमेन्ट वा अनुसन्धान विषय २ मिनेट बुझाउनुहोस्।"],["Explain a concept you learned this week to a friend.","यो हप्ता सिकेको अवधारणा साथीलाई बुझाउनुहोस्।"]],
+  q:{q:"Which is a polite classroom request?",o:["Explain again.","Could you please explain it once more?","You didn't explain."],a:1,n:"'Could you please...?' शिक्षकसँग उपयुक्त अनुरोध हो।"} },
+ { t:["Giving a Presentation","प्रस्तुति दिने"], g:["Open, structure and close a short presentation.","छोटो प्रस्तुति सुरु, व्यवस्थित र समापन गर्ने।"],
+  p:[["Good morning everyone. Today I'm going to talk about...","सबैलाई शुभ प्रभात। आज म ... बारे बोल्दैछु।"],["My presentation has three parts.","मेरो प्रस्तुतिमा तीन भाग छन्।"],["As you can see on this slide...","यो स्लाइडमा देख्न सकिन्छ जस्तै..."],["Let me move on to the next point.","अब अर्को बुँदामा जाऔँ।"],["Thank you for listening. Any questions?","सुनिदिनुभएकोमा धन्यवाद। केही प्रश्न?"]],
+  m:"Good morning everyone. Today I'm going to talk about the importance of digital learning. My presentation has three parts: the benefits, the challenges and some solutions. First, as you can see on this slide, students can learn anytime. Let me move on to the challenges. Internet access is still limited in some villages. Finally, solutions: free content and community learning centres. Thank you for listening. Any questions?",
+  mn:"डिजिटल सिकाइबारे तीन भागको प्रस्तुति नमुना।",
+  k:[["Give a 2-minute presentation on a topic from your subject.","आफ्नो विषयको कुनै शीर्षकमा २ मिनेटको प्रस्तुति दिनुहोस्।"],["Record your opening and closing only, 30 seconds each.","सुरु र समापन मात्र ३०-३० सेकेन्ड रेकर्ड गर्नुहोस्।"]],
+  q:{q:"Which sentence opens a presentation well?",o:["Today I'm going to talk about renewable energy.","Okay, so, I have nothing.","My slides are not ready."],a:0,n:"प्रस्तुति 'Today I'm going to talk about...' बाट सुरु गरिन्छ।"} },
+ { t:["Job Interview","जागिर अन्तर्वार्ता"], g:["Answer common interview questions with confidence.","सामान्य अन्तर्वार्ता प्रश्नको आत्मविश्वासका साथ उत्तर दिने।"],
+  p:[["Tell me about yourself.","आफ्नो बारेमा भन्नुहोस्।"],["My greatest strength is...","मेरो सबैभन्दा ठूलो बल..."],["I have three years of experience in teaching.","मसँग शिक्षणमा तीन वर्षको अनुभव छ।"],["I am a quick learner and a team player.","म छिटो सिक्ने र टोलीमा काम गर्ने व्यक्ति हुँ।"],["Why should we hire you?","हामीले तपाईंलाई किन छान्ने?"]],
+  m:"Thank you for this opportunity. I have a master's degree in education and three years of experience in teaching. My greatest strength is that I am a quick learner and a team player. For example, last year I led a small project to teach free English classes. I believe I can bring the same energy to your organisation.",
+  mn:"आफ्नो योग्यता, अनुभव र बलबारे अन्तर्वार्ताको जवाफ नमुना।",
+  k:[["Answer 'Tell me about yourself' in 2 minutes.","'आफ्नो बारेमा भन्नुहोस्' को जवाफ २ मिनेटमा दिनुहोस्।"],["Answer 'Why should we hire you?' in 90 seconds.","'हामीले तपाईंलाई किन छान्ने?' को जवाफ ९० सेकेन्डमा दिनुहोस्।"]],
+  q:{q:"'Tell me about yourself' needs:",o:["A short summary of your background and strengths","Your family's whole history","Only your name"],a:0,n:"पृष्ठभूमि, अनुभव र बलको छोटो सारांश दिनुपर्छ।"} },
+ { t:["Office Communication & Meetings","कार्यालय सञ्चार र बैठक"], g:["Lead and join meetings and report progress.","बैठक सञ्चालन गर्ने, सहभागी हुने र प्रगति बताउने।"],
+  p:[["Let's get started with the agenda.","कार्यसूचीबाट सुरु गरौँ।"],["I'll send you the report by Friday.","म शुक्रबारसम्म प्रतिवेदन पठाउँछु।"],["Could we schedule a meeting?","हामी बैठक तय गर्न सक्छौँ?"],["I'd like to update you on the progress.","म प्रगतिबारे जानकारी दिन चाहन्छु।"],["Let's follow up next week.","अर्को हप्ता फेरि छलफल गरौँ।"]],
+  m:"Good afternoon, everyone. Let's get started with the agenda. First, I'd like to update you on the progress. We have finished the survey in two villages and we are planning the third. I'll send you the report by Friday. Could we schedule a short meeting next week to review it? Let's follow up then. Thank you.",
+  mn:"बैठकमा प्रगति जानकारी दिने र अर्को बैठक तय गर्ने नमुना।",
+  k:[["Give a 2-minute progress update on a project.","कुनै परियोजनाको प्रगति २ मिनेटमा बताउनुहोस्।"],["Role-play opening a team meeting.","टोली बैठक सुरु गर्ने भूमिका-अभिनय गर्नुहोस्।"]],
+  q:{q:"'Let's follow up next week' means:",o:["Discuss again next week","Never discuss","Finish today"],a:0,n:"'Follow up' = फेरि छलफल/जाँच गर्ने।"} },
+ { t:["Explaining Problems & Solutions","समस्या र समाधान बुझाउने"], g:["Describe a problem and propose a clear solution.","समस्या वर्णन गरी स्पष्ट समाधान प्रस्ताव गर्ने।"],
+  p:[["The problem is that...","समस्या के हो भने..."],["One possible solution is...","एउटा सम्भावित समाधान..."],["We need to deal with this immediately.","हामीले यसलाई तुरुन्तै सम्बोधन गर्नुपर्छ।"],["As a result...","परिणामस्वरूप..."],["I suggest that we...","म सुझाव दिन्छु कि हामी..."]],
+  m:"The problem is that many students do not submit assignments on time. As a result, teachers cannot give feedback. One possible solution is to use a simple online form with a clear deadline. I suggest that we start with one class and review the results after a month. We need to deal with this immediately, because the exams are near.",
+  mn:"असाइनमेन्ट समयमा नबुझाउने समस्या र अनलाइन फारमको समाधान।",
+  k:[["Present a problem in your campus or village and solve it (2.5 min).","आफ्नो क्याम्पस/गाउँको समस्या र समाधान प्रस्तुत गर्नुहोस् (२.५ मिनेट)।"],["Explain a problem you solved in the past.","विगतमा समाधान गरेको समस्याबारे बताउनुहोस्।"]],
+  q:{q:"After describing a problem you should:",o:["Suggest a solution","Complain more","Stay silent"],a:0,n:"समस्यापछि समाधान प्रस्ताव गर्नु राम्रो सञ्चार हो।"} },
+ { t:["Group Discussion & Debate","समूह छलफल र वादविवाद"], g:["Support an argument with evidence and respond to others.","तर्कलाई प्रमाणले समर्थन गर्ने र अरूलाई जवाफ दिने।"],
+  p:[["I'd like to start by saying...","म यसरी सुरु गर्न चाहन्छु..."],["Research shows that...","अनुसन्धानले देखाउँछ कि..."],["My opponent said..., however...","विपक्षीले ... भन्नुभयो, तर..."],["Let me give you an example.","म एउटा उदाहरण दिन्छु।"],["In conclusion, ...","निष्कर्षमा..."]],
+  m:"I'd like to start by saying that free digital education can change lives. Research shows that students who practise daily improve faster. My opponent said that internet is a problem; however, many villages now have mobile data. Let me give you an example: a free YouTube lesson can be watched many times. In conclusion, we should support free learning for all.",
+  mn:"निःशुल्क डिजिटल शिक्षाको पक्षमा तर्क र विपक्षीलाई जवाफ।",
+  k:[["Debate: 'Social media helps learning' (3 min, one side).","वादविवाद: 'सामाजिक सञ्जालले सिकाइमा मद्दत गर्छ' (३ मिनेट, एक पक्ष)।"],["Summarise a group discussion in 2 minutes.","समूह छलफलको सारांश २ मिनेटमा भन्नुहोस्।"]],
+  q:{q:"Which supports an argument best?",o:["Research shows that...","Everybody knows.","I just feel so."],a:0,n:"प्रमाण/अनुसन्धानले तर्कलाई बलियो बनाउँछ।"} }
+ ]},
+{ n:5, icon:"🏔️", t:"Confident & Independent Speaking", s:"आत्मविश्वासका साथ आफ्नै शैलीमा स्वतन्त्र रूपमा बोल्ने अभ्यास", target:[180,300], lab:"3–5 minutes",
+ lessons:[
+ { t:["Structure: Opening, Body, Closing","बोलाइको ढाँचा: सुरु, मध्य, समापन"], g:["Build any talk with PREP: Point, Reason, Example, Point.","PREP: बुँदा, कारण, उदाहरण, बुँदाले कुनै पनि भाषण बनाउने।"],
+  p:[["Let me begin with a story.","एउटा कथाबाट सुरु गरौँ।"],["There are three key reasons.","तीन प्रमुख कारण छन्।"],["For example, ...","उदाहरणका लागि..."],["Let me wrap up.","अब समापन गरौँ।"],["The key message is...","मुख्य सन्देश..."]],
+  m:"Point: Speaking practice should be daily. Reason: because confidence is a habit, not a gift. Example: when I started speaking for just one minute every day, after three months I could speak for five minutes without stopping. Point again: so, practise a little, every day. (Expand each part for about one minute.)",
+  mn:"PREP ढाँचा: बुँदा → कारण → उदाहरण → फेरि बुँदा।",
+  k:[["Give a 3-minute talk on 'Why daily practice matters' using PREP.","PREP प्रयोग गरी 'दैनिक अभ्यास किन महत्त्वपूर्ण' विषयमा ३ मिनेट बोल्नुहोस्।"],["Repeat the same talk with a different example.","फरक उदाहरणसहित उही भाषण दोहोर्‍याउनुहोस्।"]],
+  q:{q:"In the PREP method, P-R-E-P stands for:",o:["Point, Reason, Example, Point","Plan, Read, Edit, Present","Pause, Repeat, End, Pray"],a:0,n:"PREP = Point, Reason, Example, Point।"} },
+ { t:["Your Life Story","आफ्नो जीवनकथा"], g:["Tell your story with turning points and lessons learned.","मोड र सिकाइसहित आफ्नो कथा सुनाउने।"],
+  p:[["I was born in...","म ... मा जन्मिएँ।"],["Growing up, I...","हुर्कँदै गर्दा म..."],["A turning point in my life was...","मेरो जीवनको एउटा मोड..."],["What I have learned is...","मैले सिकेको कुरा..."],["Looking ahead, I plan to...","भविष्यमा म ... योजना गर्छु।"]],
+  m:"I was born in a small town in Nepal. Growing up, I was shy and afraid of speaking in front of people. A turning point in my life was when a teacher asked me to read aloud in class. My voice shook, but I finished. What I have learned is that courage grows when we act. Looking ahead, I plan to teach others for free. (Continue with two more stories.)",
+  mn:"लजालु विद्यार्थीबाट आत्मविश्वासी वक्ता बन्ने यात्रा।",
+  k:[["Tell your life story in 4 minutes with at least one turning point.","कम्तीमा एउटा मोडसहित जीवनकथा ४ मिनेटमा सुनाउनुहोस्।"],["Describe your future plan in 3 minutes.","भविष्यको योजना ३ मिनेटमा वर्णन गर्नुहोस्।"]],
+  q:{q:"A 'turning point' is:",o:["A moment that changes your direction","A traffic sign","The end of a story"],a:0,n:"Turning point = जीवनको दिशा बदल्ने क्षण।"} },
+ { t:["Teach a Topic You Know","आफूले जानेको विषय सिकाउने"], g:["Explain something clearly step by step.","कुनै कुरा चरणबद्ध रूपमा स्पष्ट बुझाउने।"],
+  p:[["Today I'll explain how...","आज म ... कसरी हुन्छ बुझाउँछु।"],["Imagine that...","कल्पना गर्नुहोस् कि..."],["Let me break it down into steps.","यसलाई चरणमा बाँडेर बुझाउँछु।"],["A common mistake is...","सामान्य गल्ती..."],["To put it simply...","सजिलो भाषामा भन्दा..."]],
+  m:"Today I'll explain how to solve a simple equation. Imagine a balance scale. Let me break it down into steps. Step one: whatever you do on one side, do on the other. Step two: remove the number next to x. A common mistake is changing only one side. To put it simply, keep the scale balanced. (Add two worked examples.)",
+  mn:"सन्तुलित तराजुको उपमाले समीकरण बुझाउने नमुना।",
+  k:[["Teach a topic from your subject in 4 minutes.","आफ्नो विषयको एउटा शीर्षक ४ मिनेटमा सिकाउनुहोस्।"],["Explain how to cook or make something you know.","आफूलाई आउने कुनै खाना/वस्तु बनाउन सिकाउनुहोस्।"]],
+  q:{q:"To explain a topic clearly you should:",o:["Break it into steps","Speak very fast","Use only difficult words"],a:0,n:"चरणमा बाँडेर बुझाउँदा श्रोताले सजिलै बुझ्छन्।"} },
+ { t:["Persuasive Speech","प्रभावकारी (मनाउने) भाषण"], g:["Convince an audience with questions, evidence and a call to action.","प्रश्न, प्रमाण र आह्वानद्वारा श्रोतालाई मनाउने।"],
+  p:[["Have you ever wondered...?","के तपाईंले कहिल्यै सोच्नुभएको छ...?"],["The evidence clearly shows...","प्रमाणले स्पष्ट देखाउँछ..."],["Some people argue that..., but...","कतिपयले ... भन्छन्, तर..."],["I urge you to...","म तपाईंहरूलाई आग्रह गर्छु..."],["Together, we can make a difference.","सँगै मिलेर हामी परिवर्तन ल्याउन सक्छौँ।"]],
+  m:"Have you ever wondered why some people speak so confidently? The evidence clearly shows that regular practice is the secret. Some people argue that confidence is a natural talent, but I disagree. I urge you to speak for just five minutes every day. Together, we can make a difference in our own lives and in our community.",
+  mn:"नियमित अभ्यासको पक्षमा प्रश्न, प्रमाण र आह्वानसहितको भाषण।",
+  k:[["Persuade your audience to join a cause in 4 minutes.","कुनै अभियानमा सहभागी हुन श्रोतालाई ४ मिनेटमा मनाउनुहोस्।"],["Add one counter-argument and answer it.","एउटा विपक्षी तर्क थपेर जवाफ दिनुहोस्।"]],
+  q:{q:"A persuasive speech should end with:",o:["A clear call to action","An apology","A new unrelated topic"],a:0,n:"प्रभावकारी भाषण स्पष्ट आह्वानमा टुङ्गिन्छ।"} },
+ { t:["Impromptu Speaking","तत्काल (तयारीबिना) बोल्ने"], g:["Answer a surprise question calmly in three to four minutes.","अप्रत्याशित प्रश्नको उत्तर शान्तसँग ३–४ मिनेट दिने।"],
+  p:[["That's an interesting question.","रोचक प्रश्न हो।"],["Let me think for a moment.","एकछिन सोचौँ।"],["There are two sides to this.","यसका दुई पक्ष छन्।"],["From my own experience...","मेरै अनुभवमा..."],["I'd like to close by saying...","म यसो भनेर टुङ्ग्याउन चाहन्छु..."]],
+  m:"That's an interesting question. Let me think for a moment. There are two sides to this. On one side, technology helps us learn faster. On the other, it can distract us. From my own experience, I learn best when I use it with a plan. I'd like to close by saying: use technology, but let it serve your goals.",
+  mn:"अप्रत्याशित प्रश्नमा दुई पक्ष देखाएर निष्कर्ष दिने नमुना।",
+  k:[["Press 'Random prompt' in Practice and speak for 3 minutes.","अभ्यास पेजमा 'Random prompt' थिचेर ३ मिनेट बोल्नुहोस्।"],["Answer: 'What would you change in your community?'","उत्तर दिनुहोस्: 'तपाईंको समुदायमा के परिवर्तन गर्नुहुन्छ?'"]],
+  q:{q:"First thing in an impromptu answer:",o:["Pause, then give your main point","Say sorry and leave","Memorize a speech"],a:0,n:"छोटो विराम लिएर मुख्य बुँदा भन्नुहोस्।"} },
+ { t:["Your Signature Speech (Capstone)","तपाईंको आफ्नै भाषण (क्यापस्टोन)"], g:["Deliver a five-minute speech in your own style.","आफ्नै शैलीमा ५ मिनेटको भाषण दिने।"],
+  p:[["Today, I want to share...","आज म ... साझा गर्न चाहन्छु।"],["This matters because...","यो महत्त्वपूर्ण छ किनभने..."],["Here is my challenge to you.","यो मेरो तपाईंहरूलाई चुनौती हो।"],["If I can, you can too.","म सक्छु भने तपाईं पनि सक्नुहुन्छ।"],["Thank you, and keep speaking!","धन्यवाद, बोलिरहनुहोस्!"]],
+  m:"Today, I want to share how I learned to speak English from zero. This matters because language opens doors. First, my story. Second, three habits that worked. Third, a challenge for you. Here is my challenge to you: speak for one minute today. If I can, you can too. Thank you, and keep speaking! (Build your own five-minute version.)",
+  mn:"आफ्नै कथा, तीन बानी र श्रोतालाई चुनौती भएको क्यापस्टोन भाषण ढाँचा।",
+  k:[["Prepare an outline, then deliver a 5-minute signature speech.","रूपरेखा बनाएर ५ मिनेटको आफ्नै भाषण दिनुहोस्।"],["Record it twice and compare your two attempts.","दुई पटक रेकर्ड गरी दुवै प्रयास तुलना गर्नुहोस्।"]],
+  q:{q:"Your signature speech should be:",o:["Clear, personal and structured","Copied from the internet","Random and unplanned"],a:0,n:"स्पष्ट, व्यक्तिगत र व्यवस्थित भाषण नै प्रभावकारी हुन्छ।"} }
+ ]}
+];
+
+/* ================= FREE VIDEO TUTORIALS (YouTube topic links) ================= */
+const YTQ=[
+ ["english speaking greetings and introducing yourself for beginners","english speaking family and home sentences for beginners","english speaking daily routine sentences for beginners","english speaking likes and dislikes sentences for beginners","english speaking telling time numbers and days for beginners","english speaking basic questions and answers for beginners"],
+ ["english conversation shopping and bargaining at a shop","english conversation ordering food at a restaurant","english conversation asking for directions and transport","english conversation at the doctor describing symptoms","english phone call conversation and making plans","english speaking talk about weather and festivals"],
+ ["english fillers and connectors for fluent speaking","how to tell a story in english past tense speaking practice","how to give your opinion in english speaking","english phrases to agree disagree and interrupt politely","describing people and places in english speaking practice","how to speak english without stopping fluency tips"],
+ ["english for classroom and college communication","how to give a presentation in english useful phrases","job interview english questions and answers","english for office meetings business english speaking","english phrases to explain problems and suggest solutions","english group discussion and debate phrases"],
+ ["PREP method public speaking speech structure","how to tell your life story in a speech english","how to explain a topic clearly teaching in english","how to write and deliver a persuasive speech","impromptu speaking tips english","how to give a 5 minute speech in english"]
+];
+const YTV=["spoken english course for beginners full course","english conversation practice daily life full course","fluent english speaking practice full course","english for work and academic speaking full course","advanced english public speaking course"];
+const yt=q=>"https://www.youtube.com/results?search_query="+encodeURIComponent(q);
+
+/* ================= UI TEXT ================= */
+const U = {
+ home:["Home","गृह"], course:["Course","पाठ"], practice:["Practice","अभ्यास"], progress:["Progress","प्रगति"], about:["About","बारेमा"],
+ cont:["Continue learning","सिकाइ जारी राख्नुहोस्"], start:["Start Volume 1","भाग १ सुरु गर्नुहोस्"],
+ lead:["Climb from a 10-second answer to a 5-minute speech. Listen, repeat, speak and track every step.","१० सेकेन्डको उत्तरदेखि ५ मिनेटको भाषणसम्म। सुन्नुहोस्, दोहोर्‍याउनुहोस्, बोल्नुहोस् र हरेक चरण ट्र्याक गर्नुहोस्।"],
+ ladder:["Your speaking ladder","तपाईंको बोल्ने सिँढी"],
+ lessons:["lessons","पाठ"], done:["done","सकियो"],
+ goal:["Goal","लक्ष्य"], phrases:["Key phrases","मुख्य वाक्यांश"], model:["Model speech","नमुना भाषण"], tasks:["Speaking tasks","बोल्ने अभ्यास"], quiz:["Check yourself","आफूलाई जाँच्नुहोस्"],
+ listen:["Listen","सुन्नुहोस्"], slow:["Slow","ढिलो"], markDone:["Mark lesson complete","पाठ पूरा भएको जनाउनुहोस्"], isDone:["Lesson complete ✓","पाठ पूरा ✓"],
+ back:["← Back","← पछाडि"], tryTask:["Practise this","यो अभ्यास गर्नुहोस्"], next:["Next question","अर्को प्रश्न"],
+ target:["Speaking target","बोल्ने लक्ष्य"], startT:["Start speaking","बोल्न सुरु गर्नुहोस्"], stopT:["Stop","रोक्नुहोस्"], reset:["Reset","रिसेट"],
+ rnd:["Random prompt","अनियमित विषय"], mic:["Show live transcript (needs a supported browser and microphone)","लाइभ ट्रान्सक्रिप्ट देखाउनुहोस् (समर्थित ब्राउजर र माइक चाहिन्छ)"],
+ save:["Save this session","यो सत्र सुरक्षित गर्नुहोस्"], saved:["Saved ✓","सुरक्षित ✓"],
+ keepOn:["Keep going — you have not reached the target yet.","बोलिरहनुहोस् — लक्ष्य अझै पुगेको छैन।"], good:["Perfect zone. Finish your thought.","उत्तम क्षेत्र। आफ्नो कुरा टुङ्ग्याउनुहोस्।"], over:["Time to wrap up.","अब समापन गर्ने बेला।"],
+ quick:["Quick quiz","छिटो क्विज"], pickVol:["Choose a volume","भाग छान्नुहोस्"],
+ stLessons:["Lessons completed","पूरा भएका पाठ"], stQuiz:["Quiz correct","सही क्विज"], stTime:["Minutes spoken","बोलिएको समय (मिनेट)"], stStreak:["Day streak","निरन्तर दिन"],
+ badges:["Badges","ब्याज"], sessions:["Recent speaking sessions","हालका बोल्ने सत्र"], noSess:["No sessions yet. Open Practice and speak for the first time.","अहिलेसम्म सत्र छैन। अभ्यास खोलेर पहिलो पटक बोल्नुहोस्।"],
+ resetAll:["Reset all progress","सबै प्रगति रिसेट गर्नुहोस्"], sure:["Tap again to confirm reset","पक्का गर्न फेरि थिच्नुहोस्"],
+ howto:["How to learn with this app","यो एपबाट कसरी सिक्ने"],
+ videos:["Free video tutorials","निःशुल्क भिडियो ट्युटोरियल"], watchEn:["Watch free video lesson","निःशुल्क भिडियो पाठ हेर्नुहोस्"], watchNe:["Learn in Nepali","नेपालीमा सिक्नुहोस्"],
+ fullCourse:["Free full video course for this volume","यस भागको निःशुल्क पूर्ण भिडियो कोर्स"], vidNote:["Opens free videos on YouTube in a new tab.","YouTube मा निःशुल्क भिडियो नयाँ ट्याबमा खुल्छ।"]
+};
+
+/* ================= STATE ================= */
+const KEY="esc_a2z_v1";
+let S={done:{},qa:0,qc:0,sess:[],days:[],lang:"en",theme:""};
+try{ const raw=localStorage.getItem(KEY); if(raw){ const o=JSON.parse(raw); if(o&&typeof o==="object") S=Object.assign(S,o); } }catch(e){}
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){} }
+function today(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function touch(){ const t=today(); if(!S.days.includes(t)){ S.days.push(t); if(S.days.length>400) S.days=S.days.slice(-400); } }
+function streak(){
+  const set=new Set(S.days); let n=0; const d=new Date();
+  const f=x=>x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0");
+  if(!set.has(f(d))) d.setDate(d.getDate()-1);
+  while(set.has(f(d))){ n++; d.setDate(d.getDate()-1); }
+  return n;
+}
+const L=()=>S.lang==="ne"?1:0;
+const tr=p=>p[L()];
+const u=k=>U[k][L()];
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+const lid=(v,l)=>v+"-"+l;
+function volDone(v){ return VOL[v].lessons.filter((_,l)=>S.done[lid(v,l)]).length; }
+function totalDone(){ return VOL.reduce((a,_,v)=>a+volDone(v),0); }
+const TOTAL=VOL.reduce((a,v)=>a+v.lessons.length,0);
+function fmt(sec){ sec=Math.max(0,Math.round(sec)); return String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0"); }
+function tlabel(sec){ return sec<60? sec+"s" : (sec/60)+" min"; }
+
+/* view state */
+let view="home", cv=0, cl=null, LQ={}, QZ={cur:null,pick:null}, resetArm=false;
+let P={vol:0,prompt:null,running:false,t0:0,el:0,timer:null,rec:null,fin:"",int:"",mic:false,result:null,saved:false};
+
+/* ================= SPEECH ================= */
+function say(text,rate){
+  try{
+    if(!("speechSynthesis" in window)) return;
+    speechSynthesis.cancel();
+    const m=new SpeechSynthesisUtterance(text); m.lang="en-US"; m.rate=rate||0.95;
+    speechSynthesis.speak(m);
+  }catch(e){}
+}
+
+/* ================= VIEWS ================= */
+function nextLesson(){
+  for(let v=0;v<VOL.length;v++) for(let l=0;l<VOL[v].lessons.length;l++) if(!S.done[lid(v,l)]) return [v,l];
+  return null;
+}
+function vHome(){
+  const nl=nextLesson(); const td=totalDone();
+  const maxLog=Math.log(310), minLog=Math.log(8);
+  const rungs=VOL.map((v,i)=>{
+    const w=18+82*((Math.log(v.target[1])-minLog)/(maxLog-minLog));
+    const pc=Math.round(100*volDone(i)/v.lessons.length);
+    return `<button class="rung" data-act="vol" data-v="${i}" aria-label="Volume ${v.n}: ${esc(v.lab)}">
+      <span class="bar" style="width:${w}%"><i style="width:${pc}%"></i><b>${v.icon} ${esc(v.lab)}</b></span>
+      <span class="lab">${S.lang==="ne"?"भाग":"Part"} ${v.n}</span></button>`;
+  }).join("");
+  const cards=VOL.map((v,i)=>{
+    const d=volDone(i), pc=Math.round(100*d/v.lessons.length);
+    return `<button class="vcard" data-act="vol" data-v="${i}">
+      <h3>${v.icon} ${S.lang==="ne"?"भाग":"Part"} ${v.n}: ${esc(v.t)}</h3>
+      <div class="ne">${esc(v.s)}</div>
+      <div class="muted" style="font-size:.9rem;margin-top:4px">🎯 ${u("target")}: ${esc(v.lab)} · ${d}/${v.lessons.length} ${u("lessons")}</div>
+      <div class="prog"><i style="width:${pc}%"></i></div></button>`;
+  }).join("");
+  const cta = nl
+    ? `<button class="btn" data-act="lesson" data-v="${nl[0]}" data-l="${nl[1]}">${td? u("cont"):u("start")}</button>`
+    : `<span class="badge">🏆 ${S.lang==="ne"?"तपाईंले सबै पाठ पूरा गर्नुभयो!":"You completed every lesson!"}</span>`;
+  return `<section class="hero">
+    <h1>📚 English Speaking Course: A to Z</h1>
+    <div class="ne" style="margin-top:-4px">नेपाली सिकारुहरूका लागि व्यावहारिक बोल्ने पाठ्यक्रम</div>
+    <p class="lead">${u("lead")}</p>
+    <div class="row">${cta}<button class="btn alt" data-act="nav" data-view="practice">🎙️ ${u("practice")}</button></div>
+    <h2 style="margin-top:20px">${u("ladder")}</h2>
+    <div class="ladder">${rungs}</div>
+  </section>
+  <div class="vgrid">${cards}</div>
+  ${credit()}`;
+}
+function vCourse(){
+  const v=VOL[cv];
+  const tabs=VOL.map((x,i)=>`<button class="chip ${i===cv?"on":""}" data-act="vol" data-v="${i}">${x.icon} ${x.n}</button>`).join("");
+  const items=v.lessons.map((ls,l)=>{
+    const d=S.done[lid(cv,l)];
+    return `<button class="lesson-item ${d?"done":""}" data-act="lesson" data-v="${cv}" data-l="${l}">
+      <span class="ck">${d?"✓":l+1}</span>
+      <span><b>${esc(ls.t[0])}</b><br><span class="ne">${esc(ls.t[1])}</span></span></button>`;
+  }).join("");
+  return `<div class="row" style="margin-bottom:12px">${tabs}</div>
+  <h2>${v.icon} ${S.lang==="ne"?"भाग":"Part"} ${v.n}: ${esc(v.t)}</h2>
+  <p class="ne">${esc(v.s)}</p>
+  <p><span class="tag">🎯 ${u("target")}: ${esc(v.lab)}</span> <span class="tag">${volDone(cv)}/${v.lessons.length} ${u("done")}</span></p>
+  <div class="card vid"><div style="margin-bottom:8px">🎬 <b>${u("fullCourse")}</b></div>
+    <div class="row"><a class="btn" href="${esc(yt(YTV[cv]))}" target="_blank" rel="noopener noreferrer">▶ ${u("watchEn")}</a>
+    <a class="btn alt" href="${esc(yt(YTV[cv]+" Nepali"))}" target="_blank" rel="noopener noreferrer">🇳🇵 ${u("watchNe")}</a></div></div>
+  ${items}`;
+}
+function vLesson(){
+  const v=VOL[cv], ls=v.lessons[cl], id=lid(cv,cl), d=S.done[id];
+  const ph=ls.p.map((p,i)=>`<div class="phr"><button class="say" data-act="say" data-text="${esc(p[0])}" aria-label="${u("listen")}: ${esc(p[0])}">🔊</button>
+    <div><div><b>${esc(p[0])}</b></div><div class="ne">${esc(p[1])}</div></div></div>`).join("");
+  const tk=ls.k.map((k,i)=>`<div class="task">${esc(tr(k))}
+    <div class="row" style="margin-top:6px"><button class="btn alt" data-act="tryTask" data-v="${cv}" data-i="${i}">🎙️ ${u("tryTask")}</button></div></div>`).join("");
+  const q=ls.q, pk=LQ[id];
+  const opts=q.o.map((o,i)=>{
+    let cls="opt"; if(pk!=null){ if(i===q.a) cls+=" right"; else if(i===pk) cls+=" wrong"; }
+    return `<button class="${cls}" data-act="lq" data-i="${i}" ${pk!=null?"disabled":""}>${esc(o)}</button>`;
+  }).join("");
+  const fb = pk!=null ? `<p><b>${pk===q.a?"✅ "+(S.lang==="ne"?"सही!":"Correct!"):"❌ "+(S.lang==="ne"?"सही उत्तर हरियो रङमा छ।":"The right answer is in green.")}</b><br><span class="ne">${esc(q.n)}</span></p>`:"";
+  return `<button class="crumb" data-act="vol" data-v="${cv}">${u("back")} · ${esc(v.t)}</button>
+  <h2>${esc(tr(ls.t))}</h2>
+  <p class="ne">${esc(S.lang==="ne"?ls.t[0]:ls.t[1])}</p>
+  <div class="card"><b>🎯 ${u("goal")}:</b> ${esc(tr(ls.g))}<br><span class="tag">${u("target")}: ${esc(v.lab)}</span></div>
+  <h3>${u("phrases")}</h3><div class="card">${ph}</div>
+  <h3>${u("model")}</h3>
+  <div class="model">${esc(ls.m)}</div>
+  <div class="ne" style="margin:6px 0 8px">${esc(ls.mn)}</div>
+  <div class="row" style="margin-bottom:16px"><button class="btn" data-act="say" data-text="${esc(ls.m)}">🔊 ${u("listen")}</button><button class="btn alt" data-act="say" data-text="${esc(ls.m)}" data-rate="0.7">🐢 ${u("slow")}</button></div>
+  <h3>🎬 ${u("videos")}</h3>
+  <div class="card vid"><div class="row">
+    <a class="btn" href="${esc(yt(YTQ[cv][cl]))}" target="_blank" rel="noopener noreferrer">▶ ${u("watchEn")}</a>
+    <a class="btn alt" href="${esc(yt(YTQ[cv][cl]+" Nepali"))}" target="_blank" rel="noopener noreferrer">🇳🇵 ${u("watchNe")}</a></div>
+    <div class="muted" style="font-size:.85rem;margin-top:6px">${u("vidNote")}</div></div>
+  <h3>${u("tasks")}</h3>${tk}
+  <h3 style="margin-top:16px">${u("quiz")}</h3>
+  <div class="card"><p><b>${esc(q.q)}</b></p>${opts}${fb}</div>
+  <button class="btn ${d?"alt":""}" data-act="done" ${d?"":""}>${d?u("isDone"):u("markDone")}</button>`;
+}
+function vPractice(){
+  const v=VOL[P.vol];
+  const chips=VOL.map((x,i)=>`<button class="chip ${i===P.vol?"on":""}" data-act="pvol" data-v="${i}" ${P.running?"disabled":""}>${x.icon} ${x.n}</button>`).join("");
+  const scale=v.target[1]*1.3, z0=100*v.target[0]/scale, z1=100*(v.target[1]-v.target[0])/scale;
+  const res=P.result?`<div class="card" id="result">
+    <h3>${S.lang==="ne"?"नतिजा":"Result"}</h3>
+    <p>⏱ <b>${fmt(P.result.sec)}</b> · ${P.result.ok? (S.lang==="ne"?"✅ लक्ष्यभित्र":"✅ Inside target"):(P.result.sec<v.target[0]?(S.lang==="ne"?"⬆️ लक्ष्यभन्दा छोटो":"⬆️ Shorter than target — add more details"):(S.lang==="ne"?"⬇️ लक्ष्यभन्दा लामो":"⬇️ Longer than target — be more concise"))}
+    ${P.result.words?`<br>🗣 ${P.result.words} ${S.lang==="ne"?"शब्द":"words"} · ${P.result.wpm} ${S.lang==="ne"?"शब्द/मिनेट":"words/min"}`:""}</p>
+    <button class="btn" data-act="saveSess" ${P.saved?"disabled":""}>${P.saved?u("saved"):u("save")}</button></div>`:"";
+  const pr=P.prompt?`<div class="task"><b>${esc(tr(P.prompt))}</b></div>`:`<p class="muted">${S.lang==="ne"?"'Random prompt' थिचेर विषय पाउनुहोस्, वा आफ्नै विषयमा बोल्नुहोस्।":"Tap Random prompt for a topic, or speak on your own topic."}</p>`;
+  return `<h2>🎙️ ${u("practice")}</h2>
+  <p class="muted">${u("pickVol")}</p>
+  <div class="row" style="margin-bottom:10px">${chips}</div>
+  <div class="card">
+    <div class="row"><span class="tag">🎯 ${u("target")}: ${esc(v.lab)}</span><span class="sp"></span><button class="btn alt" data-act="prompt" ${P.running?"disabled":""}>🎲 ${u("rnd")}</button></div>
+    <div style="margin-top:10px">${pr}</div>
+    <div class="timer" id="tm" role="timer" aria-live="off">${fmt(P.el)}</div>
+    <div class="band" aria-hidden="true"><div class="zone" style="left:${z0}%;width:${z1}%"></div><div class="fill" id="fill"></div></div>
+    <div class="row" style="justify-content:space-between;font-size:.82rem;color:var(--muted);margin-top:2px"><span>0</span><span>${tlabel(v.target[0])}</span><span>${tlabel(v.target[1])}</span></div>
+    <div class="zonetxt" id="zt" aria-live="polite"></div>
+    <div class="row" style="justify-content:center;margin-top:8px">
+      <button class="btn ${P.running?"warn":""}" data-act="toggleT">${P.running?"⏹ "+u("stopT"):"▶ "+u("startT")}</button>
+      <button class="btn alt" data-act="resetT" ${P.running?"disabled":""}>${u("reset")}</button></div>
+    <label style="display:flex;gap:8px;align-items:flex-start;margin-top:12px;font-size:.92rem"><input type="checkbox" id="micChk" data-act="mic" ${P.mic?"checked":""} ${P.running?"disabled":""} style="margin-top:6px;width:18px;height:18px"><span>${u("mic")}</span></label>
+    <div class="live" id="live" ${P.mic?"":"hidden"}>${esc((P.fin+P.int).trim())}</div>
+  </div>
+  ${res}
+  <h2 style="margin-top:20px">🧩 ${u("quick")}</h2>
+  ${quizBlock()}`;
+}
+function pickQ(){
+  const all=[]; VOL.forEach((v,vi)=>v.lessons.forEach((ls,li)=>all.push(ls.q)));
+  let q; do{ q=all[Math.floor(Math.random()*all.length)]; }while(all.length>1&&QZ.cur===q);
+  QZ.cur=q; QZ.pick=null;
+}
+function quizBlock(){
+  if(!QZ.cur) pickQ();
+  const q=QZ.cur, pk=QZ.pick;
+  const opts=q.o.map((o,i)=>{
+    let cls="opt"; if(pk!=null){ if(i===q.a) cls+=" right"; else if(i===pk) cls+=" wrong"; }
+    return `<button class="${cls}" data-act="qq" data-i="${i}" ${pk!=null?"disabled":""}>${esc(o)}</button>`;
+  }).join("");
+  const fb=pk!=null?`<p><b>${pk===q.a?"✅":"❌"}</b> <span class="ne">${esc(q.n)}</span></p><button class="btn" data-act="nextQ">${u("next")}</button>`:"";
+  return `<div class="card"><p><b>${esc(q.q)}</b></p>${opts}${fb}</div>`;
+}
+function badges(){
+  const td=totalDone(), sc=S.sess.length, st=streak();
+  const list=[["🌱",S.lang==="ne"?"पहिलो पाइला":"First step",td>=1],["🎙️",S.lang==="ne"?"पहिलो सत्र":"First session",sc>=1],["🔟",S.lang==="ne"?"१० सत्र":"10 sessions",sc>=10],["🔥",S.lang==="ne"?"७ दिन निरन्तर":"7-day streak",st>=7]];
+  VOL.forEach((v,i)=>list.push([v.icon,(S.lang==="ne"?"भाग ":"Volume ")+v.n,volDone(i)===v.lessons.length]));
+  list.push(["🏆",S.lang==="ne"?"पूरा पाठ्यक्रम":"Full course",td===TOTAL]);
+  return list.map(b=>`<span class="badge ${b[2]?"":"off"}">${b[0]} ${esc(b[1])}</span>`).join("");
+}
+function vProgress(){
+  const td=totalDone(), pc=Math.round(100*td/TOTAL);
+  const mins=Math.round(S.sess.reduce((a,s)=>a+s.sec,0)/60*10)/10;
+  const bars=VOL.map((v,i)=>{ const p=Math.round(100*volDone(i)/v.lessons.length);
+    return `<div style="margin-bottom:10px"><div class="row"><b>${v.icon} ${S.lang==="ne"?"भाग":"Part"} ${v.n}</b><span class="sp"></span><span class="muted">${volDone(i)}/${v.lessons.length}</span></div><div class="prog"><i style="width:${p}%"></i></div></div>`; }).join("");
+  const rec=S.sess.slice(-8).reverse().map(s=>{
+    const d=new Date(s.ts);
+    return `<div class="task">${VOL[s.v].icon} ${S.lang==="ne"?"भाग":"Part"} ${VOL[s.v].n} · <b>${fmt(s.sec)}</b> ${s.ok?"✅":""}${s.words?` · ${s.words} ${S.lang==="ne"?"शब्द":"words"} (${s.wpm}/min)`:""}<br><span class="muted" style="font-size:.85rem">${d.toLocaleDateString()} ${d.toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}</span></div>`;
+  }).join("") || `<p class="muted">${u("noSess")}</p>`;
+  return `<h2>📈 ${u("progress")}</h2>
+  <div class="card"><div class="row"><b style="font-size:1.3rem">${pc}%</b><span class="muted">${td}/${TOTAL} ${u("lessons")}</span></div><div class="prog"><i style="width:${pc}%"></i></div></div>
+  <div class="stats" style="margin-bottom:14px">
+   <div class="stat"><b>${td}</b>${u("stLessons")}</div>
+   <div class="stat"><b>${S.qc}/${S.qa}</b>${u("stQuiz")}</div>
+   <div class="stat"><b>${mins}</b>${u("stTime")}</div>
+   <div class="stat"><b>${streak()}</b>${u("stStreak")}</div></div>
+  <div class="card">${bars}</div>
+  <h3>${u("badges")}</h3><div>${badges()}</div>
+  <h3 style="margin-top:12px">${u("sessions")}</h3>${rec}
+  <p style="margin-top:16px"><button class="btn alt" data-act="resetAll">${resetArm?u("sure"):u("resetAll")}</button></p>`;
+}
+function vAbout(){
+  const rows=VOL.map(v=>`<div class="task"><b>${v.icon} ${S.lang==="ne"?"भाग":"Part"} ${v.n}: ${esc(v.t)}</b><br><span class="ne">${esc(v.s)}</span><br><span class="tag">🎯 ${esc(v.lab)}</span></div>`).join("");
+  const how=S.lang==="ne"
+   ?["१. पाठ खोल्नुहोस् र 🔊 थिचेर प्रत्येक वाक्यांश सुन्नुहोस्।","२. ठूलो स्वरमा दोहोर्‍याउनुहोस् — पहिले ढिलो, पछि स्वाभाविक गतिमा।","३. बोल्ने अभ्यासमा टाइमर चलाएर लक्ष्य समयभित्र बोल्नुहोस्।","४. क्विज हल गरी पाठ पूरा भएको जनाउनुहोस्।","५. दिनदिनै कम्तीमा एक सत्र बोल्नुहोस् — निरन्तरता नै कुञ्जी हो।"]
+   :["1. Open a lesson and tap 🔊 to hear each phrase.","2. Repeat aloud — slowly first, then at natural speed.","3. Use the speaking timer and aim for your volume's target time.","4. Take the quiz and mark the lesson complete.","5. Speak at least one session every day — consistency is the key."];
+  return `<h2>${u("about")}</h2>
+  <div class="card"><h3>📚 English Speaking Course: A to Z</h3><p>A Practical Speaking Course for Nepali Learners<br><b>Padam Raj Pant</b></p></div>
+  <h3>${u("howto")}</h3><div class="card">${how.map(h=>`<p>${esc(h)}</p>`).join("")}</div>
+  ${rows}
+  <div class="card flat"><p class="muted" style="font-size:.9rem">${S.lang==="ne"?"टिप: आवाज सुन्ने र लाइभ ट्रान्सक्रिप्टका लागि क्रोम वा सफारी जस्ता आधुनिक ब्राउजर राम्रो हुन्छ। तपाईंको प्रगति यही उपकरणमा मात्र सुरक्षित हुन्छ।":"Tip: audio playback and live transcript work best in a modern browser such as Chrome or Safari. Your progress is stored on this device only."}</p></div>
+  ${credit()}`;
+}
+function credit(){
+  return `<footer class="credit">${S.lang==="ne"
+   ?"श्री बिष्णु सिंह रायमाझीद्वारा तयार — गणित प्रध्यापक तथा विभागीय प्रमुख, मानविकी तथा सामाजिक शास्त्र (KMC-HSSD), कपिलवस्तु बहुमुखी क्याम्पस, तौलिहवा। UCDL Academy · SDROK · त्रिभुवन विश्वविद्यालय।"
+   :"Prepared by Mr. Bishnu Singh Rayamajhi — Math Lecturer & Head, Humanities and Social Sciences Department (KMC-HSSD), Kapilvastu Multiple Campus, Taulihawa. UCDL Academy · SDROK · Tribhuvan University."}</footer>`;
+}
+
+/* ================= RENDER ================= */
+const NAV=[["home","🏠"],["course","📖"],["practice","🎙️"],["progress","📈"],["about","ℹ️"]];
+function render(scroll){
+  const main=document.getElementById("main");
+  const V={home:vHome,course:vCourse,lesson:vLesson,practice:vPractice,progress:vProgress,about:vAbout};
+  main.innerHTML=V[view]();
+  const cur=view==="lesson"?"course":view;
+  document.getElementById("tabs").innerHTML=NAV.map(n=>`<button data-act="nav" data-view="${n[0]}" class="${n[0]===cur?"on":""}" ${n[0]===cur?'aria-current="page"':""}><span class="i">${n[1]}</span>${u(n[0])}</button>`).join("");
+  document.documentElement.lang=S.lang==="ne"?"ne":"en";
+  document.getElementById("langBtn").textContent=S.lang==="ne"?"नेपा | EN":"EN | नेपा";
+  if(view==="practice") tick(true);
+  if(scroll) window.scrollTo(0,0);
+}
+function applyTheme(){
+  if(S.theme) document.documentElement.setAttribute("data-theme",S.theme); else document.documentElement.removeAttribute("data-theme");
+}
+
+/* ================= TIMER ================= */
+function tick(paint){
+  const v=VOL[P.vol];
+  if(P.running) P.el=(performance.now()-P.t0)/1000;
+  const tm=document.getElementById("tm"); if(!tm) return;
+  tm.textContent=fmt(P.el);
+  const scale=v.target[1]*1.3, w=Math.min(100,100*P.el/scale);
+  const f=document.getElementById("fill"); if(f) f.style.width=w+"%";
+  const zt=document.getElementById("zt");
+  if(zt){
+    if(!P.running&&P.el===0){ zt.textContent=""; }
+    else if(P.el<v.target[0]){ zt.textContent=u("keepOn"); zt.style.color="var(--muted)"; }
+    else if(P.el<=v.target[1]){ zt.textContent=u("good"); zt.style.color="var(--ok)"; }
+    else { zt.textContent=u("over"); zt.style.color="var(--orange)"; }
+  }
+  if(P.running&&P.mic){ const n=document.getElementById("live"); if(n) n.textContent=(P.fin+P.int).trim(); }
+}
+function startRec(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR||!P.mic) return;
+  try{
+    const r=new SR(); r.lang="en-US"; r.continuous=true; r.interimResults=true;
+    r.onresult=ev=>{ let fin="",int=""; for(let i=0;i<ev.results.length;i++){ const t=ev.results[i][0].transcript; if(ev.results[i].isFinal) fin+=t+" "; else int+=t; } P.fin=fin; P.int=int; };
+    r.onend=()=>{ if(P.running&&P.rec===r){ try{ r.start(); }catch(e){} } };
+    r.onerror=()=>{};
+    r.start(); P.rec=r;
+  }catch(e){ P.rec=null; }
+}
+function stopRec(){ const r=P.rec; P.rec=null; if(r){ try{ r.stop(); }catch(e){} } }
+function startT(){
+  P.running=true; P.result=null; P.saved=false; P.fin=""; P.int=""; P.el=0; P.t0=performance.now();
+  clearInterval(P.timer); P.timer=setInterval(()=>tick(),250);
+  startRec(); render();
+}
+function stopT(){
+  tick(); P.running=false; clearInterval(P.timer); stopRec();
+  const v=VOL[P.vol], sec=P.el, txt=(P.fin+P.int).trim();
+  const words=txt?txt.split(/\s+/).filter(Boolean).length:0;
+  const wpm=words&&sec>5?Math.round(words/(sec/60)):0;
+  P.result={sec:sec,ok:sec>=v.target[0]&&sec<=v.target[1],words:words,wpm:wpm};
+  render();
+}
+function resetT(){ P.running=false; clearInterval(P.timer); stopRec(); P.el=0; P.result=null; P.fin=""; P.int=""; render(); }
+
+/* ================= EVENTS ================= */
+document.addEventListener("click",e=>{
+  const el=e.target.closest("[data-act]"); if(!el) return;
+  const a=el.dataset.act;
+  if(a==="mic") return;
+  if(a==="nav"){ if(P.running) return; view=el.dataset.view; resetArm=false; render(true); }
+  else if(a==="vol"){ cv=+el.dataset.v; view="course"; render(true); }
+  else if(a==="lesson"){ cv=+el.dataset.v; cl=+el.dataset.l; view="lesson"; render(true); }
+  else if(a==="lang"){ S.lang=S.lang==="ne"?"en":"ne"; save(); render(); }
+  else if(a==="theme"){ const dark=document.documentElement.getAttribute("data-theme")==="dark"||(!document.documentElement.getAttribute("data-theme")&&!matchMedia("(prefers-color-scheme: light)").matches); S.theme=dark?"light":"dark"; applyTheme(); save(); }
+  else if(a==="say"){ say(el.dataset.text,el.dataset.rate?+el.dataset.rate:0.95); }
+  else if(a==="done"){ const id=lid(cv,cl); S.done[id]=!S.done[id]; if(S.done[id]) touch(); save(); render(); }
+  else if(a==="lq"){ const id=lid(cv,cl); if(LQ[id]!=null) return; const i=+el.dataset.i; LQ[id]=i; S.qa++; if(i===VOL[cv].lessons[cl].q.a) S.qc++; touch(); save(); render(); }
+  else if(a==="tryTask"){ P.vol=+el.dataset.v; P.prompt=VOL[P.vol].lessons[cl].k[+el.dataset.i]; P.el=0; P.result=null; view="practice"; render(true); }
+  else if(a==="pvol"){ P.vol=+el.dataset.v; P.el=0; P.result=null; P.prompt=null; render(); }
+  else if(a==="prompt"){
+    const ls=VOL[P.vol].lessons, l=ls[Math.floor(Math.random()*ls.length)], k=l.k[Math.floor(Math.random()*l.k.length)];
+    P.prompt=k; render();
+  }
+  else if(a==="toggleT"){ P.running?stopT():startT(); }
+  else if(a==="resetT"){ resetT(); }
+  else if(a==="saveSess"){ if(!P.result||P.saved) return; S.sess.push({ts:Date.now(),v:P.vol,sec:Math.round(P.result.sec),words:P.result.words,wpm:P.result.wpm,ok:P.result.ok}); if(S.sess.length>100) S.sess=S.sess.slice(-100); touch(); save(); P.saved=true; render(); }
+  else if(a==="qq"){ if(QZ.pick!=null) return; QZ.pick=+el.dataset.i; S.qa++; if(QZ.pick===QZ.cur.a) S.qc++; touch(); save(); render(); }
+  else if(a==="nextQ"){ pickQ(); render(); }
+  else if(a==="resetAll"){ if(!resetArm){ resetArm=true; render(); return; } S.done={}; S.qa=0; S.qc=0; S.sess=[]; S.days=[]; LQ={}; resetArm=false; save(); render(); }
+});
+document.addEventListener("change",e=>{
+  if(e.target&&e.target.id==="micChk"){
+    P.mic=e.target.checked;
+    const n=document.getElementById("live"); if(n) n.hidden=!P.mic;
+    if(P.mic&&!(window.SpeechRecognition||window.webkitSpeechRecognition)){
+      if(n){ n.hidden=false; n.textContent=S.lang==="ne"?"यो ब्राउजरमा लाइभ ट्रान्सक्रिप्ट समर्थित छैन। टाइमर अझै काम गर्छ।":"Live transcript is not supported in this browser. The timer still works."; }
+    }
+  }
+});
+
+applyTheme();
+render();
+</script>
+</body>
+</html>
