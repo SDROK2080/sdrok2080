@@ -1,1577 +1,873 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<div class="calendar-header">
-    <img src="KMC-HSSD Academic Calendar Poster.png" alt="KMC-HSSD Calendar" class="KMC-HSSD Calendar">
-</div>
-    <style> 
-.calendar-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#12306B">
+<title>KMC-HSSD Academic Calendar 2027/28</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,700&family=Mukta:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDF1F7; --surface:#FFFFFF; --surface-2:#F4F7FB; --ink:#14213A; --muted:#55627A; --line:#D3DBE8;
+  --navy:#12306B; --navy-deep:#0B2150; --gold:#C4912A; --gold-soft:#FAF1DA; --link:#12306B;
+  --c-academic:#2B5FBF; --c-research:#B8841C; --c-holiday:#B33A2B; --c-community:#2A8556;
+  --shadow:0 1px 2px rgba(11,33,80,.08),0 12px 28px -16px rgba(11,33,80,.35);
+  --serif:'Literata',Georgia,'Times New Roman',serif;
+  --sans:'Mukta','Segoe UI',system-ui,-apple-system,sans-serif;
 }
-
-.kmc-logo {
-    width: 70px;
-    height: 70px;
-    object-fit: contain;
+[data-theme="dark"]{
+  --paper:#08121F; --surface:#0F1E38; --surface-2:#142849; --ink:#E7EDF8; --muted:#9EACC6; --line:#233657;
+  --gold:#E0B04A; --gold-soft:#2A2412; --link:#9DBEFF;
+  --c-academic:#6A9BEF; --c-research:#E0B04A; --c-holiday:#EE7B6B; --c-community:#58C48C;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 28px -16px rgba(0,0,0,.7);
 }
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);font-size:17px;line-height:1.65;color:var(--ink);background:var(--paper);-webkit-text-size-adjust:100%}
+a{color:var(--link)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:4px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:12px;top:-60px;background:var(--navy);color:#fff;padding:10px 16px;border-radius:8px;z-index:100;text-decoration:none}
+.skip:focus{top:12px}
+.page{max-width:1240px;margin:0 auto;padding:16px 20px 0}
 
-.calendar-title {
-    text-align: left;
+/* ---------- Banner ---------- */
+.banner{border-radius:22px;overflow:hidden;border-bottom:5px solid var(--gold);box-shadow:var(--shadow);background:var(--navy)}
+.banner img{display:block;width:100%;height:auto;aspect-ratio:1863/844;object-fit:cover}
+
+/* ---------- Intro ---------- */
+.intro{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:36px;padding:36px 4px 28px;align-items:start}
+.intro h1{font-family:var(--serif);font-weight:700;font-size:clamp(1.8rem,3.6vw,2.6rem);line-height:1.15;letter-spacing:-.01em;color:var(--navy);max-width:20ch}
+[data-theme="dark"] .intro h1{color:var(--ink)}
+.intro .dept{margin-top:12px;color:var(--muted);max-width:60ch}
+.nextup{margin-top:22px;display:flex;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--cc,var(--navy));border-radius:12px;padding:14px 18px;max-width:560px;box-shadow:var(--shadow)}
+.nextup .when{font-family:var(--serif);font-weight:700;font-size:1.5rem;line-height:1.1;min-width:84px;text-align:center;color:var(--cc,var(--navy))}
+.nextup .when small{display:block;font-family:var(--sans);font-weight:500;font-size:.8rem;color:var(--muted);margin-top:2px}
+.nextup b{display:block;font-weight:700;line-height:1.3}
+.nextup span{font-size:.92rem;color:var(--muted)}
+.year{background:var(--navy-deep);color:#EAF0FB;border-radius:16px;padding:22px 24px;box-shadow:var(--shadow)}
+.year h2{font-family:var(--serif);font-size:1.15rem;font-weight:700;margin-bottom:8px;color:#fff}
+.year dl>div{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-top:1px solid rgba(255,255,255,.14)}
+.year dt{color:#B9C7E3}
+.year dd{font-weight:600;text-align:right}
+.year dd.gold{color:#F0C766}
+
+/* ---------- Timeline ---------- */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
+.glance{padding:24px 24px 18px;margin-bottom:28px}
+.glance-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.glance h2{font-family:var(--serif);font-size:1.35rem;line-height:1.2}
+.glance p.sub{color:var(--muted);font-size:.95rem}
+.legend{display:flex;gap:8px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:3px 14px 3px 10px;font-size:.9rem;font-weight:500;line-height:1.5}
+.chip i{width:11px;height:11px;border-radius:50%;background:var(--cc)}
+.chip[aria-pressed="false"]{opacity:.55;text-decoration:line-through}
+.chip:hover{border-color:var(--cc)}
+.cat-academic{--cc:var(--c-academic)}.cat-research{--cc:var(--c-research)}.cat-holiday{--cc:var(--c-holiday)}.cat-community{--cc:var(--c-community)}
+.tl-scroll{overflow-x:auto;padding:8px 0 4px;margin-top:6px}
+.tl{position:relative;height:150px;min-width:880px;margin:0 14px}
+.tl-line{position:absolute;left:0;right:0;bottom:38px;height:3px;background:var(--line);border-radius:2px}
+.tl-band{position:absolute;bottom:38px;height:3px;background:var(--navy);border-radius:2px}
+[data-theme="dark"] .tl-band{background:var(--gold)}
+.tl-bandlabel{position:absolute;bottom:14px;font-size:.78rem;color:var(--muted);white-space:nowrap}
+.tl-tick{position:absolute;bottom:0;transform:translateX(-50%);font-size:.8rem;color:var(--muted);text-align:center;line-height:1.2;padding-top:4px}
+.tl-tick::before{content:"";position:absolute;left:50%;top:-8px;width:1px;height:8px;background:var(--line)}
+.tl-tick small{display:block;font-size:.68rem;opacity:.8}
+.tl-dot{position:absolute;bottom:calc(38px + var(--lane)*30px);width:16px;height:16px;border-radius:50%;border:3px solid var(--surface);background:var(--cc);transform:translate(-50%,50%);padding:0;box-shadow:0 0 0 1px var(--cc)}
+.tl-dot::before{content:"";position:absolute;left:50%;top:50%;width:2px;height:calc(var(--lane)*30px);transform:translateX(-50%);background:var(--cc);opacity:.4;z-index:-1}
+.tl-dot:hover,.tl-dot:focus-visible{transform:translate(-50%,50%) scale(1.3)}
+.tl-today{position:absolute;bottom:38px;width:2px;height:90px;background:var(--gold)}
+.tl-today span{position:absolute;top:-4px;left:6px;font-size:.75rem;font-weight:600;color:var(--gold)}
+.tl-read{margin-top:6px;min-height:1.7em;font-weight:600;color:var(--navy)}
+[data-theme="dark"] .tl-read{color:var(--ink)}
+
+/* ---------- Tabs ---------- */
+.tabbar{position:sticky;top:0;z-index:30;background:var(--paper);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;margin:0 -20px 28px;padding:0 20px}
+.tabs{display:flex;gap:2px;overflow-x:auto;flex:1;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{background:none;border:0;border-bottom:4px solid transparent;padding:14px 16px 10px;font-weight:600;white-space:nowrap;color:var(--muted)}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--pc,var(--navy))}
+.tab-sep{width:1px;background:var(--line);margin:10px 8px;flex:none}
+.theme-btn{flex:none;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--surface);font-size:1.1rem;line-height:1}
+.p-learn{--pc:#2E8B57}.p-research{--pc:#2B6FD6}.p-innovate{--pc:#D97A0B}.p-collaborate{--pc:#C2336E}.p-impact{--pc:#7B3FB5}
+
+/* ---------- Layout ---------- */
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:32px;align-items:start;padding-bottom:56px}
+.panel{background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--pc,var(--navy));border-radius:18px;padding:34px 38px 40px;box-shadow:var(--shadow)}
+.panel[hidden]{display:none}
+.panel>h2{font-family:var(--serif);font-weight:700;font-size:clamp(1.5rem,2.6vw,2rem);line-height:1.2;margin-bottom:18px;max-width:28ch}
+.prose{max-width:70ch}
+.prose p{margin-bottom:14px}
+.prose h3{font-family:var(--serif);font-size:1.25rem;line-height:1.3;margin:30px 0 12px;color:var(--navy)}
+[data-theme="dark"] .prose h3{color:var(--gold)}
+.prose ul{margin:0 0 16px 22px}
+.prose li{margin-bottom:7px}
+.prose li::marker{color:var(--pc,var(--navy))}
+.wide{max-width:none}
+.callout{background:var(--gold-soft);border-left:5px solid var(--gold);border-radius:6px 12px 12px 6px;padding:16px 20px;margin:22px 0}
+.callout ul{margin:8px 0 0 20px}
+.kpi{border:1px dashed var(--pc,var(--navy));border-radius:12px;padding:14px 18px;background:var(--surface-2)}
+.steps{list-style:none;margin:0 0 16px;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 18px;counter-reset:s}
+.steps li{counter-increment:s;display:flex;gap:12px;align-items:baseline;margin:0;padding:10px 14px;background:var(--surface-2);border-radius:10px}
+.steps li::before{content:counter(s);flex:none;width:26px;height:26px;border-radius:50%;background:var(--pc);color:#fff;font-weight:700;font-size:.85rem;display:grid;place-items:center;transform:translateY(2px)}
+.event-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin:16px 0 8px}
+.event-card{background:var(--surface-2);border:1px solid var(--line);border-top:4px solid var(--pc,var(--navy));border-radius:10px;padding:14px 16px}
+.event-card-date{display:inline-block;font-size:.82rem;font-weight:700;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:0 8px;margin-bottom:8px}
+.event-card-title{font-weight:700;line-height:1.35}
+.event-card-title a{text-decoration:none;color:var(--ink);background:linear-gradient(var(--pc),var(--pc)) 0 100%/0 2px no-repeat;transition:background-size .2s}
+.event-card-title a:hover{background-size:100% 2px}
+.event-card-desc{font-size:.92rem;color:var(--muted);margin-top:4px;line-height:1.5}
+
+/* ---------- Calendar ---------- */
+.cal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.cal-nav{display:flex;align-items:center;gap:10px}
+.cal-nav h2{font-family:var(--serif);font-size:1.6rem;min-width:11ch;text-align:center}
+.nbtn{width:42px;height:42px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);font-size:1.2rem;line-height:1}
+.nbtn:hover:not(:disabled){background:var(--navy);color:#fff;border-color:var(--navy)}
+.nbtn:disabled{opacity:.35;cursor:not-allowed}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.dow{font-weight:700;font-size:.85rem;color:var(--muted);text-align:center;padding:4px 0}
+.cell{min-height:92px;border:1px solid var(--line);border-radius:8px;padding:6px 8px;background:var(--surface);display:flex;flex-direction:column;gap:4px;text-align:left;font-size:.95rem}
+.cell .n{font-weight:600;font-size:.9rem}
+.cell.off{background:var(--surface-2);color:var(--muted);opacity:.7}
+.cell.today{outline:2px solid var(--gold);outline-offset:-2px}
+button.cell.has{border-left:5px solid var(--cc);background:color-mix(in srgb,var(--cc) 9%,var(--surface))}
+button.cell.has:hover{border-color:var(--cc);box-shadow:0 4px 14px -6px var(--cc)}
+.cell .t{font-size:.78rem;font-weight:600;line-height:1.25;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.cell .d{display:none;width:9px;height:9px;border-radius:50%;background:var(--cc)}
+.empty{color:var(--muted);padding:18px 0}
+
+/* ---------- List ---------- */
+.mgroup{margin-bottom:26px}
+.mgroup h3{font-family:var(--serif);font-size:1.15rem;padding-bottom:6px;border-bottom:2px solid var(--navy);margin-bottom:6px}
+[data-theme="dark"] .mgroup h3{border-color:var(--gold)}
+.row{display:grid;grid-template-columns:62px minmax(0,1fr) auto;gap:16px;align-items:center;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:12px 6px;border-left:4px solid var(--cc);padding-left:14px;margin:4px 0}
+.row:hover{background:var(--surface-2)}
+.row .dn{font-family:var(--serif);font-weight:700;font-size:1.6rem;line-height:1;text-align:center;color:var(--cc)}
+.row .dn small{display:block;font-family:var(--sans);font-size:.75rem;font-weight:500;color:var(--muted);margin-top:2px}
+.row b{display:block;line-height:1.35}
+.row span.ds{display:block;font-size:.9rem;color:var(--muted);line-height:1.45;margin-top:2px}
+.tag{font-size:.8rem;font-weight:600;color:var(--cc);border:1px solid var(--cc);border-radius:999px;padding:1px 12px}
+
+/* ---------- Sidebar ---------- */
+aside.side{position:sticky;top:78px;padding:22px 22px 14px}
+aside.side h2{font-family:var(--serif);font-size:1.2rem;margin-bottom:10px}
+.up{list-style:none}
+.up button{display:block;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:11px 4px 11px 12px;border-left:4px solid var(--cc);margin-top:-1px}
+.up button:hover{background:var(--surface-2)}
+.up .dt{font-size:.82rem;font-weight:700;color:var(--cc)}
+.up .tt{display:block;font-weight:600;line-height:1.35}
+
+/* ---------- Dialog ---------- */
+dialog{border:0;border-radius:18px;padding:0;max-width:480px;width:calc(100% - 32px);background:var(--surface);color:var(--ink);box-shadow:0 30px 80px rgba(0,0,0,.4);margin:auto}
+dialog::backdrop{background:rgba(6,16,36,.6)}
+dialog[open]{animation:pop .22s ease-out}
+@keyframes pop{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
+.dlg-top{height:8px;background:var(--cc)}
+.dlg-body{padding:24px 26px 26px}
+.dlg-date{font-weight:700;color:var(--muted);font-size:.95rem}
+.dlg-body h2{font-family:var(--serif);font-size:1.5rem;line-height:1.25;margin:4px 0 10px}
+.dlg-body p{margin-bottom:12px}
+.dlg-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:12px;font-size:.92rem;color:var(--muted)}
+.dlg-close{margin-top:18px;background:var(--navy);color:#fff;border:0;border-radius:10px;padding:9px 22px;font-weight:600}
+.dlg-close:hover{background:var(--navy-deep)}
+
+/* ---------- Footer ---------- */
+footer{background:var(--navy-deep);color:#C9D5EC;border-top:5px solid var(--gold);margin-top:8px}
+.foot{max-width:1240px;margin:0 auto;padding:30px 20px;display:grid;gap:6px;font-size:.95rem}
+footer a{color:#F0C766}
+footer .dev{color:#fff;font-weight:600;margin-top:8px}
+
+
+/* ---------- Detail dialog additions ---------- */
+dialog{max-width:560px}
+.dlg-body .tag{display:inline-block;margin-bottom:8px}
+.dlg-facts{margin:14px 0 4px}
+.dlg-facts>div{display:grid;grid-template-columns:116px minmax(0,1fr);gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.dlg-facts dt{color:var(--muted);font-size:.9rem;font-weight:600}
+.dlg-facts dd{overflow-wrap:anywhere;line-height:1.5}
+.dlg-facts small{display:block;color:var(--muted)}
+.lnk{background:none;border:0;padding:0;color:var(--link);text-decoration:underline;text-underline-offset:3px;font-weight:600;text-align:left}
+.dlg-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.dlg-actions [hidden]{display:none!important}
+.dlg-actions .dlg-close{margin-top:0;background:transparent;color:var(--ink);border:1px solid var(--line)}
+.dlg-actions .dlg-close:hover{background:var(--surface-2)}
+.dlg-open{display:inline-block;background:var(--gold);color:#1B1400;border-radius:10px;padding:9px 22px;font-weight:700;text-decoration:none}
+.dlg-open:hover{filter:brightness(1.08)}
+.dlg-copy{background:var(--navy);color:#fff;border:0;border-radius:10px;padding:9px 20px;font-weight:600}
+.event-card{cursor:pointer;transition:box-shadow .15s,transform .15s}
+.event-card:hover{box-shadow:0 8px 20px -12px var(--pc);transform:translateY(-2px)}
+.card-hint{display:block;margin-top:8px;font-size:.82rem;font-weight:600;color:var(--pc)}
+@media (max-width:680px){.dlg-facts>div{grid-template-columns:1fr;gap:2px}}
+
+/* ---------- Responsive ---------- */
+@media (max-width:1040px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  aside.side{position:static}
+  .intro{grid-template-columns:1fr;gap:24px}
 }
-
-.calendar-title h1 {
-    margin: 0;
-    font-size: 28px;
+@media (max-width:680px){
+  body{font-size:16px}
+  .page{padding:10px 12px 0}
+  .tabbar{margin:0 -12px 20px;padding:0 12px}
+  .panel{padding:24px 18px 28px;border-radius:14px}
+  .steps{grid-template-columns:1fr}
+  .cell{min-height:58px;padding:4px;align-items:center}
+  .cell .t{display:none}
+  .cell.has .d{display:block}
+  button.cell.has{border-left-width:1px}
+  .cal-grid{gap:3px}
+  .row{grid-template-columns:50px minmax(0,1fr);}
+  .row .tag{grid-column:2;justify-self:start}
+  .nextup{flex-direction:column;align-items:flex-start;gap:8px}
+  .nextup .when{text-align:left}
 }
-
-.calendar-title p {
-    margin: 5px 0 0;
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
-.calendar-title {
-    background-color: #0b1f3a;
-    padding: 15px 25px;
-    border-radius: 10px;
+@media print{
+  .tabbar,aside.side,.theme-btn,.cal-nav .nbtn,.legend,.dlg-close{display:none!important}
+  body{background:#fff;color:#000}
+  .card,.panel{box-shadow:none}
+  .layout{display:block}
 }
-
-.calendar-title h1 {
-    color: white;
-    margin: 0;
-}
-.calendar-title p {
-    color: white;
-    margin: 0;
-}
-
-.college-building {
-    width: 100%;
-    text-align: center;
-    margin: 15px 0 25px;
-}
-
-.college-building img {
-    width: 90%;
-    max-width: 800px;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 12px;
-    display: block;
-    margin: 0 auto;
-}
-
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary-blue: #1B3B6F;
-            --secondary-burgundy: #8B1538;
-            --accent-gold: #D4AF37;
-            --light-blue: #E8F1F8;
-            --text-dark: #1a1a1a;
-            --text-light: #ffffff;
-            --border-color: #ddd;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-burgundy) 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: var(--text-dark);
-        }
-
-        .app-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-        }
-
-        /* ===== HEADER ===== */
-        .app-header {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-burgundy) 100%);
-            color: var(--text-light);
-            padding: 40px 20px;
-            text-align: center;
-        }
-
-        .app-header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .app-header p {
-            font-size: 1.1em;
-            opacity: 0.95;
-            margin: 5px 0;
-        }
-
-        /* ===== THEME PILLARS (TABS) ===== */
-        .theme-pillars {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 25px;
-            flex-wrap: wrap;
-        }
-
-        .pillar-btn {
-            background: rgba(212, 175, 55, 0.2);
-            padding: 12px 20px;
-            border-radius: 25px;
-            border: 2px solid var(--accent-gold);
-            font-size: 0.95em;
-            font-weight: 600;
-            color: var(--text-light);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .pillar-btn:hover {
-            background: rgba(212, 175, 55, 0.4);
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
-        }
-
-        .pillar-btn.active {
-            background: var(--accent-gold);
-            color: var(--primary-blue);
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
-            transform: scale(1.1);
-        }
-
-        /* ===== CONTROLS ===== */
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            background: var(--light-blue);
-            border-bottom: 2px solid var(--primary-blue);
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .month-selector {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        button {
-            background: var(--primary-blue);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            font-size: 1em;
-        }
-
-        button:hover {
-            background: var(--secondary-burgundy);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        .current-month {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: var(--primary-blue);
-            min-width: 250px;
-            text-align: center;
-        }
-
-        .view-toggle {
-            display: flex;
-            gap: 10px;
-        }
-
-        .view-btn {
-            padding: 8px 16px;
-            font-size: 0.9em;
-        }
-
-        .view-btn.active {
-            background: var(--secondary-burgundy);
-            color: white;
-        }
-
-        /* ===== MAIN CONTENT ===== */
-        .content {
-            display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 20px;
-            padding: 20px;
-            min-height: 500px;
-        }
-
-        /* ===== CONTENT SECTIONS ===== */
-        .content-section {
-            display: none;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        .content-section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .section-title {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-size: 2em;
-            color: var(--primary-blue);
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid var(--accent-gold);
-        }
-
-        .section-title-icon {
-            font-size: 2.5em;
-        }
-
-        .section-content {
-            line-height: 1.8;
-        }
-
-        .section-content h3 {
-            color: var(--secondary-burgundy);
-            margin-top: 20px;
-            margin-bottom: 12px;
-            font-size: 1.4em;
-        }
-
-        .section-content p {
-            margin-bottom: 15px;
-            color: #333;
-            text-align: justify;
-        }
-
-        .section-content ul, .section-content ol {
-            margin-left: 30px;
-            margin-bottom: 15px;
-        }
-
-        .section-content li {
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .highlight-card {
-            background: var(--light-blue);
-            border-left: 5px solid var(--accent-gold);
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 8px;
-        }
-
-        .highlight-card strong {
-            color: var(--secondary-burgundy);
-        }
-
-        .event-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .event-card {
-            background: linear-gradient(135deg, var(--light-blue) 0%, white 100%);
-            border: 2px solid var(--primary-blue);
-            border-radius: 8px;
-            padding: 15px;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        .event-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(27, 59, 111, 0.2);
-            border-color: var(--secondary-burgundy);
-        }
-
-        .event-card-title {
-            font-weight: bold;
-            color: var(--primary-blue);
-            font-size: 1.05em;
-            margin-bottom: 8px;
-        }
-
-        .event-card-date {
-            font-size: 0.9em;
-            color: var(--secondary-burgundy);
-            margin-bottom: 5px;
-        }
-
-        .event-card-desc {
-            font-size: 0.9em;
-            color: #666;
-            line-height: 1.5;
-        }
-
-        .learn-icon { color: #4CAF50; }
-        .research-icon { color: #2196F3; }
-        .innovate-icon { color: #FF9800; }
-        .collaborate-icon { color: #E91E63; }
-        .impact-icon { color: #9C27B0; }
-
-        /* ===== CALENDAR VIEW ===== */
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
-        }
-
-        .day-header {
-            background: var(--primary-blue);
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-weight: bold;
-            border-radius: 5px;
-            font-size: 0.95em;
-        }
-
-        .calendar-day {
-            aspect-ratio: 1;
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            padding: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            flex-direction: column;
-            background: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .calendar-day:hover {
-            border-color: var(--secondary-burgundy);
-            box-shadow: 0 4px 12px rgba(139, 21, 56, 0.2);
-            transform: translateY(-3px);
-        }
-
-        .calendar-day.other-month {
-            background: #f9f9f9;
-            color: #999;
-        }
-
-        .calendar-day.has-event {
-            border-left: 4px solid var(--accent-gold);
-            background: linear-gradient(135deg, white 0%, var(--light-blue) 100%);
-        }
-
-        .day-number {
-            font-weight: bold;
-            color: var(--primary-blue);
-            margin-bottom: 5px;
-            font-size: 0.95em;
-        }
-
-        .event-indicator {
-            font-size: 0.7em;
-            color: var(--secondary-burgundy);
-            font-weight: 600;
-            margin-top: 3px;
-        }
-
-        /* ===== SIDEBAR ===== */
-        .sidebar {
-            background: var(--light-blue);
-            border-radius: 8px;
-            padding: 20px;
-            border: 2px solid var(--primary-blue);
-            height: fit-content;
-        }
-
-        .sidebar h3 {
-            color: var(--primary-blue);
-            margin-bottom: 15px;
-            font-size: 1.1em;
-            border-bottom: 2px solid var(--secondary-burgundy);
-            padding-bottom: 10px;
-        }
-
-        .event-list {
-            list-style: none;
-        }
-
-        .event-item {
-            background: white;
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            border-left: 4px solid var(--secondary-burgundy);
-            font-size: 0.9em;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .event-item:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transform: translateX(5px);
-        }
-
-        .event-date {
-            font-weight: bold;
-            color: var(--primary-blue);
-            font-size: 0.85em;
-        }
-
-        .event-title {
-            color: var(--text-dark);
-            margin-top: 3px;
-            font-weight: 600;
-        }
-
-        .quick-info {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            border: 2px solid var(--accent-gold);
-        }
-
-        .quick-info h4 {
-            color: var(--primary-blue);
-            margin-bottom: 10px;
-        }
-
-        .info-item {
-            font-size: 0.9em;
-            margin: 8px 0;
-            padding: 5px 0;
-            border-bottom: 1px solid rgba(27, 59, 111, 0.2);
-        }
-
-        .info-item:last-child {
-            border-bottom: none;
-        }
-
-        .info-label {
-            font-weight: bold;
-            color: var(--secondary-burgundy);
-        }
-
-        /* ===== LIST VIEW ===== */
-        .list-view {
-            display: none;
-        }
-
-        .list-view.show {
-            display: block;
-        }
-
-        .events-by-month {
-            margin-bottom: 30px;
-        }
-
-        .events-by-month h3 {
-            background: var(--primary-blue);
-            color: white;
-            padding: 12px 15px;
-            border-radius: 5px;
-            margin-bottom: 12px;
-        }
-
-        .event-row {
-            display: grid;
-            grid-template-columns: 150px 1fr 150px;
-            gap: 15px;
-            padding: 12px;
-            border-bottom: 1px solid var(--border-color);
-            align-items: center;
-        }
-
-        .event-row:hover {
-            background: var(--light-blue);
-        }
-
-        .event-date-col {
-            font-weight: bold;
-            color: var(--secondary-burgundy);
-        }
-
-        .event-title-col {
-            color: var(--text-dark);
-        }
-
-        .event-category-col {
-            text-align: right;
-        }
-
-        /* ===== MODAL ===== */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            animation: fadeIn 0.3s;
-        }
-
-        .modal.show {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: slideIn 0.3s;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .modal-close {
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            color: var(--primary-blue);
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        .modal-close:hover {
-            color: var(--secondary-burgundy);
-        }
-
-        .modal h2 {
-            color: var(--primary-blue);
-            margin-bottom: 15px;
-            clear: both;
-        }
-
-        .modal-date {
-            font-size: 1.1em;
-            color: var(--secondary-burgundy);
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .modal-event {
-            background: var(--light-blue);
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border-left: 4px solid var(--accent-gold);
-        }
-
-        .modal-event-title {
-            font-weight: bold;
-            color: var(--primary-blue);
-            font-size: 1.05em;
-        }
-
-        .modal-event-desc {
-            color: var(--text-dark);
-            margin-top: 8px;
-            line-height: 1.5;
-        }
-
-        .modal-event-category {
-            display: inline-block;
-            background: var(--secondary-burgundy);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 3px;
-            font-size: 0.8em;
-            margin-top: 8px;
-        }
-
-        /* ===== FOOTER ===== */
-        .footer {
-            background: var(--light-blue);
-            padding: 20px;
-            text-align: center;
-            border-top: 2px solid var(--primary-blue);
-            font-size: 0.9em;
-            color: #666;
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 1024px) {
-            .content {
-                grid-template-columns: 1fr;
-            }
-
-            .calendar-day {
-                aspect-ratio: auto;
-                min-height: 80px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .app-header h1 {
-                font-size: 1.8em;
-            }
-
-            .theme-pillars {
-                gap: 8px;
-            }
-
-            .pillar-btn {
-                padding: 8px 12px;
-                font-size: 0.8em;
-            }
-
-            .controls {
-                flex-direction: column;
-            }
-
-            .month-selector {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .current-month {
-                min-width: auto;
-                width: 100%;
-            }
-
-            .calendar-grid {
-                grid-template-columns: repeat(7, 1fr);
-                gap: 5px;
-            }
-
-            .calendar-day {
-                padding: 5px;
-                font-size: 0.8em;
-            }
-
-            .day-number {
-                font-size: 0.85em;
-            }
-
-            .event-row {
-                grid-template-columns: 1fr;
-                gap: 5px;
-            }
-
-            .event-category-col {
-                text-align: left;
-            }
-
-            .section-title {
-                font-size: 1.5em;
-            }
-
-            .event-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+</style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- HEADER -->
-        <div class="app-header">
-            <h2>Kapilvastu Multiple Campus (KMC), Department of Humanities & Social Sciences (KMC-HSSD)</h2>
-            <p style="font-size: 1em; margin-top: 10px;"> <h3><strong>Academic Excellence & Research Ecosystem</strong></h3></p>
-            
-            <!-- INTERACTIVE THEME PILLARS -->
-            <div class="theme-pillars">
-                <button class="pillar-btn active" data-pillar="learn" onclick="switchPillar(event, 'learn')">
-                    📚 LEARN
-                </button>
-                <button class="pillar-btn" data-pillar="research" onclick="switchPillar(event, 'research')">
-                    🔬 RESEARCH
-                </button>
-                <button class="pillar-btn" data-pillar="innovate" onclick="switchPillar(event, 'innovate')">
-                    💡 INNOVATE
-                </button>
-                <button class="pillar-btn" data-pillar="collaborate" onclick="switchPillar(event, 'collaborate')">
-                    🤝 COLLABORATE
-                </button>
-                <button class="pillar-btn" data-pillar="impact" onclick="switchPillar(event, 'impact')">
-                    🌟 CREATE IMPACT
-                </button>
-            </div>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="page">
+  <header>
+    <figure class="banner">
+      <img src="KMC-HSSD%20Academic%20Calendar%20Poster.png" width="1863" height="844" fetchpriority="high"
+           alt="Academic Calendar, Kapilvastu Multiple Campus KMC-HSSD: campus building with the Nepal flag"
+           onerror="this.closest('figure').hidden=true">
+    </figure>
+  </header>
+
+  <section class="intro" aria-labelledby="h1">
+    <div>
+      <h1 id="h1">Academic Excellence &amp; Research Ecosystem</h1>
+      <p class="dept">Kapilvastu Multiple Campus (KMC), Department of Humanities &amp; Social Sciences (KMC-HSSD), Taulihawa, Nepal</p>
+      <div class="nextup" id="nextUp" aria-live="polite"></div>
+    </div>
+    <div class="year">
+      <h2>The 2027/28 academic year</h2>
+      <dl>
+        <div><dt>Academic year</dt><dd>2027/28</dd></div>
+        <div><dt>Classes begin</dt><dd>Sep 18, 2027</dd></div>
+        <div><dt>Classes end</dt><dd>May 15, 2028</dd></div>
+        <div><dt>Exam forms due</dt><dd class="gold">Mar 25, 2028</dd></div>
+        <div><dt>Results expected</dt><dd>Sep 2028</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="card glance" aria-labelledby="glanceT">
+    <div class="glance-head">
+      <div>
+        <h2 id="glanceT">The year at a glance</h2>
+        <p class="sub">Select a marker to see what happens that day. Use the colours to show or hide event types.</p>
+      </div>
+      <div class="legend" role="group" aria-label="Filter by event type"></div>
+    </div>
+    <div class="tl-scroll"><div class="tl" id="tl"></div></div>
+    <p class="tl-read" id="tlRead" aria-live="polite"></p>
+  </section>
+
+  <nav class="tabbar" aria-label="Calendar sections">
+    <div class="tabs" role="tablist" id="tabs">
+      <button class="tab p-learn" role="tab" id="t-learn" data-tab="learn" aria-controls="learn" aria-selected="true">📚 Learn</button>
+      <button class="tab p-research" role="tab" id="t-research" data-tab="research" aria-controls="research" aria-selected="false" tabindex="-1">🔬 Research</button>
+      <button class="tab p-innovate" role="tab" id="t-innovate" data-tab="innovate" aria-controls="innovate" aria-selected="false" tabindex="-1">💡 Innovate</button>
+      <button class="tab p-collaborate" role="tab" id="t-collaborate" data-tab="collaborate" aria-controls="collaborate" aria-selected="false" tabindex="-1">🤝 Collaborate</button>
+      <button class="tab p-impact" role="tab" id="t-impact" data-tab="impact" aria-controls="impact" aria-selected="false" tabindex="-1">🌟 Create impact</button>
+      <span class="tab-sep" aria-hidden="true"></span>
+      <button class="tab" role="tab" id="t-calendarPanel" data-tab="calendarPanel" aria-controls="calendarPanel" aria-selected="false" tabindex="-1">📅 Calendar</button>
+      <button class="tab" role="tab" id="t-listPanel" data-tab="listPanel" aria-controls="listPanel" aria-selected="false" tabindex="-1">📋 List</button>
+    </div>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch to dark theme">◐</button>
+  </nav>
+
+  <div class="layout" id="main">
+    <div>
+
+      <!-- LEARN -->
+      <section class="panel p-learn" id="learn" role="tabpanel" aria-labelledby="t-learn">
+        <h2>Build knowledge through critical learning</h2>
+        <div class="prose">
+          <p>The Learn pillar focuses on comprehensive knowledge building through critical reading, classroom engagement, interdisciplinary learning, and digital literacy. Students engage with course content across six programs.</p>
+
+          <h3>🎓 Academic programs (B.A.)</h3>
+          <ul>
+            <li><strong>Nepali</strong> – Language, Literature &amp; Culture</li>
+            <li><strong>English</strong> – Literature, Composition &amp; Linguistics</li>
+            <li><strong>Sociology</strong> – Social Theory &amp; Community Studies</li>
+            <li><strong>History &amp; Culture</strong> – Historical Studies &amp; Cultural Heritage</li>
+            <li><strong>Economics</strong> – Microeconomics, Macroeconomics &amp; Statistics</li>
+            <li><strong>Rural Development</strong> – Community Development &amp; Sustainable Development</li>
+          </ul>
+
+          <h3>📖 Learning outcomes</h3>
+          <ul>
+            <li>Master discipline-specific knowledge and concepts</li>
+            <li>Develop critical thinking and analytical skills</li>
+            <li>Engage with diverse academic perspectives</li>
+            <li>Build digital literacy and information retrieval skills</li>
+            <li>Achieve 90% attendance and assignment completion</li>
+          </ul>
+
+          <div class="callout">
+            <strong>Key learning activities</strong>
+            <ul>
+              <li>Interactive classroom sessions (Sep–May)</li>
+              <li>Assigned readings and critical reviews</li>
+              <li>Collaborative group discussions</li>
+              <li>Mid-term formative assessments (Nov 18–28)</li>
+              <li>Digital literacy seminars (Sep–Oct)</li>
+              <li>Academic writing workshops (Oct)</li>
+            </ul>
+          </div>
+
+          <h3>📊 Learning progress tracking</h3>
+          <p class="kpi"><strong>Target: ≥90% assignment completion</strong><br>Regular feedback from instructors ensures continuous improvement and mastery of content.</p>
         </div>
+      </section>
 
-        <!-- CONTROLS -->
-        <div class="controls">
-            <div class="month-selector">
-                <button onclick="previousMonth()">← Previous</button>
-                <div class="current-month" id="currentMonth">September 2027</div>
-                <button onclick="nextMonth()">Next →</button>
-            </div>
-            <div class="view-toggle">
-                <button class="view-btn active" onclick="switchView(event, 'calendar')">📅 Calendar</button>
-                <button class="view-btn" onclick="switchView(event, 'list')">📋 List</button>
-            </div>
+      <!-- RESEARCH -->
+      <section class="panel p-research" id="research" role="tabpanel" aria-labelledby="t-research" hidden>
+        <h2>Generate evidence-based understanding</h2>
+        <div class="prose wide">
+          <p style="max-width:70ch">The Research pillar emphasizes structured research development from problem identification through rigorous academic writing. All B.A. students engage in original research as a core learning outcome.</p>
+
+          <h3>📋 The 8-milestone research cycle</h3>
+          <ol class="steps">
+            <li><span><strong>Idea generation</strong> – Personal &amp; departmental interests</span></li>
+            <li><span><strong>Problem identification</strong> – Define research gap &amp; significance</span></li>
+            <li><span><strong>Literature review</strong> – Comprehensive scholarship review</span></li>
+            <li><span><strong>Question formulation</strong> – Clear research questions &amp; hypotheses</span></li>
+            <li><span><strong>Method design</strong> – Research design &amp; data collection</span></li>
+            <li><span><strong>Data collection</strong> – Empirical or textual data gathering</span></li>
+            <li><span><strong>Analysis &amp; interpretation</strong> – Critical analysis &amp; synthesis</span></li>
+            <li><span><strong>Findings presentation</strong> – Written thesis, poster, or oral presentation</span></li>
+          </ol>
+
+          <h3>📅 Research timeline 2027/28</h3>
+          <div class="event-grid">
+            <div class="event-card"><div class="event-card-date">Oct 5, 2027</div><div class="event-card-title"><a href="https://forms.gle/6tAzMEoLZfXwR5Rq7">Form 1: Student Profile</a></div><div class="event-card-desc">Research interest identification</div></div>
+            <div class="event-card"><div class="event-card-date">Oct 20, 2027</div><div class="event-card-title"><a href="https://forms.gle/mnG2icKv8sqNaUeJ8">Form 2: Topic Selection</a></div><div class="event-card-desc">Problem identification</div></div>
+            <div class="event-card"><div class="event-card-date">Dec 31, 2027</div><div class="event-card-title"><a href="https://forms.gle/ZmTSTkYxpmmJBU1V8">Form 3: Proposal Due</a></div><div class="event-card-desc">Full research proposal (3–5 pages)</div></div>
+            <div class="event-card"><div class="event-card-date">Jan–Feb 2028</div><div class="event-card-title"><a href="https://forms.gle/Ju2WqrTCjpvEUEdg9">Form 4: Progress</a></div><div class="event-card-desc">Monthly tracking reports</div></div>
+            <div class="event-card"><div class="event-card-date">Mar 31, 2028</div><div class="event-card-title"><a href="https://forms.gle/UqsLWLdRKcm8KyRL7">Form 5: Final Submission</a></div><div class="event-card-desc">Complete research &amp; evaluation</div></div>
+            <div class="event-card"><div class="event-card-date">Apr 2028</div><div class="event-card-title"><a href="https://forms.gle/XQHeTGbRWsvQyHXC6">Form 6: Research Dissemination</a></div><div class="event-card-desc">Public seminar &amp; community sharing</div></div>
+          </div>
+
+          <div class="callout" style="max-width:70ch"><strong>Research support:</strong> The Research Coordinator provides guidance on methodology, ethics, literature databases, and digital tools. Students can use KMC library resources and online databases (Google Scholar, JSTOR, ResearchGate).</div>
+
+          <h3>🎯 Research KPI</h3>
+          <p class="kpi" style="max-width:70ch"><strong>Target: 100% research participation</strong><br>All students submit research proposals, complete monthly tracking, and present findings.</p>
         </div>
+      </section>
 
-        <!-- MAIN CONTENT -->
-        <div class="content">
-            <!-- LEARN SECTION -->
-            <div class="content-section active" id="learn">
-                <div class="section-title">
-                    <span class="section-title-icon learn-icon">📚</span>
-                    <div>Build Knowledge Through Critical Learning</div>
-                </div>
-                <div class="section-content">
-                    <p>The LEARN pillar focuses on comprehensive knowledge building through critical reading, classroom engagement, interdisciplinary learning, and digital literacy. Students engage with course content across six programs:</p>
-                    
-                    <h3>🎓 Academic Programs (B.A.)</h3>
-                    <ul>
-                        <li><strong>Nepali</strong> – Language, Literature & Culture</li>
-                        <li><strong>English</strong> – Literature, Composition & Linguistics</li>
-                        <li><strong>Sociology</strong> – Social Theory & Community Studies</li>
-                        <li><strong>History & Culture</strong> – Historical Studies & Cultural Heritage</li>
-                        <li><strong>Economics</strong> – Microeconomics, Macroeconomics & Statistics</li>
-                        <li><strong>Rural Development</strong> – Community Development & Sustainable Development</li>
-                    </ul>
+      <!-- INNOVATE -->
+      <section class="panel p-innovate" id="innovate" role="tabpanel" aria-labelledby="t-innovate" hidden>
+        <h2>Create new possibilities and solutions</h2>
+        <div class="prose wide">
+          <p style="max-width:70ch">The Innovate pillar uses AI-assisted learning, digital humanities, creative problem-solving, technology integration, and entrepreneurial thinking to transform academic work.</p>
 
-                    <h3>📖 Learning Outcomes</h3>
-                    <ul>
-                        <li>Master discipline-specific knowledge and concepts</li>
-                        <li>Develop critical thinking and analytical skills</li>
-                        <li>Engage with diverse academic perspectives</li>
-                        <li>Build digital literacy and information retrieval skills</li>
-                        <li>Achieve 90% attendance and assignment completion</li>
-                    </ul>
+          <h3>🤖 AI &amp; digital tools for learning</h3>
+          <p>Students use approved tools responsibly:</p>
+          <ul style="max-width:70ch">
+            <li><strong>Literature discovery:</strong> Zotero, Mendeley, Google Scholar</li>
+            <li><strong>Qualitative analysis:</strong> NVivo, ATLAS.ti, MAXQDA</li>
+            <li><strong>Quantitative analysis:</strong> SPSS, Jamovi, R, Python</li>
+            <li><strong>Data visualization:</strong> Power BI, Tableau, Canva</li>
+            <li><strong>Generative AI:</strong> ChatGPT, Claude, Gemini (with transparency)</li>
+            <li><strong>Digital humanities:</strong> QGIS mapping, digital archives</li>
+            <li><strong>Writing support:</strong> Grammarly, Turnitin</li>
+          </ul>
 
-                    <div class="highlight-card">
-                        <strong>Key Learning Activities:</strong>
-                        <ul style="margin-top: 10px; margin-left: 15px;">
-                            <li>Interactive classroom sessions (Sep-May)</li>
-                            <li>Assigned readings and critical reviews</li>
-                            <li>Collaborative group discussions</li>
-                            <li>Mid-term formative assessments (Nov 18-28)</li>
-                            <li>Digital literacy seminars (Sep-Oct)</li>
-                            <li>Academic writing workshops (Oct)</li>
-                        </ul>
-                    </div>
+          <div class="callout" style="max-width:70ch"><strong>AI policy:</strong> "AI tools should support learning and research, not replace students' independent academic work. All use of generative AI must be transparently disclosed and cited."</div>
 
-                    <h3>📊 Learning Progress Tracking</h3>
-                    <p><strong>Target: ≥90% Assignment Completion</strong><br>
-                    Regular feedback from instructors ensures continuous improvement and mastery of content.</p>
-                </div>
-            </div>
+          <h3>🎤 Innovation workshops</h3>
+          <div class="event-grid">
+            <div class="event-card"><div class="event-card-date">Nov 2027</div><div class="event-card-title"><a href="https://ldi.njit.edu/sites/ldi/files/AI%20Literacy%20for%20Everyone_0.pdf">AI Literacy Seminar</a></div><div class="event-card-desc">Ethics, tools, best practices for AI use</div></div>
+            <div class="event-card"><div class="event-card-date">Dec 2027</div><div class="event-card-title"><a href="https://www.quirkos.com/learn-qualitative/workshops.html">Qualitative Analysis Workshop</a></div><div class="event-card-desc">NVivo/ATLAS.ti hands-on training</div></div>
+            <div class="event-card"><div class="event-card-date">Dec 2027</div><div class="event-card-title"><a href="https://www.uriux.com/quantitative-research-training-workshops/">Quantitative Analysis Workshop</a></div><div class="event-card-desc">SPSS &amp; Jamovi data analysis</div></div>
+            <div class="event-card"><div class="event-card-date">Feb 2028</div><div class="event-card-title"><a href="https://www.slideshare.net/slideshow/seminar-on-entreprenship/236807668">Entrepreneurship Seminar</a></div><div class="event-card-desc">Social innovation &amp; business ideas</div></div>
+          </div>
 
-            <!-- RESEARCH SECTION -->
-            <div class="content-section" id="research">
-                <div class="section-title">
-                    <span class="section-title-icon research-icon">🔬</span>
-                    <div>Generate Evidence-Based Understanding</div>
-                </div>
-                <div class="section-content">
-                    <p>The RESEARCH pillar emphasizes structured research development from problem identification through rigorous academic writing. All B.A. students engage in original research as a core learning outcome.</p>
+          <h3>💻 Digital projects</h3>
+          <p>Students engage in innovative projects:</p>
+          <ul style="max-width:70ch">
+            <li>Digital humanities research using QGIS mapping</li>
+            <li>Data visualization of research findings</li>
+            <li>AI-assisted literature synthesis and analysis</li>
+            <li>Interactive multimedia presentations</li>
+            <li>Community knowledge digital archiving</li>
+          </ul>
 
-                    <h3>📋 8-Milestone Research Cycle</h3>
-                    <ol>
-                        <li><strong>Idea Generation</strong> – Personal & departmental interests</li>
-                        <li><strong>Problem Identification</strong> – Define research gap & significance</li>
-                        <li><strong>Literature Review</strong> – Comprehensive scholarship review</li>
-                        <li><strong>Question Formulation</strong> – Clear research questions & hypotheses</li>
-                        <li><strong>Method Design</strong> – Research design & data collection</li>
-                        <li><strong>Data Collection</strong> – Empirical or textual data gathering</li>
-                        <li><strong>Analysis & Interpretation</strong> – Critical analysis & synthesis</li>
-                        <li><strong>Findings Presentation</strong> – Written thesis, poster, or oral presentation</li>
-                    </ol>
-
-                    <h3>📅 Research Timeline 2027/28</h3>
-                    <div class="event-grid">
-                        <div class="event-card">
-                            <div class="event-card-date">Oct 5, 2027</div>
-                            <div class="event-card-title"><a href="https://forms.gle/6tAzMEoLZfXwR5Rq7">Form 1: Student Profile</a></div>
-                            <div class="event-card-desc">Research interest identification</div>
-                        </div>
-                        <div class="event-card">
-                            <div class="event-card-date">Oct 20, 2027</div>
-                            <div class="event-card-title"><a href="https://forms.gle/mnG2icKv8sqNaUeJ8">Form 2: Topic Selection</a></div>
-                            <div class="event-card-desc">Problem identification</div>
-                        </div>
-                        <div class="event-card">
-                            <div class="event-card-date">Dec 31, 2027</div>
-                            <div class="event-card-title"><a href="https://forms.gle/ZmTSTkYxpmmJBU1V8">Form 3: Proposal Due</a></div>
-                            <div class="event-card-desc">Full research proposal (3-5 pages)</div>
-                        </div>
-                        <div class="event-card">
-                            <div class="event-card-date">Jan-Feb 2028</div>
-                            <div class="event-card-title"><a href="https://forms.gle/Ju2WqrTCjpvEUEdg9">Form 4: Progress</a></div>
-                            <div class="event-card-desc">Monthly tracking reports</div>
-                        </div>
-                        <div class="event-card">
-                            <div class="event-card-date">Mar 31, 2028</div>
-                            <div class="event-card-title"><a href="https://forms.gle/UqsLWLdRKcm8KyRL7">Form 5: Final Submission</a></div>
-                            <div class="event-card-desc">Complete research & evaluation</div>
-                        </div>
-                        <div class="event-card">
-                            <div class="event-card-date">Apr 2028</div>
-                            <div class="event-card-title"><a href="https://forms.gle/XQHeTGbRWsvQyHXC6">Form 6: Research Dissemination</a></div>
-                            <div class="event-card-desc">Public seminar & community sharing</div>
-                        </div>
-                    </div>
-
-                    <div class="highlight-card">
-                        <strong>Research Support:</strong> Research Coordinator provides guidance on methodology, ethics, literature databases, and digital tools. Access to KMC library resources and online databases (Google Scholar, JSTOR, ResearchGate).
-                    </div>
-
-                    <h3>🎯 Research KPI</h3>
-                    <p><strong>Target: 100% Research Participation</strong><br>
-                    All students submit research proposals, complete monthly tracking, and present findings.</p>
-                </div>
-            </div>
-
-            <!-- INNOVATE SECTION -->
-            <div class="content-section" id="innovate">
-                <div class="section-title">
-                    <span class="section-title-icon innovate-icon">💡</span>
-                    <div>Create New Possibilities & Solutions</div>
-                </div>
-                <div class="section-content">
-                    <p>The INNOVATE pillar leverages AI-assisted learning, digital humanities, creative problem-solving, technology integration, and entrepreneurial thinking to transform academic work.</p>
-
-                    <h3>🤖 AI & Digital Tools for Learning</h3>
-                    <p>Students use approved tools responsibly:</p>
-                    <ul>
-                        <li><strong>Literature Discovery:</strong> Zotero, Mendeley, Google Scholar</li>
-                        <li><strong>Qualitative Analysis:</strong> NVivo, ATLAS.ti, MAXQDA</li>
-                        <li><strong>Quantitative Analysis:</strong> SPSS, Jamovi, R, Python</li>
-                        <li><strong>Data Visualization:</strong> Power BI, Tableau, Canva</li>
-                        <li><strong>Generative AI:</strong> ChatGPT, Claude, Gemini (with transparency)</li>
-                        <li><strong>Digital Humanities:</strong> QGIS mapping, digital archives</li>
-                        <li><strong>Writing Support:</strong> Grammarly, Turnitin</li>
-                    </ul>
-
-                    <div class="highlight-card">
-                        <strong>AI Policy:</strong> "AI tools should support learning and research, not replace students' independent academic work. All use of generative AI must be transparently disclosed and cited."
-                    </div>
-
-                    <h3>🎤 Innovation Workshops</h3>
-                    <div class="event-grid">
-                        
-                        <div class="event-card">
-                            <div class="event-card-date">Nov 2027</div>
-                            <div class="event-card-title"><a href="https://ldi.njit.edu/sites/ldi/files/AI%20Literacy%20for%20Everyone_0.pdf">AI Literacy Seminar</a></div>
-                            <div class="event-card-desc">Ethics, tools, best practices for AI use</div>
-                        </div>
-                        <div class="event-card">
-                            <div class="event-card-date">Dec 2027</div>
-                             <div class="event-card-title"><a href="https://www.quirkos.com/learn-qualitative/workshops.html">Qualitative Analysis Workshop</a></div>
-                             <div class="event-card-desc">NVivo/ATLAS.ti hands-on training</div>
-                        </div>
-                        <div class="event-card">
-                            <div class="event-card-date">Dec 2027</div>
-                            <div class="event-card-title"><a href="https://www.uriux.com/quantitative-research-training-workshops/">Quantitative Analysis Workshop</a></div>
-                            <div class="event-card-desc">SPSS & Jamovi data analysis</div>
-                        </div>
-                        <div class="event-card">
-                            <div class="event-card-date">Feb 2028</div>
-                            <div class="event-card-title"><a href="https://www.slideshare.net/slideshow/seminar-on-entreprenship/236807668">Entrepreneurship Seminar</a></div>
-                            <div class="event-card-desc">Social innovation & business ideas</div>
-                        </div>
-                    </div>
-
-                    <h3>💻 Digital Projects</h3>
-                    <p>Students engage in innovative projects:</p>
-                    <ul>
-                        <li>Digital humanities research using QGIS mapping</li>
-                        <li>Data visualization of research findings</li>
-                        <li>AI-assisted literature synthesis and analysis</li>
-                        <li>Interactive multimedia presentations</li>
-                        <li>Community knowledge digital archiving</li>
-                    </ul>
-
-                    <h3>🎯 Innovation KPI</h3>
-                    <p><strong>Target: 55% Workshops Delivered</strong><br>
-                    Ensuring students gain practical skills in digital innovation and emerging technologies.</p>
-                </div>
-            </div>
-
-            <!-- COLLABORATE SECTION -->
-            <div class="content-section" id="collaborate">
-                <div class="section-title">
-                    <span class="section-title-icon collaborate-icon">🤝</span>
-                    <div>Connect People & Ideas</div>
-                </div>
-                <div class="section-content">
-                    <p>The COLLABORATE pillar emphasizes faculty-student partnerships, peer learning, community engagement, interdepartmental initiatives, and alumni networks to create meaningful connections.</p>
-
-                    <h3>🎓 Collaborative Learning Activities</h3>
-                    <ul>
-                        <li><strong>Peer Review Sessions:</strong> Students critique and improve each other's work</li>
-                        <li><strong>Group Research Projects:</strong> Interdisciplinary team-based investigations</li>
-                        <li><strong>Faculty-Student Mentorship:</strong> One-on-one guidance on research & career</li>
-                        <li><strong>Study Circles:</strong> Collaborative reading and discussion groups</li>
-                        <li><strong>Seminar Presentations:</strong> Knowledge sharing through public seminars</li>
-                    </ul>
-
-                    <h3>🤝 Community Partnerships</h3>
-                    <div class="event-grid">
-                        <div class="event-card">
-                            <div class="event-card-date">Sep 2027</div>
-                             <div class="event-card-title"><a href="https://www.scribd.com/document/863941423/Introduction-to-Community-Surveys">Community Survey</a></div>
-                            <div class="event-card-desc">Baseline assessment of local needs</div>
-                        </div>
-                        <div class="event-card">
-                            <div class="event-card-date">Oct 2027 - Mar 2028</div>
-                            <div class="event-card-title"><a href="https://evergreenorigins.in/resources/heritage-documentation-guide">Heritage Documentation</a></div>
-                            <div class="event-card-desc">Collaborative local history project</div>
-                        </div>
-                        <div class="event-card">
-                            <div class="event-card-date">Nov 2027</div>
-                            <div class="event-card-title"><a href="https://english.onlinekhabar.com/national-digital-literacy-campaign-for-digital-transformation-of-hotels-and-restaurants.html">Digital Literacy Campaign</a></div>
-                            <div class="event-card-desc">Community skill-building</div>
-                        </div>
-                        <div class="event-card">
-                            <div class="event-card-date">Mar 2028</div>
-                            <div class="event-card-title"><a href="https://scholar.google.com/scholar?q=Community+Engagement+Seminar&hl=en&as_sdt=0&as_vis=1&oi=scholart">Community Engagement Seminar</a></div>
-                            <div class="event-card-desc">Social responsibility & partnership</div>
-                        </div>
-                    </div>
-
-                    <h3>📚 Collaborative Seminars</h3>
-                    <ul>
-                        <li><strong>Research Methodology (Oct 2027):</strong> All years collaborate on best practices</li>
-                        <li><strong>Critical Thinking & Debate (Oct 2027):</strong> Structured peer discussion</li>
-                        <li><strong>Community Engagement (Mar 2028):</strong> Cross-program collaboration</li>
-                        <li><strong>Research Dissemination (Apr 2028):</strong> Public presentation of student work</li>
-                    </ul>
-
-                    <div class="highlight-card">
-                        <strong>Interdepartmental Collaboration:</strong> KMC-HSSD works across TU Faculty of Humanities & Social Sciences, campus administration, local government, and community organizations to create synergies.
-                    </div>
-
-                    <h3>🎯 Collaboration KPI</h3>
-                    <p><strong>Target: Student Satisfaction 65%</strong><br>
-                    Regular feedback ensures collaborative initiatives meet student needs and build meaningful relationships.</p>
-                </div>
-            </div>
-
-            <!-- CREATE IMPACT SECTION -->
-            <div class="content-section" id="impact">
-                <div class="section-title">
-                    <span class="section-title-icon impact-icon">🌟</span>
-                    <div>Transform Knowledge Into Social Value</div>
-                </div>
-                <div class="section-content">
-                    <p>The CREATE IMPACT pillar transforms academic knowledge into real-world social value through community service, research dissemination, heritage preservation, sustainable development, and evidence-based social transformation.</p>
-
-                    <h3>🌍 Community Impact Activities</h3>
-                    <div class="event-grid">
-                        <div class="event-card">
-                            <div class="event-card-date">Sep 2027</div>
-                            <div class="event-card-title"><a href="https://www.rosterfy.com/resources-hub/blog/community-needs-assessment-guide-with-examples/">Community Needs Survey</a></div>
-                            <div class="event-card-desc">Identify priority development areas</div>
-                        </div>
-                        <div class="event-card">
-                            <div class="event-card-date">Oct 2027 - Mar 2028</div>
-                            <div class="event-card-title"><a href="https://evergreenorigins.in/resources/heritage-documentation-guide">Heritage Documentation</a></div>
-                            <div class="event-card-desc">Preserve Kapilvastu cultural legacy</div>
-                        </div>
-                        <div class="event-card">
-                            <div class="event-card-date">Nov 2027</div>
-                             <div class="event-card-title"><a href="https://ashrafifoundation.in/case/digital-literacy-campaigns/">Digital Literacy Campaign</a></div>
-                            <div class="event-card-desc">Build community tech skills</div>
-                        </div>
-                        <div class="event-card">
-                            <div class="event-card-date">Dec 2027</div>
-                             <div class="event-card-title"><a href="https://sasane.org.np/programs/school-awareness-program/">Social Awareness Program</a></div>
-                             <div class="event-card-desc">Health, education, environmental issues</div>
-                        </div>
-                        <div class="event-card">
-                            <div class="event-card-date">Jan-Feb 2028</div>
-                            <div class="event-card-title"><a href="https://scholar.google.com/scholar?q=Local+Knowledge+Documentation&hl=en&as_sdt=0&as_vis=1&oi=scholart">Local Knowledge Documentation</a></div>
-                            <div class="event-card-desc">Oral history & cultural preservation</div>
-                        </div>
-                        <div class="event-card">
-                            <div class="event-card-date">Feb-Apr 2028</div>
-                            <div class="event-card-title"><a href="https://popp.undp.org/taxonomy/term/6036">Development Projects</a></div>
-                            <div class="event-card-desc">Student-led solutions to local problems</div>
-                        </div>
-                        <div class="event-card">
-                            <div class="event-card-date">Mar 2028</div>
-                             <div class="event-card-title"><a href="https://www.goeco.org/area/volunteer-in-asia/nepal/educational-outreach-in-kathmandu/">Educational Outreach</a></div>
-                            <div class="event-card-desc">School mentoring & support</div>
-                        </div>
-                        <div class="event-card">
-                            <div class="event-card-date">Apr 2028</div>
-                            <div class="event-card-title"><a href="https://atlasti.com/research-hub/research-dissemination">Research Dissemination Seminar</a></div>
-                            <div class="event-card-desc">Share findings with community</div>
-                        </div>
-                    </div>
-
-                    <h3>🏛️ Kapilvastu Heritage Impact</h3>
-                    <p>KMC-HSSD leverages unique location at Tilaurakot (UNESCO World Heritage site) to:</p>
-                    <ul>
-                        <li>Document and preserve Buddhist heritage</li>
-                        <li>Create digital archives of local history</li>
-                        <li>Support sustainable heritage tourism development</li>
-                        <li>Enhance community pride in cultural legacy</li>
-                        <li>Contribute to UNESCO World Heritage conservation</li>
-                    </ul>
-
-                    <h3>📊 Impact Measurement</h3>
-                    <div class="highlight-card">
-                        <strong>Key Performance Indicators:</strong>
-                        <ul style="margin-top: 10px; margin-left: 15px;">
-                            <li>Exam Form Submission: 100% by March 25, 2028</li>
-                            <li>Class Completion Rate: 100%</li>
-                            <li>Student Attendance: ≥90%</li>
-                            <li>Mid-Term Pass Rate: ≥85%</li>
-                            <li>Research Participation: 100%</li>
-                            <li>Student Satisfaction: 65%</li>
-                            <li>Workshops Delivered: 55%</li>
-                        </ul>
-                    </div>
-
-                    <h3>🎯 Annual Review Cycle</h3>
-                    <p><strong>PLAN → IMPLEMENT → MONITOR → EVALUATE → IMPROVE</strong></p>
-                    <ul>
-                        <li><strong>May-Aug 2028:</strong> Plan next year's initiatives</li>
-                        <li><strong>Sep 2027-May 2028:</strong> Execute programs</li>
-                        <li><strong>Monthly:</strong> Monitor progress via KPIs</li>
-                        <li><strong>May-Jun 2028:</strong> Comprehensive evaluation</li>
-                        <li><strong>Jun-Aug 2028:</strong> Refine strategies for 2028/29</li>
-                    </ul>
-
-                    <div class="highlight-card">
-                        <strong>Annual Academic Review Report (September 2028)</strong> documents achievements, challenges, and recommendations, contributing to institutional learning and continuous improvement.
-                    </div>
-                </div>
-            </div>
-
-            <!-- CALENDAR VIEW (Hidden by default) -->
-            <div id="calendarViewContainer" style="display: none;">
-                <div class="calendar-grid" id="calendar"></div>
-            </div>
-
-            <!-- LIST VIEW (Hidden by default) -->
-            <div class="list-view" id="listView"></div>
-
-            <!-- SIDEBAR -->
-            <div class="sidebar">
-                <h3>📅 Upcoming Events</h3>
-                <ul class="event-list" id="eventList"></ul>
-                <div class="quick-info">
-                    <h4>⚡ Quick Stats</h4>
-                    <div class="info-item">
-                        <span class="info-label">Academic Year:</span> 2027/28
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Start Date:</span> Sep 18, 2027
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">End Date:</span> May 15, 2028
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Exam Forms Due:</span> Mar 25, 2028
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Results Expected:</span> Sep 2028
-                    </div>
-                </div>
-            </div>
+          <h3>🎯 Innovation KPI</h3>
+          <p class="kpi" style="max-width:70ch"><strong>Target: 55% workshops delivered</strong><br>Ensuring students gain practical skills in digital innovation and emerging technologies.</p>
         </div>
+      </section>
 
-        <!-- FOOTER -->
-        <div class="footer">
-            <p>© 2027/28 Kapilvastu Multiple Campus - HSSD | Taulihawa, Kapilvastu, Lumbini Province, Nepal</p>
-            <p style="margin-top: 10px;">For updates, visit: <strong>www.kmctlw.edu.np</strong> | <strong>https://fohss.tu.edu.np/</strong></p>
-            <h5>Developed By: Mr. Bishnu Singh Rayamajhi, Math Lecturer and Department Head of Humanities & Social Sciences (KMC-HSSD)</h5>
+      <!-- COLLABORATE -->
+      <section class="panel p-collaborate" id="collaborate" role="tabpanel" aria-labelledby="t-collaborate" hidden>
+        <h2>Connect people and ideas</h2>
+        <div class="prose wide">
+          <p style="max-width:70ch">The Collaborate pillar emphasizes faculty-student partnerships, peer learning, community engagement, interdepartmental initiatives, and alumni networks to create meaningful connections.</p>
+
+          <h3>🎓 Collaborative learning activities</h3>
+          <ul style="max-width:70ch">
+            <li><strong>Peer review sessions:</strong> Students critique and improve each other's work</li>
+            <li><strong>Group research projects:</strong> Interdisciplinary team-based investigations</li>
+            <li><strong>Faculty-student mentorship:</strong> One-on-one guidance on research &amp; career</li>
+            <li><strong>Study circles:</strong> Collaborative reading and discussion groups</li>
+            <li><strong>Seminar presentations:</strong> Knowledge sharing through public seminars</li>
+          </ul>
+
+          <h3>🤝 Community partnerships</h3>
+          <div class="event-grid">
+            <div class="event-card"><div class="event-card-date">Sep 2027</div><div class="event-card-title"><a href="https://www.scribd.com/document/863941423/Introduction-to-Community-Surveys">Community Survey</a></div><div class="event-card-desc">Baseline assessment of local needs</div></div>
+            <div class="event-card"><div class="event-card-date">Oct 2027 – Mar 2028</div><div class="event-card-title"><a href="https://evergreenorigins.in/resources/heritage-documentation-guide">Heritage Documentation</a></div><div class="event-card-desc">Collaborative local history project</div></div>
+            <div class="event-card"><div class="event-card-date">Nov 2027</div><div class="event-card-title"><a href="https://english.onlinekhabar.com/national-digital-literacy-campaign-for-digital-transformation-of-hotels-and-restaurants.html">Digital Literacy Campaign</a></div><div class="event-card-desc">Community skill-building</div></div>
+            <div class="event-card"><div class="event-card-date">Mar 2028</div><div class="event-card-title"><a href="https://scholar.google.com/scholar?q=Community+Engagement+Seminar&hl=en&as_sdt=0&as_vis=1&oi=scholart">Community Engagement Seminar</a></div><div class="event-card-desc">Social responsibility &amp; partnership</div></div>
+          </div>
+
+          <h3>📚 Collaborative seminars</h3>
+          <ul style="max-width:70ch">
+            <li><strong>Research Methodology (Oct 2027):</strong> All years collaborate on best practices</li>
+            <li><strong>Critical Thinking &amp; Debate (Oct 2027):</strong> Structured peer discussion</li>
+            <li><strong>Community Engagement (Mar 2028):</strong> Cross-program collaboration</li>
+            <li><strong>Research Dissemination (Apr 2028):</strong> Public presentation of student work</li>
+          </ul>
+
+          <div class="callout" style="max-width:70ch"><strong>Interdepartmental collaboration:</strong> KMC-HSSD works across the TU Faculty of Humanities &amp; Social Sciences, campus administration, local government, and community organizations to create synergies.</div>
+
+          <h3>🎯 Collaboration KPI</h3>
+          <p class="kpi" style="max-width:70ch"><strong>Target: student satisfaction 65%</strong><br>Regular feedback ensures collaborative initiatives meet student needs and build meaningful relationships.</p>
         </div>
+      </section>
+
+      <!-- CREATE IMPACT -->
+      <section class="panel p-impact" id="impact" role="tabpanel" aria-labelledby="t-impact" hidden>
+        <h2>Transform knowledge into social value</h2>
+        <div class="prose wide">
+          <p style="max-width:70ch">The Create Impact pillar transforms academic knowledge into real-world social value through community service, research dissemination, heritage preservation, sustainable development, and evidence-based social transformation.</p>
+
+          <h3>🌍 Community impact activities</h3>
+          <div class="event-grid">
+            <div class="event-card"><div class="event-card-date">Sep 2027</div><div class="event-card-title"><a href="https://www.rosterfy.com/resources-hub/blog/community-needs-assessment-guide-with-examples/">Community Needs Survey</a></div><div class="event-card-desc">Identify priority development areas</div></div>
+            <div class="event-card"><div class="event-card-date">Oct 2027 – Mar 2028</div><div class="event-card-title"><a href="https://evergreenorigins.in/resources/heritage-documentation-guide">Heritage Documentation</a></div><div class="event-card-desc">Preserve Kapilvastu cultural legacy</div></div>
+            <div class="event-card"><div class="event-card-date">Nov 2027</div><div class="event-card-title"><a href="https://ashrafifoundation.in/case/digital-literacy-campaigns/">Digital Literacy Campaign</a></div><div class="event-card-desc">Build community tech skills</div></div>
+            <div class="event-card"><div class="event-card-date">Dec 2027</div><div class="event-card-title"><a href="https://sasane.org.np/programs/school-awareness-program/">Social Awareness Program</a></div><div class="event-card-desc">Health, education, environmental issues</div></div>
+            <div class="event-card"><div class="event-card-date">Jan–Feb 2028</div><div class="event-card-title"><a href="https://scholar.google.com/scholar?q=Local+Knowledge+Documentation&hl=en&as_sdt=0&as_vis=1&oi=scholart">Local Knowledge Documentation</a></div><div class="event-card-desc">Oral history &amp; cultural preservation</div></div>
+            <div class="event-card"><div class="event-card-date">Feb–Apr 2028</div><div class="event-card-title"><a href="https://popp.undp.org/taxonomy/term/6036">Development Projects</a></div><div class="event-card-desc">Student-led solutions to local problems</div></div>
+            <div class="event-card"><div class="event-card-date">Mar 2028</div><div class="event-card-title"><a href="https://www.goeco.org/area/volunteer-in-asia/nepal/educational-outreach-in-kathmandu/">Educational Outreach</a></div><div class="event-card-desc">School mentoring &amp; support</div></div>
+            <div class="event-card"><div class="event-card-date">Apr 2028</div><div class="event-card-title"><a href="https://atlasti.com/research-hub/research-dissemination">Research Dissemination Seminar</a></div><div class="event-card-desc">Share findings with community</div></div>
+          </div>
+
+          <h3>🏛️ Kapilvastu heritage impact</h3>
+          <p>KMC-HSSD uses its location near Tilaurakot (UNESCO World Heritage site) to:</p>
+          <ul style="max-width:70ch">
+            <li>Document and preserve Buddhist heritage</li>
+            <li>Create digital archives of local history</li>
+            <li>Support sustainable heritage tourism development</li>
+            <li>Enhance community pride in cultural legacy</li>
+            <li>Contribute to UNESCO World Heritage conservation</li>
+          </ul>
+
+          <h3>📊 Impact measurement</h3>
+          <div class="callout" style="max-width:70ch">
+            <strong>Key performance indicators</strong>
+            <ul>
+              <li>Exam form submission: 100% by March 25, 2028</li>
+              <li>Class completion rate: 100%</li>
+              <li>Student attendance: ≥90%</li>
+              <li>Mid-term pass rate: ≥85%</li>
+              <li>Research participation: 100%</li>
+              <li>Student satisfaction: 65%</li>
+              <li>Workshops delivered: 55%</li>
+            </ul>
+          </div>
+
+          <h3>🎯 Annual review cycle</h3>
+          <p><strong>Plan → Implement → Monitor → Evaluate → Improve</strong></p>
+          <ul style="max-width:70ch">
+            <li><strong>May–Aug 2028:</strong> Plan next year's initiatives</li>
+            <li><strong>Sep 2027–May 2028:</strong> Execute programs</li>
+            <li><strong>Monthly:</strong> Monitor progress via KPIs</li>
+            <li><strong>May–Jun 2028:</strong> Comprehensive evaluation</li>
+            <li><strong>Jun–Aug 2028:</strong> Refine strategies for 2028/29</li>
+          </ul>
+
+          <div class="callout" style="max-width:70ch"><strong>Annual Academic Review Report (September 2028)</strong> documents achievements, challenges, and recommendations, contributing to institutional learning and continuous improvement.</div>
+        </div>
+      </section>
+
+      <!-- CALENDAR -->
+      <section class="panel" id="calendarPanel" role="tabpanel" aria-labelledby="t-calendarPanel" hidden>
+        <div class="cal-head">
+          <div class="cal-nav">
+            <button class="nbtn" id="prevBtn" type="button" aria-label="Previous month">‹</button>
+            <h2 id="monthTitle" aria-live="polite"></h2>
+            <button class="nbtn" id="nextBtn" type="button" aria-label="Next month">›</button>
+          </div>
+          <div class="legend" role="group" aria-label="Filter by event type"></div>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+      </section>
+
+      <!-- LIST -->
+      <section class="panel" id="listPanel" role="tabpanel" aria-labelledby="t-listPanel" hidden>
+        <div class="cal-head">
+          <h2 style="margin:0;font-family:var(--serif);font-size:1.6rem">All events, month by month</h2>
+          <div class="legend" role="group" aria-label="Filter by event type"></div>
+        </div>
+        <div id="listBody"></div>
+      </section>
+
     </div>
 
-    <!-- MODAL -->
-    <div class="modal" id="eventModal">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeModal()">&times;</span>
-            <h2 id="modalDate"></h2>
-            <div id="modalEvents"></div>
-        </div>
+    <aside class="card side" aria-labelledby="upT">
+      <h2 id="upT">Coming up</h2>
+      <ul class="up" id="upList"></ul>
+    </aside>
+  </div>
+</div>
+
+<dialog id="dlg" aria-labelledby="dlgTitle">
+  <div class="dlg-top"></div>
+  <div class="dlg-body">
+    <span class="tag" id="dlgKicker"></span>
+    <div class="dlg-date" id="dlgDate"></div>
+    <h2 id="dlgTitle"></h2>
+    <p id="dlgDesc"></p>
+    <dl class="dlg-facts" id="dlgExtra"></dl>
+    <div class="dlg-actions">
+      <a class="dlg-open" id="dlgOpen" target="_blank" rel="noopener" hidden>Open link</a>
+      <button class="dlg-copy" id="dlgCopy" type="button" hidden>Copy link</button>
+      <button class="dlg-close" id="dlgClose" type="button">Close</button>
     </div>
+  </div>
+</dialog>
 
-    <script>
-        // ===== ACADEMIC CALENDAR DATA =====
-        const calendarEvents = {
-            "2027-09-18": {
-                title: "Classes Begin",
-                category: "academic",
-                description: "KMC-HSSD classes officially start for academic year 2027/28",
-                bs: "Ashwin 2, 2084"
-            },
-            "2027-09-19": {
-                title: "Constitution Day (Public Holiday)",
-                category: "holiday",
-                description: "Nepal Republic Day - Public Holiday",
-                bs: "Ashwin 3, 2084"
-            },
-            "2027-09-25": {
-                title: "Digital Literacy Seminar",
-                category: "academic",
-                description: "Seminar 10: Digital Literacy & Information Security (1st Year)",
-                bs: "Ashwin 9, 2084"
-            },
-            "2027-10-01": {
-                title: "Research Methodology Seminar",
-                category: "academic",
-                description: "Seminar 1: Research Methodology & SMART Research Design",
-                bs: "Ashwin 15, 2084"
-            },
-            "2027-10-05": {
-                title: "Research Form 1 Due",
-                category: "research",
-                description: "Student Profile & Research Interest submission deadline",
-                bs: "Ashwin 19, 2084"
-            },
-            "2027-10-10": {
-                title: "Academic Writing Seminar",
-                category: "academic",
-                description: "Seminar 2: Academic Writing & Citation Standards",
-                bs: "Ashwin 24, 2084"
-            },
-            "2027-10-17": {
-                title: "Dashain Holiday Begins",
-                category: "holiday",
-                description: "Major Nepal festival - 7 days break (Oct 17-23)",
-                bs: "Ashwin 31, 2084"
-            },
-            "2027-10-20": {
-                title: "Research Form 2 Due",
-                category: "research",
-                description: "Research Topic & Problem Identification",
-                bs: "Kartik 4, 2084"
-            },
-            "2027-10-25": {
-                title: "Critical Thinking & Debate",
-                category: "academic",
-                description: "Seminar 11: Critical Thinking & Debate Skills",
-                bs: "Kartik 9, 2084"
-            },
-            "2027-11-05": {
-                title: "AI Literacy Seminar",
-                category: "academic",
-                description: "Seminar 3: AI Literacy for Humanities Scholars",
-                bs: "Kartik 19, 2084"
-            },
-            "2027-11-08": {
-                title: "Tihar Holiday Begins",
-                category: "holiday",
-                description: "Major Nepal festival - 5 days break (Nov 8-12)",
-                bs: "Kartik 22, 2084"
-            },
-            "2027-11-15": {
-                title: "Zotero Workshop",
-                category: "academic",
-                description: "Seminar 4: Zotero Reference Management",
-                bs: "Kartik 29, 2084"
-            },
-            "2027-11-18": {
-                title: "Mid-Term Tests Begin",
-                category: "academic",
-                description: "Mid-term internal assessments (Nov 18-28)",
-                bs: "Kartik 2, 2084"
-            },
-            "2027-11-20": {
-                title: "Research Ethics Seminar",
-                category: "academic",
-                description: "Seminar 7: Research Ethics & Informed Consent",
-                bs: "Kartik 4, 2084"
-            },
-            "2027-12-01": {
-                title: "Qualitative Analysis Workshop",
-                category: "academic",
-                description: "Seminar 5: Qualitative Data Analysis (NVivo/ATLAS.ti)",
-                bs: "Poush 15, 2084"
-            },
-            "2027-12-10": {
-                title: "Quantitative Analysis Workshop",
-                category: "academic",
-                description: "Seminar 6: Quantitative Analysis (SPSS & Jamovi)",
-                bs: "Poush 24, 2084"
-            },
-            "2027-12-31": {
-                title: "Research Form 3 & Proposals Due",
-                category: "research",
-                description: "Research Proposal Submission Deadline",
-                bs: "Poush 15, 2084"
-            },
-            "2028-01-15": {
-                title: "Career Development Seminar",
-                category: "academic",
-                description: "Seminar 8: Career Development & Professional Communication (Final Year)",
-                bs: "Magh 1, 2085"
-            },
-            "2028-02-05": {
-                title: "Entrepreneurship Seminar",
-                category: "academic",
-                description: "Seminar 9: Entrepreneurship & Social Innovation",
-                bs: "Magh 22, 2085"
-            },
-            "2028-03-10": {
-                title: "Community Engagement Seminar",
-                category: "community",
-                description: "Seminar 12: Community Engagement & Social Responsibility",
-                bs: "Falgun 25, 2085"
-            },
-            "2028-03-25": {
-                title: "Exam Form Submission Deadline",
-                category: "academic",
-                description: "TU Exam Form Submission (100% target)",
-                bs: "Falgun 11, 2085"
-            },
-            "2028-03-31": {
-                title: "Research Form 5 Due",
-                category: "research",
-                description: "Final Research Submission & Evaluation",
-                bs: "Falgun 17, 2085"
-            },
-            "2028-04-05": {
-                title: "Heritage Preservation Seminar",
-                category: "academic",
-                description: "Seminar 13: Heritage Preservation & Digital Humanities",
-                bs: "Chaitra 22, 2085"
-            },
-            "2028-05-15": {
-                title: "Classes End",
-                category: "academic",
-                description: "Regular classes end for academic year 2027/28",
-                bs: "Jestha 1, 2085"
-            },
-            "2028-06-10": {
-                title: "TU Final Exams Begin",
-                category: "academic",
-                description: "Tribhuvan University Final Examinations Start",
-                bs: "Ashadh 2085"
-            }
-        };
+<footer>
+  <div class="foot">
+    <p>© 2027/28 Kapilvastu Multiple Campus – HSSD, Taulihawa, Kapilvastu, Lumbini Province, Nepal</p>
+    <p>Updates: <a href="https://www.kmctlw.edu.np">www.kmctlw.edu.np</a> and <a href="https://fohss.tu.edu.np/">fohss.tu.edu.np</a></p>
+    <p class="dev">Developed by Mr. Bishnu Singh Rayamajhi, Math Lecturer and Department Head of Humanities &amp; Social Sciences (KMC-HSSD)</p>
+  </div>
+</footer>
 
-        let currentDate = new Date(2027, 8, 1); // September 2027
+<script>
+// ===== ACADEMIC CALENDAR DATA (unchanged) =====
+const calendarEvents = {
+  "2027-09-18": { title: "Classes Begin", category: "academic", description: "KMC-HSSD classes officially start for academic year 2027/28", bs: "Ashwin 2, 2084" },
+  "2027-09-19": { title: "Constitution Day (Public Holiday)", category: "holiday", description: "Nepal Republic Day - Public Holiday", bs: "Ashwin 3, 2084" },
+  "2027-09-25": { title: "Digital Literacy Seminar", category: "academic", description: "Seminar 10: Digital Literacy & Information Security (1st Year)", bs: "Ashwin 9, 2084" },
+  "2027-10-01": { title: "Research Methodology Seminar", category: "academic", description: "Seminar 1: Research Methodology & SMART Research Design", bs: "Ashwin 15, 2084" },
+  "2027-10-05": { title: "Research Form 1 Due", category: "research", description: "Student Profile & Research Interest submission deadline", bs: "Ashwin 19, 2084" },
+  "2027-10-10": { title: "Academic Writing Seminar", category: "academic", description: "Seminar 2: Academic Writing & Citation Standards", bs: "Ashwin 24, 2084" },
+  "2027-10-17": { title: "Dashain Holiday Begins", category: "holiday", description: "Major Nepal festival - 7 days break (Oct 17-23)", bs: "Ashwin 31, 2084" },
+  "2027-10-20": { title: "Research Form 2 Due", category: "research", description: "Research Topic & Problem Identification", bs: "Kartik 4, 2084" },
+  "2027-10-25": { title: "Critical Thinking & Debate", category: "academic", description: "Seminar 11: Critical Thinking & Debate Skills", bs: "Kartik 9, 2084" },
+  "2027-11-05": { title: "AI Literacy Seminar", category: "academic", description: "Seminar 3: AI Literacy for Humanities Scholars", bs: "Kartik 19, 2084" },
+  "2027-11-08": { title: "Tihar Holiday Begins", category: "holiday", description: "Major Nepal festival - 5 days break (Nov 8-12)", bs: "Kartik 22, 2084" },
+  "2027-11-15": { title: "Zotero Workshop", category: "academic", description: "Seminar 4: Zotero Reference Management", bs: "Kartik 29, 2084" },
+  "2027-11-18": { title: "Mid-Term Tests Begin", category: "academic", description: "Mid-term internal assessments (Nov 18-28)", bs: "Kartik 2, 2084" },
+  "2027-11-20": { title: "Research Ethics Seminar", category: "academic", description: "Seminar 7: Research Ethics & Informed Consent", bs: "Kartik 4, 2084" },
+  "2027-12-01": { title: "Qualitative Analysis Workshop", category: "academic", description: "Seminar 5: Qualitative Data Analysis (NVivo/ATLAS.ti)", bs: "Poush 15, 2084" },
+  "2027-12-10": { title: "Quantitative Analysis Workshop", category: "academic", description: "Seminar 6: Quantitative Analysis (SPSS & Jamovi)", bs: "Poush 24, 2084" },
+  "2027-12-31": { title: "Research Form 3 & Proposals Due", category: "research", description: "Research Proposal Submission Deadline", bs: "Poush 15, 2084" },
+  "2028-01-15": { title: "Career Development Seminar", category: "academic", description: "Seminar 8: Career Development & Professional Communication (Final Year)", bs: "Magh 1, 2085" },
+  "2028-02-05": { title: "Entrepreneurship Seminar", category: "academic", description: "Seminar 9: Entrepreneurship & Social Innovation", bs: "Magh 22, 2085" },
+  "2028-03-10": { title: "Community Engagement Seminar", category: "community", description: "Seminar 12: Community Engagement & Social Responsibility", bs: "Falgun 25, 2085" },
+  "2028-03-25": { title: "Exam Form Submission Deadline", category: "academic", description: "TU Exam Form Submission (100% target)", bs: "Falgun 11, 2085" },
+  "2028-03-31": { title: "Research Form 5 Due", category: "research", description: "Final Research Submission & Evaluation", bs: "Falgun 17, 2085" },
+  "2028-04-05": { title: "Heritage Preservation Seminar", category: "academic", description: "Seminar 13: Heritage Preservation & Digital Humanities", bs: "Chaitra 22, 2085" },
+  "2028-05-15": { title: "Classes End", category: "academic", description: "Regular classes end for academic year 2027/28", bs: "Jestha 1, 2085" },
+  "2028-06-10": { title: "TU Final Exams Begin", category: "academic", description: "Tribhuvan University Final Examinations Start", bs: "Ashadh 2085" }
+};
 
-        // ===== SWITCH PILLAR (THEME) =====
-        function switchPillar(event, pillar) {
-            event.preventDefault();
+// ===== HELPERS =====
+const CATS = {
+  academic:  { label: 'Academic' },
+  research:  { label: 'Research' },
+  holiday:   { label: 'Holiday' },
+  community: { label: 'Community' }
+};
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const MON3 = MONTHS.map(m => m.slice(0,3));
+const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const $ = id => document.getElementById(id);
+const parseDate = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+const fmtLong = d => d.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' });
+const fmtShort = d => d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+const key = (y,m,d) => `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
 
-            // Hide all content sections
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.remove('active');
-            });
+const events = Object.entries(calendarEvents)
+  .map(([date, e]) => ({ date, d: parseDate(date), ...e }))
+  .sort((a,b) => a.d - b.d);
+const hidden = new Set();
+const visible = e => !hidden.has(e.category);
 
-            // Show selected section
-            document.getElementById(pillar).classList.add('active');
+const today = new Date(); today.setHours(0,0,0,0);
+const RANGE_START = new Date(2027, 8, 1), RANGE_END = new Date(2028, 5, 30);
+const MIN_M = 2027*12 + 8, MAX_M = 2028*12 + 5;
+let monthIdx = (() => { const t = today.getFullYear()*12 + today.getMonth(); return t >= MIN_M && t <= MAX_M ? t : MIN_M; })();
 
-            // Update button states
-            document.querySelectorAll('.pillar-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
+// ===== LEGEND / FILTER =====
+function renderLegends() {
+  const html = Object.entries(CATS).map(([k,c]) =>
+    `<button type="button" class="chip cat-${k}" data-cat="${k}" aria-pressed="${!hidden.has(k)}"><i></i>${c.label}</button>`).join('');
+  document.querySelectorAll('.legend').forEach(el => el.innerHTML = html);
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if (!b) return;
+  const k = b.dataset.cat;
+  hidden.has(k) ? hidden.delete(k) : hidden.add(k);
+  renderAll();
+});
 
-            // Hide calendar/list views
-            document.getElementById('calendarViewContainer').style.display = 'none';
-            document.getElementById('listView').classList.remove('show');
+// ===== NEXT UP =====
+function renderNext() {
+  const el = $('nextUp');
+  const next = events.find(e => e.d >= today);
+  if (!next) { el.innerHTML = '<div><b>The 2027/28 academic year is complete.</b><span>Check back for the next calendar.</span></div>'; return; }
+  const days = Math.round((next.d - today) / 864e5);
+  const label = days === 0 ? 'Today' : days === 1 ? 'Tomorrow' : days;
+  el.className = `nextup cat-${next.category}`;
+  el.innerHTML = `<div class="when">${label}${typeof label === 'number' ? '<small>days to go</small>' : ''}</div>
+    <div><b>${next.title}</b><span>${fmtLong(next.d)}</span></div>`;
+}
 
-            // Update sidebar (still show upcoming events)
-            updateEventList();
-        }
+// ===== TIMELINE =====
+function renderTimeline() {
+  const span = RANGE_END - RANGE_START;
+  const pct = d => ((d - RANGE_START) / span * 100);
+  let h = '<div class="tl-line"></div>';
+  const bs = pct(new Date(2027,8,18)), be = pct(new Date(2028,4,15));
+  h += `<div class="tl-band" style="left:${bs}%;width:${be-bs}%"></div>`;
+  h += `<div class="tl-bandlabel" style="left:${bs}%">Classes in session</div>`;
+  for (let i = 0; i < 10; i++) {
+    const d = new Date(2027, 8 + i, 1);
+    const yr = (d.getMonth() === 8 || d.getMonth() === 0) ? `<small>${d.getFullYear()}</small>` : '';
+    h += `<span class="tl-tick" style="left:${pct(d)}%">${MON3[d.getMonth()]}${yr}</span>`;
+  }
+  if (today >= RANGE_START && today <= RANGE_END) h += `<div class="tl-today" style="left:${pct(today)}%"><span>Today</span></div>`;
+  events.filter(visible).forEach((e,i) => {
+    h += `<button type="button" class="tl-dot cat-${e.category}" style="left:${pct(e.d)}%;--lane:${i%4}" data-date="${e.date}" aria-label="${e.title}, ${fmtShort(e.d)}"></button>`;
+  });
+  $('tl').innerHTML = h;
+  $('tlRead').textContent = 'Hover or focus a marker to preview it.';
+}
+$('tl').addEventListener('click', e => { const b = e.target.closest('.tl-dot'); if (b) openEvent(b.dataset.date); });
+['mouseover','focusin'].forEach(t => $('tl').addEventListener(t, e => {
+  const b = e.target.closest('.tl-dot'); if (!b) return;
+  const ev = calendarEvents[b.dataset.date];
+  $('tlRead').textContent = `${fmtShort(parseDate(b.dataset.date))}: ${ev.title}`;
+}));
 
-        // ===== SWITCH VIEW (CALENDAR/LIST) =====
-        function switchView(event, view) {
-            event.preventDefault();
+// ===== CALENDAR =====
+function renderCalendar() {
+  const year = Math.floor(monthIdx/12), month = monthIdx % 12;
+  $('monthTitle').textContent = `${MONTHS[month]} ${year}`;
+  $('prevBtn').disabled = monthIdx <= MIN_M;
+  $('nextBtn').disabled = monthIdx >= MAX_M;
+  const first = new Date(year, month, 1).getDay();
+  const dim = new Date(year, month+1, 0).getDate();
+  const total = Math.ceil((first + dim) / 7) * 7;
+  let h = DOW.map(d => `<div class="dow">${d}</div>`).join('');
+  for (let i = 0; i < total; i++) {
+    const d = new Date(year, month, 1 - first + i);
+    const k = key(d.getFullYear(), d.getMonth(), d.getDate());
+    const off = d.getMonth() !== month;
+    const ev = calendarEvents[k] && visible({category: calendarEvents[k].category}) ? calendarEvents[k] : null;
+    const isToday = d.getTime() === today.getTime();
+    const cls = `cell${off ? ' off' : ''}${isToday ? ' today' : ''}`;
+    if (ev) {
+      h += `<button type="button" class="${cls} has cat-${ev.category}" data-date="${k}" aria-label="${fmtLong(d)}: ${ev.title}">
+        <span class="n">${d.getDate()}</span><span class="d"></span><span class="t">${ev.title}</span></button>`;
+    } else {
+      h += `<div class="${cls}"><span class="n">${d.getDate()}</span></div>`;
+    }
+  }
+  $('calGrid').innerHTML = h;
+}
+$('calGrid').addEventListener('click', e => { const b = e.target.closest('button.cell'); if (b) openEvent(b.dataset.date); });
+$('prevBtn').onclick = () => { if (monthIdx > MIN_M) { monthIdx--; renderCalendar(); } };
+$('nextBtn').onclick = () => { if (monthIdx < MAX_M) { monthIdx++; renderCalendar(); } };
 
-            // Remove active class from all pillar buttons
-            document.querySelectorAll('.pillar-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
+// ===== LIST =====
+function renderList() {
+  const groups = {};
+  events.filter(visible).forEach(e => {
+    const k = `${MONTHS[e.d.getMonth()]} ${e.d.getFullYear()}`;
+    (groups[k] = groups[k] || []).push(e);
+  });
+  const entries = Object.entries(groups);
+  if (!entries.length) { $('listBody').innerHTML = '<p class="empty">No event types are selected. Turn one on above to see events.</p>'; return; }
+  $('listBody').innerHTML = entries.map(([m, list]) => `
+    <div class="mgroup"><h3>${m}</h3>
+    ${list.map(e => `<button type="button" class="row cat-${e.category}" data-date="${e.date}">
+      <span class="dn">${e.d.getDate()}<small>${DOW[e.d.getDay()]}</small></span>
+      <span><b>${e.title}</b><span class="ds">${e.description}</span></span>
+      <span class="tag">${CATS[e.category].label}</span></button>`).join('')}
+    </div>`).join('');
+}
+$('listBody').addEventListener('click', e => { const b = e.target.closest('.row'); if (b) openEvent(b.dataset.date); });
 
-            // Hide all content sections
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.remove('active');
-            });
+// ===== UPCOMING =====
+function renderUpcoming() {
+  const list = events.filter(e => e.d >= today && visible(e)).slice(0, 8);
+  $('upList').innerHTML = list.length
+    ? list.map(e => `<li><button type="button" class="cat-${e.category}" data-date="${e.date}"><span class="dt">${fmtShort(e.d)}</span><span class="tt">${e.title}</span></button></li>`).join('')
+    : '<li class="empty">No upcoming events.</li>';
+}
+$('upList').addEventListener('click', e => { const b = e.target.closest('button'); if (b) openEvent(b.dataset.date); });
 
-            // Hide calendar/list views initially
-            document.getElementById('calendarViewContainer').style.display = 'none';
-            document.getElementById('listView').classList.remove('show');
+// ===== DIALOG =====
+const dlg = $('dlg');
+const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const PILLARS = {
+  learn:       { icon:'📚', name:'Learn',         color:'#2E8B57', kpi:'≥90% assignment completion' },
+  research:    { icon:'🔬', name:'Research',      color:'#2B6FD6', kpi:'100% research participation' },
+  innovate:    { icon:'💡', name:'Innovate',      color:'#D97A0B', kpi:'55% workshops delivered' },
+  collaborate: { icon:'🤝', name:'Collaborate',   color:'#C2336E', kpi:'Student satisfaction 65%' },
+  impact:      { icon:'🌟', name:'Create impact', color:'#7B3FB5', kpi:'Attendance ≥90%, research participation 100%, student satisfaction 65%, workshops delivered 55%' }
+};
+// Cards that match an entry in the calendar data (same activity, same date)
+const RELATED = {
+  'Form 1: Student Profile':'2027-10-05', 'Form 2: Topic Selection':'2027-10-20',
+  'Form 3: Proposal Due':'2027-12-31', 'Form 5: Final Submission':'2028-03-31',
+  'AI Literacy Seminar':'2027-11-05', 'Qualitative Analysis Workshop':'2027-12-01',
+  'Quantitative Analysis Workshop':'2027-12-10', 'Entrepreneurship Seminar':'2028-02-05',
+  'Community Engagement Seminar':'2028-03-10'
+};
+const items = [];
+document.querySelectorAll('.panel .event-card').forEach(card => {
+  const a = card.querySelector('.event-card-title a'); if (!a) return;
+  const panel = card.closest('.panel');
+  items.push({
+    panel: panel.id,
+    heading: panel.querySelector('h2').textContent,
+    date: card.querySelector('.event-card-date').textContent.trim(),
+    title: a.textContent.trim(),
+    desc: card.querySelector('.event-card-desc').textContent.trim(),
+    url: a.href,
+    cal: RELATED[a.textContent.trim()] || null
+  });
+  card.dataset.idx = items.length - 1;
+  const hint = document.createElement('span');
+  hint.className = 'card-hint'; hint.textContent = 'Details and link';
+  card.appendChild(hint);
+});
+document.addEventListener('click', e => {
+  const card = e.target.closest('.event-card'); if (!card) return;
+  e.preventDefault();
+  openItem(items[card.dataset.idx]);
+});
 
-            // Update button states
-            document.querySelectorAll('.view-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
+function fillDialog({ cls, color, kicker, date, title, desc, facts, url }) {
+  dlg.className = cls || '';
+  color ? dlg.style.setProperty('--cc', color) : dlg.style.removeProperty('--cc');
+  $('dlgKicker').textContent = kicker;
+  $('dlgDate').textContent = date;
+  $('dlgTitle').textContent = title;
+  $('dlgDesc').textContent = desc;
+  $('dlgExtra').innerHTML = facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('');
+  const open = $('dlgOpen'), copy = $('dlgCopy');
+  open.hidden = copy.hidden = !url;
+  if (url) { open.href = url; copy.dataset.url = url; copy.textContent = 'Copy link'; }
+  if (!dlg.open) dlg.showModal();
+}
 
-            // Show selected view
-            if (view === 'calendar') {
-                document.getElementById('calendarViewContainer').style.display = 'block';
-                renderCalendar();
-            } else {
-                document.getElementById('listView').classList.add('show');
-                updateListView();
-            }
-        }
+function openItem(it) {
+  const P = PILLARS[it.panel];
+  let host = it.url; try { host = new URL(it.url).hostname.replace(/^www\./, ''); } catch (e) {}
+  const facts = [
+    ['When', esc(it.date)],
+    ['Part of', `${P.icon} ${esc(P.name)}<small>${esc(it.heading)}</small>`],
+    ['Pillar target', esc(P.kpi)]
+  ];
+  if (it.cal && calendarEvents[it.cal]) {
+    const ev = calendarEvents[it.cal];
+    facts.push(['Calendar entry', `${esc(fmtLong(parseDate(it.cal)))}<small>Nepali date: ${esc(ev.bs)}</small><button type="button" class="lnk" data-cal="${it.cal}">View calendar entry</button>`]);
+  }
+  facts.push(['Link', `${esc(host)}<small>${esc(it.url)}</small>`]);
+  fillDialog({ color: P.color, kicker: `${P.icon} ${P.name}`, date: it.date, title: it.title, desc: it.desc, facts, url: it.url });
+}
 
-        // ===== RENDER CALENDAR =====
-        function renderCalendar() {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
+function openEvent(k) {
+  const ev = calendarEvents[k]; if (!ev) return;
+  const rel = items.filter(i => i.cal === k);
+  const facts = [
+    ['Category', esc(CATS[ev.category].label)],
+    ['Nepali date', esc(ev.bs)]
+  ];
+  if (rel.length) facts.push(['Related link', rel.map(i => `<button type="button" class="lnk" data-item="${items.indexOf(i)}">${esc(i.title)}</button>`).join('<br>')]);
+  fillDialog({ cls: `cat-${ev.category}`, kicker: CATS[ev.category].label, date: fmtLong(parseDate(k)), title: ev.title, desc: ev.description, facts, url: null });
+}
 
-            // Update header
-            const monthNames = ["January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"];
-            document.getElementById('currentMonth').textContent = `${monthNames[month]} ${year}`;
+$('dlgExtra').addEventListener('click', e => {
+  const b = e.target.closest('.lnk'); if (!b) return;
+  if (b.dataset.cal) openEvent(b.dataset.cal);
+  else if (b.dataset.item) openItem(items[b.dataset.item]);
+});
+$('dlgCopy').onclick = async e => {
+  const b = e.currentTarget;
+  try { await navigator.clipboard.writeText(b.dataset.url); b.textContent = 'Copied'; }
+  catch (err) { b.textContent = 'Copy not available'; }
+  setTimeout(() => b.textContent = 'Copy link', 1800);
+};
+$('dlgClose').onclick = () => dlg.close();
+dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
 
-            // Clear calendar
-            const calendar = document.getElementById('calendar');
-            calendar.innerHTML = '';
+// ===== TABS =====
+const tabs = [...document.querySelectorAll('.tab')];
+function activate(id, focus) {
+  tabs.forEach(t => { const on = t.dataset.tab === id; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; if (on && focus) t.focus(); });
+  document.querySelectorAll('.panel').forEach(p => p.hidden = p.id !== id);
+  const active = tabs.find(t => t.dataset.tab === id);
+  active.scrollIntoView({ block: 'nearest', inline: 'center' });
+}
+tabs.forEach(t => t.addEventListener('click', () => activate(t.dataset.tab)));
+$('tabs').addEventListener('keydown', e => {
+  const i = tabs.findIndex(t => t.getAttribute('aria-selected') === 'true');
+  let n = -1;
+  if (e.key === 'ArrowRight') n = (i + 1) % tabs.length;
+  else if (e.key === 'ArrowLeft') n = (i - 1 + tabs.length) % tabs.length;
+  else if (e.key === 'Home') n = 0;
+  else if (e.key === 'End') n = tabs.length - 1;
+  if (n >= 0) { e.preventDefault(); activate(tabs[n].dataset.tab, true); }
+});
 
-            // Day headers
-            const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            dayHeaders.forEach(day => {
-                const header = document.createElement('div');
-                header.className = 'day-header';
-                header.textContent = day;
-                calendar.appendChild(header);
-            });
+// ===== THEME =====
+function setTheme(t) {
+  document.documentElement.dataset.theme = t;
+  $('themeBtn').setAttribute('aria-label', t === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+  $('themeBtn').textContent = t === 'dark' ? '☀' : '◐';
+  try { localStorage.setItem('kmc-cal-theme', t); } catch (e) {}
+}
+(function () {
+  let t = null;
+  try { t = localStorage.getItem('kmc-cal-theme'); } catch (e) {}
+  if (!t) t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  setTheme(t);
+})();
+$('themeBtn').onclick = () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
 
-            // Get first day of month and number of days
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const daysInPrevMonth = new Date(year, month, 0).getDate();
-
-            // Previous month days
-            for (let i = firstDay - 1; i >= 0; i--) {
-                const day = daysInPrevMonth - i;
-                const dayDiv = createDayElement(day, year, month - 1, true);
-                calendar.appendChild(dayDiv);
-            }
-
-            // Current month days
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayDiv = createDayElement(day, year, month, false);
-                calendar.appendChild(dayDiv);
-            }
-
-            // Next month days
-            const totalCells = calendar.children.length - 7;
-            const remainingCells = 42 - totalCells;
-            for (let day = 1; day <= remainingCells; day++) {
-                const dayDiv = createDayElement(day, year, month + 1, true);
-                calendar.appendChild(dayDiv);
-            }
-        }
-
-        // ===== CREATE DAY ELEMENT =====
-        function createDayElement(day, year, month, isOtherMonth) {
-            const dayDiv = document.createElement('div');
-            dayDiv.className = 'calendar-day';
-
-            if (isOtherMonth) {
-                dayDiv.classList.add('other-month');
-                year = month < 0 ? year - 1 : (month > 11 ? year + 1 : year);
-                month = (month + 12) % 12;
-            }
-
-            const dateStr = formatDate(year, month, day);
-            const dayNumber = document.createElement('div');
-            dayNumber.className = 'day-number';
-            dayNumber.textContent = day;
-            dayDiv.appendChild(dayNumber);
-
-            if (calendarEvents[dateStr]) {
-                dayDiv.classList.add('has-event');
-                const indicator = document.createElement('div');
-                indicator.className = 'event-indicator';
-                indicator.innerHTML = `<span class="event-dot"></span>1 event`;
-                dayDiv.appendChild(indicator);
-            }
-
-            dayDiv.onclick = () => showDayEvents(dateStr);
-
-            return dayDiv;
-        }
-
-        // ===== FORMAT DATE =====
-        function formatDate(year, month, day) {
-            const m = String(month + 1).padStart(2, '0');
-            const d = String(day).padStart(2, '0');
-            return `${year}-${m}-${d}`;
-        }
-
-        // ===== SHOW DAY EVENTS =====
-        function showDayEvents(dateStr) {
-            if (!calendarEvents[dateStr]) return;
-
-            const date = new Date(dateStr);
-            const monthNames = ["January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"];
-            const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
-            document.getElementById('modalDate').innerHTML = `
-                <strong>${dayNames[date.getDay()]}, ${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}</strong>
-            `;
-
-            const event = calendarEvents[dateStr];
-            const categoryEmoji = {
-                'academic': '🎓',
-                'research': '📖',
-                'holiday': '🎉',
-                'community': '🤝',
-                'workshop': '🎤'
-            };
-
-            const modalEvents = document.getElementById('modalEvents');
-            modalEvents.innerHTML = `
-                <div class="modal-event">
-                    <div class="modal-event-title">${categoryEmoji[event.category]} ${event.title}</div>
-                    <div class="modal-event-desc">${event.description}</div>
-                    <div class="modal-event-category">${event.category.toUpperCase()}</div>
-                    <div style="margin-top: 8px; font-size: 0.9em; color: #666;">
-                        <strong>Nepali Date:</strong> ${event.bs}
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('eventModal').classList.add('show');
-        }
-
-        // ===== CLOSE MODAL =====
-        function closeModal() {
-            document.getElementById('eventModal').classList.remove('show');
-        }
-
-        // ===== UPDATE EVENT LIST =====
-        function updateEventList() {
-            const eventList = document.getElementById('eventList');
-            eventList.innerHTML = '';
-
-            const today = new Date();
-            const eventsArray = Object.entries(calendarEvents)
-                .map(([date, event]) => ({ date, ...event }))
-                .sort((a, b) => new Date(a.date) - new Date(b.date));
-
-            const upcomingEvents = eventsArray.filter(e => new Date(e.date) >= today).slice(0, 8);
-
-            if (upcomingEvents.length === 0) {
-                eventList.innerHTML = '<li class="event-item" style="text-align: center; color: #999;">No upcoming events</li>';
-                return;
-            }
-
-            upcomingEvents.forEach(event => {
-                const date = new Date(event.date);
-                const eventItem = document.createElement('li');
-                eventItem.className = 'event-item';
-                eventItem.innerHTML = `
-                    <div class="event-date">${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
-                    <div class="event-title">${event.title}</div>
-                `;
-                eventItem.onclick = () => showDayEvents(event.date);
-                eventList.appendChild(eventItem);
-            });
-        }
-
-        // ===== UPDATE LIST VIEW =====
-        function updateListView() {
-            const listView = document.getElementById('listView');
-            listView.innerHTML = '';
-
-            const eventsArray = Object.entries(calendarEvents)
-                .map(([date, event]) => ({ date, ...event }))
-                .sort((a, b) => new Date(a.date) - new Date(b.date));
-
-            const monthGroups = {};
-            const monthNames = ["January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"];
-
-            eventsArray.forEach(event => {
-                const date = new Date(event.date);
-                const monthKey = `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
-                if (!monthGroups[monthKey]) monthGroups[monthKey] = [];
-                monthGroups[monthKey].push(event);
-            });
-
-            Object.entries(monthGroups).forEach(([month, events]) => {
-                const monthDiv = document.createElement('div');
-                monthDiv.className = 'events-by-month';
-                monthDiv.innerHTML = `<h3>${month}</h3>`;
-
-                events.forEach(event => {
-                    const date = new Date(event.date);
-                    const row = document.createElement('div');
-                    row.className = 'event-row';
-                    row.innerHTML = `
-                        <div class="event-date-col">${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
-                        <div class="event-title-col"><strong>${event.title}</strong><br><small>${event.description}</small></div>
-                        <div class="event-category-col"><span class="event-category">${event.category}</span></div>
-                    `;
-                    row.style.cursor = 'pointer';
-                    row.onclick = () => showDayEvents(event.date);
-                    monthDiv.appendChild(row);
-                });
-
-                listView.appendChild(monthDiv);
-            });
-        }
-
-        // ===== NAVIGATION =====
-        function previousMonth() {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            renderCalendar();
-        }
-
-        function nextMonth() {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            renderCalendar();
-        }
-
-        // ===== CLICK OUTSIDE MODAL =====
-        window.onclick = function(event) {
-            const modal = document.getElementById('eventModal');
-            if (event.target === modal) {
-                modal.classList.remove('show');
-            }
-        }
-
-        // ===== INITIALIZE APP =====
-        updateEventList();
-    </script>
+// ===== INIT =====
+function renderAll() { renderLegends(); renderTimeline(); renderCalendar(); renderList(); renderUpcoming(); }
+document.querySelectorAll('.panel a[href^="http"]').forEach(a => { a.target = '_blank'; a.rel = 'noopener'; });
+renderNext();
+renderAll();
+</script>
 </body>
 </html>
