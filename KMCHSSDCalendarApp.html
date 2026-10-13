@@ -198,7 +198,6 @@ dialog{max-width:560px}
 .dlg-actions .dlg-close:hover{background:var(--surface-2)}
 .dlg-open{display:inline-block;background:var(--gold);color:#1B1400;border-radius:10px;padding:9px 22px;font-weight:700;text-decoration:none}
 .dlg-open:hover{filter:brightness(1.08)}
-.dlg-copy{background:var(--navy);color:#fff;border:0;border-radius:10px;padding:9px 20px;font-weight:600}
 .event-card{cursor:pointer;transition:box-shadow .15s,transform .15s}
 .event-card:hover{box-shadow:0 8px 20px -12px var(--pc);transform:translateY(-2px)}
 .card-hint{display:block;margin-top:8px;font-size:.82rem;font-weight:600;color:var(--pc)}
@@ -551,7 +550,6 @@ dialog{max-width:560px}
     <dl class="dlg-facts" id="dlgExtra"></dl>
     <div class="dlg-actions">
       <a class="dlg-open" id="dlgOpen" target="_blank" rel="noopener" hidden>Open link</a>
-      <button class="dlg-copy" id="dlgCopy" type="button" hidden>Copy link</button>
       <button class="dlg-close" id="dlgClose" type="button">Close</button>
     </div>
   </div>
@@ -782,9 +780,9 @@ function fillDialog({ cls, color, kicker, date, title, desc, facts, url }) {
   $('dlgTitle').textContent = title;
   $('dlgDesc').textContent = desc;
   $('dlgExtra').innerHTML = facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('');
-  const open = $('dlgOpen'), copy = $('dlgCopy');
-  open.hidden = copy.hidden = !url;
-  if (url) { open.href = url; copy.dataset.url = url; copy.textContent = 'Copy link'; }
+  const open = $('dlgOpen');
+  open.hidden = !url;
+  if (url) open.href = url;
   if (!dlg.open) dlg.showModal();
 }
 
@@ -820,12 +818,6 @@ $('dlgExtra').addEventListener('click', e => {
   if (b.dataset.cal) openEvent(b.dataset.cal);
   else if (b.dataset.item) openItem(items[b.dataset.item]);
 });
-$('dlgCopy').onclick = async e => {
-  const b = e.currentTarget;
-  try { await navigator.clipboard.writeText(b.dataset.url); b.textContent = 'Copied'; }
-  catch (err) { b.textContent = 'Copy not available'; }
-  setTimeout(() => b.textContent = 'Copy link', 1800);
-};
 $('dlgClose').onclick = () => dlg.close();
 dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
 
