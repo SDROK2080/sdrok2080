@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Learn • Practice • Create</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--tx:#1b1f2a;--mu:#5d6578;--ac:#4f46e5;--ac2:#e0e7ff;--bd:#e2e5ee;--ok:#16a34a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1220;--card:#181c2e;--tx:#eceefa;--mu:#9aa3bd;--ac:#8b93ff;--ac2:#262b4d;--bd:#2a3050;--ok:#4ade80}}
+:root[data-theme="dark"]{--bg:#0f1220;--card:#181c2e;--tx:#eceefa;--mu:#9aa3bd;--ac:#8b93ff;--ac2:#262b4d;--bd:#2a3050;--ok:#4ade80}
+:root[data-theme="light"]{color-scheme:light}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:860px;margin:0 auto;padding:16px}
+h1{font-size:1.5rem;margin:.2rem 0}p.s{color:var(--mu);margin:.2rem 0 1rem}
+.bar{height:10px;background:var(--ac2);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ac);width:0;transition:width .3s}
+.grid{display:grid;gap:10px;margin-top:14px}
+.tr{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;cursor:pointer;display:flex;gap:12px;align-items:center;text-align:left;width:100%;color:inherit;font:inherit}
+.tr b{display:block}.tr span.d{color:var(--mu);font-size:.88rem}.ic{font-size:1.7rem}.pc{margin-left:auto;font-size:.85rem;color:var(--ac);white-space:nowrap}
+.back{background:none;border:0;color:var(--ac);font:inherit;cursor:pointer;padding:6px 0}
+.tabs{display:flex;gap:6px;margin:12px 0}.tabs button{flex:1;padding:9px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font:inherit;cursor:pointer}
+.tabs button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.ls{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:10px}
+.ls h3{margin:0 0 6px;font-size:1.02rem}.ls p{margin:.3rem 0;color:var(--mu);font-size:.93rem}
+.lk{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+a.b{padding:7px 12px;border-radius:9px;background:var(--ac2);color:var(--ac);text-decoration:none;font-size:.9rem;font-weight:600}
+label.c{display:flex;gap:8px;align-items:center;margin-top:10px;font-size:.9rem;cursor:pointer}
+textarea{width:100%;min-height:80px;margin-top:8px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);padding:8px;font:inherit}
+.rs a{display:block;padding:8px 0;color:var(--ac);border-bottom:1px solid var(--bd);text-decoration:none}
+.top{display:flex;justify-content:space-between;align-items:center}.top button{background:var(--card);border:1px solid var(--bd);color:var(--tx);border-radius:9px;padding:6px 10px;cursor:pointer}
+footer{max-width:860px;margin:8px auto 24px;padding:14px 16px;text-align:center;color:var(--mu);font-size:.88rem;border-top:1px solid var(--bd)}footer b{color:var(--tx)}
+</style></head><body><div class="w" id="app"></div>
+<footer>Prepared By: <b>Mr. Bishnu Singh Rayamajhi</b><br>Math Lecturer and Department Head of Humanities &amp; Social Sciences (KMC-HSSD),<br>Taulihawa, Kapilvastu.</footer>
+<script>
+const Q=s=>encodeURIComponent(s);
+const T=[
+{i:"🌱",t:"AI for Beginners",d:"Understand AI, machine learning, ChatGPT and how AI works.",L:[
+["What is AI? Machine learning vs deep learning","what is artificial intelligence explained for beginners","introduction to artificial intelligence for beginners","Write in your own words: AI vs ML vs deep learning, with one everyday example each.","Make a one-page AI cheat sheet for a friend."],
+["How AI and neural networks learn","how neural networks work explained simply","machine learning basics beginners guide","Spot 5 places AI is used in your phone or daily life.","Draw a simple diagram of training → model → prediction."],
+["How ChatGPT and LLMs work","how ChatGPT works large language models explained","large language models introduction","Ask a chatbot the same question 3 ways; compare answers.","Write a short guide: strengths and limits of chatbots."],
+["AI ethics, safety and bias","AI ethics bias privacy explained","responsible AI ethics guide","List 3 risks of AI and how you would reduce each.","Draft personal rules for using AI responsibly."]]},
+{i:"💬",t:"Master ChatGPT",d:"Prompt engineering: write better prompts, get more useful answers.",L:[
+["Prompt basics: role, task, context, format","ChatGPT prompt engineering tutorial beginners","prompt engineering guide","Rewrite a vague prompt using Role + Task + Context + Format.","Build your own reusable prompt template."],
+["Examples, steps and chain-of-thought","few-shot prompting chain of thought tutorial","prompt engineering techniques few-shot","Give 2 examples in a prompt and compare with no examples.","Create a 'step-by-step explainer' prompt for any topic."],
+["Iterate, refine and fix bad answers","how to improve ChatGPT answers follow up prompts","ChatGPT tips improve answers","Take a weak answer and improve it in 3 follow-ups.","Collect 10 of your best prompts into a library."],
+["Custom instructions, files and GPTs","ChatGPT custom instructions custom GPT tutorial","ChatGPT custom GPT guide","Set custom instructions about your role and style.","Design a custom assistant for a task you repeat."]]},
+{i:"🧰",t:"Practical AI Tools",d:"Writing, images, video, presentations and productivity tools.",L:[
+["AI writing and editing tools","best AI writing tools tutorial","AI writing tools guide","Polish a paragraph using an AI assistant; note what you kept.","Write an email, a summary and a post with AI + your edits."],
+["AI research and summarizing (Perplexity, NotebookLM)","NotebookLM Perplexity tutorial research","AI research tools guide","Summarize a long PDF and verify 3 facts yourself.","Make a study guide from your own notes."],
+["AI presentations and design","AI presentation maker tutorial Gamma Canva","AI presentation tools guide","Generate a 6-slide outline, then rewrite titles.","Build a short deck on a topic you teach or love."],
+["AI productivity workflows","AI productivity workflow tutorial","AI productivity tools guide","Automate one weekly task with an AI assistant.","Document a 5-step personal AI workflow."]]},
+{i:"💻",t:"AI & Coding",d:"Python, AI programming and simple AI projects.",L:[
+["Python basics","Python for beginners full course","Python for beginners pdf","Write a program that prints a multiplication table.","Build a small calculator or quiz script."],
+["Data and machine learning with Python","machine learning python scikit-learn tutorial beginners","machine learning with python pdf","Load a small CSV and plot one chart.","Train a simple classifier and report its accuracy."],
+["Use AI APIs and build a chatbot","build chatbot python API tutorial","build chatbot with LLM API pdf","Send one prompt to an AI API from code.","Create a simple Q&A chatbot for a topic."],
+["Code with AI assistants","AI coding assistant tutorial vibe coding","AI pair programming guide","Ask AI to explain and fix a buggy snippet.","Build a tiny web app with AI help and test it."]]},
+{i:"💼",t:"AI for Business & Income",d:"Business, freelancing, marketing and productivity with AI.",L:[
+["AI for business basics","AI for business beginners tutorial","AI for business guide","List 5 business tasks AI can speed up.","Write a one-page plan to add AI to a small business."],
+["AI for freelancing","how to freelance using AI tools","freelancing with AI guide","Draft a service offer and profile with AI, then edit it.","Create a portfolio sample for one service."],
+["AI for marketing and content","AI marketing content creation tutorial","AI digital marketing guide","Generate 10 post ideas and pick 3.","Build a 2-week content calendar."],
+["Customer support and automation","AI automation no code tutorial Zapier Make","AI business automation guide","Write an FAQ-answering prompt for a business.","Map one automation: trigger → AI step → result."]]},
+{i:"🎓",t:"AI for Education",d:"Learning, teaching, research and educational materials.",L:[
+["AI for learning and study","how to study with AI tutorial","AI for students guide","Ask AI to quiz you on a topic and explain mistakes.","Make flashcards and a study plan with AI."],
+["AI for lesson planning and teaching","AI lesson plan teachers tutorial ChatGPT","AI for teachers guide","Generate a lesson plan, then adapt it to your class.","Make a worksheet with an answer key."],
+["AI for research and writing","AI research assistant academic tutorial","AI academic research guide","Find themes in 3 sources; cite originals yourself.","Outline a research paper with AI, write it yourself."],
+["Quizzes, rubrics and materials","AI create quiz rubric educational content","AI educational content creation guide","Create 10 MCQs and check each answer.","Produce a mini course: outline, slides, quiz."]]},
+{i:"🎨",t:"AI Image & Video Creation",d:"Generate images, design graphics and create videos with AI.",L:[
+["AI image generation basics","AI image generation prompts tutorial beginners","AI image generation guide","Generate one image; change style, light, angle.","Write a prompt formula you can reuse."],
+["Graphic design with AI","AI graphic design Canva tutorial","AI graphic design guide","Design a poster or thumbnail with AI help.","Make a 3-piece brand kit: logo idea, colors, post."],
+["AI video creation","AI video generator tutorial","AI video creation guide","Write a 30-second script and storyboard.","Produce a short AI-assisted video."],
+["Voice, editing and publishing","AI voiceover video editing tutorial","AI video editing guide","Add subtitles and voiceover to a clip.","Publish a short video with a title and description."]]}
+];
+const R=[["Elements of AI (free course)","https://www.elementsofai.com"],["Microsoft AI for Beginners (GitHub)","https://github.com/microsoft/AI-For-Beginners"],["Learn Prompting (free guide)","https://learnprompting.org"],["freeCodeCamp (YouTube)","https://www.youtube.com/@freecodecamp"],["Hugging Face Learn","https://huggingface.co/learn"],["Google Skillshop / AI courses","https://grow.google/ai/"]];
+let S={};try{S=JSON.parse(localStorage.getItem("ail")||"{}")}catch(e){}
+const save=()=>{try{localStorage.setItem("ail",JSON.stringify(S))}catch(e){}};
+let cur=null,tab=0;const $=document.getElementById("app");
+const done=i=>T[i].L.filter((_,j)=>S["d"+i+j]).length;
+function pct(){let n=0;T.forEach((_,i)=>n+=done(i));return Math.round(n/28*100)}
+function home(){cur=null;$.innerHTML=`<div class="top"><h1>🤖 AI: Learn • Practice • Create</h1><button onclick="th()">◐</button></div><p class="s">Step by step, with free video tutorials and PDF guides. Every lesson has a practice task and a creation task.</p><div class="bar"><i style="width:${pct()}%"></i></div><p class="s">${pct()}% complete</p><div class="grid">${T.map((t,i)=>`<button class="tr" onclick="open_(${i})"><span class="ic">${t.i}</span><span><b>${i+1}. ${t.t}</b><span class="d">${t.d}</span></span><span class="pc">${done(i)}/4</span></button>`).join("")}</div><h3>More free resources</h3><div class="rs">${R.map(r=>`<a href="${r[1]}" target="_blank" rel="noopener">↗ ${r[0]}</a>`).join("")}</div>`}
+function open_(i){cur=i;tab=0;view()}
+function view(){const t=T[cur];$.innerHTML=`<button class="back" onclick="home()">← All tracks</button><h1>${t.i} ${t.t}</h1><p class="s">${t.d}</p><div class="bar"><i style="width:${done(cur)*25}%"></i></div><div class="tabs">${["Learn","Practice","Create"].map((n,k)=>`<button class="${k==tab?"on":""}" onclick="tab=${k};view()">${n}</button>`).join("")}</div>`+t.L.map((l,j)=>`<div class="ls"><h3>${j+1}. ${l[0]}</h3>`+(tab==0?`<p>Watch a free tutorial, then read a free PDF guide.</p><div class="lk"><a class="b" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=${Q(l[1])}">▶ Video tutorials</a><a class="b" target="_blank" rel="noopener" href="https://www.google.com/search?q=${Q(l[2]+" filetype:pdf")}">📄 PDF files</a></div><label class="c"><input type="checkbox" ${S["d"+cur+j]?"checked":""} onchange="S['d${cur}${j}']=this.checked;save();view()"> Mark lesson complete</label>`:`<p><b>${tab==1?"Practice":"Create"}:</b> ${tab==1?l[3]:l[4]}</p><textarea placeholder="Your notes, prompts, results…" oninput="S['n${tab}${cur}${j}']=this.value;save()">${S["n"+tab+cur+j]||""}</textarea>`)+`</div>`).join("")}
+function th(){const r=document.documentElement,d=matchMedia("(prefers-color-scheme:dark)").matches;const c=r.dataset.theme||(d?"dark":"light");r.dataset.theme=c=="dark"?"light":"dark"}
+home();
+</script></body></html>
