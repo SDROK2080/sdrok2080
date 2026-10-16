@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Analytic Geometry - Teaching & Learning App</title>
+<style>
+:root{--bg:#12100d;--cd:#1c1913;--tx:#f1e9dc;--mu:#a89c88;--ac:#d4a574;--bd:#3a3226;--ok:#7bd88f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Devanagari",sans-serif}
+.w{max-width:900px;margin:0 auto;padding:16px}
+header{text-align:center;padding:10px 0}h1{margin:.2rem 0;color:var(--ac);font-size:1.5rem}header p{margin:.2rem 0;color:var(--mu)}
+.lg{float:right;background:none;border:1px solid var(--ac);color:var(--ac);border-radius:8px;padding:5px 12px;cursor:pointer;font:inherit}
+.bar{height:10px;background:var(--bd);border-radius:9px;overflow:hidden;margin:10px 0 4px}.bar i{display:block;height:100%;background:var(--ac);transition:width .3s}
+.tabs{display:flex;gap:6px;margin:12px 0}.tabs button{flex:1;padding:9px;border:1px solid var(--bd);background:var(--cd);color:var(--tx);border-radius:10px;font:inherit;cursor:pointer}.tabs .on{background:var(--ac);color:#1a140c;border-color:var(--ac);font-weight:700}
+input[type=search]{width:100%;padding:10px;border-radius:10px;border:1px solid var(--bd);background:var(--cd);color:var(--tx);font:inherit;margin-bottom:10px}
+.ch{background:var(--cd);border:1px solid var(--bd);border-radius:14px;margin-bottom:10px;overflow:hidden}
+.hd{display:flex;gap:10px;align-items:center;padding:12px 14px;cursor:pointer}.nm{width:32px;height:32px;border-radius:50%;background:var(--ac);color:#1a140c;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.hd b{display:block}.hd small{color:var(--mu)}.hd .ok{margin-left:auto;color:var(--ok)}
+.bd{display:none;padding:0 14px 14px;border-top:1px solid var(--bd)}.ch.op .bd{display:block}
+.bd h4{margin:12px 0 6px;color:var(--ac);font-size:.92rem}.lk{display:flex;flex-wrap:wrap;gap:8px}
+a.b{padding:7px 12px;border-radius:9px;border:1px solid var(--ac);color:var(--ac);text-decoration:none;font-size:.88rem}a.b:hover{background:var(--ac);color:#1a140c}
+label.c{display:flex;gap:8px;align-items:center;margin-top:12px;cursor:pointer}
+.tp{color:var(--mu);font-size:.92rem;margin:8px 0 0}
+.pt{background:var(--cd);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:10px}.pt h3{margin:0;color:var(--ac)}.pt p{margin:.3rem 0;color:var(--mu)}
+.st{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.st div{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:14px;text-align:center}.st b{display:block;font-size:1.6rem;color:var(--ac)}
+footer{text-align:center;color:var(--mu);font-size:.85rem;border-top:1px solid var(--bd);margin-top:20px;padding:14px 0 24px}footer b{color:var(--tx)}
+</style></head><body><div class="w">
+<header><button class="lg" id="lg"></button><h1 id="h1"></h1><p id="sub"></p></header>
+<div class="bar"><i id="pb"></i></div><div id="pt" style="color:var(--mu);font-size:.9rem"></div>
+<div class="tabs" id="tb"></div><div id="v"></div>
+<footer id="ft"></footer></div>
+<script>
+const Q=encodeURIComponent,yt=s=>"https://www.youtube.com/results?search_query="+Q(s),pdf=s=>"https://www.google.com/search?q="+Q(s+" filetype:pdf");
+const OS="https://openstax.org/details/books/precalculus-2e",KH="https://www.khanacademy.org/math/precalculus",MIT="https://ocw.mit.edu/courses/18-02sc-multivariable-calculus-fall-2010/";
+// [en, ne, pages, topics, search keyword, extra link]
+const C=[
+["Transformation of Coordinates","निर्देशाङ्कको रूपान्तरण","1–12","Translation and rotation of axes; invariants","transformation of coordinates translation rotation of axes",OS],
+["Parabola","परवलय","13–44","Standard equation, tangent, normal, chord, pole and polar","parabola analytic geometry tangent normal",KH],
+["Ellipse","दीर्घवृत्त","45–102","Standard equation, auxiliary circle, tangent, conjugate diameters","ellipse analytic geometry conjugate diameters",KH],
+["Hyperbola","अतिपरवलय","103–134","Standard form, asymptotes, conjugate hyperbola, tangents","hyperbola analytic geometry asymptotes",KH],
+["Polar Equation of a Conic","शांकवको ध्रुवीय समीकरण","135–156","Focus-directrix polar form, tangent and chord","polar equation of a conic eccentricity directrix",OS],
+["General Equation of Second Degree","दोस्रो घातको सामान्य समीकरण","157–186","Classifying and tracing conics; centre; axes","general equation of second degree conic section",OS],
+["Coordinates in Space","आकाशमा निर्देशाङ्कहरू","187–208","Distance, section formula, direction cosines and ratios","3D coordinate geometry direction cosines direction ratios",MIT],
+["Plane","समतल","209–236","Equation of plane, angle, distance, planes through lines","plane in 3D geometry equation of a plane",MIT],
+["Straight Line","सरल रेखा","237–266","Line in space, shortest distance, skew lines","straight line in 3D shortest distance skew lines",MIT],
+["Sphere","गोला","267–286","Equation, tangent plane, sphere through a circle","sphere analytic geometry tangent plane",MIT],
+["Cone and Cylinder","शंकु र बेलन","287–322","Enveloping cone, right circular cone and cylinder","cone and cylinder analytic geometry",MIT],
+["Central Conicoid","केन्द्रीय कोनिकोइड","323–362","Ellipsoid, hyperboloids, tangent plane, normals","central conicoid ellipsoid hyperboloid",MIT],
+["Plane Sections and Generating Lines","समतल खण्ड र जनक रेखाहरू","363–414","Plane sections, paraboloids, generating lines","generating lines of conicoids plane sections paraboloid",MIT]];
+
+const RW=[["rotation of axes real life applications computer graphics robotics","AI computer vision coordinate transformation explained"],
+["parabola real life applications satellite dish bridges projectile","ChatGPT solve parabola problems step by step"],
+["ellipse real life applications planetary orbits whispering gallery","AI python plot ellipse matplotlib tutorial"],
+["hyperbola real life applications GPS navigation cooling towers","AI GPS positioning hyperbola machine learning"],
+["conic orbits satellites real world polar equation","AI orbit prediction machine learning satellites"],
+["conic sections real world applications","AI identify conic section from equation python"],
+["3D coordinates real world applications GPS computer graphics","AI 3D computer vision coordinates explained"],
+["plane equation real world applications 3D modeling","AI 3D modeling plane detection point cloud"],
+["lines in 3D real world applications robotics","AI robotics 3D path planning explained"],
+["sphere equation real world applications GPS trilateration","AI GPS trilateration spheres explained"],
+["cone and cylinder real world engineering applications","AI CAD design cone cylinder generative design"],
+["ellipsoid hyperboloid real world applications architecture","AI generative design 3D surfaces architecture"],
+["ruled surfaces hyperboloid real world architecture applications","AI generative architecture design explained"]];
+const P=[["Beginner","सुरुवाती","4 weeks","Fundamentals of coordinates",[1,7]],["Conic Sections","शांकव खण्ड","6 weeks","All conic sections",[2,3,4,5,6]],["3D Geometry","त्रिविमीय ज्यामिति","5 weeks","Space, plane, line, sphere",[7,8,9,10]],["Advanced Conicoid","उन्नत कोनिकोइड","6 weeks","Cone, cylinder, conicoids",[11,12,13]],["Complete Curriculum","पूर्ण पाठ्यक्रम","16 weeks","All 13 chapters",[1,2,3,4,5,6,7,8,9,10,11,12,13]]];
+const U={en:{t:"Analytic Geometry - Teaching & Learning",s:"For B.A. / B.Sc. / B.Ed. Students",tabs:["Chapters","Learning Paths","Progress"],sr:"Search chapters…",v:"Video tutorials",p:"PDF files",x:"Free reference",d:"Mark chapter complete",c:"Complete",pg:"Pages",ch:"Chapter",cn:"Completed",lf:"Left",pc:"Percent",vl:"Lecture videos",vs:"Solved problems",pn:"Notes (PDF)",pp:"Practice problems (PDF)",ft:"Prepared By",rw:"Real-world uses",rv:"Real-life applications",ai:"AI for this topic",av:"AI video tutorials",ap:"Try with AI (copy prompt)",pr:"Explain {T} with a real-world example, then give me 3 practice problems with step-by-step solutions.",cp:"Copied!"},
+ne:{t:"विश्लेषणात्मक ज्यामिति - शिक्षण तथा सिकाइ",s:"बी.ए. / बी.एस्सी. / बी.एड. विद्यार्थीहरूका लागि",tabs:["अध्यायहरू","सिकाइ मार्ग","प्रगति"],sr:"अध्याय खोज्नुहोस्…",v:"भिडियो ट्यूटोरियल",p:"PDF फाइलहरू",x:"निःशुल्क सन्दर्भ",d:"अध्याय पूरा भयो",c:"पूरा",pg:"पृष्ठ",ch:"अध्याय",cn:"पूरा भएका",lf:"बाँकी",pc:"प्रतिशत",vl:"लेक्चर भिडियो",vs:"समाधान गरिएका समस्या",pn:"नोट्स (PDF)",pp:"अभ्यास समस्या (PDF)",ft:"तयार गर्ने",rw:"वास्तविक जीवनका प्रयोग",rv:"वास्तविक जीवनका उपयोग",ai:"यस विषयमा AI",av:"AI भिडियो ट्यूटोरियल",ap:"AI सँग प्रयास गर्नुहोस् (प्रम्प्ट कपी)",pr:"{T} लाई वास्तविक जीवनको उदाहरणसहित सरल नेपालीमा बुझाउनुहोस्, अनि ३ अभ्यास समस्या चरणबद्ध समाधानसहित दिनुहोस्।",cp:"कपी भयो!"}};
+let L="en",tab=0,qs="",open_=-1,S={};try{S=JSON.parse(localStorage.getItem("agp")||"{}")}catch(e){}
+const sv=()=>{try{localStorage.setItem("agp",JSON.stringify(S))}catch(e){}},$=id=>document.getElementById(id),n=()=>C.filter((_,i)=>S[i]).length;
+function chap(i){const c=C[i],u=U[L],k=c[4],t=L=="en"?c[0]:c[1];
+return `<div class="ch ${open_==i?"op":""}"><div class="hd" onclick="open_=open_==${i}?-1:${i};r()"><span class="nm">${i+1}</span><span><b>${t}</b><small>${u.pg} ${c[2]}</small></span>${S[i]?'<span class="ok">✔</span>':""}</div><div class="bd"><p class="tp">${c[3]}</p>
+<h4>▶ ${u.v}</h4><div class="lk"><a class="b" target="_blank" rel="noopener" href="${yt(k+" lecture")}">${u.vl}</a><a class="b" target="_blank" rel="noopener" href="${yt(k+" solved problems")}">${u.vs}</a></div>
+<h4>📄 ${u.p}</h4><div class="lk"><a class="b" target="_blank" rel="noopener" href="${pdf(k+" notes")}">${u.pn}</a><a class="b" target="_blank" rel="noopener" href="${pdf(k+" exercises solutions")}">${u.pp}</a></div>
+<h4>🔗 ${u.x}</h4><div class="lk"><a class="b" target="_blank" rel="noopener" href="${c[5]}">${c[5]==OS?"OpenStax Precalculus":c[5]==KH?"Khan Academy":"MIT OpenCourseWare"}</a></div>
+<h4>🌍 ${u.rw}</h4><div class="lk"><a class="b" target="_blank" rel="noopener" href="${yt(RW[i][0])}">${u.rv}</a></div>
+<h4>🤖 ${u.ai}</h4><div class="lk"><a class="b" target="_blank" rel="noopener" href="${yt(RW[i][1])}">${u.av}</a><a class="b" href="#" onclick="cp(${i});return false">${u.ap}</a></div>
+<label class="c"><input type="checkbox" ${S[i]?"checked":""} onchange="S[${i}]=this.checked;sv();r()"> ${u.d}</label></div></div>`}
+function r(){const u=U[L],p=Math.round(n()/13*100);
+$("h1").textContent=u.t;$("sub").textContent=u.s;$("lg").textContent=L=="en"?"नेपाली":"English";$("pb").style.width=p+"%";$("pt").textContent=p+"% "+u.c;
+$("tb").innerHTML=u.tabs.map((x,i)=>`<button class="${i==tab?"on":""}" onclick="tab=${i};r()">${x}</button>`).join("");
+$("ft").innerHTML=`${u.ft}: <b>Mr. Bishnu Singh Rayamajhi</b><br>Math Lecturer and Department Head of Humanities &amp; Social Sciences (KMC-HSSD),<br>Taulihawa, Kapilvastu.<br>Kapilvastu Multiple Campus • Tribhuvan University • UCDL Academy • SDROK`;
+let h="";
+if(tab==0){h=`<input type="search" id="q" placeholder="${u.sr}" value="${qs}" oninput="qs=this.value;r();document.getElementById('q').focus()">`+C.map((c,i)=>i).filter(i=>(C[i][0]+C[i][1]+C[i][3]).toLowerCase().includes(qs.toLowerCase())).map(chap).join("")}
+else if(tab==1){h=P.map(x=>`<div class="pt"><h3>${L=="en"?x[0]:x[1]}</h3><p>${x[2]} • ${x[3]}</p><p>${u.ch}: ${x[4].join(", ")}</p><div class="bar"><i style="width:${Math.round(x[4].filter(c=>S[c-1]).length/x[4].length*100)}%"></i></div><div class="lk"><a class="b" href="#" onclick="tab=0;open_=${x[4][0]-1};r();return false">→ ${u.ch} ${x[4][0]}</a></div></div>`).join("")}
+else{h=`<div class="st"><div><b>${n()}</b>${u.cn}</div><div><b>${13-n()}</b>${u.lf}</div><div><b>${p}%</b>${u.pc}</div></div>`}
+$("v").innerHTML=h}
+function cp(i){const t=U[L].pr.replace("{T}",C[i][L=="en"?0:1]);const d=()=>alert(U[L].cp+"\n\n"+t);try{navigator.clipboard.writeText(t).then(d,()=>prompt("Copy:",t))}catch(e){prompt("Copy:",t)}}
+$("lg").onclick=()=>{L=L=="en"?"ne":"en";r()};r();
+</script></body></html>
