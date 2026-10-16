@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KMC-HSSD Academic Program – 4-Year BA</title>
+<style>
+:root{--bg:#0f1117;--card:#181b24;--ink:#eceff4;--mut:#9aa3b2;--gold:#f5b335;--org:#ff8a3d;--line:#2a2f3c;--ok:#4cc38a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#faf7f0;--card:#fff;--ink:#1d2330;--mut:#5b6475;--gold:#b97a00;--org:#d2560a;--line:#e3dccb;--ok:#18794e}}
+:root[data-theme="light"]{--bg:#faf7f0;--card:#fff;--ink:#1d2330;--mut:#5b6475;--gold:#b97a00;--org:#d2560a;--line:#e3dccb;--ok:#18794e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{padding:28px 18px 18px;text-align:center;border-bottom:1px solid var(--line);background:linear-gradient(135deg,rgba(245,179,53,.12),rgba(255,138,61,.08))}
+h1{margin:0;font-size:clamp(20px,4.5vw,30px);color:var(--gold)}header p{margin:6px 0 0;color:var(--mut);font-size:13px}
+main{max-width:1000px;margin:0 auto;padding:16px}
+.tabs,.filters{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+button,input{font:inherit}
+.tab,.f{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:9px 16px;cursor:pointer}
+.tab.on,.f.on{background:linear-gradient(135deg,var(--gold),var(--org));color:#1a1206;border-color:transparent;font-weight:700}
+input{flex:1;min-width:180px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+.note{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--org);border-radius:10px;padding:10px 14px;margin:12px 0;color:var(--mut);font-size:13px}
+.sub{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:10px 0;overflow:hidden}
+.sub>summary{cursor:pointer;padding:12px 16px;font-weight:600;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.sub[open]>summary{border-bottom:1px solid var(--line)}
+.badge{font-size:11px;padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--mut);font-weight:500}
+.badge.v{color:var(--ok);border-color:var(--ok)}
+.links{margin-left:auto;display:flex;gap:10px;font-size:13px;font-weight:500}
+a{color:var(--gold)}
+.wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);font-size:14px}th{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+.c{color:var(--ok)}.o{color:var(--org)}.empty{padding:12px 16px;color:var(--mut);font-size:13px}
+h2{font-size:17px;margin:22px 0 4px;color:var(--org)}
+footer{text-align:center;color:var(--mut);font-size:12px;padding:24px 16px}
+</style></head><body>
+<header><h1>KMC-HSSD Academic Program · 4-Year B.A.</h1>
+<p>Kapilvastu Multiple Campus · Humanities &amp; Social Sciences Department · Taulihawa, Kapilvastu · Tribhuvan University (FoHSS syllabus)</p></header>
+<main>
+<div class="tabs" id="tabs"></div>
+<div class="filters"><button class="f on" data-f="all">All</button><button class="f" data-f="C">Compulsory</button><button class="f" data-f="O">Optional</button><input id="q" type="search" placeholder="Search subject or code…"></div>
+<div class="note" id="note"></div>
+<div id="out"></div>
+</main>
+<footer>Source: <a href="https://fohss.tu.edu.np/downloads?category=14" target="_blank" rel="noopener">fohss.tu.edu.np · 4 Yrs BA Syllabus</a> · Prepared by UCDL Academy · SDROK · KMC-HSSD</footer>
+<script>
+const P="https://portal.tu.edu.np/downloads/";
+const QP="https://exam.tu.edu.np/";
+// paper: [code,title,type(C/O),marks]
+const GEN={
+1:[["401","Compulsory English: Reading & Writing (patterns of writing)","C",100]],
+2:[["Comp. Nepali (Y2)","Compulsory Nepali (see syllabus PDF)","C",100]],
+3:[["Comp. English (Y3)","Reading & Writing Across the Disciplines","C",100]],
+4:[]};
+const GENL={1:"4yrs_BA_first3rdyr_Comp.E_2023_04_30_09_39_39.pdf",2:"Comp.NepaliSecondYear_2023_04_30_10_15_03.pdf",3:"4yrs_BA_first3rdyr_Comp.E_2023_04_30_09_39_39.pdf"};
+const S=[
+{n:"Economics",f:"EconomicsFirst-FourthYear_2023_04_30_09_34_55.pdf",v:1,p:{
+1:[["Econ.421","Microeconomics","C",100],["Econ.422","Mathematics and Statistics for Economics","C",100]],
+2:[["Econ.423","Macroeconomics","C",100],["Econ.424","Development Economics, Planning and the Economy of Nepal","C",100]],
+3:[["Econ.425","Public Finance","C",100],["Econ.410","Elective Economics (for non-economics students)","O",100]],
+4:[["Econ.426","Money, Financial System and International Trade","C",100],["Econ.427","Research Methodology and Academic Writing","C",100]]}},
+{n:"Mathematics",f:"MathematicsFirst-FourthYear_2023_04_30_10_11_15.pdf",v:1,p:{
+1:[["Math 421","Calculus","C",100],["Math 422","Analytical Geometry and Vectors","C",100]],
+2:[["Math 423","Linear Algebra","C",100],["Math 424","Differential Equations","C",100]],
+3:[["Math 425","Real Analysis","C",100],["Math 410A","Linear Programming & Discrete Mathematics","O",100],["Math 410B","Computer Programming (50 theory + 50 lab)","O",100]],
+4:[["Math 426","Modern Algebra","C",100],["Math 427","Mathematical Analysis","C",100],["Math 428","Project Work","O",100],["Math 429","Mathematical Economics","O",100]]}},
+{n:"English (Major)",f:"EnglishMajorFirst-FourthYe_2023_04_30_09_44_12.pdf"},
+{n:"English (Alternative, Year II)",f:"Alt.EnglishSecondYear_2023_04_30_10_14_21.pdf"},
+{n:"Nepali (Major, Revised 2080)",f:"4yrsNepaliRevised_2080_2024_02_02_11_37_26.pdf"},
+{n:"Nepali (Major, earlier syllabus)",f:"NepaliFirst-FourthYear_2023_05_02_07_57_16.pdf"},
+{n:"Nepal Bhasha",f:"Up_NepalBhashaFirst-Fourth_2023_09_10_16_39_49.pdf"},
+{n:"Nepal Adhyayan (Nepal Studies)",f:"NepalAddhyanFourthYear_2023_05_11_05_12_05.pdf"},
+{n:"Philosophy",f:"2024_11_13_17_49_21.pdf"},
+{n:"Political Science",f:"4yrs_BA_Fullsyllabus_Politica_2023_04_30_09_50_04.pdf"},
+{n:"History",f:"History_2024_02_01_16_33_17.pdf"},
+{n:"Geography",f:"Geography_2024_02_01_16_31_06.pdf"},
+{n:"Sociology",f:"SociologyFirst-FourthYear_2023_04_30_09_34_03.pdf"},
+{n:"Anthropology",f:"4yrsAnthromerged_2024_02_02_11_19_42.pdf"},
+{n:"Psychology",f:"Up_PsychologyFirst-FourthYe_2023_09_10_16_29_58.pdf"},
+{n:"Linguistics",f:"Linguistics_2024_02_01_16_34_24.pdf"},
+{n:"Population Studies",f:"Up_PopulationStudiesFirst-F_2023_09_10_16_31_05.pdf"},
+{n:"Rural Development",f:"Up_RuralDevelopmentFirst-Fo_2023_09_10_16_28_43.pdf"}];
+const YN=["First","Second","Third","Fourth"];let yr=1,flt="all";
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+function rows(list,f,sy){return list.filter(r=>flt=="all"||r[2]==flt).map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td class="${r[2]=="C"?"c":"o"}">${r[2]=="C"?"Compulsory":"Optional"}</td><td>${r[3]}</td><td><a href="${P}${f}" target="_blank" rel="noopener">Syllabus</a> · <a href="${QP}" target="_blank" rel="noopener">Questions</a></td></tr>`).join("")}
+function tbl(h,list,f){const b=rows(list,f);return b?`<div class="wrap"><table><tr><th>Code</th><th>Paper</th><th>Type</th><th>Full marks</th><th>Links</th></tr>${b}</table></div>`:""}
+function render(){
+ const q=$("#q").value.toLowerCase();let h="";
+ const g=GEN[yr];
+ if(g.length&&flt!="O"){h+=`<h2>Common compulsory – Year ${yr}</h2><details class="sub" open><summary>${esc(g[0][1])}<span class="badge v">100 marks</span><span class="links"><a href="${P}${GENL[yr]}" target="_blank" rel="noopener">Syllabus PDF</a></span></summary>${tbl("",g,GENL[yr])}</details>`}
+ h+=`<h2>Major / optional subjects – Year ${yr}</h2>`;
+ let n=0;
+ S.forEach(s=>{
+  const l=(s.p&&s.p[yr])||[];
+  if(q&&!(s.n.toLowerCase().includes(q)||l.some(r=>(r[0]+r[1]).toLowerCase().includes(q))))return;
+  const t=tbl("",l,s.f);
+  if(s.p&&!t)return;
+  n++;
+  h+=`<details class="sub"><summary>${esc(s.n)}<span class="badge ${s.v?"v":""}">${s.v?"codes verified":"see syllabus PDF"}</span><span class="links"><a href="${P}${s.f}" target="_blank" rel="noopener">Syllabus PDF</a><a href="${QP}" target="_blank" rel="noopener">Question papers</a></span></summary>${t||`<div class="empty">Year ${yr} paper codes, marks and units are in the official syllabus PDF above. TU papers are normally 100 marks (70 external + 30 internal; pass 40).</div>`}</details>`;
+ });
+ if(!n)h+=`<div class="empty">No subject matches.</div>`;
+ $("#out").innerHTML=h;
+ $("#note").textContent=`BA ${YN[yr-1]} Year · “codes verified” = codes, titles and marks read directly from the TU syllabus PDF. Question-paper links open TU’s Office of the Controller of Examinations; add department-held past papers here when ready.`;
+}
+$("#tabs").innerHTML=YN.map((y,i)=>`<button class="tab ${i?"":"on"}" data-y="${i+1}">${y} Year</button>`).join("");
+document.addEventListener("click",e=>{const t=e.target.closest(".tab"),f=e.target.closest(".f");
+ if(t){yr=+t.dataset.y;document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b==t));render()}
+ if(f){flt=f.dataset.f;document.querySelectorAll(".f").forEach(b=>b.classList.toggle("on",b==f));render()}});
+$("#q").addEventListener("input",render);render();
+</script></body></html>
