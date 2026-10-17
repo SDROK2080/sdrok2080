@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Limit of a Function — Interactive Simulation</title>
+<style>
+:root{--bg:#12141c;--card:#1b1e2b;--line:#2c3144;--tx:#e9e9f0;--mut:#9aa0b8;--gold:#f5b942;--org:#ff7a3d;--grn:#4cd68a;--red:#ff5d6c;--blu:#5fb0ff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Devanagari",sans-serif}
+.wrap{max-width:900px;margin:0 auto;padding:14px}
+header{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+h1{margin:0;font-size:1.45rem;color:var(--gold)}
+h2{margin:0 0 8px;font-size:1.1rem;color:var(--org)}
+.sub{color:var(--mut);font-size:.85rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:14px 0}
+button,select{font:inherit;background:#252a3d;color:var(--tx);border:1px solid var(--line);border-radius:9px;padding:7px 12px;cursor:pointer}
+button:hover{border-color:var(--gold)}
+button.pri{background:var(--gold);color:#201a08;border-color:var(--gold);font-weight:600}
+canvas{width:100%;height:auto;display:block;background:#0e1018;border-radius:10px;border:1px solid var(--line)}
+.ctl{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0}
+.ctl label{min-width:110px;color:var(--mut);font-size:.9rem}
+input[type=range]{flex:1;min-width:140px;accent-color:var(--org)}
+.val{min-width:70px;font-family:ui-monospace,Menlo,monospace;color:var(--gold)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:10px}
+.box{background:#12141f;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.box small{display:block;color:var(--mut);font-size:.75rem}
+.box b{font-family:ui-monospace,Menlo,monospace;font-size:1rem}
+.L b{color:var(--org)}.R b{color:var(--grn)}
+.verdict{margin-top:10px;padding:10px;border-radius:10px;background:#12141f;border-left:4px solid var(--gold)}
+.ok{color:var(--grn)}.bad{color:var(--red)}
+ul{padding-left:20px;margin:6px 0}li{margin:4px 0}
+.q{margin:12px 0;padding-bottom:10px;border-bottom:1px dashed var(--line)}
+.opt{display:block;width:100%;text-align:left;margin:5px 0}
+.opt.right{border-color:var(--grn);background:#17301f}.opt.wrong{border-color:var(--red);background:#341a1f}
+.fb{font-size:.9rem;color:var(--mut);margin-top:4px}
+footer{text-align:center;color:var(--mut);font-size:.78rem;padding:10px 0 20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><h1 data-en="Limit of a Function" data-ne="फलनको सीमा (Limit)">Limit of a Function</h1>
+  <div class="sub" data-en="Functions, Limit, Continuity &amp; Derivatives · TU Calculus · BA / BSc / BEd / Engineering" data-ne="फलन, सीमा, निरन्तरता र अवकलन · TU क्याल्कुलस · BA / BSc / BEd / Engineering">Functions, Limit, Continuity &amp; Derivatives</div></div>
+  <button id="langBtn">नेपाली</button>
+</header>
+
+<section class="card">
+  <h2 data-en="Idea in short" data-ne="छोटो परिचय">Idea in short</h2>
+  <p data-en="A limit asks: as <b>x</b> gets closer and closer to <b>a</b> (but not equal to a), which value does <b>f(x)</b> get closer to? We write lim<sub>x→a</sub> f(x) = L. Only the behaviour <i>near</i> a matters — f(a) itself may be undefined or different." data-ne="सीमाले सोध्छ: <b>x</b> लाई <b>a</b> नजिक नजिक (a बराबर नभई) लैजाँदा <b>f(x)</b> कुन मानतिर पुग्छ? हामी lim<sub>x→a</sub> f(x) = L लेख्छौँ। a वरिपरिको व्यवहार मात्र महत्त्वपूर्ण हुन्छ — f(a) परिभाषित नहुन वा फरक हुन सक्छ।"></p>
+  <ul>
+    <li data-en="Limit exists ⇔ left-hand limit (LHL) = right-hand limit (RHL) = a finite number L." data-ne="सीमा अस्तित्वमा हुन्छ ⇔ बायाँ सीमा (LHL) = दायाँ सीमा (RHL) = सीमित सङ्ख्या L।"></li>
+    <li data-en="ε–δ: for every ε &gt; 0 there is a δ &gt; 0 such that 0 &lt; |x − a| &lt; δ ⇒ |f(x) − L| &lt; ε." data-ne="ε–δ: प्रत्येक ε &gt; 0 का लागि यस्तो δ &gt; 0 हुन्छ कि 0 &lt; |x − a| &lt; δ ⇒ |f(x) − L| &lt; ε।"></li>
+    <li data-en="f is continuous at a ⇔ lim<sub>x→a</sub> f(x) = f(a)." data-ne="f, a मा निरन्तर ⇔ lim<sub>x→a</sub> f(x) = f(a)।"></li>
+  </ul>
+</section>
+
+<section class="card">
+  <h2 data-en="Simulation" data-ne="सिमुलेसन">Simulation</h2>
+  <div class="ctl"><label data-en="Function" data-ne="फलन">Function</label>
+    <select id="fn" style="flex:1"></select></div>
+  <canvas id="cv" width="760" height="380"></canvas>
+  <div class="ctl"><label data-en="Distance h from a" data-ne="a बाट दूरी h">Distance h</label>
+    <input type="range" id="h" min="0" max="100" value="100"><span class="val" id="hv"></span></div>
+  <div class="ctl">
+    <button class="pri" id="anim" data-en="▶ Animate x → a" data-ne="▶ x → a एनिमेट">▶ Animate</button>
+    <button id="rst" data-en="Reset" data-ne="रिसेट">Reset</button>
+    <span class="sub" data-en="Orange = from the left, green = from the right" data-ne="सुन्तला = बायाँबाट, हरियो = दायाँबाट"></span>
+  </div>
+  <div class="grid" id="live"></div>
+  <div class="verdict" id="verdict"></div>
+
+  <h2 style="margin-top:16px" data-en="ε–δ game" data-ne="ε–δ खेल">ε–δ game</h2>
+  <div class="ctl"><label>ε</label><input type="range" id="eps" min="0.05" max="2" step="0.05" value="0.5"><span class="val" id="ev"></span></div>
+  <div class="ctl"><label>δ</label><input type="range" id="del" min="0.01" max="2" step="0.01" value="0.3"><span class="val" id="dv"></span></div>
+  <div class="verdict" id="ed"></div>
+</section>
+
+<section class="card">
+  <h2 data-en="Try this" data-ne="यो प्रयास गर्नुहोस्">Try this</h2>
+  <ul>
+    <li data-en="Pick f₁ and drag h towards 0. What does f(x) approach? Is f(1) even defined?" data-ne="f₁ छान्नुहोस् र h लाई 0 तिर तान्नुहोस्। f(x) कुन मानतिर जान्छ? f(1) परिभाषित छ?"></li>
+    <li data-en="Pick f₆: compare f(1) with the limit. Same or different? Is f continuous at 1?" data-ne="f₆ छान्नुहोस्: f(1) र सीमा तुलना गर्नुहोस्। उस्तै वा फरक? f, 1 मा निरन्तर छ?"></li>
+    <li data-en="Pick f₃ (jump): compare LHL and RHL. Why does the limit not exist?" data-ne="f₃ (जम्प) छान्नुहोस्: LHL र RHL तुलना गर्नुहोस्। सीमा किन अस्तित्वमा छैन?"></li>
+    <li data-en="Pick f₄ (1/x²): watch the values grow. Is ∞ a number? Does a finite limit exist?" data-ne="f₄ (1/x²) छान्नुहोस्: मान बढ्दै गएको हेर्नुहोस्। ∞ सङ्ख्या हो? सीमित सीमा छ?"></li>
+    <li data-en="f₁, ε = 0.1: find the largest δ that turns the status green. Halve ε — what happens to δ?" data-ne="f₁, ε = 0.1: स्ट्याटस हरियो बनाउने सबैभन्दा ठूलो δ पत्ता लगाउनुहोस्। ε आधा गर्दा δ को के हुन्छ?"></li>
+    <li data-en="f₂ (sin x / x): how small must h be before f(x) agrees with 1 to 4 decimals?" data-ne="f₂ (sin x / x): f(x) 1 सँग ४ दशमलवसम्म मिल्न h कति सानो हुनुपर्छ?"></li>
+  </ul>
+</section>
+
+<section class="card">
+  <h2 data-en="Quick quiz (3 questions)" data-ne="छिटो क्विज (३ प्रश्न)">Quick quiz</h2>
+  <div id="quiz"></div>
+  <div id="score" class="sub"></div>
+</section>
+
+<footer>Kapilvastu Multiple Campus · HSS Department · UCDL Academy · SDROK · Tribhuvan University</footer>
+</div>
+
+<script>
+var lang='en';
+try{lang=localStorage.getItem('limLang')||'en'}catch(e){}
+function T(a,b){return lang==='ne'?b:a}
+var INF=Infinity;
+var F=[
+ {n:'f₁(x) = (x²−1)/(x−1), a = 1',f:function(x){return (x*x-1)/(x-1)},a:1,L:2,lh:2,rh:2,fa:null,v:[-2,4,-2,6]},
+ {n:'f₂(x) = sin x / x, a = 0',f:function(x){return x===0?NaN:Math.sin(x)/x},a:0,L:1,lh:1,rh:1,fa:null,v:[-8,8,-0.6,1.4]},
+ {n:'f₃(x) = x/|x|, a = 0 (jump)',f:function(x){return x===0?NaN:(x<0?-1:1)},a:0,L:null,lh:-1,rh:1,fa:null,v:[-3,3,-3,3]},
+ {n:'f₄(x) = 1/x², a = 0',f:function(x){return x===0?NaN:1/(x*x)},a:0,L:INF,lh:INF,rh:INF,fa:null,v:[-3,3,-1,10]},
+ {n:'f₅(x) = x² + 1, a = 2 (continuous)',f:function(x){return x*x+1},a:2,L:5,lh:5,rh:5,fa:5,v:[-1,5,-2,12]},
+ {n:'f₆(x) = x+1 (x≠1), f(1) = 5',f:function(x){return Math.abs(x-1)<1e-12?5:x+1},a:1,L:2,lh:2,rh:2,fa:5,v:[-2,4,-2,6]}
+];
+var $=function(i){return document.getElementById(i)};
+var cv=$('cv'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height,cur=F[0];
+var sel=$('fn');
+F.forEach(function(o,i){var op=document.createElement('option');op.value=i;op.textContent=o.n;sel.appendChild(op)});
+function fmt(v){if(isNaN(v))return T('undefined','अपरिभाषित');if(v===INF)return '+∞';if(v===-INF)return '−∞';
+ return Math.abs(v)>=1e6?v.toExponential(2):String(+v.toFixed(6))}
+function hval(){return 2*Math.pow(10,-$('h').value/25)}
+function ed(){return {e:+$('eps').value,d:+$('del').value}}
+
+function draw(){
+ var o=cur,v=o.v,x0=v[0],x1=v[1],y0=v[2],y1=v[3],a=o.a;
+ var X=function(x){return (x-x0)/(x1-x0)*W},Y=function(y){return H-(y-y0)/(y1-y0)*H};
+ ctx.clearRect(0,0,W,H);
+ ctx.strokeStyle='#23283a';ctx.lineWidth=1;ctx.font='12px sans-serif';ctx.fillStyle='#7d839c';
+ var sx=(x1-x0)>10?2:1,sy=(y1-y0)>10?2:1,i;
+ for(i=Math.ceil(x0/sx)*sx;i<=x1;i+=sx){ctx.beginPath();ctx.moveTo(X(i),0);ctx.lineTo(X(i),H);ctx.stroke();ctx.fillText(i,X(i)+2,Y(0)>H-14?H-4:Math.min(H-4,Y(0)+12))}
+ for(i=Math.ceil(y0/sy)*sy;i<=y1;i+=sy){ctx.beginPath();ctx.moveTo(0,Y(i));ctx.lineTo(W,Y(i));ctx.stroke();if(i!==0)ctx.fillText(i,X(0)+4>W-20?W-24:X(0)+4,Y(i)-3)}
+ ctx.strokeStyle='#6a7194';ctx.lineWidth=1.6;
+ ctx.beginPath();ctx.moveTo(0,Y(0));ctx.lineTo(W,Y(0));ctx.moveTo(X(0),0);ctx.lineTo(X(0),H);ctx.stroke();
+ var fin=isFinite(o.L),p=ed();
+ if(fin){
+  var ok=check(p.e,p.d);
+  ctx.fillStyle=ok?'rgba(76,214,138,.14)':'rgba(255,93,108,.14)';
+  ctx.fillRect(0,Y(o.L+p.e),W,Y(o.L-p.e)-Y(o.L+p.e));
+  ctx.fillRect(X(a-p.d),0,X(a+p.d)-X(a-p.d),H);
+  ctx.setLineDash([6,5]);ctx.strokeStyle='#f5b942';ctx.lineWidth=1.2;
+  ctx.beginPath();ctx.moveTo(0,Y(o.L));ctx.lineTo(W,Y(o.L));ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle='#f5b942';ctx.fillText('L = '+o.L,6,Y(o.L)-5);
+ }
+ if(o.L===INF){ctx.setLineDash([6,5]);ctx.strokeStyle='#f5b942';ctx.beginPath();ctx.moveTo(X(a),0);ctx.lineTo(X(a),H);ctx.stroke();ctx.setLineDash([])}
+ ctx.strokeStyle='#5fb0ff';ctx.lineWidth=2.5;
+ [[x0,a-1e-6],[a+1e-6,x1]].forEach(function(r){
+  ctx.beginPath();var pen=false;
+  for(var k=0;k<=600;k++){var x=r[0]+(r[1]-r[0])*k/600,y=o.f(x);
+   if(!isFinite(y)||Math.abs(y)>1e6){pen=false;continue}
+   pen?ctx.lineTo(X(x),Y(y)):ctx.moveTo(X(x),Y(y));pen=true}
+  ctx.stroke()});
+ function dot(x,y,fill,col){ctx.beginPath();ctx.arc(X(x),Y(y),6,0,7);ctx.fillStyle=fill?col:'#0e1018';ctx.fill();ctx.strokeStyle=col;ctx.lineWidth=2;ctx.stroke()}
+ var opens=fin?[o.L]:(isFinite(o.lh)&&isFinite(o.rh)?[o.lh,o.rh]:[]);
+ opens.forEach(function(y){if(o.fa!==y)dot(a,y,false,'#5fb0ff')});
+ if(o.fa!==null)dot(a,o.fa,true,'#5fb0ff');
+ var h=hval();
+ [[a-h,'#ff7a3d'],[a+h,'#4cd68a']].forEach(function(q){
+  var y=o.f(q[0]);if(!isFinite(y))return;
+  ctx.setLineDash([4,4]);ctx.strokeStyle=q[1];ctx.lineWidth=1.2;
+  ctx.beginPath();ctx.moveTo(X(q[0]),Y(0));ctx.lineTo(X(q[0]),Math.max(-20,Math.min(H+20,Y(y))));
+  ctx.moveTo(X(q[0]),Math.max(-20,Math.min(H+20,Y(y))));ctx.lineTo(X(x0),Math.max(-20,Math.min(H+20,Y(y))));ctx.stroke();ctx.setLineDash([]);
+  if(Y(y)>-10&&Y(y)<H+10)dot(q[0],y,true,q[1]);
+ });
+}
+function check(e,d){var o=cur;if(!isFinite(o.L))return false;
+ for(var k=0;k<=400;k++){var x=o.a-d+2*d*k/400;if(Math.abs(x-o.a)<1e-12)continue;
+  var y=o.f(x);if(isNaN(y))continue;if(!(Math.abs(y-o.L)<e))return false}
+ return true}
+function update(){
+ var o=cur,h=hval(),xl=o.a-h,xr=o.a+h,fl=o.f(xl),fr=o.f(xr),p=ed();
+ $('hv').textContent=h<0.001?h.toExponential(1):h.toFixed(4);
+ $('ev').textContent=p.e.toFixed(2);$('dv').textContent=p.d.toFixed(2);
+ var cell=function(c,l,v){return '<div class="box '+c+'"><small>'+l+'</small><b>'+v+'</b></div>'};
+ $('live').innerHTML=
+  cell('L','x '+T('(left)','(बायाँ)'),fmt(xl))+cell('L','f(x)',fmt(fl))+
+  cell('R','x '+T('(right)','(दायाँ)'),fmt(xr))+cell('R','f(x)',fmt(fr))+
+  cell('','LHL',fmt(o.lh))+cell('','RHL',fmt(o.rh))+
+  cell('','f(a)',o.fa===null?T('undefined','अपरिभाषित'):fmt(o.fa))+
+  cell('','lim f(x)',o.L===null?T('does not exist','अस्तित्वमा छैन'):(o.L===INF?'∞ ('+T('no finite limit','सीमित सीमा छैन')+')':fmt(o.L)));
+ var s;
+ if(o.L===null)s=T('LHL ≠ RHL, so the <b class="bad">limit does not exist</b> (the graph jumps).','LHL ≠ RHL, त्यसैले <b class="bad">सीमा अस्तित्वमा छैन</b> (ग्राफ जम्प हुन्छ)।');
+ else if(o.L===INF)s=T('Values grow without bound: <b class="bad">no finite limit</b> (vertical asymptote). Not continuous at a.','मान सीमारहित बढ्छ: <b class="bad">सीमित सीमा छैन</b> (ठाडो असिम्टोट)। a मा निरन्तर छैन।');
+ else if(o.fa===o.L)s=T('LHL = RHL = f(a) = '+o.L+' → limit exists and <b class="ok">f is continuous at a</b>.','LHL = RHL = f(a) = '+o.L+' → सीमा छ र <b class="ok">f, a मा निरन्तर छ</b>।');
+ else s=T('LHL = RHL = '+o.L+' → <b class="ok">limit exists</b>, but f(a) is '+(o.fa===null?'undefined':'≠ L')+', so <b class="bad">not continuous</b> at a.','LHL = RHL = '+o.L+' → <b class="ok">सीमा छ</b>, तर f(a) '+(o.fa===null?'अपरिभाषित छ':'≠ L छ')+', त्यसैले a मा <b class="bad">निरन्तर छैन</b>।');
+ $('verdict').innerHTML=s;
+ if(!isFinite(o.L))$('ed').innerHTML=T('No finite L exists here, so no ε can be matched by any δ.','यहाँ सीमित L छैन, त्यसैले कुनै ε का लागि कुनै δ मिल्दैन।');
+ else{var ok=check(p.e,p.d);
+  $('ed').innerHTML=ok?T('<b class="ok">✔ δ works:</b> every x with 0 &lt; |x−a| &lt; δ gives f(x) inside (L−ε, L+ε).','<b class="ok">✔ δ मिल्यो:</b> 0 &lt; |x−a| &lt; δ भएका सबै x का लागि f(x) (L−ε, L+ε) भित्र छ।')
+   :T('<b class="bad">✘ δ too big:</b> some f(x) escapes the green band. Shrink δ.','<b class="bad">✘ δ धेरै ठूलो:</b> केही f(x) ब्यान्डबाट बाहिर छ। δ घटाउनुहोस्।')}
+ draw();
+}
+sel.onchange=function(){cur=F[sel.value];update()};
+['h','eps','del'].forEach(function(i){$(i).oninput=update});
+var raf=null;
+function stop(){if(raf){cancelAnimationFrame(raf);raf=null}$('anim').textContent=T('▶ Animate x → a','▶ x → a एनिमेट')}
+$('anim').onclick=function(){
+ if(raf){stop();return}
+ if(+$('h').value>=99.5||+$('h').value<=1)$('h').value=0;
+ $('h').value=Math.max(0,$('h').value);
+ var t=0;$('h').value=0;
+ $('anim').textContent=T('⏸ Pause','⏸ रोक्नुहोस्');
+ (function step(){t+=0.35;if(t>=100){$('h').value=100;update();stop();return}
+  $('h').value=t;update();raf=requestAnimationFrame(step)})();
+};
+$('rst').onclick=function(){stop();$('h').value=0;update()};
+$('h').addEventListener('input',function(){if(raf){}});
+
+/* quiz */
+var Q=[
+ {q:['lim<sub>x→2</sub> (x²−4)/(x−2) = ?','lim<sub>x→2</sub> (x²−4)/(x−2) = ?'],o:[['0','0'],['4','4'],['2','2'],['Does not exist','अस्तित्वमा छैन']],a:1,
+  e:['Cancel (x−2): the expression equals x+2 for x≠2, so the limit is 4.','(x−2) काट्दा x≠2 का लागि x+2 हुन्छ, त्यसैले सीमा 4।']},
+ {q:['At x = a, LHL = −1 and RHL = 1. Then lim f(x) is…','x = a मा LHL = −1 र RHL = 1 भए lim f(x) …'],o:[['0 (the average)','0 (औसत)'],['1','1'],['−1','−1'],['does not exist','अस्तित्वमा छैन']],a:3,
+  e:['Limit exists only if both one-sided limits are equal.','दुवै एकतर्फी सीमा बराबर भएमा मात्र सीमा अस्तित्वमा हुन्छ।']},
+ {q:['Does lim<sub>x→a</sub> f(x) depend on the value f(a)?','के lim<sub>x→a</sub> f(x) f(a) को मानमा निर्भर हुन्छ?'],o:[['Yes, f(a) must be defined','हुन्छ, f(a) परिभाषित हुनुपर्छ'],['No, only values near a matter','हुँदैन, a नजिकका मान मात्र महत्त्वपूर्ण'],['Only when f(a) = 0','f(a) = 0 हुँदा मात्र'],['Only for polynomials','बहुपदका लागि मात्र']],a:1,
+  e:['Limits describe nearby behaviour (x≠a). See f₁ and f₆.','सीमाले a नजिकको (x≠a) व्यवहार बताउँछ। f₁ र f₆ हेर्नुहोस्।']}
+];
+var ans=[null,null,null];
+function quiz(){
+ var h='';
+ Q.forEach(function(q,i){
+  h+='<div class="q"><b>'+(i+1)+'. '+T(q.q[0],q.q[1])+'</b>';
+  q.o.forEach(function(o,j){
+   var c='opt';if(ans[i]!==null){if(j===q.a)c+=' right';else if(j===ans[i])c+=' wrong'}
+   h+='<button class="'+c+'" onclick="pick('+i+','+j+')">'+T(o[0],o[1])+'</button>'});
+  if(ans[i]!==null)h+='<div class="fb">'+T(q.e[0],q.e[1])+'</div>';
+  h+='</div>'});
+ $('quiz').innerHTML=h;
+ var n=0,d=0;ans.forEach(function(a,i){if(a!==null){d++;if(a===Q[i].a)n++}});
+ $('score').textContent=d===3?T('Score: '+n+' / 3','अङ्क: '+n+' / 3'):'';
+}
+window.pick=function(i,j){if(ans[i]===null){ans[i]=j;quiz()}};
+
+function setLang(){
+ document.documentElement.lang=lang==='ne'?'ne':'en';
+ document.querySelectorAll('[data-en]').forEach(function(e){e.innerHTML=lang==='ne'?e.dataset.ne:e.dataset.en});
+ $('langBtn').textContent=lang==='ne'?'English':'नेपाली';
+ if(!raf)$('anim').textContent=T('▶ Animate x → a','▶ x → a एनिमेट');
+ quiz();update();
+}
+$('langBtn').onclick=function(){lang=lang==='ne'?'en':'ne';try{localStorage.setItem('limLang',lang)}catch(e){}setLang()};
+setLang();
+</script>
+</body>
+</html>
