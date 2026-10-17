@@ -26,6 +26,11 @@ main{max-width:860px;margin:0 auto;padding:12px}
 .lk a{display:block;text-align:center;text-decoration:none;color:var(--tx);border:1px solid var(--bd);background:var(--bg);border-radius:10px;padding:9px 6px;font-size:.85rem}
 .lk a:hover{border-color:var(--ac);background:var(--ac2)}
 footer{text-align:center;color:var(--mu);font-size:.8rem;padding:16px;line-height:1.6}
+#sim{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;z-index:50;padding:8px}#sim.on{opacity:1;pointer-events:auto}
+.sb{background:var(--card);border-radius:14px;max-width:700px;width:100%;max-height:92vh;overflow:auto;padding:12px;transform:scale(.95);transition:transform .3s}#sim.on .sb{transform:none}
+#cv{width:100%;height:auto;background:var(--bg);border-radius:10px;border:1px solid var(--bd);display:block}.sh{display:flex;justify-content:space-between;gap:8px;margin-bottom:8px;align-items:center}
+.sh button{border:0;background:var(--ac2);color:var(--tx);border-radius:8px;padding:6px 10px;cursor:pointer}.sc{display:grid;gap:6px;margin:8px 0}.sc label{display:flex;gap:8px;align-items:center;font-size:.85rem}.sc input[type=range]{flex:1}.sc select{padding:4px}
+#so{font-size:.85rem;background:var(--ac2);padding:8px;border-radius:8px}#sG{font-size:.85rem;color:var(--mu)}#sA{display:block;text-align:center;text-decoration:none;color:#fff;background:var(--ac);border-radius:10px;padding:9px}
 </style></head><body>
 <header><h1>Calculus: Differential & Integral</h1><p>TU syllabus guide for BA · BSc · BEd · Engineering</p><p style="font-size:.78rem;margin-top:8px">Developed By: Mr. Bishnu Singh Rayamajhi, Math Lecturer and Department Head of Humanities &amp; Social Sciences (KMC-HSSD), Kapilvastu Multiple Campus, Taulihawa</p></header>
 <main>
@@ -34,6 +39,7 @@ footer{text-align:center;color:var(--mu);font-size:.8rem;padding:16px;line-heigh
 <div class="prog"><i id="pb"></i></div><div id="pt" style="font-size:.85rem;color:var(--mu)"></div>
 <div id="list"></div></main>
 <footer><b>Developed By: Mr. Bishnu Singh Rayamajhi, Math Lecturer and Department Head of Humanities &amp; Social Sciences (KMC-HSSD), Kapilvastu Multiple Campus, Taulihawa</b><br>Links open free search results from YouTube, Google (PDFs), open references and AI assistants. Tick topics to track progress.</footer>
+<div id="sim"><div class="sb"><div class="sh"><b id="sT"></b><button id="sx" aria-label="Close">✕ Close</button></div><canvas id="cv" width="640" height="360"></canvas><div class="sc"><label id="fw">Function <select id="fs"><option>sin(x)</option><option>x*x</option><option>x*x*x-3*x</option><option>exp(x/2)</option><option>1/x</option><option>cos(x)+x/3</option><option>sqrt(abs(x))</option></select></label><label id="pw"><span id="lp"></span><input type="range" id="p"></label><label id="qw"><span id="lq"></span><input type="range" id="q"></label></div><div id="so"></div><p id="sG"></p><a id="sA" target="_blank" rel="noopener">✨ Build a custom version with AI</a></div></div>
 <script>
 const D=[
 ["A","Functions, Limit, Continuity & Derivatives","Modelling speed, growth and decay; engineering signal analysis.","Functions|Limit|Continuity|Derivatives"],
@@ -73,16 +79,54 @@ function links(t,c){const l=$("lv").value,k="calculus "+t+" "+c;return[
 function render(){const s=$("q").value.toLowerCase().trim(),h=[];let n=0,d=0;
 D.forEach((c,i)=>{if(c[0]!==part)return;const ts=c[3].split("|");let r="";
 ts.forEach((t,j)=>{const id=i+"."+j;n++;if(prog[id])d++;if(s&&!(t+c[1]).toLowerCase().includes(s))return;
-r+=`<div class="t" id="t${id.replace('.','_')}"><div class="row"><input type="checkbox" data-id="${id}" ${prog[id]?"checked":""} aria-label="Done"><span class="nm" data-o="1"><b>${j+1}</b>${t}</span><button class="go" data-o="1">Open</button></div><div class="pn"><div><div class="lk">${links(t,c[1]).map(x=>`<a href="${x[1]}" target="_blank" rel="noopener">${x[0]}</a>`).join("")}</div></div></div></div>`});
+r+=`<div class="t" id="t${id.replace('.','_')}"><div class="row"><input type="checkbox" data-id="${id}" ${prog[id]?"checked":""} aria-label="Done"><span class="nm" data-o="1"><b>${j+1}</b>${t}</span><button class="go" data-o="1">Open</button></div><div class="pn"><div><div class="lk">${links(t,c[1]).map(x=>`<a href="${x[1]}" target="_blank" rel="noopener">${x[0]}</a>`).join("")+`<a href="#" data-sim="${id}">🎮 Interactive Simulation</a><a href="${aiSim(t,c[1])}" target="_blank" rel="noopener">✨ AI Simulation Builder</a>`}</div></div></div></div>`});
 if(r)h.push(`<div class="ch ${s?"open":""}"><button>Chapter ${i+1-(part==="B"?12:0)}: ${c[1]}<small>${ts.length} topics ▾</small></button><div class="body"><div><div class="uses"><b>Real-world uses:</b> ${c[2]}</div>${r}</div></div></div>`)});
 $("list").innerHTML=h.join("")||"<p>No topics found.</p>";
 const p=Math.round(d/n*100);$("pb").style.width=p+"%";$("pt").textContent=`Progress: ${d}/${n} topics (${p}%)`;
 $("tA").classList.toggle("on",part==="A");$("tB").classList.toggle("on",part==="B")}
-$("list").onclick=e=>{const t=e.target;
+$("list").onclick=e=>{const t=e.target;if(t.dataset.sim){e.preventDefault();openSim(t.dataset.sim);return}
 if(t.closest(".ch>button")){t.closest(".ch").classList.toggle("open")}
 else if(t.dataset.o){t.closest(".t").classList.toggle("open")}
 else if(t.dataset.id){prog[t.dataset.id]=t.checked;save();const all=D.reduce((a,c)=>a+c[3].split("|").length,0)}
 if(t.dataset&&t.dataset.id){const v=Object.keys(prog).filter(k=>prog[k]&&D[+k.split(".")[0]][0]===part).length,n=D.filter(c=>c[0]===part).reduce((a,c)=>a+c[3].split("|").length,0);$("pb").style.width=Math.round(v/n*100)+"%";$("pt").textContent=`Progress: ${v}/${n} topics (${Math.round(v/n*100)}%)`}};
+const MAP="s,s,s,s,c,s,s,c,v,s,p,e,r,r,r,r,r,p,r,a,o,d,d,d,d".split(",");
+const GUIDE={s:"Drag a and h. As h→0 the secant (red) merges with the tangent (blue); the dashed line is the normal. The slope’s sign shows increasing/decreasing; slope 0 marks maxima and minima.",t:"Increase the degree: the polynomial (red) hugs sin x (blue) over a wider interval and the error shrinks.",r:"Raise n: the rectangles fit the curve better and the sum approaches the exact integral (area).",a:"Raise n: the polygon of chords approaches the true arc length (rectification).",v:"Move a: the red circle of curvature matches the curve locally; radius = 1/κ, large where the curve is flat.",p:"Change a and k to trace limaçons, cardioids and roses, r = a + cos(kθ).",c:"Colours show z = cos x + sin y. Move the point: the arrow is the gradient (fx, fy). At stationary points both partials vanish: maximum, minimum or saddle.",e:"Each line is one member of the family x/c + y/(L−c) = 1. Increase the number of lines: their envelope (a parabola) appears.",o:"Rotating y = |f(x)| about the x-axis: thin discs (π·f²·dx) add up to the volume as n increases.",d:"Grey segments form the slope field of dy/dx = a·y − x. The red curve is the solution through (0, y0)."};
+const C={s:[["a",-4,4,.1,1],["h",-2.5,2.5,.05,1.5]],t:[0,["degree n",1,9,1,3]],r:[["lower limit a",-3,3,.1,0],["n rectangles",1,60,1,6]],a:[["start a",-3,3,.1,-2],["n segments",1,40,1,4]],v:[["a",-3,3,.1,1],0],p:[["a",0,2,.1,1],["k",1,8,1,3]],c:[["x",-3,3,.1,1],["y",-3,3,.1,1]],e:[["L",2,6,.5,5],["lines",3,60,1,12]],o:[["start a",-3,3,.1,0],["n discs",1,40,1,8]],d:[["a",-2,2,.1,-.5],["y0",-3,3,.1,1]]};
+let sm;const cv=$("cv"),cx=cv.getContext("2d"),W=640,H=360;
+function aiSim(t,c){return "https://claude.ai/new?q="+E("Create an interactive HTML simulation (sliders, animated canvas/SVG, live numbers) that visually teaches “"+t+"” from "+c+" in Calculus for BA/BSc/BEd/Engineering students (TU syllabus). Include a short explanation, ‘try this’ tasks and 3 quiz questions.")}
+function openSim(id){const[i,j]=id.split(".").map(Number),c=D[i],t=c[3].split("|")[j];sm=MAP[i];if(i==2&&j>5)sm="t";
+$("sT").textContent=t;$("sG").textContent=GUIDE[sm];$("sA").href=aiSim(t,c[1]);
+[["p",0],["q",1]].forEach(([n,m])=>{const k=C[sm][m];$(n+"w").style.display=k?"":"none";if(k){$("l"+n).textContent=k[0];const g=$(n);[g.min,g.max,g.step,g.value]=k.slice(1)}});
+$("fw").style.display="sravo".includes(sm)?"":"none";$("sim").classList.add("on");draw()}
+function draw(){const st=getComputedStyle(document.documentElement),tx=st.getPropertyValue("--tx").trim(),bd=st.getPropertyValue("--bd").trim(),ac=st.getPropertyValue("--ac").trim();
+const p=+$("p").value,q=+$("q").value,f=sm=="t"?Math.sin:new Function("x","with(Math){return "+$("fs").value+"}"),S=sm=="p"?55:50,X=x=>W/2+x*S,Y=y=>H/2-y*S;let out="";
+cx.clearRect(0,0,W,H);
+const L=(a,b,c,d,col,w,dh)=>{cx.beginPath();cx.moveTo(a,b);cx.lineTo(c,d);cx.strokeStyle=col;cx.lineWidth=w||1;cx.setLineDash(dh||[]);cx.stroke();cx.setLineDash([])};
+const G=(fn,col,a,b)=>{cx.beginPath();let u=0;for(let x=a;x<=b;x+=.02){const y=fn(x);if(!isFinite(y)||Math.abs(y)>8){u=0;continue}u?cx.lineTo(X(x),Y(y)):cx.moveTo(X(x),Y(y));u=1}cx.strokeStyle=col;cx.lineWidth=2;cx.setLineDash([]);cx.stroke()};
+const P=(x,y,col)=>{cx.beginPath();cx.arc(X(x),Y(y),5,0,7);cx.fillStyle=col;cx.fill()};
+const sum=(g,a,b,n)=>{let s=0,d=(b-a)/n;for(let k=0;k<n;k++){const v=g(a+(k+.5)*d);if(isFinite(v))s+=v*d}return s};
+if(sm!="c"&&sm!="e"){L(0,H/2,W,H/2,bd,1);L(W/2,0,W/2,H,bd,1)}
+if(sm=="s"){const h=q||.01,d=(f(p+1e-4)-f(p-1e-4))/2e-4,sc=(f(p+h)-f(p))/h,y0=f(p);G(f,tx,-6.4,6.4);
+L(X(-7),Y(y0-7*d-p*d),X(7),Y(y0+7*d-p*d),"#2f8fff",2);L(X(-7),Y(y0+sc*(-7-p)),X(7),Y(y0+sc*(7-p)),"#e5484d",2);
+if(Math.abs(d)>.01)L(X(-7),Y(y0+(7+p)/d),X(7),Y(y0-(7-p)/d),tx,1,[5,4]);P(p,y0,tx);P(p+h,f(p+h),"#e5484d");
+out=`f(a) = ${y0.toFixed(3)} · tangent slope f′(a) = ${d.toFixed(3)} · secant slope = ${sc.toFixed(3)} · difference = ${Math.abs(sc-d).toFixed(3)}`}
+else if(sm=="t"){const T=x=>{let s=0,t=x;for(let k=0;k<q;k++){s+=t;t*=-x*x/((2*k+2)*(2*k+3))}return s};G(Math.sin,tx,-6.4,6.4);G(T,"#e5484d",-6.4,6.4);out=`Taylor polynomial of degree ${2*q-1} · error at x = 2: ${Math.abs(T(2)-Math.sin(2)).toExponential(2)}`}
+else if(sm=="r"||sm=="o"){const a=p,d=3/q;let s=0;for(let k=0;k<q;k++){const x=a+(k+.5)*d;let y=f(x);if(sm=="o")y=Math.abs(y);if(!isFinite(y)||Math.abs(y)>4)continue;s+=sm=="o"?y*y*d:y*d;cx.beginPath();if(sm=="o")cx.ellipse(X(x),Y(0),Math.max(2,d*S*.3),y*S,0,0,7);else cx.rect(X(x-d/2),Math.min(Y(0),Y(y)),d*S,Math.abs(y*S));cx.fillStyle="rgba(47,91,234,.25)";cx.fill();cx.strokeStyle=ac;cx.lineWidth=1;cx.stroke()}
+const g=sm=="o"?(x=>Math.abs(f(x))):f;G(g,tx,-6.4,6.4);if(sm=="o")G(x=>-g(x),tx,-6.4,6.4);
+const ex=sm=="o"?sum(x=>g(x)**2,a,a+3,2000):sum(f,a,a+3,2000);out=sm=="o"?`Volume ≈ ${(Math.PI*s).toFixed(3)} · exact ≈ ${(Math.PI*ex).toFixed(3)}`:`Riemann sum = ${s.toFixed(3)} · exact ∫ ≈ ${ex.toFixed(3)} · error = ${Math.abs(s-ex).toFixed(3)}`}
+else if(sm=="a"){const a=p,d=4/q;G(f,tx,-6.4,6.4);cx.beginPath();let s=0;for(let k=0;k<=q;k++){const x=a+k*d,y=f(x);k?cx.lineTo(X(x),Y(y)):cx.moveTo(X(x),Y(y));if(k)s+=Math.hypot(d,y-f(x-d))}cx.strokeStyle="#e5484d";cx.lineWidth=2;cx.stroke();
+let e=0;for(let k=0;k<2000;k++){const x=a+k*.002;e+=Math.hypot(.002,f(x+.002)-f(x))}out=`Polygon length = ${s.toFixed(3)} · true arc length ≈ ${e.toFixed(3)}`}
+else if(sm=="v"){const h=.01,d1=(f(p+h)-f(p-h))/(2*h),d2=(f(p+h)-2*f(p)+f(p-h))/(h*h),k=d2/Math.pow(1+d1*d1,1.5);G(f,tx,-6.4,6.4);P(p,f(p),tx);
+if(Math.abs(k)>.01){const R=1/Math.abs(k),n=Math.sign(k)/Math.hypot(1,d1),mx=p-d1*n*R,my=f(p)+n*R;cx.beginPath();cx.arc(X(mx),Y(my),R*S,0,7);cx.strokeStyle="#e5484d";cx.lineWidth=2;cx.stroke();out=`κ = ${k.toFixed(3)} · radius of curvature R = ${R.toFixed(3)} · centre = (${mx.toFixed(2)}, ${my.toFixed(2)})`}else out=`κ ≈ 0: the curve is locally straight (R → ∞, possible inflection)`}
+else if(sm=="p"){cx.beginPath();for(let t=0;t<=6.29;t+=.01){const r=p+Math.cos(q*t);t?cx.lineTo(X(r*Math.cos(t)),Y(r*Math.sin(t))):cx.moveTo(X(r),Y(0))}cx.strokeStyle="#e5484d";cx.lineWidth=2;cx.stroke();out=`r = ${p.toFixed(1)} + cos(${q}θ): ${p==0?"rose":p<1?"inner-loop limaçon / rose":p==1?"cardioid-type":"dimpled or convex limaçon"}`}
+else if(sm=="c"){for(let x=0;x<W;x+=8)for(let y=0;y<H;y+=8){const z=Math.cos((x-W/2)/S)+Math.sin((H/2-y)/S);cx.fillStyle=`hsl(${240-(z+2)*60},70%,55%)`;cx.fillRect(x,y,8,8)}
+L(0,H/2,W,H/2,"rgba(255,255,255,.6)");L(W/2,0,W/2,H,"rgba(255,255,255,.6)");const fx=-Math.sin(p),fy=Math.cos(q);L(X(p),Y(q),X(p+fx*.9),Y(q+fy*.9),"#000",3);P(p,q,"#fff");
+out=`z = ${(Math.cos(p)+Math.sin(q)).toFixed(3)} · ∂z/∂x = ${fx.toFixed(3)} · ∂z/∂y = ${fy.toFixed(3)} · ${Math.abs(fx)<.05&&Math.abs(fy)<.05?"stationary point: check second derivatives":"not stationary"}`}
+else if(sm=="e"){const ox=60,oy=H-30;L(ox,oy,W,oy,tx,1.5);L(ox,oy,ox,0,tx,1.5);for(let k=1;k<=q;k++){const c=p*k/(q+1);L(ox+c*S,oy,ox,oy-(p-c)*S,ac,1.2)}out=`${q} lines of the family; envelope: √x + √y = √${p} (a parabola)`}
+else{G(()=>NaN,tx,0,0);for(let gx=-6;gx<=6;gx+=.5)for(let gy=-3.5;gy<=3.5;gy+=.5){const a=Math.atan(p*gy-gx),dx=9*Math.cos(a),dy=9*Math.sin(a);L(X(gx)-dx,Y(gy)+dy,X(gx)+dx,Y(gy)-dy,bd,1.5)}
+cx.beginPath();for(const sg of[1,-1]){let x=0,y=q;cx.moveTo(X(0),Y(q));for(let k=0;k<640;k++){y+=sg*.01*(p*y-x);x+=sg*.01;if(Math.abs(y)>9)break;cx.lineTo(X(x),Y(y))}}cx.strokeStyle="#e5484d";cx.lineWidth=2;cx.stroke();out=`dy/dx = ${p.toFixed(1)}·y − x, y(0) = ${q.toFixed(1)}`}
+$("so").textContent=out}
+["p","q","fs"].forEach(i=>$(i).oninput=draw);const cl=()=>$("sim").classList.remove("on");$("sx").onclick=cl;$("sim").onclick=e=>{if(e.target.id=="sim")cl()};document.onkeydown=e=>{if(e.key=="Escape")cl()};
 $("tA").onclick=()=>{part="A";render()};$("tB").onclick=()=>{part="B";render()};
 $("q").oninput=render;$("lv").onchange=render;render();
 </script></body></html>
