@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Functions – Interactive Calculus Lab</title>
+<style>
+:root{--bg:#f7f7f4;--card:#fff;--tx:#1d2330;--mu:#5b6475;--bd:#dfe3ea;--ac:#2563eb;--ac2:#e11d48;--ok:#15803d;--bad:#b91c1c;--grid:#e5e8ee;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10131a;--card:#181c26;--tx:#e8ebf2;--mu:#9aa3b5;--bd:#2a3040;--ac:#6ea0ff;--ac2:#ff6b8b;--ok:#4ade80;--bad:#f87171;--grid:#252b3a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#10131a;--card:#181c26;--tx:#e8ebf2;--mu:#9aa3b5;--bd:#2a3040;--ac:#6ea0ff;--ac2:#ff6b8b;--ok:#4ade80;--bad:#f87171;--grid:#252b3a;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:760px;margin:0 auto;padding:14px}
+h1{font-size:1.4rem;margin:.2em 0}h2{font-size:1.05rem;margin:0 0 .4em}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin:12px 0}
+.mu{color:var(--mu);font-size:.92rem}
+canvas{width:100%;display:block;border-radius:10px;border:1px solid var(--bd);background:var(--card)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+select,button{font:inherit;padding:8px 12px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx)}
+button{cursor:pointer}button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.sl{display:grid;grid-template-columns:70px 1fr 54px;gap:8px;align-items:center;margin:6px 0}
+.sl input{width:100%}.sl b{text-align:right;font-variant-numeric:tabular-nums}
+.machine{display:flex;align-items:center;justify-content:center;gap:8px;margin:10px 0;flex-wrap:wrap}
+.box{padding:10px 16px;border-radius:10px;border:2px solid var(--ac);font-weight:700}
+.val{padding:8px 12px;border-radius:10px;background:var(--bg);border:1px solid var(--bd);font-variant-numeric:tabular-nums;min-width:90px;text-align:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:8px 10px}
+.stat small{display:block;color:var(--mu)}.stat span{font-weight:600}
+li{margin:.35em 0}
+.opt{display:block;width:100%;text-align:left;margin:6px 0}
+.opt.ok{border-color:var(--ok);color:var(--ok)}.opt.bad{border-color:var(--bad);color:var(--bad)}
+.fb{font-size:.92rem;margin-top:4px}
+</style></head><body><main>
+<h1>Functions: a rule that gives one output</h1>
+<p class="mu">Calculus · Unit 1 (Functions, Limit, Continuity &amp; Derivatives) · BA / BSc / BEd / Engineering (TU)</p>
+
+<div class="card"><h2>The idea</h2>
+<p>A <b>function</b> f: A → B assigns to every x in the <b>domain</b> A exactly <b>one</b> value f(x) in B. The set of outputs actually produced is the <b>range</b>. Graphically, a vertical line meets the graph at most once (vertical line test). A function is <b>one-to-one</b> if different inputs give different outputs (horizontal line test). Here every curve is built as <b>f(x) = a·g(x − h) + k</b>: a stretches/flips, h shifts right, k shifts up.</p></div>
+
+<div class="card">
+<div class="row"><label for="fn"><b>Base g(x):</b></label>
+<select id="fn"></select>
+<button id="anim">▶ Animate x</button><button id="hl">Horizontal line test</button></div>
+<div style="height:8px"></div>
+<canvas id="cv" width="700" height="700"></canvas>
+<div class="machine"><div class="val" id="mx">x = 0</div>→<div class="box" id="mb">f</div>→<div class="val" id="my">f(x) = 0</div></div>
+<div class="sl"><span>x</span><input id="x" type="range" min="-8" max="8" step="0.1" value="1"><b id="xv"></b></div>
+<div class="sl"><span>a</span><input id="a" type="range" min="-3" max="3" step="0.1" value="1"><b id="av"></b></div>
+<div class="sl"><span>h</span><input id="h" type="range" min="-5" max="5" step="0.5" value="0"><b id="hv"></b></div>
+<div class="sl"><span>k</span><input id="k" type="range" min="-5" max="5" step="0.5" value="0"><b id="kv"></b></div>
+<div class="sl" id="cr"><span>y = c</span><input id="c" type="range" min="-8" max="8" step="0.1" value="2"><b id="cvv"></b></div>
+<div class="grid2">
+<div class="stat"><small>Formula</small><span id="s1"></span></div>
+<div class="stat"><small>Domain</small><span id="s2"></span></div>
+<div class="stat"><small>Range</small><span id="s3"></span></div>
+<div class="stat"><small>Even / odd</small><span id="s4"></span></div>
+<div class="stat"><small>One-to-one?</small><span id="s5"></span></div>
+<div class="stat"><small>Line y = c cuts graph</small><span id="s6">off</span></div>
+</div></div>
+
+<div class="card"><h2>Try this</h2><ol>
+<li>Choose <b>√x</b>, then slide <b>h</b>. Watch the domain start move with it. What is the domain when h = 3?</li>
+<li>Choose <b>1/x</b>. Slide <b>x</b> toward h. What happens to f(x), and why is x = h excluded?</li>
+<li>Choose <b>x²</b>, switch on the horizontal line test and move <b>c</b>. For which c are there 2 hits, 1 hit, 0 hits? What does that say about one-to-one?</li>
+<li>Choose <b>sin x</b> and change <b>a</b> and <b>k</b>. Predict the range before reading it.</li>
+<li>With <b>x²</b> keep h = 0, k = 0: is it even or odd? Now set h = 1. What changes?</li></ol></div>
+
+<div class="card"><h2>Quick quiz</h2><div id="quiz"></div><p id="score" class="mu"></p></div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const G={lin:["x",x=>x],quad:["x²",x=>x*x],cub:["x³",x=>x*x*x],sqrt:["√x",x=>x>=0?Math.sqrt(x):NaN],rec:["1/x",x=>x!==0?1/x:NaN],abs:["|x|",Math.abs],sin:["sin x",Math.sin]};
+const NAMES={lin:"x",quad:"x²",cub:"x³",sqrt:"√x",rec:"1/x",abs:"|x|",sin:"sin x"};
+for(const k in G){const o=document.createElement("option");o.value=k;o.textContent="g(x) = "+G[k][0];$("fn").appendChild(o)}
+$("fn").value="quad";
+const n=v=>(+v.toFixed(2)).toString().replace("-","−");
+const P=()=>({t:$("fn").value,a:+$("a").value,h:+$("h").value,k:+$("k").value});
+const F=(x,p)=>p.a*G[p.t][1](x-p.h)+p.k;
+let anim=false,dir=1,hl=false;
+const cv=$("cv"),ctx=cv.getContext("2d"),R=8;
+function fit(){const w=Math.min(cv.parentElement.clientWidth,520),d=devicePixelRatio||1;cv.style.width=w+"px";cv.style.height=w+"px";cv.width=w*d;cv.height=w*d;draw()}
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()}
+function info(p){
+ const{t,a,h,k}=p;let dom="ℝ",ran,eo,oo;
+ if(t=="sqrt")dom="x ≥ "+n(h);if(t=="rec")dom="x ≠ "+n(h);
+ if(a==0)ran="{"+n(k)+"}";
+ else if(t=="lin"||t=="cub")ran="ℝ";
+ else if(t=="rec")ran="y ≠ "+n(k);
+ else if(t=="sin")ran="["+n(k-Math.abs(a))+", "+n(k+Math.abs(a))+"]";
+ else ran=a>0?"y ≥ "+n(k):"y ≤ "+n(k);
+ let ev=true,od=true,cnt=0;
+ for(let x=0.5;x<=5;x+=0.5){const u=F(x,p),w=F(-x,p);if(!isFinite(u)||!isFinite(w))continue;cnt++;if(Math.abs(u-w)>1e-9)ev=false;if(Math.abs(u+w)>1e-9)od=false}
+ eo=cnt==0?"not symmetric (domain)":ev&&od?"both":ev?"even":od?"odd":"neither";
+ oo=a!=0&&["lin","cub","sqrt","rec"].includes(t)?"Yes":"No";
+ return{dom,ran,eo,oo};
+}
+function draw(){
+ const p=P(),W=cv.width,s=W/(2*R),X=x=>(x+R)*s,Y=y=>(R-y)*s,d=W/520;
+ ctx.clearRect(0,0,W,W);ctx.lineWidth=1;ctx.strokeStyle=css("--grid");
+ for(let i=-R;i<=R;i++){ctx.beginPath();ctx.moveTo(X(i),0);ctx.lineTo(X(i),W);ctx.moveTo(0,Y(i));ctx.lineTo(W,Y(i));ctx.stroke()}
+ ctx.strokeStyle=css("--mu");ctx.lineWidth=1.5*d;ctx.beginPath();ctx.moveTo(X(0),0);ctx.lineTo(X(0),W);ctx.moveTo(0,Y(0));ctx.lineTo(W,Y(0));ctx.stroke();
+ const c=+$("c").value;
+ if(hl){ctx.strokeStyle=css("--ac2");ctx.setLineDash([6*d,5*d]);ctx.beginPath();ctx.moveTo(0,Y(c));ctx.lineTo(W,Y(c));ctx.stroke();ctx.setLineDash([])}
+ ctx.strokeStyle=css("--ac");ctx.lineWidth=3*d;ctx.beginPath();let prev=null,hits=0,pd=null;
+ for(let x=-R;x<=R;x+=0.01){const y=F(x,p);
+  if(!isFinite(y)||Math.abs(y)>60){prev=null;pd=null;continue}
+  if(prev===null||Math.abs(y-prev)>6){ctx.moveTo(X(x),Y(y))}else ctx.lineTo(X(x),Y(y));
+  if(pd!==null&&Math.abs(y-pd)<6&&((pd-c)*(y-c)<0||y==c&&pd!=c))hits++;
+  prev=y;pd=y}
+ ctx.stroke();
+ const x0=+$("x").value,y0=F(x0,p),ok=isFinite(y0);
+ ctx.fillStyle=css("--mu");ctx.font=11*d+"px system-ui";
+ for(let i=-R+2;i<=R-1;i+=2)if(i){ctx.fillText(i,X(i)-4*d,Y(0)+13*d);ctx.fillText(i,X(0)+4*d,Y(i)+4*d)}
+ ctx.strokeStyle=css("--ac2");ctx.lineWidth=1.5*d;ctx.setLineDash([4*d,4*d]);
+ ctx.beginPath();ctx.moveTo(X(x0),Y(0));ctx.lineTo(X(x0),ok&&Math.abs(y0)<R+4?Y(y0):Y(0));
+ if(ok&&Math.abs(y0)<R+4){ctx.lineTo(X(0),Y(y0))}ctx.stroke();ctx.setLineDash([]);
+ ctx.fillStyle=css("--ac2");
+ if(ok&&Math.abs(y0)<R+4){ctx.beginPath();ctx.arc(X(x0),Y(y0),6*d,0,7);ctx.fill()}
+ else{ctx.beginPath();ctx.arc(X(x0),Y(0),5*d,0,7);ctx.fill()}
+ const I=info(p),pr=(p.a==1?"":p.a==-1?"−":n(p.a)+"·");
+ $("xv").textContent=n(x0);$("av").textContent=n(p.a);$("hv").textContent=n(p.h);$("kv").textContent=n(p.k);$("cvv").textContent=n(c);
+ $("mx").textContent="x = "+n(x0);$("mb").textContent="f";
+ $("my").textContent=ok?"f(x) = "+n(y0):"undefined";
+ const hs=p.h?"(x "+(p.h>0?"− ":"+ ")+n(Math.abs(p.h))+")":"x",gs=NAMES[p.t].replace(/x/g,hs=="x"?"x":hs.replace(/^\(|\)$/g,m=>m));
+ $("s1").textContent="f(x) = "+pr+(p.t=="sqrt"?"√"+hs:p.t=="abs"?"|"+hs.replace(/^\(|\)$/g,"")+"|":p.t=="sin"?"sin"+(p.h?hs:" x"):p.t=="rec"?"1/"+hs:NAMES[p.t].replace("x",hs))+(p.k?(p.k>0?" + ":" − ")+n(Math.abs(p.k)):"");
+ if(p.a==0)$("s1").textContent="f(x) = "+n(p.k)+" (constant)";
+ $("s2").textContent=I.dom;$("s3").textContent=I.ran;$("s4").textContent=I.eo;$("s5").textContent=I.oo;
+ $("s6").textContent=hl?"≈ "+hits+" point"+(hits==1?"":"s")+" (y = "+n(c)+")":"off";
+ $("cr").style.display=hl?"grid":"none";
+}
+["fn","x","a","h","k","c"].forEach(i=>$(i).addEventListener("input",draw));
+$("hl").onclick=()=>{hl=!hl;$("hl").classList.toggle("on",hl);draw()};
+$("anim").onclick=()=>{anim=!anim;$("anim").classList.toggle("on",anim);$("anim").textContent=anim?"⏸ Pause":"▶ Animate x";if(anim)requestAnimationFrame(tick)};
+function tick(){if(!anim)return;let x=+$("x").value+dir*0.05;if(x>=R){x=R;dir=-1}if(x<=-R){x=-R;dir=1}$("x").value=x;draw();requestAnimationFrame(tick)}
+addEventListener("resize",fit);
+matchMedia("(prefers-color-scheme:dark)").addEventListener("change",draw);
+
+const Q=[
+ ["What is the domain of f(x) = √(x − 3)?",["x ≥ 3","x ≤ 3","x > 3","all real numbers"],0,"The square root needs x − 3 ≥ 0, so x ≥ 3 (the graph of √x shifted right by 3)."],
+ ["Which relation is NOT a function of x (fails the vertical line test)?",["y = x²","y = |x|","x² + y² = 4","y = 1/x"],2,"For x = 0 the circle gives y = 2 and y = −2: one input, two outputs."],
+ ["If f(x) = 2x² − 1, then f(−3) = ?",["−19","17","−7","19"],1,"2(−3)² − 1 = 2·9 − 1 = 17. Squaring removes the sign."]
+];
+let sc=0,done=0;
+Q.forEach((q,i)=>{const d=document.createElement("div");d.style.margin="10px 0";
+ d.innerHTML="<b>"+(i+1)+". "+q[0]+"</b>";
+ q[1].forEach((o,j)=>{const b=document.createElement("button");b.className="opt";b.textContent=o;
+  b.onclick=()=>{if(d.dataset.d)return;d.dataset.d=1;done++;
+   const bs=d.querySelectorAll(".opt");bs[q[2]].classList.add("ok");
+   if(j==q[2])sc++;else b.classList.add("bad");
+   const f=document.createElement("div");f.className="fb";f.textContent=(j==q[2]?"Correct. ":"Not quite. ")+q[3];d.appendChild(f);
+   if(done==Q.length)$("score").textContent="Score: "+sc+" / "+Q.length};
+  d.appendChild(b)});
+ $("quiz").appendChild(d)});
+fit();
+</script></body></html>
