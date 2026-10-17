@@ -1,0 +1,88 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Calculus: Differential & Integral – TU Learning App</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--tx:#1b2333;--mu:#5d6779;--ac:#2f5bea;--ac2:#e8eeff;--bd:#dde2ee;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10141f;--card:#1a2030;--tx:#e8ecf5;--mu:#9aa6bd;--ac:#7c9bff;--ac2:#222c4a;--bd:#2c3550}}
+:root[data-theme="dark"]{--bg:#10141f;--card:#1a2030;--tx:#e8ecf5;--mu:#9aa6bd;--ac:#7c9bff;--ac2:#222c4a;--bd:#2c3550}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{padding:20px 16px;background:linear-gradient(135deg,#2f5bea,#7a3fe0);color:#fff;text-align:center}
+header h1{margin:0;font-size:1.5rem}header p{margin:4px 0 0;opacity:.9;font-size:.9rem}
+main{max-width:860px;margin:0 auto;padding:12px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.bar>*{flex:1 1 140px;padding:10px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font-size:.95rem}
+.tabs button{cursor:pointer;font-weight:600}.tabs button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.prog{height:8px;background:var(--bd);border-radius:6px;overflow:hidden;margin:8px 0}.prog i{display:block;height:100%;background:#22b07d;width:0;transition:width .4s}
+.ch{background:var(--card);border:1px solid var(--bd);border-radius:12px;margin:10px 0;overflow:hidden}
+.ch>button{all:unset;display:flex;justify-content:space-between;gap:8px;width:100%;box-sizing:border-box;padding:14px;cursor:pointer;font-weight:700}
+.ch>button small{color:var(--mu);font-weight:400}
+.body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}.open>.body{grid-template-rows:1fr}
+.body>div{overflow:hidden}
+.uses{margin:0 14px 8px;padding:10px;background:var(--ac2);border-radius:8px;font-size:.88rem}
+.t{border-top:1px solid var(--bd)}
+.t>.row{display:flex;align-items:center;gap:10px;padding:10px 14px}
+.t .nm{flex:1;cursor:pointer}.t .nm b{color:var(--ac);margin-right:6px}
+.go{border:0;background:var(--ac);color:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;font-size:.85rem}
+.pn{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}.t.open>.pn{grid-template-rows:1fr}
+.pn>div{overflow:hidden}.lk{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;padding:4px 14px 14px}
+.lk a{display:block;text-align:center;text-decoration:none;color:var(--tx);border:1px solid var(--bd);background:var(--bg);border-radius:10px;padding:9px 6px;font-size:.85rem}
+.lk a:hover{border-color:var(--ac);background:var(--ac2)}
+footer{text-align:center;color:var(--mu);font-size:.8rem;padding:16px;line-height:1.6}
+</style></head><body>
+<header><h1>Calculus: Differential & Integral</h1><p>TU syllabus guide for BA · BSc · BEd · Engineering</p><p style="font-size:.78rem;margin-top:8px">Developed By: Mr. Bishnu Singh Rayamajhi, Math Lecturer and Department Head of Humanities &amp; Social Sciences (KMC-HSSD), Kapilvastu Multiple Campus, Taulihawa</p></header>
+<main>
+<div class="bar tabs"><button id="tA">Differential Calculus</button><button id="tB">Integral Calculus</button></div>
+<div class="bar"><input id="q" type="search" placeholder="Search topics…"><select id="lv"><option>BA</option><option>BSc</option><option>BEd</option><option>Engineering</option></select></div>
+<div class="prog"><i id="pb"></i></div><div id="pt" style="font-size:.85rem;color:var(--mu)"></div>
+<div id="list"></div></main>
+<footer><b>Developed By: Mr. Bishnu Singh Rayamajhi, Math Lecturer and Department Head of Humanities &amp; Social Sciences (KMC-HSSD), Kapilvastu Multiple Campus, Taulihawa</b><br>Links open free search results from YouTube, Google (PDFs), open references and AI assistants. Tick topics to track progress.</footer>
+<script>
+const D=[
+["A","Functions, Limit, Continuity & Derivatives","Modelling speed, growth and decay; engineering signal analysis.","Functions|Limit|Continuity|Derivatives"],
+["A","Higher Order Derivatives","Acceleration in physics, beam bending, vibration analysis.","Definitions and Notations|Higher Order Derivatives of Some Special Functions|Higher Order Derivatives of Rational Functions|Leibnitz’s Theorem"],
+["A","Expansion of Functions","Calculator algorithms, approximating sin/exp, error estimation.","Rolle’s Theorem|Geometrical Interpretation of Rolle’s Theorem|Lagrange’s Mean Value Theorem|Geometrical Interpretation of Lagrange’s MVT|Cauchy’s Mean Value Theorem|Geometrical Interpretation of Cauchy’s MVT|Taylor’s Theorem in Finite Form|Taylor’s Theorem with Cauchy’s Form of Remainder|Maclaurin’s Series in Finite Form|Expansion of a Function in an Infinite Series|Other Methods of Expansion"],
+["A","Indeterminate Forms","Evaluating limits in physics and economics formulas.","The form 0/0 (L’Hospital’s Theorem)|Generalization of L’Hospital’s Theorem|Indeterminate Form ∞/∞|The form ∞ × 0|The form ∞ − ∞|Other Indeterminate Forms (0^0, 1^∞, ∞^0)"],
+["A","Partial Differentiation","Thermodynamics, economics (marginal analysis), machine learning gradients.","Function of Two or Three Variables|Domain of a Function|Neighbourhood of a Point|Limit of a Function of Two Variables|Continuity of a Function of Two Variables|Partial Derivatives|Partial Derivatives of Higher Order|Equality of Cross (Mixed) Partial Derivatives|Geometrical Interpretation of a Function of Two Variables|Geometrical Interpretation of Partial Derivatives of First Order|Homogeneous Functions|Euler’s Theorem on Homogeneous Functions|Total Differentials|Composite Function|Total Derivative|Euler’s Theorem for Three Variables|Converse of Euler’s Theorem|Differentiation of Implicit Function"],
+["A","Tangent and Normal","Road and rail design, optics, computer graphics.","Tangent and Normal|Equation of Tangent and Normal|Angle of Intersection of Two Curves|Cartesian Subtangent, Subnormal, Length of Tangent and Normal|Derivatives of Arc Length (Cartesian)|Derivatives of Arc Length (Parametric)|Derivative of Arc Length (Polar)|Values of sin ψ and cos ψ|Angle Between Radius Vector and Tangent|Polar Subtangent and Polar Subnormal|Length of Perpendicular from the Pole on Tangent|Pedal Equation"],
+["A","Maxima and Minima of Functions of One Variable","Profit maximisation, minimum cost, optimal design of containers.","Increasing and Decreasing Functions|Maxima and Minima of Functions of One Variable|Necessary Condition for Maxima and Minima|Sufficient Condition for Maxima and Minima|Alternative Criterion of Sufficient Condition|Steps for Finding Maxima and Minima|Global (Absolute) Extreme Values|Concavity and Point of Inflection"],
+["A","Maxima and Minima of Two and Three Variables","Multi-variable optimisation in economics, logistics, engineering design.","Maxima and Minima of Functions of Two Variables|Extreme Value|Necessary Condition for Two Variables|Stationary Points|Taylor’s Theorem for Two or More Variables|Sufficient (Lagrange’s) Conditions|Working Rule for Two Variables|Criteria for Three Independent Variables|Extreme Values Under Constraints|Lagrange’s Method of Undetermined Multipliers"],
+["A","Curvature","Highway curves, roller coasters, lens design.","Curvature of a Curve at a Point|Radius of Curvature at a Point|Determination of Radius of Curvature|Radius of Curvature at Origin|Geometrical Interpretation of Newtonian Formula|Circle of Curvature|Length of Chord of Curvature Through the Pole|Length of Chord of Curvature Parallel to Axes|Centre of Curvature|Evolutes and Involutes"],
+["A","Asymptotes","Graph behaviour in physics, long-term trends and limits.","Branches of a Curve|Asymptotes|Asymptotes of General Rational Algebraic Curves|Total Number of Asymptotes|Rules of Finding Asymptotes of Algebraic Curves|Asymptotes of Polar Curves|Rules of Finding Asymptotes of Polar Curves"],
+["A","Curve Tracing","Plotting software, animation paths, data visualisation.","Tracing Cartesian Curves|Tracing Polar Curves"],
+["A","Envelope","Optics (caustics), gear design, projectile safety zones.","One Parameter Family of Curves|Envelope|Analytic Definition of Envelope|Determination of Envelope of One Parameter Family|Two Parameter Family of Curves|Envelope of Two Parameter Family"],
+["B","Indefinite Integral","Finding position from velocity, accumulation in physics.","Indefinite Integral|Definite Integral|General Laws Satisfied by Integrals|Methods of Integration|Integration by Method of Transformation|Method of Substitution|Integration by Parts|Integration of Some Special Trigonometric Functions|Integration of Rational Fractions"],
+["B","Definite Integral","Area, work done, total distance, probability.","Introduction|Properties of Definite Integral|Definite Integral as the Limit of a Sum|Geometrical Interpretation as the Limit of a Sum|Generalized Definition|Summation of Series|Fundamental Theorem of Integral Calculus"],
+["B","Infinite (Improper) Integrals","Probability distributions, signal processing, physics fields.","Improper Integrals|Improper Integrals of the First Kind and Convergence|Improper Integrals of the Second Kind and Convergence|Transformation of Infinite Integral into Definite Integral"],
+["B","Reduction Formulae","Fast evaluation of repeated integrals in engineering and physics.","Reduction Formula for ∫x^n e^ax dx|Reduction Formula for sin^n x, cos^n x|Reduction Formula for ∫tan^n x dx|Reduction Formula for ∫sec^n x dx|Reduction Formula for ∫cos^m x sin nx dx|Reduction Formula for ∫cos^m x cos nx dx"],
+["B","Beta and Gamma Functions","Statistics, quantum physics, fluid mechanics.","Beta and Gamma Functions|Properties of Beta and Gamma Functions"],
+["B","Tracing of Some Well-known Curves","Computer graphics, design of cams and arches.","Method of Curve Tracing (Cartesian)|Tracing Well-known Curves in Cartesian Coordinates|Methods of Tracing Curves in Polar Coordinates|Tracing Some Well-known Polar Curves"],
+["B","Quadrature","Land area survey, material estimates, flood-plain mapping.","Area in Cartesian Coordinates|Area Between Two Curves and Two Ordinates|Area in Polar Coordinates|Area Bounded by a Closed Curve"],
+["B","Length of Plane Curves & Intrinsic Equations","Cable and road length, robotics path planning.","Arc Lengths from Cartesian Curves|Arc Length from Polar Curves|Arc Lengths from Parametric Curves|Arc Length from Pedal (p–r) Curves|Intrinsic Equation of a Curve|Intrinsic Equation from Cartesian Curve|Intrinsic Equation from Parametric Curve|Intrinsic Equation from Polar Equation|Intrinsic Equation from Pedal Curve"],
+["B","Volume and Surface Area","Tank capacity, pottery, vase and bottle design.","Solid of Revolution|Volume of Solid of Revolution (Cartesian)|Volume from Polar Equations|Axis of Revolution Parallel to x or y Axis|Any Axis of Revolution|Surface of Solid of Revolution"],
+["B","Differential Equations","Population growth, circuits, cooling, epidemics.","Differential Equation|Order of Differential Equation|Degree of Differential Equation|Solution of Differential Equations|Formation of Differential Equation|Different Forms of Solution"],
+["B","First Order and First Degree Equations","Radioactive decay, mixing problems, finance.","DE First Order and First Degree|Standard Forms of First Order DE|Separation of the Variables|Change of Variable|Homogeneous Differential Equations|First Order DE Reducible to Homogeneous Form|Linear Differential Equation of First Order|Bernoulli’s Equation|Exact Differential Equation|Integrating Factor|Application of Differential Equations|Important Geometrical Results"],
+["B","First Order but not First Degree","Envelope and optics problems, mechanics.","Equations Solvable for p|Equations Solvable for y|Equations Solvable for x|Clairaut’s Equation|DE Reducible to Clairaut’s Form"],
+["B","Linear DE with Constant Coefficients","Springs, vibrations, RLC circuits, control systems.","Second Order Linear DE with Constant Coefficients|Solving d²y/dx² + P1 dy/dx + P2 y = 0|Particular Integral|Rules for Finding Particular Integral|Homogeneous Linear Differential Equations|Equation Reducible to Homogeneous Linear Equation|Differential Equation of Third and Fourth Order"]];
+const E=encodeURIComponent,$=id=>document.getElementById(id);
+let part="A",prog={};try{prog=JSON.parse(localStorage.getItem("calc-prog")||"{}")}catch(e){}
+const save=()=>{try{localStorage.setItem("calc-prog",JSON.stringify(prog))}catch(e){}};
+function links(t,c){const l=$("lv").value,k="calculus "+t+" "+c;return[
+["▶ Video Tutorial","https://www.youtube.com/results?search_query="+E(k+" tutorial "+l)],
+["📄 PDF Notes","https://www.google.com/search?q="+E(k+" "+l+" notes filetype:pdf")],
+["📚 Free Reference","https://www.google.com/search?q="+E(k+" site:tutorial.math.lamar.edu OR site:math.libretexts.org OR site:khanacademy.org OR site:openstax.org")],
+["🌍 Real-World Uses","https://www.google.com/search?q="+E("real world applications of "+t+" calculus")],
+["🤖 Ask AI","https://claude.ai/new?q="+E("Explain “"+t+"” ("+c+", Calculus) for a "+l+" student following the Tribhuvan University syllabus: concept, formulas, 2 solved examples, a real-world use and 3 practice questions.")]]}
+function render(){const s=$("q").value.toLowerCase().trim(),h=[];let n=0,d=0;
+D.forEach((c,i)=>{if(c[0]!==part)return;const ts=c[3].split("|");let r="";
+ts.forEach((t,j)=>{const id=i+"."+j;n++;if(prog[id])d++;if(s&&!(t+c[1]).toLowerCase().includes(s))return;
+r+=`<div class="t" id="t${id.replace('.','_')}"><div class="row"><input type="checkbox" data-id="${id}" ${prog[id]?"checked":""} aria-label="Done"><span class="nm" data-o="1"><b>${j+1}</b>${t}</span><button class="go" data-o="1">Open</button></div><div class="pn"><div><div class="lk">${links(t,c[1]).map(x=>`<a href="${x[1]}" target="_blank" rel="noopener">${x[0]}</a>`).join("")}</div></div></div></div>`});
+if(r)h.push(`<div class="ch ${s?"open":""}"><button>Chapter ${i+1-(part==="B"?12:0)}: ${c[1]}<small>${ts.length} topics ▾</small></button><div class="body"><div><div class="uses"><b>Real-world uses:</b> ${c[2]}</div>${r}</div></div></div>`)});
+$("list").innerHTML=h.join("")||"<p>No topics found.</p>";
+const p=Math.round(d/n*100);$("pb").style.width=p+"%";$("pt").textContent=`Progress: ${d}/${n} topics (${p}%)`;
+$("tA").classList.toggle("on",part==="A");$("tB").classList.toggle("on",part==="B")}
+$("list").onclick=e=>{const t=e.target;
+if(t.closest(".ch>button")){t.closest(".ch").classList.toggle("open")}
+else if(t.dataset.o){t.closest(".t").classList.toggle("open")}
+else if(t.dataset.id){prog[t.dataset.id]=t.checked;save();const all=D.reduce((a,c)=>a+c[3].split("|").length,0)}
+if(t.dataset&&t.dataset.id){const v=Object.keys(prog).filter(k=>prog[k]&&D[+k.split(".")[0]][0]===part).length,n=D.filter(c=>c[0]===part).reduce((a,c)=>a+c[3].split("|").length,0);$("pb").style.width=Math.round(v/n*100)+"%";$("pt").textContent=`Progress: ${v}/${n} topics (${Math.round(v/n*100)}%)`}};
+$("tA").onclick=()=>{part="A";render()};$("tB").onclick=()=>{part="B";render()};
+$("q").oninput=render;$("lv").onchange=render;render();
+</script></body></html>
