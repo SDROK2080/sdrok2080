@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Exponential &amp; Logarithmic Functions — Interactive Simulation</title>
+<style>
+:root{--bg:#12141c;--card:#1b1e2b;--line:#2c3144;--tx:#e9e9f0;--mut:#9aa0b8;--gold:#f5b942;--org:#ff7a3d;--grn:#4cd68a;--red:#ff5d6c;--blu:#5fb0ff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Devanagari",sans-serif}
+.wrap{max-width:900px;margin:0 auto;padding:14px}
+header{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+h1{margin:0;font-size:1.4rem;color:var(--gold)}
+h2{margin:0 0 8px;font-size:1.1rem;color:var(--org)}
+.sub{color:var(--mut);font-size:.85rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:14px 0}
+button{font:inherit;background:#252a3d;color:var(--tx);border:1px solid var(--line);border-radius:9px;padding:7px 12px;cursor:pointer}
+button:hover{border-color:var(--gold)}
+button.pri{background:var(--gold);color:#201a08;border-color:var(--gold);font-weight:600}
+canvas{width:100%;height:auto;display:block;background:#0e1018;border-radius:10px;border:1px solid var(--line)}
+.ctl{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0}
+.ctl label{min-width:110px;color:var(--mut);font-size:.9rem}
+input[type=range]{flex:1;min-width:140px;accent-color:var(--org)}
+.val{min-width:60px;font-family:ui-monospace,Menlo,monospace;color:var(--gold)}
+.chk{display:flex;gap:14px;flex-wrap:wrap;font-size:.9rem;color:var(--mut)}
+.chk label{cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:10px}
+.box{background:#12141f;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.box small{display:block;color:var(--mut);font-size:.75rem}
+.box b{font-family:ui-monospace,Menlo,monospace;font-size:1rem}
+.E b{color:var(--org)}.G b{color:var(--grn)}
+.verdict{margin-top:10px;padding:10px;border-radius:10px;background:#12141f;border-left:4px solid var(--gold)}
+.ok{color:var(--grn)}.bad{color:var(--red)}
+.leg{font-size:.85rem;color:var(--mut);margin-top:6px}
+.leg i{display:inline-block;width:18px;height:3px;vertical-align:middle;margin:0 4px 0 10px}
+ul{padding-left:20px;margin:6px 0}li{margin:4px 0}
+.q{margin:12px 0;padding-bottom:10px;border-bottom:1px dashed var(--line)}
+.opt{display:block;width:100%;text-align:left;margin:5px 0}
+.opt.right{border-color:var(--grn);background:#17301f}.opt.wrong{border-color:var(--red);background:#341a1f}
+.fb{font-size:.9rem;color:var(--mut);margin-top:4px}
+footer{text-align:center;color:var(--mut);font-size:.78rem;padding:10px 0 20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><h1 data-en="Exponential &amp; Logarithmic Functions" data-ne="चरघातांकीय र लघुगणकीय फलन">Exponential &amp; Logarithmic Functions</h1>
+  <div class="sub" data-en="Functions · TU Calculus · BA / BSc / BEd / Engineering" data-ne="फलन · TU क्याल्कुलस · BA / BSc / BEd / Engineering"></div></div>
+  <button id="langBtn">नेपाली</button>
+</header>
+
+<section class="card">
+  <h2 data-en="Idea in short" data-ne="छोटो परिचय">Idea in short</h2>
+  <p data-en="The <b>exponential function</b> y = a<sup>x</sup> (a &gt; 0, a ≠ 1) multiplies y by <b>a</b> every time x increases by 1. The <b>logarithm</b> y = log<sub>a</sub> x is its <b>inverse</b>: it answers “a to what power gives x?”. Their graphs are mirror images in the line y = x." data-ne="<b>चरघातांकीय फलन</b> y = a<sup>x</sup> (a &gt; 0, a ≠ 1) मा x लाई 1 ले बढाउँदा y लाई <b>a</b> ले गुणा गरिन्छ। <b>लघुगणक</b> y = log<sub>a</sub> x यसको <b>उल्टो (inverse)</b> हो: “a को कति घात x हुन्छ?” दुवै ग्राफ y = x रेखामा ऐनाको प्रतिबिम्ब हुन्छन्।"></p>
+  <ul>
+    <li data-en="a<sup>x</sup>: domain ℝ, range (0, ∞), passes through (0, 1), asymptote y = 0." data-ne="a<sup>x</sup>: प्रान्त ℝ, विस्तार (0, ∞), (0, 1) बाट जान्छ, असिम्टोट y = 0।"></li>
+    <li data-en="log<sub>a</sub> x: domain (0, ∞), range ℝ, passes through (1, 0), asymptote x = 0." data-ne="log<sub>a</sub> x: प्रान्त (0, ∞), विस्तार ℝ, (1, 0) बाट जान्छ, असिम्टोट x = 0।"></li>
+    <li data-en="a &gt; 1: increasing (growth). 0 &lt; a &lt; 1: decreasing (decay). log<sub>a</sub>(a<sup>x</sup>) = x and a<sup>log<sub>a</sub> x</sup> = x." data-ne="a &gt; 1: वर्धमान (वृद्धि)। 0 &lt; a &lt; 1: ह्रासमान (क्षय)। log<sub>a</sub>(a<sup>x</sup>) = x र a<sup>log<sub>a</sub> x</sup> = x।"></li>
+    <li data-en="Special base e ≈ 2.71828: the slope of e<sup>x</sup> equals its own height, so (e<sup>x</sup>)′ = e<sup>x</sup>. ln x = log<sub>e</sub> x." data-ne="विशेष आधार e ≈ 2.71828: e<sup>x</sup> को ढलान त्यसकै उचाइ बराबर हुन्छ, अर्थात् (e<sup>x</sup>)′ = e<sup>x</sup>। ln x = log<sub>e</sub> x।"></li>
+  </ul>
+</section>
+
+<section class="card">
+  <h2 data-en="Simulation" data-ne="सिमुलेसन">Simulation</h2>
+  <canvas id="cv" width="720" height="540"></canvas>
+  <div class="leg"><i style="background:#ff7a3d"></i>y = a<sup>x</sup><i style="background:#4cd68a"></i>y = log<sub>a</sub> x<i style="background:#9aa0b8"></i>y = x</div>
+  <div class="ctl"><label data-en="Base a" data-ne="आधार a">Base a</label>
+    <input type="range" id="a" min="0.1" max="10" step="0.05" value="2"><span class="val" id="av"></span></div>
+  <div class="ctl">
+    <button id="p05">a = ½</button><button id="p2">a = 2</button><button id="pe">a = e</button><button id="p10">a = 10</button>
+    <button class="pri" id="sweep" data-en="▶ Sweep a" data-ne="▶ a स्वीप">▶ Sweep a</button>
+  </div>
+  <div class="ctl"><label data-en="Point x" data-ne="बिन्दु x">Point x</label>
+    <input type="range" id="t" min="-3" max="3" step="0.05" value="1"><span class="val" id="tv"></span></div>
+  <div class="chk">
+    <label><input type="checkbox" id="cE" checked> a<sup>x</sup></label>
+    <label><input type="checkbox" id="cL" checked> log<sub>a</sub> x</label>
+    <label><input type="checkbox" id="cD" checked> y = x</label>
+    <label><input type="checkbox" id="cT"> <span data-en="tangent at P" data-ne="P मा स्पर्शरेखा">tangent at P</span></label>
+  </div>
+  <div class="grid" id="live"></div>
+  <div class="verdict" id="verdict"></div>
+</section>
+
+<section class="card">
+  <h2 data-en="Try this" data-ne="यो प्रयास गर्नुहोस्">Try this</h2>
+  <ul>
+    <li data-en="Set a = 2, then a = 10. Which curve rises faster for x &gt; 0? What stays the same at (0, 1)?" data-ne="a = 2, फेरि a = 10 राख्नुहोस्। x &gt; 0 मा कुन वक्र छिटो बढ्छ? (0, 1) मा के उस्तै रहन्छ?"></li>
+    <li data-en="Slide a below 1 (try ½). Is the curve rising or falling? What happens to log<sub>a</sub> x?" data-ne="a लाई 1 भन्दा तल (½) लानुहोस्। वक्र बढ्छ कि घट्छ? log<sub>a</sub> x को के हुन्छ?"></li>
+    <li data-en="Move x towards −3. Does a<sup>x</sup> ever reach 0 or go negative? Compare with the asymptote y = 0." data-ne="x लाई −3 तिर सार्नुहोस्। a<sup>x</sup> कहिले 0 वा ऋणात्मक हुन्छ? असिम्टोट y = 0 सँग तुलना गर्नुहोस्।"></li>
+    <li data-en="Find x with 2<sup>x</sup> = 5: set a = 2 and move x until a<sup>x</sup> ≈ 5. You have found log<sub>2</sub> 5 ≈ 2.32." data-ne="2<sup>x</sup> = 5 हुने x पत्ता लगाउनुहोस्: a = 2 राखी a<sup>x</sup> ≈ 5 हुने गरी x सार्नुहोस्। यो log<sub>2</sub> 5 ≈ 2.32 हो।"></li>
+    <li data-en="Set a = e and switch on the tangent. Compare slope with height. Now try a = 2: slope ÷ height = ln 2 ≈ 0.69." data-ne="a = e राखी स्पर्शरेखा खोल्नुहोस्। ढलान र उचाइ तुलना गर्नुहोस्। अब a = 2: ढलान ÷ उचाइ = ln 2 ≈ 0.69।"></li>
+    <li data-en="Watch the dashed line from P to Q. Why does it always cross y = x at a right angle?" data-ne="P देखि Q सम्मको धर्सो हेर्नुहोस्। यो y = x लाई किन सधैं समकोणमा काट्छ?"></li>
+  </ul>
+</section>
+
+<section class="card">
+  <h2 data-en="Quick quiz (3 questions)" data-ne="छिटो क्विज (३ प्रश्न)">Quick quiz</h2>
+  <div id="quiz"></div>
+  <div id="score" class="sub"></div>
+</section>
+
+<footer>Kapilvastu Multiple Campus · HSS Department · UCDL Academy · SDROK · Tribhuvan University</footer>
+</div>
+
+<script>
+var lang='en';
+try{lang=localStorage.getItem('limLang')||'en'}catch(e){}
+function T(a,b){return lang==='ne'?b:a}
+var $=function(i){return document.getElementById(i)};
+var cv=$('cv'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+var x0=-4.5,x1=6.5,S=W/(x1-x0),yT=5.2,yB=yT-H/S;
+function X(x){return (x-x0)*S}function Y(y){return (yT-y)*S}
+function A(){return +$('a').value}
+function fmt(v){if(!isFinite(v))return '—';return Math.abs(v)>=1e5||(v!==0&&Math.abs(v)<1e-4)?v.toExponential(2):String(+v.toFixed(4))}
+function drawCurve(fn,from,to,step,col){
+ ctx.beginPath();ctx.strokeStyle=col;ctx.lineWidth=3;var pen=false;
+ for(var u=from;u<=to;u+=step){var p=fn(u),px=p[0],py=p[1];
+  if(!isFinite(px)||!isFinite(py)||Math.abs(px)>1e3||Math.abs(py)>1e3){pen=false;continue}
+  pen?ctx.lineTo(X(px),Y(py)):ctx.moveTo(X(px),Y(py));pen=true}
+ ctx.stroke()}
+function dot(x,y,col,fill){ctx.beginPath();ctx.arc(X(x),Y(y),6,0,7);ctx.fillStyle=fill===false?'#0e1018':col;ctx.fill();ctx.strokeStyle=col;ctx.lineWidth=2;ctx.stroke()}
+function draw(){
+ var a=A(),t=+$('t').value,one=Math.abs(a-1)<0.01;
+ ctx.clearRect(0,0,W,H);
+ ctx.font='12px sans-serif';ctx.lineWidth=1;
+ for(var i=Math.ceil(x0);i<=x1;i++){ctx.strokeStyle='#23283a';ctx.beginPath();ctx.moveTo(X(i),0);ctx.lineTo(X(i),H);ctx.stroke();if(i)ctx.fillStyle='#7d839c',ctx.fillText(i,X(i)+2,Y(0)+13)}
+ for(i=Math.ceil(yB);i<=yT;i++){ctx.strokeStyle='#23283a';ctx.beginPath();ctx.moveTo(0,Y(i));ctx.lineTo(W,Y(i));ctx.stroke();if(i)ctx.fillStyle='#7d839c',ctx.fillText(i,X(0)+4,Y(i)-3)}
+ ctx.strokeStyle='#6a7194';ctx.lineWidth=1.6;
+ ctx.beginPath();ctx.moveTo(0,Y(0));ctx.lineTo(W,Y(0));ctx.moveTo(X(0),0);ctx.lineTo(X(0),H);ctx.stroke();
+ if($('cD').checked){ctx.setLineDash([7,6]);ctx.strokeStyle='#9aa0b8';ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(X(-5),Y(-5));ctx.lineTo(X(7),Y(7));ctx.stroke();ctx.setLineDash([])}
+ if(one){
+  ctx.strokeStyle='#ff7a3d';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,Y(1));ctx.lineTo(W,Y(1));ctx.stroke();return}
+ ctx.setLineDash([3,5]);ctx.strokeStyle='#f5b94288';ctx.lineWidth=1.2;
+ if($('cE').checked){ctx.beginPath();ctx.moveTo(0,Y(0)-1);ctx.lineTo(W,Y(0)-1);ctx.stroke()}
+ if($('cL').checked){ctx.beginPath();ctx.moveTo(X(0)+1,0);ctx.lineTo(X(0)+1,H);ctx.stroke()}
+ ctx.setLineDash([]);
+ if($('cE').checked)drawCurve(function(u){return [u,Math.pow(a,u)]},x0-1,x1+1,0.02,'#ff7a3d');
+ if($('cL').checked)drawCurve(function(u){return [Math.pow(a,u),u]},yB-1,yT+1,0.01,'#4cd68a');
+ if($('cE').checked)dot(0,1,'#5fb0ff');
+ if($('cL').checked)dot(1,0,'#5fb0ff');
+ var y=Math.pow(a,t);
+ if($('cE').checked&&$('cL').checked){
+  ctx.setLineDash([5,4]);ctx.strokeStyle='#f5b942';ctx.lineWidth=1.3;ctx.beginPath();ctx.moveTo(X(t),Y(y));ctx.lineTo(X(y),Y(t));ctx.stroke();ctx.setLineDash([])}
+ if($('cT').checked&&$('cE').checked){
+  var m=Math.log(a)*y;ctx.strokeStyle='#5fb0ff';ctx.lineWidth=1.8;ctx.beginPath();
+  ctx.moveTo(X(t-1.3),Y(y-1.3*m));ctx.lineTo(X(t+1.3),Y(y+1.3*m));ctx.stroke()}
+ if($('cE').checked)dot(t,y,'#ff7a3d');
+ if($('cL').checked)dot(y,t,'#4cd68a');
+ ctx.fillStyle='#ff7a3d';if($('cE').checked)ctx.fillText('P',X(t)+9,Y(y)-8);
+ ctx.fillStyle='#4cd68a';if($('cL').checked)ctx.fillText('Q',X(y)+9,Y(t)-8);
+}
+function update(){
+ var a=A(),t=+$('t').value,one=Math.abs(a-1)<0.01,y=Math.pow(a,t),la=Math.log(a);
+ $('av').textContent=a.toFixed(2);$('tv').textContent=t.toFixed(2);
+ if(one){
+  $('live').innerHTML='';
+  $('verdict').innerHTML=T('<b class="bad">a = 1 is not allowed:</b> 1<sup>x</sup> = 1 is just a constant line, it has no inverse, and log<sub>1</sub> x is undefined. Move a away from 1.','<b class="bad">a = 1 मान्य छैन:</b> 1<sup>x</sup> = 1 स्थिर रेखा मात्र हो, यसको inverse हुँदैन र log<sub>1</sub> x अपरिभाषित हुन्छ। a लाई 1 बाट टाढा सार्नुहोस्।');
+  draw();return}
+ var c=function(k,l,v){return '<div class="box '+k+'"><small>'+l+'</small><b>'+v+'</b></div>'};
+ $('live').innerHTML=
+  c('','a  /  ln a',fmt(a)+'  /  '+fmt(la))+
+  c('E','P = (x, a^x)','('+fmt(t)+', '+fmt(y)+')')+
+  c('G','Q = (a^x, x)','('+fmt(y)+', '+fmt(t)+')')+
+  c('G','log_a(a^x)',fmt(Math.log(y)/la))+
+  c('','a^(x+1) ÷ a^x',fmt(Math.pow(a,t+1)/y))+
+  c('','slope at P = ln a · a^x',fmt(la*y))+
+  c('','slope ÷ height',fmt(la))+
+  c('','e^x  '+T('(for comparison)','(तुलनाका लागि)'),fmt(Math.exp(t)));
+ var trend=a>1?T('<b class="ok">a &gt; 1: growth</b> — increasing, each +1 in x multiplies y by '+fmt(a)+'.','<b class="ok">a &gt; 1: वृद्धि</b> — वर्धमान, x मा प्रत्येक +1 ले y लाई '+fmt(a)+' ले गुणा गर्छ।')
+  :T('<b class="bad">0 &lt; a &lt; 1: decay</b> — decreasing, each +1 in x multiplies y by '+fmt(a)+'.','<b class="bad">0 &lt; a &lt; 1: क्षय</b> — ह्रासमान, x मा प्रत्येक +1 ले y लाई '+fmt(a)+' ले गुणा गर्छ।');
+ var near=Math.abs(a-Math.E)<0.03?T(' Near a = e: slope ÷ height ≈ 1.',' a = e नजिक: ढलान ÷ उचाइ ≈ 1।'):'';
+ $('verdict').innerHTML=trend+' '+T('Reflecting P in y = x gives Q, so log<sub>a</sub>('+fmt(y)+') = '+fmt(t)+'.','P लाई y = x मा प्रतिबिम्बित गर्दा Q आउँछ, त्यसैले log<sub>a</sub>('+fmt(y)+') = '+fmt(t)+'।')+near;
+ draw();
+}
+['a','t'].forEach(function(i){$(i).oninput=update});
+['cE','cL','cD','cT'].forEach(function(i){$(i).onchange=update});
+function setA(v){stop();$('a').value=v;update()}
+$('p05').onclick=function(){setA(0.5)};$('p2').onclick=function(){setA(2)};
+$('pe').onclick=function(){setA(Math.E)};$('p10').onclick=function(){setA(10)}
+var raf=null;
+function stop(){if(raf){cancelAnimationFrame(raf);raf=null}$('sweep').textContent=T('▶ Sweep a','▶ a स्वीप')}
+$('sweep').onclick=function(){
+ if(raf){stop();return}
+ var v=0.2;$('sweep').textContent=T('⏸ Pause','⏸ रोक्नुहोस्');
+ (function step(){v+=0.015;if(Math.abs(v-1)<0.03)v=1.04;if(v>=4.5){stop();return}
+  $('a').value=v;update();raf=requestAnimationFrame(step)})();
+};
+
+var Q=[
+ {q:['log<sub>2</sub> 8 = ?','log<sub>2</sub> 8 = ?'],o:[['2','2'],['3','3'],['4','4'],['8','8']],a:1,
+  e:['2³ = 8, so the power needed is 3.','2³ = 8 भएकाले आवश्यक घात 3 हो।']},
+ {q:['The domain of y = log<sub>a</sub> x is…','y = log<sub>a</sub> x को प्रान्त …'],o:[['all real numbers','सबै वास्तविक सङ्ख्या'],['x &gt; 0','x &gt; 0'],['x ≥ 0','x ≥ 0'],['x &lt; 0','x &lt; 0']],a:1,
+  e:['It is the inverse of a<sup>x</sup>, whose range is (0, ∞). Logs of 0 or negatives do not exist.','यो a<sup>x</sup> को inverse हो जसको विस्तार (0, ∞) हो। 0 वा ऋणात्मकको log हुँदैन।']},
+ {q:['For 0 &lt; a &lt; 1, the function y = a<sup>x</sup> is…','0 &lt; a &lt; 1 का लागि y = a<sup>x</sup> …'],o:[['increasing','वर्धमान'],['decreasing','ह्रासमान'],['constant','स्थिर'],['not defined','अपरिभाषित']],a:1,
+  e:['Multiplying by a number less than 1 each step shrinks y: exponential decay.','प्रत्येक चरणमा 1 भन्दा सानो सङ्ख्याले गुणा गर्दा y घट्छ: चरघातांकीय क्षय।']}
+];
+var ans=[null,null,null];
+function quiz(){
+ var h='';
+ Q.forEach(function(q,i){
+  h+='<div class="q"><b>'+(i+1)+'. '+T(q.q[0],q.q[1])+'</b>';
+  q.o.forEach(function(o,j){
+   var c='opt';if(ans[i]!==null){if(j===q.a)c+=' right';else if(j===ans[i])c+=' wrong'}
+   h+='<button class="'+c+'" onclick="pick('+i+','+j+')">'+T(o[0],o[1])+'</button>'});
+  if(ans[i]!==null)h+='<div class="fb">'+T(q.e[0],q.e[1])+'</div>';
+  h+='</div>'});
+ $('quiz').innerHTML=h;
+ var n=0,d=0;ans.forEach(function(v,i){if(v!==null){d++;if(v===Q[i].a)n++}});
+ $('score').textContent=d===3?T('Score: '+n+' / 3','अङ्क: '+n+' / 3'):'';
+}
+window.pick=function(i,j){if(ans[i]===null){ans[i]=j;quiz()}};
+function setLang(){
+ document.documentElement.lang=lang==='ne'?'ne':'en';
+ document.querySelectorAll('[data-en]').forEach(function(e){e.innerHTML=lang==='ne'?e.dataset.ne:e.dataset.en});
+ $('langBtn').textContent=lang==='ne'?'English':'नेपाली';
+ if(!raf)$('sweep').textContent=T('▶ Sweep a','▶ a स्वीप');
+ quiz();update();
+}
+$('langBtn').onclick=function(){lang=lang==='ne'?'en':'ne';try{localStorage.setItem('limLang',lang)}catch(e){}setLang()};
+setLang();
+</script>
+</body>
+</html>
