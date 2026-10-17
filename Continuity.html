@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Continuity – Interactive Simulation | KMC-HSSD</title>
+<style>
+:root{color-scheme:dark;--bg:#0f1220;--card:#1a1e33;--ink:#eef0f8;--mut:#9aa3c4;--gold:#f5b942;--org:#ff7a3d;--ok:#4cd58a;--bad:#ff5b6e;--blu:#5cb8ff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:16px}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+h1{margin:0;font-size:1.5rem;color:var(--gold)}h2{font-size:1.1rem;color:var(--org);margin:0 0 8px}
+.sub{color:var(--mut);font-size:.85rem}
+.card{background:var(--card);border:1px solid #2b3150;border-radius:14px;padding:14px;margin-top:14px}
+button,select{background:#262b47;color:var(--ink);border:1px solid #3a4170;border-radius:8px;padding:7px 12px;font:inherit;cursor:pointer}
+button:hover{border-color:var(--gold)}button.on{background:var(--gold);color:#222;border-color:var(--gold)}
+canvas{width:100%;height:auto;aspect-ratio:3/2;background:#121528;border-radius:10px;display:block}
+.grid{display:grid;grid-template-columns:1.5fr 1fr;gap:14px}@media(max-width:760px){.grid{grid-template-columns:1fr}}
+.ctl{display:grid;grid-template-columns:auto 1fr 52px;gap:8px;align-items:center;margin:6px 0;font-size:.9rem}
+input[type=range]{width:100%;accent-color:var(--gold)}
+.num{font-family:ui-monospace,Menlo,monospace;color:var(--gold);text-align:right}
+table{width:100%;border-collapse:collapse;font-size:.9rem}td{padding:5px 4px;border-bottom:1px solid #2b3150}td:last-child{text-align:right;font-family:ui-monospace,Menlo,monospace}
+.ok{color:var(--ok)}.bad{color:var(--bad)}
+.verdict{margin-top:10px;padding:10px;border-radius:10px;font-weight:600;text-align:center}
+.v-ok{background:#12301f;color:var(--ok)}.v-bad{background:#3a1620;color:var(--bad)}
+ul{padding-left:20px;margin:6px 0}li{margin:6px 0}
+.q{margin:14px 0}.q label{display:block;padding:6px 8px;border:1px solid #2b3150;border-radius:8px;margin:5px 0;cursor:pointer}
+.q .fb{font-size:.88rem;margin-top:4px}
+footer{text-align:center;color:var(--mut);font-size:.78rem;margin:18px 0 8px}
+.f{font-family:ui-monospace,Menlo,monospace;color:var(--blu)}
+</style></head><body><div class="wrap">
+<header><div><h1 data-ne="निरन्तरता (Continuity) – अन्तरक्रियात्मक सिमुलेसन">Continuity – Interactive Simulation</h1>
+<div class="sub" data-ne="कलकुलस · प्रकार्य, सीमा, निरन्तरता र अवकलन · TU BA/BSc/BEd/Engineering">Calculus · Functions, Limit, Continuity &amp; Derivatives · TU BA/BSc/BEd/Engineering</div></div>
+<button id="lang">नेपाली</button></header>
+
+<div class="card"><h2 data-ne="छोटो व्याख्या">Quick idea</h2>
+<p data-ne="कुनै प्रकार्य f बिन्दु x = a मा निरन्तर हुन तीन सर्त चाहिन्छ: (1) f(a) परिभाषित हुनुपर्छ, (2) lim f(x) (x→a) अस्तित्वमा हुनुपर्छ (बायाँ सीमा = दायाँ सीमा), (3) lim f(x) = f(a)। ग्राफ कलम नउठाई कोर्न सकिन्छ भने त्यो निरन्तर हो। कुनै सर्त फेल भए छिद्र (removable), फड्को (jump) वा अनन्त (infinite) असन्तता देखिन्छ।">
+A function <span class="f">f</span> is <b>continuous at x = a</b> when three things hold: <b>(1)</b> f(a) is defined, <b>(2)</b> lim<sub>x→a</sub> f(x) exists (left limit = right limit), and <b>(3)</b> lim<sub>x→a</sub> f(x) = f(a). Informally: you can draw the graph through x = a without lifting your pen. If a condition fails you get a <i>removable</i> (hole), <i>jump</i> or <i>infinite</i> discontinuity. The ε–δ view: for every ε-band around f(a) there is a δ-window around a whose outputs stay inside the band.</p></div>
+
+<div class="card"><h2 data-ne="सिमुलेसन">Simulation</h2>
+<div style="margin-bottom:8px"><select id="type">
+<option value="cont">Continuous: f(x) = 0.2x² − 1</option>
+<option value="rem">Removable: f(x) = (x²−a²)/(x−a), f(a) = d</option>
+<option value="jump">Jump: piecewise line, shift J at a</option>
+<option value="inf">Infinite: f(x) = 1/(x − a)</option></select>
+<button id="play" class="on">Pause</button></div>
+<div class="grid"><div><canvas id="cv" width="900" height="600"></canvas>
+<div class="sub" style="margin-top:6px"><span style="color:var(--org)">●</span> left approach &nbsp;<span style="color:var(--blu)">●</span> right approach &nbsp;<span style="color:var(--gold)">●</span> f(a) &nbsp;○ hole/limit value</div></div>
+<div>
+<div class="ctl"><span>a</span><input id="a" type="range" min="-3" max="3" step="0.5" value="1"><span class="num" id="aV"></span></div>
+<div class="ctl" id="pRow"><span id="pLab">J</span><input id="p" type="range" min="-3" max="3" step="0.1" value="1.5"><span class="num" id="pV"></span></div>
+<div class="ctl"><span>ε</span><input id="eps" type="range" min="0.1" max="2" step="0.05" value="0.6"><span class="num" id="eV"></span></div>
+<div class="ctl"><span>δ</span><input id="del" type="range" min="0.05" max="2" step="0.05" value="0.5"><span class="num" id="dV"></span></div>
+<table>
+<tr><td>h (distance from a)</td><td id="h"></td></tr>
+<tr><td>f(a − h)</td><td id="fl" style="color:var(--org)"></td></tr>
+<tr><td>f(a + h)</td><td id="fr" style="color:var(--blu)"></td></tr>
+<tr><td>Left limit</td><td id="L"></td></tr>
+<tr><td>Right limit</td><td id="R"></td></tr>
+<tr><td>f(a)</td><td id="fa"></td></tr>
+<tr><td>① f(a) defined</td><td id="c1"></td></tr>
+<tr><td>② limit exists</td><td id="c2"></td></tr>
+<tr><td>③ limit = f(a)</td><td id="c3"></td></tr>
+<tr><td>ε–δ test</td><td id="ed"></td></tr></table>
+<div class="verdict" id="verdict"></div></div></div></div>
+
+<div class="card"><h2 data-ne="यो गरेर हेर्नुहोस् (Try this)">Try this</h2><ul>
+<li data-ne="Continuous छानी a स्लाइड गर्नुहोस् – तीनै सर्त सधैँ ✓ रहन्छ।">Pick <b>Continuous</b> and slide <b>a</b>: all three checks stay ✓ everywhere.</li>
+<li data-ne="Removable मा a = 2 राख्नुहोस्। d लाई 4 सम्म सार्नुहोस् – छिद्र पुरिन्छ र असन्तता हट्छ।">Choose <b>Removable</b>, set a = 2, then move d until it equals 4 (= 2a). The hole is filled and the verdict flips to continuous.</li>
+<li data-ne="Jump मा J = 0 बाट बढाउनुहोस् – बायाँ र दायाँ सीमा किन छुट्टिन्छन् हेर्नुहोस्।">In <b>Jump</b>, start at J = 0 and increase it. Watch the left and right limits separate and ② fail.</li>
+<li data-ne="Infinite मा h घट्दा f(a±h) कसरी अनन्ततिर जान्छ हेर्नुहोस्।">In <b>Infinite</b>, watch f(a ± h) blow up as h shrinks. Does any ε-band work?</li>
+<li data-ne="Continuous मा ε = 0.3 राखी δ घटाउँदै सबैभन्दा ठुलो काम गर्ने δ खोज्नुहोस्।">In <b>Continuous</b>, set ε = 0.3 and find the largest δ that still passes the ε–δ test.</li></ul></div>
+
+<div class="card"><h2 data-ne="क्विज (३ प्रश्न)">Quick quiz (3 questions)</h2><div id="quiz"></div><div id="score" style="font-weight:700;color:var(--gold)"></div></div>
+<footer>Kapilvastu Multiple Campus · HSS Department · UCDL Academy · SDROK · Tribhuvan University</footer>
+</div>
+<script>
+const $=id=>document.getElementById(id),cv=$('cv'),g=cv.getContext('2d'),W=900,H=600,R0=5;
+const X=x=>(x+R0)/(2*R0)*W,Y=y=>H-(y+R0)/(2*R0)*H;
+let a=1,p=1.5,eps=.6,del=.5,type='cont',playing=true,t0=performance.now(),tt=0;
+const F=x=>type=='cont'?.2*x*x-1:type=='rem'?x+a:type=='jump'?(.5*x+1+(x<a?0:p)):1/(x-a);
+const FA=()=>type=='rem'?p:type=='inf'?null:F(a);
+const fin=v=>Math.abs(v)<1e3,f2=v=>v==null?'undefined':!fin(v)?(v>0?'+∞':'−∞'):v.toFixed(3);
+function sync(){a=+$('a').value;p=+$('p').value;eps=+$('eps').value;del=+$('del').value;type=$('type').value;
+$('aV').textContent=a;$('pV').textContent=p.toFixed(1);$('eV').textContent=eps.toFixed(2);$('dV').textContent=del.toFixed(2);
+$('pRow').style.display=(type=='rem'||type=='jump')?'grid':'none';$('pLab').textContent=type=='rem'?'d':'J';
+if(type=='rem'&&$('pLab').dataset.k!='d'){$('p').value=Math.max(-3,Math.min(3,0.5));p=+$('p').value}
+$('pLab').dataset.k=type=='rem'?'d':'J'}
+function stat(h){const e=1e-5,L=F(a-e),Rr=F(a+e),fa=FA(),ex=fin(L)&&fin(Rr)&&Math.abs(L-Rr)<.02;
+const c1=fa!=null,c3=c1&&ex&&Math.abs(fa-L)<.02,ctr=c1?fa:ex?L:null;
+$('h').textContent=h.toFixed(4);$('fl').textContent=f2(F(a-h));$('fr').textContent=f2(F(a+h));
+$('L').textContent=f2(L);$('R').textContent=f2(Rr);$('fa').textContent=f2(fa);
+const m=(el,v)=>{$(el).textContent=v?'✓ yes':'✗ no';$(el).className=v?'ok':'bad'};m('c1',c1);m('c2',ex);m('c3',c3);
+let pass=ctr!=null;if(pass)for(let i=0;i<=200;i++){const x=a-del+2*del*i/200,y=Math.abs(x-a)<1e-9?fa:F(x);if(y==null||!fin(y)||Math.abs(y-ctr)>=eps){pass=false;break}}
+$('ed').textContent=ctr==null?'no centre':pass?'δ works':'δ too big';$('ed').className=pass?'ok':'bad';
+const v=$('verdict');v.className='verdict '+(c3?'v-ok':'v-bad');
+v.textContent=c3?'Continuous at x = '+a:type=='inf'||!fin(L)||!fin(Rr)?'Infinite discontinuity':!ex?'Jump discontinuity (limits differ)':'Removable discontinuity (limit exists, ≠ f(a))';
+return{ctr,fa,ex,L,Rr}}
+function draw(h){g.clearRect(0,0,W,H);const s=stat(h);
+g.lineWidth=1;g.strokeStyle='#23284a';g.fillStyle='#6e789e';g.font='16px system-ui';
+for(let i=-5;i<=5;i++){g.beginPath();g.moveTo(X(i),0);g.lineTo(X(i),H);g.moveTo(0,Y(i));g.lineTo(W,Y(i));g.stroke();if(i&&i%1==0&&i%2==0){g.fillText(i,X(i)+3,Y(0)+16);g.fillText(i,X(0)+4,Y(i)-3)}}
+g.strokeStyle='#6e789e';g.lineWidth=1.6;g.beginPath();g.moveTo(X(0),0);g.lineTo(X(0),H);g.moveTo(0,Y(0));g.lineTo(W,Y(0));g.stroke();
+if(s.ctr!=null){g.fillStyle='rgba(245,185,66,.14)';g.fillRect(0,Y(s.ctr+eps),W,Y(s.ctr-eps)-Y(s.ctr+eps));
+g.fillStyle='rgba(92,184,255,.12)';g.fillRect(X(a-del),0,X(a+del)-X(a-del),H);
+g.strokeStyle='rgba(245,185,66,.5)';g.setLineDash([6,5]);g.lineWidth=1;[s.ctr+eps,s.ctr-eps].forEach(y=>{g.beginPath();g.moveTo(0,Y(y));g.lineTo(W,Y(y));g.stroke()});g.setLineDash([])}
+g.strokeStyle='#f5f6ff';g.lineWidth=3;
+[[-R0,a-.005],[a+.005,R0]].forEach(([x0,x1])=>{let pen=false,py=0;g.beginPath();for(let x=x0;x<=x1+1e-9;x+=.02){const y=F(x);if(!fin(y)||Math.abs(y)>7){pen=false;continue}
+if(pen&&Math.abs(y-py)>3){pen=false}
+pen?g.lineTo(X(x),Y(y)):g.moveTo(X(x),Y(y));pen=true;py=y}g.stroke()});
+const dot=(x,y,c,r,open)=>{if(!fin(y)||Math.abs(y)>R0+1)return;g.beginPath();g.arc(X(x),Y(y),r,0,7);if(open){g.fillStyle='#121528';g.fill();g.strokeStyle=c;g.lineWidth=3;g.stroke()}else{g.fillStyle=c;g.fill()}};
+if(fin(s.L))dot(a,s.L,'#ff7a3d',7,true);if(fin(s.Rr)&&Math.abs(s.L-s.Rr)>.02)dot(a,s.Rr,'#5cb8ff',7,true);
+if(s.fa!=null)dot(a,s.fa,'#f5b942',8,false);
+[[a-h,'#ff7a3d'],[a+h,'#5cb8ff']].forEach(([x,c])=>{const y=F(x);g.strokeStyle=c;g.lineWidth=1.5;g.setLineDash([4,4]);g.beginPath();g.moveTo(X(x),Y(0));g.lineTo(X(x),Math.max(0,Math.min(H,Y(y))));g.stroke();g.setLineDash([]);dot(x,y,c,6,false)});
+g.strokeStyle='#f5b942';g.lineWidth=1;g.setLineDash([2,6]);g.beginPath();g.moveTo(X(a),0);g.lineTo(X(a),H);g.stroke();g.setLineDash([]);g.fillStyle='#f5b942';g.fillText('x = a',X(a)+6,18)}
+function loop(now){if(playing)tt=(now-t0)/1000;const h=Math.max(.004,2*Math.pow(.5,tt%8));draw(h);requestAnimationFrame(loop)}
+['a','p','eps','del','type'].forEach(i=>$(i).addEventListener('input',sync));
+$('type').addEventListener('change',()=>{if(type=='rem'){$('p').min=-6;$('p').max=6;$('p').value=a*2+1}else{$('p').min=-3;$('p').max=3;$('p').value=1.5}sync()});
+$('a').addEventListener('input',()=>{if(type=='rem'){$('p').min=-6;$('p').max=6}});
+$('play').onclick=()=>{playing=!playing;if(playing)t0=performance.now()-tt*1000;$('play').textContent=playing?'Pause':'Play';$('play').classList.toggle('on',playing)};
+let ne=false;$('lang').onclick=()=>{ne=!ne;document.querySelectorAll('[data-ne]').forEach(e=>{if(!e.dataset.en)e.dataset.en=e.innerHTML;e.innerHTML=ne?e.dataset.ne:e.dataset.en});$('lang').textContent=ne?'English':'नेपाली'};
+const Q=[{q:'For f(x) = (x²−4)/(x−2), which condition of continuity fails at x = 2?',n:'f(x) = (x²−4)/(x−2) को x = 2 मा कुन सर्त फेल हुन्छ?',o:['f(2) is not defined','The limit does not exist','The limit ≠ f(2) although f(2) is defined','None – it is continuous'],c:0,e:'x = 2 makes the denominator 0, so f(2) is undefined. The limit is 4, so it is a removable discontinuity.'},
+{q:'A function has left limit 1, right limit 3 and f(a) = 1 at x = a. What is the discontinuity?',n:'बायाँ सीमा 1, दायाँ सीमा 3 र f(a) = 1 भए कस्तो असन्तता?',o:['Removable','Jump','Infinite','Continuous'],c:1,e:'Left ≠ right, so the limit does not exist: a jump discontinuity.'},
+{q:'What value of f(3) makes f(x) = (x²−9)/(x−3) (x ≠ 3) continuous at x = 3?',n:'x = 3 मा निरन्तर बनाउन f(3) को मान कति हुनुपर्छ?',o:['0','3','6','9'],c:2,e:'(x²−9)/(x−3) = x+3 for x ≠ 3, so the limit is 6. Define f(3) = 6.'}];
+let sc=0,done=0;Q.forEach((x,i)=>{const d=document.createElement('div');d.className='q';d.innerHTML='<b>'+(i+1)+'. '+x.q+'</b><div class="sub">'+x.n+'</div>'+x.o.map((o,j)=>'<label><input type="radio" name="q'+i+'" value="'+j+'"> '+o+'</label>').join('')+'<div class="fb" id="fb'+i+'"></div>';
+d.querySelectorAll('input').forEach(r=>r.onchange=()=>{if(d.dataset.d)return;d.dataset.d=1;const ok=+r.value==x.c;if(ok)sc++;done++;$('fb'+i).innerHTML=(ok?'<span class="ok">✓ Correct. </span>':'<span class="bad">✗ Not quite. </span>')+x.e;if(done==3)$('score').textContent='Score: '+sc+' / 3'});$('quiz').appendChild(d)});
+sync();requestAnimationFrame(loop);
+</script></body></html>
