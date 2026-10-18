@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KMC-HSSD Campus Location Map</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+  html, body { height: 100%; margin: 0; font-family: Arial, Helvetica, sans-serif; }
+  #map { position: absolute; inset: 56px 0 0 0; }
+  header {
+    position: absolute; top: 0; left: 0; right: 0; height: 56px;
+    background: #17365D; color: #fff; display: flex; align-items: center;
+    justify-content: space-between; padding: 0 16px; box-sizing: border-box; gap: 10px;
+  }
+  header h1 { font-size: 16px; margin: 0; line-height: 1.2; }
+  header small { display: block; font-weight: normal; opacity: .8; font-size: 11px; }
+  .btns button {
+    background: #FFBE00; color: #17365D; border: 0; border-radius: 4px;
+    padding: 7px 10px; font-weight: bold; cursor: pointer; margin-left: 6px; font-size: 12px;
+  }
+  .campus-label {
+    background: rgba(255,255,255,.95); border: 2px solid #17365D; border-radius: 4px;
+    color: #17365D; font-weight: bold; font-size: 12px; padding: 2px 6px;
+  }
+  .info {
+    background: #fff; padding: 8px 10px; border-radius: 6px;
+    box-shadow: 0 1px 5px rgba(0,0,0,.4); font-size: 12px; line-height: 1.5;
+  }
+  .info b { color: #17365D; }
+  .swatch { display: inline-block; width: 12px; height: 12px; margin-right: 6px; vertical-align: middle; border: 1px solid #555; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Kapilvastu Multiple Campus – HSSD
+    <small>Taulihawa, Kapilvastu, Nepal</small></h1>
+  <div class="btns">
+    <button id="btnZoom">Zoom to campus</button>
+    <button id="btnCopy">Copy coordinates</button>
+    <button id="btnSave">Save GeoJSON</button>
+  </div>
+</header>
+<div id="map"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+// 1. COORDINATES (DMS -> decimal): 27°33'44"N, 83°03'17"E
+const latitude  = 27 + 33/60 + 44/3600;
+const longitude = 83 + 3/60 + 17/3600;
+const campus = [latitude, longitude];
+
+// 2. BASEMAPS
+const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19, attribution: '&copy; OpenStreetMap contributors'
+});
+const satellite = L.tileLayer(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  maxZoom: 19, attribution: 'Tiles &copy; Esri'
+});
+const topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+  maxZoom: 17, attribution: '&copy; OpenTopoMap (CC-BY-SA)'
+});
+
+const map = L.map('map', { center: campus, zoom: 16, layers: [osm] });
+
+// 3. CAMPUS POINT (red star with gold outline)
+const starSvg = `
+<svg width="34" height="34" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 1.5l3.1 6.6 7.2.9-5.3 5 1.4 7.1L12 17.5l-6.4 3.6L7 14l-5.3-5 7.2-.9z"
+        fill="#E6192D" stroke="#FFBE00" stroke-width="1.5" stroke-linejoin="round"/>
+</svg>`;
+const starIcon = L.divIcon({ html: starSvg, className: '', iconSize: [34, 34], iconAnchor: [17, 17] });
+
+const marker = L.marker(campus, { icon: starIcon, title: 'Kapilvastu Multiple Campus' });
+marker.bindTooltip('Kapilvastu Multiple Campus', {
+  permanent: true, direction: 'right', offset: [14, 0], className: 'campus-label'
+});
+marker.bindPopup(
+  '<b>Kapilvastu Multiple Campus</b><br>' +
+  'Humanities &amp; Social Sciences (KMC-HSSD)<br>' +
+  'Lat: ' + latitude.toFixed(6) + '<br>Lon: ' + longitude.toFixed(6)
+);
+
+// ~1.2 km view box around campus
+const dLat = 600 / 111320;
+const dLon = 600 / (111320 * Math.cos(latitude * Math.PI / 180));
+const viewBox = L.rectangle(
+  [[latitude - dLat, longitude - dLon], [latitude + dLat, longitude + dLon]],
+  { color: '#17365D', weight: 1.5, dashArray: '6 4', fill: false }
+);
+
+const campusGroup = L.layerGroup([marker]).addTo(map);
+
+// 4. LAYER CONTROL, SCALE
+L.control.layers(
+  { 'OpenStreetMap': osm, 'Satellite (Esri)': satellite, 'Topographic (elevation)': topo },
+  { 'KMC-HSSD Campus Location': campusGroup, '1.2 km study window': viewBox },
+  { collapsed: false }
+).addTo(map);
+L.control.scale({ imperial: false }).addTo(map);
+
+// 5. INFO + ELEVATION CLASS LEGEND (same five zones as the DEM script)
+const info = L.control({ position: 'bottomleft' });
+info.onAdd = function () {
+  const d = L.DomUtil.create('div', 'info');
+  d.innerHTML =
+    '<b>KMC-HSSD Campus</b><br>' +
+    'Lat: ' + latitude.toFixed(6) + '&deg; N<br>' +
+    'Lon: ' + longitude.toFixed(6) + '&deg; E<br>' +
+    '<hr style="margin:5px 0"><b>Elevation zones</b> (reference)<br>' +
+    '<span class="swatch" style="background:#1a9641"></span>&lt; 500 m<br>' +
+    '<span class="swatch" style="background:#a6d96a"></span>500 – 1000 m<br>' +
+    '<span class="swatch" style="background:#ffffbf"></span>1000 – 2000 m<br>' +
+    '<span class="swatch" style="background:#fdae61"></span>2000 – 3000 m<br>' +
+    '<span class="swatch" style="background:#d7191c"></span>&ge; 3000 m';
+  return d;
+};
+info.addTo(map);
+
+// 6. BUTTONS
+document.getElementById('btnZoom').onclick = () => {
+  map.fitBounds(viewBox.getBounds());
+  marker.openPopup();
+};
+
+document.getElementById('btnCopy').onclick = () => {
+  const text = latitude.toFixed(6) + ', ' + longitude.toFixed(6);
+  const done = () => alert('Copied: ' + text);
+  if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, () => prompt('Copy:', text));
+  else prompt('Copy:', text);
+};
+
+// Equivalent of saving the point to GPKG: download as GeoJSON
+document.getElementById('btnSave').onclick = () => {
+  const geojson = {
+    type: 'FeatureCollection',
+    features: [{
+      type: 'Feature',
+      properties: {
+        Name: 'Kapilvastu Multiple Campus',
+        Department: 'Humanities & Social Sciences (KMC-HSSD)',
+        Latitude: latitude,
+        Longitude: longitude
+      },
+      geometry: { type: 'Point', coordinates: [longitude, latitude] }
+    }]
+  };
+  const blob = new Blob([JSON.stringify(geojson, null, 2)], { type: 'application/geo+json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'KMC_HSSD_Location.geojson';
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+
+// Start zoomed to the 1.2 km window
+map.fitBounds(viewBox.getBounds());
+marker.openPopup();
+</script>
+</body>
+</html>
