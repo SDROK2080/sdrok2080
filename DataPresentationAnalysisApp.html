@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data Analysis & Visualization Explorer</title>
+<style>
+:root{--pri:#2563eb;--bg:#f8fafc;--card:#fff;--ink:#0f172a;--mute:#64748b;--line:#e2e8f0;--chip:#f1f5f9;--chip2:#e2e8f0;color-scheme:light}
+@media(prefers-color-scheme:dark){:root{--pri:#7aa2ff;--bg:#0f1420;--card:#171e2e;--ink:#eef0f5;--mute:#9aa4bd;--line:#2a3350;--chip:#202a40;--chip2:#2a3552;color-scheme:dark}}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:var(--bg);color:var(--ink);line-height:1.5;padding:20px}
+.c{max-width:1000px;margin:0 auto}
+h1{font-size:1.8rem;color:var(--pri);text-align:center}
+.sub{text-align:center;color:var(--mute);margin:6px 0 20px}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+input{flex:1;min-width:230px;padding:10px 14px;border:1px solid var(--line);border-radius:8px;font-size:1rem;background:var(--card);color:var(--ink)}
+button{cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:9px 14px;font-size:.95rem}
+button:focus-visible,input:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+.tabs{display:flex;gap:6px;border-bottom:2px solid var(--line);margin-bottom:16px;overflow-x:auto}
+.tabs button{border:0;border-bottom:3px solid transparent;border-radius:0;background:none;font-weight:600;color:var(--mute);white-space:nowrap}
+.tabs button.on{color:var(--pri);border-bottom-color:var(--pri)}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+ul{list-style:none;padding-left:22px;border-left:1px dashed var(--line)}
+.root{padding-left:0;border:0}
+li{margin:6px 0}
+li.hide{display:none}
+.n{display:inline-flex;gap:8px;align-items:center;padding:6px 12px;border-radius:6px;background:var(--chip);cursor:pointer;user-select:none;text-align:left;border:0;color:var(--ink)}
+.n:hover{background:var(--chip2)}
+.n.p::before{content:"▶️";font-size:.65rem;color:var(--mute);transition:transform .3s}
+li.open>.n.p::before{transform:rotate(90deg)}
+.n.l::before{content:"•";color:var(--pri);font-weight:700}
+.n.sel{outline:2px solid var(--pri)}
+.pn{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s ease}
+li.open>.pn{grid-template-rows:1fr}
+.pn>ul{overflow:hidden;min-height:0;margin-top:0}
+.info{margin-top:16px;border-left:4px solid var(--pri)}
+.info b{display:block;color:var(--pri)}.info small{color:var(--mute)}
+.lk{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.lk a{display:inline-block;padding:7px 12px;border-radius:8px;border:1px solid var(--line);background:var(--chip);color:var(--ink);text-decoration:none;font-size:.92rem}
+.lk a:hover{background:var(--chip2);border-color:var(--pri)}
+.info{position:sticky;bottom:8px;box-shadow:0 -4px 14px rgba(0,0,0,.12)}
+@media(prefers-reduced-motion:reduce){.pn,.n.p::before{transition:none}}
+</style>
+</head>
+<body>
+<div class="c">
+<h1>Data Analysis & Visualization Explorer</h1>
+<p class="sub">Tap an item to open it. Its meaning, video, PDF and simulation links appear at the bottom.</p>
+<div class="row"><input id="q" type="search" placeholder="Search: ANOVA, Ogive, Bar diagram…" aria-label="Search"><button id="ea">Open all</button><button id="ca">Close all</button></div>
+<div class="tabs" id="tabs"></div>
+<div class="box"><div id="tree"></div>
+<div class="box info" id="info"><b>Select an item</b><small>Its meaning and free learning links appear here.</small></div></div>
+</div>
+<script>
+var D={
+"Forms of Diagram":["One-Dimensional",["Bar Diagram",["Simple",["Absolute",["Vertical","Horizontal"],"Proportionate","Percentage",["Vertical","Horizontal"]],"Multiple","Sub-Divided"]],"Two-Dimensional",["Rectangle","Square","Circles",["Simple","Pie Diagram"]],"Three-Dimensional",["Cubes","Sphere","Cylinders"],"Pictograms","Cartograms"],
+"Forms of Graphs":["Time-Series Graph",["One-Variable Graph","Two-Variable Graph","Index Graph"],"Functional Relationship Graph",["Linear Graph","Non-Linear Graph"],"Other Graphs",["Zone Graph","Band Graph","Z-Chart","Frequency Graph",["Simple Bar","Frequency Polygon","Frequency Curves",["Normal Frequency Curves","Asymmetric Curves",["J-Shaped Curves","U-Shaped Curves"]],"Ogive Curves","Galton's Graph","Lorenz's Curves"]]],
+"Analysis of Data":["Processing of Data (Preparation for Analysis)",["Editing","Coding","Classification","Tabulation","Using Percentage"],"Descriptive & Causal Analysis",["Uni-Dimensional Analysis",["Measure of Central Tendency","Measure of Dispersion","Measure of Skewness","One-Way ANOVA","Index Number","Time Series Analysis","Others: Simple Correlation & Regression in Classification of Paired Data"],"Bi-Variate Analysis (Two-Way Classification)",["Simple Regression (Causal) & Simple Correlation","Association of Attributes",["Coefficient of Association","Coefficient of Contingency"],"Two-Way ANOVA"],"Multivariate Analysis (Multiple Classification)",["Multiple Regression (Causal) & Multiple Partial Correlation","Multiple Discriminant Analysis","Multi-ANOVA","Canonical Analysis","Other: Factor Analysis & Cluster Analysis"]],"Inferential (Statistical) Analysis",["Estimation of Parameter Value","Types of Hypothesis Tests",["Parametric Test","Non-Parametric Test (Distribution-Free Tests)"]]]
+};
+var T={"Bar Diagram":"Bars of equal width whose length shows the value. Only length matters.","Simple":"One value per category, shown by a single bar.","Multiple":"Several bars side by side per category to compare series.","Sub-Divided":"One bar split into parts to show its components.","Absolute":"Bars show the actual values.","Proportionate":"Bars show each value as a proportion of the total.","Percentage":"Bars show each value as a percentage; every bar reaches 100%.","Pie Diagram":"A circle split into sectors. Angle = (part ÷ total) × 360°.","Rectangle":"Area of the rectangle shows the value.","Cubes":"Volume of the cube shows the value. Used when values differ greatly.","Pictograms":"Symbols or pictures, each standing for a fixed quantity.","Cartograms":"Data shown on a map, e.g. population by district.","Index Graph":"Plots index numbers against a base year.","Linear Graph":"A straight line, y = a + bx.","Z-Chart":"Shows monthly data, cumulative total and moving total in a Z shape.","Frequency Polygon":"Join the midpoints of class tops in a histogram.","Ogive Curves":"Cumulative frequency curve, used to find median and quartiles.","Lorenz's Curves":"Shows inequality, such as income distribution, against the line of equality.","Normal Frequency Curves":"Symmetric bell-shaped curve.","J-Shaped Curves":"Rises or falls steadily towards one end.","U-Shaped Curves":"High at both ends and low in the middle.","Editing":"Checking raw data for errors, gaps and inconsistencies.","Coding":"Giving numbers or symbols to answers, e.g. Male = 1, Female = 2.","Classification":"Grouping data into classes with common features.","Tabulation":"Arranging classified data in rows and columns.","Using Percentage":"Makes groups of different sizes comparable.","Measure of Central Tendency":"Mean, median and mode: the typical value.","Measure of Dispersion":"Range, variance and standard deviation: the spread.","Measure of Skewness":"How asymmetric the distribution is.","One-Way ANOVA":"Analysis of Variance: compares means of groups by one factor.","Two-Way ANOVA":"Compares means by two factors at once.","Association of Attributes":"Relationship between qualitative characteristics.","Coefficient of Contingency":"Measures association in a contingency table.","Simple Regression (Causal) & Simple Correlation":"Regression predicts one variable from another; correlation measures strength.","Canonical Analysis":"Relates a set of variables to a set of attributes.","Estimation of Parameter Value":"Uses a sample to estimate a population value.","Parametric Test":"Assumes a known distribution, e.g. t-test, z-test, F-test.","Non-Parametric Test (Distribution-Free Tests)":"No distribution assumed, e.g. chi-square, sign test."};
+var tree=document.getElementById("tree"),tabs=document.getElementById("tabs"),info=document.getElementById("info"),sel=null;
+function build(a,path){var ul=document.createElement("ul");for(var i=0;i<a.length;i++){if(Array.isArray(a[i]))continue;var kids=Array.isArray(a[i+1])?a[i+1]:null,li=document.createElement("li"),b=document.createElement("button");b.className="n "+(kids?"p":"l");b.textContent=a[i];b.type="button";li.appendChild(b);var p=path.concat(a[i]);li.dataset.t=a[i].toLowerCase();
+ (function(name,p,li,b,kids){b.onclick=function(){if(sel)sel.classList.remove("sel");sel=b;b.classList.add("sel");info.innerHTML="<b></b><p></p><small></small><div class='lk'></div>";info.querySelector("b").textContent=name;info.querySelector("p").textContent=T[name]||(kids?"Opens into "+kids.filter(function(x){return !Array.isArray(x)}).length+" sub-topics.":"A type within this group.");info.querySelector("small").textContent=p.join(" › ");links(name,p,info.querySelector(".lk"));if(kids){li.classList.toggle("open");li.querySelector(":scope>.pn").setAttribute("aria-hidden",!li.classList.contains("open"))}}})(a[i],p,li,b,kids);
+ if(kids){var w=document.createElement("div");w.className="pn";w.appendChild(build(kids,p));li.appendChild(w)}ul.appendChild(li)}
+ return ul}
+
+var B="https://onlinestatbook.com/2/",NC="https://nces.ed.gov/nceskids/createagraph/",G="graphing_distributions/graphing_distributions.html",SU="summarizing_distributions/summarizing_distributions.html",MM="summarizing_distributions/mean_median_sim.html",REG="regression/regression.html",BI="describing_bivariate_data/bivariate.html";
+var R=[[/linear|non-linear/,REG,"Desmos graphing calculator","https://www.desmos.com/calculator"],
+[/ogive|polygon/,G,"GeoGebra: search","GG"],[/lorenz|galton/,"advanced_graphs/contents.html","GeoGebra: search","GG"],
+[/normal|j-shaped|u-shaped|asymmetric|frequency curves/,"normal_distribution/normal_distribution.html","Normal distribution simulation","normal_distribution/varieties_demo.html"],
+[/skew/,SU,"Mean and median simulation",MM],[/central/,SU,"Balance scale simulation","summarizing_distributions/balance.html"],
+[/dispersion/,SU,"Variability simulation","summarizing_distributions/spread_sim.html"],[/uni-dimensional/,SU,"Mean and median simulation",MM],
+[/anova/,"analysis_of_variance/ANOVA.html","One-way ANOVA simulation","analysis_of_variance/one-way_demo.html"],
+[/index number|time series/,G,"Create a Graph (NCES)",NC],
+[/regression|paired/,REG,"Linear fit simulation","regression/linear_fit_demo.html"],
+[/correlation|bi-variate|descriptive/,BI,"Guessing correlations simulation","describing_bivariate_data/pearson_demo.html"],
+[/association|contingency|attributes/,"chi_square/Chi_Square.html","2 x 2 table simulation","chi_square/2x2sim.html"],
+[/multivariate|discriminant|canonical|factor|cluster/,REG,"Statistics calculators","calculators/calculators.html"],
+[/estimation/,"estimation/estimation.html","Confidence interval simulation","estimation/ci_sim.html"],
+[/non-parametric|distribution-free/,"distribution_free_tests/contents.html","Testing distributions simulation","chi_square/theor_sim.html"],
+[/parametric/,"tests_of_means/testing_means.html","t distribution simulation","tests_of_means/t_distribution_demo.html"],
+[/hypothes|inferential/,"logic_of_hypothesis_testing/logic_hypothesis.html","Power simulation","power/power_demo.html"],
+[/editing|coding|classification|processing/,"introduction/introduction.html","Measurement simulation","introduction/measurement_demo.html"]];
+function links(name,p,box){var n=name.toLowerCase(),r=[0,G,"Create a Graph (NCES)",NC];
+ if(p[0]!=="Forms of Diagram")for(var i=0;i<R.length;i++)if(R[i][0].test(n)){r=R[i];break}
+ var q=name.replace(/\(.*?\)/g,"").replace(/[:&]/g," ").trim(),abs=function(u){return u.indexOf("http")==0?u:B+u},
+ sim=r[3]=="GG"?"https://www.geogebra.org/search/"+encodeURIComponent(q):abs(r[3]);
+ [["▶️ Video tutorials","https://www.youtube.com/results?search_query="+encodeURIComponent(q+" explained statistics")],["📖 Free chapter",abs(r[1])],["📄 PDF textbook","https://onlinestatbook.com/Online_Statistics_Education.pdf"],["📄 PDF slides","https://onlinestatbook.com/2/stats_slides.pdf"],["🧪 "+r[2],sim],["Khan Academy","https://www.khanacademy.org/math/statistics-probability"]].forEach(function(x){var a=document.createElement("a");a.href=x[1];a.target="_blank";a.rel="noopener";a.textContent=x[0];box.appendChild(a)})}
+var names=Object.keys(D),panes={};
+names.forEach(function(k,i){var d=document.createElement("div");d.hidden=i>0;var u=build(D[k],[k]);u.classList.add("root");d.appendChild(u);tree.appendChild(d);panes[k]=d;var b=document.createElement("button");b.textContent=k;b.className=i?"":"on";b.onclick=function(){names.forEach(function(n){panes[n].hidden=n!==k});[].forEach.call(tabs.children,function(x){x.classList.toggle("on",x===b)})};tabs.appendChild(b)});
+function all(on){document.querySelectorAll("#tree li").forEach(function(li){if(li.querySelector(":scope>.pn"))li.classList.toggle("open",on)})}
+document.getElementById("ea").onclick=function(){all(true)};
+document.getElementById("ca").onclick=function(){all(false)};
+function filt(li,t){var own=li.dataset.t.indexOf(t)>-1,kids=li.querySelectorAll(":scope>.pn>ul>li"),any=false;kids.forEach(function(k){if(filt(k,t))any=true});var show=own||any;li.classList.toggle("hide",!show);if(kids.length)li.classList.toggle("open",any);return show}
+document.getElementById("q").addEventListener("input",function(e){var t=e.target.value.toLowerCase().trim();document.querySelectorAll("#tree>div>ul>li").forEach(function(li){if(!t){li.classList.remove("hide");li.querySelectorAll("li").forEach(function(x){x.classList.remove("hide","open")});li.classList.remove("open")}else filt(li,t)});
+ if(t){for(var i=0;i<names.length;i++){if(panes[names[i]].querySelector("li:not(.hide)")){names.forEach(function(n){panes[n].hidden=n!==names[i]});[].forEach.call(tabs.children,function(x,j){x.classList.toggle("on",j===i)});break}}}});
+</script>
+</body>
+</html>
