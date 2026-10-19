@@ -1,5 +1,5 @@
 """
-RI-GI Nexus Seed Data & Complete Demonstration Workflows
+KMC-HSSD Seed Data & Complete Demonstration Workflows
 All demonstration records are explicitly labeled with [SAMPLE / DEMO].
 Provides initial researchers, research ideas, proposals, projects, datasets,
 scientific experiments, peer-reviewed references, funding grants, ethics reviews,
@@ -42,11 +42,11 @@ def seed_database():
 
     # 1. Users
     users_data = [
-        ("user_bishnu", "Dr. Bishnu S. Rayamajhi", "bishnu@rigi-nexus.edu", hash_pw("research2026"), "researcher", "Tribhuvan University & RI-GI Global Institute", "👨‍🏫"),
+        ("user_bishnu", "Dr. Bishnu S. Rayamajhi", "bishnu@rigi-nexus.edu", hash_pw("research2026"), "researcher", "Tribhuvan University & KMC-HSSD Global Institute", "👨‍🏫"),
         ("user_elena", "Prof. Elena Rostova", "elena.rostova@cambridge-ri.org", hash_pw("cambridge2026"), "supervisor", "University of Cambridge", "👩‍🔬"),
         ("user_kwame", "Dr. Kwame Mensah", "kwame.mensah@ghana-tech.edu", hash_pw("accra2026"), "reviewer", "Kwame Nkrumah University of Science and Technology", "👨‍💻"),
         ("user_sophia", "Sophia Chen, M.Sc.", "sophia.chen@stanford-ai.org", hash_pw("stanford2026"), "student", "Stanford Artificial Intelligence Lab", "👩‍🎓"),
-        ("user_admin", "System Governance Admin", "admin@rigi-nexus.org", hash_pw("adminSecure2026"), "administrator", "RI-GI Global Governance Council", "🛡️")
+        ("user_admin", "System Governance Admin", "admin@rigi-nexus.org", hash_pw("adminSecure2026"), "administrator", "KMC-HSSD Global Governance Council", "🛡️")
     ]
     cur.executemany("INSERT INTO users (id, name, email, password_hash, role, institution, avatar) VALUES (?, ?, ?, ?, ?, ?, ?)", users_data)
 

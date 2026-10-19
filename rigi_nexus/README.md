@@ -1,4 +1,4 @@
-# RI-GI Nexus — Research, Innovation & Global Impact
+# KMC-HSSD — Research, Innovation & Global Impact
 
 > **Tagline:** “Empowering Researchers for a Better Tomorrow.”  
 > **Mission:** Research with Purpose. Innovate with Courage. Collaborate Without Borders. Create Global Impact.  
@@ -8,7 +8,7 @@
 
 ## 1. Executive Summary & Platform Architecture
 
-**RI-GI Nexus** is a responsive, intelligent, and evidence-grounded research platform designed for professors, PhD scholars, graduate researchers, and international scientific consortia. 
+**KMC-HSSD** is a responsive, intelligent, and evidence-grounded research platform designed for professors, PhD scholars, graduate researchers, and international scientific consortia. 
 
 It covers the complete 11-stage research lifecycle:
 1. **Idea Development:** Problem identification, research gap exploration, and hypothesis formulation.

@@ -1,5 +1,5 @@
 /**
- * RI-GI Nexus Frontend Application Controller
+ * KMC-HSSD Frontend Application Controller
  * Handles Navigation, State Management, API Connectivity, Real-time Charts,
  * Scientific Statistical Analysis, Simulation Runs, AI Academic Inquiries,
  * and Modal Interactions.
@@ -1253,7 +1253,7 @@ async function submitImpactRecord() {
 
 function exportManuscriptDraft() {
   const title = document.getElementById('manuscriptTitle').innerText;
-  const content = `# ${title}\n\nAuthor: Dr. Bishnu S. Rayamajhi\nInstitution: Tribhuvan University & RI-GI Global Institute\n\nAbstract:\nHigh-relief mountain agricultural zones undergo intense localized frost risks that regional weather satellites cannot capture at adequate resolution. This empirical investigation evaluates a 15-station IoT microclimate sensor network across an elevation transect from 1,850m to 3,100m in Mustang, Nepal. Ordinary Least Squares (OLS) regression demonstrated that elevation accounts for 98.5% of variance in mean temperature (R² = 0.985, p < .0001, slope = -0.0091 °C/m).\n\nKeywords: Agro-climatology, Micro-sensing, OLS Regression, SDG 2, SDG 13\n\nMethodology:\nContinuous empirical telemetry collected across 12 monitoring stations (N=12).\n\nReferences:\n- Ostrom, E. (2009). Science, 325(5939), 419-422. https://doi.org/10.1126/science.1172133\n- Rayamajhi, B. S. et al. (2025). J. Mt. Sci., https://doi.org/10.1007/s11629-024-8841-x\n`;
+  const content = `# ${title}\n\nAuthor: Dr. Bishnu S. Rayamajhi\nInstitution: Tribhuvan University & KMC-HSSD Global Institute\n\nAbstract:\nHigh-relief mountain agricultural zones undergo intense localized frost risks that regional weather satellites cannot capture at adequate resolution. This empirical investigation evaluates a 15-station IoT microclimate sensor network across an elevation transect from 1,850m to 3,100m in Mustang, Nepal. Ordinary Least Squares (OLS) regression demonstrated that elevation accounts for 98.5% of variance in mean temperature (R² = 0.985, p < .0001, slope = -0.0091 °C/m).\n\nKeywords: Agro-climatology, Micro-sensing, OLS Regression, SDG 2, SDG 13\n\nMethodology:\nContinuous empirical telemetry collected across 12 monitoring stations (N=12).\n\nReferences:\n- Ostrom, E. (2009). Science, 325(5939), 419-422. https://doi.org/10.1126/science.1172133\n- Rayamajhi, B. S. et al. (2025). J. Mt. Sci., https://doi.org/10.1007/s11629-024-8841-x\n`;
 
   const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
   const url = URL.createObjectURL(blob);

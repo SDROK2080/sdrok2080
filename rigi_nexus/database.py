@@ -1,5 +1,5 @@
 """
-RI-GI Nexus Database Initialization and Schema Management
+KMC-HSSD Database Initialization and Schema Management
 Database: SQLite3 (compatible with standard SQL, migrations, and PostgreSQL syntax)
 Entities:
 - users

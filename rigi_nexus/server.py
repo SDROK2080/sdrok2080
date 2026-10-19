@@ -1,5 +1,5 @@
 """
-RI-GI Nexus Intelligent HTTP Application Server
+KMC-HSSD Intelligent HTTP Application Server
 Provides RESTful APIs for all 14 Modules, Static Frontend Delivery,
 Scientific Analytics (Descriptive stats, Pearson/Spearman, OLS Regression, t-tests),
 Simulation Studio (SIR Epidemic, Climate CO2 Forcing),
@@ -666,7 +666,7 @@ def run_server():
     server_address = ('127.0.0.1', PORT)
     httpd = socketserver.TCPServer(server_address, NexusRequestHandler)
     print(f"================================================================")
-    print(f"RI-GI Nexus Platform Running at http://127.0.0.1:{PORT}")
+    print(f"KMC-HSSD Platform Running at http://127.0.0.1:{PORT}")
     print(f"Mission: Research • Innovation • Global Impact")
     print(f"Tagline: 'Empowering Researchers for a Better Tomorrow.'")
     print(f"================================================================")
