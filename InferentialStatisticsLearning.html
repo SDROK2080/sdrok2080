@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Inferential Statistics – Flowchart Learning App</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{color-scheme:dark;--bg:#0f1524;--card:#18213a;--line:#2b3758;--ink:#eef0f6;--mute:#9ba6c4;--gold:#e6b450;--ok:#5cc98a;--bad:#e8706a;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:var(--bg);color:var(--ink);line-height:1.55;padding:16px}
+.c{max-width:960px;margin:0 auto}
+h1{font-size:1.6rem;color:var(--gold);text-align:center}
+.sub{text-align:center;color:var(--mute);margin:4px 0 16px}
+button{font:inherit;cursor:pointer;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:9px 14px}
+button:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.tabs{display:flex;gap:6px;border-bottom:2px solid var(--line);margin-bottom:16px;overflow-x:auto}
+.tabs button{border:0;border-bottom:3px solid transparent;border-radius:0;background:none;color:var(--mute);font-weight:600;white-space:nowrap}
+.tabs button.on{color:var(--gold);border-bottom-color:var(--gold)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:12px 0}
+.pri{background:var(--gold);color:#1a1405;border-color:var(--gold);font-weight:600}
+.pn{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s ease}
+.open>.pn{grid-template-rows:1fr}
+.pn>.in{overflow:hidden;min-height:0;opacity:0;transition:opacity .45s}
+.open>.pn>.in{opacity:1}
+.it{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:10px 0}
+.it>button{display:flex;width:100%;justify-content:space-between;gap:10px;text-align:left;border:0;background:none;padding:13px 16px;font-weight:600}
+.it>button small{display:block;color:var(--mute);font-weight:400}
+.it>button i{font-style:normal;transition:transform .4s}
+.open>button i{transform:rotate(180deg)}
+.it .in>div{padding:0 16px 14px}
+.tag{display:inline-block;font-size:.75rem;padding:1px 8px;border-radius:10px;background:#24325a;color:var(--gold);margin-right:6px}
+.lk{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.lk a{padding:7px 12px;border-radius:8px;border:1px solid var(--line);background:#202c4d;color:var(--ink);text-decoration:none;font-size:.92rem}
+.lk a:hover{border-color:var(--gold)}
+.opts button{display:block;width:100%;text-align:left;margin:7px 0}
+.opts button:hover{border-color:var(--gold)}
+.crumb{color:var(--mute);font-size:.9rem;margin-bottom:6px}
+.res{border-left:4px solid var(--gold)}
+table{border-collapse:collapse;width:100%;min-width:480px}th,td{border:1px solid var(--line);padding:7px 10px;text-align:left}th{color:var(--gold)}
+.tw{overflow-x:auto}
+td button{border:0;background:none;color:var(--ink);text-decoration:underline;padding:0}
+.q button.r{border-color:var(--ok);background:#173126}.q button.w{border-color:var(--bad);background:#35201f}
+.q button{display:block;width:100%;text-align:left;margin:6px 0}
+.fb{color:var(--mute);font-size:.92rem}
+footer{margin:28px auto 8px;padding:16px 8px;border-top:1px solid var(--line);text-align:center;color:var(--mute);font-size:.92rem}
+footer b{color:var(--ink)}
+[hidden]{display:none!important}
+@media(prefers-reduced-motion:reduce){.pn,.pn>.in,.it>button i{transition:none}}
+</style>
+</head>
+<body>
+<div class="c">
+<h1>Inferential Statistics</h1>
+<p class="sub">Complete flowchart: from research problem to reporting, with free videos, PDFs and simulations</p>
+<div class="tabs" id="tabs"></div>
+<div id="v"></div>
+<footer><b>Developed By:</b> Mr. Bishnu Singh Rayamajhi, Math Lecturer of Kapilvastu Multiple Campus (KMC) and Department Head of Humanities &amp; Social Sciences (KMC-HSSD), Taulihawa</footer>
+</div>
+<script>
+var B="https://onlinestatbook.com/2/",GG="GG",SK="https://www.lock5stat.com/StatKey/";
+var HT=["logic_of_hypothesis_testing/logic_hypothesis.html","Power and significance simulation","power/power_demo.html"];
+var T={
+t1:{n:"One-sample t-test",p:1,d:"Compares one sample mean with a known population mean.",h:"H0: μ = μ0",a:"Interval/ratio data, roughly normal, no severe outliers.",c:"tests_of_means/testing_means.html",s:["t distribution simulation","tests_of_means/t_distribution_demo.html"]},
+ti:{n:"Independent t-test",p:1,d:"Compares the means of two separate groups.",h:"H0: μ1 = μ2",a:"Independent samples, normal data, similar variances (check with Levene's or the F test).",c:"tests_of_means/testing_means.html",s:["t distribution simulation","tests_of_means/t_distribution_demo.html"]},
+tp:{n:"Paired t-test",p:1,d:"Compares two measurements on the same subjects (before and after).",h:"H0: mean difference = 0",a:"Paired data, differences roughly normal.",c:"tests_of_means/testing_means.html",s:["t distribution simulation","tests_of_means/t_distribution_demo.html"]},
+an:{n:"One-way ANOVA",p:1,d:"Compares the means of three or more groups. If significant, follow with a post-hoc test (Tukey or Bonferroni).",h:"H0: all group means are equal",a:"Independent groups, normal data, equal variances.",c:"analysis_of_variance/ANOVA.html",s:["One-way ANOVA simulation","analysis_of_variance/one-way_demo.html"]},
+pe:{n:"Pearson correlation",p:1,d:"Measures the strength and direction of a linear relationship (−1 to +1).",h:"H0: ρ = 0",a:"Both variables interval/ratio, roughly normal, linear relationship.",c:"describing_bivariate_data/bivariate.html",s:["Guessing correlations simulation","describing_bivariate_data/pearson_demo.html"]},
+rg:{n:"Linear regression",p:1,d:"Predicts one variable from one (simple) or several (multiple) predictors.",h:"H0: slope = 0",a:"Linear relationship, independent and roughly normal residuals, constant variance.",c:"regression/regression.html",s:["Linear fit simulation","regression/linear_fit_demo.html"]},
+ws:{n:"Wilcoxon signed-rank test (or Sign test)",p:0,d:"Non-parametric alternative to the one-sample or paired t-test.",h:"H0: median difference = 0",a:"Ordinal or non-normal data, small samples.",c:"distribution_free_tests/contents.html",s:["StatKey randomization tests",SK]},
+mw:{n:"Mann-Whitney U test",p:0,d:"Non-parametric alternative to the independent t-test; compares two independent groups by ranks.",h:"H0: the two distributions are the same",a:"Ordinal or non-normal data, independent samples.",c:"distribution_free_tests/contents.html",s:["StatKey randomization tests",SK]},
+kw:{n:"Kruskal-Wallis H test",p:0,d:"Non-parametric alternative to one-way ANOVA. If significant, follow with Dunn's post-hoc test.",h:"H0: all groups have the same distribution",a:"Ordinal or non-normal data, independent groups.",c:"distribution_free_tests/contents.html",s:["StatKey randomization tests",SK]},
+sp:{n:"Spearman rank correlation",p:0,d:"Measures a monotonic relationship using ranks.",h:"H0: ρs = 0",a:"Ordinal data or non-normal continuous data.",c:"describing_bivariate_data/bivariate.html",s:["GeoGebra: search",GG]},
+ch:{n:"Chi-square test",p:0,d:"Tests association between categorical variables (independence) or whether counts fit an expected distribution (goodness of fit).",h:"H0: variables are independent / data fit the distribution",a:"Counts, expected frequencies mostly 5 or more.",c:"chi_square/Chi_Square.html",s:["2 x 2 table simulation","chi_square/2x2sim.html"]},
+ks:{n:"Kolmogorov-Smirnov test",p:0,d:"Checks whether data follow a given distribution, such as the normal distribution.",h:"H0: data follow the stated distribution",a:"Continuous data, one or two samples.",c:"chi_square/Chi_Square.html",s:["GeoGebra: search",GG]}
+};
+var W={r:{q:"What do you want to find out?",o:[["Compare means or groups","c"],["Find a relationship","r2"],["Test categorical data or a distribution","k"]]},
+c:{q:"Are the data interval/ratio, roughly normal, with no severe outliers?",o:[["Yes (parametric)","cp"],["No: ordinal, nominal or non-normal (non-parametric)","cn"]]},
+cp:{q:"How many samples or groups?",o:[["One sample versus a known value","t1"],["Two groups","c2"],["Three or more groups","an"]]},
+c2:{q:"Are the two groups independent or paired?",o:[["Independent","ti"],["Paired (same subjects)","tp"]]},
+cn:{q:"How many samples or groups?",o:[["One sample or paired data","ws"],["Two independent groups","mw"],["Three or more groups","kw"]]},
+r2:{q:"Do you want to predict one variable from another?",o:[["Yes (regression)","rg"],["No, only the strength of the relation","r3"]]},
+r3:{q:"Are both variables normal, interval/ratio?",o:[["Yes (Pearson)","pe"],["No (Spearman)","sp"]]},
+k:{q:"What exactly do you want to test?",o:[["Association of two categorical variables","ch"],["Whether counts fit an expected pattern","ch"],["Whether data are normally distributed","ks"]]}};
+var ST=[["1. Define the research problem","Decide what you want to find out about the population: compare means, test a claim, or find a relationship.","Do students taught with the new method score higher than those taught the old way?",["logic_of_hypothesis_testing/logic_hypothesis.html","Significance testing reading","GG"]],
+["2. Formulate hypotheses","H0 (null) states no effect, no difference or no relationship. H1 (alternative) states what you want to show.","H0: μ1 = μ2. H1: μ1 > μ2.",HT],
+["3. Set the level of significance (α)","The risk of wrongly rejecting a true H0. Commonly 0.05 (5%) or 0.01 (1%).","α = 0.05 means a 5% chance of a false alarm.",HT],
+["4. Choose the appropriate test","Depends on the type of data, number of groups and the research question. Use the Test Selector tab.","Two independent groups, normal data → independent t-test.",["tests_of_means/testing_means.html","Test choice reading","tests_of_means/t_distribution_demo.html"]],
+["5. Calculate the test statistic and p-value","Use software (SPSS, R, Excel) or statistical tables. The p-value is the probability of results at least this extreme if H0 is true.","t = 2.31, p = 0.024.",["tests_of_means/testing_means.html","t distribution simulation","tests_of_means/t_distribution_demo.html"]],
+["6. Make a decision","If p ≤ α, reject H0 (statistically significant). If p > α, fail to reject H0 (not significant).","0.024 ≤ 0.05 → reject H0.",HT],
+["7. Interpret the results","State the conclusion in the context of the problem. Include effect size and confidence interval where relevant.","The new method raised scores by 6 marks (95% CI 1 to 11).",["estimation/estimation.html","Confidence interval simulation","estimation/ci_sim.html"]],
+["8. Report the findings","Present clear tables, graphs and a plain interpretation.","Report test name, statistic, df, p-value, effect size and CI.",["graphing_distributions/graphing_distributions.html","Graphing reading","GG"]]];
+var TM=[["H0","Null hypothesis: no effect, difference or relationship"],["H1","Alternative hypothesis: what you want to prove"],["α","Level of significance"],["p-value","Probability value"],["CI","Confidence interval"],["Effect size","Magnitude of the result"]];
+var PN=[["One-sample t-test","t1","Wilcoxon signed-rank test","ws"],["Independent t-test","ti","Mann-Whitney U test","mw"],["Paired t-test","tp","Wilcoxon signed-rank test","ws"],["One-way ANOVA","an","Kruskal-Wallis test","kw"],["Pearson correlation","pe","Spearman correlation","sp"],["Linear regression","rg","Kolmogorov-Smirnov test","ks"]];
+var QZ=[["A p-value of 0.03 with α = 0.05 means…",["Reject H0","Fail to reject H0","Accept H1 as proven"],0],["Which test compares three or more normal groups?",["Independent t-test","One-way ANOVA","Mann-Whitney U"],1],["Non-parametric alternative to the independent t-test?",["Mann-Whitney U","Pearson","Paired t-test"],0],["Which test checks association of two categorical variables?",["Chi-square","Spearman","ANOVA"],0],["After a significant Kruskal-Wallis test, use…",["Tukey","Dunn's test","Paired t-test"],1],["Ordinal data and a rank-based relationship call for…",["Pearson","Spearman","Regression"],1]];
+var TABS=[["Roadmap","road"],["Test Selector","sel"],["Test Library","lib"],["Terms & Quiz","qz"]],cur="road",trail=[],qs={},V=document.getElementById("v");
+function ab(u){return u.indexOf("http")==0?u:B+u}
+function links(nm,ch,sl,su){var q=nm.replace(/\(.*?\)/g,"").trim(),u=su==GG?"https://www.geogebra.org/search/"+encodeURIComponent(q):ab(su),h="";
+ [["▶️ Video tutorials","https://www.youtube.com/results?search_query="+encodeURIComponent(q+" explained statistics")],["📖 Free chapter",ab(ch)],["📄 PDF textbook","https://onlinestatbook.com/Online_Statistics_Education.pdf"],["📄 PDF slides","https://onlinestatbook.com/2/stats_slides.pdf"],["🧪 "+sl,u]].forEach(function(x){h+="<a href='"+x[1]+"' target='_blank' rel='noopener'>"+x[0]+"</a>"});return "<div class='lk'>"+h+"</div>"}
+function tl(id){var t=T[id];return links(t.n,t.c,t.s[0],t.s[1])}
+function acc(id,t,sub,body,open){return "<div class='it"+(open?" open":"")+"' id='"+id+"'><button data-a='"+id+"' aria-expanded='"+!!open+"'><span>"+t+(sub?"<small>"+sub+"</small>":"")+"</span><i>▾</i></button><div class='pn'><div class='in'><div>"+body+"</div></div></div></div>"}
+function road(){return "<p class='sub' style='text-align:left'>Tap a step to open it.</p>"+ST.map(function(s,i){return acc("s"+i,s[0],"",s[1]+"<p><span class='tag'>Example</span>"+s[2]+"</p>"+links(s[0].replace(/^\d\.\s*/,""),s[3][0],s[3][1],s[3][2]),i==0)}).join("")}
+function sel(){var k=trail[trail.length-1]||"r",h="";
+ if(T[k]){var t=T[k];h="<div class='card res'><span class='tag'>"+(t.p?"Parametric":"Non-parametric")+"</span><h3>"+t.n+"</h3><p>"+t.d+"</p><p><b>"+t.h+"</b></p><p><i>Assumptions:</i> "+t.a+"</p>"+tl(k)+"<p class='lk'><button data-lib='"+k+"'>Open in Test Library</button></p></div>"}
+ else{var n=W[k];h="<div class='card'><p class='crumb'>Step "+(trail.length+1)+"</p><h3>"+n.q+"</h3><div class='opts'>"+n.o.map(function(o){return "<button data-go='"+o[1]+"'>"+o[0]+"</button>"}).join("")+"</div></div>"}
+ return "<div class='lk'><button data-back='1'"+(trail.length?"":" hidden")+">← Back</button><button data-rs='1'"+(trail.length?"":" hidden")+">Restart</button></div>"+h}
+function lib(){return "<div class='tw'><table><tr><th>Parametric</th><th>Non-parametric</th></tr>"+PN.map(function(r){return "<tr><td><button data-lib='"+r[1]+"'>"+r[0]+"</button></td><td><button data-lib='"+r[3]+"'>"+r[2]+"</button></td></tr>"}).join("")+"</table></div>"+Object.keys(T).map(function(k){var t=T[k];return acc("t_"+k,t.n,t.p?"Parametric":"Non-parametric",t.d+"<p><b>"+t.h+"</b></p><p><i>Assumptions:</i> "+t.a+"</p>"+tl(k))}).join("")}
+function qh(i){var q=QZ[i],a=qs[i];return "<div class='card q' id='q"+i+"'><p><b>"+(i+1)+". "+q[0]+"</b></p>"+q[1].map(function(o,k){var c="";if(a!==undefined){if(k==q[2])c="r";else if(k==a)c="w"}return "<button class='"+c+"' data-qi='"+i+"' data-o='"+k+"'"+(a===q[2]?" disabled":"")+">"+o+"</button>"}).join("")+(a!==undefined&&a!==q[2]?"<p class='fb'>Not quite. Try again.</p>":"")+"</div>"}
+function qz(){return "<div class='card'><h3>Key terms</h3>"+TM.map(function(t){return "<p><b>"+t[0]+"</b> = "+t[1]+"</p>"}).join("")+"</div><h3>Quick quiz <span id='sc' class='tag'></span></h3>"+QZ.map(function(_,i){return qh(i)}).join("")}
+function score(){var n=0;QZ.forEach(function(q,i){if(qs[i]===q[2])n++});var e=document.getElementById("sc");if(e)e.textContent=n+" / "+QZ.length}
+function render(){document.getElementById("tabs").innerHTML=TABS.map(function(t){return "<button class='"+(t[1]==cur?"on":"")+"' data-t='"+t[1]+"'>"+t[0]+"</button>"}).join("");V.innerHTML=({road:road,sel:sel,lib:lib,qz:qz})[cur]();score()}
+function show(id){var e=document.getElementById(id);if(e){e.classList.add("open");e.querySelector("button").setAttribute("aria-expanded","true");setTimeout(function(){e.scrollIntoView({behavior:"smooth",block:"start"})},80)}}
+document.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var d=b.dataset;
+ if(d.t){cur=d.t;render()}
+ else if(d.a){var el=document.getElementById(d.a),o=el.classList.toggle("open");b.setAttribute("aria-expanded",o)}
+ else if(d.go){trail.push(d.go);render()}
+ else if(d.back){trail.pop();render()}
+ else if(d.rs){trail=[];render()}
+ else if(d.lib){cur="lib";render();show("t_"+d.lib)}
+ else if(d.qi!==undefined){var i=+d.qi;qs[i]=+d.o;document.getElementById("q"+i).outerHTML=qh(i);score()}
+});
+render();
+</script>
+</body>
+</html>
