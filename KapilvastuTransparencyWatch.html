@@ -2009,33 +2009,79 @@ function renderDataSourcesView() {
     <!-- QGIS PyQGIS Bridge & Scripts -->
     <div class="card">
       <div class="card-header">
-        <h3>PyQGIS Automation Script (Reprojecting Nepal District & Ward Shapefiles)</h3>
+        <h3>End-to-End QGIS Automation Pipeline (Repair -> Reproject -> GeoJSON Optimization)</h3>
+        <button class="sm pri" onclick="copyQgisPipelineScript()">📋 Copy Full PyQGIS Script</button>
       </div>
-      <p class="sub">Run this script in the QGIS Python Console to convert official Survey Department / MoFAGA shapefiles (MUTM / Nepal Nagarkot CRS) to web-ready WGS 84 GeoJSON for this application:</p>
+      <p class="sub">Run this script in the QGIS Python Console (Plugins > Python Console or Ctrl+Alt+P). It repairs self-intersecting geometries, reprojects from Nepal MUTM / Everest 1830 to WGS 84 (EPSG:4326), and optimizes coordinate precision to 5 decimals for rapid web rendering:</p>
       
-      <pre class="code">from qgis.core import QgsVectorLayer, QgsProject, QgsCoordinateReferenceSystem
-import processing
+      <pre class="code" id="pyqgisScriptBlock">from qgis.core import (
+    QgsProject, QgsVectorLayer, QgsCoordinateReferenceSystem,
+    QgsVectorFileWriter, QgsFeatureRequest
+)
+import processing, os
 
-# 1. Load Kapilvastu Ward Boundary Shapefile
-input_path = "/path/to/kapilvastu_ward_boundary.shp"
-layer = QgsVectorLayer(input_path, "Kapilvastu_Wards", "ogr")
+# Configure workspace export folder
+BASE_DIR = os.path.expanduser("~/Desktop/sdrok2080/clean-repo")
+OUTPUT_DIR = os.path.join(BASE_DIR, "exported_geojson")
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-if layer.isValid():
-    QgsProject.instance().addMapLayer(layer)
-    print("✓ Successfully loaded layer into QGIS")
+# Layers to batch process and export
+layers_to_export = [
+    {"layer_name": "Kapilvastu_Ward_Boundaries", "out_name": "kapilvastu_wards.geojson"},
+    {"layer_name": "Kapilvastu_Infrastructure_Contracts", "out_name": "kapilvastu_contracts.geojson"}
+]
+
+print("=== Starting QGIS Pipeline for Kapilvastu Transparency Watch ===")
+
+for item in layers_to_export:
+    lyr_match = QgsProject.instance().mapLayersByName(item["layer_name"])
+    if not lyr_match:
+        print(f"[-] Layer '{item['layer_name']}' not found in QGIS Canvas. Skipping.")
+        continue
     
-    # 2. Reproject to EPSG:4326 (WGS 84 Standard for Web Leaflet Maps)
-    output_geojson = "/path/to/kapilvastu_wards_wgs84.geojson"
-    processing.run("native:reprojectlayer", {
-        'INPUT': layer,
+    layer = lyr_match[0]
+    out_path = os.path.join(OUTPUT_DIR, item["out_name"])
+    
+    # Step 1: Geometry Repair (Resolves topological self-intersections)
+    fixed = processing.run("native:fixgeometries", {'INPUT': layer, 'OUTPUT': 'memory:'})['OUTPUT']
+    
+    # Step 2: Reproject to WGS 84 (EPSG:4326)
+    reprojected = processing.run("native:reprojectlayer", {
+        'INPUT': fixed,
         'TARGET_CRS': QgsCoordinateReferenceSystem('EPSG:4326'),
-        'OUTPUT': output_geojson
-    })
-    print(f"✓ Exported WGS84 GeoJSON to {output_geojson}")
-else:
-    print("✗ Invalid layer. Ensure .shp, .shx, .dbf and .prj reside in the same folder.")</pre>
+        'OUTPUT': 'memory:'
+    })['OUTPUT']
+    
+    # Step 3: Write GeoJSON with 5-decimal precision (~1.1 meter accuracy, reduces file size by 60%)
+    save_options = QgsVectorFileWriter.SaveVectorOptions()
+    save_options.driverName = "GeoJSON"
+    save_options.fileEncoding = "UTF-8"
+    save_options.layerOptions = ["COORDINATE_PRECISION=5", "WRITE_BBOX=YES"]
+    
+    err, msg = QgsVectorFileWriter.writeAsVectorFormatV3(
+        reprojected, out_path, QgsProject.instance().transformContext(), save_options
+    )
+    
+    if err == QgsVectorFileWriter.NoError:
+        print(f"[✓] Exported: {item['out_name']} ({reprojected.featureCount()} features)")
+    else:
+        print(f"[✗] Export failed for {item['out_name']}: {msg}")
+
+print("=== Pipeline Complete! Ingest output into Tab 9 or Leaflet map. ===")</pre>
     </div>
   `;
+}
+
+function copyQgisPipelineScript() {
+  var el = document.getElementById("pyqgisScriptBlock");
+  if (!el) return;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(el.innerText).then(function() {
+      alert("PyQGIS automation script copied to clipboard!");
+    });
+  } else {
+    alert("Please select and copy the PyQGIS code manually.");
+  }
 }
 
 // Ingestion Handlers
