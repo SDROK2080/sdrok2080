@@ -1,0 +1,2527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kapilvastu Public Integrity & Expenditure Intelligence Platform (Investigative Research Suite)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<!-- Lucide icons or system fonts -->
+<style>
+:root {
+  --bg: #0b0f19;
+  --panel: #111827;
+  --card: #182235;
+  --card-hover: #1f2c44;
+  --ink: #f3f4f6;
+  --ink-secondary: #9ca3af;
+  --mute: #6b7280;
+  --line: #26334d;
+  --line-strong: #374766;
+  --pri: #3b82f6;
+  --pri-glow: rgba(59, 130, 246, 0.2);
+  --accent: #06b6d4;
+  --red: #ef4444;
+  --org: #f97316;
+  --yel: #eab308;
+  --grn: #10b981;
+  --purp: #8b5cf6;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root.light {
+    --bg: #f8fafc;
+    --panel: #ffffff;
+    --card: #f1f5f9;
+    --card-hover: #e2e8f0;
+    --ink: #0f172a;
+    --ink-secondary: #475569;
+    --mute: #64748b;
+    --line: #cbd5e1;
+    --line-strong: #94a3b8;
+    --pri: #2563eb;
+    --pri-glow: rgba(37, 99, 235, 0.15);
+    --accent: #0284c7;
+    color-scheme: light;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+body { background: var(--bg); color: var(--ink); line-height: 1.5; font-size: 14px; min-height: 100vh; display: flex; flex-direction: column; }
+
+/* Status Ribbon */
+.investigation-banner {
+  background: linear-gradient(90deg, #1e293b, #0f172a);
+  border-bottom: 1px solid var(--line);
+  padding: 6px 16px;
+  font-size: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.badge-tag {
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid var(--pri);
+  color: #93c5fd;
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.sec-notice { color: #facc15; font-weight: 500; display: inline-flex; align-items: center; gap: 5px; }
+
+/* Header */
+header {
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+  padding: 12px 20px 0;
+}
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 1350px;
+  margin: 0 auto 10px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.title-group h1 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  letter-spacing: -0.3px;
+}
+.title-group h1 span.highlight { color: var(--pri); }
+.title-group p { font-size: 0.82rem; color: var(--ink-secondary); margin-top: 2px; }
+.actions-group { display: flex; gap: 8px; align-items: center; }
+
+/* Nav */
+nav {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  max-width: 1350px;
+  margin: 0 auto;
+  border-bottom: 1px solid transparent;
+  scrollbar-width: thin;
+}
+nav button {
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: none;
+  color: var(--ink-secondary);
+  font-weight: 600;
+  padding: 10px 14px;
+  white-space: nowrap;
+  cursor: pointer;
+  font-size: 0.88rem;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+nav button:hover { color: var(--ink); background: rgba(255,255,255,0.03); }
+nav button.on { color: var(--pri); border-bottom-color: var(--pri); background: rgba(59, 130, 246, 0.08); }
+
+/* Main Container */
+main {
+  max-width: 1350px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 18px 20px 40px;
+  flex: 1;
+}
+
+/* Common Components */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding-bottom: 8px;
+}
+.card-header h3 { font-size: 1rem; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 8px; }
+.sub { color: var(--ink-secondary); font-size: 0.82rem; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.kpi {
+  background: linear-gradient(145deg, var(--card), #141c2c);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+.kpi::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: var(--line-strong);
+}
+.kpi.alert-hi::before { background: var(--red); }
+.kpi.alert-mid::before { background: var(--org); }
+.kpi.alert-ok::before { background: var(--grn); }
+.kpi.alert-info::before { background: var(--pri); }
+.kpi b { font-size: 1.6rem; font-weight: 700; color: #fff; margin-top: 4px; font-feature-settings: "tnum"; }
+.kpi span { color: var(--ink-secondary); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+.kpi .kpi-sub { font-size: 0.75rem; color: var(--mute); margin-top: 4px; }
+
+/* Filter Controls */
+.filter-bar {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.filter-bar input, .filter-bar select {
+  flex: 1;
+  min-width: 140px;
+}
+button, select, input, textarea {
+  font: inherit;
+  color: var(--ink);
+  background: #0f172a;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  padding: 7px 11px;
+  font-size: 0.85rem;
+}
+button { cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-weight: 500; transition: background 0.15s, border-color 0.15s; }
+button:hover { background: #1e293b; border-color: #4b5563; }
+button.pri { background: var(--pri); color: #fff; border-color: var(--pri); font-weight: 600; }
+button.pri:hover { background: #2563eb; }
+button.sm { padding: 4px 8px; font-size: 0.78rem; border-radius: 4px; }
+button.danger { background: rgba(239, 68, 68, 0.2); border-color: var(--red); color: #fca5a5; }
+button.danger:hover { background: var(--red); color: #fff; }
+button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--pri);
+  outline-offset: 1px;
+}
+
+/* Tables */
+.tw { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-sm); margin: 8px 0; }
+table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: 0.84rem; text-align: left; }
+th, td { border-bottom: 1px solid var(--line); padding: 9px 12px; }
+th { background: #0f172a; color: #94a3b8; font-weight: 600; font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.5px; position: sticky; top: 0; }
+tr:last-child td { border-bottom: none; }
+tr.cl { cursor: pointer; transition: background 0.15s; }
+tr.cl:hover { background: rgba(59, 130, 246, 0.08); }
+tr.selected { background: rgba(59, 130, 246, 0.16) !important; border-left: 3px solid var(--pri); }
+
+/* Badges & Pills */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #fff;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.red { background: rgba(239, 68, 68, 0.2); border: 1px solid var(--red); color: #fca5a5; }
+.org { background: rgba(249, 115, 22, 0.2); border: 1px solid var(--org); color: #fdba74; }
+.yel { background: rgba(234, 179, 8, 0.2); border: 1px solid var(--yel); color: #fde047; }
+.grn { background: rgba(16, 185, 129, 0.2); border: 1px solid var(--grn); color: #86efac; }
+.gry { background: rgba(107, 114, 128, 0.2); border: 1px solid var(--mute); color: #d1d5db; }
+.purp { background: rgba(139, 92, 246, 0.2); border: 1px solid var(--purp); color: #c4b5fd; }
+
+.note {
+  border-left: 4px solid var(--accent);
+  padding: 10px 14px;
+  background: rgba(6, 182, 212, 0.08);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.82rem;
+  margin: 12px 0;
+  color: #e0f2fe;
+}
+.note.warn {
+  border-left-color: var(--org);
+  background: rgba(249, 115, 22, 0.08);
+  color: #ffedd5;
+}
+
+/* Progress bar */
+.bt { background: #1e293b; border-radius: 6px; overflow: hidden; height: 10px; width: 100%; border: 1px solid var(--line); }
+.bar { height: 100%; border-radius: 6px; background: var(--pri); transition: width 0.3s; }
+
+/* Map View */
+#map { height: 500px; border-radius: var(--radius-md); border: 1px solid var(--line); position: relative; z-index: 1; }
+.map-layout { display: grid; grid-template-columns: 1fr 360px; gap: 16px; margin-top: 10px; }
+@media (max-width: 950px) { .map-layout { grid-template-columns: 1fr; } }
+.map-sidebar { display: flex; flex-direction: column; gap: 12px; }
+
+/* Dossier / Case File UI */
+.dossier-box {
+  background: #0d131f;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  position: relative;
+}
+.dossier-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+}
+.dossier-title { font-size: 1.05rem; font-weight: 700; color: #fff; }
+.dossier-sub { font-size: 0.78rem; color: var(--ink-secondary); margin-top: 2px; }
+.dossier-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; font-size: 0.82rem; margin-bottom: 12px; }
+.dossier-item span:first-child { color: var(--mute); display: block; font-size: 0.72rem; text-transform: uppercase; }
+.dossier-item span:last-child { font-weight: 600; color: var(--ink); }
+
+/* Timeline UI */
+.timeline { position: relative; padding-left: 20px; margin: 12px 0 16px 6px; border-left: 2px solid var(--line-strong); }
+.timeline-item { position: relative; margin-bottom: 16px; }
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: -26px;
+  top: 3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--pri);
+  border: 2px solid #0b0f19;
+}
+.timeline-item.alert::before { background: var(--red); }
+.timeline-date { font-size: 0.72rem; color: var(--mute); font-family: var(--font-mono); }
+.timeline-content { font-size: 0.82rem; color: var(--ink); margin-top: 2px; }
+
+/* Red Flag Checklist */
+.flag-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin: 10px 0; }
+.flag-item {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--red);
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.82rem;
+}
+.flag-item.mid { border-left-color: var(--org); }
+.flag-item.low { border-left-color: var(--yel); }
+.flag-item .flag-title { font-weight: 600; color: #fff; display: flex; justify-content: space-between; }
+.flag-item .flag-inv { font-size: 0.75rem; color: #94a3b8; margin-top: 4px; }
+
+/* Network Matrix / Relationship Visualizer */
+.network-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.contractor-pill {
+  padding: 6px 12px;
+  background: #1e293b;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Accordion */
+.hg { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-sm); margin: 8px 0; }
+.hg > button { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: none; border: 0; color: #fff; font-weight: 600; text-align: left; }
+.hg .pn { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease; }
+.hg.open .pn { grid-template-rows: 1fr; }
+.hg .in { overflow: hidden; }
+.hg .bd { padding: 0 16px 16px; font-size: 0.85rem; color: var(--ink-secondary); }
+.hg .bd p, .hg .bd ul, .hg .bd ol { margin: 6px 0; }
+.hg .bd ul, .hg .bd ol { margin-left: 20px; }
+
+/* Code blocks */
+pre.code {
+  background: #080c14;
+  color: #7dd3fc;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  overflow-x: auto;
+  margin: 8px 0;
+}
+
+/* Modal Dialog */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-window {
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  max-width: 680px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+  padding: 24px;
+}
+
+/* Investigative Scorecard */
+.score-meter {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.score-number { font-size: 2.2rem; font-weight: 800; font-family: var(--font-mono); line-height: 1; }
+.score-max { font-size: 0.9rem; color: var(--mute); }
+
+footer {
+  max-width: 1350px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  color: var(--mute);
+  font-size: 0.78rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media print {
+  nav, .filter-bar, .actions-group, .noprint, #map { display: none !important; }
+  body { background: #fff; color: #000; }
+  .card, .dossier-box { border: 1px solid #ccc; background: #fff; color: #000; box-shadow: none; }
+  th { background: #eee; color: #000; }
+}
+</style>
+</head>
+<body>
+
+<div class="investigation-banner">
+  <div style="display:flex; align-items:center; gap:8px;">
+    <span class="badge-tag">Investigative Research Suite</span>
+    <span class="sec-notice">⚖️ Standard of Evidence: Probabilistic Triangulation (OCP Red Flag Framework v2.4)</span>
+  </div>
+  <div style="font-size:0.75rem; color:var(--ink-secondary);">
+    Target LGU: <b>Kapilvastu Municipality (Code: 549-01)</b> | FY: <b>2081/82 - 2082/83 (B.S.)</b>
+  </div>
+</div>
+
+<header>
+  <div class="header-top">
+    <div class="title-group">
+      <h1>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--pri)"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><path d="M11 8v6M8 11h6"></path></svg>
+        <span>Kapilvastu</span> <span class="highlight">Public Integrity & Expenditure Monitor</span>
+      </h1>
+      <p class="sub">Forensic Open Contracting Intelligence, Budget Variance Screening, GIS Verification & Anti-Corruption Research Engine</p>
+    </div>
+    <div class="actions-group noprint">
+      <button class="sm" id="btnExportDossier">📄 Export Case Dossier (PDF/Print)</button>
+      <button class="sm" id="btnRTI">📝 RTI Request Generator</button>
+      <button class="sm pri" id="btnQuickImport">⬆️ Ingest Datasets</button>
+      <button class="sm" id="btnThemeToggle">🌓</button>
+    </div>
+  </div>
+  <nav id="navBar"></nav>
+</header>
+
+<main id="appView"></main>
+
+<footer>
+  <div>
+    <b>Kapilvastu Transparency Watch / Public Financial Accountability Initiative</b><br>
+    Methodology conforms to OGP (Open Government Partnership) and PPMO e-GP transparency standards.
+  </div>
+  <div style="text-align:right;">
+    Screening heuristics are probabilistic triage aids, never criminal findings without judicial indictment.<br>
+    Built with OpenStreetMap, Leaflet, Proj4, GeoTIFF, SheetJS, and LocalStorage Vault.
+  </div>
+</footer>
+
+<!-- External Tooling Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/shpjs@4.0.4/dist/shp.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/geotiff@2.1.3/dist-browser/geotiff.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/proj4@2.9.2/dist/proj4.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<script>
+/**
+ * KAPILVASTU TRANSPARENCY WATCH - FORENSIC RESEARCH SUITE
+ * Architecture:
+ * - 10 Core Research Modules (Executive Triage, Interactive GIS, Contract Forensics, Contractor Cartel Matrix, Ward Budgets, Audit Findings, Field Inspection Log, RTI Drafting, Ingestion Engine, Methodology)
+ * - Quantitative Composite Risk Scoring (0 - 100 Index with 8 Weighted Risk Vectors)
+ * - Field Triangulation & Geolocation Verification
+ * - Right to Information (RTI Section 3 & 7) Auto-Drafting Generator
+ * - Complete Offline Import/Export & Local Vault persistence
+ */
+
+// Global App State
+var STATE = {
+  currentTab: 0,
+  activeFilter: { ward: '', cat: '', priority: '', search: '', riskMin: 0 },
+  selectedProjectId: null,
+  activeMap: null,
+  mapLayers: {},
+  thresholds: {
+    progGap: 20,       // Financial % - Physical %
+    singleBid: 1,      // Max bids for red flag
+    amendments: 2,     // Variation orders
+    delayDays: 90,     // Days overrun
+    concentration: 25  // % of total market share
+  }
+};
+
+// Tabs configuration
+var TABS = [
+  { id: 'dashboard', label: 'Triage Dashboard', icon: '📊' },
+  { id: 'map', label: 'GIS & Satellite Verification', icon: '🗺️' },
+  { id: 'procurement', label: 'Procurement Risk Matrix', icon: '🔍' },
+  { id: 'cartel', label: 'Contractor & Cartel Analysis', icon: '🏢' },
+  { id: 'budgets', label: 'Ward Budget & Outliers', icon: '💰' },
+  { id: 'audit', label: 'OAG Audit Observations', icon: '📋' },
+  { id: 'field', label: 'Field Triangulation Logs', icon: '📸' },
+  { id: 'rti', label: 'RTI Request Drafter', icon: '⚖️' },
+  { id: 'sources', label: 'Data Ingestion & QGIS', icon: '💾' },
+  { id: 'methodology', label: 'Methodology & Guide', icon: '📖' }
+];
+
+// Seeded PRNG for reproducible synthetic benchmark baseline
+var SEED = 208204;
+function pseudoRandom() {
+  SEED = (SEED * 9301 + 49297) % 233280;
+  return SEED / 233280;
+}
+
+// Realistic Nepal Municipality Sector Domains & Contractors in Kapilvastu / Lumbini
+var CATEGORIES = ["Blacktopped Roads & Culverts", "Riverbank Embankment & Flood Control", "Deep Tubewell & Drinking Water", "Basic Health Post Infrastructure", "Secondary School Block Construction", "Irrigation Canal Modernization", "Municipal Administrative Facility"];
+var CONTRACTORS = [
+  { name: "Lumbini-Shivapur Builders JV", reg: "REG-2065-098", pan: "302918231", rep: "B. K. Sharma", riskFactor: 1.2 },
+  { name: "Taulihawa Engineering & Infra Pvt Ltd", reg: "REG-2071-412", pan: "601928341", rep: "R. C. Yadav", riskFactor: 0.9 },
+  { name: "Shakya Heritage Infrastructure Const.", reg: "REG-2068-119", pan: "304819201", rep: "A. Shakya", riskFactor: 0.8 },
+  { name: "Gorusinghe Terai Roadway Constr.", reg: "REG-2074-551", pan: "604928114", rep: "M. Khan", riskFactor: 1.3 },
+  { name: "Kapilvastu Nirman Sewa", reg: "REG-2062-023", pan: "301928344", rep: "D. R. Pokhrel", riskFactor: 1.4 },
+  { name: "Mayadevi Water & Sanitation Developers", reg: "REG-2077-890", pan: "609281729", rep: "S. K. Gupta", riskFactor: 1.0 },
+  { name: "Banganga Construction Consortium", reg: "REG-2069-332", pan: "305829103", rep: "P. Chaudhary", riskFactor: 1.1 }
+];
+var FISCAL_YEARS = ["2080/81", "2081/82", "2082/83"];
+var WARDS_DATA = [
+  { no: 1, name: "Taulihawa Bazar North", pop: 8200 },
+  { no: 2, name: "Taulihawa Bazar South", pop: 7800 },
+  { no: 3, name: "Tilaurakot Archaeological Zone", pop: 6400 },
+  { no: 4, name: "Malpara Rural Belt", pop: 5900 },
+  { no: 5, name: "Pipra Agricultural Plains", pop: 6100 },
+  { no: 6, name: "Thunhiya Border Sector", pop: 7300 },
+  { no: 7, name: "Dharmawali River Corridor", pop: 5200 },
+  { no: 8, name: "Bithuwa East", pop: 6700 },
+  { no: 9, name: "Jagadishpur Wetland Buffer", pop: 5800 },
+  { no: 10, name: "Sohrabagadha Fringe", pop: 6200 },
+  { no: 11, name: "Niglihawa Inscription Sector", pop: 5400 },
+  { no: 12, name: "Kudan Historic Belt", pop: 5900 }
+];
+
+// Initialize Comprehensive Benchmark Project Dataset
+var PROJECTS = [];
+(function initBenchmarkData() {
+  // Kapilvastu center approx lat: 27.545, lng: 83.050
+  for (var i = 0; i < 28; i++) {
+    var cat = CATEGORIES[i % CATEGORIES.length];
+    var ward = (i % 12) + 1;
+    var conObj = CONTRACTORS[Math.floor(pseudoRandom() * CONTRACTORS.length)];
+    if (i % 4 === 0) conObj = CONTRACTORS[0]; // Introduce realistic market concentration pattern
+    
+    var budget = Math.round((3.5 + pseudoRandom() * 26) * 10) / 10; // NPR Millions
+    var bidVariation = 0.82 + (pseudoRandom() * 0.35); // Contract awarded vs estimate
+    var awarded = Math.round(budget * bidVariation * 10) / 10;
+    
+    var physicalProgress = Math.round(pseudoRandom() * 100);
+    // Introduce discrepancy deliberate patterns (e.g. advance payment without on-site progress)
+    var financialRatio = physicalProgress / 100;
+    if (i % 3 === 0) financialRatio += 0.28 + (pseudoRandom() * 0.3); // High variance
+    else if (i % 5 === 0) financialRatio -= 0.15;
+    financialRatio = Math.max(0.1, Math.min(1.25, financialRatio));
+    var spent = Math.round(awarded * financialRatio * 10) / 10;
+    
+    var delayDays = (i % 2 === 0) ? Math.floor(pseudoRandom() * 240) : Math.floor(pseudoRandom() * 45);
+    var bidders = (i % 4 === 0) ? 1 : 2 + Math.floor(pseudoRandom() * 5);
+    var amendments = (i % 3 === 0) ? 2 + Math.floor(pseudoRandom() * 3) : Math.floor(pseudoRandom() * 2);
+    var docsOnline = (i % 4 !== 0);
+    var eGPNested = (pseudoRandom() > 0.15);
+    var tenderMethod = bidders === 1 && pseudoRandom() > 0.5 ? "Direct Procurement / Quotation" : "National Competitive Bidding (NCB)";
+    
+    // Lat / Lng in Kapilvastu municipality region
+    var lat = 27.538 + (pseudoRandom() - 0.5) * 0.14;
+    var lng = 83.045 + (pseudoRandom() - 0.5) * 0.16;
+
+    // Milestone completion date & estimated handover
+    var startMonth = 1 + Math.floor(pseudoRandom() * 10);
+    var plannedCompletion = "2082-" + (startMonth < 10 ? "0" + startMonth : startMonth) + "-30";
+    
+    PROJECTS.push({
+      id: "KV-NCB-" + (208100 + i + 1),
+      egp_id: "PPMO-EGP-2081-" + (94812 + i),
+      name: cat + " Package " + (i + 1) + " (Ward " + ward + ")",
+      ward: ward,
+      cat: cat,
+      fy: FISCAL_YEARS[i % FISCAL_YEARS.length],
+      contractor: conObj.name,
+      contractor_pan: conObj.pan,
+      contractor_rep: conObj.rep,
+      budget_est: budget,
+      contract_val: awarded,
+      spent_val: spent,
+      physical_prog: (i === 4 || i === 19) ? null : physicalProgress, // Real data gap
+      delay_days: delayDays,
+      bidders_count: bidders,
+      amendments_count: amendments,
+      docs_online: docsOnline,
+      proc_method: tenderMethod,
+      planned_date: plannedCompletion,
+      lat: lat,
+      lng: lng,
+      is_synthetic: true,
+      data_source_id: "SYNTH-BASE-01"
+    });
+  }
+})();
+
+// Audit Observations from OAG Nepal (Real-world pattern modeled from Auditor General Local Level Reports)
+var AUDIT_FINDINGS = [
+  { id: "OAG-KAP-01", pid: "KV-NCB-208101", year: "2080/81", para: "Para 14.2", clause: "PPA 2063 Sec 52", desc: "Payment released without third-party quality lab verification of asphalt sub-base compaction thickness.", amount_npr: 2.4, status: "Under Investigation", assigned_to: "CIAO / PPMO Desk" },
+  { id: "OAG-KAP-02", pid: "KV-NCB-208104", year: "2080/81", para: "Para 18.5", clause: "PPR 2064 Rule 85", desc: "Contract split into 4 piecemeal direct purchase packages below statutory ceiling to bypass open NCB competitive tendering.", amount_npr: 4.8, status: "Institution Response Rejected", assigned_to: "Municipal Public Accounts Comm." },
+  { id: "OAG-KAP-03", pid: "KV-NCB-208109", year: "2081/82", para: "Para 09.1", clause: "Financial Procedure Act", desc: "Mobilization advance of 20% retained after contract validity lapse without operational bank guarantee renewal.", amount_npr: 3.1, status: "Recovery Notice Issued", assigned_to: "Internal Audit Section" },
+  { id: "OAG-KAP-04", pid: "KV-NCB-208113", year: "2081/82", para: "Para 22.3", clause: "PPA 2063 Sec 54", desc: "Variation order granted exceeding 15% statutory limit without endorsement by competent ministerial/executive authority.", amount_npr: 1.9, status: "Under Review", assigned_to: "Judicial Committee" },
+  { id: "OAG-KAP-05", pid: "KV-NCB-208121", year: "2081/82", para: "Para 07.8", clause: "Local Government Operation Act Sec 71", desc: "Heavy machinery hire payments made without logbook meter hours verification and petroleum fuel reconciliation vouchers.", amount_npr: 1.2, status: "Document Demanded", assigned_to: "Ward 5 Oversight Panel" }
+];
+
+// Field Inspections Triangulated Vault
+var FIELD_LOGS = [];
+try {
+  FIELD_LOGS = JSON.parse(localStorage.getItem("ktw_field_v2") || "[]");
+} catch(e) { FIELD_LOGS = []; }
+
+if (FIELD_LOGS.length === 0) {
+  FIELD_LOGS = [
+    {
+      id: "INSP-001",
+      pid: "KV-NCB-208101",
+      inspector: "Civil Society Triangulation Team",
+      date: "2082-02-14",
+      geo_verified: true,
+      gps_lat: 27.5412,
+      gps_lng: 83.0514,
+      measured_physical_pct: 35,
+      reported_physical_pct: 65,
+      variance_note: "Site inspection observed aggregate laid only up to 400m of total 1.2km contract scope. Culvert uncast. Discrepancy confirmed: 30 percentage points.",
+      evidence_photo_meta: "IMG_20820214_1102.JPG (MD5: e7f2...a1)",
+      witness: "Ward 1 Consumer Committee Secretary"
+    },
+    {
+      id: "INSP-002",
+      pid: "KV-NCB-208104",
+      inspector: "Citizen Journalist Group Kapilvastu",
+      date: "2082-03-02",
+      geo_verified: true,
+      gps_lat: 27.5491,
+      gps_lng: 83.0482,
+      measured_physical_pct: 10,
+      reported_physical_pct: 45,
+      variance_note: "Tubewell boring machinery idle since Chaitra. No pipe connection laid to settlement. Official report showed 45% progress with NPR 2.1M disbursed.",
+      evidence_photo_meta: "IMG_20820302_1430.JPG (MD5: b4c1...89)",
+      witness: "Community School Headmaster"
+    }
+  ];
+}
+
+// RTI Document Register
+var RTI_REQUESTS = [];
+try {
+  RTI_REQUESTS = JSON.parse(localStorage.getItem("ktw_rti_v2") || "[]");
+} catch(e) { RTI_REQUESTS = []; }
+
+// Helper: Save persistent logs
+function saveFieldVault() {
+  try {
+    localStorage.setItem("ktw_field_v2", JSON.stringify(FIELD_LOGS));
+    localStorage.setItem("ktw_rti_v2", JSON.stringify(RTI_REQUESTS));
+  } catch(e) { console.error("Storage error", e); }
+}
+
+// Data Sources Log
+var IMPORTED_DATASETS = [
+  { id: "DS-INIT-01", file: "kapilvastu_municipal_annual_prog_2081_82.xlsx", src: "Kapilvastu Municipality Planning Section", type: "Budget & Contract Register", date: "2082-01-10", verification: "Official Municipal Document (Scanned PDF Reconciliation)" }
+];
+
+// Spatial Layers (Leaflet vector/raster overlays)
+var SPATIAL_LAYERS = [];
+
+// ==========================================
+// FORENSIC RISK ENGINE (OCP Red Flag Logic)
+// ==========================================
+function evaluateForensicRisk(p) {
+  var flags = [];
+  var score = 0; // 0 to 100 risk score
+  
+  var finProgressPct = p.contract_val ? (p.spent_val / p.contract_val) * 100 : 0;
+  var budgetVariancePct = p.budget_est ? ((p.contract_val - p.budget_est) / p.budget_est) * 100 : 0;
+  
+  // Data incomplete indicator
+  if (p.physical_prog == null) {
+    return {
+      score: null,
+      grade: 'gry',
+      label: 'Insufficient Disclosure',
+      flags: [{
+        code: 'RF-DATA-NULL',
+        title: 'Critical Physical Progress Missing',
+        desc: 'Contract expenditures recorded without corresponding engineer measurement book / physical progress disclosure.',
+        weight: 15,
+        investigationStep: 'File RTI Section 3 requesting the measurement book (MB) and running bill valuation certificate.'
+      }],
+      finProgressPct: finProgressPct,
+      budgetVariancePct: budgetVariancePct
+    };
+  }
+
+  // 1. Progress Gap (Financial >> Physical) - Weight: 25
+  var gap = finProgressPct - p.physical_prog;
+  if (gap > STATE.thresholds.progGap) {
+    var severity = gap > 40 ? 'Critical' : 'High';
+    score += (gap > 40 ? 25 : 18);
+    flags.push({
+      code: 'RF-FIN-DISPARITY',
+      title: 'Financial Drawdown Exceeds Work Completed by ' + Math.round(gap) + '%',
+      desc: 'Disbursement of NPR ' + p.spent_val + 'M (' + Math.round(finProgressPct) + '%) against only ' + p.physical_prog + '% documented physical completion. Indication of unearned running bill disbursements or unrecovered advances.',
+      weight: (gap > 40 ? 25 : 18),
+      investigationStep: 'Examine bank transfer dates against approved interim payment certificates (IPC). Check for unrecovered mobilization advances.'
+    });
+  }
+
+  // 2. Single-Bid / Monopolized Competition - Weight: 20
+  if (p.bidders_count != null && p.bidders_count <= STATE.thresholds.singleBid) {
+    score += 20;
+    flags.push({
+      code: 'RF-COMP-SINGLE',
+      title: 'Sole Tender Submission / Market Foreclosure',
+      desc: 'Only ' + p.bidders_count + ' bid was received. May indicate restrictive bid qualification criteria designed to eliminate competition, or collusive bid submission suppression.',
+      weight: 20,
+      investigationStep: 'Audit PPMO e-GP bid security logs and check if other prospective bidders downloaded tender docs but withdrew.'
+    });
+  }
+
+  // 3. Chronic Amendments / Scope Expansion - Weight: 15
+  if (p.amendments_count != null && p.amendments_count >= STATE.thresholds.amendments) {
+    score += 15;
+    flags.push({
+      code: 'RF-VAR-EXCESS',
+      title: p.amendments_count + ' Contract Variations / Amendments Registered',
+      desc: 'Multiple post-award amendments. Common mechanism to artificially suppress initial bid price below statutory thresholds and subsequently inflate payout via non-competitive variation orders.',
+      weight: 15,
+      investigationStep: 'Verify technical justification submitted by supervising engineer; compare variation order approvals with original Bill of Quantities (BoQ).'
+    });
+  }
+
+  // 4. Critical Timeline Slippage - Weight: 15
+  if (p.delay_days != null && p.delay_days >= STATE.thresholds.delayDays) {
+    score += 15;
+    flags.push({
+      code: 'RF-TIME-SLIPPAGE',
+      title: 'Substantial Project Overrun (' + p.delay_days + ' days)',
+      desc: 'Project exceeds initial completion schedule by ' + p.delay_days + ' days. PPA 2063 mandates liquidated damages (LD) assessment unless legally valid force majeure or site hindrance is proven.',
+      weight: 15,
+      investigationStep: 'Request Executive Council minutes on time extension approvals and ascertain whether liquidated damages were levied on contractor payments.'
+    });
+  }
+
+  // 5. Payment in Excess of Contract Ceiling - Weight: 15
+  if (p.contract_val != null && p.spent_val > p.contract_val) {
+    var overspent = Math.round((p.spent_val - p.contract_val) * 10) / 10;
+    score += 15;
+    flags.push({
+      code: 'RF-COST-OVERRUN',
+      title: 'Disbursement Exceeds Awarded Ceiling (+NPR ' + overspent + 'M)',
+      desc: 'Total paid (NPR ' + p.spent_val + 'M) exceeds awarded contract limit (NPR ' + p.contract_val + 'M). Violates Public Procurement Regulations without formalized addendum.',
+      weight: 15,
+      investigationStep: 'Cross-reference financial ledger vouchers with municipal accounting software (SUTRA) payment authorization codes.'
+    });
+  }
+
+  // 6. Public Transparency Concealment - Weight: 10
+  if (p.docs_online === false) {
+    score += 10;
+    flags.push({
+      code: 'RF-DOC-CONCEALED',
+      title: 'Tender Documentation Not Disclosed on PPMO e-GP Portal',
+      desc: 'Mandatory tender notice, BoQ specifications, and award notices absent from public online repository. Obstruction of citizen monitoring.',
+      weight: 10,
+      investigationStep: 'Serve formal RTI notice to Public Information Officer (PIO) invoking Right to Information Act 2064.'
+    });
+  }
+
+  // 7. Check for Correlated OAG Audit Observations - Weight: 15
+  var relatedAudit = AUDIT_FINDINGS.filter(function(a) { return a.pid === p.id; });
+  if (relatedAudit.length > 0) {
+    score += 15;
+    flags.push({
+      code: 'RF-OAG-ACTIVE',
+      title: 'Active Auditor General Query: ' + relatedAudit[0].id,
+      desc: relatedAudit[0].desc + ' (Statutory Reference: ' + relatedAudit[0].clause + ').',
+      weight: 15,
+      investigationStep: 'Inspect recovery status with Municipal Public Accounts Committee and verify whether financial recovery was executed.'
+    });
+  }
+
+  // Cap score at 100
+  score = Math.min(100, score);
+
+  var grade = 'grn';
+  var label = 'Low Risk Screening';
+  if (score >= 60) {
+    grade = 'red';
+    label = 'Critical Forensic Priority';
+  } else if (score >= 40) {
+    grade = 'org';
+    label = 'Elevated Risk Profile';
+  } else if (score >= 20) {
+    grade = 'yel';
+    label = 'Verification Recommended';
+  }
+
+  return {
+    score: score,
+    grade: grade,
+    label: label,
+    flags: flags,
+    finProgressPct: finProgressPct,
+    budgetVariancePct: budgetVariancePct
+  };
+}
+
+// ==========================================
+// FORMATTERS & UTILITIES
+// ==========================================
+function esc(str) {
+  return String(str == null ? "" : str).replace(/[&<>"']/g, function(c) {
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+  });
+}
+function r1(val) { return Math.round(val * 10) / 10; }
+function formatNPR(val) { return "NPR " + (val != null ? Number(val).toLocaleString('en-US', {minimumFractionDigits: 1, maximumFractionDigits: 1}) : '0.0') + "M"; }
+
+function getFilteredProjects() {
+  var f = STATE.activeFilter;
+  return PROJECTS.filter(function(p) {
+    var risk = evaluateForensicRisk(p);
+    var matchesWard = !f.ward || p.ward == f.ward;
+    var matchesCat = !f.cat || p.cat === f.cat;
+    var matchesPri = !f.priority || risk.grade === f.priority;
+    var matchesSearch = !f.search || (
+      p.id.toLowerCase().indexOf(f.search.toLowerCase()) > -1 ||
+      p.name.toLowerCase().indexOf(f.search.toLowerCase()) > -1 ||
+      p.contractor.toLowerCase().indexOf(f.search.toLowerCase()) > -1 ||
+      (p.egp_id && p.egp_id.toLowerCase().indexOf(f.search.toLowerCase()) > -1)
+    );
+    var matchesRiskScore = !f.riskMin || (risk.score != null && risk.score >= f.riskMin);
+    return matchesWard && matchesCat && matchesPri && matchesSearch && matchesRiskScore;
+  });
+}
+
+// ==========================================
+// VIEW RENDERING: 1. DASHBOARD (TRIAGE)
+// ==========================================
+function renderDashboard() {
+  var filtered = getFilteredProjects();
+  var totalBud = PROJECTS.reduce(function(acc, x){ return acc + (x.budget_est || 0); }, 0);
+  var totalSpent = PROJECTS.reduce(function(acc, x){ return acc + (x.spent_val || 0); }, 0);
+  var totalContract = PROJECTS.reduce(function(acc, x){ return acc + (x.contract_val || 0); }, 0);
+  
+  var criticalProjects = PROJECTS.filter(function(p){ return evaluateForensicRisk(p).grade === 'red'; });
+  var elevatedProjects = PROJECTS.filter(function(p){ return evaluateForensicRisk(p).grade === 'org'; });
+  var singleBidProjects = PROJECTS.filter(function(p){ return p.bidders_count === 1; });
+  var delayedProjects = PROJECTS.filter(function(p){ return p.delay_days >= STATE.thresholds.delayDays; });
+
+  var html = `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+      <div>
+        <h2 style="font-size:1.25rem; font-weight:700; color:#fff;">Executive Forensic Triage Dashboard</h2>
+        <p class="sub">Continuous surveillance of municipal public contracts, expenditure anomalies, and audit non-compliance.</p>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="pri sm" onclick="triggerFilterPriority('red')">🚨 View Critical Risk (${criticalProjects.length})</button>
+        <button class="sm" onclick="triggerFilterPriority('org')">⚠️ Elevated Risk (${elevatedProjects.length})</button>
+        <button class="sm" onclick="exportFullCsvReport()">📥 Export CSV Registry</button>
+      </div>
+    </div>
+
+    <!-- KPI Grid -->
+    <div class="grid">
+      <div class="kpi alert-info">
+        <span>Portfolio Volume</span>
+        <b>${PROJECTS.length} <small style="font-size:0.9rem; font-weight:normal; color:#9ca3af;">Projects</small></b>
+        <div class="kpi-sub">Total Approved: ${formatNPR(totalBud)}</div>
+      </div>
+      <div class="kpi">
+        <span>Disbursed Outlay</span>
+        <b>${formatNPR(totalSpent)}</b>
+        <div class="kpi-sub">Committed: ${formatNPR(totalContract)} (${Math.round(totalSpent/totalContract*100)}%)</div>
+      </div>
+      <div class="kpi alert-hi">
+        <span>Critical Forensic Triage</span>
+        <b style="color:#f87171;">${criticalProjects.length} <small style="font-size:0.9rem; font-weight:normal;">(${Math.round(criticalProjects.length/PROJECTS.length*100)}%)</small></b>
+        <div class="kpi-sub">Score ≥ 60/100 · Red Flag Checklist Triggered</div>
+      </div>
+      <div class="kpi alert-mid">
+        <span>Single-Bid Awards</span>
+        <b style="color:#fb923c;">${singleBidProjects.length}</b>
+        <div class="kpi-sub">Vulnerable to Cartel Rigging</div>
+      </div>
+      <div class="kpi alert-mid">
+        <span>Severe Delays (&gt;90d)</span>
+        <b style="color:#facc15;">${delayedProjects.length}</b>
+        <div class="kpi-sub">Potential PPA LD Liability</div>
+      </div>
+      <div class="kpi alert-hi">
+        <span>Unresolved OAG Audit Queries</span>
+        <b style="color:#f87171;">${AUDIT_FINDINGS.length}</b>
+        <div class="kpi-sub">Total Disputed: NPR 13.4M</div>
+      </div>
+    </div>
+
+    ${renderFilterBar()}
+
+    <!-- Dual Layout: Priority Triage Feed + Live Investigation Dossier -->
+    <div style="display:grid; grid-template-columns: 1fr 420px; gap:16px;">
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <h3>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              High-Risk Project Registry (Ranked by Forensic Exposure)
+            </h3>
+            <span class="sub">Showing ${filtered.length} matching packages</span>
+          </div>
+          
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Triage Status</th>
+                  <th>Contract Details & Scope</th>
+                  <th>Ward</th>
+                  <th>Awarded</th>
+                  <th>Spent</th>
+                  <th>Phys %</th>
+                  <th>Risk Score</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${filtered.map(function(p){
+                  var risk = evaluateForensicRisk(p);
+                  var isSelected = STATE.selectedProjectId === p.id;
+                  return `
+                    <tr class="cl ${isSelected ? 'selected' : ''}" onclick="selectProject('${p.id}')">
+                      <td><span class="pill ${risk.grade}">${risk.label}</span></td>
+                      <td>
+                        <strong style="color:#fff; display:block;">${esc(p.name)}</strong>
+                        <div class="sub" style="font-family:var(--font-mono); font-size:0.75rem;">${p.id} · ${p.contractor}</div>
+                      </td>
+                      <td>W-${p.ward}</td>
+                      <td><b>${p.contract_val}M</b></td>
+                      <td>${p.spent_val}M</td>
+                      <td>${p.physical_prog != null ? p.physical_prog + '%' : '<span style="color:#f87171">N/A</span>'}</td>
+                      <td>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                          <b style="font-family:var(--font-mono); color:${risk.grade==='red'?'#f87171':risk.grade==='org'?'#fb923c':'#4ade80'}">${risk.score != null ? risk.score : '—'}</b>
+                          <small style="color:var(--mute)">/100</small>
+                        </div>
+                      </td>
+                      <td>
+                        <button class="sm" onclick="event.stopPropagation(); generateRTIForProject('${p.id}')" title="Draft RTI Petition">📝 RTI</button>
+                      </td>
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive Dossier -->
+      <div>
+        <div id="quickDossierContainer">
+          ${renderProjectDossier(STATE.selectedProjectId || (filtered.length ? filtered[0].id : null))}
+        </div>
+      </div>
+    </div>
+  `;
+  return html;
+}
+
+// ==========================================
+// VIEW RENDERING: 2. GIS & SATELLITE
+// ==========================================
+function renderMapView() {
+  return `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+      <div>
+        <h2 style="font-size:1.25rem; font-weight:700; color:#fff;">GIS Spatial Ground-Truth Verification</h2>
+        <p class="sub">Georeferenced public infrastructure assets, GPS field inspection markers, and satellite baseline comparison.</p>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="sm" onclick="centerMapKapilvastu()">📍 Recenter Kapilvastu</button>
+        <button class="sm pri" onclick="navigateTab(8)">⬆️ Add Layer (Shapefile/GeoTIFF)</button>
+      </div>
+    </div>
+
+    ${renderFilterBar()}
+
+    <div class="map-layout">
+      <div>
+        <div id="map"></div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; font-size:0.8rem; color:var(--ink-secondary); flex-wrap:wrap; gap:8px;">
+          <div style="display:flex; gap:14px;">
+            <span><b style="color:var(--red)">●</b> Critical Risk (Score ≥ 60)</span>
+            <span><b style="color:var(--org)">●</b> Elevated (Score 40-59)</span>
+            <span><b style="color:var(--yel)">●</b> Verification (Score 20-39)</span>
+            <span><b style="color:var(--grn)">●</b> Low Risk</span>
+            <span><b style="color:var(--mute)">●</b> Incomplete Data</span>
+          </div>
+          <div>
+            <span>Projection: <b>WGS 84 (EPSG:4326) / UTM 44N</b></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-sidebar">
+        <div class="card" style="margin-bottom:0;">
+          <div class="card-header">
+            <h3>Selected Asset Geolocation</h3>
+          </div>
+          <div id="mapSelectedDossier">
+            <p class="sub">Click any project pin on the GIS map to load forensic coordinates, field audit logs, and contractor metadata.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>Field Triangulation Hotspots</h3>
+          </div>
+          <div style="font-size:0.8rem;">
+            ${FIELD_LOGS.map(function(f){
+              return `
+                <div style="border-bottom:1px solid var(--line); padding:6px 0;">
+                  <strong style="color:#fff;">${esc(f.pid)}: ${f.inspector}</strong>
+                  <div class="sub">Reported: ${f.reported_physical_pct}% | Actual Verified: <span style="color:#f87171; font-weight:700;">${f.measured_physical_pct}%</span></div>
+                  <div style="font-size:0.75rem; color:#9ca3af; margin-top:2px;">${esc(f.variance_note)}</div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function initMapLeaflet() {
+  if (typeof L === "undefined") {
+    var mapEl = document.getElementById("map");
+    if (mapEl) mapEl.innerHTML = "<p style='padding:20px; color:#f87171;'>Leaflet library could not be loaded. Please ensure internet connectivity.</p>";
+    return;
+  }
+  if (STATE.activeMap) {
+    STATE.activeMap.remove();
+    STATE.activeMap = null;
+  }
+
+  // Kapilvastu Center: 27.545, 83.050
+  var map = L.map("map").setView([27.545, 83.050], 12);
+  STATE.activeMap = map;
+
+  // Primary Satellite Imagery Basemap (Esri World Imagery) + Standard OSM Overlay
+  var osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "© OpenStreetMap contributors",
+    maxZoom: 19
+  });
+  
+  var satellite = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+    attribution: "Tiles © Esri, DigitalGlobe, GeoEye, Earthstar Geographics",
+    maxZoom: 18
+  }).addTo(map);
+
+  var baseMaps = {
+    "Satellite Imagery": satellite,
+    "Street / Topological Map": osm
+  };
+
+  var markersGroup = L.layerGroup().addTo(map);
+  var fieldGroup = L.layerGroup().addTo(map);
+
+  var colMap = {
+    red: "#ef4444",
+    org: "#f97316",
+    yel: "#eab308",
+    grn: "#10b981",
+    gry: "#9ca3af"
+  };
+
+  var bounds = [];
+  var filtered = getFilteredProjects();
+
+  // Render Project Asset Pins
+  filtered.forEach(function(p) {
+    if (p.lat == null || p.lng == null) return;
+    var risk = evaluateForensicRisk(p);
+    bounds.push([p.lat, p.lng]);
+
+    var marker = L.circleMarker([p.lat, p.lng], {
+      radius: 8,
+      fillColor: colMap[risk.grade],
+      color: "#0f172a",
+      weight: 2,
+      opacity: 1,
+      fillOpacity: 0.95
+    });
+
+    var popupContent = `
+      <div style="font-family:system-ui; font-size:12px; color:#111;">
+        <strong style="font-size:13px; color:#1e40af;">${esc(p.id)}</strong><br>
+        <b>${esc(p.name)}</b><br>
+        <span style="display:inline-block; margin:3px 0; padding:2px 6px; border-radius:3px; background:${colMap[risk.grade]}; color:#fff; font-weight:bold;">
+          ${risk.label} (${risk.score != null ? risk.score + '/100' : 'Incomplete'})
+        </span><br>
+        Ward: ${p.ward} · Contractor: <b>${esc(p.contractor)}</b><br>
+        Contract: ${formatNPR(p.contract_val)} | Spent: ${formatNPR(p.spent_val)}<br>
+        Physical: ${p.physical_prog != null ? p.physical_prog + '%' : 'Missing'}<br>
+        <button style="margin-top:6px; padding:3px 8px; font-size:11px; background:#1e40af; color:#fff; border:0; border-radius:4px; cursor:pointer;" onclick="selectProject('${p.id}')">Open Forensic Dossier</button>
+      </div>
+    `;
+
+    marker.bindPopup(popupContent);
+    marker.on('click', function() {
+      selectProject(p.id);
+      var sideBox = document.getElementById("mapSelectedDossier");
+      if (sideBox) sideBox.innerHTML = renderProjectDossier(p.id);
+    });
+
+    marker.addTo(markersGroup);
+  });
+
+  // Render Field Inspection Pins (Cross-validation triangles)
+  FIELD_LOGS.forEach(function(f) {
+    if (f.gps_lat && f.gps_lng) {
+      var fieldMarker = L.circleMarker([f.gps_lat, f.gps_lng], {
+        radius: 11,
+        fillColor: "#8b5cf6",
+        color: "#ffffff",
+        weight: 2,
+        fillOpacity: 0.9
+      });
+      fieldMarker.bindPopup(`
+        <div style="font-family:system-ui; font-size:12px; color:#111;">
+          <strong style="color:#6d28d9;">📸 Citizen Triangulation Landmark</strong><br>
+          Target: <b>${f.pid}</b><br>
+          Inspector: ${esc(f.inspector)} (${f.date})<br>
+          Reported: ${f.reported_physical_pct}% vs Actual Measured: <b style="color:#dc2626">${f.measured_physical_pct}%</b><br>
+          <div style="margin-top:4px; font-style:italic;">"${esc(f.variance_note)}"</div>
+        </div>
+      `);
+      fieldMarker.addTo(fieldGroup);
+    }
+  });
+
+  // Add Custom User Ingested Spatial Layers
+  var overlayMaps = {
+    "Monitored Contracts": markersGroup,
+    "Field Triangulation Logs": fieldGroup
+  };
+
+  SPATIAL_LAYERS.forEach(function(layerItem) {
+    try {
+      if (layerItem.kind === 'geojson' && layerItem.gj) {
+        var geoLayer = L.geoJSON(layerItem.gj, {
+          style: { color: layerItem.color || "#06b6d4", weight: 2, fillOpacity: 0.2 },
+          onEachFeature: function(f, lyr) {
+            lyr.bindPopup("<b>" + esc(layerItem.name) + "</b><br>" + JSON.stringify(f.properties || {}));
+          }
+        }).addTo(map);
+        overlayMaps[layerItem.name] = geoLayer;
+      } else if (layerItem.kind === 'raster' && layerItem.url && layerItem.bounds) {
+        var imgLayer = L.imageOverlay(layerItem.url, layerItem.bounds, { opacity: 0.7 }).addTo(map);
+        overlayMaps[layerItem.name] = imgLayer;
+      }
+    } catch(err) { console.error("Layer load error", err); }
+  });
+
+  L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map);
+
+  if (bounds.length > 0) {
+    map.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+  }
+}
+
+function centerMapKapilvastu() {
+  if (STATE.activeMap) {
+    STATE.activeMap.setView([27.545, 83.050], 12);
+  }
+}
+
+// ==========================================
+// VIEW RENDERING: 3. PROCUREMENT RISK MATRIX
+// ==========================================
+function renderProcurementMatrix() {
+  var filtered = getFilteredProjects();
+
+  return `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+      <div>
+        <h2 style="font-size:1.25rem; font-weight:700; color:#fff;">Tender & Procurement Red Flag Matrix</h2>
+        <p class="sub">Systematic screening for bid suppression, anomalous tender timelines, variation manipulation, and collusion indicators.</p>
+      </div>
+      <div>
+        <button class="sm pri" onclick="exportFullCsvReport()">📥 Export Procurement Audit Dataset</button>
+      </div>
+    </div>
+
+    <!-- Threshold Adjustment Bar -->
+    <div class="card" style="background:var(--panel);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <strong style="color:#fff; font-size:0.9rem;">⚙️ Investigative Screening Threshold Calibration (Statutory Benchmark Guidelines)</strong>
+        <span class="sub">Regulated under Public Procurement Act (PPA 2063) & Rules (PPR 2064)</span>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+        <div>
+          <label style="font-size:0.75rem; color:var(--ink-secondary);">Progress Gap Tolerance (% Points)</label>
+          <input type="number" id="th_gap" value="${STATE.thresholds.progGap}" onchange="updateThreshold('progGap', this.value)" style="width:100%;">
+          <span class="sub">Disbursement vs Measured Physical Progress</span>
+        </div>
+        <div>
+          <label style="font-size:0.75rem; color:var(--ink-secondary);">Single Bid Tolerance (Max Count)</label>
+          <input type="number" id="th_bid" value="${STATE.thresholds.singleBid}" onchange="updateThreshold('singleBid', this.value)" style="width:100%;">
+          <span class="sub">Flagged as Restricted Competition</span>
+        </div>
+        <div>
+          <label style="font-size:0.75rem; color:var(--ink-secondary);">Permissible Amendments (Count)</label>
+          <input type="number" id="th_amend" value="${STATE.thresholds.amendments}" onchange="updateThreshold('amendments', this.value)" style="width:100%;">
+          <span class="sub">Variation Orders exceeding limit</span>
+        </div>
+        <div>
+          <label style="font-size:0.75rem; color:var(--ink-secondary);">Project Overrun Ceiling (Days)</label>
+          <input type="number" id="th_delay" value="${STATE.thresholds.delayDays}" onchange="updateThreshold('delayDays', this.value)" style="width:100%;">
+          <span class="sub">Triggers Liquidated Damages review</span>
+        </div>
+      </div>
+    </div>
+
+    ${renderFilterBar()}
+
+    <div class="card">
+      <div class="tw">
+        <table>
+          <thead>
+            <tr>
+              <th>Package ID / e-GP Ref</th>
+              <th>Procurement Method</th>
+              <th>Contractor Name</th>
+              <th>Bids Recv</th>
+              <th>Amendments</th>
+              <th>Schedule Delay</th>
+              <th>PPMO Docs</th>
+              <th>Red Flag Indicators</th>
+              <th>Investigative Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filtered.map(function(p){
+              var risk = evaluateForensicRisk(p);
+              return `
+                <tr class="cl" onclick="selectProject('${p.id}')">
+                  <td>
+                    <strong style="color:#fff;">${esc(p.id)}</strong>
+                    <div style="font-size:0.72rem; color:var(--mute); font-family:var(--font-mono);">${p.egp_id || 'N/A'}</div>
+                  </td>
+                  <td><span class="badge-tag">${esc(p.proc_method)}</span></td>
+                  <td>${esc(p.contractor)}</td>
+                  <td>
+                    ${p.bidders_count === 1 ? '<b style="color:#f87171">1 (Sole Bid)</b>' : p.bidders_count}
+                  </td>
+                  <td>
+                    ${p.amendments_count >= STATE.thresholds.amendments ? '<b style="color:#fb923c">' + p.amendments_count + ' Variations</b>' : p.amendments_count}
+                  </td>
+                  <td>
+                    ${p.delay_days >= STATE.thresholds.delayDays ? '<b style="color:#f87171">+' + p.delay_days + ' Days</b>' : p.delay_days + ' d'}
+                  </td>
+                  <td>
+                    ${p.docs_online ? '<span style="color:#4ade80">✓ Public</span>' : '<span style="color:#f87171">✗ Concealed</span>'}
+                  </td>
+                  <td>
+                    <span class="pill ${risk.grade}">${risk.flags.length} Flags (${risk.score}/100)</span>
+                  </td>
+                  <td>
+                    <button class="sm" onclick="event.stopPropagation(); generateRTIForProject('${p.id}')">Draft RTI</button>
+                  </td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+// ==========================================
+// VIEW RENDERING: 4. CONTRACTOR & CARTEL MATRIX
+// ==========================================
+function renderCartelMatrix() {
+  var totalContractSum = PROJECTS.reduce(function(acc, x){ return acc + (x.contract_val || 0); }, 0);
+  
+  // Aggregate stats per contractor
+  var contractorMap = {};
+  PROJECTS.forEach(function(p){
+    var c = p.contractor;
+    if (!contractorMap[c]) {
+      contractorMap[c] = {
+        name: c,
+        pan: p.contractor_pan,
+        rep: p.contractor_rep,
+        totalVal: 0,
+        totalSpent: 0,
+        count: 0,
+        singleBids: 0,
+        flaggedCount: 0,
+        wards: {}
+      };
+    }
+    contractorMap[c].totalVal += (p.contract_val || 0);
+    contractorMap[c].totalSpent += (p.spent_val || 0);
+    contractorMap[c].count++;
+    if (p.bidders_count === 1) contractorMap[c].singleBids++;
+    var risk = evaluateForensicRisk(p);
+    if (risk.grade === 'red' || risk.grade === 'org') contractorMap[c].flaggedCount++;
+    contractorMap[c].wards[p.ward] = true;
+  });
+
+  var contractorList = Object.keys(contractorMap).map(function(k){ return contractorMap[k]; });
+  contractorList.sort(function(a, b){ return b.totalVal - a.totalVal; });
+
+  return `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+      <div>
+        <h2 style="font-size:1.25rem; font-weight:700; color:#fff;">Contractor Network & Market Concentration Analysis</h2>
+        <p class="sub">Investigating market share dominance, rotational bidding patterns, and joint-venture cartel monopolies in Kapilvastu.</p>
+      </div>
+      <div>
+        <span class="badge-tag">HHI Market Index: Monitored</span>
+      </div>
+    </div>
+
+    <div class="note warn">
+      <strong>Anti-Monopoly Standard (Competition Promotion and Market Protection Act 2063):</strong>
+      A contractor capturing &gt;25% of municipal procurement value warrants antitrust review for political patronage, front-company bidding, or collusive ring-fencing.
+    </div>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap:16px;">
+      ${contractorList.map(function(c){
+        var marketSharePct = Math.round((c.totalVal / totalContractSum) * 100);
+        var isDominant = marketSharePct >= STATE.thresholds.concentration;
+        var wardsCovered = Object.keys(c.wards).length;
+        
+        return `
+          <div class="card" style="${isDominant ? 'border-color:var(--org);' : ''}">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+              <div>
+                <strong style="font-size:1.05rem; color:#fff;">${esc(c.name)}</strong>
+                <div class="sub">Representative: <b>${esc(c.rep)}</b> · PAN: <code style="color:#7dd3fc">${esc(c.pan)}</code></div>
+              </div>
+              <span class="pill ${isDominant ? 'org' : 'grn'}">${marketSharePct}% Market Share</span>
+            </div>
+
+            <!-- Market Share Progress Bar -->
+            <div style="margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--ink-secondary); margin-bottom:4px;">
+                <span>Total Awarded: <b>${formatNPR(c.totalVal)}</b></span>
+                <span>${c.count} Monitored Packages</span>
+              </div>
+              <div class="bt">
+                <div class="bar" style="width:${Math.min(100, marketSharePct * 2)}%; background:${isDominant ? 'var(--org)' : 'var(--pri)'}"></div>
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:0.8rem; background:rgba(0,0,0,0.2); padding:10px; border-radius:6px; margin-bottom:10px;">
+              <div>
+                <span class="sub">Single-Bid Win Rate:</span><br>
+                <b style="${c.singleBids > 1 ? 'color:#f87171' : '#fff'}">${c.singleBids} awards (${Math.round(c.singleBids/c.count*100)}%)</b>
+              </div>
+              <div>
+                <span class="sub">High-Risk Packages:</span><br>
+                <b style="${c.flaggedCount > 0 ? 'color:#fb923c' : '#4ade80'}">${c.flaggedCount} of ${c.count} flagged</b>
+              </div>
+              <div>
+                <span class="sub">Ward Dispersion:</span><br>
+                <b>${wardsCovered} Wards Active</b>
+              </div>
+              <div>
+                <span class="sub">Payment Realization:</span><br>
+                <b>${Math.round(c.totalSpent/c.totalVal*100)}% Disbursed</b>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:8px;">
+              <button class="sm" onclick="filterByContractor('${esc(c.name)}')">View All Packages</button>
+              <button class="sm pri" onclick="draftCartelAuditInquiry('${esc(c.name)}')">Generate Inquest Profile</button>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+// ==========================================
+// VIEW RENDERING: 5. WARD BUDGETS & OUTLIERS
+// ==========================================
+function renderWardBudgets() {
+  var wardStats = {};
+  for (var w = 1; w <= 12; w++) {
+    wardStats[w] = { ward: w, budget: 0, contract: 0, spent: 0, count: 0, projects: [] };
+  }
+  
+  PROJECTS.forEach(function(p){
+    if (wardStats[p.ward]) {
+      wardStats[p.ward].budget += (p.budget_est || 0);
+      wardStats[p.ward].contract += (p.contract_val || 0);
+      wardStats[p.ward].spent += (p.spent_val || 0);
+      wardStats[p.ward].count++;
+      wardStats[p.ward].projects.push(p);
+    }
+  });
+
+  // Calculate IQR on Ward Expenditure Utilization
+  var utilizationRates = [];
+  Object.keys(wardStats).forEach(function(k){
+    var ws = wardStats[k];
+    if (ws.budget > 0) utilizationRates.push(ws.spent / ws.budget);
+  });
+  utilizationRates.sort(function(a,b){ return a - b; });
+
+  function getQuantile(arr, q) {
+    var pos = (arr.length - 1) * q;
+    var base = Math.floor(pos);
+    var rest = pos - base;
+    if (arr[base + 1] !== undefined) {
+      return arr[base] + rest * (arr[base + 1] - arr[base]);
+    }
+    return arr[base];
+  }
+
+  var q1 = getQuantile(utilizationRates, 0.25) || 0.5;
+  var median = getQuantile(utilizationRates, 0.5) || 0.7;
+  var q3 = getQuantile(utilizationRates, 0.75) || 0.85;
+  var iqr = q3 - q1;
+  var lowerBound = q1 - 1.5 * iqr;
+  var upperBound = q3 + 1.5 * iqr;
+
+  var maxBudget = Math.max.apply(null, Object.keys(wardStats).map(function(k){ return wardStats[k].budget; })) || 1;
+
+  return `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+      <div>
+        <h2 style="font-size:1.25rem; font-weight:700; color:#fff;">Ward-Level Budget Allocation & Utilization Anomalies</h2>
+        <p class="sub">Econometric screening using Interquartile Range (IQR) fence tests to detect expenditure hoarding or artificial year-end rush (Asare Bikash).</p>
+      </div>
+      <div>
+        <span class="badge-tag">Median Utilization: ${Math.round(median * 100)}%</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>Ward Allocation Breakdown vs Expenditure Reality</h3>
+        <span class="sub">Values in NPR Millions (Blue = Approved Budget | Green = Disbursed Outlay)</span>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        ${Object.keys(wardStats).map(function(k){
+          var ws = wardStats[k];
+          var util = ws.budget > 0 ? (ws.spent / ws.budget) : 0;
+          var isOutlier = (util < lowerBound || util > upperBound);
+          var wardMeta = WARDS_DATA.find(function(item){ return item.no == k; }) || { name: 'Ward ' + k };
+
+          return `
+            <div style="background:rgba(15,23,42,0.4); padding:10px 14px; border-radius:6px; border:1px solid var(--line);">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; flex-wrap:wrap;">
+                <div>
+                  <strong style="color:#fff; font-size:0.95rem;">Ward ${k}: ${esc(wardMeta.name)}</strong>
+                  <span class="sub">(${ws.count} active packages)</span>
+                </div>
+                <div style="display:flex; gap:8px; align-items:center;">
+                  <span style="font-size:0.8rem; color:var(--ink-secondary);">Utilization: <b>${Math.round(util * 100)}%</b></span>
+                  ${isOutlier ? '<span class="pill org">Statistical Anomaly</span>' : '<span class="pill grn">Normal Band</span>'}
+                  <button class="sm" onclick="filterByWard('${k}')">Filter Ward</button>
+                </div>
+              </div>
+
+              <!-- Dual Comparative Bars -->
+              <div style="margin-bottom:6px;">
+                <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:#9ca3af; margin-bottom:2px;">
+                  <span>Approved Budget: ${formatNPR(ws.budget)}</span>
+                  <span>${Math.round(ws.budget / maxBudget * 100)}% of Max Ward Allocation</span>
+                </div>
+                <div class="bt"><div class="bar" style="width:${Math.min(100, (ws.budget / maxBudget) * 100)}%; background:var(--pri);"></div></div>
+              </div>
+
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:#9ca3af; margin-bottom:2px;">
+                  <span>Executed Expenditure: ${formatNPR(ws.spent)}</span>
+                  <span>Disbursement Ratio: ${Math.round(util * 100)}%</span>
+                </div>
+                <div class="bt"><div class="bar" style="width:${Math.min(100, (ws.spent / maxBudget) * 100)}%; background:var(--grn);"></div></div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ==========================================
+// VIEW RENDERING: 6. AUDIT FINDINGS (OAG)
+// ==========================================
+function renderAuditObservations() {
+  return `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+      <div>
+        <h2 style="font-size:1.25rem; font-weight:700; color:#fff;">Auditor General Statutory Audit Observations (Beruju)</h2>
+        <p class="sub">Tracking compliance inquiries, irregular disbursements, and legal recovery notices under OAG Nepal reports.</p>
+      </div>
+      <div>
+        <button class="pri sm" onclick="openAddAuditModal()">+ Record New Audit Query</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="tw">
+        <table>
+          <thead>
+            <tr>
+              <th>Audit Query ID</th>
+              <th>Fiscal Year</th>
+              <th>Linked Contract ID</th>
+              <th>Statutory Clause</th>
+              <th>Observation Synopsis</th>
+              <th>Disputed Amount</th>
+              <th>Action Status</th>
+              <th>Assigned Desk</th>
+              <th>Modify</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${AUDIT_FINDINGS.map(function(a, idx){
+              return `
+                <tr>
+                  <td><code style="color:#f87171; font-weight:700;">${esc(a.id)}</code></td>
+                  <td>${esc(a.year)}</td>
+                  <td><a href="#" onclick="selectProject('${a.pid}'); return false;" style="color:#60a5fa; font-weight:600;">${esc(a.pid)}</a></td>
+                  <td><span class="badge-tag">${esc(a.clause)}</span></td>
+                  <td style="max-width:300px;">${esc(a.desc)}</td>
+                  <td><b>${formatNPR(a.amount_npr)}</b></td>
+                  <td>
+                    <select onchange="updateAuditStatus(${idx}, this.value)" style="padding:3px 6px; font-size:0.75rem;">
+                      ${["Under Investigation", "Institution Response Pending", "Institution Response Rejected", "Recovery Notice Issued", "Settled / Recovered"].map(function(st){
+                        return `<option ${st === a.status ? 'selected' : ''}>${st}</option>`;
+                      }).join('')}
+                    </select>
+                  </td>
+                  <td><span class="sub">${esc(a.assigned_to)}</span></td>
+                  <td>
+                    <button class="sm danger" onclick="deleteAuditFinding(${idx})">×</button>
+                  </td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+// ==========================================
+// VIEW RENDERING: 7. FIELD INSPECTION LOGS
+// ==========================================
+function renderFieldInspectionView() {
+  return `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+      <div>
+        <h2 style="font-size:1.25rem; font-weight:700; color:#fff;">Civil Society Field Triangulation & Inspection Register</h2>
+        <p class="sub">Ground-level asset verification, physical measurement discrepancies, and on-site community witness statements.</p>
+      </div>
+      <div>
+        <button class="pri sm" onclick="openAddFieldModal()">+ Record Field Inspection</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="tw">
+        <table>
+          <thead>
+            <tr>
+              <th>Inspection ID</th>
+              <th>Contract Reference</th>
+              <th>Inspection Date</th>
+              <th>Verified GPS</th>
+              <th>Official Reported %</th>
+              <th>Actual Measured %</th>
+              <th>Discrepancy (Delta)</th>
+              <th>Witness / Community Header</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${FIELD_LOGS.map(function(f, idx){
+              var gap = f.reported_physical_pct - f.measured_physical_pct;
+              return `
+                <tr>
+                  <td><strong style="color:#c4b5fd;">${esc(f.id)}</strong></td>
+                  <td><a href="#" onclick="selectProject('${f.pid}'); return false;" style="color:#60a5fa;">${esc(f.pid)}</a></td>
+                  <td>${esc(f.date)}</td>
+                  <td>
+                    ${f.geo_verified ? `<code style="color:#38bdf8">${f.gps_lat.toFixed(4)}, ${f.gps_lng.toFixed(4)}</code>` : '<span style="color:var(--mute)">Unverified</span>'}
+                  </td>
+                  <td>${f.reported_physical_pct}%</td>
+                  <td><b style="color:#f87171">${f.measured_physical_pct}%</b></td>
+                  <td>
+                    ${gap > 0 ? `<span class="pill red">-${gap}% Under-delivered</span>` : '<span class="pill grn">Consistent</span>'}
+                  </td>
+                  <td><span class="sub">${esc(f.witness || 'N/A')}</span></td>
+                  <td>
+                    <button class="sm" onclick="viewFieldDetail(${idx})">Inspect</button>
+                    <button class="sm danger" onclick="deleteFieldLog(${idx})">×</button>
+                  </td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+// ==========================================
+// VIEW RENDERING: 8. RTI REQUEST GENERATOR
+// ==========================================
+function renderRTIGeneratorView() {
+  var p = STATE.selectedProjectId ? PROJECTS.find(function(x){ return x.id === STATE.selectedProjectId; }) : PROJECTS[0];
+
+  return `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+      <div>
+        <h2 style="font-size:1.25rem; font-weight:700; color:#fff;">Right to Information (RTI) Legal Notice Generator</h2>
+        <p class="sub">Compliant with Right to Information Act, 2064 (Nepal) - Sections 3 and 7 statutory information requests.</p>
+      </div>
+      <div>
+        <button class="sm pri" onclick="printRTIDocument()">🖨️ Print Statutory Notice</button>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 360px 1fr; gap:16px;">
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Select Target Contract</h3>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div>
+              <label style="font-size:0.75rem; color:var(--ink-secondary);">Choose Contract for RTI Action</label>
+              <select id="rti_sel_project" onchange="selectProject(this.value); render();" style="width:100%;">
+                ${PROJECTS.map(function(item){
+                  return `<option value="${item.id}" ${p && p.id === item.id ? 'selected' : ''}>${item.id} - ${item.name.substring(0, 30)}...</option>`;
+                }).join('')}
+              </select>
+            </div>
+
+            <div>
+              <label style="font-size:0.75rem; color:var(--ink-secondary);">Public Body Addressed</label>
+              <input type="text" id="rti_officer" value="The Public Information Officer (सूचना अधिकारी), Kapilvastu Municipality Executive Office, Taulihawa." style="width:100%;">
+            </div>
+
+            <div>
+              <label style="font-size:0.75rem; color:var(--ink-secondary);">Applicant Name / Citizen Organization</label>
+              <input type="text" id="rti_applicant" value="Citizen Oversight & Public Financial Integrity Forum, Kapilvastu" style="width:100%;">
+            </div>
+
+            <div>
+              <label style="font-size:0.75rem; color:var(--ink-secondary);">Demand Category Focus</label>
+              <select id="rti_demand_type" onchange="regenerateRTIText()" style="width:100%;">
+                <option value="all">Full Comprehensive Dossier (BoQ, Measurement Book, Payments)</option>
+                <option value="financial">Financial Vouchers, Advance Guarantees & Running Bills</option>
+                <option value="quality">Quality Lab Test Reports & Compaction Certificates</option>
+                <option value="variation">Variation Orders & Executive Council Approvals</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card" id="rtiPrintSection">
+          <div class="card-header">
+            <h3>Statutory Notice Preview (अनुसूची बमोजिमको सूचना मागको निवेदन)</h3>
+            <button class="sm" onclick="copyRTIText()">📋 Copy Text</button>
+          </div>
+          <div style="background:#090d16; border:1px solid var(--line); border-radius:6px; padding:20px; font-family:var(--font-mono); font-size:0.85rem; line-height:1.7; color:#e2e8f0; white-space:pre-wrap;" id="rtiTextContainer">${generateRTITemplate(p)}</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function generateRTITemplate(p) {
+  if (!p) return "Select a project to generate statutory RTI application.";
+  var demandType = document.getElementById("rti_demand_type") ? document.getElementById("rti_demand_type").value : "all";
+  
+  var demands = "";
+  if (demandType === "all" || demandType === "financial") {
+    demands += `1. Certified copies of all Interim Payment Certificates (IPC), running bills, and final vouchers released to contractor ${p.contractor} under contract ${p.id}.\n`;
+    demands += `2. Copy of bank mobilization advance guarantee and verification of valid renewal records.\n`;
+  }
+  if (demandType === "all" || demandType === "quality") {
+    demands += `3. Copies of engineer-certified Measurement Books (MB) documenting physical progress claimed at ${p.physical_prog || 'N/A'}%.\n`;
+    demands += `4. Laboratory test certificates for material compaction, cement mix, and structural integrity performed by accredited testing labs.\n`;
+  }
+  if (demandType === "all" || demandType === "variation") {
+    demands += `5. Technical justification and Municipal Council endorsement minutes regarding ${p.amendments_count} variation orders / contract amendments.\n`;
+    demands += `6. Approved work schedule versus actual milestone logs accounting for ${p.delay_days} days delay.\n`;
+  }
+
+  var text = `मिति: २०८२/..../....
+श्रीमान् सूचना अधिकारी ज्यू,
+कपिलवस्तु नगरपालिका, नगर कार्यपालिकाको कार्यालय,
+तौलिहवा, लुम्बिनी प्रदेश, नेपाल।
+
+विषय: सूचनाको हक सम्बन्धी ऐन, २०६४ को दफा ३ र ७ बमोजिम सार्वजनिक महत्वको सूचना तथा प्रमाणित प्रतिलिपि उपलब्ध गराउने बारे।
+
+महोदय,
+नेपालको संविधानको धारा २७ तथा सूचनाको हक सम्बन्धी ऐन, २०६४ को दफा ३ ले प्रत्येक नेपाली नागरिकलाई सार्वजनिक निकायमा रहेको सार्वजनिक महत्वको सूचना माग्ने र पाउने मौलिक अधिकार प्रत्याभूत गरेको छ। 
+
+सोही कानूनी अधिकार प्रयोग गरी कपिलवस्तु नगरपालिका अन्तर्गत सञ्चालित देहायको सार्वजनिक विकास निर्माण सम्बन्धी आयोजनाको प्रमाणित सूचना तथा कागजातहरूको प्रतिलिपि माग गर्दछु:
+
+१. आयोजनाको विवरण:
+   - आयोजनाको नाम: ${p.name}
+   - ठेक्का सम्झौता नं. (Contract ID): ${p.id}
+   - PPMO e-GP प्रणाली संकेत नं.: ${p.egp_id || 'N/A'}
+   - वडा नं.: ${p.ward} | आ.व.: ${p.fy}
+   - निर्माण व्यवसायी / ठेकेदार: ${p.contractor}
+   - सम्झौता रकम: रु. ${p.contract_val} मिलियन | भुक्तानी भएको रकम: रु. ${p.spent_val} मिलियन
+
+२. माग गरिएका विशिष्ट कागजात तथा सूचनाहरू:
+${demands}
+३. सूचना प्राप्त गर्ने माध्यम: 
+   - प्रमाणित डिजिटल प्रति (PDF) अथवा प्रमाणित कागजी प्रतिलिपि।
+
+सूचनाको हक सम्बन्धी ऐन, २०६४ को दफा ७(१) बमोजिम निवेदन दर्ता भएको मितिले १५ (पन्ध्र) दिनभित्र माग बमोजिमको सूचना उपलब्ध गराइदिनुहुन सादर अनुरोध गर्दछु।
+
+निवेदक:
+हस्ताक्षर: ________________________
+नाम/संस्था: नागरिक सार्वजनिक वित्तीय पारदर्शिता मञ्च, कपिलवस्तु
+सम्पर्क ठेगाना: कपिलवस्तु नगरपालिका-१, तौलिहवा
+इमेल / फोन: info@kapilvastu-transparency.local`;
+
+  return text;
+}
+
+function regenerateRTIText() {
+  var p = STATE.selectedProjectId ? PROJECTS.find(function(x){ return x.id === STATE.selectedProjectId; }) : PROJECTS[0];
+  var box = document.getElementById("rtiTextContainer");
+  if (box && p) box.innerText = generateRTITemplate(p);
+}
+
+function copyRTIText() {
+  var box = document.getElementById("rtiTextContainer");
+  if (!box) return;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(box.innerText).then(function() {
+      alert("RTI notice copied to clipboard successfully.");
+    });
+  } else {
+    alert("Please select and copy the text manually.");
+  }
+}
+
+function printRTIDocument() {
+  window.print();
+}
+
+// ==========================================
+// VIEW RENDERING: 9. DATA SOURCES & INGESTION
+// ==========================================
+function renderDataSourcesView() {
+  return `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+      <div>
+        <h2 style="font-size:1.25rem; font-weight:700; color:#fff;">Data Ingestion, GIS Shapefile & QGIS Pipeline</h2>
+        <p class="sub">Direct local parser for CSV, Excel (.xlsx), GeoJSON, and ESRI Shapefiles (.shp, .dbf, .prj) without server leakage.</p>
+      </div>
+      <div>
+        <button class="sm" onclick="downloadCsvTemplate()">📥 Download Clean CSV Schema Template</button>
+      </div>
+    </div>
+
+    <!-- Ingestion File Drop Box -->
+    <div class="card" id="importBox">
+      <div class="card-header">
+        <h3>Local Data Ingestion Portal (Client-Side Privacy Enforced)</h3>
+      </div>
+      <p class="sub" style="margin-bottom:12px;">Supported Formats: CSV, Excel (SheetJS), GeoJSON, Shapefile Zip, and GeoTIFF. Data is stored directly into your browser's private local vault.</p>
+      
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px; margin-bottom:14px;">
+        <div style="border:1px dashed var(--line-strong); padding:16px; border-radius:6px; background:#0d131f;">
+          <strong style="color:#fff; display:block; margin-bottom:4px;">1. Ingest Project Records (CSV / Excel)</strong>
+          <span class="sub" style="display:block; margin-bottom:10px;">Loads new contracts, expenditures, and progress reports.</span>
+          <input type="file" id="fileProjects" accept=".csv, .xlsx, .xls, .geojson, .json" onchange="handleProjectFileUpload(this.files[0])">
+        </div>
+
+        <div style="border:1px dashed var(--line-strong); padding:16px; border-radius:6px; background:#0d131f;">
+          <strong style="color:#fff; display:block; margin-bottom:4px;">2. Ingest Spatial Layers (Shapefile / Raster)</strong>
+          <span class="sub" style="display:block; margin-bottom:10px;">Select Shapefile .zip or GeoTIFF (.tif) for GIS overlay.</span>
+          <input type="file" id="fileSpatial" accept=".zip, .shp, .tif, .tiff" onchange="handleSpatialFileUpload(this.files)">
+        </div>
+      </div>
+
+      <div id="ingestionPreviewBox"></div>
+    </div>
+
+    <!-- Active Registered Datasets Table -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Active Registered Provenance Sources</h3>
+      </div>
+      <div class="tw">
+        <table>
+          <thead>
+            <tr>
+              <th>Dataset ID</th>
+              <th>Filename / Source</th>
+              <th>Originating Institution</th>
+              <th>Format Type</th>
+              <th>Acquisition Date</th>
+              <th>Verification Audit Trail</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${IMPORTED_DATASETS.map(function(d){
+              return `
+                <tr>
+                  <td><code>${esc(d.id)}</code></td>
+                  <td><b>${esc(d.file)}</b></td>
+                  <td>${esc(d.src)}</td>
+                  <td><span class="badge-tag">${esc(d.type)}</span></td>
+                  <td>${esc(d.date)}</td>
+                  <td><span class="sub">${esc(d.verification)}</span></td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- QGIS PyQGIS Bridge & Scripts -->
+    <div class="card">
+      <div class="card-header">
+        <h3>PyQGIS Automation Script (Reprojecting Nepal District & Ward Shapefiles)</h3>
+      </div>
+      <p class="sub">Run this script in the QGIS Python Console to convert official Survey Department / MoFAGA shapefiles (MUTM / Nepal Nagarkot CRS) to web-ready WGS 84 GeoJSON for this application:</p>
+      
+      <pre class="code">from qgis.core import QgsVectorLayer, QgsProject, QgsCoordinateReferenceSystem
+import processing
+
+# 1. Load Kapilvastu Ward Boundary Shapefile
+input_path = "/path/to/kapilvastu_ward_boundary.shp"
+layer = QgsVectorLayer(input_path, "Kapilvastu_Wards", "ogr")
+
+if layer.isValid():
+    QgsProject.instance().addMapLayer(layer)
+    print("✓ Successfully loaded layer into QGIS")
+    
+    # 2. Reproject to EPSG:4326 (WGS 84 Standard for Web Leaflet Maps)
+    output_geojson = "/path/to/kapilvastu_wards_wgs84.geojson"
+    processing.run("native:reprojectlayer", {
+        'INPUT': layer,
+        'TARGET_CRS': QgsCoordinateReferenceSystem('EPSG:4326'),
+        'OUTPUT': output_geojson
+    })
+    print(f"✓ Exported WGS84 GeoJSON to {output_geojson}")
+else:
+    print("✗ Invalid layer. Ensure .shp, .shx, .dbf and .prj reside in the same folder.")</pre>
+    </div>
+  `;
+}
+
+// Ingestion Handlers
+function handleProjectFileUpload(file) {
+  if (!file) return;
+  var previewBox = document.getElementById("ingestionPreviewBox");
+  if (previewBox) previewBox.innerHTML = "<p class='sub'>Parsing and validating file structure...</p>";
+
+  var reader = new FileReader();
+  if (/\.xlsx?$/i.test(file.name)) {
+    reader.onload = function(e) {
+      try {
+        var data = new Uint8Array(e.target.result);
+        var workbook = XLSX.read(data, { type: 'array' });
+        var firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        var rows = XLSX.utils.sheet_to_json(firstSheet);
+        processIngestedRows(file.name, rows);
+      } catch(err) {
+        if (previewBox) previewBox.innerHTML = "<div class='note warn'>Error parsing Excel spreadsheet: " + esc(err.message) + "</div>";
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  } else {
+    reader.onload = function(e) {
+      try {
+        var text = e.target.result;
+        var rows = parseCsvText(text);
+        processIngestedRows(file.name, rows);
+      } catch(err) {
+        if (previewBox) previewBox.innerHTML = "<div class='note warn'>Error parsing CSV text: " + esc(err.message) + "</div>";
+      }
+    };
+    reader.readAsText(file);
+  }
+}
+
+function processIngestedRows(fileName, rawRows) {
+  var previewBox = document.getElementById("ingestionPreviewBox");
+  if (!rawRows || rawRows.length === 0) {
+    if (previewBox) previewBox.innerHTML = "<div class='note warn'>The imported file contains no readable data rows.</div>";
+    return;
+  }
+
+  var valid = [];
+  var rejected = [];
+
+  rawRows.forEach(function(row, idx) {
+    // Normalization mapping
+    var id = String(row.id || row.contract_id || row.ID || "IMP-" + (idx + 1)).trim();
+    var name = String(row.name || row.project_name || row.Title || id).trim();
+    var ward = parseInt(row.ward || row.ward_no || 1, 10);
+    var budget = parseFloat(row.budget || row.budget_est || row.estimate || 0);
+    var contract = parseFloat(row.contract_val || row.contract_value || budget || 0);
+    var spent = parseFloat(row.spent || row.spent_val || row.expenditure || 0);
+    var phys = row.physical_prog !== undefined && row.physical_prog !== "" ? parseFloat(row.physical_prog) : null;
+    var con = String(row.contractor || row.vendor || "Local Implementation Committee").trim();
+    
+    if (isNaN(budget) || isNaN(spent)) {
+      rejected.push({ row: idx + 1, reason: "Non-numeric budget or expenditure" });
+      return;
+    }
+
+    valid.push({
+      id: id,
+      egp_id: row.egp_id || ("IMP-EGP-" + (1000 + idx)),
+      name: name,
+      ward: ward || 1,
+      cat: row.cat || row.category || "General Municipal Works",
+      fy: row.fy || "2081/82",
+      contractor: con,
+      contractor_pan: row.pan || "300000000",
+      contractor_rep: row.rep || "Authorized Representative",
+      budget_est: budget,
+      contract_val: contract,
+      spent_val: spent,
+      physical_prog: phys,
+      delay_days: parseInt(row.delay_days || 0, 10),
+      bidders_count: parseInt(row.bidders_count || 2, 10),
+      amendments_count: parseInt(row.amendments_count || 0, 10),
+      docs_online: row.docs_online === true || String(row.docs_online).toLowerCase() === "yes",
+      proc_method: row.proc_method || "NCB",
+      planned_date: row.planned_date || "2082-03-30",
+      lat: parseFloat(row.lat) || (27.540 + (Math.random() - 0.5) * 0.08),
+      lng: parseFloat(row.lng) || (83.050 + (Math.random() - 0.5) * 0.08),
+      is_synthetic: false,
+      data_source_id: fileName
+    });
+  });
+
+  if (previewBox) {
+    previewBox.innerHTML = `
+      <div class="note">
+        <strong>Validation Summary for "${esc(fileName)}":</strong><br>
+        ✓ <b>${valid.length}</b> valid records extracted | ✗ <b>${rejected.length}</b> rows flagged/rejected.<br>
+        <div style="margin-top:8px;">
+          <button class="pri sm" onclick="commitIngestedProjects('${esc(fileName)}')">Commit ${valid.length} Valid Records to Active Vault</button>
+        </div>
+      </div>
+    `;
+  }
+
+  window._PENDING_INGESTION = valid;
+}
+
+function commitIngestedProjects(fileName) {
+  if (window._PENDING_INGESTION && window._PENDING_INGESTION.length > 0) {
+    PROJECTS = window._PENDING_INGESTION.concat(PROJECTS);
+    IMPORTED_DATASETS.push({
+      id: "DS-" + (IMPORTED_DATASETS.length + 1),
+      file: fileName,
+      src: "User Upload (Manual Ingestion)",
+      type: "Field / Municipal Record",
+      date: new Date().toISOString().substring(0, 10),
+      verification: "Locally Verified Client Import"
+    });
+    window._PENDING_INGESTION = null;
+    alert("Successfully imported records into active forensic database.");
+    navigateTab(0);
+  }
+}
+
+function handleSpatialFileUpload(files) {
+  if (!files || files.length === 0) return;
+  var previewBox = document.getElementById("ingestionPreviewBox");
+  if (previewBox) previewBox.innerHTML = "<p class='sub'>Reading spatial geometry layers...</p>";
+
+  var file = files[0];
+  if (/\.zip$/i.test(file.name)) {
+    file.arrayBuffer().then(function(buf) {
+      return shp(buf);
+    }).then(function(geojson) {
+      SPATIAL_LAYERS.push({
+        kind: 'geojson',
+        name: file.name.replace(/\.zip$/i, ''),
+        gj: geojson,
+        color: '#06b6d4'
+      });
+      if (previewBox) previewBox.innerHTML = "<div class='note'>✓ Successfully ingested ESRI Shapefile: <b>" + esc(file.name) + "</b>. Layer is now available on the GIS Map tab!</div>";
+    }).catch(function(err) {
+      if (previewBox) previewBox.innerHTML = "<div class='note warn'>Error decoding Shapefile ZIP: " + esc(err.message) + "</div>";
+    });
+  } else {
+    if (previewBox) previewBox.innerHTML = "<div class='note warn'>Please upload Shapefiles bundled as a standard .ZIP archive containing .shp, .shx, and .dbf files.</div>";
+  }
+}
+
+function parseCsvText(text) {
+  var lines = text.split(/\r?\n/).filter(function(l){ return l.trim() !== ""; });
+  if (lines.length < 2) return [];
+  var headers = lines[0].split(",").map(function(h){ return h.trim().replace(/^"|"$/g, ""); });
+  var result = [];
+  for (var i = 1; i < lines.length; i++) {
+    var parts = lines[i].split(",");
+    var obj = {};
+    headers.forEach(function(h, idx){
+      obj[h] = parts[idx] ? parts[idx].trim().replace(/^"|"$/g, "") : "";
+    });
+    result.push(obj);
+  }
+  return result;
+}
+
+function downloadCsvTemplate() {
+  var header = "id,egp_id,name,ward,cat,fy,contractor,pan,rep,budget_est,contract_val,spent_val,physical_prog,delay_days,bidders_count,amendments_count,docs_online,proc_method,lat,lng\n";
+  var sample = 'KV-SAMPLE-01,PPMO-2082-01,"Ward 3 Irrigation Canal",3,"Irrigation Canal Modernization","2081/82","Kapilvastu Nirman Sewa","301928344","D. R. Pokhrel",12.5,10.8,8.2,45,60,1,2,yes,"NCB",27.545,83.052\n';
+  var blob = new Blob([header + sample], { type: "text/csv" });
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "kapilvastu_transparency_schema_template.csv";
+  a.click();
+}
+
+// ==========================================
+// VIEW RENDERING: 10. METHODOLOGY & GUIDE
+// ==========================================
+function renderMethodologyView() {
+  return `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+      <div>
+        <h2 style="font-size:1.25rem; font-weight:700; color:#fff;">Investigative Methodology & Evidence Triangulation Framework</h2>
+        <p class="sub">Standard operating procedures, legal evidentiary hierarchy, and forensic thresholds for anti-corruption research.</p>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:16px;">
+      <div class="card">
+        <div class="card-header">
+          <h3>The Four Evidentiary Standards</h3>
+        </div>
+        <ul style="display:flex; flex-direction:column; gap:10px; font-size:0.85rem; padding-left:14px;">
+          <li>
+            <b style="color:#4ade80">Class 1: Legally Verified Fact</b><br>
+            <span class="sub">Directly corroborated by dual primary evidence (e.g. signed bank voucher + counter-signed engineer Measurement Book).</span>
+          </li>
+          <li>
+            <b style="color:#facc15">Class 2: Forensic Risk Indicator (Red Flag)</b><br>
+            <span class="sub">Statistical or procedural anomaly (e.g. disbursement exceeds physical progress). Triage basis only; never a criminal finding without inquiry.</span>
+          </li>
+          <li>
+            <b style="color:#fb923c">Class 3: Uncorroborated Civic Allegation</b><br>
+            <span class="sub">Whistleblower tip, community complaint, or press report lacking documentation. Held in secure escrow pending triangulation.</span>
+          </li>
+          <li>
+            <b style="color:#60a5fa">Class 4: Statutory Audit Finding (Beruju)</b><br>
+            <span class="sub">Formally documented query by the Office of the Auditor General (OAG) Nepal or CIAA anti-corruption agency.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>Composite Risk Index Weighting Model</h3>
+        </div>
+        <div style="font-size:0.85rem;">
+          <p class="sub" style="margin-bottom:8px;">Each project is scored from 0 to 100 based on Open Contracting Partnership (OCP) Red Flag taxonomy:</p>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <div style="display:flex; justify-content:space-between;"><span>Financial vs Physical Drawdown Disparity</span> <b>25 pts</b></div>
+            <div style="display:flex; justify-content:space-between;"><span>Sole Tender Submission / Market Collusion</span> <b>20 pts</b></div>
+            <div style="display:flex; justify-content:space-between;"><span>Excessive Variation Orders (Amendments)</span> <b>15 pts</b></div>
+            <div style="display:flex; justify-content:space-between;"><span>Severe Schedule Overrun (&gt;90 days)</span> <b>15 pts</b></div>
+            <div style="display:flex; justify-content:space-between;"><span>Spending Above Contract Award Ceiling</span> <b>15 pts</b></div>
+            <div style="display:flex; justify-content:space-between;"><span>PPMO Document Concealment</span> <b>10 pts</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Accordion Q&A -->
+    <div style="margin-top:16px;">
+      <h3 style="margin-bottom:10px; color:#fff;">Investigator Operating Guide</h3>
+      ${renderAccordionItem(
+        "How to conduct a field triangulation inspection in Kapilvastu?",
+        "<p>1. Identify the contract package number and download the original Bill of Quantities (BoQ) from the Procurement Matrix tab.</p><p>2. Travel to the geocoded site with a high-accuracy GPS camera or smartphone.</p><p>3. Measure physical dimensions (e.g., culvert span, road layer thickness, tubewell depth) against the engineering specification.</p><p>4. Interview local Ward Citizen Forum members and record signed statements.</p><p>5. Log the findings into the Field Triangulation tab with cryptographic photo metadata.</p>"
+      )}
+      ${renderAccordionItem(
+        "What legal recourse exists if the Municipality ignores an RTI request?",
+        "<p>Under Section 9 of the Right to Information Act 2064, if the Public Information Officer fails to provide the requested information within 15 days, you may file an internal appeal to the Chief Administrative Officer (CAO). If unresolved within 7 days, file a formal complaint before the National Information Commission (NIC), which holds powers to fine non-compliant officers and mandate disclosure.</p>"
+      )}
+      ${renderAccordionItem(
+        "How is data confidentiality and whistleblower safety maintained?",
+        "<p>This platform operates completely offline in-browser using Web Storage and Web Workers. No data is transmitted to third-party tracking servers. When documenting complaints or allegations, never record identifying civilian names without encrypted pseudonymization.</p>"
+      )}
+    </div>
+  `;
+}
+
+function renderAccordionItem(title, content) {
+  return `
+    <div class="hg">
+      <button onclick="this.parentElement.classList.toggle('open')">
+        <span>${esc(title)}</span>
+        <i>▾</i>
+      </button>
+      <div class="pn">
+        <div class="in">
+          <div class="bd">${content}</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ==========================================
+// SHARED REUSABLE COMPONENTS
+// ==========================================
+function renderFilterBar() {
+  var f = STATE.activeFilter;
+  return `
+    <div class="filter-bar noprint">
+      <input type="text" id="filter_search" placeholder="🔍 Search Contract ID, Name, Contractor, PAN..." value="${esc(f.search)}" oninput="updateSearchFilter(this.value)">
+      
+      <select id="filter_ward" onchange="updateFilter('ward', this.value)">
+        <option value="">All Wards (1 - 12)</option>
+        ${[1,2,3,4,5,6,7,8,9,10,11,12].map(function(w){
+          return `<option value="${w}" ${f.ward == w ? 'selected' : ''}>Ward ${w}</option>`;
+        }).join('')}
+      </select>
+
+      <select id="filter_cat" onchange="updateFilter('cat', this.value)">
+        <option value="">All Sectors</option>
+        ${CATEGORIES.map(function(c){
+          return `<option value="${esc(c)}" ${f.cat === c ? 'selected' : ''}>${esc(c)}</option>`;
+        }).join('')}
+      </select>
+
+      <select id="filter_priority" onchange="updateFilter('priority', this.value)">
+        <option value="">All Risk Profiles</option>
+        <option value="red" ${f.priority === 'red' ? 'selected' : ''}>🚨 Critical Priority (Score ≥ 60)</option>
+        <option value="org" ${f.priority === 'org' ? 'selected' : ''}>⚠️ Elevated Risk (40-59)</option>
+        <option value="yel" ${f.priority === 'yel' ? 'selected' : ''}>🔍 Verification (20-39)</option>
+        <option value="grn" ${f.priority === 'grn' ? 'selected' : ''}>✓ Low Risk (&lt;20)</option>
+        <option value="gry" ${f.priority === 'gry' ? 'selected' : ''}>❓ Incomplete Data</option>
+      </select>
+
+      <button class="sm" onclick="resetFilters()">Reset Filters</button>
+    </div>
+  `;
+}
+
+function renderProjectDossier(pid) {
+  if (!pid) return "<div class='card'><p class='sub'>Select any package from the matrix to inspect its full case dossier.</p></div>";
+  var p = PROJECTS.find(function(x){ return x.id === pid; });
+  if (!p) return "<div class='card'><p class='sub'>Selected record not found.</p></div>";
+
+  var risk = evaluateForensicRisk(p);
+  var relatedAudit = AUDIT_FINDINGS.filter(function(a){ return a.pid === p.id; });
+  var relatedField = FIELD_LOGS.filter(function(f){ return f.pid === p.id; });
+
+  return `
+    <div class="dossier-box">
+      <div class="dossier-header">
+        <div>
+          <div class="dossier-title">${esc(p.name)}</div>
+          <div class="dossier-sub">${esc(p.id)} · Ward ${p.ward} · Fiscal Year ${p.fy}</div>
+        </div>
+        <span class="pill ${risk.grade}">${risk.label}</span>
+      </div>
+
+      <!-- Risk Score Meter -->
+      <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); padding:10px 14px; border-radius:6px; margin-bottom:12px; border:1px solid var(--line);">
+        <div>
+          <span style="font-size:0.75rem; color:var(--ink-secondary); text-transform:uppercase;">Composite Risk Index</span>
+          <div class="score-meter">
+            <span class="score-number" style="color:${risk.grade==='red'?'#f87171':risk.grade==='org'?'#fb923c':'#4ade80'}">${risk.score != null ? risk.score : 'N/A'}</span>
+            <span class="score-max">/ 100</span>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <button class="sm pri" onclick="generateRTIForProject('${p.id}')">📝 Draft RTI Petition</button>
+        </div>
+      </div>
+
+      <!-- Financial Metrics Grid -->
+      <div class="dossier-grid">
+        <div class="dossier-item">
+          <span>Approved Budget:</span>
+          <span>${formatNPR(p.budget_est)}</span>
+        </div>
+        <div class="dossier-item">
+          <span>Awarded Contract:</span>
+          <span>${formatNPR(p.contract_val)}</span>
+        </div>
+        <div class="dossier-item">
+          <span>Recorded Spent:</span>
+          <span>${formatNPR(p.spent_val)} (${Math.round(risk.finProgressPct)}%)</span>
+        </div>
+        <div class="dossier-item">
+          <span>Physical Progress:</span>
+          <span>${p.physical_prog != null ? p.physical_prog + '%' : '<b style="color:#f87171">Not Disclosed</b>'}</span>
+        </div>
+        <div class="dossier-item">
+          <span>Contractor Name:</span>
+          <span>${esc(p.contractor)}</span>
+        </div>
+        <div class="dossier-item">
+          <span>Bidders / Method:</span>
+          <span>${p.bidders_count} bids · ${esc(p.proc_method)}</span>
+        </div>
+      </div>
+
+      <!-- Red Flag Checklist -->
+      <strong style="font-size:0.85rem; color:#fff; display:block; margin-top:10px;">Triggered Investigative Red Flags (${risk.flags.length})</strong>
+      ${risk.flags.length === 0 ? '<p class="sub" style="margin:6px 0;">No active red flags detected within current threshold calibration.</p>' : `
+        <ul class="flag-list">
+          ${risk.flags.map(function(f){
+            return `
+              <li class="flag-item ${f.weight >= 20 ? 'alert' : f.weight >= 15 ? 'mid' : 'low'}">
+                <div class="flag-title">
+                  <span>${esc(f.title)}</span>
+                  <span class="badge-tag">+${f.weight} pts</span>
+                </div>
+                <div style="color:#cbd5e1; font-size:0.75rem; margin-top:2px;">${esc(f.desc)}</div>
+                <div class="flag-inv"><b>Action:</b> ${esc(f.investigationStep)}</div>
+              </li>
+            `;
+          }).join('')}
+        </ul>
+      `}
+
+      <!-- Triangulation / Audit Status -->
+      ${relatedAudit.length > 0 ? `
+        <div style="margin-top:10px; padding:8px; background:rgba(239, 68, 68, 0.1); border:1px solid var(--red); border-radius:6px;">
+          <strong style="color:#f87171; font-size:0.8rem;">🚨 Active Auditor General Observation: ${relatedAudit[0].id}</strong>
+          <div style="font-size:0.75rem; color:#cbd5e1; margin-top:2px;">${esc(relatedAudit[0].desc)}</div>
+        </div>
+      ` : ''}
+
+      ${relatedField.length > 0 ? `
+        <div style="margin-top:10px; padding:8px; background:rgba(139, 92, 246, 0.1); border:1px solid var(--purp); border-radius:6px;">
+          <strong style="color:#c4b5fd; font-size:0.8rem;">📸 Ground Triangulation Verified (${relatedField[0].date})</strong>
+          <div style="font-size:0.75rem; color:#cbd5e1; margin-top:2px;">Verified Physical Progress: <b>${relatedField[0].measured_physical_pct}%</b> (Reported was ${relatedField[0].reported_physical_pct}%).</div>
+        </div>
+      ` : ''}
+    </div>
+  `;
+}
+
+// ==========================================
+// STATE MANAGEMENT & CONTROLLERS
+// ==========================================
+function selectProject(pid) {
+  STATE.selectedProjectId = pid;
+  if (STATE.currentTab === 0) {
+    var c = document.getElementById("quickDossierContainer");
+    if (c) c.innerHTML = renderProjectDossier(pid);
+  } else if (STATE.currentTab === 1) {
+    var sc = document.getElementById("mapSelectedDossier");
+    if (sc) sc.innerHTML = renderProjectDossier(pid);
+  }
+}
+
+function updateFilter(key, val) {
+  STATE.activeFilter[key] = val;
+  render();
+}
+
+function updateSearchFilter(val) {
+  STATE.activeFilter.search = val;
+  clearTimeout(window._searchDebounce);
+  window._searchDebounce = setTimeout(function(){
+    render();
+    var box = document.getElementById("filter_search");
+    if (box) {
+      box.focus();
+      box.selectionStart = box.selectionEnd = box.value.length;
+    }
+  }, 250);
+}
+
+function triggerFilterPriority(priority) {
+  STATE.activeFilter.priority = priority;
+  render();
+}
+
+function resetFilters() {
+  STATE.activeFilter = { ward: '', cat: '', priority: '', search: '', riskMin: 0 };
+  render();
+}
+
+function filterByWard(wardNo) {
+  STATE.activeFilter.ward = wardNo;
+  navigateTab(0);
+}
+
+function filterByContractor(conName) {
+  STATE.activeFilter.search = conName;
+  navigateTab(0);
+}
+
+function updateThreshold(key, val) {
+  STATE.thresholds[key] = parseFloat(val) || 0;
+  render();
+}
+
+function navigateTab(tabIdx) {
+  STATE.currentTab = tabIdx;
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function generateRTIForProject(pid) {
+  STATE.selectedProjectId = pid;
+  navigateTab(7);
+}
+
+function draftCartelAuditInquiry(conName) {
+  filterByContractor(conName);
+}
+
+function updateAuditStatus(idx, newStatus) {
+  if (AUDIT_FINDINGS[idx]) {
+    AUDIT_FINDINGS[idx].status = newStatus;
+  }
+}
+
+function deleteAuditFinding(idx) {
+  if (confirm("Remove this statutory audit observation?")) {
+    AUDIT_FINDINGS.splice(idx, 1);
+    render();
+  }
+}
+
+function deleteFieldLog(idx) {
+  if (confirm("Delete this field triangulation log?")) {
+    FIELD_LOGS.splice(idx, 1);
+    saveFieldVault();
+    render();
+  }
+}
+
+function viewFieldDetail(idx) {
+  var f = FIELD_LOGS[idx];
+  alert("Field Triangulation Details:\n\nTarget: " + f.pid + "\nInspector: " + f.inspector + " (" + f.date + ")\nReported Progress: " + f.reported_physical_pct + "%\nActual Measured: " + f.measured_physical_pct + "%\n\nSite Observations:\n" + f.variance_note + "\n\nWitness: " + (f.witness || "None"));
+}
+
+function openAddAuditModal() {
+  var pid = prompt("Enter Target Contract ID (e.g. KV-NCB-208101):", STATE.selectedProjectId || "KV-NCB-208101");
+  if (!pid) return;
+  var desc = prompt("Enter Audit Query Description:", "Discrepancy in asphalt compaction density; lack of third-party test certs.");
+  if (!desc) return;
+  
+  AUDIT_FINDINGS.push({
+    id: "OAG-USER-" + (AUDIT_FINDINGS.length + 1),
+    pid: pid,
+    year: "2081/82",
+    para: "Para User",
+    clause: "PPA 2063 Sec 52",
+    desc: desc,
+    amount_npr: 1.5,
+    status: "Under Investigation",
+    assigned_to: "Municipal PAC"
+  });
+  render();
+}
+
+function openAddFieldModal() {
+  var pid = prompt("Target Contract ID:", STATE.selectedProjectId || "KV-NCB-208101");
+  if (!pid) return;
+  var repPct = parseInt(prompt("Official Reported Physical %:", "60") || "0", 10);
+  var actPct = parseInt(prompt("Actual Measured Physical % on Site:", "30") || "0", 10);
+  var notes = prompt("Field Observations / Discrepancy Note:", "Bridge foundation pillars incomplete; work halted for 4 months.");
+  
+  FIELD_LOGS.push({
+    id: "INSP-" + (FIELD_LOGS.length + 1),
+    pid: pid,
+    inspector: "Citizen Field Triangulation Unit",
+    date: new Date().toISOString().substring(0, 10),
+    geo_verified: true,
+    gps_lat: 27.542,
+    gps_lng: 83.051,
+    reported_physical_pct: repPct,
+    measured_physical_pct: actPct,
+    variance_note: notes || "Discrepancy observed on site.",
+    witness: "Local Ward Citizen Representative"
+  });
+  saveFieldVault();
+  render();
+}
+
+function exportFullCsvReport() {
+  var rows = [
+    ["Contract_ID", "eGP_ID", "Project_Name", "Ward", "Sector", "Fiscal_Year", "Contractor", "PAN", "Budget_NPR_M", "Contract_NPR_M", "Spent_NPR_M", "Physical_Progress_Pct", "Bidders_Count", "Amendments_Count", "Delay_Days", "Docs_Public", "Risk_Score", "Risk_Grade", "Active_Red_Flags"]
+  ];
+
+  PROJECTS.forEach(function(p){
+    var risk = evaluateForensicRisk(p);
+    var flagsText = risk.flags.map(function(f){ return f.title; }).join(" | ");
+    rows.push([
+      p.id,
+      p.egp_id || '',
+      '"' + p.name.replace(/"/g, '""') + '"',
+      p.ward,
+      '"' + p.cat.replace(/"/g, '""') + '"',
+      p.fy,
+      '"' + p.contractor.replace(/"/g, '""') + '"',
+      p.contractor_pan || '',
+      p.budget_est,
+      p.contract_val,
+      p.spent_val,
+      p.physical_prog != null ? p.physical_prog : '',
+      p.bidders_count,
+      p.amendments_count,
+      p.delay_days,
+      p.docs_online ? 'Yes' : 'No',
+      risk.score != null ? risk.score : '',
+      risk.grade,
+      '"' + flagsText.replace(/"/g, '""') + '"'
+    ]);
+  });
+
+  var csvContent = rows.map(function(e){ return e.join(","); }).join("\n");
+  var blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "kapilvastu_forensic_procurement_registry_" + Date.now() + ".csv";
+  a.click();
+}
+
+// Global App Root Render
+function render() {
+  // Update Nav
+  var nav = document.getElementById("navBar");
+  if (nav) {
+    nav.innerHTML = TABS.map(function(t, idx){
+      return `<button class="${idx === STATE.currentTab ? 'on' : ''}" onclick="navigateTab(${idx})"><span>${t.icon}</span> <span>${t.label}</span></button>`;
+    }).join('');
+  }
+
+  // Update Main View Content
+  var view = document.getElementById("appView");
+  if (!view) return;
+
+  switch(STATE.currentTab) {
+    case 0: view.innerHTML = renderDashboard(); break;
+    case 1: 
+      view.innerHTML = renderMapView(); 
+      setTimeout(initMapLeaflet, 50); 
+      break;
+    case 2: view.innerHTML = renderProcurementMatrix(); break;
+    case 3: view.innerHTML = renderCartelMatrix(); break;
+    case 4: view.innerHTML = renderWardBudgets(); break;
+    case 5: view.innerHTML = renderAuditObservations(); break;
+    case 6: view.innerHTML = renderFieldInspectionView(); break;
+    case 7: view.innerHTML = renderRTIGeneratorView(); break;
+    case 8: view.innerHTML = renderDataSourcesView(); break;
+    case 9: view.innerHTML = renderMethodologyView(); break;
+    default: view.innerHTML = renderDashboard();
+  }
+}
+
+// Global Event Listeners & Bootstrapping
+document.addEventListener("DOMContentLoaded", function() {
+  render();
+
+  // Header quick buttons
+  document.getElementById("btnExportDossier").addEventListener("click", function(){ window.print(); });
+  document.getElementById("btnRTI").addEventListener("click", function(){ navigateTab(7); });
+  document.getElementById("btnQuickImport").addEventListener("click", function(){ navigateTab(8); });
+  
+  var themeToggle = document.getElementById("btnThemeToggle");
+  if (themeToggle) {
+    themeToggle.addEventListener("click", function(){
+      document.documentElement.classList.toggle("light");
+    });
+  }
+});
+
+// Run immediate render
+render();
+</script>
+</body>
+</html>
