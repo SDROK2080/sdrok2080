@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GovData Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.2/plotly.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{--bg:#f3f5f8;--sf:#fff;--ink:#0f1b2d;--mu:#5a6678;--ln:#d9dfe8;--pr:#1f4fa8;--pr2:#e8eefb;--ac:#c4122f;--ok:#1b7f4b;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1420;--sf:#151f2f;--ink:#e8edf5;--mu:#93a1b5;--ln:#263349;--pr:#7ba3ff;--pr2:#1c2c4a;--ac:#ff6b80;--ok:#4cc38a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d1420;--sf:#151f2f;--ink:#e8edf5;--mu:#93a1b5;--ln:#263349;--pr:#7ba3ff;--pr2:#1c2c4a;--ac:#ff6b80;--ok:#4cc38a;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+.app{display:grid;grid-template-columns:224px minmax(0,1fr)}
+nav{background:var(--sf);border-right:1px solid var(--ln);padding:18px 0;min-height:100vh}
+.brand{padding:0 18px 14px;font-weight:700;font-size:17px;letter-spacing:-.01em}
+.brand small{display:block;font-weight:400;color:var(--mu);font-size:12px}
+nav button{display:block;width:100%;text-align:left;background:none;border:0;border-left:3px solid transparent;border-radius:0;padding:9px 18px;color:var(--mu);font:inherit;cursor:pointer}
+nav button.on{border-left-color:var(--ac);color:var(--ink);background:var(--pr2);font-weight:600}
+main{padding:20px;min-width:0;max-width:1100px}
+.top{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.top h1{font-size:22px;margin:0 auto 0 0;letter-spacing:-.01em}
+h2{font-size:17px;margin:0 0 6px}
+.panel{background:var(--sf);border:1px solid var(--ln);border-radius:10px;padding:16px;margin-bottom:14px}
+.mu{color:var(--mu)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin:10px 0}
+label{display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--mu)}
+input,select,button{font:inherit;color:var(--ink);background:var(--sf);border:1px solid var(--ln);border-radius:6px;padding:7px 10px;min-height:36px}
+input[type=checkbox]{min-height:0}
+button{cursor:pointer}
+button.p{background:var(--pr);border-color:var(--pr);color:#fff;font-weight:600}
+button.d{border-color:var(--ac);color:var(--ac)}
+:focus-visible{outline:2px solid var(--pr);outline-offset:2px}
+.sc{overflow-x:auto;border:1px solid var(--ln);border-radius:6px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:6px 10px;border-bottom:1px solid var(--ln);text-align:left;white-space:nowrap}
+th{background:var(--pr2);font-weight:600}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));background:var(--sf);border:1px solid var(--ln);border-radius:10px;margin-bottom:14px}
+.strip div{padding:14px 16px;border-right:1px solid var(--ln)}
+.strip b{display:block;font-size:26px;letter-spacing:-.02em}
+.empty{border:1px dashed var(--ln);border-radius:10px;padding:26px;text-align:center;color:var(--mu)}
+.tag{display:inline-block;border-radius:4px;padding:1px 7px;font-size:12px;border:1px solid var(--ln)}
+.tag.ok{color:var(--ok);border-color:var(--ok)}
+ul.l{margin:6px 0;padding-left:18px}
+#plot{min-height:380px}
+iframe{width:100%;height:520px;border:1px solid var(--ln);border-radius:6px;background:#fff}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:8px;max-width:90vw;display:none;z-index:9}
+a{color:var(--pr)}
+@media(max-width:800px){.app{grid-template-columns:minmax(0,1fr)}nav{display:flex;overflow-x:auto;min-height:0;padding:0;border-right:0;border-bottom:1px solid var(--ln)}.brand{display:none}nav button{width:auto;white-space:nowrap;border-left:0;border-bottom:3px solid transparent;padding:12px 14px}nav button.on{border-bottom-color:var(--ac)}main{padding:14px}}
+</style>
+</head>
+<body>
+<div class="app">
+<nav id="nav" aria-label="Main"></nav>
+<main>
+<div class="top"><h1 id="ttl"></h1><select id="cur" data-c="pick" aria-label="Active dataset"></select><button data-a="theme" id="thb">Theme</button></div>
+<section id="v"></section>
+</main>
+</div>
+<div id="toast" role="status"></div>
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const VIEWS=[['dash','Dashboard'],['src','Data sources'],['imp','File import'],['cln','Data cleaning'],['ana','Analysis'],['cht','Charts'],['rep','Reports'],['his','Dataset history'],['set','Settings']];
+const SRC=[
+{n:'National Statistics Office',u:'https://nsonepal.gov.np/',c:'Statistics',o:1,d:'National statistics, census and survey publications.'},
+{n:'Open Data Nepal (Open Knowledge Nepal)',u:'https://opendatanepal.com/',c:'Open data portal',o:0,d:'Third-party open-data portal. Check each dataset’s own source and licence.'},
+{n:'Election Commission Nepal',u:'https://election.gov.np/',c:'Elections',o:1,d:'Election results and voter information.'},
+{n:'Nepal Rastra Bank',u:'https://www.nrb.org.np/',c:'Finance',o:1,d:'Central bank statistics and publications (official institution, not a .gov.np domain).'}];
+let S={view:'dash',cur:null,ds:[],act:[],usr:[],pg:0,q:'',sq:'',sc:'All',po:null,pend:null,wb:null,rep:null,cd:[],img:null,imgDs:null};
+const A={};
+try{const j=JSON.parse(localStorage.getItem('gda')||'null');if(j){S.ds=j.ds||[];S.act=j.act||[];S.cur=j.cur||null;S.usr=j.usr||[]}}catch(e){}
+function save(){try{localStorage.setItem('gda',JSON.stringify({ds:S.ds,act:S.act,cur:S.cur,usr:S.usr}))}catch(e){toast('Browser storage is full. Datasets stay available only until you close this page.')}}
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display='none',4200)}
+const D=()=>S.ds.find(d=>d.id===S.cur);
+const miss=v=>v==null||String(v).trim()==='';
+const num=v=>{if(typeof v==='number')return v;if(miss(v))return NaN;const s=String(v).replace(/,/g,'').trim();return /^-?\d*\.?\d+(e[+-]?\d+)?$/i.test(s)?parseFloat(s):NaN};
+const fmt=n=>typeof n==='number'?(Number.isInteger(n)?n.toLocaleString():(+n.toFixed(3)).toLocaleString()):esc(n);
+const host=u=>{try{return new URL(u).hostname}catch(e){return ''}};
+const qn=(b,p)=>{const i=(b.length-1)p,l=Math.floor(i);return b[l]+(b[Math.min(l+1,b.length-1)]-b[l])(i-l)};
+function nstat(a){const n=a.length;if(!n)return null;const s=a.reduce((x,y)=>x+y,0),m=s/n,b=[...a].sort((x,y)=>x-y),med=n%2?b[(n-1)/2]:(b[n/2-1]+b[n/2])/2,f={};let mode='none',mc=1;a.forEach(v=>{f[v]=(f[v]||0)+1;if(f[v]>mc){mc=f[v];mode=v}});const va=n>1?a.reduce((x,y)=>x+(y-m)**2,0)/(n-1):0,q1=qn(b,.25),q3=qn(b,.75),iq=q3-q1;return{n,sum:s,mean:m,median:med,mode,min:b[0],max:b[n-1],range:b[n-1]-b[0],sd:Math.sqrt(va),va,out:a.filter(v=>v<q1-1.5*iq||v>q3+1.5*iq).length}}
+function info(d,c){const v=d.clean.map(o=>o[c]),pr=v.filter(x=>!miss(x)),nums=pr.map(num).filter(x=>!isNaN(x)),f={};pr.forEach(x=>f[x]=(f[x]||0)+1);const top=Object.entries(f).sort((a,b)=>b[1]-a[1])[0];return{type:pr.length&&nums.length>=.8*pr.length?'number':'text',pr:pr.length,miss:v.length-pr.length,uniq:Object.keys(f).length,top:top?top[0]+' ('+top[1]+')':'',nums}}
+const numCols=d=>d.cols.filter(c=>info(d,c).type==='number');
+function empty(m){return <div class="empty">${m||'No dataset is loaded yet.'}<div class="row" style="justify-content:center"><button class="p" data-a="go" data-v="imp">Import a file</button></div></div>}
+function render(){
+  $('#nav').innerHTML='<div class="brand">GovData Analyzer<small>Public data, analysed in your browser</small></div>'+VIEWS.map(([k,l])=><button data-a="go" data-v="${k}" class="${S.view===k?'on':''}">${l}</button>).join('');
+  $('#ttl').textContent=VIEWS.find(v=>v[0]===S.view)[1];
+  const c=$('#cur');c.style.display=S.ds.length?'':'none';c.innerHTML=S.ds.map(d=><option value="${d.id}" ${d.id===S.cur?'selected':''}>${esc(d.name)}</option>).join('');
+  $('#v').innerHTML=V[S.view]();(AFTER[S.view]||(()=>{}))();
+}
+const AFTER={cln:()=>tbl(),cht:()=>{if(D())A.draw()}};
+document.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(t&&A[t.dataset.a])A[t.dataset.a](t,e)});
+document.addEventListener('change',e=>{const t=e.target.closest('[data-c]');if(t&&A[t.dataset.c])A[t.dataset.c](t,e)});
+document.addEventListener('input',e=>{const t=e.target.closest('[data-i]');if(t&&A[t.dataset.i])A[t.dataset.i](t,e)});
+A.go=t=>{S.view=t.dataset.v;S.pg=0;S.q='';S.po=null;render()};
+A.pick=t=>{S.cur=t.value;S.pg=0;S.po=null;save();render()};
+function theme(set){let m=set||(()=>{try{return localStorage.getItem('gda-theme')}catch(e){return null}})()||'auto';if(set){try{localStorage.setItem('gda-theme',set)}catch(e){}}if(m==='auto')delete document.documentElement.dataset.theme;else document.documentElement.dataset.theme=m;$('#thb').textContent='Theme: '+m;return m}
+A.theme=()=>{const m=theme();theme({auto:'light',light:'dark',dark:'auto'}[m]);if(S.view==='cht')A.draw()};
+async function dl(name,data){let d=null;try{d=window.claude?await claude.use('downloads'):null}catch(e){}if(!d){toast('File saving is not available in this view. Open the page from claude.ai.');return}try{await d.save({filename:name,data});}catch(e){if(!e||e.code!=='declined')toast('Could not save the file.')}}
+/* ---------- dashboard ---------- */
+const V={};
+V.dash=()=>{const tr=S.ds.reduce((a,d)=>a+d.raw.length,0),cnt=k=>S.act.filter(a=>a.k===k),rec=k=>cnt(k).slice(-5).reverse().map(a=><li>${esc(a.n)} <span class="mu">${new Date(a.t).toLocaleString()}</span></li>).join('')||'<li class="mu">Nothing yet.</li>',by={};
+  S.ds.forEach(d=>{const h=host(d.source)||'Uploaded file';by[h]=(by[h]||0)+1});
+  return `<div class="strip"><div><b>${S.ds.length}</b>Datasets</div><div><b>${tr.toLocaleString()}</b>Records imported</div><div><b>${cnt('analysis').length}</b>Analyses run</div><div><b>${cnt('report').length}</b>Reports generated</div></div>
+  <div class="row"><button class="p" data-a="go" data-v="imp">Import a file</button><button data-a="go" data-v="src">Browse sources</button><button data-a="go" data-v="ana">Analyse</button><button data-a="go" data-v="rep">Make a report</button></div>
+  ${S.ds.length?'':empty('Your workspace is empty. Import a CSV, JSON or Excel file downloaded from a government source to begin.')}
+  <div class="panel"><h2>Dataset status</h2>${S.ds.length?<div class="sc"><table><tr><th>Dataset</th><th>Rows</th><th>Columns</th><th>Status</th></tr>${S.ds.map(d=><tr><td>${esc(d.name)}</td><td>${d.clean.length.toLocaleString()}</td><td>${d.cols.length}</td><td><span class="tag ok">Ready</span> ${d.log.length} edits</td></tr>).join('')}</table></div>:'<p class="mu">No datasets.</p>'}</div>
+  <div class="panel"><h2>Recent imports</h2><ul class="l">${rec('import')}</ul><h2>Recent analyses</h2><ul class="l">${rec('analysis')}</ul><h2>Recent reports</h2><ul class="l">${rec('report')}</ul><h2>Sources used most</h2><ul class="l">${Object.entries(by).sort((a,b)=>b[1]-a[1]).map(([h,n])=><li>${esc(h)}: ${n}</li>).join('')||'<li class="mu">Nothing yet.</li>'}</ul></div>`};
+/* ---------- sources ---------- */
+V.src=()=>{const all=[...SRC,...S.usr],cats=['All',...new Set(all.map(s=>s.c))],q=S.sq.toLowerCase(),L=all.filter(s=>(S.sc==='All'||s.c===S.sc)&&(s.n+s.d+s.u).toLowerCase().includes(q));
+  return <div class="panel"><div class="row"><label>Search<input data-i="ssq" value="${esc(S.sq)}" id="ssq"></label><label>Category<select data-c="ssc">${cats.map(c=><option ${c===S.sc?'selected':''}>${esc(c)}</option>`).join('')}</select></label></div>
+  <p class="mu">Listing a site here does not confirm that it allows automated collection. Open each source, read its terms of use, download the public file, then import it.</p>
+  ${L.map(s=><div class="panel"><b>${esc(s.n)}</b> <span class="tag">${esc(s.c)}</span> <span class="tag ${s.o?'ok':''}">${s.o?'Official government source':'Third-party or user-added'}</span><p class="mu" style="margin:4px 0">${esc(s.d)}</p><a href="${esc(s.u)}" target="_blank" rel="noopener noreferrer">${esc(s.u)}</a><br><span class="mu">Link not verified by this app</span></div>).join('')||'<div class="empty">No sources match.</div>'}</div>
+  <div class="panel"><h2>Add a source</h2><div class="row"><label>Name<input id="an"></label><label>Web address<input id="au" placeholder="https://"></label><label>Category<input id="ac" placeholder="Health"></label><button data-a="addsrc">Add source</button></div></div>`};
+A.ssq=t=>{S.sq=t.value;const p=t.selectionStart;render();const i=$('#ssq');i.focus();i.setSelectionRange(p,p)};
+A.ssc=t=>{S.sc=t.value;render()};
+A.addsrc=()=>{const n=$('#an').value.trim(),u=$('#au').value.trim(),c=$('#ac').value.trim()||'Other';if(!n||!/^https?:\/\//i.test(u))return toast('Enter a name and a web address starting with http:// or https://.');S.usr.push({n,u,c,o:host(u).endsWith('.gov.np')?1:0,d:'Added by you.'});save();render()};
+/* ---------- import ---------- */
+V.imp=()=>`<div class="panel"><h2>Import a file</h2><p class="mu">CSV, JSON, Excel (.xlsx, .xls), up to 10 MB. Files are read in your browser and are not uploaded anywhere.</p><input type="file" id="f" data-c="file" accept=".csv,.json,.xlsx,.xls"><div id="pend"></div></div>
+<div class="panel"><h2>What needs the server backend</h2><p class="mu">Web scraping, API extraction, downloading from a URL, PDF table extraction and OCR, ZIP archives, user accounts and background jobs cannot run in a browser page: browsers block cross-site requests and have no OCR or database. Download the file from the source and import it here, or use the FastAPI backend for those modules.</p></div>`;
+A.file=t=>{const f=t.files[0];if(!f)return;const ext=(f.name.split('.').pop()||'').toLowerCase();S.wb=null;S.pend=null;$('#pend').innerHTML='';
+  if(!['csv','json','xlsx','xls'].includes(ext))return toast('.'+ext+' files are not supported here. PDF, ZIP and scanned documents need the server backend.');
+  if(f.size>10*1048576)return toast('That file is over 10 MB.');
+  const r=new FileReader();r.onerror=()=>toast('The file could not be read.');
+  try{if(ext==='csv'){r.onload=()=>{const p=Papa.parse(r.result,{header:true,skipEmptyLines:true});if(!p.data.length)return toast('No rows found. Check that the file has a header row.');stage(f,p.data,p.meta.fields,'Delimiter detected: '+(p.meta.delimiter==='\t'?'tab':p.meta.delimiter)+'. Read as UTF-8.')};r.readAsText(f)}
+  else if(ext==='json'){r.onload=()=>{let j;try{j=JSON.parse(r.result)}catch(e){return toast('This is not valid JSON.')}let a=Array.isArray(j)?j:Object.values(j||{}).find(Array.isArray)||(j&&typeof j==='object'?[j]:[]);if(!a.length||a.some(o=>!o||typeof o!=='object'||Array.isArray(o)))return toast('Expected a list of records (objects).');a=a.map(o=>Object.fromEntries(Object.entries(o).map(([k,v])=>[k,v&&typeof v==='object'?JSON.stringify(v):v])));stage(f,a,[...new Set(a.flatMap(Object.keys))],'')};r.readAsText(f)}
+  else{r.onload=()=>{S.wb=XLSX.read(r.result,{type:'array'});sheet(f,S.wb.SheetNames[0])};r.readAsArrayBuffer(f)}}catch(e){toast('This file could not be parsed.')}};
+function sheet(f,name){const a=XLSX.utils.sheet_to_json(S.wb.Sheets[name],{defval:'',raw:false});if(!a.length)return toast('That worksheet is empty.');stage(f,a,[...new Set(a.flatMap(Object.keys))],'Worksheet: '+name,name)}
+function stage(f,rows,cols,note,sh){if(cols.length>200)return toast('Too many columns (limit 200).');S.pend={f,rows,cols,note};
+  $('#pend').innerHTML=<p><b>${esc(f.name)}</b>: ${rows.length.toLocaleString()} rows, ${cols.length} columns, ${(f.size/1024).toFixed(1)} KB. ${esc(note)}</p>${S.wb?<label>Worksheet<select data-c="sheetpick">${S.wb.SheetNames.map(n=><option ${n===sh?'selected':''}>${esc(n)}</option>).join('')}</select></label>`:''}
+  <div class="sc"><table><tr>${cols.map(c=><th>${esc(c)}</th>).join('')}</tr>${rows.slice(0,8).map(o=><tr>${cols.map(c=><td>${esc(o[c])}</td>).join('')}</tr>).join('')}</table></div>
+  <div class="row"><label>Dataset name<input id="pn" value="${esc(f.name.replace(/\.[^.]+$/,''))}"></label><label>Source web address<input id="su" data-i="chk" placeholder="https://nsonepal.gov.np/..."></label><label>Collected on<input id="sd" type="date" value="${new Date().toISOString().slice(0,10)}"></label></div><p class="mu" id="oc">Add the page you downloaded this from so reports can cite it.</p><button class="p" data-a="savep">Save to workspace</button>`}
+A.sheetpick=t=>sheet(S.pend.f,t.value);
+A.chk=t=>{const h=host(t.value);$('#oc').textContent=!h?'Enter a full web address.':h.endsWith('.gov.np')?'Official Nepal government domain ('+h+').':h+' is not a .gov.np domain. Confirm manually that it is an official or reputable source.'};
+A.savep=()=>{const p=S.pend;if(!p)return;const rows=p.rows.map(o=>{const n={};p.cols.forEach(c=>n[c]=o[c]==null?'':o[c]);return n}),id='d'+Date.now(),name=$('#pn').value.trim()||p.f.name;
+  S.ds.push({id,name,file:p.f.name,size:p.f.size,source:$('#su').value.trim(),collected:$('#sd').value,cols:[...p.cols],raw:rows,clean:rows.map(o=>({...o})),rawCols:[...p.cols],log:[],undo:[],created:Date.now()});S.cur=id;S.act.push({t:Date.now(),k:'import',n:name});S.pend=null;save();S.view='cln';render();toast('Saved. The raw copy is kept separately.')};
+/* ---------- cleaning ---------- */
+const OPS={
+trim:(r)=>({rows:r.map(o=>Object.fromEntries(Object.entries(o).map(([k,v])=>[k,typeof v==='string'?v.replace(/\s+/g,' ').trim():v])))}),
+dedupe:(r)=>{const s=new Set();return{rows:r.filter(o=>{const k=JSON.stringify(o);if(s.has(k))return false;s.add(k);return true})}},
+dropmiss:(r,c)=>({rows:r.filter(o=>c==='*'?!Object.values(o).some(miss):!miss(o[c]))}),
+fill:(r,c,p)=>{const st=$('#fs').value,pr=r.map(o=>o[c]).filter(v=>!miss(v)),ns=pr.map(num).filter(x=>!isNaN(x));let f;if(st==='value')f=p;else if(st==='mode'){const m={};pr.forEach(v=>m[v]=(m[v]||0)+1);f=Object.entries(m).sort((a,b)=>b[1]-a[1])[0]?.[0]}else{if(!ns.length)return{err:'This column has no numbers to take a '+st+' from.'};const s=nstat(ns);f=st==='mean'?s.mean:s.median}if(f==null||f==='')return{err:'Type a value to fill with, or choose another strategy.'};return{rows:r.map(o=>miss(o[c])?{...o,[c]:f}:o)}},
+tonum:(r,c)=>({rows:r.map(o=>({...o,[c]:isNaN(num(o[c]))?o[c]:num(o[c])}))}),
+out:(r,c)=>{const s=nstat(r.map(o=>num(o[c])).filter(x=>!isNaN(x)));if(!s)return{err:'This column has no numbers.'};const b=r.map(o=>num(o[c])).filter(x=>!isNaN(x)).sort((x,y)=>x-y),q1=qn(b,.25),q3=qn(b,.75),i=q3-q1;return{rows:r.filter(o=>{const v=num(o[c]);return isNaN(v)||(v>=q1-1.5*i&&v<=q3+1.5*i)})}},
+filt:(r,c,p)=>{const op=$('#fo').value;if(p==='')return{err:'Type a value to compare with.'};const nv=num(p);return{rows:r.filter(o=>{const v=o[c],a=num(v);return op==='eq'?(!isNaN(a)&&!isNaN(nv)?a===nv:String(v)===p):op==='ne'?(!isNaN(a)&&!isNaN(nv)?a!==nv:String(v)!==p):op==='gt'?a>nv:op==='lt'?a<nv:String(v).toLowerCase().includes(p.toLowerCase())})}},
+ren:(r,c,p,d)=>{if(!p)return{err:'Type the new column name.'};if(d.cols.includes(p))return{err:'A column with that name already exists.'};return{rows:r.map(o=>{const n={};Object.keys(o).forEach(k=>n[k===c?p:k]=o[k]);return n}),cols:d.cols.map(k=>k===c?p:k)}},
+dcol:(r,c,p,d)=>({rows:r.map(o=>{const n={...o};delete n[c];return n}),cols:d.cols.filter(k=>k!==c)})};
+const NEEDC=['fill','tonum','out','filt','ren','dcol'],LBL={trim:'Trim whitespace',dedupe:'Remove duplicates',dropmiss:'Drop rows with missing values',fill:'Fill missing values',tonum:'Convert to number',out:'Remove outliers (IQR rule)',filt:'Keep matching rows',ren:'Rename column',dcol:'Drop column'};
+V.cln=()=>{const d=D();if(!d)return empty();const B=Object.entries(LBL).map(([k,l])=><button data-a="op" data-o="${k}">${l}</button>).join('');
+  return `<div class="panel"><h2>${esc(d.name)}</h2><p class="mu">The raw copy (${d.raw.length.toLocaleString()} rows) is never changed. Every action is previewed first and can be undone.</p>
+  <div class="row"><label>Column<select id="cc"><option value="*">All columns</option>${d.cols.map(c=><option>${esc(c)}</option>).join('')}</select></label><label>Value<input id="cp" placeholder="new name or value"></label><label>Fill strategy<select id="fs"><option value="mean">mean</option><option value="median">median</option><option value="mode">most common</option><option value="value">value typed</option></select></label><label>Match<select id="fo"><option value="eq">equals</option><option value="ne">does not equal</option><option value="gt">greater than</option><option value="lt">less than</option><option value="has">contains</option></select></label></div>
+  <div class="row">${B}</div><div id="pv"></div><div class="row"><button data-a="undo" ${d.undo.length?'':'disabled'}>Undo last change</button><button data-a="reset">Reset to raw data</button></div></div>
+  <div class="panel"><label>Search rows<input data-i="sq" id="sq" value="${esc(S.q)}"></label><div id="tb"></div></div>`};
+A.op=t=>{const d=D(),o=t.dataset.o,c=$('#cc').value,p=$('#cp').value.trim();if(NEEDC.includes(o)&&c==='*')return toast('Choose a column first.');const res=OPS[o](d.clean,c,p,d);if(res.err)return toast(res.err);
+  let ch=0;if(res.rows.length===d.clean.length&&!res.cols)res.rows.forEach((r,i)=>{if(r!==d.clean[i]&&JSON.stringify(r)!==JSON.stringify(d.clean[i]))ch++});
+  const msg=res.rows.length!==d.clean.length?${d.clean.length-res.rows.length} rows would be removed (${res.rows.length} remain).:res.cols?'The columns would change.':${ch} rows would change.;
+  S.po={o,res,desc:LBL[o]+(c!=='*'?' on "'+c+'"':'')};$('#pv').innerHTML=<div class="panel" style="border-color:var(--pr)"><b>Preview: ${esc(S.po.desc)}</b><p>${esc(msg)}</p><button class="p" data-a="apply">Apply</button> <button data-a="cancel">Cancel</button></div>};
+A.cancel=()=>{S.po=null;$('#pv').innerHTML=''};
+A.apply=()=>{const d=D(),p=S.po;if(!p)return;d.undo.push({rows:d.clean,cols:[...d.cols]});if(d.undo.length>10)d.undo.shift();d.clean=p.res.rows;if(p.res.cols)d.cols=p.res.cols;d.log.push({t:Date.now(),op:p.desc});S.po=null;S.pg=0;save();render()};
+A.undo=()=>{const d=D(),u=d.undo.pop();if(!u)return;d.clean=u.rows;d.cols=u.cols;d.log.push({t:Date.now(),op:'Undo last change'});save();render()};
+A.reset=()=>{const d=D();d.undo.push({rows:d.clean,cols:[...d.cols]});d.clean=d.raw.map(o=>({...o}));d.cols=[...d.rawCols];d.log.push({t:Date.now(),op:'Reset to raw data'});save();render()};
+A.sq=t=>{S.q=t.value;S.pg=0;tbl()};A.pgp=()=>{S.pg=Math.max(0,S.pg-1);tbl()};A.pgn=()=>{S.pg++;tbl()};
+function tbl(){const d=D(),el=$('#tb');if(!d||!el)return;const q=S.q.toLowerCase(),r=q?d.clean.filter(o=>d.cols.some(c=>String(o[c]==null?'':o[c]).toLowerCase().includes(q))):d.clean,P=15,np=Math.max(1,Math.ceil(r.length/P));S.pg=Math.min(S.pg,np-1);
+  el.innerHTML=r.length?<div class="sc"><table><tr>${d.cols.map(c=><th>${esc(c)}</th>).join('')}</tr>${r.slice(S.pg*P,S.pg*P+P).map(o=><tr>${d.cols.map(c=><td>${esc(o[c])}</td>).join('')}</tr>).join('')}</table></div><div class="row"><button data-a="pgp">Previous</button><span class="mu">Page ${S.pg+1} of ${np}, ${r.length.toLocaleString()} rows</span><button data-a="pgn">Next</button></div>:'<div class="empty">No rows to show.</div>'}
+/* ---------- analysis ---------- */
+function corr(a,b){let n=0,sa=0,sb=0,saa=0,sbb=0,sab=0;for(let i=0;i<a.length;i++){if(isNaN(a[i])||isNaN(b[i]))continue;n++;sa+=a[i];sb+=b[i];saa+=a[i]a[i];sbb+=b[i]*b[i];sab+=a[i]*b[i]}const d=Math.sqrt((n*saa-sa*sa)(n*sbb-sb*sb));return n>2&&d?(n*sab-sa*sb)/d:NaN}
+function cmat(d,nc){const cols=nc.slice(0,10),v=cols.map(c=>d.clean.map(o=>num(o[c])));return{cols,m:cols.map((,i)=>cols.map((,j)=>i===j?1:corr(v[i],v[j])))}}
+V.ana=()=>{const d=D();if(!d)return empty();const nc=numCols(d),I=d.cols.map(c=>[c,info(d,c)]),st=nc.map(c=>[c,nstat(info(d,c).nums)]);
+  const cm=nc.length>1?cmat(d,nc):null;
+  return <div class="panel"><h2>${esc(d.name)}: ${d.clean.length.toLocaleString()} records, ${d.cols.length} columns</h2><div class="sc"><table><tr><th>Column</th><th>Detected type</th><th>Filled</th><th>Missing</th><th>Unique</th><th>Most common</th></tr>${I.map(([c,i])=><tr><td>${esc(c)}</td><td>${i.type}</td><td>${i.pr}</td><td>${i.miss}</td><td>${i.uniq}</td><td>${i.type==='text'?esc(i.top):''}</td></tr>`).join('')}</table></div></div>
+  <div class="panel"><h2>Numeric summary</h2>${st.length?<div class="sc"><table><tr><th>Column</th><th>Sum</th><th>Mean</th><th>Median</th><th>Mode</th><th>Min</th><th>Max</th><th>Range</th><th>Std dev</th><th>Variance</th><th>Outliers (IQR)</th></tr>${st.map(([c,s])=><tr><td>${esc(c)}</td><td>${fmt(s.sum)}</td><td>${fmt(s.mean)}</td><td>${fmt(s.median)}</td><td>${fmt(s.mode)}</td><td>${fmt(s.min)}</td><td>${fmt(s.max)}</td><td>${fmt(s.range)}</td><td>${fmt(s.sd)}</td><td>${fmt(s.va)}</td><td>${s.out}</td></tr>).join('')}</table></div><p class="mu">Only columns where at least 80% of filled values are numbers are summarised. Codes and IDs stored as numbers may not be meaningful to sum or average.</p>:'<p class="mu">No numeric columns detected. Use Data cleaning, Convert to number, if values are stored as text.</p>'}</div>
+  <div class="panel"><h2>Group and compare</h2>${nc.length?<div class="row"><label>Group by<select id="gg">${d.cols.map(c=><option>${esc(c)}</option>).join('')}</select></label><label>Measure<select id="gv">${nc.map(c=><option>${esc(c)}</option>).join('')}</select></label><label>Calculation<select id="gf"><option>sum</option><option>mean</option><option>count</option><option>min</option><option>max</option></select></label><button class="p" data-a="grp">Run</button></div><div id="go"></div>:'<p class="mu">Needs at least one numeric column.</p>'}</div>
+  <div class="panel"><h2>Correlation</h2>${cm?<div class="sc"><table><tr><th></th>${cm.cols.map(c=><th>${esc(c)}</th>).join('')}</tr>${cm.m.map((r,i)=><tr><th>${esc(cm.cols[i])}</th>${r.map(v=><td>${isNaN(v)?'n/a':v.toFixed(2)}</td>).join('')}</tr>).join('')}</table></div><p class="mu">Pearson correlation on rows where both values exist. Correlation does not show cause and effect.</p>:'<p class="mu">Needs at least two numeric columns.</p>'}</div>`};
+A.grp=()=>{const d=D(),g=$('#gg').value,v=$('#gv').value,f=$('#gf').value,m=new Map();d.clean.forEach(o=>{if(miss(o[g]))return;const k=String(o[g]),n=num(o[v]);if(!m.has(k))m.set(k,[]);if(f==='count'||!isNaN(n))m.get(k).push(isNaN(n)?0:n)});
+  let L=[...m.entries()].map(([k,a])=>[k,f==='count'?a.length:f==='sum'?a.reduce((x,y)=>x+y,0):f==='mean'?a.reduce((x,y)=>x+y,0)/(a.length||1):f==='min'?a.reduce((x,y)=>Math.min(x,y),Infinity):a.reduce((x,y)=>Math.max(x,y),-Infinity),a.length]);
+  const numk=L.length&&L.every(x=>!isNaN(num(x[0])));L.sort(numk?(a,b)=>num(a[0])-num(b[0]):(a,b)=>b[1]-a[1]);
+  $('#go').innerHTML=L.length?<div class="sc"><table><tr><th>${esc(g)}</th><th>${f} of ${esc(v)}</th><th>Rows</th>${numk?'<th>Change vs previous group</th>':''}</tr>${L.slice(0,200).map((x,i)=><tr><td>${esc(x[0])}</td><td>${fmt(x[1])}</td><td>${x[2]}</td>${numk?<td>${i&&L[i-1][1]?(((x[1]-L[i-1][1])/Math.abs(L[i-1][1]))*100).toFixed(1)+'%':''}</td>:''}</tr>).join('')}</table></div>:'<p class="mu">No data for that combination.</p>';
+  S.act.push({t:Date.now(),k:'analysis',n:d.name+': '+f+' of '+v+' by '+g});save()};
+/* ---------- charts ---------- */
+V.cht=()=>{const d=D();if(!d)return empty();const o=(a,s)=>a.map(c=><option ${c===s?'selected':''}>${esc(c)}</option>).join(''),nc=numCols(d),tc=d.cols.filter(c=>!nc.includes(c));
+  return `<div class="panel"><div class="row"><label>Chart<select id="ct" data-c="draw"><option value="bar">Bar</option><option value="hbar">Horizontal bar</option><option value="line">Line</option><option value="area">Area</option><option value="pie">Pie</option><option value="donut">Donut</option><option value="hist">Histogram</option><option value="scatter">Scatter</option><option value="box">Box plot</option><option value="heat">Heatmap (correlation)</option></select></label>
+  <label>X axis<select id="cx" data-c="draw">${o([...tc,...nc],tc[0]||d.cols[0])}</select></label><label>Y axis<select id="cy" data-c="draw"><option value="">(count rows)</option>${o(nc,nc[0])}</select></label><label>Group by<select id="cg" data-c="draw"><option value="">(none)</option>${o(d.cols)}</select></label><label>Calculation<select id="ca" data-c="draw"><option>sum</option><option>mean</option><option>count</option><option>min</option><option>max</option></select></label></div>
+  <div id="plot"></div><div class="row"><button data-a="png">Save PNG</button><button data-a="svg">Save SVG</button><button data-a="cdl">Save chart data (CSV)</button></div><p class="mu">Charts use only the cleaned rows of this dataset. Scroll or drag on a chart to zoom, and click legend items to hide series.</p></div>`};
+function aggr(rows,x,gr,y,ag){const m=new Map();rows.forEach(o=>{if(miss(o[x]))return;const g=gr?String(o[gr]):'',k=String(o[x]),key=g+'\u0001'+k;let e=m.get(key);if(!e){e={g,k,v:[]};m.set(key,e)}if(!y||ag==='count')e.v.push(1);else{const n=num(o[y]);if(!isNaN(n))e.v.push(n)}});
+  return[...m.values()].map(e=>({g:e.g,k:e.k,v:!e.v.length?null:ag==='mean'?e.v.reduce((a,b)=>a+b,0)/e.v.length:ag==='min'?e.v.reduce((a,b)=>Math.min(a,b),Infinity):ag==='max'?e.v.reduce((a,b)=>Math.max(a,b),-Infinity):ag==='count'?e.v.length:e.v.reduce((a,b)=>a+b,0)}))}
+A.draw=()=>{const d=D(),P=$('#plot');if(!d||!P)return;const g=i=>$('#'+i).value,t=g('ct'),x=g('cx'),y=g('cy'),gr=g('cg'),ag=g('ca'),rows=d.clean,isN=c=>c&&info(d,c).type==='number',cs=getComputedStyle(document.documentElement),ink=cs.getPropertyValue('--ink').trim(),ln=cs.getPropertyValue('--ln').trim();
+  let tr=[],lay={},data=[],bad='';
+  const nat=(a,b)=>String(a).localeCompare(String(b),undefined,{numeric:true});
+  if(['bar','hbar','line','area'].includes(t)){const a=aggr(rows,x,gr,y,y?ag:'count'),G=[...new Set(a.map(e=>e.g))].slice(0,8);let K=[...new Set(a.map(e=>e.k))];if(!gr&&t.endsWith('bar')&&!isN(x)){const s=Object.fromEntries(a.map(e=>[e.k,e.v]));K.sort((p,q)=>(s[q]||0)-(s[p]||0))}else K.sort(nat);K=K.slice(0,40);
+    G.forEach(gv=>{const mp=Object.fromEntries(a.filter(e=>e.g===gv).map(e=>[e.k,e.v])),ys=K.map(k=>mp[k]==null?null:mp[k]);K.forEach((k,i)=>data.push({series:gv||(y||'count'),x:k,y:ys[i]}));const b={name:gv||(y||'count'),type:t==='hbar'?'bar':t==='bar'?'bar':'scatter'};if(t==='hbar'){b.orientation='h';b.x=ys;b.y=K}else{b.x=K;b.y=ys}if(t==='line'){b.mode='lines+markers'}if(t==='area'){b.mode='lines';b.fill='tozeroy'}tr.push(b)});if(t==='bar'&&G.length>1)lay.barmode='group';if(t==='hbar')lay.yaxis={autorange:'reversed'};}
+  else if(t==='pie'||t==='donut'){const a=aggr(rows,x,'',y,y?ag:'count').filter(e=>e.v!=null&&e.v>0).sort((p,q)=>q.v-p.v).slice(0,15);a.forEach(e=>data.push({series:'',x:e.k,y:e.v}));tr=[{type:'pie',labels:a.map(e=>e.k),values:a.map(e=>e.v),hole:t==='donut'?.45:0}]}
+  else if(t==='hist'){if(!isN(x))bad='Pick a numeric column for X.';else{const n=info(d,x).nums;n.forEach(v=>data.push({series:x,x:v,y:''}));tr=[{type:'histogram',x:n,name:x}];lay.yaxis={title:'Count'}}}
+  else if(t==='scatter'){if(!isN(x)||!isN(y))bad='Pick numeric columns for X and Y.';else{const G=gr?[...new Set(rows.map(o=>String(o[gr])))].slice(0,8):[''];G.forEach(gv=>{const r=rows.filter(o=>!gr||String(o[gr])===gv).filter(o=>!isNaN(num(o[x]))&&!isNaN(num(o[y])));r.forEach(o=>data.push({series:gv,x:num(o[x]),y:num(o[y])}));tr.push({type:'scatter',mode:'markers',name:gv||'rows',x:r.map(o=>num(o[x])),y:r.map(o=>num(o[y]))})})}}
+  else if(t==='box'){if(!isN(y))bad='Pick a numeric column for Y.';else{const G=x&&!isN(x)?[...new Set(rows.map(o=>String(o[x])))].slice(0,20):[''];G.forEach(gv=>{const v=rows.filter(o=>!x||isN(x)||String(o[x])===gv).map(o=>num(o[y])).filter(n=>!isNaN(n));v.forEach(n=>data.push({series:gv,x:gv,y:n}));tr.push({type:'box',name:gv||y,y:v})})}}
+  else if(t==='heat'){const nc=numCols(d);if(nc.length<2)bad='Needs at least two numeric columns.';else{const c=cmat(d,nc);tr=[{type:'heatmap',z:c.m,x:c.cols,y:c.cols,zmin:-1,zmax:1,colorscale:'RdBu',reversescale:true}];c.cols.forEach((a,i)=>c.cols.forEach((b,j)=>data.push({series:a,x:b,y:c.m[i][j]})))}}
+  if(!bad&&!tr.length)bad='Nothing to plot with these choices.';
+  if(bad){Plotly.purge(P);P.innerHTML='<div class="empty">'+esc(bad)+'</div>';S.cd=[];S.img=null;return}
+  P.innerHTML='';Plotly.react(P,tr,Object.assign({title:{text:t==='heat'?'Correlation between numeric columns':(y&&!['hist','scatter','box'].includes(t)?ag+' of '+y+' by '+x:t==='hist'?'Distribution of '+x:t==='scatter'?y+' against '+x:y?y+(x?' by '+x:''):'Rows by '+x),font:{size:15}},paper_bgcolor:'rgba(0,0,0,0)',plot_bgcolor:'rgba(0,0,0,0)',font:{color:ink,family:'Public Sans, sans-serif'},margin:{l:60,r:20,t:50,b:60},colorway:['#1f4fa8','#c4122f','#1b7f4b','#d98e04','#7a3fb5','#0e8a9a','#6b7280','#e06c9f'],xaxis:{automargin:true,gridcolor:ln},showlegend:tr.length>1||t==='pie'||t==='donut'},lay,lay.yaxis?{yaxis:Object.assign({automargin:true,gridcolor:ln},lay.yaxis)}:{yaxis:{automargin:true,gridcolor:ln}}),{responsive:true,displaylogo:false}).then(()=>Plotly.toImage(P,{format:'png',width:900,height:480}).then(u=>{S.img=u;S.imgDs=d.id}).catch(()=>{}));
+  S.cd=data};
+A.png=()=>{if($('#plot')&&S.cd.length)Plotly.downloadImage('plot',{format:'png',filename:'chart',width:1200,height:640}).catch(()=>toast('Save blocked here; use the camera icon on the chart.'))};
+A.svg=()=>{if($('#plot')&&S.cd.length)Plotly.downloadImage('plot',{format:'svg',filename:'chart',width:1200,height:640}).catch(()=>toast('Save blocked here; use the camera icon on the chart.'))};
+A.cdl=()=>{if(!S.cd.length)return toast('Draw a chart first.');dl('chart-data.csv',Papa.unparse(S.cd))};
+/* ---------- reports ---------- */
+const SECS=[['sum','Executive summary'],['src','Data source'],['dsc','Dataset description'],['qa','Data-quality assessment'],['cl','Cleaning operations'],['st','Key statistical findings'],['ch','Chart'],['tb','Result tables'],['tr','Trends and comparisons'],['lim','Limitations and assumptions'],['con','Conclusion'],['rec','Recommendations']];
+V.rep=()=>{const d=D();if(!d)return empty();return <div class="panel"><div class="row"><label>Report title<input id="rt" size="36" value="${esc('Analysis of '+d.name)}"></label></div><div class="row">${SECS.map(([k,l])=><label style="flex-direction:row;align-items:center;gap:6px;color:var(--ink)"><input type="checkbox" class="sk" value="${k}" checked>${l}</label>).join('')}</div><button class="p" data-a="gen">Generate report</button><div id="rp" style="margin-top:12px"></div></div>};
+function rhtml(d,title,sel){const I=d.cols.map(c=>[c,info(d,c)]),nc=numCols(d),cells=d.clean.length*d.cols.length,ms=I.reduce((a,[,i])=>a+i.miss,0),pc=cells?ms/cells*100:0,dup=d.raw.length-new Set(d.raw.map(o=>JSON.stringify(o))).size,h=host(d.source),has=k=>sel.includes(k),T=(hd,rows)=><table><tr>${hd.map(x=><th>${esc(x)}</th>).join('')}</tr>${rows.map(r=><tr>${r.map(x=><td>${typeof x==='number'?fmt(x):esc(x)}</td>).join('')}</tr>).join('')}</table>,S2=(h2,b)=><h2>${h2}</h2>${b};let o='';
+  const st=nc.map(c=>[c,nstat(info(d,c).nums)]);let best=null;if(nc.length>1){const c=cmat(d,nc);c.m.forEach((r,i)=>r.forEach((v,j)=>{if(j>i&&!isNaN(v)&&(!best||Math.abs(v)>Math.abs(best[2])))best=[c.cols[i],c.cols[j],v]}))}
+  if(has('sum'))o+=S2('Executive summary',<p class="t">Fact</p><p>The cleaned dataset has ${d.clean.length.toLocaleString()} records and ${d.cols.length} columns; ${nc.length} columns were detected as numeric. ${ms.toLocaleString()} cells (${pc.toFixed(1)}%) are missing.</p>);
+  if(has('src'))o+=S2('Data source',<p>Source address: ${esc(d.source||'not recorded')}${h?' ('+(h.endsWith('.gov.np')?'official .gov.np domain':'not a .gov.np domain; confirm authority manually')+')':''}<br>Original file: ${esc(d.file)}<br>Collected on: ${esc(d.collected||'not recorded')}</p>);
+  if(has('dsc'))o+=S2('Dataset description',T(['Column','Type','Filled','Unique'],I.map(([c,i])=>[c,i.type,i.pr,i.uniq])));
+  if(has('qa'))o+=S2('Data-quality assessment',<p>Missing cells: ${ms.toLocaleString()} (${pc.toFixed(1)}%). Exact duplicate rows in the raw data: ${dup}.</p>+T(['Column','Missing'],I.filter(([,i])=>i.miss).map(([c,i])=>[c,i.miss])));
+  if(has('cl'))o+=S2('Cleaning operations performed',d.log.length?'<ul>'+d.log.map(l=><li>${esc(l.op)} (${new Date(l.t).toLocaleString()})</li>).join('')+'</ul>':'<p>No cleaning was applied. Figures describe the raw data.</p>');
+  if(has('st'))o+=S2('Key statistical findings',st.length?T(['Column','Mean','Median','Min','Max','Std dev','Outliers (IQR)'],st.map(([c,s])=>[c,s.mean,s.median,s.min,s.max,s.sd,s.out])):'<p>No numeric columns.</p>');
+  if(has('ch'))o+=S2('Chart',S.img&&S.imgDs===d.id?<img src="${S.img}" alt="Chart drawn on the Charts page" style="max-width:100%">:'<p>No chart available. Draw one on the Charts page, then regenerate.</p>');
+  if(has('tb')){const tc=I.find(([,i])=>i.type==='text'&&i.uniq>1&&i.uniq<=d.clean.length);if(tc){const f={};d.clean.forEach(r=>{if(!miss(r[tc[0]]))f[r[tc[0]]]=(f[r[tc[0]]]||0)+1});o+=S2('Result tables: most common values in '+esc(tc[0]),T(['Value','Count'],Object.entries(f).sort((a,b)=>b[1]-a[1]).slice(0,10)))}}
+  if(has('tr'))o+=S2('Trends and comparisons',best?<p class="t">Fact</p><p>The strongest pairwise correlation among numeric columns is between ${esc(best[0])} and ${esc(best[1])} (r = ${best[2].toFixed(2)}). This shows association only, not cause.</p>:'<p>Not enough numeric columns to compare.</p>');
+  if(has('lim'))o+=S2('Limitations and assumptions','<ul><li>Results depend on the quality of the file as published by the source.</li><li>Column types are detected automatically (numeric if at least 80% of filled values are numbers).</li><li>Missing values are not estimated unless a cleaning step says so.</li></ul>');
+  if(has('con'))o+=S2('Conclusion',<p class="t">Interpretation</p><p>${pc>5?'A notable share of cells is missing, so findings should be treated with caution.':'Missingness is low, so the summary statistics describe most of the data.'} Verify key figures against the original source before publishing.</p>);
+  if(has('rec'))o+=S2('Recommendations',<p class="t">Interpretation</p><ul><li>Check the source page for newer releases of this dataset.</li>${pc>5?'<li>Investigate columns with many missing values before using them in decisions.</li>':''}${dup?'<li>Review duplicate rows found in the raw data.</li>':''}</ul>);
+  return <!DOCTYPE html><html><head><meta charset="utf-8"><title>${esc(title)}</title><style>body{font:15px/1.5 system-ui,sans-serif;max-width:820px;margin:24px auto;padding:0 16px;color:#111}h1{font-size:24px}h2{font-size:18px;border-bottom:2px solid #c4122f;padding-bottom:2px;margin-top:26px}table{border-collapse:collapse;font-size:13px}td,th{border:1px solid #ccc;padding:4px 8px;text-align:left}th{background:#e8eefb}.t{display:inline-block;font-size:12px;background:#e8eefb;padding:1px 7px;border-radius:4px}</style></head><body><h1>${esc(title)}</h1><p>Generated ${new Date().toLocaleString()} with GovData Analyzer</p>${o}</body></html>}
+A.gen=()=>{const d=D(),sel=[...document.querySelectorAll('.sk:checked')].map(e=>e.value);if(!sel.length)return toast('Select at least one section.');const title=$('#rt').value.trim()||'Report';S.rep={html:rhtml(d,title,sel),title,id:d.id};S.act.push({t:Date.now(),k:'report',n:title});save();
+  $('#rp').innerHTML=<iframe sandbox="" title="Report preview"></iframe><div class="row"><button data-a="x" data-f="html">Save HTML</button><button data-a="x" data-f="json">Save JSON</button><button data-a="x" data-f="csv">Save CSV</button><button data-a="x" data-f="xlsx">Save Excel</button></div><p class="mu">For PDF, save the HTML and use your browser’s Print, then Save as PDF.</p>;$('#rp iframe').srcdoc=S.rep.html};
+A.x=t=>{const d=D(),f=t.dataset.f,b=(S.rep&&S.rep.title||'report').replace(/[^\w-]+/g,'_');
+  if(f==='html')dl(b+'.html',S.rep.html);
+  else if(f==='csv')dl(b+'.csv',Papa.unparse({fields:d.cols,data:d.clean.map(o=>d.cols.map(c=>o[c]))}));
+  else if(f==='json')dl(b+'.json',JSON.stringify({title:S.rep.title,source:d.source,collected:d.collected,file:d.file,columns:d.cols.map(c=>{const i=info(d,c);return{name:c,type:i.type,missing:i.miss,unique:i.uniq,stats:i.type==='number'?nstat(i.nums):undefined}}),processing:d.log,generated:new Date().toISOString(),records:d.clean},null,1));
+  else{const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(d.clean,{header:d.cols}),'Cleaned');XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(d.raw,{header:d.rawCols}),'Raw');XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet([{field:'Source',value:d.source},{field:'Collected',value:d.collected},...d.log.map(l=>({field:'Step',value:l.op}))]),'Provenance');dl(b+'.xlsx',XLSX.write(wb,{bookType:'xlsx',type:'array'}))}};
+/* ---------- history & settings ---------- */
+V.his=()=>S.ds.length?S.ds.map(d=>`<div class="panel"><div class="row"><label>Name<input id="n${d.id}" value="${esc(d.name)}"></label><button data-a="ren2" data-id="${d.id}">Rename</button><button data-a="open" data-id="${d.id}">Open</button><button class="d" data-a="del" data-id="${d.id}">Delete</button></div>
+<p class="mu">File: ${esc(d.file)}, ${(d.size/1024).toFixed(1)} KB. Source: ${esc(d.source||'not recorded')}. Collected: ${esc(d.collected||'not recorded')}. Imported ${new Date(d.created).toLocaleString()}.<br>Raw: ${d.raw.length.toLocaleString()} rows, ${d.rawCols.length} columns. Cleaned: ${d.clean.length.toLocaleString()} rows, ${d.cols.length} columns.</p>
+<b>Processing history</b><ul class="l">${d.log.map(l=><li>${esc(l.op)} <span class="mu">${new Date(l.t).toLocaleString()}</span></li>).join('')||'<li class="mu">No changes yet.</li>'}</ul></div>`).join(''):empty('No datasets saved yet.');
+A.ren2=t=>{const d=S.ds.find(x=>x.id===t.dataset.id),v=$('#n'+d.id).value.trim();if(v){d.name=v;save();render()}};
+A.open=t=>{S.cur=t.dataset.id;S.view='ana';save();render()};
+A.del=t=>{if(t.dataset.arm!=='1'){t.dataset.arm='1';t.textContent='Confirm delete';return}S.ds=S.ds.filter(x=>x.id!==t.dataset.id);if(S.cur===t.dataset.id)S.cur=S.ds[0]?S.ds[0].id:null;save();render()};
+V.set=()=>`<div class="panel"><h2>Appearance</h2><p class="mu">Use the Theme button at the top to switch between automatic, light and dark.</p><h2>Your data</h2><p class="mu">Datasets are saved in this browser only. Clearing site data removes them.</p><button class="d" data-a="wipe">Delete all datasets and history</button></div>
+<div class="panel"><h2>Responsible use</h2><p class="mu">This app does not fetch websites or bypass any access control. Import only public files you are allowed to use, keep the source address and collection date with each dataset, and check the terms of use of each source.</p></div>`;
+A.wipe=t=>{if(t.dataset.arm!=='1'){t.dataset.arm='1';t.textContent='Confirm: delete everything';return}S.ds=[];S.act=[];S.cur=null;save();render()};
+if(!S.cur&&S.ds[0])S.cur=S.ds[0].id;theme();render();
+</script>
+</body>
+</html>
