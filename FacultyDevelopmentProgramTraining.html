@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FDP Academic Training Hub v3</title>
+<style>
+:root{--navy:#0f2747;--navy2:#1b3a66;--gold:#c9a227;--bg:#f5f6f9;--card:#ffffff;--text:#1c2331;--muted:#5b6474;--line:#dfe3ea;--warn:#a6611a}
+@media (prefers-color-scheme: dark){:root{--bg:#0c1624;--card:#132238;--text:#e8edf5;--muted:#9aa6ba;--line:#263a57}}
+*{box-sizing:border-box}
+body{margin:0;font-family:Georgia,"Times New Roman",serif;background:var(--bg);color:var(--text);line-height:1.55}
+header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:22px 20px 18px;border-bottom:4px solid var(--gold)}
+header h1{margin:0 0 4px;font-size:1.45rem}
+header p{margin:0;font-size:.9rem;opacity:.85}
+nav{display:flex;flex-wrap:wrap;gap:6px;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+nav button{border:1px solid var(--line);background:transparent;color:var(--text);padding:7px 12px;border-radius:20px;cursor:pointer;font-size:.85rem;font-family:inherit}
+nav button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+main{max-width:880px;margin:0 auto;padding:18px 16px 60px}
+.progress{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:16px}
+.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:8px}
+.bar>div{height:100%;background:linear-gradient(90deg,var(--gold),#e2c35a);transition:width .3s}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px}
+.card h2{margin:0 0 4px;font-size:1.2rem;color:var(--navy)}
+@media (prefers-color-scheme: dark){.card h2{color:var(--gold)}}
+.theme{color:var(--muted);font-style:italic;margin:0 0 8px}
+.session{border-left:3px solid var(--gold);padding:6px 0 6px 12px;margin:14px 0}
+.session h4{margin:0 0 4px;font-size:.98rem}
+.res-block{background:var(--bg);border-radius:8px;padding:8px 12px;margin-top:8px}
+.res-block h5{margin:4px 0 6px;font-size:.8rem;color:var(--muted);font-family:system-ui,sans-serif;text-transform:uppercase;letter-spacing:.04em}
+.res{font-size:.9rem;margin:8px 0}
+.res a{color:var(--navy2)}
+@media (prefers-color-scheme: dark){.res a{color:#8fb4ff}}
+.res .note{display:block;color:var(--muted);font-size:.8rem}
+.none{font-size:.85rem;color:var(--muted);font-style:italic;margin:4px 0}
+ul{margin:4px 0 4px 18px;padding:0}li{margin:3px 0}
+.check{display:flex;gap:8px;align-items:flex-start;margin:6px 0;cursor:pointer;font-size:.93rem}
+.check input{margin-top:5px;accent-color:var(--navy)}
+.tag{display:inline-block;font-size:.72rem;padding:2px 8px;border-radius:10px;background:var(--line);color:var(--muted);margin-right:4px;font-family:system-ui,sans-serif}
+.badge{display:inline-block;font-size:.68rem;padding:1px 7px;border-radius:8px;color:#fff;margin-right:6px;font-family:system-ui,sans-serif;vertical-align:middle}
+.b-yt{background:#c4302b}.b-pdf{background:#b5452d}
+.warn{font-size:.82rem;color:var(--warn);border:1px dashed var(--warn);border-radius:8px;padding:8px 10px;margin-top:10px}
+label.field{display:block;font-size:.88rem;font-weight:700;margin:10px 0 3px}
+input[type=text],textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font-family:inherit;font-size:.92rem}
+textarea{min-height:64px;resize:vertical}
+button.primary{background:var(--navy);color:#fff;border:0;padding:9px 16px;border-radius:8px;cursor:pointer;font-family:inherit;margin-top:12px}
+.output{width:100%;min-height:220px;margin-top:10px;font-family:ui-monospace,Menlo,monospace;font-size:.83rem}
+.footer-note{font-size:.8rem;color:var(--muted);margin-top:24px;text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <h1>FDP Academic Training Hub</h1>
+  <p>Doing Research That Reviewers Can't Reject · Five-Day International Faculty Development Program</p>
+  <p>Prepared by Mr. Bishnu Singh Rayamajhi · KMC-HSSD, Kapilvastu Multiple Campus, Taulihawa, Nepal</p>
+</header>
+<nav id="nav"></nav>
+<main>
+  <div class="progress" id="progress"></div>
+  <div id="content"></div>
+  <div class="footer-note">Progress and the concept note are kept only while this page is open. Re-check each item before teaching.</div>
+</main>
+
+<script>
+const CHK = "Checked 23 Oct 2026";
+const YT_NOTE = "YouTube link opens a search for this exact title. Click the matching video; confirm it is free before assigning.";
+
+const DAYS = [
+{
+  id:1, short:"Day 1", title:"Doing Impactful Research: Publishing in High-Impact Journals",
+  theme:"From research idea to a defensible concept note and journal target",
+  sessions:[
+    {t:"Research landscape and problem identification",
+     obj:["Identify significant, original, and researchable problems","Move from a broad interest to a focused research question"],
+     method:"Lecture + analysis of strong and weak research questions",
+     act:"Evaluate example research questions and write your own problem statement",
+     yt:[], pdf:[]},
+    {t:"Literature review and gap analysis",
+     obj:["Conduct systematic and critical literature reviews","Distinguish theoretical, empirical, methodological, and contextual gaps"],
+     method:"Guided reading + search exercise",
+     act:"Map at least four papers against the four gap types",
+     yt:[], pdf:[]},
+    {t:"Conceptual frameworks, hypotheses, and novelty",
+     obj:["Develop a conceptual framework","Articulate novelty and contribution"],
+     method:"Worked example + peer discussion",
+     act:"Draft a preliminary conceptual framework with theoretically justified hypotheses",
+     yt:[], pdf:[]},
+    {t:"Journal quality, ethics, and target selection",
+     obj:["Evaluate journal scope, indexing, and editorial standards","Recognise predatory journals and questionable publishers"],
+     method:"Demonstration and reading",
+     act:"Identify three target journals and write a journal-selection justification",
+     yt:[], pdf:[]},
+    {t:"Titles, abstracts, keywords, and introductions",
+     obj:["Improve titles, abstracts, and keywords","Understand responsible AI use and authorship"],
+     method:"Peer critique of sample abstracts",
+     act:"Prepare a preliminary manuscript outline",
+     yt:[], pdf:[]}
+  ],
+  deliverable:"Preliminary research concept note (use the builder tab)",
+  warn:"No free YouTube tutorials or PDFs for Day 1 have been verified yet. A dedicated search is needed before adding them."
+},
+{
+  id:2, short:"Day 2", title:"Ways to Get Government-Sponsored Research Projects",
+  theme:"Matching research ideas to funding calls and writing a competitive proposal",
+  sessions:[
+    {t:"Funding ecosystems: Nepal and international",
+     obj:["Identify government and international funding programs","Check eligibility, restrictions, and deadlines"],
+     method:"Portal walkthrough (official sources only)",
+     act:"Find three currently relevant funding opportunities and record them in the tracker",
+     yt:[], pdf:[]},
+    {t:"From idea to funding call",
+     obj:["Match a research idea to a call's priorities","Build a grant eligibility checklist"],
+     method:"Analysis of one official funding announcement",
+     act:"Complete the eligibility checklist for one call", yt:[], pdf:[]},
+    {t:"Proposal design: problem, objectives, and methods",
+     obj:["Write a compelling problem statement","Design a feasible, rigorous research plan"],
+     method:"Template-based drafting",
+     act:"Draft a two-page concept note", yt:[], pdf:[]},
+    {t:"Work packages, timeline, and budget",
+     obj:["Build milestones and a Gantt chart","Prepare a transparent budget with justification"],
+     method:"Hands-on spreadsheet exercise",
+     act:"Create a project timeline and preliminary budget", yt:[], pdf:[]},
+    {t:"Capacity, collaboration, risk, and rejection",
+     obj:["Demonstrate institutional readiness","Avoid common reasons for grant rejection"],
+     method:"Proposal review simulation",
+     act:"Complete a risk management plan and proposal review checklist", yt:[], pdf:[]}
+  ],
+  deliverable:"Preliminary grant proposal package (Deliverable 6)",
+  warn:"No free YouTube tutorials or PDFs for Day 2 have been verified yet. Funding calls change, so confirm each one on its official site."
+},
+{
+  id:3, short:"Day 3", title:"Paths to Prediction: PLS-SEM from Model to Manuscript",
+  theme:"Specify, estimate, assess, and report a PLS-SEM model",
+  sessions:[
+    {t:"SEM foundations and when PLS-SEM fits",
+     obj:["Explain latent variables, indicators, and structural paths","Distinguish explanatory from predictive objectives"],
+     method:"Lecture + decision discussion",
+     act:"Write a justification for PLS-SEM or an alternative",
+     yt:[
+       {title:"SmartPLS 4 Tutorial Guide 1: Getting started", channel:"James Gaskin", note:"Covers workspace, importing data, first model, and interpreting results"},
+       {title:"SmartPLS 3 setting up your first model", channel:"James Gaskin", note:"Older SmartPLS 3 version; the concepts carry over"}
+     ],
+     pdf:[]},
+    {t:"Measurement model: reflective and formative",
+     obj:["Specify reflective and formative constructs","Assess loadings, reliability, convergent and discriminant validity (HTMT)"],
+     method:"SmartPLS demonstration",
+     act:"Run the measurement model on the synthetic dataset",
+     yt:[
+       {title:"PLS-SEM (2): Create measurement model in SmartPLS", channel:"RESEARCH HUB", note:"Channel name from a listing; confirm on the video page"}
+     ],
+     pdf:[
+       {title:"Henseler, J., Ringle, C. M., & Sarstedt, M. (2015). A new criterion for assessing discriminant validity in variance-based structural equation modeling. Journal of the Academy of Marketing Science, 43(1), 115–135.", url:"https://doi.org/10.1007/s11747-014-0403-8", note:"Open access (Springer). Introduces the HTMT criterion."}
+     ]},
+    {t:"Structural model assessment",
+     obj:["Check collinearity (VIF), path coefficients, R², and f²","Interpret predictive relevance (PLSpredict)"],
+     method:"Bootstrapping and hypothesis-testing demonstration",
+     act:"Complete the structural model report table",
+     yt:[
+       {title:"Model Assessment with smartPLS", channel:"Research Beast", note:"Channel name from a listing; confirm on the video page"},
+       {title:"SmartPLS 4: Structural Model Assessment", channel:"", note:"Check channel on the video page"}
+     ],
+     pdf:[]},
+    {t:"Mediation, moderation, multigroup, and robustness",
+     obj:["Test indirect effects and moderation","Run sensitivity and measurement-invariance checks"],
+     method:"Guided worked example",
+     act:"Run one mediation test and one robustness check",
+     yt:[
+       {title:"How to Run a Simple Mediation Model in SmartPLS 4", channel:"", note:"Part of the #SmartPLS4 series; confirm the channel"},
+       {title:"Multi Group Analysis (PLS-MGA) in SmartPLS 4", channel:"", note:"Part of the #SmartPLS4 series; confirm the channel"}
+     ],
+     pdf:[]},
+    {t:"Reporting PLS-SEM transparently",
+     obj:["Produce publication-ready tables and figures","Write methods and results without overstating evidence"],
+     method:"Reporting checklist workshop",
+     act:"Draft the PLS-SEM results section using the checklist",
+     yt:[],
+     pdf:[]}
+  ],
+  deliverable:"Reproducible PLS-SEM analysis package (clearly labelled as synthetic or real data)",
+  warn:"SmartPLS is commercial software with a free version for learning. Check the current licence on smartpls.com before the course."
+},
+{
+  id:4, short:"Day 4", title:"Fit, Fidelity and Theory Testing: Getting CB-SEM Right",
+  theme:"Confirmatory factor analysis, fit assessment, and choosing the right engine",
+  sessions:[
+    {t:"CFA, identification, and estimation",
+     obj:["Specify a theoretically justified CFA model","Check degrees of freedom and identification"],
+     method:"Software demonstration",
+     act:"Estimate a CFA and record the model identification rationale",
+     yt:[
+       {title:"SmartPLS 4: Confirmatory Factor Analysis (CFA)", channel:"", note:"Uses SmartPLS, not lavaan. Confirm the channel on the video page"},
+       {title:"SmartPLS 3 Factor Analysis", channel:"James Gaskin", note:"Short factor-analysis walkthrough in SmartPLS 3"}
+     ],
+     pdf:[]},
+    {t:"Measurement quality and fit indices",
+     obj:["Interpret standardised loadings and composite reliability","Read chi-square, CFI, TLI, RMSEA, and SRMR in context"],
+     method:"Interpretation workshop",
+     act:"Write a fit assessment paragraph for your model",
+     yt:[],
+     pdf:[
+       {title:"Willse, J. T. (2006). Partial replication of Hu & Bentler (1999) on fit indexes. Journal of Experimental Education.", url:"https://stephensivo.itweb.ucf.edu/Distribution/PublishedPapers/2006%20JXE%20-%20FitIndex.pdf", note:"Author-hosted PDF on a university site. Check its copyright statement before sharing."}
+     ]},
+    {t:"Structural models and competing theories",
+     obj:["Estimate a structural model and mediation paths","Avoid data-driven modifications without theory"],
+     method:"Model comparison exercise",
+     act:"Compare two theoretically plausible models",
+     yt:[], pdf:[]},
+    {t:"Invariance, moderation, and CB-SEM reporting",
+     obj:["Evaluate measurement invariance where required","Report fit and parameters transparently"],
+     method:"Guided reporting session",
+     act:"Draft the CB-SEM methods and results sections",
+     yt:[],
+     pdf:[
+       {title:"Hirschfeld, G., & von Brachel, R. (2014). Improving multiple-group confirmatory factor analysis in R: A tutorial in measurement invariance with continuous and ordinal indicators. Practical Assessment, Research & Evaluation, 19(1), 7.", url:"https://openpublishing.library.umass.edu/pare/article/id/1369", note:"Open-access journal. Article page; PDF download is on that page. Uses free R packages."}
+     ]},
+    {t:"Choosing your engine: PLS-SEM or CB-SEM?",
+     obj:["Apply a decision framework to research objectives and data","Recognise misconceptions about each method"],
+     method:"Decision tree and comparison table",
+     act:"Complete the engine-selection decision guide for your study",
+     yt:[], pdf:[]}
+  ],
+  deliverable:"CB-SEM analysis package with tables, fit assessment, and draft methods and results",
+  warn:"Hu & Bentler (1999), the usual source for fit-index cutoffs, is paywalled and is not listed. Access it through your university library. No free YouTube tutorial on lavaan CB-SEM has been verified yet."
+},
+{
+  id:5, short:"Day 5", title:"Converting Analysis into Research Papers",
+  theme:"From results to a submission-ready manuscript",
+  sessions:[
+    {t:"Structure and introduction",
+     obj:["Write an informative title and accurate abstract","Establish the problem and knowledge gap"],
+     method:"Manuscript clinic",
+     act:"Prepare a draft title, abstract, and introduction", yt:[], pdf:[]},
+    {t:"Theory, methods, and results",
+     obj:["Develop the theoretical background and hypotheses","Report methods and results transparently"],
+     method:"Reporting templates + peer review",
+     act:"Write or revise the methods and results sections", yt:[], pdf:[]},
+    {t:"Discussion, contributions, and limitations",
+     obj:["Connect findings to literature","State theoretical, practical, and policy contributions"],
+     method:"Discussion framework workshop",
+     act:"Draft the discussion and contribution statement", yt:[], pdf:[]},
+    {t:"Submission, cover letter, and reviewers",
+     obj:["Follow author guidelines and reporting standards","Respond professionally to reviewer comments"],
+     method:"Simulated peer-review exercise",
+     act:"Prepare a cover letter and a point-by-point response template", yt:[], pdf:[]},
+    {t:"Ethics, AI disclosure, and submission readiness",
+     obj:["Avoid plagiarism, fabrication, and unsupported claims","Disclose AI use according to journal policy"],
+     method:"Final checklist review",
+     act:"Complete the submission readiness checklist", yt:[], pdf:[]}
+  ],
+  deliverable:"Manuscript development package (Deliverable 10)",
+  warn:"No free YouTube tutorials or PDFs for Day 5 have been verified yet. Search before adding them."
+}
+];
+
+const DELIVERABLES = [
+  "Int'l FDP Concept Note","Detailed Five-Day Curriculum","Verified Free Video Library","Verified Open-Access PDF Library",
+  "Comprehensive Resource Database","Research Grant Application Toolkit","PLS-SEM Practical Toolkit","CB-SEM Practical Toolkit",
+  "PLS-SEM vs CB-SEM Decision Guide","Manuscript Development Toolkit","Assessment Package","Facilitator's Handbook",
+  "Participant's Workbook","Final APA 7 Bibliography"
+];
+const CONCEPT_FIELDS = [
+  ["title","Proposed title"],["problem","Background and research problem"],["gap","Research gap"],
+  ["rq","Research questions"],["objectives","Objectives"],["theory","Theoretical foundation"],
+  ["contribution","Expected contribution"],["method","Proposed methodology"],
+  ["j1","Target journal 1"],["j2","Target journal 2"],["j3","Target journal 3"]
+];
+const MULTI = ["problem","gap","rq","objectives","theory","contribution","method"];
+const state = { tab: 0, done: {}, concept: {} };
+
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+
+function ytSearchUrl(v){
+  const q = v.title + (v.channel ? " " + v.channel : "");
+  return "https://www.youtube.com/results?search_query=" + encodeURIComponent(q);
+}
+
+function resView(s){
+  if(!s.yt.length && !s.pdf.length) return <p class="none">No verified free YouTube tutorial or PDF yet for this session.</p>;
+  const yt = s.yt.map(v=>`<div class="res"><span class="badge b-yt">YouTube</span>
+      <a href="${esc(ytSearchUrl(v))}" target="_blank" rel="noopener">${esc(v.title)}</a>
+      <span class="note">${v.channel?"Channel: "+esc(v.channel)+" · ":""}${esc(v.note||"")} · ${esc(YT_NOTE)}</span></div>`).join("");
+  const pdf = s.pdf.map(p=>`<div class="res"><span class="badge b-pdf">PDF / Article</span>
+      <a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title)}</a>
+      <span class="note">${esc(p.note||"")} · ${CHK}</span></div>`).join("");
+  return yt + pdf;
+}
+
+function renderNav(){
+  const tabs = DAYS.map((d,i)=><button class="${state.tab===i?'active':''}" data-tab="${i}">${d.short}</button>).join("");
+  document.getElementById("nav").innerHTML = tabs +
+    <button class="${state.tab===5?'active':''}" data-tab="5">Deliverables</button> +
+    <button class="${state.tab===6?'active':''}" data-tab="6">Concept Note</button>;
+}
+function pct(){
+  let total=0,n=0;
+  DAYS.forEach(d=>d.sessions.forEach((s,i)=>{total++; if(state.done[d${d.id}-s${i}]) n++;}));
+  DELIVERABLES.forEach((_,i)=>{total++; if(state.done[del-${i}]) n++;});
+  return {n,total,p:Math.round(n/total*100)};
+}
+function renderProgress(){
+  const {n,total,p}=pct();
+  document.getElementById("progress").innerHTML =
+    <strong>Overall progress:</strong> ${n} of ${total} items complete (${p}%)<div class="bar"><div style="width:${p}%"></div></div>;
+}
+function dayView(d){
+  const sessions = d.sessions.map((s,i)=>{
+    const key=d${d.id}-s${i};
+    return `<div class="session">
+      <h4>Session ${i+1}: ${esc(s.t)}</h4>
+      <span class="tag">${esc(s.method)}</span>
+      <h3 style="margin:10px 0 4px;font-size:.98rem">Learning objectives</h3>
+      <ul>${s.obj.map(o=><li>${esc(o)}</li>).join("")}</ul>
+      <label class="check"><input type="checkbox" data-key="${key}" ${state.done[key]?"checked":""}>
+        <span><strong>Activity:</strong> ${esc(s.act)}</span></label>
+      <div class="res-block"><h5>Free YouTube tutorials and PDFs</h5>${resView(s)}</div>
+    </div>`;
+  }).join("");
+  const dk=day${d.id}-deliv;
+  return `<div class="card"><h2>${esc(d.title)}</h2><p class="theme">${esc(d.theme)}</p>${sessions}</div>
+  <div class="card"><h2>Daily deliverable</h2>
+    <label class="check"><input type="checkbox" data-key="${dk}" ${state.done[dk]?"checked":""}><span>${esc(d.deliverable)}</span></label>
+    ${d.warn?<div class="warn">${esc(d.warn)}</div>:""}
+  </div>`;
+}
+function deliverablesView(){
+  const items = DELIVERABLES.map((name,i)=><label class="check"><input type="checkbox" data-key="del-${i}" ${state.done[`del-${i}]?"checked":""}>
+    <span>Deliverable ${i+1}: ${esc(name)}</span></label>`).join("");
+  return <div class="card"><h2>Required final deliverables</h2><p class="theme">Track the 14 deliverables from the master prompt.</p>${items}</div>;
+}
+function conceptView(){
+  const fields = CONCEPT_FIELDS.map(([k,label])=>{
+    const v=esc(state.concept[k]||"");
+    return <label class="field" for="cn-${k}">${esc(label)}</label> +
+      (MULTI.includes(k)?<textarea id="cn-${k}" data-cn="${k}">${v}</textarea>:<input type="text" id="cn-${k}" data-cn="${k}" value="${v}">);
+  }).join("");
+  return `<div class="card"><h2>Day 1 concept note builder</h2>
+    <p class="theme">Fill in each section, then generate a text version to paste into your document.</p>
+    ${fields}
+    <button class="primary" id="gen">Generate concept note</button>
+    <textarea class="output" id="out" placeholder="Your concept note will appear here."></textarea></div>`;
+}
+function render(){
+  renderNav(); renderProgress();
+  const c=document.getElementById("content");
+  if(state.tab<5) c.innerHTML=dayView(DAYS[state.tab]);
+  else if(state.tab===5) c.innerHTML=deliverablesView();
+  else c.innerHTML=conceptView();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-tab]");
+  if(t){state.tab=Number(t.dataset.tab); render(); return;}
+  if(e.target.id==="gen"){
+    const g=k=>(document.getElementById("cn-"+k)||{}).value||"";
+    document.getElementById("out").value = [
+      "PRELIMINARY RESEARCH CONCEPT NOTE","",
+      "Proposed title: "+g("title"),"",
+      "Background and research problem:\n"+g("problem"),"",
+      "Research gap:\n"+g("gap"),"",
+      "Research questions:\n"+g("rq"),"",
+      "Objectives:\n"+g("objectives"),"",
+      "Theoretical foundation:\n"+g("theory"),"",
+      "Expected contribution:\n"+g("contribution"),"",
+      "Proposed methodology:\n"+g("method"),"",
+      "Target journals:\n1. "+g("j1")+"\n2. "+g("j2")+"\n3. "+g("j3"),"",
+      "Prepared by: Mr. Bishnu Singh Rayamajhi, KMC-HSSD, Kapilvastu Multiple Campus, Taulihawa, Nepal"
+    ].join("\n");
+  }
+});
+document.addEventListener("change",e=>{
+  const k=e.target.dataset.key;
+  if(k){state.done[k]=e.target.checked; renderProgress();}
+});
+document.addEventListener("input",e=>{
+  const k=e.target.dataset.cn;
+  if(k) state.concept[k]=e.target.value;
+});
+render();
+</script>
+</body>
+</html>
