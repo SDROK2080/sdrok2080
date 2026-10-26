@@ -154,6 +154,28 @@ const MODULES=[
  pdf:[{title:"Henseler, J., Ringle, C. M., & Sarstedt, M. (2015). A new criterion for assessing discriminant validity in variance-based structural equation modeling. Journal of the Academy of Marketing Science, 43(1), 115–135.",url:"https://doi.org/10.1007/s11747-014-0403-8",note:"Use its discriminant validity reporting when writing the results"}]}
 ];
 
+const WB="https://doi.org/10.1007/978-3-030-80519-7";
+const WB_NOTE="Open access. Written with SEMinR (R), not SmartPLS: use it for the concepts and the SmartPLS tutorials for software steps.";
+const OA_BOOK="https://link.springer.com/book/9783032283214";
+const HAIR19="https://tore.tuhh.de/handle/11420/3978";
+const EXTRA_PDFS={
+ 1:[{title:"Hair, J. F., Hult, G. T. M., Ringle, C. M., Sarstedt, M., Danks, N. P., & Ray, S. (2021). Partial Least Squares Structural Equation Modeling (PLS-SEM) Using R: A Workbook. Springer.",url:WB,note:WB_NOTE+" Start with the introductory chapters."},
+    {title:"Partial Least Squares Structural Equation Modeling (PLS-SEM) open-access book with SEMinR (Springer, latest edition)",url:OA_BOOK,note:"Open access. Check the edition year on the page."}],
+ 2:[{title:"Hair et al. (2021). PLS-SEM Using R: A Workbook (see Module 1)",url:WB,note:WB_NOTE+" Use the data-preparation chapters as background."}],
+ 3:[{title:"Hair, J. F., Risher, J. J., Sarstedt, M., & Ringle, C. M. (2019). When to use and how to report the results of PLS-SEM. European Business Review, 31(1), 2–24.",url:HAIR19,note:"TUHH Open Research repository record. The journal version is on Emerald (subscription). Check the repository page for a full-text PDF before sharing."},
+    {title:"Hair et al. (2021). PLS-SEM Using R: A Workbook (see Module 1)",url:WB,note:WB_NOTE+" Measurement model chapters."}],
+ 4:[{title:"Kock, N. (2015). Common method bias in PLS-SEM: A full collinearity assessment approach. International Journal of e-Collaboration, 11(4), 1–10.",url:"https://cits.tamiu.edu/kock/pubs/journals/2015JournalIJeC_CommMethBias/Kock_2015_IJeC_CommonMethodBiasPLS.pdf",note:"Author-hosted PDF. Shows the full collinearity test for common method bias."}],
+ 5:[{title:"Hair et al. (2019). When to use and how to report the results of PLS-SEM (see Module 3)",url:HAIR19,note:"Covers PLSpredict and reporting metrics. Check the repository for full text."},
+    {title:"Shmueli, G., Sarstedt, M., Hair, J. F., et al. (2019). Predictive model assessment in PLS-SEM: Guidelines for using PLSpredict. European Journal of Marketing, 53(11), 2322–2347.",url:"https://papers.ssrn.com/abstract=3471205",note:"SSRN listing for this paper. The publisher version is paywalled. Check the SSRN page for a free download."},
+    {title:"Hair et al. (2021). PLS-SEM Using R: A Workbook (see Module 1)",url:WB,note:WB_NOTE+" Predictive assessment chapters."}],
+ 6:[{title:"Hair et al. (2021). PLS-SEM Using R: A Workbook (see Module 1)",url:WB,note:WB_NOTE+" Check the table of contents for the mediation chapter."}],
+ 7:[{title:"Hair et al. (2021). PLS-SEM Using R: A Workbook (see Module 1)",url:WB,note:WB_NOTE+" Check the table of contents for group comparison chapters."}],
+ 8:[{title:"Hair et al. (2021). PLS-SEM Using R: A Workbook (see Module 1)",url:WB,note:WB_NOTE+" Use it to contrast PLS-SEM with CFA-based fit assessment."}],
+ 9:[{title:"Hair et al. (2019). When to use and how to report the results of PLS-SEM (see Module 3)",url:HAIR19,note:"Reporting guidance. Check the repository for full text."},
+    {title:"Hair et al. (2021). PLS-SEM Using R: A Workbook (see Module 1)",url:WB,note:WB_NOTE+" Reporting chapters."}]
+};
+MODULES.forEach(m=>{(EXTRA_PDFS[m.id]||[]).forEach(p=>m.pdf.push(p));});
+
 const CHECKLIST=["Software name and version reported","Data source and sample size stated (synthetic data labelled as synthetic)","Missing values and outlier handling described","Outer loadings reported with thresholds","Reliability (alpha, CR) and AVE reported","HTMT reported with threshold","VIF reported for all predictor sets","Path coefficients, t-values, p-values, and confidence intervals reported","R² and f² reported","PLSpredict reported if prediction is claimed","Bootstrap settings (subsamples, seed) reported","Limitations stated, including common method bias"];
 
 const QUIZ=[
@@ -269,7 +291,7 @@ function resourcesView(){
   return `<div class="card"><h2>All free resources</h2>
     <p class="theme">Every verified YouTube tutorial and PDF in this app, in module order. Checked 23 Oct 2026.</p>
     <table><tr><th>Module</th><th>Type</th><th>Title (click)</th><th>Channel or note</th></tr>${rows}</table>
-    <div class="warn">Coverage is limited. Several modules have no verified item yet (for example, Modules 1 and 9 for PDFs). Search the official SmartPLS documentation (smartpls.com) and your library for further free material, and verify each item before teaching.</div></div>`;
+    <div class="warn">Coverage is limited. Every module now has at least one verified PDF. YouTube coverage is still missing for Modules 4 and 9. Some PDFs are author-hosted or repository records, so check each link and copyright statement before sharing. Verify each item before teaching.</div></div>`;
 }
 
 function render(){
