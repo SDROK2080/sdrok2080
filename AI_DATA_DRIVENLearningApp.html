@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI, ML & Deep Learning – Teaching & Learning System</title>
+<style>
+:root{--navy:#1b2a4a;--gold:#c9a227;--bg:#f5f6fa;--card:#fff;--text:#1d2433;--muted:#6b7385;--ok:#2e7d4f}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#121826;--card:#1c2538;--text:#e8ecf5;--muted:#9aa4b8;--navy:#0d1424}}
+:root[data-theme="dark"]{--bg:#121826;--card:#1c2538;--text:#e8ecf5;--muted:#9aa4b8;--navy:#0d1424}
+*{box-sizing:border-box}
+html,body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+header{background:var(--navy);color:#fff;padding:14px 16px;padding-top:calc(14px + env(safe-area-inset-top,0px));position:sticky;top:0;z-index:5}
+header h1{font-size:17px;margin:0}
+header small{color:var(--gold);font-size:12px}
+nav{display:flex;gap:6px;overflow-x:auto;padding:10px 12px;background:var(--card);border-bottom:1px solid #0002}
+button{border:0;border-radius:8px;padding:8px 12px;background:var(--navy);color:#fff;cursor:pointer;font-size:14px;white-space:nowrap;font-family:inherit}
+button.on{background:var(--gold);color:#1b1b1b}
+button.gold{background:var(--gold);color:#1b1b1b}
+button.ghost{background:transparent;color:var(--text);border:1px solid #8886}
+main{padding:14px;max-width:820px;margin:auto}
+.card{background:var(--card);border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px #0001}
+h2{font-size:18px;margin:4px 0 10px}
+.muted{color:var(--muted);font-size:14px}
+.bar{height:8px;background:#8883;border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--gold)}
+input,textarea{width:100%;padding:9px;border-radius:8px;border:1px solid #8885;background:var(--bg);color:var(--text);font:inherit;margin:4px 0 8px}
+.opt{display:block;padding:8px;border:1px solid #8885;border-radius:8px;margin:6px 0;cursor:pointer}
+.opt.sel{border-color:var(--gold);background:#c9a22722}
+.ok{color:var(--ok);font-weight:600}
+.cert{background:#fffdf5;color:#1b2a4a;border:6px double var(--gold);padding:30px;text-align:center;border-radius:6px}
+.cert h3{font-family:Georgia,serif;font-size:26px;margin:8px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.stat{text-align:center}
+.stat b{display:block;font-size:24px;color:var(--gold)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td,th{padding:6px;border-bottom:1px solid #8883;text-align:left}
+#certArea{display:none}
+@media print{
+ body *{visibility:hidden}
+ #certArea,#certArea *{visibility:visible}
+ #certArea{display:block!important;position:absolute;left:0;top:0;width:100%}
+ header,nav,.noprint{display:none!important}
+}
+</style>
+</head>
+<body>
+<header>
+ <h1>AI, Machine Learning &amp; Deep Learning – Teaching &amp; Learning System</h1>
+ <small>Developed by Mr. Bishnu Singh Rayamajhi · Math Lecturer &amp; Head, Humanities &amp; Social Sciences · Kapilvastu Multiple Campus, Taulihawa</small>
+</header>
+<nav id="nav"></nav>
+<main id="app"></main>
+<div id="certArea"></div>
+
+<script>
+const KEY="aiml-lms-v1";
+
+const MODS=[
+{t:"AI, Machine Learning & Deep Learning",d:"The basic concepts and how they relate to one another.",
+ k:["AI: machines performing tasks that seem intelligent.","Machine learning: systems learn patterns from data instead of fixed rules.","Deep learning: multi-layer neural networks behind image, speech and language tools."],
+ a:"List five everyday apps that use AI and label each as rule-based, ML or deep learning.",
+ q:"Which of these tools would be hardest to explain with simple if–then rules, and why?"},
+{t:"Data-Driven Materials Science",d:"How data helps predict how materials behave before they are tested in the lab.",
+ k:["Materials databases record composition, structure and measured properties.","ML models learn links between composition, processing and properties such as strength or conductivity.","Predictions help choose which experiments are worth running, saving time and cost."],
+ a:"Choose one property (for example, hardness) and list the data you would need to predict it.",
+ q:"What risks come from trusting a model trained on a small or biased dataset?"},
+{t:"Physics-Informed Techniques",d:"Using scientific laws to make machine learning models more reliable.",
+ k:["Physics-informed neural networks add equations, such as conservation laws, to the training loss.","This helps models work with less data and produce physically plausible results.","Useful in fluid flow, heat transfer and material modelling."],
+ a:"Write one physical law you know and explain how it could constrain a model’s prediction.",
+ q:"When might a purely data-driven model break a known physical law?"},
+{t:"Scientific Research & Supercomputing",d:"How high-performance computing speeds up discovery.",
+ k:["Supercomputers run very large simulations in parallel across thousands of processors.","They support climate modelling, drug discovery, astronomy and materials design.","Access is often shared through national and university computing centres."],
+ a:"Research one supercomputing centre and summarise its main research areas in about 150 words.",
+ q:"How could researchers in Nepal benefit from shared computing resources?"}
+];
+
+const RES=[
+{v:[{t:"3Blue1Brown: Neural Networks series, 4 free videos",u:"https://ki-campus.org/node/209?locale=de"}],r:[{t:"Michael Nielsen: Neural Networks and Deep Learning (free online book)",u:"http://neuralnetworksanddeeplearning.com"},{t:"Simon Prince: Understanding Deep Learning (free textbook)",u:"https://udlbook.github.io/udlbook/"},{t:"Visual guide to neural networks (Globalnerdy)",u:"https://www.globalnerdy.com/?p=36218"}]},
+{v:[{t:"ExcitonScience: Machine learning for materials science (online tutorial series)",u:"https://excitonscience.com/node/2898"}],r:[{t:"Review: Machine learning for materials property prediction (open access, 2023)",u:"https://pmc.ncbi.nlm.nih.gov/articles/PMC10488794"},{t:"Morgan & Jacobs: Opportunities and Challenges for ML in Materials Science (PDF)",u:"https://par.nsf.gov/servlets/purl/10176420"},{t:"Bhadeshia: Machine learning in materials science (free downloads, Cambridge)",u:"https://www.phase-trans.msm.cam.ac.uk/2018/Birmingham/index.html"}]},
+{v:[{t:"Steve Brunton: Physics Informed Neural Networks (PINNs), video lecture",u:"https://www.youtube.com/watch?v=-zrY7P2dVC4"}],r:[{t:"Raissi et al. (2017): Physics-Informed Neural Networks, Part I (arXiv)",u:"https://arxiv.org/abs/1711.10561v1"},{t:"Raissi et al. (2024): Physics-Informed Neural Networks and Extensions (arXiv)",u:"https://arxiv.org/abs/2408.16806v1"},{t:"Introduction to PINNs with PyTorch (Towards Data Science tutorial)",u:"https://medium.com/data-science/solving-differential-equations-with-neural-networks-afdcf7b8bcc4"}]},
+{v:[{t:"NCSA: How do scientists use supercomputers? (video)",u:"https://www.ncsa.illinois.edu/?p=11558"}],r:[{t:"What is supercomputing? (MEGWARE glossary)",u:"https://www.megware.com/en/megware-glossary/supercomputing/"},{t:"What is supercomputing? (OVHcloud explainer)",u:"https://www.ovhcloud.com/en/learn/what-is-super-computing/"},{t:"OSC: What is supercomputing? (PDF booklet)",u:"https://osc.edu/files/press/media/docs/OSCwhatisseries.pdf"},{t:"PRACE free five-week online course on supercomputing",u:"https://ssri.psu.edu/node/1675"}]}
+];
+
+const QUIZ=[
+{q:"Which best describes machine learning?",o:["Following fixed hand-written rules only","Learning patterns from data to make predictions","Storing large files in a database","Designing computer hardware"],a:1},
+{q:"Deep learning is best described as:",o:["Neural networks with many layers","Any spreadsheet calculation","Manual data entry","Rule-based expert systems"],a:0},
+{q:"Data-driven materials science mainly uses data to:",o:["Predict material properties","Paint metal surfaces","Replace all laboratory experiments","Measure room temperature"],a:0},
+{q:"Physics-informed machine learning:",o:["Adds scientific laws as constraints on the model","Removes all physics from the model","Uses only images as input","Relies on random guessing"],a:0},
+{q:"How do supercomputers help scientific research?",o:["By running large simulations quickly","By replacing teachers","By printing research papers","By storing family photos"],a:0},
+{q:"Which is a typical step in training an ML model?",o:["Splitting data into training and test sets","Deleting all the data","Guessing labels without any data","Ignoring prediction errors"],a:0},
+{q:"A model that performs well on training data but poorly on new data is said to be:",o:["Overfitting","Free of data","Perfectly general","Physics-informed"],a:0},
+{q:"The main benefit of physics-informed models is that they:",o:["Need less data and respect known laws","Avoid using equations entirely","Run slower on purpose","Skip validation"],a:0}
+];
+
+const ASSIGN=[
+{t:"Assignment 1: AI vs ML vs Deep Learning",d:"Explain the difference between AI, machine learning and deep learning, with one example of each (about 300 words)."},
+{t:"Assignment 2: Predicting a Material Property",d:"Pick a material property and describe the data, features and model you would use to predict it."},
+{t:"Assignment 3: Physics-Informed Research in Nepal",d:"Write a short reflection on how physics-informed ML could help research problems in Nepal."}
+];
+
+let DB=load();
+let VIEW="learn";
+let QA={};
+
+function fresh(){return{user:null,students:{},videos:{}};}
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||fresh();}catch(e){return fresh();}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function me(){
+  if(!DB.students[DB.user.name]) DB.students[DB.user.name]={done:[],quiz:null,subs:{}};
+  return DB.students[DB.user.name];
+}
+function pct(){return Math.round(me().done.length/MODS.length*100);}
+
+function loginView(){
+  return `<div class="card"><h2>Welcome</h2><p class="muted">Choose your role. Progress is saved on this device.</p>
+  <label>Your name</label><input id="nm" placeholder="Full name">
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+   <button onclick="login('student')">Enter as Student</button>
+   <button class="gold" onclick="login('teacher')">Enter as Teacher</button>
+   <button class="ghost" onclick="login('admin')">Enter as Admin</button>
+  </div></div>`;
+}
+function login(role){
+  const n=document.getElementById('nm').value.trim()||(role==='student'?'Student':role==='teacher'?'Teacher':'Admin');
+  DB.user={name:n,role};
+  if(role==='student') me();
+  VIEW=role==='student'?'learn':'videos';
+  save();render();
+}
+function logout(){DB.user=null;save();render();}
+function go(v){VIEW=v;render();window.scrollTo(0,0);}
+
+const TABS={
+  student:[["learn","Lessons"],["quiz","Quiz"],["assign","Assignments"],["cert","Certificate"]],
+  staff:[["videos","Lesson videos"],["grade","Grading"],["overview","Overview"]]
+};
+
+function render(){
+  const nav=document.getElementById('nav'),app=document.getElementById('app');
+  if(!DB.user){nav.innerHTML="";app.innerHTML=loginView();return;}
+  const tabs=DB.user.role==='student'?TABS.student:TABS.staff;
+  nav.innerHTML=tabs.map(([k,l])=>`<button class="${VIEW===k?'on':''}" onclick="go('${k}')">${l}</button>`).join('')+
+    `<button class="ghost" onclick="logout()">Sign out</button>`;
+  const views={learn:learnView,quiz:quizView,assign:assignView,cert:certView,videos:videosView,grade:gradeView,overview:overviewView};
+  const fn=views[VIEW]||learnView;
+  app.innerHTML=`<p class="muted">Signed in as <b>${esc(DB.user.name)}</b> · ${esc(DB.user.role)}</p>`+fn();
+}
+
+/* ---------- Student: lessons ---------- */
+function learnView(){
+  if(DB.user.role!=='student') return overviewView();
+  return `<div class="card"><b>Your progress: ${pct()}%</b><div class="bar"><i style="width:${pct()}%"></i></div></div>`+
+  MODS.map((x,i)=>{
+    const d=me().done.includes(i);
+    const vids=[...RES[i].v];
+    if(DB.videos[i]) vids.unshift({t:"Video lesson (added by teacher)",u:DB.videos[i]});
+    const vid=(vids.length?vids.map(x=>`<a href="${esc(x.u)}" target="_blank" rel="noopener">▶ ${esc(x.t)}</a>`).join('<br>'):'<span class="muted">Video lesson: coming soon (teacher can add one under “Lesson videos”)</span>')+
+      (RES[i].r.length?'<p><b>PDFs &amp; readings:</b></p>'+RES[i].r.map(x=>`<a href="${esc(x.u)}" target="_blank" rel="noopener">📄 ${esc(x.t)}</a>`).join('<br>'):'');
+    return `<div class="card">
+      <div style="display:flex;justify-content:space-between;gap:8px"><h2>${i+1}. ${esc(x.t)}</h2>${d?'<span class="ok">✓ Done</span>':''}</div>
+      <p>${esc(x.d)}</p>
+      <ul>${x.k.map(p=>`<li>${esc(p)}</li>`).join('')}</ul>
+      <p><b>Mini-project:</b> ${esc(x.a)}</p>
+      <p><b>Discussion:</b> ${esc(x.q)}</p>
+      <div style="margin:8px 0">${vid}</div>
+      <button class="${d?'ghost':'gold'}" onclick="toggle(${i})">${d?'Mark as not done':'Mark as completed'}</button>
+    </div>`;
+  }).join('');
+}
+function toggle(i){
+  const m=me(),k=m.done.indexOf(i);
+  k>-1?m.done.splice(k,1):m.done.push(i);
+  save();render();
+}
+
+/* ---------- Student: quiz ---------- */
+function quizView(){
+  const m=me();
+  if(m.quiz){
+    const p=Math.round(m.quiz.score/QUIZ.length*100);
+    return `<div class="card"><h2>Quiz result</h2><p>You scored <b>${m.quiz.score}/${QUIZ.length}</b> (${p}%). ${p>=60?'<span class="ok">Passed ✓</span>':'Below the 60% pass mark. Please try again.'}</p>
+    <button onclick="retake()">Retake quiz</button></div>`;
+  }
+  return QUIZ.map((x,i)=>`<div class="card"><b>${i+1}. ${esc(x.q)}</b>
+    ${x.o.map((o,j)=>`<div class="opt ${QA[i]===j?'sel':''}" onclick="pick(${i},${j})">${esc(o)}</div>`).join('')}</div>`).join('')+
+    `<button class="gold" onclick="submitQuiz()">Submit quiz</button>`;
+}
+function pick(i,j){QA[i]=j;render();}
+function submitQuiz(){
+  if(Object.keys(QA).length<QUIZ.length){alert('Please answer all questions.');return;}
+  let s=0;QUIZ.forEach((x,i)=>{if(QA[i]===x.a)s++;});
+  me().quiz={score:s,date:new Date().toISOString().slice(0,10)};
+  save();render();
+}
+function retake(){QA={};me().quiz=null;save();render();}
+
+/* ---------- Student: assignments ---------- */
+function assignView(){
+  const s=me().subs;
+  return ASSIGN.map((a,i)=>{
+    const sub=s[i];
+    return `<div class="card"><h2>${esc(a.t)}</h2><p>${esc(a.d)}</p>
+    ${sub?`<p><b>Your submission:</b><br>${esc(sub.text)}</p>
+      <p>Grade: <b>${sub.grade===null||sub.grade===undefined?'Pending':sub.grade}</b>${sub.fb?`<br><span class="muted">Feedback: ${esc(sub.fb)}</span>`:''}</p>`
+    :`<textarea id="as${i}" rows="5" placeholder="Write your answer…"></textarea><button class="gold" onclick="submitA(${i})">Submit assignment</button>`}
+    </div>`;
+  }).join('');
+}
+function submitA(i){
+  const t=document.getElementById('as'+i).value.trim();
+  if(t.length<20){alert('Please write a little more (at least 20 characters).');return;}
+  me().subs[i]={text:t,grade:null,fb:""};
+  save();render();
+}
+
+/* ---------- Student: certificate ---------- */
+function certView(){
+  const m=me();
+  const passed=m.quiz&&m.quiz.score/QUIZ.length>=0.6;
+  const lessonsDone=m.done.length===MODS.length;
+  if(!(lessonsDone&&passed)){
+    return `<div class="card"><h2>Certificate</h2><p>To earn your certificate:</p><ul>
+      <li>${lessonsDone?'✓':'○'} Complete all ${MODS.length} lessons (${m.done.length}/${MODS.length})</li>
+      <li>${passed?'✓':'○'} Pass the quiz with at least 60%</li></ul>
+      <p class="muted">Assignments are recommended for your learning but are not required for the certificate.</p></div>`;
+  }
+  return `<div class="card"><div class="cert">${certHTML()}</div>
+    <p></p><button class="gold noprint" onclick="printCert()">Print / Save as PDF</button></div>`;
+}
+function certHTML(){
+  const q=me().quiz;
+  return `<p>Kapilvastu Multiple Campus · Department of Humanities &amp; Social Sciences</p>
+  <p class="muted">Certificate of Completion</p>
+  <p>This certifies that</p>
+  <h3>${esc(DB.user.name)}</h3>
+  <p>has successfully completed the<br><b>AI, Machine Learning &amp; Deep Learning Teaching-Learning Programme</b><br>
+  covering Data-Driven Materials Science, Physics-Informed Techniques and Scientific Research &amp; Supercomputing</p>
+  <p>Quiz score: ${q.score}/${QUIZ.length} · Date: ${q.date}</p>
+  <p style="margin-top:28px">________________________<br>Mr. Bishnu Singh Rayamajhi<br>Course Developer</p>`;
+}
+function printCert(){
+  const a=document.getElementById('certArea');
+  a.innerHTML=`<div class="cert" style="margin:20px">${certHTML()}</div>`;
+  a.style.display='block';
+  window.onafterprint=()=>{a.style.display='none';a.innerHTML='';};
+  window.print();
+}
+
+/* ---------- Teacher / Admin ---------- */
+function videosView(){
+  if(DB.user.role==='student') return learnView();
+  return `<div class="card"><h2>Lesson video links</h2><p class="muted">Paste a YouTube or other https link for each lesson. Students see a “Watch” button.</p></div>`+
+  MODS.map((x,i)=>`<div class="card"><b>${i+1}. ${esc(x.t)}</b>
+    <input id="v${i}" value="${esc(DB.videos[i]||'')}" placeholder="https://www.youtube.com/watch?v=…">
+    <button onclick="saveV(${i})">Save link</button></div>`).join('');
+}
+function saveV(i){
+  const v=document.getElementById('v'+i).value.trim();
+  if(v&&!/^https:\/\//.test(v)){alert('The link must start with https://');return;}
+  if(v) DB.videos[i]=v; else delete DB.videos[i];
+  save();alert('Saved');
+}
+
+function gradeView(){
+  if(DB.user.role==='student') return learnView();
+  const names=Object.keys(DB.students);
+  if(!names.length) return '<div class="card muted">No student work yet.</div>';
+  return names.map((n,ni)=>{
+    const s=DB.students[n];
+    const rows=Object.keys(s.subs).map(i=>{
+      const sb=s.subs[i];
+      return `<div style="border-top:1px solid #8883;padding-top:8px;margin-top:8px">
+        <b>${esc(ASSIGN[i].t)}</b><p>${esc(sb.text)}</p>
+        <input id="g${ni}_${i}" type="number" min="0" max="100" placeholder="Grade 0–100" value="${sb.grade===null||sb.grade===undefined?'':sb.grade}">
+        <input id="f${ni}_${i}" placeholder="Feedback" value="${esc(sb.fb||'')}">
+        <button class="gold" onclick="grade(${ni},${i})">Save grade</button></div>`;
+    }).join('');
+    return `<div class="card"><h2>${esc(n)}</h2>${rows||'<p class="muted">No submissions yet.</p>'}</div>`;
+  }).join('');
+}
+function grade(ni,i){
+  const n=Object.keys(DB.students)[ni];
+  const g=parseInt(document.getElementById('g'+ni+'_'+i).value,10);
+  const f=document.getElementById('f'+ni+'_'+i).value.trim();
+  if(isNaN(g)||g<0||g>100){alert('Enter a grade from 0 to 100.');return;}
+  DB.students[n].subs[i].grade=g;
+  DB.students[n].subs[i].fb=f;
+  save();alert('Grade saved');
+}
+
+function overviewView(){
+  const names=Object.keys(DB.students),n=names.length;
+  const avgP=n?Math.round(names.reduce((a,x)=>a+DB.students[x].done.length,0)/n/MODS.length*100):0;
+  const withQ=names.filter(x=>DB.students[x].quiz);
+  const avgQ=withQ.length?Math.round(withQ.reduce((a,x)=>a+DB.students[x].quiz.score,0)/withQ.length/QUIZ.length*100):0;
+  const certs=names.filter(x=>{const s=DB.students[x];return s.done.length===MODS.length&&s.quiz&&s.quiz.score/QUIZ.length>=0.6;}).length;
+  const subs=names.reduce((a,x)=>a+Object.keys(DB.students[x].subs).length,0);
+  const rows=names.map(x=>{const s=DB.students[x];return `<tr><td>${esc(x)}</td><td>${s.done.length}/${MODS.length}</td><td>${s.quiz?s.quiz.score+'/'+QUIZ.length:'—'}</td></tr>`;}).join('')||
+    '<tr><td colspan="3" class="muted">No students yet</td></tr>';
+  return `<div class="card grid">
+    <div class="stat"><b>${n}</b>Students</div>
+    <div class="stat"><b>${avgP}%</b>Avg progress</div>
+    <div class="stat"><b>${avgQ}%</b>Avg quiz</div>
+    <div class="stat"><b>${certs}</b>Certificates</div>
+    <div class="stat"><b>${subs}</b>Submissions</div></div>
+    <div class="card"><h2>Students</h2><table><tr><th>Name</th><th>Lessons</th><th>Quiz</th></tr>${rows}</table></div>
+    ${DB.user.role==='admin'?`<div class="card"><h2>Admin tools</h2><p class="muted">Clears all students, grades and video links on this device.</p>
+    <button style="background:#a33" onclick="resetAll()">Reset all data</button></div>`:''}`;
+}
+function resetAll(){
+  if(confirm('Delete all student data and video links on this device?')){
+    DB.students={};DB.videos={};save();render();
+  }
+}
+
+render();
+</script>
+</body>
+</html>
