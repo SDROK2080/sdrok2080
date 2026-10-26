@@ -3,268 +3,362 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>KMC-HSSD NDIEM 2026 Learning and Practical Hub</title>
+<title>KMC-HSSD NDIEM 2026 · SMART Dynamic Learning App</title>
 <style>
-:root{--navy:#0f2747;--navy2:#1b3a66;--gold:#c9a227;--bg:#f5f6f9;--card:#ffffff;--text:#1c2331;--muted:#5b6474;--line:#dfe3ea;--warn:#a6611a}
-@media (prefers-color-scheme: dark){:root{--bg:#0c1624;--card:#132238;--text:#e8edf5;--muted:#9aa6ba;--line:#263a57}}
+:root{--navy:#0f2747;--navy2:#1b3a66;--gold:#c9a227;--bg:#f5f6f9;--card:#ffffff;--text:#1c2331;--muted:#5b6474;--line:#dfe3ea;--ok:#2e7d4f;--warn:#a6611a;--bad:#b3261e}
+@media (prefers-color-scheme: dark){:root{--bg:#0c1624;--card:#132238;--text:#e8edf5;--muted:#9aa6ba;--line:#263a57;--ok:#4caf7a;--warn:#e0a050;--bad:#ef6b63}}
 *{box-sizing:border-box}
-body{margin:0;font-family:Georgia,"Times New Roman",serif;background:var(--bg);color:var(--text);line-height:1.55}
-header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:22px 20px 18px;border-bottom:4px solid var(--gold)}
-header h1{margin:0 0 4px;font-size:1.4rem}
-header p{margin:0;font-size:.9rem;opacity:.88}
-nav{display:flex;flex-wrap:wrap;gap:6px;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
-nav button{border:1px solid var(--line);background:transparent;color:var(--text);padding:7px 12px;border-radius:20px;cursor:pointer;font-size:.85rem;font-family:inherit}
+body{margin:0;font-family:Georgia,"Times New Roman",serif;background:var(--bg);color:var(--text);line-height:1.5}
+header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:20px 20px 16px;border-bottom:4px solid var(--gold)}
+header h1{margin:0 0 4px;font-size:1.35rem}
+header p{margin:0;font-size:.88rem;opacity:.88}
+nav{display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+nav button{border:1px solid var(--line);background:transparent;color:var(--text);padding:6px 11px;border-radius:18px;cursor:pointer;font-size:.83rem;font-family:inherit}
 nav button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
-main{max-width:880px;margin:0 auto;padding:18px 16px 60px}
-.progress{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:16px}
-.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:8px}
-.bar>div{height:100%;background:linear-gradient(90deg,var(--gold),#e2c35a);transition:width .3s}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px}
-.card h2{margin:0 0 4px;font-size:1.2rem;color:var(--navy)}
+main{max-width:920px;margin:0 auto;padding:16px 14px 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 17px;margin-bottom:14px}
+.card h2{margin:0 0 4px;font-size:1.18rem;color:var(--navy)}
 @media (prefers-color-scheme: dark){.card h2{color:var(--gold)}}
-.theme{color:var(--muted);font-style:italic;margin:0 0 8px}
-.sub{font-weight:700;margin:12px 0 4px;font-size:.95rem}
-ul{margin:4px 0 4px 18px;padding:0}li{margin:3px 0}
-.check{display:flex;gap:8px;align-items:flex-start;margin:6px 0;cursor:pointer;font-size:.93rem}
-.check input{margin-top:5px;accent-color:var(--navy)}
+.theme{color:var(--muted);font-style:italic;margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:10px 0}
+.stat{background:var(--bg);border-radius:10px;padding:10px 12px;text-align:center}
+.stat b{display:block;font-size:1.5rem}
+.stat span{font-size:.78rem;color:var(--muted);font-family:system-ui,sans-serif}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:6px 0}
+.row label{font-size:.85rem;font-family:system-ui,sans-serif;color:var(--muted)}
+input[type=date],input[type=number],input[type=text],textarea,select{padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font-family:inherit;font-size:.9rem}
+input[type=text].wide,textarea.wide{width:100%}
+textarea{min-height:56px;resize:vertical;width:100%}
+.goal{border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:10px;padding:12px 14px;margin:10px 0;background:var(--bg)}
+.goal-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.pill{font-size:.72rem;padding:3px 10px;border-radius:12px;color:#fff;font-family:system-ui,sans-serif;font-weight:700}
+.s-ok{background:var(--ok)}.s-warn{background:var(--warn)}.s-bad{background:var(--bad)}.s-done{background:var(--navy2)}
+.bar{height:9px;background:var(--line);border-radius:6px;overflow:hidden;margin:8px 0 4px}
+.bar>div{height:100%;background:linear-gradient(90deg,var(--gold),#e2c35a)}
+.sm{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:8px}
+.sm label{font-size:.78rem;font-family:system-ui,sans-serif;color:var(--muted);display:block;margin-bottom:2px}
+.sub{font-weight:700;margin:14px 0 4px;font-size:.93rem;font-family:system-ui,sans-serif}
+.check{display:flex;gap:8px;align-items:flex-start;margin:5px 0;font-size:.92rem}
+.check input{margin-top:4px;accent-color:var(--navy)}
+.linkbtn{background:none;border:none;color:var(--bad);cursor:pointer;font-size:.8rem;font-family:system-ui,sans-serif;padding:2px 4px}
+.addbtn,button.primary{background:var(--navy);color:#fff;border:0;padding:7px 13px;border-radius:8px;cursor:pointer;font-family:system-ui,sans-serif;font-size:.85rem}
+button.primary{padding:9px 16px;font-size:.92rem;margin-top:10px}
 .res-block{background:var(--bg);border-radius:8px;padding:8px 12px;margin-top:10px}
-.res-block h5{margin:4px 0 6px;font-size:.8rem;color:var(--muted);font-family:system-ui,sans-serif;text-transform:uppercase;letter-spacing:.04em}
-.res{font-size:.9rem;margin:8px 0}
+.res-block h5{margin:4px 0 6px;font-size:.78rem;color:var(--muted);font-family:system-ui,sans-serif;text-transform:uppercase;letter-spacing:.04em}
+.res{font-size:.88rem;margin:7px 0}
 .res a{color:var(--navy2)}
 @media (prefers-color-scheme: dark){.res a{color:#8fb4ff}}
-.res .note{display:block;color:var(--muted);font-size:.8rem}
-.badge{display:inline-block;font-size:.68rem;padding:1px 7px;border-radius:8px;color:#fff;margin-right:6px;font-family:system-ui,sans-serif;vertical-align:middle}
+.res .note{display:block;color:var(--muted);font-size:.78rem}
+.badge{display:inline-block;font-size:.66rem;padding:1px 7px;border-radius:8px;color:#fff;margin-right:6px;font-family:system-ui,sans-serif;vertical-align:middle}
 .b-yt{background:#c4302b}.b-pdf{background:#b5452d}
-.none{font-size:.85rem;color:var(--muted);font-style:italic;margin:4px 0}
-.warn{font-size:.82rem;color:var(--warn);border:1px dashed var(--warn);border-radius:8px;padding:8px 10px;margin-top:10px}
-label.field{display:block;font-size:.88rem;font-weight:700;margin:10px 0 3px}
-input[type=text],textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font-family:inherit;font-size:.92rem}
-textarea{min-height:60px;resize:vertical}
-button.primary{background:var(--navy);color:#fff;border:0;padding:9px 16px;border-radius:8px;cursor:pointer;font-family:inherit;margin-top:12px}
-.output{width:100%;min-height:200px;margin-top:10px;font-family:ui-monospace,Menlo,monospace;font-size:.83rem}
-.footer-note{font-size:.8rem;color:var(--muted);margin-top:24px;text-align:center}
+.none{font-size:.84rem;color:var(--muted);font-style:italic;margin:4px 0}
+.warn{font-size:.8rem;color:var(--warn);border:1px dashed var(--warn);border-radius:8px;padding:8px 10px;margin-top:10px}
+.attn li{margin:4px 0}
+.chart{width:100%;height:auto}
+.output{width:100%;min-height:200px;margin-top:10px;font-family:ui-monospace,Menlo,monospace;font-size:.82rem}
+.footer-note{font-size:.78rem;color:var(--muted);margin-top:22px;text-align:center}
 </style>
 </head>
 <body>
 <header>
-  <h1>KMC-HSSD · NDIEM 2026 Learning and Practical Hub</h1>
+  <h1>KMC-HSSD · NDIEM 2026 · SMART Dynamic Learning App</h1>
   <p>National Discovery, Innovation &amp; Entrepreneurship Mission for learning and doing practical work</p>
   <p>Humanities &amp; Social Sciences Department · Kapilvastu Multiple Campus (KMC), Taulihawa, Nepal</p>
+  <p><strong>Developed By:</strong> Mr. Bishnu Singh Rayamajhi, Math Lecturer and Department Head of Humanities &amp; Social Sciences (KMC-HSSD), Kapilvastu Multiple Campus, Taulihawa, Kapilvastu</p>
 </header>
 <nav id="nav"></nav>
-<main>
-  <div class="progress" id="progress"></div>
-  <div id="content"></div>
-  <div class="footer-note">Progress and the idea canvas are kept only while this page is open. Copy your work before closing.</div>
-</main>
+<main id="main"></main>
+<div class="footer-note" style="max-width:920px;margin:0 auto;padding:0 14px 30px">Program name is as provided; no official source was found. Goals, progress, and the canvas are kept only while this page is open. Copy your summary before closing.<br>Developed By: Mr. Bishnu Singh Rayamajhi, Math Lecturer and Department Head of Humanities &amp; Social Sciences (KMC-HSSD), Kapilvastu Multiple Campus, Taulihawa, Kapilvastu.</div>
 
 <script>
 const CHK = "Checked 23 Oct 2026";
 const YT_NOTE = "Opens a YouTube search for this exact title. Click the matching video and confirm it is free before assigning.";
 
 const MODULES = [
-{
-  id:1, title:"Discover: Find a Real Problem Around You",
-  theme:"Learn to notice problems in Taulihawa and Kapilvastu before proposing any solution",
-  tasks:[
-    "Walk one street or market in Taulihawa for 30 minutes and list five problems you observe",
-    "Interview at least five people outside your class (shopkeepers, farmers, parents, students, drivers)",
-    "Record each interview with the person's permission and write three key quotes",
-    "Note what surprised you and what you assumed before going out"
-  ],
+{ id:1, short:"M1", title:"Discover: Find a Real Problem Around You",
+  theme:"Notice problems in Taulihawa and Kapilvastu before proposing solutions",
+  tasks:["Walk one street or market for 30 minutes and list five problems","Interview at least five people outside your class","Record interviews with permission and write three key quotes","Write what surprised you and what you assumed beforehand"],
   deliverable:"Problem discovery notes: five observations, five interview summaries, one surprise",
-  yt:[
-    {title:"How to Start a Startup", channel:"Y Combinator / Stanford CS183B", note:"Sam Altman's Stanford course; lecture on finding problems worth solving"},
-    {title:"Y Combinator Startup School", channel:"Y Combinator", note:"Playlist of free lectures; start with talks on finding users and talking to users"}
-  ],
-  pdf:[
-    {title:"Design Thinking Bootleg (Stanford d.school): Empathize tools", url:"https://dschool.stanford.edu/resources/design-thinking-bootleg", note:"Free PDF of tools; available in English, German, and Spanish. Use the Empathize section."}
-  ]
-},
-{
-  id:2, title:"Define: Turn Observations into a Clear Problem Statement",
-  theme:"Make your problem specific, human, and testable",
-  tasks:[
-    "Choose the one problem your interviews support most strongly",
-    "Write a Point of View statement: [User] needs [need] because [insight]",
-    "Write three 'How might we' questions from that statement",
-    "Check the statement with two people and revise it once"
-  ],
+  goals:[{specific:"Interview at least 5 community members in Taulihawa",measure:"Interviews completed",target:5,unit:"interviews",achievable:"About one interview per day over a week, using the class's own network",relevant:"Real problems come from real people, which is the base for every later module"}],
+  yt:[{title:"How to Start a Startup",channel:"Y Combinator / Stanford CS183B",note:"Sam Altman's Stanford course; lecture on finding problems worth solving"},
+      {title:"Y Combinator Startup School",channel:"Y Combinator",note:"Playlist of free lectures; start with talks on finding users and talking to users"}],
+  pdf:[{title:"Design Thinking Bootleg (Stanford d.school): Empathize tools",url:"https://dschool.stanford.edu/resources/design-thinking-bootleg",note:"Free PDF in English, German, and Spanish. Use the Empathize section."}]},
+{ id:2, short:"M2", title:"Define: Turn Observations into a Problem Statement",
+  theme:"Make the problem specific, human, and testable",
+  tasks:["Choose the one problem your interviews support most strongly","Write a Point of View statement: [User] needs [need] because [insight]","Write three 'How might we' questions","Check the statement with two people and revise it once"],
   deliverable:"One-sentence problem statement and three How-might-we questions",
-  yt:[
-    {title:"How to Start a Startup", channel:"Y Combinator / Stanford CS183B", note:"Use the sessions on identifying customers and market need"}
-  ],
-  pdf:[
-    {title:"Design Thinking Bootleg (Stanford d.school): Define tools", url:"https://dschool.stanford.edu/resources/design-thinking-bootleg", note:"Free PDF; use the Define section for Point of View and How-might-we tools"}
-  ]
-},
-{
-  id:3, title:"Ideate: Generate and Choose Solutions",
+  goals:[{specific:"Write one problem statement and three How-might-we questions",measure:"Items written and checked",target:4,unit:"items",achievable:"Drafted from M1 notes in one sitting, then checked with two people",relevant:"A clear problem statement decides what the later prototype must test"}],
+  yt:[{title:"How to Start a Startup",channel:"Y Combinator / Stanford CS183B",note:"Sessions on identifying customers and market need"}],
+  pdf:[{title:"Design Thinking Bootleg (Stanford d.school): Define tools",url:"https://dschool.stanford.edu/resources/design-thinking-bootleg",note:"Free PDF; use the Define section for Point of View and How-might-we tools"}]},
+{ id:3, short:"M3", title:"Ideate: Generate and Choose Solutions",
   theme:"Generate many ideas, then choose one with clear criteria",
-  tasks:[
-    "Run a 15-minute brainstorm alone, writing at least 20 ideas",
-    "Group ideas into three themes and pick the best idea from each",
-    "Score the three ideas on impact, feasibility with local resources, and fit with the problem",
-    "Choose one idea and explain the choice in three sentences"
-  ],
+  tasks:["Run a 15-minute solo brainstorm and write at least 20 ideas","Group ideas into three themes and pick the best from each","Score the three ideas on impact, local feasibility, and fit with the problem","Choose one idea and explain the choice in three sentences"],
   deliverable:"Idea list, scoring table, and one chosen idea with reasons",
-  yt:[
-    {title:"Y Combinator Startup School", channel:"Y Combinator", note:"Playlist; look for talks on prioritising ideas and building a minimum viable product"}
-  ],
-  pdf:[
-    {title:"Design Thinking Bootleg (Stanford d.school): Ideate tools", url:"https://dschool.stanford.edu/resources/design-thinking-bootleg", note:"Free PDF; use the Ideate section for brainstorming and selection methods"}
-  ]
-},
-{
-  id:4, title:"Prototype: Build a Cheap Version Before Spending Money",
-  theme:"Test an idea with paper, sketches, or a simple demo",
-  tasks:[
-    "Build a low-cost prototype (paper, cardboard, sketch, role-play, or a simple form)",
-    "Show the prototype to five people and watch them use it without helping",
-    "Record where they hesitate, misunderstand, or ignore the idea"
-  ],
-  deliverable:"Prototype photo or sketch, and a short list of observed reactions",
-  yt:[
-    {title:"Y Combinator Startup School", channel:"Y Combinator", note:"Playlist; look for talks on early customers and the first version of a product"}
-  ],
-  pdf:[
-    {title:"Design Thinking Bootleg (Stanford d.school): Prototype tools", url:"https://dschool.stanford.edu/resources/design-thinking-bootleg", note:"Free PDF; use the Prototype section for low-fidelity prototyping methods"}
-  ]
-},
-{
-  id:5, title:"Validate and Plan: Model the Idea as a Practical Venture",
+  goals:[{specific:"Generate at least 20 ideas and score a shortlist of three",measure:"Ideas generated",target:20,unit:"ideas",achievable:"A 15-minute solo brainstorm followed by a 20-minute group scoring session",relevant:"A wide list reduces the risk of building the first idea that comes to mind"}],
+  yt:[{title:"Y Combinator Startup School",channel:"Y Combinator",note:"Playlist; look for talks on prioritising ideas and building a minimum viable product"}],
+  pdf:[{title:"Design Thinking Bootleg (Stanford d.school): Ideate tools",url:"https://dschool.stanford.edu/resources/design-thinking-bootleg",note:"Free PDF; use the Ideate section for brainstorming and selection"}]},
+{ id:4, short:"M4", title:"Prototype: Build a Cheap Version Before Spending Money",
+  theme:"Test an idea with paper, sketches, role-play, or a simple form",
+  tasks:["Build a low-cost prototype (paper, cardboard, sketch, role-play, or simple form)","Show it to five people and watch them use it without helping","Record where they hesitate, misunderstand, or ignore the idea"],
+  deliverable:"Prototype photo or sketch and a short list of observed reactions",
+  goals:[{specific:"Test a low-cost prototype with five people and record their reactions",measure:"People who tested the prototype",target:5,unit:"people",achievable:"Paper or cardboard prototype costing under a small budget set by the group",relevant:"Observed behaviour shows whether the idea works better than what people say"}],
+  yt:[{title:"Y Combinator Startup School",channel:"Y Combinator",note:"Playlist; look for talks on early customers and the first version of a product"}],
+  pdf:[{title:"Design Thinking Bootleg (Stanford d.school): Prototype tools",url:"https://dschool.stanford.edu/resources/design-thinking-bootleg",note:"Free PDF; use the Prototype section for low-fidelity methods"}]},
+{ id:5, short:"M5", title:"Validate and Plan: Model the Idea as a Venture",
   theme:"Check whether people will use or pay, then plan the basics",
-  tasks:[
-    "Test the prototype again with at least five new people and record what changed",
-    "Complete a one-page business model: customers, problem solved, how you reach them, costs, income",
-    "Estimate start-up cost and monthly cost, with sources for each number",
-    "List the Nepal registration or permit steps you would need, and confirm them with an official office"
-  ],
-  deliverable:"Validation summary and one-page business model with cost estimate",
-  yt:[
-    {title:"How to Start a Startup", channel:"Y Combinator / Stanford CS183B", note:"Sessions on business models and early revenue"}
-  ],
-  pdf:[
-    {title:"Entrepreneurship Development (ENME411), Tribhuvan University syllabus, 2026 downloads", url:"https://portal.tu.edu.np/downloads/ENME411ENTREPRENEURSHIPDEVE_2026_06_30_10_37_45.pdf", note:"Official TU course outline (PDF). Covers business plan, financial plan, marketing, and legal provisions for starting a company in Nepal. An outline, not a textbook."}
-  ]
-},
-{
-  id:6, title:"Pitch and Present: Explain Your Work Clearly",
-  theme:"Communicate the problem, the solution, and the evidence in three minutes",
-  tasks:[
-    "Prepare a three-minute pitch: problem, who has it, your solution, evidence, next step",
-    "Present to your class or a group of teachers and collect two written comments",
-    "Revise the pitch once using those comments"
-  ],
-  deliverable:"Three-minute pitch (slides or script) and a short reflection on feedback",
-  yt:[
-    {title:"Y Combinator Startup School", channel:"Y Combinator", note:"Playlist; look for talks on pitching and talking to investors or users"}
-  ],
-  pdf:[]
-},
-{
-  id:7, title:"Responsible Practice: Ethics for Interviews and Community Work",
+  tasks:["Re-test the prototype with at least five new people and record changes","Complete a one-page business model: customers, problem solved, reach, costs, income","Estimate start-up and monthly cost, with a source for each number","List Nepal registration or permit steps and confirm them with an official office"],
+  deliverable:"Validation summary, one-page business model, and cost estimate",
+  goals:[{specific:"Re-validate with five new people and complete a one-page business model",measure:"New people tested",target:5,unit:"people",achievable:"Uses the M4 prototype and existing contacts, with a one-week window",relevant:"Repeat testing shows whether the change is real or just a single reaction"}],
+  yt:[{title:"How to Start a Startup",channel:"Y Combinator / Stanford CS183B",note:"Sessions on business models and early revenue"}],
+  pdf:[{title:"Entrepreneurship Development (ENME411), Tribhuvan University syllabus, 2026 downloads",url:"https://portal.tu.edu.np/downloads/ENME411ENTREPRENEURSHIPDEVE_2026_06_30_10_37_45.pdf",note:"Official TU course outline. Covers business plans, financial plans, marketing, and legal provisions in Nepal. An outline, not a textbook."}]},
+{ id:6, short:"M6", title:"Pitch and Present: Explain Your Work Clearly",
+  theme:"Communicate the problem, solution, and evidence in three minutes",
+  tasks:["Prepare a three-minute pitch: problem, who has it, solution, evidence, next step","Present to your class or a group of teachers","Collect two written comments and revise the pitch once"],
+  deliverable:"Three-minute pitch (slides or script) and a reflection on feedback",
+  goals:[{specific:"Deliver a three-minute pitch and collect two written comments",measure:"Written comments collected",target:2,unit:"comments",achievable:"One rehearsal with a peer, then one live presentation",relevant:"Clear communication lets others judge and support the work"}],
+  yt:[{title:"Y Combinator Startup School",channel:"Y Combinator",note:"Playlist; look for talks on pitching and talking to users"}],
+  pdf:[]},
+{ id:7, short:"M7", title:"Responsible Practice: Ethics for Interviews and Community Work",
   theme:"Do community research and innovation with consent, privacy, and respect",
-  tasks:[
-    "Ask permission before every interview or recording and explain how the information will be used",
-    "Store interview notes securely and do not share names or private details without consent",
-    "Check that your idea does not harm the people it is meant to help"
-  ],
-  deliverable:"Signed consent note for each interviewee and a one-page ethics checklist",
+  tasks:["Ask permission before every interview or recording and explain its use","Store notes securely and do not share private details without consent","Check that the idea does not harm the people it is meant to help"],
+  deliverable:"Consent note for each interviewee and a one-page ethics checklist",
+  goals:[{specific:"Obtain documented consent from every interviewee",measure:"Consents recorded",target:5,unit:"consents",achievable:"Consent is a short written or recorded statement at the start of each interview",relevant:"Consent protects people and is expected in any research or community work"}],
   yt:[],
-  pdf:[
-    {title:"Design Thinking Bootleg (Stanford d.school): Empathize and interview tools", url:"https://dschool.stanford.edu/resources/design-thinking-bootleg", note:"Free PDF; review its interview guidance before starting Module 1 fieldwork"}
-  ]
-}
+  pdf:[{title:"Design Thinking Bootleg (Stanford d.school): Empathize and interview tools",url:"https://dschool.stanford.edu/resources/design-thinking-bootleg",note:"Free PDF; review its interview guidance before starting Module 1 fieldwork"}]}
 ];
 
-const CANVAS_FIELDS = [
-  ["problem","Problem statement (one sentence)"],
-  ["who","Who has this problem? (users in Taulihawa or Kapilvastu)"],
-  ["idea","Your chosen idea"],
-  ["evidence","Evidence from interviews and prototype testing"],
-  ["cost","Start-up and monthly cost (with sources)"],
-  ["income","How the idea earns or is sustained"],
-  ["steps","Next three steps"]
-];
-const MULTI = ["problem","who","idea","evidence","cost","income","steps"];
-const state = { tab:0, done:{}, canvas:{} };
+const CANVAS_FIELDS=[["problem","Problem statement (one sentence)"],["who","Who has this problem? (users in Taulihawa or Kapilvastu)"],["idea","Your chosen idea"],["evidence","Evidence from interviews and prototype testing"],["cost","Start-up and monthly cost (with sources)"],["income","How the idea earns or is sustained"],["steps","Next three steps"]];
+const MULTI=["problem","who","idea","evidence","cost","income","steps"];
 
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-function ytUrl(v){return "https://www.youtube.com/results?search_query="+encodeURIComponent(v.title+(v.channel?" "+v.channel:""));}
+const state={tab:0,start:"2026-10-26",today:"2026-10-26",done:{},tasks:{},goals:[],canvas:{},seq:0};
 
-function resView(m){
-  if(!m.yt.length && !m.pdf.length) return `<p class="none">No verified free YouTube or PDF for this module yet.</p>`;
-  const yt = m.yt.map(v=>`<div class="res"><span class="badge b-yt">YouTube</span><a href="${esc(ytUrl(v))}" target="_blank" rel="noopener">${esc(v.title)}</a>
-    <span class="note">Channel: ${esc(v.channel)} · ${esc(v.note)} · ${esc(YT_NOTE)}</span></div>`).join("");
-  const pdf = m.pdf.map(p=>`<div class="res"><span class="badge b-pdf">PDF</span><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title)}</a>
-    <span class="note">${esc(p.note)} · ${CHK}</span></div>`).join("");
-  return yt+pdf;
+function init(){
+  MODULES.forEach(m=>{
+    state.tasks[m.id]=m.tasks.map((t,i)=>({id:`m${m.id}-t${i}`,text:t}));
+    m.goals.forEach(g=>state.goals.push({...g,id:"g"+(++state.seq),module:m.id,current:0,due:""}));
+  });
+}
+init();
+
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function addDays(iso,n){const d=new Date(iso+"T00:00:00");d.setDate(d.getDate()+n);return d.toISOString().slice(0,10);}
+function daysBetween(a,b){return Math.round((new Date(b+"T00:00:00")-new Date(a+"T00:00:00"))/86400000);}
+function mStart(m){return addDays(state.start,(m.id-1)*7);}
+function mDue(m){return addDays(state.start,m.id*7-1);}
+function modOf(id){return MODULES.find(m=>m.id===id);}
+function goalDue(g){return g.due||mDue(modOf(g.module));}
+function prog(g){return g.target>0?Math.min(g.current/g.target,1):0;}
+
+function status(g){
+  const m=modOf(g.module), p=prog(g);
+  if(p>=1) return {k:"done",label:"Achieved",cls:"s-done"};
+  const due=goalDue(g);
+  if(daysBetween(state.today,due)<0) return {k:"overdue",label:"Overdue",cls:"s-bad"};
+  const span=Math.max(daysBetween(mStart(m),due),1);
+  const elapsed=Math.min(Math.max(daysBetween(mStart(m),state.today),0)/span,1);
+  if(p>=elapsed-0.15) return {k:"ontrack",label:"On track",cls:"s-ok"};
+  return {k:"risk",label:"At risk",cls:"s-warn"};
 }
 
-function pct(){
+function moduleProgress(mid){
+  const gs=state.goals.filter(g=>g.module===mid);
+  if(!gs.length) return 0;
+  return gs.reduce((a,g)=>a+prog(g),0)/gs.length;
+}
+function taskCounts(){
   let total=0,n=0;
-  MODULES.forEach(m=>{m.tasks.forEach((_,i)=>{total++; if(state.done[`m${m.id}-t${i}`]) n++;}); total++; if(state.done[`m${m.id}-deliv`]) n++;});
-  return {n,total,p:Math.round(n/total*100)};
+  Object.values(state.tasks).forEach(arr=>arr.forEach(t=>{total++; if(state.done[t.id]) n++;}));
+  return {n,total};
 }
+function counts(){
+  const c={total:state.goals.length,done:0,ontrack:0,risk:0,overdue:0};
+  state.goals.forEach(g=>c[status(g).k]++);
+  return c;
+}
+
 function renderNav(){
-  const tabs = MODULES.map((m,i)=>`<button class="${state.tab===i?'active':''}" data-tab="${i}">M${m.id}</button>`).join("");
-  document.getElementById("nav").innerHTML = tabs + `<button class="${state.tab===7?'active':''}" data-tab="7">Idea Canvas</button>`;
+  const tabs=MODULES.map((m,i)=>`<button class="${state.tab===i+1?'active':''}" data-tab="${i+1}">${m.short}</button>`).join("");
+  document.getElementById("nav").innerHTML =
+    `<button class="${state.tab===0?'active':''}" data-tab="0">Dashboard</button>`+tabs+
+    `<button class="${state.tab===8?'active':''}" data-tab="8">Canvas</button>`;
 }
-function renderProgress(){
-  const {n,total,p}=pct();
-  document.getElementById("progress").innerHTML=`<strong>Overall progress:</strong> ${n} of ${total} items complete (${p}%)<div class="bar"><div style="width:${p}%"></div></div>`;
-}
-function moduleView(m){
-  const tasks = m.tasks.map((t,i)=>{const k=`m${m.id}-t${i}`;
-    return `<label class="check"><input type="checkbox" data-key="${k}" ${state.done[k]?"checked":""}><span>${esc(t)}</span></label>`;}).join("");
-  const dk=`m${m.id}-deliv`;
-  return `<div class="card"><h2>Module ${m.id}: ${esc(m.title)}</h2><p class="theme">${esc(m.theme)}</p>
-    <div class="sub">Practical tasks</div>${tasks}
-    <div class="sub">Deliverable</div>
-    <label class="check"><input type="checkbox" data-key="${dk}" ${state.done[dk]?"checked":""}><span>${esc(m.deliverable)}</span></label>
-    <div class="res-block"><h5>Free YouTube videos and PDFs</h5>${resView(m)}</div>
+
+function dashboardView(){
+  const c=counts(), t=taskCounts();
+  const bars=MODULES.map((m,i)=>{
+    const p=moduleProgress(m.id), h=Math.round(p*150), x=40+i*82;
+    return `<rect x="${x}" y="${180-h}" width="48" height="${h}" fill="#c9a227" rx="4"/>
+      <text x="${x+24}" y="200" text-anchor="middle" font-size="12" fill="currentColor">${m.short}</text>
+      <text x="${x+24}" y="${172-h}" text-anchor="middle" font-size="11" fill="currentColor">${Math.round(p*100)}%</text>`;
+  }).join("");
+  const attention=state.goals.filter(g=>["risk","overdue"].includes(status(g).k)).map(g=>{
+    const s=status(g);
+    return `<li><span class="pill ${s.cls}">${s.label}</span> <strong>M${g.module}</strong> ${esc(g.specific)} (${g.current}/${g.target} ${esc(g.unit)}, due ${goalDue(g)})</li>`;
+  }).join("");
+  return `<div class="card">
+    <h2>Dashboard</h2>
+    <p class="theme">Live view of all SMART goals and tasks. Change the dates to test different schedules.</p>
+    <div class="row">
+      <label>Programme start <input type="date" data-date="start" value="${state.start}"></label>
+      <label>Today <input type="date" data-date="today" value="${state.today}"></label>
+    </div>
+    <div class="grid">
+      <div class="stat"><b>${c.total}</b><span>SMART goals</span></div>
+      <div class="stat"><b>${c.done}</b><span>Achieved</span></div>
+      <div class="stat"><b>${c.ontrack}</b><span>On track</span></div>
+      <div class="stat"><b>${c.risk}</b><span>At risk</span></div>
+      <div class="stat"><b>${c.overdue}</b><span>Overdue</span></div>
+      <div class="stat"><b>${t.n}/${t.total}</b><span>Tasks done</span></div>
+    </div>
   </div>
-  <div class="card warn">Search note: the program name "NDIEM 2026" is as you provided it. I could not find an official source for it in my searches. Confirm the official name, rules, and dates with the KMC administration before using this module list for assessment.</div>`;
+  <div class="card">
+    <h2>Progress by module</h2>
+    <p class="theme">Average progress of each module's SMART goals.</p>
+    <svg class="chart" viewBox="0 0 640 210" role="img" aria-label="Progress by module">
+      <line x1="30" y1="180" x2="630" y2="180" stroke="#8a93a3" stroke-width="1"/>${bars}
+    </svg>
+  </div>
+  <div class="card">
+    <h2>Needs attention</h2>
+    ${attention?`<ul class="attn">${attention}</ul>`:`<p class="none">No goals at risk or overdue. Update progress in each module to keep this accurate.</p>`}
+  </div>
+  <div class="card">
+    <h2>Summary export</h2>
+    <p class="theme">Generate a text summary of all goals for your report.</p>
+    <button class="primary" id="exp">Generate summary</button>
+    <textarea class="output" id="out" placeholder="Summary will appear here."></textarea>
+  </div>`;
 }
+
+function goalCard(g){
+  const s=status(g), p=Math.round(prog(g)*100);
+  return `<div class="goal">
+    <div class="goal-head"><span class="pill ${s.cls}">${s.label}</span>
+      <span style="font-size:.8rem;color:var(--muted)">${p}% · due ${goalDue(g)}</span>
+      <button class="linkbtn" data-act="del-goal" data-id="${g.id}">Remove</button></div>
+    <div class="bar"><div style="width:${p}%"></div></div>
+    <div class="sm">
+      <div style="grid-column:1/-1"><label>S: Specific</label><input type="text" class="wide" data-goal="${g.id}" data-f="specific" value="${esc(g.specific)}"></div>
+      <div><label>M: Measure</label><input type="text" class="wide" data-goal="${g.id}" data-f="measure" value="${esc(g.measure)}"></div>
+      <div><label>Target</label><input type="number" min="0" data-goal="${g.id}" data-f="target" value="${g.target}"></div>
+      <div><label>Unit</label><input type="text" data-goal="${g.id}" data-f="unit" value="${esc(g.unit)}"></div>
+      <div><label>Current progress</label><input type="number" min="0" data-goal="${g.id}" data-f="current" value="${g.current}"></div>
+      <div style="grid-column:1/-1"><label>A: Achievable (resources and effort)</label><textarea data-goal="${g.id}" data-f="achievable">${esc(g.achievable)}</textarea></div>
+      <div style="grid-column:1/-1"><label>R: Relevant (why it matters)</label><textarea data-goal="${g.id}" data-f="relevant">${esc(g.relevant)}</textarea></div>
+      <div><label>T: Time-bound (leave blank for module deadline)</label><input type="date" data-goal="${g.id}" data-f="due" value="${g.due}"></div>
+    </div>
+  </div>`;
+}
+
+function moduleView(m){
+  const tasks=state.tasks[m.id].map(t=>`<div class="check" style="justify-content:space-between">
+      <label style="display:flex;gap:8px"><input type="checkbox" data-key="${t.id}" ${state.done[t.id]?"checked":""}><span>${esc(t.text)}</span></label>
+      <button class="linkbtn" data-act="del-task" data-id="${t.id}" data-mod="${m.id}">Remove</button></div>`).join("");
+  const goals=state.goals.filter(g=>g.module===m.id).map(goalCard).join("") || `<p class="none">No SMART goals yet for this module.</p>`;
+  const dk=`m${m.id}-deliv`;
+  const yt=m.yt.length?m.yt.map(v=>`<div class="res"><span class="badge b-yt">YouTube</span><a href="https://www.youtube.com/results?search_query=${encodeURIComponent(v.title+(v.channel?" "+v.channel:""))}" target="_blank" rel="noopener">${esc(v.title)}</a><span class="note">Channel: ${esc(v.channel)} · ${esc(v.note)} · ${esc(YT_NOTE)}</span></div>`).join(""):"";
+  const pdf=m.pdf.length?m.pdf.map(p=>`<div class="res"><span class="badge b-pdf">PDF</span><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title)}</a><span class="note">${esc(p.note)} · ${CHK}</span></div>`).join(""):"";
+  const res=(yt+pdf)||`<p class="none">No verified free YouTube or PDF for this module yet.</p>`;
+  return `<div class="card">
+      <h2>${esc(m.short)} · ${esc(m.title)}</h2>
+      <p class="theme">${esc(m.theme)}</p>
+      <p style="font-size:.85rem;color:var(--muted)">Module window: ${mStart(m)} to ${mDue(m)}</p>
+      <div class="sub">Practical tasks</div>
+      ${tasks}
+      <div class="row"><input type="text" id="newtask-${m.id}" class="wide" placeholder="Add a task"><button class="addbtn" data-act="add-task" data-mod="${m.id}">Add task</button></div>
+      <div class="sub">SMART goals</div>
+      ${goals}
+      <div class="row"><button class="addbtn" data-act="add-goal" data-mod="${m.id}">Add SMART goal</button></div>
+      <div class="sub">Deliverable</div>
+      <label class="check"><input type="checkbox" data-key="${dk}" ${state.done[dk]?"checked":""}><span>${esc(m.deliverable)}</span></label>
+      <div class="res-block"><h5>Free YouTube videos and PDFs</h5>${res}</div>
+      <div class="warn">Program name is as provided; I could not find an official source for it. Confirm the name, rules, and dates with KMC administration before assessment use.</div>
+    </div>`;
+}
+
 function canvasView(){
-  const f = CANVAS_FIELDS.map(([k,label])=>{const v=esc(state.canvas[k]||"");
-    return `<label class="field" for="cv-${k}">${esc(label)}</label>`+(MULTI.includes(k)?`<textarea id="cv-${k}" data-cv="${k}">${v}</textarea>`:`<input type="text" id="cv-${k}" data-cv="${k}" value="${v}">`);}).join("");
-  return `<div class="card"><h2>Idea canvas</h2><p class="theme">Fill this in as you finish modules, then generate a text version for your report.</p>
-    ${f}<button class="primary" id="gen">Generate canvas text</button>
-    <textarea class="output" id="out" placeholder="Your canvas text will appear here."></textarea></div>`;
+  const f=CANVAS_FIELDS.map(([k,label])=>{const v=esc(state.canvas[k]||"");
+    return `<label style="display:block;font-weight:700;font-size:.88rem;margin:10px 0 3px" for="cv-${k}">${esc(label)}</label>`+
+      (MULTI.includes(k)?`<textarea class="wide" id="cv-${k}" data-cv="${k}">${v}</textarea>`:`<input type="text" class="wide" id="cv-${k}" data-cv="${k}" value="${v}">`);}).join("");
+  return `<div class="card"><h2>Idea canvas</h2><p class="theme">Fill this in as you finish modules, then generate text for your report.</p>
+    ${f}<button class="primary" id="gencv">Generate canvas text</button>
+    <textarea class="output" id="cvout" placeholder="Canvas text will appear here."></textarea></div>`;
 }
+
 function render(){
-  renderNav(); renderProgress();
-  const c=document.getElementById("content");
-  c.innerHTML = state.tab<7 ? moduleView(MODULES[state.tab]) : canvasView();
+  renderNav();
+  const main=document.getElementById("main");
+  if(state.tab===0) main.innerHTML=dashboardView();
+  else if(state.tab<=7) main.innerHTML=moduleView(MODULES[state.tab-1]);
+  else main.innerHTML=canvasView();
   window.scrollTo({top:0,behavior:"smooth"});
 }
+
 document.addEventListener("click",e=>{
-  const t=e.target.closest("[data-tab]");
-  if(t){state.tab=Number(t.dataset.tab); render(); return;}
-  if(e.target.id==="gen"){
+  const tab=e.target.closest("[data-tab]");
+  if(tab){state.tab=Number(tab.dataset.tab); render(); return;}
+  const act=e.target.closest("[data-act]");
+  if(act){
+    const a=act.dataset.act;
+    if(a==="add-goal"){
+      const mid=Number(act.dataset.mod);
+      state.goals.push({id:"g"+(++state.seq),module:mid,specific:"New specific goal",measure:"Measure",target:5,unit:"items",current:0,achievable:"",relevant:"",due:""});
+    }
+    if(a==="del-goal"){state.goals=state.goals.filter(g=>g.id!==act.dataset.id);}
+    if(a==="add-task"){
+      const mid=Number(act.dataset.mod), inp=document.getElementById("newtask-"+mid), txt=(inp.value||"").trim();
+      if(!txt) return;
+      state.tasks[mid].push({id:"x"+(++state.seq),text:txt});
+    }
+    if(a==="del-task"){
+      const mid=Number(act.dataset.mod);
+      state.tasks[mid]=state.tasks[mid].filter(t=>t.id!==act.dataset.id);
+      delete state.done[act.dataset.id];
+    }
+    render(); return;
+  }
+  if(e.target.id==="exp"){
+    const lines=["SMART GOAL SUMMARY: KMC-HSSD NDIEM 2026","Programme start: "+state.start+" | Reporting date: "+state.today,""];
+    MODULES.forEach(m=>{
+      lines.push(`${m.short} ${m.title}`);
+      state.goals.filter(g=>g.module===m.id).forEach(g=>{
+        const s=status(g);
+        lines.push(`  - S: ${g.specific} | M: ${g.current}/${g.target} ${g.unit} | A: ${g.achievable} | R: ${g.relevant} | T: due ${goalDue(g)} | Status: ${s.label}`);
+      });
+      lines.push("");
+    });
+    lines.push("Developed By: Mr. Bishnu Singh Rayamajhi, Math Lecturer and Department Head of Humanities & Social Sciences (KMC-HSSD), Kapilvastu Multiple Campus, Taulihawa, Kapilvastu");
+    document.getElementById("out").value=lines.join("\n");
+  }
+  if(e.target.id==="gencv"){
     const g=k=>(document.getElementById("cv-"+k)||{}).value||"";
-    document.getElementById("out").value=[
+    document.getElementById("cvout").value=[
       "PRACTICAL INNOVATION CANVAS: KMC-HSSD NDIEM 2026","",
-      "Problem statement: "+g("problem"),"",
-      "Who has this problem: "+g("who"),"",
-      "Chosen idea:\n"+g("idea"),"",
-      "Evidence from interviews and prototype testing:\n"+g("evidence"),"",
-      "Start-up and monthly cost:\n"+g("cost"),"",
-      "Income or sustainability:\n"+g("income"),"",
-      "Next three steps:\n"+g("steps"),"",
-      "Prepared by students of KMC-HSSD, Kapilvastu Multiple Campus, Taulihawa, Nepal"
-    ].join("\n");
+      "Problem statement: "+g("problem"),"","Who has this problem: "+g("who"),"","Chosen idea:\n"+g("idea"),"",
+      "Evidence from interviews and prototype testing:\n"+g("evidence"),"","Start-up and monthly cost:\n"+g("cost"),"",
+      "Income or sustainability:\n"+g("income"),"","Next three steps:\n"+g("steps"),"",
+      "Developed By: Mr. Bishnu Singh Rayamajhi, Math Lecturer and Department Head of Humanities & Social Sciences (KMC-HSSD), Kapilvastu Multiple Campus, Taulihawa, Kapilvastu"].join("\n");
   }
 });
+
 document.addEventListener("change",e=>{
-  const k=e.target.dataset.key;
-  if(k){state.done[k]=e.target.checked; renderProgress();}
+  const t=e.target;
+  if(t.dataset.key){state.done[t.dataset.key]=t.checked; render(); return;}
+  if(t.dataset.date){state[t.dataset.date]=t.value; render(); return;}
+  if(t.dataset.goal){
+    const g=state.goals.find(x=>x.id===t.dataset.goal); if(!g) return;
+    const f=t.dataset.f;
+    g[f]=(f==="target"||f==="current")?Math.max(0,Number(t.value)||0):t.value;
+    render(); return;
+  }
+  if(t.dataset.cv){state.canvas[t.dataset.cv]=t.value;}
 });
-document.addEventListener("input",e=>{
-  const k=e.target.dataset.cv;
-  if(k) state.canvas[k]=e.target.value;
+document.addEventListener("keydown",e=>{
+  if(e.key==="Enter" && e.target.id && e.target.id.startsWith("newtask-")){
+    const mid=Number(e.target.id.split("-")[1]);
+    const btn=document.querySelector(`[data-act="add-task"][data-mod="${mid}"]`);
+    if(btn) btn.click();
+  }
 });
 render();
 </script>
