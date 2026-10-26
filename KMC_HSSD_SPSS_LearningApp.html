@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KMC-HSSD SPSS Learning App</title>
+<style>
+:root{--navy:#0f2747;--navy2:#1b3a66;--gold:#c9a227;--bg:#f5f6f9;--card:#ffffff;--text:#1c2331;--muted:#5b6474;--line:#dfe3ea;--ok:#2e7d4f;--warn:#a6611a;--bad:#b3261e}
+@media (prefers-color-scheme: dark){:root{--bg:#0c1624;--card:#132238;--text:#e8edf5;--muted:#9aa6ba;--line:#263a57;--ok:#4caf7a;--warn:#e0a050;--bad:#ef6b63}}
+*{box-sizing:border-box}
+body{margin:0;font-family:Georgia,"Times New Roman",serif;background:var(--bg);color:var(--text);line-height:1.5}
+header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:20px 20px 16px;border-bottom:4px solid var(--gold)}
+header h1{margin:0 0 4px;font-size:1.35rem}
+header p{margin:2px 0;font-size:.88rem;opacity:.92}
+nav{display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+nav button{border:1px solid var(--line);background:transparent;color:var(--text);padding:6px 11px;border-radius:18px;cursor:pointer;font-size:.83rem;font-family:inherit}
+nav button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+main{max-width:920px;margin:0 auto;padding:16px 14px 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 17px;margin-bottom:14px}
+.card h2{margin:0 0 4px;font-size:1.18rem;color:var(--navy)}
+@media (prefers-color-scheme: dark){.card h2{color:var(--gold)}}
+.theme{color:var(--muted);font-style:italic;margin:0 0 10px}
+.sub{font-weight:700;margin:14px 0 4px;font-size:.93rem;font-family:system-ui,sans-serif}
+.tabs-level{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.tabs-level button{border:1px solid var(--line);background:var(--bg);color:var(--text);padding:7px 12px;border-radius:8px;cursor:pointer;font-family:system-ui,sans-serif;font-size:.85rem}
+.tabs-level button.on{background:var(--gold);color:#1a1a1a;border-color:var(--gold);font-weight:700}
+.depth{background:var(--bg);border-left:3px solid var(--gold);padding:8px 12px;border-radius:6px;margin:8px 0;font-size:.92rem}
+.progress{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 15px;margin-bottom:14px}
+.bar{height:9px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:6px}
+.bar>div{height:100%;background:linear-gradient(90deg,var(--gold),#e2c35a);transition:width .3s}
+.check{display:flex;gap:8px;align-items:flex-start;margin:5px 0;font-size:.92rem;cursor:pointer}
+.check input{margin-top:4px;accent-color:var(--navy)}
+ul{margin:4px 0 4px 18px;padding:0}li{margin:3px 0}
+.res-block{background:var(--bg);border-radius:8px;padding:8px 12px;margin-top:10px}
+.res-block h5{margin:4px 0 6px;font-size:.78rem;color:var(--muted);font-family:system-ui,sans-serif;text-transform:uppercase;letter-spacing:.04em}
+.res{font-size:.9rem;margin:7px 0}
+.res a{color:var(--navy2)}
+@media (prefers-color-scheme: dark){.res a{color:#8fb4ff}}
+.res .note{display:block;color:var(--muted);font-size:.78rem}
+.badge{display:inline-block;font-size:.66rem;padding:1px 7px;border-radius:8px;color:#fff;margin-right:6px;font-family:system-ui,sans-serif;vertical-align:middle}
+.b-yt{background:#c4302b}.b-pdf{background:#b5452d}
+.none{font-size:.84rem;color:var(--muted);font-style:italic;margin:4px 0}
+table{width:100%;border-collapse:collapse;font-size:.86rem;margin:8px 0}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:var(--bg);font-family:system-ui,sans-serif}
+input[type=number],input[type=text],select{padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font-family:inherit;font-size:.9rem;width:130px}
+.calc-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:6px 0}
+.calc-row label{font-size:.85rem;color:var(--muted);font-family:system-ui,sans-serif}
+.calc-out{margin-top:8px;padding:10px 12px;border-radius:8px;background:var(--bg);font-size:.92rem}
+.opt{display:block;margin:6px 0;font-size:.92rem;cursor:pointer}
+.opt input{margin-right:6px;accent-color:var(--navy)}
+.qres{margin-top:6px;font-size:.9rem;padding:8px 10px;border-radius:8px}
+.q-ok{background:rgba(46,125,79,.15);color:var(--ok)}.q-bad{background:rgba(179,38,30,.12);color:var(--bad)}
+button.primary{background:var(--navy);color:#fff;border:0;padding:9px 16px;border-radius:8px;cursor:pointer;font-family:system-ui,sans-serif;font-size:.9rem;margin-top:8px}
+.warn{font-size:.8rem;color:var(--warn);border:1px dashed var(--warn);border-radius:8px;padding:8px 10px;margin-top:10px}
+.output{width:100%;min-height:200px;margin-top:10px;font-family:ui-monospace,Menlo,monospace;font-size:.82rem;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px}
+.footer-note{font-size:.78rem;color:var(--muted);margin-top:22px;text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <h1>KMC-HSSD · SPSS Learning App</h1>
+  <p>For Masters students, scholars, researchers, and innovators · Humanities &amp; Social Sciences Department</p>
+  <p>Kapilvastu Multiple Campus (KMC), Taulihawa, Kapilvastu, Nepal</p>
+  <p><strong>Developed By:</strong> Mr. Bishnu Singh Rayamajhi, Math Lecturer and Department Head of Humanities &amp; Social Sciences (KMC-HSSD), Kapilvastu Multiple Campus, Taulihawa, Kapilvastu</p>
+</header>
+<nav id="nav"></nav>
+<main id="main"></main>
+<div class="footer-note" style="max-width:920px;margin:0 auto;padding:0 14px 30px">Progress, calculator inputs, and notes are kept only while this page is open. Re-check every video and PDF before teaching.</div>
+
+<script>
+const CHK="Checked 23 Oct 2026";
+const YT_NOTE="Opens a YouTube search for this exact title. Click the matching video and confirm it is free before assigning.";
+const IBM_DIR="https://public.dhe.ibm.com/software/analytics/spss/documentation/statistics/20.0/en/client/Manuals";
+const IBM_NOTE="Official IBM manual (older version 20 folder). Commands and menus may differ in current SPSS; use it for concepts.";
+const PSPP_MANUAL="https://www.gnu.org/software/pspp/manual/pspp.html";
+const OPENINTRO="https://openintro.org/book/os/";
+
+const LEVELS=[{k:"masters",label:"Masters student"},{k:"scholar",label:"Scholar / Researcher"},{k:"innovator",label:"Innovator"}];
+
+const MODULES=[
+{id:1,title:"Orientation: The SPSS Environment and Free Alternatives",
+ theme:"Know the Data View, Variable View, Output Viewer, and syntax, and choose a free option if SPSS is not licensed",
+ depth:{masters:"Open a dataset, switch between Data View and Variable View, and save both the data file and the output file.",
+        scholar:"Explain why a syntax file is kept for every analysis, and compare SPSS with a free option (PSPP) for reproducibility.",
+        innovator:"Use the free route first (PSPP or a trial) to test an idea before buying a licence."},
+ tasks:["Install SPSS (licensed or trial) or PSPP, and record the version","Open a sample file and explore Data View and Variable View","Save one output file and one syntax file with a clear name and date"],
+ yt:[{title:"Introduction to SPSS Software for Beginners (Part 1)",channel:"",note:"Beginner overview of SPSS; confirm the channel on the video page"},
+     {title:"Learn SPSS IN 20 MINUTES. GO FROM ZERO TO HERO IN SPSS QUICKLY",channel:"",note:"Quick overview for beginners; confirm the channel"}],
+ pdf:[{title:"IBM SPSS Statistics Brief Guide (IBM official manual folder, version 20)",url:IBM_DIR,note:IBM_NOTE+" Open the Brief Guide file in this folder."},
+      {title:"GNU PSPP Manual (free SPSS-compatible software)",url:PSPP_MANUAL,note:"Official GNU manual (GNU Free Documentation License). Read the HTML version online."}]},
+{id:2,title:"Data Entry, Variable Definition, and Coding",
+ theme:"Enter survey data correctly, define variables and value labels, and set measurement levels",
+ depth:{masters:"Define every variable with a name, type, label, value labels, and measurement level (nominal, ordinal, or scale).",
+        scholar:"Document a codebook with the coding of every item and each missing-value code, and keep it with the data.",
+        innovator:"Design a simple data entry form first, so the spreadsheet matches the SPSS variables from the start."},
+ tasks:["Create the codebook (variable name, label, type, values, measurement level)","Enter or import at least 20 synthetic or consented records","Check the data for impossible values (for example, age of 250)"],
+ yt:[{title:"SPSS course for beginners: Stats basics, creating variables, data entry, descriptive stats",channel:"",note:"Long course (about two hours) covering variables and data entry"},
+     {title:"How to Use SPSS - An Introduction to SPSS for Beginners",channel:"Research by Design (Dr. Daniel)",note:"Free series by Research by Design; confirm on the video page"},
+     {title:"Using SPSS for Research Analysis: Tutorial about Entering Data",channel:"ZFA Channel (per listing)",note:"Data entry walkthrough; confirm the channel"}],
+ pdf:[{title:"IBM SPSS Statistics Core System User's Guide (IBM official manual folder, version 20)",url:IBM_DIR,note:IBM_NOTE+" Open the Core System User's Guide file in this folder."}]},
+{id:3,title:"Cleaning, Recoding, and Computing Variables",
+ theme:"Prepare data: missing values, reverse-coded items, and computed scores",
+ depth:{masters:"Recode reverse-scored items, compute a total or mean score, and report how missing values were handled.",
+        scholar:"Write the syntax for every transformation, and test the transformed variables against the raw data.",
+        innovator:"Build one clean score variable that your product or report will use, and document how it was made."},
+ tasks:["Identify reverse-coded items and recode them (see the calculator)","Compute a total or mean score and check its range","Record how missing values were treated"],
+ yt:[{title:"Importing Data into SPSS 27 - Statistics with SPSS for Beginners (with Puppies) (3 of 8)",channel:"",note:"Part of a numbered series; confirm the channel. Data import step"}],
+ pdf:[{title:"IBM SPSS Statistics Command Syntax Reference (IBM official manual folder, version 20)",url:IBM_DIR,note:IBM_NOTE+" Use it for RECODE and COMPUTE syntax."}]},
+{id:4,title:"Descriptive Statistics and Charts",
+ theme:"Describe your data with frequencies, means, standard deviations, and charts",
+ depth:{masters:"Report frequencies and percentages for categories, and mean, SD, and range for scales, in a table.",
+        scholar:"Check the shape of distributions (skewness, kurtosis) and justify your chart choice.",
+        innovator:"Turn a descriptive table into one clear chart for a non-specialist audience."},
+ tasks:["Run frequencies for categorical variables","Run descriptives for scale variables","Make one table and one chart for the report"],
+ yt:[{title:"Descriptive Statistics in SPSS (SPSS Tutorial Video #5)",channel:"",note:"Descriptive statistics walkthrough; confirm the channel"},
+     {title:"02 Descriptive Statistics and Frequencies in SPSS – SPSS for Beginners",channel:"Research by Design (Dr. Daniel)",note:"Frequencies walkthrough"},
+     {title:"03 Descriptive Statistics and z Scores in SPSS – SPSS for Beginners",channel:"Research by Design (Dr. Daniel)",note:"Descriptives and z-scores"},
+     {title:"Descriptive Statistics in SPSS",channel:"RStats Institute",note:"Listed on the Michigan State University SPSS guide for descriptive statistics"}],
+ pdf:[{title:"OpenIntro Statistics, 4th edition (free PDF, Creative Commons)",url:OPENINTRO,note:"Free open textbook. Use the data-description chapters for concepts of distributions and summaries."}]},
+{id:5,title:"Scale Reliability (Cronbach's Alpha) and Scale Construction",
+ theme:"Check that a set of items measures one construct consistently",
+ depth:{masters:"Report Cronbach's alpha for each scale, and state the threshold used (0.70 is commonly accepted).",
+        scholar:"Discuss the limits of alpha (it depends on the number of items) and report item-total statistics.",
+        innovator:"Keep scales short and reliable, since long scales are harder to use in the field."},
+ tasks:["Run reliability analysis for each scale","Read the item-total statistics and remove weak items only with a reason","Report alpha for each scale"],
+ yt:[],
+ pdf:[{title:"IBM SPSS Statistics Base (IBM official manual folder, version 20)",url:IBM_DIR,note:IBM_NOTE+" Reliability analysis is in the Base module. Open the Base file in this folder."}]},
+{id:6,title:"Correlation and Regression",
+ theme:"Measure how variables move together and predict an outcome",
+ depth:{masters:"Report Pearson correlations with significance, and a regression model with coefficients, R², and collinearity checks.",
+        scholar:"Check assumptions (linearity, residuals, multicollinearity) and report standardised coefficients.",
+        innovator:"Use regression to identify which factor most predicts the outcome you want to change."},
+ tasks:["Run a correlation matrix for the key variables","Run a regression model and check the residuals","Report coefficients, R², and VIF"],
+ yt:[],
+ pdf:[{title:"OpenIntro Statistics, 4th edition (free PDF)",url:OPENINTRO,note:"Free open textbook. Use the regression chapters for concepts."}]},
+{id:7,title:"Hypothesis Tests: t-tests, Chi-square, and ANOVA",
+ theme:"Compare groups and test associations between categorical variables",
+ depth:{masters:"Choose the right test from the level of measurement, and report the test statistic, degrees of freedom, p-value, and effect size.",
+        scholar:"Check assumptions (normality, equal variances) and report confidence intervals with effect sizes.",
+        innovator:"Use a simple group comparison (for example, two villages) to test whether an intervention made a difference."},
+ tasks:["Choose a test for each research question","Run the test and check assumptions","Report the result with the effect size (see the calculator)"],
+ yt:[],
+ pdf:[{title:"OpenIntro Statistics, 4th edition (free PDF)",url:OPENINTRO,note:"Free open textbook. Use the inference chapters for t-tests and chi-square concepts."}]},
+{id:8,title:"Mediation and Bootstrapping",
+ theme:"Test indirect effects and whether one variable explains the effect of another",
+ depth:{masters:"Test one indirect effect with bootstrapped confidence intervals, and report whether the mediation is full or partial.",
+        scholar:"Discuss the limits of mediation claims in cross-sectional data, and report the confidence interval, not only the p-value.",
+        innovator:"Use a mediator to show the mechanism by which your idea works."},
+ tasks:["Set up one mediation model","Run bootstrapping and report the indirect effect with its confidence interval"],
+ yt:[],
+ pdf:[{title:"IBM SPSS Bootstrapping (IBM official manual folder, version 20)",url:IBM_DIR,note:IBM_NOTE+" Open the Bootstrapping file in this folder. Mediation macros such as PROCESS are separate add-ons."}]},
+{id:9,title:"Reporting Results in APA Style",
+ theme:"Write results that a reviewer, examiner, or community can understand and check",
+ depth:{masters:"Write each result as a sentence with the statistic, degrees of freedom, p-value, and effect size, in APA format.",
+        scholar:"Attach the syntax and output to the thesis appendix, so every table can be reproduced.",
+        innovator:"Turn the key results into a one-page summary with one recommendation."},
+ tasks:["Write one APA-style sentence for each key result","Build one results table","Complete the reporting checklist below"],
+ yt:[{title:"Learn SPSS data analysis, interpretation and APA reporting for beginners in 7 minutes",channel:"",note:"Short APA reporting guide; confirm the channel"}],
+ pdf:[{title:"OpenIntro Statistics, 4th edition (free PDF)",url:OPENINTRO,note:"Free open textbook. Use it for reporting conventions with the statistics you ran."}]}
+];
+
+const EXTRA_YT={
+ 5:[{title:"Introduction to SPSS for beginners",url:"https://www.youtube.com/watch?v=9ltvDNAsO-I",channel:"",note:"Direct link listed on a UKZN resource page under 'Reliability and validity'. Check that it covers reliability before assigning"},
+    {title:"SPSS Data Analysis | Cronbach Alpha Reliability - Analysis, Interpretation, and Reporting",channel:"",note:"About 6 minutes: running, interpreting, and reporting alpha. Confirm the channel"},
+    {title:"Cronbach's Alpha and Reliability Analysis in SPSS (SPSS Tutorial Video #24)",channel:"",note:"Part of a numbered SPSS series. Confirm the channel"},
+    {title:"Reliability analysis using Cronbach's Alpha in SPSS",channel:"",note:"About 12 minutes. Confirm the channel"}],
+ 6:[{title:"Interpreting Output for Multiple Regression in SPSS",channel:"",note:"About 9 minutes: two predictors and reading the output. Confirm the channel"},
+    {title:"Multiple Linear Regression in SPSS with Assumption Testing",channel:"",note:"About 15 minutes: assumption checks before running the model"},
+    {title:"SPSS for newbies: Interpreting the basic output of a multiple linear regression model",channel:"",note:"About 13 minutes: reading the output tables"},
+    {title:"Multiple Linear Regression in SPSS - Complete Tutorial",channel:"",note:"Long (about 1 hour 8 minutes): full walkthrough"},
+    {title:"Multivariable Linear Regression in SPSS (SPSS Tutorial Video #26)",channel:"",note:"Part of a numbered SPSS series. Confirm the channel"}],
+ 7:[{title:"Using SPSS to Run Independent Samples t-Tests",channel:"Chieh-Chen Bowen",url:"https://www.youtube.com/watch?v=3UopGdhDfdA",note:"Direct link from a university textbook resource page. Covers equal and unequal variance output"},
+    {title:"Independent Sample t-test",url:"https://www.youtube.com/watch?v=jyoO4i8yUag",channel:"",note:"Direct link from a textbook resource page. Explains the t-statistic and decision rule. Not SPSS-specific, so use it for theory"},
+    {title:"SPSS - Independent Samples t-Test",channel:"statslectures",note:"Listed in a 30-minute SPSS course on Class Central. Confirm the video"},
+    {title:"Independent Sample t-Test in SPSS Tutorial (SPSS Tutorial Video #13) - Comparing Two Groups",channel:"",note:"Part of a numbered SPSS series. Confirm the channel"},
+    {title:"Fisher or Chi Square test using SPSS",channel:"Farhan Haq",note:"Listed on Class Central. Chi-square and small-sample alternative. Confirm the video"}]
+};
+MODULES.forEach(m=>{(EXTRA_YT[m.id]||[]).forEach(v=>m.yt.push(v));});
+
+const EXTRA_YT_8=[
+ {title:"Testing mediation and moderation using Hayes Process Macro (Model 5) with SPSS",channel:"",note:"About 17 minutes: running the PROCESS macro for mediation. Confirm the channel on the video page"},
+ {title:"Mediation and Moderation Analysis using SPSS (Hayes's Process Macro), Part 1 (Lesson 10)",channel:"",note:"About 19 minutes: the first part of a lesson series on PROCESS. Confirm the channel"},
+ {title:"Mediation analysis in SPSS",channel:"",note:"Under 1 minute: a quick overview of running mediation with the PROCESS package. Use it as a preview only"},
+ {title:"Introduction to Mediation Analysis - Statistics Made Easy 6.4",channel:"Statistics Made Easy",note:"About 3 minutes: the concept of mediation, before running SPSS. Confirm the video"}
+];
+MODULES.find(m=>m.id===8).yt.push(...EXTRA_YT_8);
+
+const CHECKLIST=["Software and version reported (or PSPP named as the free alternative)","Codebook or variable list available","Missing values and their handling reported","Reverse-coded items recoded and documented","Descriptive statistics reported for every variable used","Assumptions checked for each test","Test statistic, degrees of freedom, p-value, and effect size reported","Scale reliability (alpha) reported","Syntax or log saved with the output","Data consent and anonymisation described"];
+
+const QUIZ=[
+ {q:"In SPSS, where do you define variable names, types, labels, and measurement levels?",opts:["Output Viewer","Variable View","Syntax Editor only","Chart Builder"],a:1,why:"Variable View holds the variable definitions; Data View holds the values."},
+ {q:"A 5-point item is reverse-scored. What is the recoded value for an original score of 2?",opts:["2","3","4","5"],a:2,why:"For a 1 to 5 scale, new = 6 − old, so 6 − 2 = 4."},
+ {q:"Which Cronbach's alpha is commonly accepted as the minimum for research scales?",opts:["0.30","0.50","0.70","0.95"],a:2,why:"0.70 is the commonly used minimum; values above about 0.95 can suggest redundant items."},
+ {q:"A researcher wants the indirect effect in a mediation model with bootstrapped confidence intervals. Which is the most common SPSS route?",opts:["Frequencies","The PROCESS macro (Hayes)","Chart Builder","Missing Values dialog"],a:1,why:"The PROCESS macro is a widely used add-on for mediation with bootstrapping in SPSS."},
+ {q:"Which test would you use to compare the mean score of two independent groups?",opts:["Chi-square test of independence","Independent-samples t-test","Frequencies","Cronbach's alpha"],a:1,why:"An independent-samples t-test compares two group means on a scale variable."}
+];
+
+const state={tab:0,level:"masters",done:{},cr:{alpha:{k:10,r:0.3},rev:{min:1,max:5,val:2},d:{m1:4.2,s1:1.1,n1:30,m2:3.6,s2:1.2,n2:30}},answers:{}};
+
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function ytUrl(v){return v.url||("https://www.youtube.com/results?search_query="+encodeURIComponent(v.title+(v.channel?" "+v.channel:"")));}
+
+function pct(){
+  let total=0,n=0;
+  MODULES.forEach(m=>{total+=m.tasks.length; m.tasks.forEach((_,i)=>{if(state.done[`m${m.id}-t${i}`]) n++;});});
+  CHECKLIST.forEach((_,i)=>{total++; if(state.done[`cl-${i}`]) n++;});
+  return {n,total,p:Math.round(n/total*100)};
+}
+
+function renderNav(){
+  const mods=MODULES.map(m=>`<button class="${state.tab===m.id?'active':''}" data-tab="${m.id}">M${m.id}</button>`).join("");
+  document.getElementById("nav").innerHTML=
+    `<button class="${state.tab===0?'active':''}" data-tab="0">Start</button>`+mods+
+    `<button class="${state.tab===10?'active':''}" data-tab="10">Calculators</button>`+
+    `<button class="${state.tab===11?'active':''}" data-tab="11">Checklist</button>`+
+    `<button class="${state.tab===12?'active':''}" data-tab="12">Quiz</button>`+
+    `<button class="${state.tab===13?'active':''}" data-tab="13">Resources</button>`;
+}
+
+function levelBar(){
+  return `<div class="tabs-level">${LEVELS.map(l=>`<button class="${state.level===l.k?'on':''}" data-level="${l.k}">${l.label}</button>`).join("")}</div>`;
+}
+
+function startView(){
+  const p=pct();
+  return `<div class="progress"><strong>Overall progress:</strong> ${p.n} of ${p.total} items (${p.p}%)<div class="bar"><div style="width:${p.p}%"></div></div></div>
+  <div class="card">
+    <h2>SPSS for KMC-HSSD</h2>
+    <p class="theme">Choose your track. Each module shows guidance for that track.</p>
+    ${levelBar()}
+    <p>Work through modules 1 to 9 in order. Each has tasks, the depth expected for your track, and free YouTube tutorials and PDFs. Use Calculators for reliability, reverse coding, and effect size, the Checklist for reporting, and the Quiz to test yourself.</p>
+    <div class="warn">SPSS (IBM) is commercial. Check whether your institution has a licence, or use a trial from IBM. PSPP is a free, SPSS-compatible alternative. Use synthetic or consented data only.</div>
+  </div>`;
+}
+
+function moduleView(m){
+  const tasks=m.tasks.map((t,i)=>{const k=`m${m.id}-t${i}`;
+    return `<label class="check"><input type="checkbox" data-key="${k}" ${state.done[k]?"checked":""}><span>${esc(t)}</span></label>`;}).join("");
+  const yt=m.yt.map(v=>`<div class="res"><span class="badge b-yt">YouTube</span><a href="${esc(ytUrl(v))}" target="_blank" rel="noopener">${esc(v.title)}</a><span class="note">${v.channel?"Channel: "+esc(v.channel)+" · ":""}${esc(v.note)} · ${esc(YT_NOTE)}</span></div>`).join("");
+  const pdf=m.pdf.map(p=>`<div class="res"><span class="badge b-pdf">PDF / Manual</span><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title)}</a><span class="note">${esc(p.note)} · ${CHK}</span></div>`).join("");
+  return `<div class="card">
+    <h2>Module ${m.id}: ${esc(m.title)}</h2>
+    <p class="theme">${esc(m.theme)}</p>
+    ${levelBar()}
+    <div class="depth"><strong>${esc(LEVELS.find(l=>l.k===state.level).label)} focus:</strong> ${esc(m.depth[state.level])}</div>
+    <div class="sub">Tasks</div>${tasks}
+    <div class="res-block"><h5>Free YouTube tutorials and PDFs</h5>${(yt+pdf)||`<p class="none">No verified free YouTube tutorial for this module yet.</p>`}</div>
+  </div>`;
+}
+
+function calculatorView(){
+  const c=state.cr;
+  const a=c.alpha, std=(a.k*a.r)/(1+(a.k-1)*a.r);
+  const alphaMsg=std>=0.9?"Very high: check for redundant items":std>=0.7?"Acceptable to good (0.70 or above)":"Below 0.70: review the items";
+  const rv=c.rev, rev=(rv.min+rv.max)-rv.val;
+  const d=c.d, pooled=Math.sqrt(((d.n1-1)*d.s1*d.s1+(d.n2-1)*d.s2*d.s2)/(d.n1+d.n2-2));
+  const cohen=(d.m1-d.m2)/pooled;
+  const dLabel=Math.abs(cohen)>=0.8?"Large":Math.abs(cohen)>=0.5?"Medium":Math.abs(cohen)>=0.2?"Small":"Negligible";
+  return `<div class="card">
+    <h2>Standardised Cronbach's alpha</h2>
+    <p class="theme">Estimates alpha from the number of items (k) and the average inter-item correlation (r). Formula: k·r / (1 + (k−1)·r).</p>
+    <div class="calc-row"><label>Items (k) <input type="number" min="2" step="1" id="ak" value="${a.k}"></label>
+    <label>Average inter-item correlation (r) <input type="number" min="0" max="0.99" step="0.01" id="ar" value="${a.r}"></label></div>
+    <div class="calc-out">Standardised alpha = <strong>${isFinite(std)?std.toFixed(3):"–"}</strong>. ${esc(alphaMsg)}</div>
+  </div>
+  <div class="card">
+    <h2>Reverse-coding helper</h2>
+    <p class="theme">New value = (minimum + maximum) − original value. For a 1 to 5 scale, new = 6 − original.</p>
+    <div class="calc-row"><label>Scale minimum <input type="number" id="rmin" value="${rv.min}"></label>
+    <label>Scale maximum <input type="number" id="rmax" value="${rv.max}"></label>
+    <label>Original value <input type="number" id="rval" value="${rv.val}"></label></div>
+    <div class="calc-out">Recoded value = <strong>${rev}</strong></div>
+  </div>
+  <div class="card">
+    <h2>Cohen's d (two independent groups)</h2>
+    <p class="theme">d = (M1 − M2) / pooled SD. Guide: 0.2 small, 0.5 medium, 0.8 large.</p>
+    <div class="calc-row"><label>M1 <input type="number" step="0.01" id="m1" value="${d.m1}"></label>
+    <label>SD1 <input type="number" step="0.01" min="0" id="s1" value="${d.s1}"></label>
+    <label>n1 <input type="number" step="1" min="2" id="n1" value="${d.n1}"></label></div>
+    <div class="calc-row"><label>M2 <input type="number" step="0.01" id="m2" value="${d.m2}"></label>
+    <label>SD2 <input type="number" step="0.01" min="0" id="s2" value="${d.s2}"></label>
+    <label>n2 <input type="number" step="1" min="2" id="n2" value="${d.n2}"></label></div>
+    <div class="calc-out">d = <strong>${isFinite(cohen)?cohen.toFixed(3):"–"}</strong> (${dLabel} effect)</div>
+  </div>`;
+}
+
+function checklistView(){
+  const items=CHECKLIST.map((t,i)=>`<label class="check"><input type="checkbox" data-key="cl-${i}" ${state.done[`cl-${i}`]?"checked":""}><span>${esc(t)}</span></label>`).join("");
+  return `<div class="card"><h2>Reporting checklist</h2><p class="theme">Tick each item before submitting a report, thesis chapter, or manuscript.</p>${items}
+    <button class="primary" id="gen">Generate reporting summary</button>
+    <textarea class="output" id="out" placeholder="Summary will appear here."></textarea></div>`;
+}
+
+function quizView(){
+  const items=QUIZ.map((q,qi)=>{
+    const sel=state.answers[qi];
+    const opts=q.opts.map((o,oi)=>`<label class="opt"><input type="radio" name="q${qi}" data-q="${qi}" value="${oi}" ${sel===oi?"checked":""}>${esc(o)}</label>`).join("");
+    let res="";
+    if(sel!==undefined) res=sel===q.a?`<div class="qres q-ok">Correct. ${esc(q.why)}</div>`:`<div class="qres q-bad">Not quite. ${esc(q.why)}</div>`;
+    return `<div style="margin:12px 0"><strong>${qi+1}. ${esc(q.q)}</strong>${opts}${res}</div>`;
+  }).join("");
+  const answered=Object.keys(state.answers).length;
+  const correct=Object.entries(state.answers).filter(([qi,v])=>QUIZ[qi].a===v).length;
+  return `<div class="card"><h2>Self-check quiz</h2><p class="theme">Score: ${correct} of ${QUIZ.length} correct (${answered} answered).</p>${items}</div>`;
+}
+
+function resourcesView(){
+  const rows=MODULES.flatMap(m=>[
+    ...m.yt.map(v=>`<tr><td>M${m.id}</td><td><span class="badge b-yt">YouTube</span></td><td><a href="${esc(ytUrl(v))}" target="_blank" rel="noopener">${esc(v.title)}</a></td><td>${esc(v.channel||"Confirm on video page")}</td></tr>`),
+    ...m.pdf.map(p=>`<tr><td>M${m.id}</td><td><span class="badge b-pdf">PDF</span></td><td><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title)}</a></td><td>${esc(p.note)}</td></tr>`)
+  ]).join("");
+  return `<div class="card"><h2>All free resources</h2>
+    <p class="theme">Every verified YouTube tutorial and PDF in this app, in module order. ${CHK}.</p>
+    <table><tr><th>Module</th><th>Type</th><th>Title (click)</th><th>Channel or note</th></tr>${rows}</table>
+    <div class="warn">Coverage is limited. Module 8 YouTube entries are title searches, not yet checked on the video page. The UCLA SPSS PROCESS seminar is a free written guide, not a video. Some YouTube entries are title searches, so confirm each channel and video before teaching. The IBM manuals are an older version (20); check the current SPSS documentation on ibm.com. Verify each item before teaching.</div></div>`;
+}
+
+function render(){
+  renderNav();
+  const main=document.getElementById("main");
+  if(state.tab===0) main.innerHTML=startView();
+  else if(state.tab<=9) main.innerHTML=moduleView(MODULES[state.tab-1]);
+  else if(state.tab===10) main.innerHTML=calculatorView();
+  else if(state.tab===11) main.innerHTML=checklistView();
+  else if(state.tab===12) main.innerHTML=quizView();
+  else main.innerHTML=resourcesView();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-tab]");
+  if(t){state.tab=Number(t.dataset.tab); render(); return;}
+  const lv=e.target.closest("[data-level]");
+  if(lv){state.level=lv.dataset.level; render(); return;}
+  if(e.target.id==="gen"){
+    const done=CHECKLIST.filter((_,i)=>state.done[`cl-${i}`]).length;
+    document.getElementById("out").value=[
+      "SPSS REPORTING SUMMARY","",
+      `Checklist items complete: ${done} of ${CHECKLIST.length}`,
+      ...CHECKLIST.map((t,i)=>`[${state.done[`cl-${i}`]?"x":" "}] ${t}`),"",
+      "Developed By: Mr. Bishnu Singh Rayamajhi, Math Lecturer and Department Head of Humanities & Social Sciences (KMC-HSSD), Kapilvastu Multiple Campus, Taulihawa, Kapilvastu"
+    ].join("\n");
+  }
+});
+
+document.addEventListener("change",e=>{
+  const t=e.target;
+  if(t.dataset.key){state.done[t.dataset.key]=t.checked; render(); return;}
+  if(t.dataset.q!==undefined){state.answers[Number(t.dataset.q)]=Number(t.value); render(); return;}
+  const num=v=>Number(v)||0;
+  const map={
+    ak:()=>state.cr.alpha.k=Math.max(2,num(t.value)),
+    ar:()=>state.cr.alpha.r=Math.min(0.99,Math.max(0,num(t.value))),
+    rmin:()=>state.cr.rev.min=num(t.value),
+    rmax:()=>state.cr.rev.max=num(t.value),
+    rval:()=>state.cr.rev.val=num(t.value),
+    m1:()=>state.cr.d.m1=num(t.value),
+    s1:()=>state.cr.d.s1=Math.max(0,num(t.value)),
+    n1:()=>state.cr.d.n1=Math.max(2,num(t.value)),
+    m2:()=>state.cr.d.m2=num(t.value),
+    s2:()=>state.cr.d.s2=Math.max(0,num(t.value)),
+    n2:()=>state.cr.d.n2=Math.max(2,num(t.value))
+  };
+  if(map[t.id]){map[t.id](); render();}
+});
+
+render();
+</script>
+</body>
+</html>
