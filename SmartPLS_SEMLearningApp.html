@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KMC-HSSD SmartPLS (PLS-SEM) Learning App</title>
+<style>
+:root{--navy:#0f2747;--navy2:#1b3a66;--gold:#c9a227;--bg:#f5f6f9;--card:#ffffff;--text:#1c2331;--muted:#5b6474;--line:#dfe3ea;--ok:#2e7d4f;--warn:#a6611a;--bad:#b3261e}
+@media (prefers-color-scheme: dark){:root{--bg:#0c1624;--card:#132238;--text:#e8edf5;--muted:#9aa6ba;--line:#263a57;--ok:#4caf7a;--warn:#e0a050;--bad:#ef6b63}}
+*{box-sizing:border-box}
+body{margin:0;font-family:Georgia,"Times New Roman",serif;background:var(--bg);color:var(--text);line-height:1.5}
+header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:20px 20px 16px;border-bottom:4px solid var(--gold)}
+header h1{margin:0 0 4px;font-size:1.35rem}
+header p{margin:2px 0;font-size:.88rem;opacity:.92}
+nav{display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+nav button{border:1px solid var(--line);background:transparent;color:var(--text);padding:6px 11px;border-radius:18px;cursor:pointer;font-size:.83rem;font-family:inherit}
+nav button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+main{max-width:920px;margin:0 auto;padding:16px 14px 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 17px;margin-bottom:14px}
+.card h2{margin:0 0 4px;font-size:1.18rem;color:var(--navy)}
+@media (prefers-color-scheme: dark){.card h2{color:var(--gold)}}
+.theme{color:var(--muted);font-style:italic;margin:0 0 10px}
+.sub{font-weight:700;margin:14px 0 4px;font-size:.93rem;font-family:system-ui,sans-serif}
+.tabs-level{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.tabs-level button{border:1px solid var(--line);background:var(--bg);color:var(--text);padding:7px 12px;border-radius:8px;cursor:pointer;font-family:system-ui,sans-serif;font-size:.85rem}
+.tabs-level button.on{background:var(--gold);color:#1a1a1a;border-color:var(--gold);font-weight:700}
+.depth{background:var(--bg);border-left:3px solid var(--gold);padding:8px 12px;border-radius:6px;margin:8px 0;font-size:.92rem}
+.check{display:flex;gap:8px;align-items:flex-start;margin:5px 0;font-size:.92rem;cursor:pointer}
+.check input{margin-top:4px;accent-color:var(--navy)}
+ul{margin:4px 0 4px 18px;padding:0}li{margin:3px 0}
+.res-block{background:var(--bg);border-radius:8px;padding:8px 12px;margin-top:10px}
+.res-block h5{margin:4px 0 6px;font-size:.78rem;color:var(--muted);font-family:system-ui,sans-serif;text-transform:uppercase;letter-spacing:.04em}
+.res{font-size:.9rem;margin:7px 0}
+.res a{color:var(--navy2)}
+@media (prefers-color-scheme: dark){.res a{color:#8fb4ff}}
+.res .note{display:block;color:var(--muted);font-size:.78rem}
+.badge{display:inline-block;font-size:.66rem;padding:1px 7px;border-radius:8px;color:#fff;margin-right:6px;font-family:system-ui,sans-serif;vertical-align:middle}
+.b-yt{background:#c4302b}.b-pdf{background:#b5452d}
+.none{font-size:.84rem;color:var(--muted);font-style:italic;margin:4px 0}
+.progress{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 15px;margin-bottom:14px}
+.bar{height:9px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:6px}
+.bar>div{height:100%;background:linear-gradient(90deg,var(--gold),#e2c35a);transition:width .3s}
+table{width:100%;border-collapse:collapse;font-size:.88rem;margin:8px 0}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:var(--bg);font-family:system-ui,sans-serif}
+input[type=number],select{padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font-family:inherit;font-size:.9rem;width:120px}
+.calc-out{margin-top:8px;padding:10px 12px;border-radius:8px;background:var(--bg);font-size:.92rem}
+.opt{display:block;margin:6px 0;font-size:.92rem;cursor:pointer}
+.opt input{margin-right:6px;accent-color:var(--navy)}
+.qres{margin-top:6px;font-size:.9rem;padding:8px 10px;border-radius:8px}
+.q-ok{background:rgba(46,125,79,.15);color:var(--ok)}.q-bad{background:rgba(179,38,30,.12);color:var(--bad)}
+button.primary,.addbtn{background:var(--navy);color:#fff;border:0;padding:8px 14px;border-radius:8px;cursor:pointer;font-family:system-ui,sans-serif;font-size:.88rem;margin-top:8px}
+.warn{font-size:.8rem;color:var(--warn);border:1px dashed var(--warn);border-radius:8px;padding:8px 10px;margin-top:10px}
+.output{width:100%;min-height:200px;margin-top:10px;font-family:ui-monospace,Menlo,monospace;font-size:.82rem;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px}
+.footer-note{font-size:.78rem;color:var(--muted);margin-top:22px;text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <h1>KMC-HSSD · SmartPLS (PLS-SEM) Learning App</h1>
+  <p>For Masters students, scholars, researchers, and innovators · Humanities &amp; Social Sciences Department</p>
+  <p>Kapilvastu Multiple Campus (KMC), Taulihawa, Kapilvastu, Nepal</p>
+  <p><strong>Developed By:</strong> Mr. Bishnu Singh Rayamajhi, Math Lecturer and Department Head of Humanities &amp; Social Sciences (KMC-HSSD), Kapilvastu Multiple Campus, Taulihawa, Kapilvastu</p>
+</header>
+<nav id="nav"></nav>
+<main id="main"></main>
+<div class="footer-note" style="max-width:920px;margin:0 auto;padding:0 14px 30px">Progress, calculator inputs, and notes are kept only while this page is open. Re-check every video and PDF before teaching.</div>
+
+<script>
+const CHK="Checked 23 Oct 2026";
+const YT_NOTE="Opens a YouTube search for this exact title. Click the matching video and confirm it is free before assigning.";
+
+const LEVELS=[
+ {k:"masters",label:"Masters student"},
+ {k:"scholar",label:"Scholar / Researcher"},
+ {k:"innovator",label:"Innovator"}
+];
+
+const MODULES=[
+{id:1,title:"Foundations: Latent Variables and When PLS-SEM Fits",
+ theme:"Understand constructs, indicators, and the explanatory versus predictive purpose of PLS-SEM",
+ depth:{masters:"Explain the difference between a latent construct and its observed indicators, and justify PLS-SEM in one paragraph using your research objective.",
+        scholar:"Compare PLS-SEM and CB-SEM assumptions and write a defended choice for your study, citing your theory's status (new or established).",
+        innovator:"Describe the structural model as a simple prediction map for your idea: what drives what, and what outcome you want to predict."},
+ tasks:["Define three latent constructs from your topic and list 3 indicators for each","Write one hypothesis per structural path","Decide and justify why PLS-SEM suits your objective"],
+ yt:[{title:"SmartPLS 4 Tutorial Guide 1: Getting started",channel:"James Gaskin",note:"Orientation to the SmartPLS 4 workspace and a first model"}],
+ pdf:[]},
+{id:2,title:"Setting Up Your First Model in SmartPLS",
+ theme:"Import data, draw the model, and run the first PLS algorithm",
+ depth:{masters:"Build the model, run the PLS algorithm once, and save the project with a clear file name and date.",
+        scholar:"Keep a reproducible log: software version, settings, seed for bootstrapping, and every change made to the data.",
+        innovator:"Build a small model with only your core idea first, then add constructs one at a time."},
+ tasks:["Install SmartPLS and confirm the version you are using","Import a dataset (synthetic or consented real data) and check missing values","Draw the model and run the PLS algorithm","Save the project and note the settings used"],
+ yt:[{title:"SmartPLS 3 setting up your first model",channel:"James Gaskin",note:"Older SmartPLS 3 version; the same logic applies in SmartPLS 4"},
+     {title:"SmartPLS 4 Tutorial Guide 1: Getting started",channel:"James Gaskin",note:"Use the importing and drawing steps"}],
+ pdf:[]},
+{id:3,title:"Measurement Model: Loadings, Reliability, Convergent Validity",
+ theme:"Check that each construct is measured well before judging the structure",
+ depth:{masters:"Report outer loadings, Cronbach's alpha, composite reliability, and AVE for every construct, with thresholds (loadings at or above 0.70, CR at or above 0.70, AVE at or above 0.50).",
+        scholar:"Discuss when a loading between 0.40 and 0.70 can be kept, based on the effect of removing it on CR and AVE, and report the decision.",
+        innovator:"Keep the measurement model simple: fewer indicators per construct with strong loadings beats many weak ones."},
+ tasks:["Check outer loadings and note any below 0.70","Report composite reliability and AVE for each construct","Document every indicator removed and the reason"],
+ yt:[{title:"PLS-SEM (2): Create measurement model in SmartPLS",channel:"RESEARCH HUB",note:"Measurement model set-up; channel name from a listing, confirm on the video page"}],
+ pdf:[]},
+{id:4,title:"Discriminant Validity and Common Method Bias",
+ theme:"Show that constructs are distinct from each other",
+ depth:{masters:"Report HTMT for every pair of constructs. Use 0.85 as the conservative threshold and 0.90 as the lenient one, and state which you used.",
+        scholar:"Read the original HTMT paper, explain why it outperforms the Fornell-Larcker criterion in variance-based SEM, and discuss its limits.",
+        innovator:"If two constructs overlap, check whether your idea really needs both before merging them."},
+ tasks:["Run the HTMT check for all construct pairs","Report the highest HTMT value and the threshold you used","Describe how you limited common method bias in data collection"],
+ yt:[],
+ pdf:[{title:"Henseler, J., Ringle, C. M., & Sarstedt, M. (2015). A new criterion for assessing discriminant validity in variance-based structural equation modeling. Journal of the Academy of Marketing Science, 43(1), 115–135.",url:"https://doi.org/10.1007/s11747-014-0403-8",note:"Open access (Springer). Introduces HTMT."}]},
+{id:5,title:"Structural Model: Paths, R², f², and Predictive Power",
+ theme:"Interpret what the model explains and predicts",
+ depth:{masters:"Report path coefficients with bootstrapped t-values and p-values, R² for each endogenous construct, and VIF for collinearity.",
+        scholar:"Add f² effect sizes and PLSpredict results (Q² and RMSE), and explain the difference between explanatory and predictive relevance.",
+        innovator:"Use R² and PLSpredict to show how well your model would predict new cases, not only whether paths are significant."},
+ tasks:["Check collinearity (VIF) for all predictor sets","Run bootstrapping (use at least 5,000 subsamples) and report paths","Calculate f² for key paths using the calculator tab","Run PLSpredict if your goal is prediction"],
+ yt:[{title:"Model Assessment with smartPLS",channel:"Research Beast",note:"Structural model checks; channel name from a listing, confirm on the video page"},
+     {title:"SmartPLS 4: Structural Model Assessment",channel:"",note:"Check the channel on the video page"}],
+ pdf:[]},
+{id:6,title:"Mediation and Moderation",
+ theme:"Test indirect effects and whether a relationship depends on a third variable",
+ depth:{masters:"Test one indirect effect with bootstrapped confidence intervals, and report whether the mediation is full or partial.",
+        scholar:"Discuss the limits of mediation claims in cross-sectional data and report the confidence interval, not only the p-value.",
+        innovator:"Use a moderator to show who benefits most from your idea, and report it as a conditional effect."},
+ tasks:["Set up one mediation model and run bootstrapping","Report the indirect effect with its confidence interval","Set up one moderation model if your theory supports it"],
+ yt:[{title:"How to Run a Simple Mediation Model in SmartPLS 4",channel:"",note:"Part of the #SmartPLS4 series; confirm the channel on the video page"}],
+ pdf:[]},
+{id:7,title:"Multigroup Analysis and Measurement Invariance",
+ theme:"Compare groups (for example, rural and urban, or male and female respondents) without invalid comparisons",
+ depth:{masters:"Check that measurement is equivalent across groups before comparing path coefficients.",
+        scholar:"Run a permutation-based multigroup test and discuss the invariance assumptions behind it. The measurement invariance tutorial below uses CB-SEM and is useful as background.",
+        innovator:"Only compare groups that matter for your product or policy, and keep the number of groups small."},
+ tasks:["Define groups before analysis and record the group sizes","Check measurement invariance before comparing paths","Report the group comparison with its test results"],
+ yt:[{title:"Multi Group Analysis (PLS-MGA) in SmartPLS 4",channel:"",note:"Part of the #SmartPLS4 series; confirm the channel on the video page"}],
+ pdf:[{title:"Hirschfeld, G., & von Brachel, R. (2014). Improving multiple-group confirmatory factor analysis in R: A tutorial in measurement invariance with continuous and ordinal indicators. Practical Assessment, Research & Evaluation, 19(1), 7.",url:"https://openpublishing.library.umass.edu/pare/article/id/1369",note:"Open-access journal. CB-SEM background for invariance concepts."}]},
+{id:8,title:"Confirmatory Factor Analysis and Fit Concepts",
+ theme:"Understand how CFA differs from PLS-SEM, and how fit indices are read",
+ depth:{masters:"Explain why fit indices (CFI, TLI, RMSEA, SRMR) belong mainly to CB-SEM and CFA, not to standard PLS-SEM outputs.",
+        scholar:"Read the fit-index replication below and discuss why fixed cut-offs are debated.",
+        innovator:"Use CFA to confirm that your survey items measure what you intend before building the full model."},
+ tasks:["Run a CFA for one construct group if your design needs it","Write a short note on which fit indices apply to your method"],
+ yt:[{title:"SmartPLS 4: Confirmatory Factor Analysis (CFA)",channel:"",note:"Uses SmartPLS, not lavaan. Check the channel on the video page"},
+     {title:"SmartPLS 3 Factor Analysis",channel:"James Gaskin",note:"Short factor-analysis walkthrough in SmartPLS 3"}],
+ pdf:[{title:"Willse, J. T. (2006). Partial replication of Hu & Bentler (1999) on fit indexes. Journal of Experimental Education.",url:"https://stephensivo.itweb.ucf.edu/Distribution/PublishedPapers/2006%20JXE%20-%20FitIndex.pdf",note:"Author-hosted PDF on a university site. Check the copyright statement before sharing."}]},
+{id:9,title:"Reporting and Publication-Ready Results",
+ theme:"Write results that a reviewer or a community can check and trust",
+ depth:{masters:"Produce one results table for measurement and one for the structural model, using the reporting checklist.",
+        scholar:"Prepare the full methods section with software version, settings, and reproducibility notes, then get peer comments.",
+        innovator:"Turn the results into a one-page summary: what the model predicts, how strong it is, and what action follows."},
+ tasks:["Complete the reporting checklist below","Draft the methods and results text","Share the draft with one peer for critical comments"],
+ yt:[],
+ pdf:[{title:"Henseler, J., Ringle, C. M., & Sarstedt, M. (2015). A new criterion for assessing discriminant validity in variance-based structural equation modeling. Journal of the Academy of Marketing Science, 43(1), 115–135.",url:"https://doi.org/10.1007/s11747-014-0403-8",note:"Use its discriminant validity reporting when writing the results"}]}
+];
+
+const CHECKLIST=["Software name and version reported","Data source and sample size stated (synthetic data labelled as synthetic)","Missing values and outlier handling described","Outer loadings reported with thresholds","Reliability (alpha, CR) and AVE reported","HTMT reported with threshold","VIF reported for all predictor sets","Path coefficients, t-values, p-values, and confidence intervals reported","R² and f² reported","PLSpredict reported if prediction is claimed","Bootstrap settings (subsamples, seed) reported","Limitations stated, including common method bias"];
+
+const QUIZ=[
+ {q:"Which outer loading threshold is commonly recommended as acceptable?",opts:["0.40","0.50","0.70","0.90"],a:2,why:"0.70 is the common guideline; loadings between 0.40 and 0.70 are kept only if removing them does not improve CR and AVE."},
+ {q:"Which HTMT value is the conservative threshold proposed by Henseler et al. (2015)?",opts:["0.50","0.70","0.85","1.00"],a:2,why:"0.85 is the conservative threshold; 0.90 is the lenient one for conceptually more similar constructs."},
+ {q:"A variance inflation factor (VIF) of 2.1 for a predictor set indicates:",opts:["Serious collinearity","Acceptable collinearity","Failed reliability","Missing data"],a:1,why:"A VIF below 5 is generally acceptable, and below 3 is a stricter preference."},
+ {q:"Bootstrapping in PLS-SEM is mainly used to:",opts:["Replace the measurement model","Estimate standard errors and significance without assuming normal data","Calculate AVE","Remove outliers"],a:1,why:"Bootstrapping resamples the data to obtain standard errors, t-values, and confidence intervals without normality assumptions."},
+ {q:"PLS-SEM is most often chosen when the research goal is:",opts:["Only to test a fully established theory with fit indices","Prediction or exploration of a model with complex relationships","Measurement invariance across countries only","Descriptive statistics"],a:1,why:"PLS-SEM emphasises prediction and exploratory model building. It is not automatically superior, and CB-SEM remains the usual choice for theory testing with global fit."}
+];
+
+const state={tab:0,level:"masters",done:{},calc:{r2in:0.5,r2ex:0.4},vif:2.1,htmt:0.78,answers:{}};
+
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function ytUrl(v){return "https://www.youtube.com/results?search_query="+encodeURIComponent(v.title+(v.channel?" "+v.channel:""));}
+function fsize(f){return f>=0.35?"Large":f>=0.15?"Medium":f>=0.02?"Small":"Negligible";}
+
+function pct(){
+  let total=0,n=0;
+  MODULES.forEach(m=>{m.tasks.forEach((_,i)=>{total++; if(state.done[`m${m.id}-t${i}`]) n++;});});
+  CHECKLIST.forEach((_,i)=>{total++; if(state.done[`cl-${i}`]) n++;});
+  return {n,total,p:Math.round(n/total*100)};
+}
+
+function renderNav(){
+  const mods=MODULES.map((m)=>`<button class="${state.tab===m.id?'active':''}" data-tab="${m.id}">M${m.id}</button>`).join("");
+  document.getElementById("nav").innerHTML=
+    `<button class="${state.tab===0?'active':''}" data-tab="0">Start</button>`+mods+
+    `<button class="${state.tab===10?'active':''}" data-tab="10">Calculators</button>`+
+    `<button class="${state.tab===11?'active':''}" data-tab="11">Checklist</button>`+
+    `<button class="${state.tab===12?'active':''}" data-tab="12">Quiz</button>`+
+    `<button class="${state.tab===13?'active':''}" data-tab="13">Resources</button>`;
+}
+
+function startView(){
+  const p=pct();
+  const lv=LEVELS.map(l=>`<button class="${state.level===l.k?'on':''}" data-level="${l.k}">${l.label}</button>`).join("");
+  return `<div class="progress"><strong>Overall progress:</strong> ${p.n} of ${p.total} items (${p.p}%)<div class="bar"><div style="width:${p.p}%"></div></div></div>
+  <div class="card">
+    <h2>SmartPLS (PLS-SEM) for KMC-HSSD</h2>
+    <p class="theme">Choose your track. Each module shows guidance for that track.</p>
+    <div class="tabs-level">${lv}</div>
+    <p>Work through modules 1 to 9 in order. Each module has tasks, the depth expected for your track, and free YouTube tutorials and PDFs. Use the Calculators tab for f², VIF, and HTMT checks, the Checklist for reporting, and the Quiz to test yourself.</p>
+    <div class="warn">Software: SmartPLS is commercial, with a free learning version. Check current licence terms on smartpls.com before the course. Use synthetic or consented data only.</div>
+  </div>`;
+}
+
+function moduleView(m){
+  const tasks=m.tasks.map((t,i)=>{const k=`m${m.id}-t${i}`;
+    return `<label class="check"><input type="checkbox" data-key="${k}" ${state.done[k]?"checked":""}><span>${esc(t)}</span></label>`;}).join("");
+  const yt=m.yt.map(v=>`<div class="res"><span class="badge b-yt">YouTube</span><a href="${esc(ytUrl(v))}" target="_blank" rel="noopener">${esc(v.title)}</a><span class="note">${v.channel?"Channel: "+esc(v.channel)+" · ":""}${esc(v.note)} · ${esc(YT_NOTE)}</span></div>`).join("");
+  const pdf=m.pdf.map(p=>`<div class="res"><span class="badge b-pdf">PDF</span><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title)}</a><span class="note">${esc(p.note)} · ${CHK}</span></div>`).join("");
+  return `<div class="card">
+    <h2>Module ${m.id}: ${esc(m.title)}</h2>
+    <p class="theme">${esc(m.theme)}</p>
+    <div class="tabs-level">${LEVELS.map(l=>`<button class="${state.level===l.k?'on':''}" data-level="${l.k}">${l.label}</button>`).join("")}</div>
+    <div class="depth"><strong>${esc(LEVELS.find(l=>l.k===state.level).label)} focus:</strong> ${esc(m.depth[state.level])}</div>
+    <div class="sub">Tasks</div>${tasks}
+    <div class="res-block"><h5>Free YouTube tutorials and PDFs</h5>${(yt+pdf)||`<p class="none">No verified free YouTube tutorial or PDF for this module yet.</p>`}</div>
+  </div>`;
+}
+
+function calculatorView(){
+  const f2=(state.calc.r2in-state.calc.r2ex)/(1-state.calc.r2in);
+  const vifMsg=state.vif<3?"Good (below 3)":state.vif<5?"Acceptable (below 5)":"Problem: collinearity likely (5 or above)";
+  const htmtMsg=state.htmt<0.85?"Passes conservative threshold (below 0.85)":state.htmt<0.90?"Passes lenient threshold only (below 0.90)":"Fails: discriminant validity not established";
+  const valid=isFinite(f2)&&state.calc.r2in<1;
+  return `<div class="card">
+    <h2>f² effect size calculator</h2>
+    <p class="theme">f² = (R²<sub>included</sub> − R²<sub>excluded</sub>) / (1 − R²<sub>included</sub>). Cohen's guide: 0.02 small, 0.15 medium, 0.35 large.</p>
+    <label>R² with the predictor included <input type="number" step="0.01" min="0" max="0.99" id="r2in" value="${state.calc.r2in}"></label>
+    <label style="margin-left:10px">R² with the predictor excluded <input type="number" step="0.01" min="0" max="0.99" id="r2ex" value="${state.calc.r2ex}"></label>
+    <div class="calc-out">${valid?`f² = <strong>${f2.toFixed(3)}</strong> → ${fsize(f2)} effect`:"Enter values where R² included is below 1."}</div>
+  </div>
+  <div class="card">
+    <h2>VIF check</h2>
+    <p class="theme">Variance inflation factor for a predictor set.</p>
+    <label>VIF <input type="number" step="0.1" min="1" id="vif" value="${state.vif}"></label>
+    <div class="calc-out">${esc(vifMsg)}</div>
+  </div>
+  <div class="card">
+    <h2>HTMT check</h2>
+    <p class="theme">Heterotrait-monotrait ratio for one pair of constructs.</p>
+    <label>HTMT <input type="number" step="0.01" min="0" id="htmt" value="${state.htmt}"></label>
+    <div class="calc-out">${esc(htmtMsg)}</div>
+  </div>`;
+}
+
+function checklistView(){
+  const items=CHECKLIST.map((t,i)=>`<label class="check"><input type="checkbox" data-key="cl-${i}" ${state.done[`cl-${i}`]?"checked":""}><span>${esc(t)}</span></label>`).join("");
+  return `<div class="card"><h2>Reporting checklist</h2><p class="theme">Tick each item before submitting a thesis chapter or a journal manuscript.</p>${items}
+    <button class="primary" id="gen">Generate reporting summary</button>
+    <textarea class="output" id="out" placeholder="Summary will appear here."></textarea></div>`;
+}
+
+function quizView(){
+  const items=QUIZ.map((q,qi)=>{
+    const sel=state.answers[qi];
+    const opts=q.opts.map((o,oi)=>`<label class="opt"><input type="radio" name="q${qi}" data-q="${qi}" value="${oi}" ${sel===oi?"checked":""}>${esc(o)}</label>`).join("");
+    let res="";
+    if(sel!==undefined) res=sel===q.a?`<div class="qres q-ok">Correct. ${esc(q.why)}</div>`:`<div class="qres q-bad">Not quite. ${esc(q.why)}</div>`;
+    return `<div style="margin:12px 0"><strong>${qi+1}. ${esc(q.q)}</strong>${opts}${res}</div>`;
+  }).join("");
+  const answered=Object.keys(state.answers).length;
+  const correct=Object.entries(state.answers).filter(([qi,v])=>QUIZ[qi].a===v).length;
+  return `<div class="card"><h2>Self-check quiz</h2><p class="theme">Answer each question. Score: ${correct} of ${QUIZ.length} correct (${answered} answered).</p>${items}</div>`;
+}
+
+function resourcesView(){
+  const rows=MODULES.flatMap(m=>[
+    ...m.yt.map(v=>`<tr><td>M${m.id}</td><td><span class="badge b-yt">YouTube</span></td><td><a href="${esc(ytUrl(v))}" target="_blank" rel="noopener">${esc(v.title)}</a></td><td>${esc(v.channel||"Confirm on video page")}</td></tr>`),
+    ...m.pdf.map(p=>`<tr><td>M${m.id}</td><td><span class="badge b-pdf">PDF</span></td><td><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title)}</a></td><td>${esc(p.note)}</td></tr>`)
+  ]).join("");
+  return `<div class="card"><h2>All free resources</h2>
+    <p class="theme">Every verified YouTube tutorial and PDF in this app, in module order. Checked 23 Oct 2026.</p>
+    <table><tr><th>Module</th><th>Type</th><th>Title (click)</th><th>Channel or note</th></tr>${rows}</table>
+    <div class="warn">Coverage is limited. Several modules have no verified item yet (for example, Modules 1 and 9 for PDFs). Search the official SmartPLS documentation (smartpls.com) and your library for further free material, and verify each item before teaching.</div></div>`;
+}
+
+function render(){
+  renderNav();
+  const main=document.getElementById("main");
+  if(state.tab===0) main.innerHTML=startView();
+  else if(state.tab<=9) main.innerHTML=moduleView(MODULES[state.tab-1]);
+  else if(state.tab===10) main.innerHTML=calculatorView();
+  else if(state.tab===11) main.innerHTML=checklistView();
+  else if(state.tab===12) main.innerHTML=quizView();
+  else main.innerHTML=resourcesView();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-tab]");
+  if(t){state.tab=Number(t.dataset.tab); render(); return;}
+  const lv=e.target.closest("[data-level]");
+  if(lv){state.level=lv.dataset.level; render(); return;}
+  if(e.target.id==="gen"){
+    const done=CHECKLIST.filter((_,i)=>state.done[`cl-${i}`]).length;
+    document.getElementById("out").value=[
+      "PLS-SEM REPORTING SUMMARY","",
+      `Checklist items complete: ${done} of ${CHECKLIST.length}`,
+      ...CHECKLIST.map((t,i)=>`[${state.done[`cl-${i}`]?"x":" "}] ${t}`),"",
+      "Prepared with the KMC-HSSD SmartPLS learning app.",
+      "Developed By: Mr. Bishnu Singh Rayamajhi, Math Lecturer and Department Head of Humanities & Social Sciences (KMC-HSSD), Kapilvastu Multiple Campus, Taulihawa, Kapilvastu"
+    ].join("\n");
+  }
+});
+
+document.addEventListener("change",e=>{
+  const t=e.target;
+  if(t.dataset.key){state.done[t.dataset.key]=t.checked; render(); return;}
+  if(t.dataset.q!==undefined){state.answers[Number(t.dataset.q)]=Number(t.value); render(); return;}
+  if(t.id==="r2in"){state.calc.r2in=Math.min(0.99,Math.max(0,Number(t.value)||0)); render(); return;}
+  if(t.id==="r2ex"){state.calc.r2ex=Math.min(0.99,Math.max(0,Number(t.value)||0)); render(); return;}
+  if(t.id==="vif"){state.vif=Math.max(1,Number(t.value)||1); render(); return;}
+  if(t.id==="htmt"){state.htmt=Math.max(0,Number(t.value)||0); render(); return;}
+});
+
+render();
+</script>
+</body>
+</html>
