@@ -28,7 +28,7 @@ footer{text-align:center;color:var(--mu);font-size:.85rem;border-top:1px solid v
 <div class="tabs" id="tb"></div><div id="v"></div>
 <footer id="ft"></footer></div>
 <script>
-const Q=encodeURIComponent,yt=s=>"https://www.youtube.com/results?search_query="+Q(s),pdf=s=>"https://www.google.com/search?q="+Q(s+" filetype:pdf");
+const Q=encodeURIComponent,yt=s=>"https://www.youtube.com/results?search_query="+Q(s),pdf=s=>"https://www.google.com/search?q="+Q(s+" filetype:pdf"),gg=s=>"https://www.geogebra.org/search/"+Q(s);
 const OS="https://openstax.org/details/books/precalculus-2e",KH="https://www.khanacademy.org/math/precalculus",MIT="https://ocw.mit.edu/courses/18-02sc-multivariable-calculus-fall-2010/";
 // [en, ne, pages, topics, search keyword, extra link]
 const C=[
@@ -46,6 +46,9 @@ const C=[
 ["Central Conicoid","केन्द्रीय कोनिकोइड","323–362","Ellipsoid, hyperboloids, tangent plane, normals","central conicoid ellipsoid hyperboloid",MIT],
 ["Plane Sections and Generating Lines","समतल खण्ड र जनक रेखाहरू","363–414","Plane sections, paraboloids, generating lines","generating lines of conicoids plane sections paraboloid",MIT]];
 
+// GeoGebra search keywords for the Interactive Simulation link, one per chapter
+const SIM=["coordinate transformation rotation of axes","parabola","ellipse","hyperbola","conic polar equation","conic sections general equation","3D coordinates space","plane 3D","line in space 3D","sphere 3D","cone cylinder 3D","ellipsoid hyperboloid 3D","plane sections conicoid 3D"];
+
 const RW=[["rotation of axes real life applications computer graphics robotics","AI computer vision coordinate transformation explained"],
 ["parabola real life applications satellite dish bridges projectile","ChatGPT solve parabola problems step by step"],
 ["ellipse real life applications planetary orbits whispering gallery","AI python plot ellipse matplotlib tutorial"],
@@ -60,8 +63,8 @@ const RW=[["rotation of axes real life applications computer graphics robotics",
 ["ellipsoid hyperboloid real world applications architecture","AI generative design 3D surfaces architecture"],
 ["ruled surfaces hyperboloid real world architecture applications","AI generative architecture design explained"]];
 const P=[["Beginner","सुरुवाती","4 weeks","Fundamentals of coordinates",[1,7]],["Conic Sections","शांकव खण्ड","6 weeks","All conic sections",[2,3,4,5,6]],["3D Geometry","त्रिविमीय ज्यामिति","5 weeks","Space, plane, line, sphere",[7,8,9,10]],["Advanced Conicoid","उन्नत कोनिकोइड","6 weeks","Cone, cylinder, conicoids",[11,12,13]],["Complete Curriculum","पूर्ण पाठ्यक्रम","16 weeks","All 13 chapters",[1,2,3,4,5,6,7,8,9,10,11,12,13]]];
-const U={en:{t:"Analytic Geometry - Teaching & Learning",s:"For B.A. / B.Sc. / B.Ed. Students",tabs:["Chapters","Learning Paths","Progress"],sr:"Search chapters…",v:"Video tutorials",p:"PDF files",x:"Free reference",d:"Mark chapter complete",c:"Complete",pg:"Pages",ch:"Chapter",cn:"Completed",lf:"Left",pc:"Percent",vl:"Lecture videos",vs:"Solved problems",pn:"Notes (PDF)",pp:"Practice problems (PDF)",ft:"Prepared By",rw:"Real-world uses",rv:"Real-life applications",ai:"AI for this topic",av:"AI video tutorials",ap:"Try with AI (copy prompt)",pr:"Explain {T} with a real-world example, then give me 3 practice problems with step-by-step solutions.",cp:"Copied!"},
-ne:{t:"विश्लेषणात्मक ज्यामिति - शिक्षण तथा सिकाइ",s:"बी.ए. / बी.एस्सी. / बी.एड. विद्यार्थीहरूका लागि",tabs:["अध्यायहरू","सिकाइ मार्ग","प्रगति"],sr:"अध्याय खोज्नुहोस्…",v:"भिडियो ट्यूटोरियल",p:"PDF फाइलहरू",x:"निःशुल्क सन्दर्भ",d:"अध्याय पूरा भयो",c:"पूरा",pg:"पृष्ठ",ch:"अध्याय",cn:"पूरा भएका",lf:"बाँकी",pc:"प्रतिशत",vl:"लेक्चर भिडियो",vs:"समाधान गरिएका समस्या",pn:"नोट्स (PDF)",pp:"अभ्यास समस्या (PDF)",ft:"तयार गर्ने",rw:"वास्तविक जीवनका प्रयोग",rv:"वास्तविक जीवनका उपयोग",ai:"यस विषयमा AI",av:"AI भिडियो ट्यूटोरियल",ap:"AI सँग प्रयास गर्नुहोस् (प्रम्प्ट कपी)",pr:"{T} लाई वास्तविक जीवनको उदाहरणसहित सरल नेपालीमा बुझाउनुहोस्, अनि ३ अभ्यास समस्या चरणबद्ध समाधानसहित दिनुहोस्।",cp:"कपी भयो!"}};
+const U={en:{t:"Analytic Geometry - Teaching & Learning",s:"For B.A. / B.Sc. / B.Ed. / Engineering Students",tabs:["Chapters","Learning Paths","Progress"],sr:"Search chapters…",v:"Video tutorials",p:"PDF files",x:"Free reference",d:"Mark chapter complete",c:"Complete",pg:"Pages",ch:"Chapter",cn:"Completed",lf:"Left",pc:"Percent",vl:"Lecture videos",vs:"Solved problems",pn:"Notes (PDF)",pp:"Practice problems (PDF)",ft:"Prepared By",rw:"Real-world uses",rv:"Real-life applications",ai:"AI for this topic",av:"AI video tutorials",ap:"Try with AI (copy prompt)",pr:"Explain {T} with a real-world example, then give me 3 practice problems with step-by-step solutions.",cp:"Copied!",sm:"Interactive simulation",sg:"Open simulations (GeoGebra)",sb:"AI Simulation Builder (copy prompt)",sp:"Build a single-file interactive HTML simulation for the chapter '{T}' of Analytic Geometry (textbook pages {P}). Include sliders for the key parameters, a live graph or 3D view, the main equation updating as the sliders move, and a short explanation with one worked example. Use plain HTML, CSS and JavaScript with no external libraries.",cs:"Simulation prompt copied!"},
+ne:{t:"विश्लेषणात्मक ज्यामिति - शिक्षण तथा सिकाइ",s:"बी.ए. / बी.एस्सी. / बी.एड. / इन्जिनियरिङ विद्यार्थीहरूका लागि",tabs:["अध्यायहरू","सिकाइ मार्ग","प्रगति"],sr:"अध्याय खोज्नुहोस्…",v:"भिडियो ट्यूटोरियल",p:"PDF फाइलहरू",x:"निःशुल्क सन्दर्भ",d:"अध्याय पूरा भयो",c:"पूरा",pg:"पृष्ठ",ch:"अध्याय",cn:"पूरा भएका",lf:"बाँकी",pc:"प्रतिशत",vl:"लेक्चर भिडियो",vs:"समाधान गरिएका समस्या",pn:"नोट्स (PDF)",pp:"अभ्यास समस्या (PDF)",ft:"तयार गर्ने",rw:"वास्तविक जीवनका प्रयोग",rv:"वास्तविक जीवनका उपयोग",ai:"यस विषयमा AI",av:"AI भिडियो ट्यूटोरियल",ap:"AI सँग प्रयास गर्नुहोस् (प्रम्प्ट कपी)",pr:"{T} लाई वास्तविक जीवनको उदाहरणसहित सरल नेपालीमा बुझाउनुहोस्, अनि ३ अभ्यास समस्या चरणबद्ध समाधानसहित दिनुहोस्।",cp:"कपी भयो!",sm:"अन्तरक्रियात्मक सिमुलेशन",sg:"सिमुलेशन खोल्नुहोस् (GeoGebra)",sb:"AI सिमुलेशन बिल्डर (प्रम्प्ट कपी)",sp:"Analytic Geometry को अध्याय '{T}' (पाठ्यपुस्तक पृष्ठ {P}) का लागि एउटै फाइलको अन्तरक्रियात्मक HTML सिमुलेशन बनाउनुहोस्। मुख्य प्यारामिटरका लागि स्लाइडर, प्रत्यक्ष ग्राफ वा 3D दृश्य, र स्लाइड सार्दा मुख्य समीकरण अद्यावधिक हुने बनाउनुहोस्। एउटा कार्यगरिएको उदाहरणसहित नेपाली व्याख्या समावेश गर्नुहोस्। बाहिरी लाइब्रेरी प्रयोग नगर्नुहोस्।",cs:"सिमुलेशन प्रम्प्ट कपी भयो!"}};
 let L="en",tab=0,qs="",open_=-1,S={};try{S=JSON.parse(localStorage.getItem("agp")||"{}")}catch(e){}
 const sv=()=>{try{localStorage.setItem("agp",JSON.stringify(S))}catch(e){}},$=id=>document.getElementById(id),n=()=>C.filter((_,i)=>S[i]).length;
 function chap(i){const c=C[i],u=U[L],k=c[4],t=L=="en"?c[0]:c[1];
@@ -69,6 +72,7 @@ return `<div class="ch ${open_==i?"op":""}"><div class="hd" onclick="open_=open_
 <h4>▶ ${u.v}</h4><div class="lk"><a class="b" target="_blank" rel="noopener" href="${yt(k+" lecture")}">${u.vl}</a><a class="b" target="_blank" rel="noopener" href="${yt(k+" solved problems")}">${u.vs}</a></div>
 <h4>📄 ${u.p}</h4><div class="lk"><a class="b" target="_blank" rel="noopener" href="${pdf(k+" notes")}">${u.pn}</a><a class="b" target="_blank" rel="noopener" href="${pdf(k+" exercises solutions")}">${u.pp}</a></div>
 <h4>🔗 ${u.x}</h4><div class="lk"><a class="b" target="_blank" rel="noopener" href="${c[5]}">${c[5]==OS?"OpenStax Precalculus":c[5]==KH?"Khan Academy":"MIT OpenCourseWare"}</a></div>
+<h4>🧪 ${u.sm}</h4><div class="lk"><a class="b" target="_blank" rel="noopener" href="${gg(SIM[i])}">${u.sg}</a><a class="b" href="#" onclick="cs(${i});return false">${u.sb}</a></div>
 <h4>🌍 ${u.rw}</h4><div class="lk"><a class="b" target="_blank" rel="noopener" href="${yt(RW[i][0])}">${u.rv}</a></div>
 <h4>🤖 ${u.ai}</h4><div class="lk"><a class="b" target="_blank" rel="noopener" href="${yt(RW[i][1])}">${u.av}</a><a class="b" href="#" onclick="cp(${i});return false">${u.ap}</a></div>
 <label class="c"><input type="checkbox" ${S[i]?"checked":""} onchange="S[${i}]=this.checked;sv();r()"> ${u.d}</label></div></div>`}
@@ -81,6 +85,8 @@ if(tab==0){h=`<input type="search" id="q" placeholder="${u.sr}" value="${qs}" on
 else if(tab==1){h=P.map(x=>`<div class="pt"><h3>${L=="en"?x[0]:x[1]}</h3><p>${x[2]} • ${x[3]}</p><p>${u.ch}: ${x[4].join(", ")}</p><div class="bar"><i style="width:${Math.round(x[4].filter(c=>S[c-1]).length/x[4].length*100)}%"></i></div><div class="lk"><a class="b" href="#" onclick="tab=0;open_=${x[4][0]-1};r();return false">→ ${u.ch} ${x[4][0]}</a></div></div>`).join("")}
 else{h=`<div class="st"><div><b>${n()}</b>${u.cn}</div><div><b>${13-n()}</b>${u.lf}</div><div><b>${p}%</b>${u.pc}</div></div>`}
 $("v").innerHTML=h}
-function cp(i){const t=U[L].pr.replace("{T}",C[i][L=="en"?0:1]);const d=()=>alert(U[L].cp+"\n\n"+t);try{navigator.clipboard.writeText(t).then(d,()=>prompt("Copy:",t))}catch(e){prompt("Copy:",t)}}
+function copyText(t,msg){const d=()=>alert(msg+"\n\n"+t);try{navigator.clipboard.writeText(t).then(d,()=>prompt("Copy:",t))}catch(e){prompt("Copy:",t)}}
+function cp(i){copyText(U[L].pr.replace("{T}",C[i][L=="en"?0:1]),U[L].cp)}
+function cs(i){copyText(U[L].sp.replace("{T}",C[i][L=="en"?0:1]).replace("{P}",C[i][2]),U[L].cs)}
 $("lg").onclick=()=>{L=L=="en"?"ne":"en";r()};r();
 </script></body></html>
