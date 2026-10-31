@@ -88,8 +88,12 @@ table.g th,table.g td{border:1px solid var(--line);padding:5px;vertical-align:to
 <section id="grid" class="sec">
   <div class="card">
     <h2 style="color:var(--org);font-size:1.05rem;margin-top:0">Import from syllabus (optional)</h2>
-    <p class="note">Paste the syllabus. Each line starting with "Unit" begins a unit, and the lines after it are its topics.</p>
-    <textarea id="imp" style="min-height:120px"></textarea>
+    <p class="note">Paste the syllabus text, or an image of it. Each line starting with "Unit" begins a unit, and the lines after it are its topics. Images are read by Claude, so check the extracted text before importing.</p>
+    <textarea id="imp" style="min-height:120px" placeholder="Paste syllabus text here, or paste a screenshot / photo (Ctrl+V or ⌘V)"></textarea>
+    <div class="note" style="border:1px dashed var(--line);padding:8px;border-radius:6px;margin-top:6px">
+      Image of syllabus: paste it into the box above, or choose a file: <input id="imgf" type="file" accept="image/*" style="width:auto">
+      <div id="imgst" style="margin-top:4px"></div>
+    </div>
     <div style="margin-top:8px"><button class="btn pri" onclick="importText()">Import into grid</button> <button class="btn" onclick="sample()">Load sample (testing only)</button></div>
   </div>
   <div class="card">
@@ -313,6 +317,27 @@ function exportHTML(){
   a.download = `${current}_papers_A4.html`;
   a.click();
 }
+
+async function readImage(file){
+  const st = $('imgst');
+  const sample = await window.claude?.use('sample');
+  if (!sample){ st.textContent = 'Image reading is not available here. Paste the text instead.'; return; }
+  const lim = await sample.limits();
+  if (!lim.images){ st.textContent = 'Image reading is not available for this account. Paste the text instead.'; return; }
+  st.textContent = 'Reading the image…';
+  try {
+    const r = await sample('Transcribe all text in this syllabus image exactly. Put each "Unit" heading on its own line, followed by its topics one per line. Output plain text only, with no commentary.', {images:[file]});
+    $('imp').value = r.text;
+    st.textContent = 'Text extracted. Check it, then press Import into grid.';
+  } catch (e) {
+    st.textContent = 'Could not read the image: ' + (e.message || 'unknown error') + '. Paste the text instead.';
+  }
+}
+$('imp').addEventListener('paste', e => {
+  const item = [...(e.clipboardData?.items || [])].find(i => i.type.startsWith('image/'));
+  if (item){ e.preventDefault(); readImage(item.getAsFile()); }
+});
+$('imgf').addEventListener('change', e => { if (e.target.files[0]) readImage(e.target.files[0]); });
 
 renderGrid();
 </script>
