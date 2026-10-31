@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SMART AI Academic Planner & Examination Architect</title>
+<style>
+:root{--bg:#0f1115;--panel:#181b22;--line:#2a2f3a;--txt:#eceff4;--mut:#9aa3b2;--gold:#d4a72c;--org:#e67e22}
+@media (prefers-color-scheme:light){:root{--bg:#f7f5ef;--panel:#ffffff;--line:#ddd6c4;--txt:#1d1f24;--mut:#5b6170;--gold:#9a7412;--org:#b45f06}}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--txt);line-height:1.5}
+header{padding:18px 20px;border-bottom:2px solid var(--gold)}
+h1{margin:0;font-size:1.3rem;color:var(--gold)}
+.tag{color:var(--mut);font-style:italic;font-size:.92rem}
+nav{display:flex;flex-wrap:wrap;gap:6px;padding:10px 20px;border-bottom:1px solid var(--line)}
+.btn,nav button{background:var(--panel);color:var(--txt);border:1px solid var(--line);padding:7px 12px;border-radius:6px;cursor:pointer;font:inherit}
+.btn.pri,nav button.on{background:var(--gold);color:#111;border-color:var(--gold)}
+main{padding:20px;max-width:1100px;margin:auto}
+.sec{display:none}.sec.on{display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+label{font-size:.85rem;color:var(--mut);display:flex;flex-direction:column;gap:4px}
+input,select,textarea{background:var(--bg);color:var(--txt);border:1px solid var(--line);border-radius:6px;padding:7px;font:inherit;width:100%}
+textarea{min-height:220px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0}
+h2{color:var(--org);font-size:1.1rem;margin-top:0}
+h3{color:var(--gold);font-size:.98rem;margin:14px 0 4px}
+table{width:100%;border-collapse:collapse;font-size:.9rem;margin:8px 0}
+th,td{border:1px solid var(--line);padding:6px;text-align:left;vertical-align:top}
+th{background:var(--bg);color:var(--gold)}
+.note{font-size:.85rem;color:var(--mut)}
+.warn{color:var(--org)}.ok{color:#3fa66a}
+@media print{nav,.noprint{display:none}body{background:#fff;color:#000}.card{border:none}}
+</style>
+</head>
+<body>
+<header>
+  <h1>SMART AI Academic Planner &amp; Examination Architect</h1>
+  <div class="tag">"From Official Syllabus to Complete Academic Planning, Teaching and Assessment."</div>
+  <div class="note">Developed By: Mr. Bishnu Singh Rayamajhi · Mathematics Lecturer &amp; Head, HSS Department · KMC, Taulihawa, Kapilvastu, Nepal</div>
+</header>
+<nav>
+  <button data-t="setup" class="on" onclick="show('setup')">1 · Setup</button>
+  <button data-t="syl" onclick="show('syl')">2 · Syllabus</button>
+  <button data-t="out" onclick="show('out')">3 · Outputs</button>
+</nav>
+
+<main>
+<section id="setup" class="sec on">
+  <div class="card"><h2>Institution &amp; subject</h2>
+    <div class="grid">
+      <label>Institution<input id="inst" value="Kapilvastu Multiple Campus"></label>
+      <label>Department / Faculty<input id="dept" value="Humanities & Social Sciences (KMC-HSSD)"></label>
+      <label>Subject name<input id="subj" placeholder="e.g. Mathematics"></label>
+      <label>Subject code<input id="code" placeholder="e.g. MTH-101"></label>
+      <label>Teacher / Lecturer<input id="teacher" value="Mr. Bishnu Singh Rayamajhi"></label>
+      <label>Academic year<input id="year" placeholder="e.g. 2026/27"></label>
+      <label>Education board / university<input id="board" value="Tribhuvan University"></label>
+      <label>Grade / class / semester / year<input id="grade" placeholder="e.g. BA Year 1"></label>
+      <label>Teaching language<select id="lang"><option>English</option><option>Nepali</option><option>Bilingual</option></select></label>
+    </div>
+  </div>
+  <div class="card"><h2>Planning &amp; marks</h2>
+    <div class="grid">
+      <label>Teaching weeks<input id="weeks" type="number" value="30" min="1"></label>
+      <label>Periods per week<input id="ppw" type="number" value="5" min="1"></label>
+      <label>Unit exam full marks<input id="fm" type="number" value="20" min="10"></label>
+      <label>Terminal exam full marks<input id="tfm" type="number" value="50" min="10"></label>
+      <label>Annual exam full marks<input id="afm" type="number" value="100" min="10"></label>
+      <label>Academic months (comma-separated)<input id="months" value="Baisakh, Jestha, Asar, Shrawan, Bhadra, Ashwin, Kartik, Mangsir, Poush, Magh, Falgun, Chaitra"></label>
+    </div>
+    <p class="note">The month list is an assumed calendar. Edit it to match your institution's calendar.</p>
+  </div>
+</section>
+
+<section id="syl" class="sec">
+  <div class="card"><h2>Official syllabus</h2>
+    <p class="note">Paste the syllabus text. A line beginning with "Unit" starts a unit; the lines after it are that unit's topics. The demo button loads sample content for testing only, not an official syllabus.</p>
+    <textarea id="syltext"></textarea>
+    <div style="margin-top:8px"><button class="btn pri" onclick="extract()">Extract units</button> <button class="btn" onclick="demo()">Load demo (sample)</button></div>
+  </div>
+  <div class="card" id="verify" style="display:none"><h2>Verify syllabus</h2>
+    <p class="note">Correct any titles, periods or topics before generating. Untick "Before terminal" for units not yet taught.</p>
+    <table><thead><tr><th>#</th><th>Unit title</th><th>Periods</th><th>Topics (one per line)</th><th>Before terminal</th></tr></thead><tbody id="vrows"></tbody></table>
+    <button class="btn" onclick="addUnit()">+ Add unit</button> <button class="btn pri" onclick="generate()">Generate all documents</button>
+  </div>
+</section>
+
+<section id="out" class="sec">
+  <div class="noprint" style="margin-bottom:10px"><button class="btn" onclick="window.print()">Print / save as PDF</button> <button class="btn" onclick="exportTxt()">Export TXT</button> <span class="note">DOCX and XLSX export: next build.</span></div>
+  <div id="result"><p class="note">Generate documents from the Syllabus tab first.</p></div>
+</section>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const BLOOM = ['Remember','Understand','Apply','Analyse','Evaluate','Create'];
+const VERB = {Remember:'state',Understand:'explain',Apply:'apply',Analyse:'analyse',Evaluate:'evaluate',Create:'design'};
+const ACT = {Remember:'Concept map and recall quiz',Understand:'Explanation with examples; pair discussion',Apply:'Worked problems; guided practice',Analyse:'Comparison task in groups',Evaluate:'Peer critique or structured debate',Create:'Mini project or poster'};
+let units = [];
+
+function show(id){
+  document.querySelectorAll('.sec').forEach(s => s.classList.toggle('on', s.id === id));
+  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.t === id));
+}
+
+function S(){
+  return {
+    inst:$('inst').value, dept:$('dept').value, subj:$('subj').value.trim(), code:$('code').value.trim(),
+    teacher:$('teacher').value.trim(), year:$('year').value.trim(), board:$('board').value.trim(),
+    grade:$('grade').value.trim(), lang:$('lang').value,
+    weeks:+$('weeks').value||30, ppw:+$('ppw').value||5, fm:+$('fm').value||20,
+    tfm:+$('tfm').value||50, afm:+$('afm').value||100,
+    months:$('months').value.split(',').map(s=>s.trim()).filter(Boolean)
+  };
+}
+
+function demo(){
+  $('syltext').value = `Unit 1: Sets and Relations
+Introduction to sets
+Types of sets
+Operations on sets
+Relations and their types
+Unit 2: Functions
+Concept of a function
+Domain and range
+Types of functions
+Composition of functions
+Unit 3: Probability
+Sample space and events
+Classical probability
+Addition and multiplication rules
+Conditional probability`;
+  extract();
+}
+
+function extract(){
+  const lines = $('syltext').value.split('\n').map(l=>l.trim()).filter(Boolean);
+  const re = /^unit\s*[-:.]?\s*(\d+|[ivxl]+)\b[\s.:-]*(.*)$/i;
+  units = []; let cur = null;
+  for (const l of lines){
+    const m = l.match(re);
+    if (m){ cur = {no:units.length+1, title:m[2]||('Unit '+m[1]), periods:0, topics:[], covered:true}; units.push(cur); }
+    else if (cur){ cur.topics.push(l.replace(/^[-•*]\s*/,'')); }
+  }
+  if (!units.length) units = [{no:1, title:'Unit 1 (rename me)', periods:0, topics:lines, covered:true}];
+  units.forEach(u => u.periods = Math.max(4, u.topics.length*2));
+  renderVerify();
+  $('verify').style.display = 'block';
+}
+
+function renderVerify(){
+  $('vrows').innerHTML = units.map((u,i) => `<tr>
+    <td>${i+1}</td>
+    <td><input class="ut" value="${esc(u.title)}"></td>
+    <td><input class="up" type="number" min="1" value="${u.periods}" style="width:80px"></td>
+    <td><textarea class="utp" style="min-height:90px">${esc(u.topics.join('\n'))}</textarea></td>
+    <td><input type="checkbox" class="tc" ${u.covered?'checked':''}></td></tr>`).join('');
+}
+
+function sync(){
+  units = [...document.querySelectorAll('#vrows tr')].map((r,i) => ({
+    no:i+1,
+    title:r.querySelector('.ut').value.trim()||('Unit '+(i+1)),
+    periods:Math.max(1, +r.querySelector('.up').value||1),
+    topics:r.querySelector('.utp').value.split('\n').map(s=>s.trim()).filter(Boolean),
+    covered:r.querySelector('.tc').checked
+  }));
+}
+
+function addUnit(){
+  sync();
+  units.push({no:units.length+1, title:'New unit', periods:4, topics:[], covered:true});
+  renderVerify();
+}
+
+// Unit exam pattern: A = objective (1 mark), B = short (2 marks), C = two analytical items
+function pattern(fm){
+  const aM = Math.round(fm*0.4), bN = Math.max(1, Math.round(fm*0.3/2)), bM = bN*2;
+  const cM = fm - aM - bM, cEach = cM/2;
+  return {aM, bN, bM, cM, cEach, ok: Number.isInteger(cEach) && cEach > 0};
+}
+
+function unitPlan(u, s){
+  const n = u.topics.length || 1, per = (u.periods/n).toFixed(1);
+  const rows = u.topics.length
+    ? u.topics.map((t,i) => {
+        const b = BLOOM[Math.min(5, Math.floor(i*6/n))];
+        return `<tr><td>${i+1}</td><td>${esc(t)}</td><td>Students will ${VERB[b]} ${esc(t)} <i>(${b})</i></td><td>${per}</td><td>${ACT[b]}</td></tr>`;
+      }).join('')
+    : '<tr><td colspan="5">No topics entered. Add topics in the Syllabus tab.</td></tr>';
+  return `<div class="card">
+    <h2>Unit ${u.no}: ${esc(u.title)}</h2>
+    <p class="note">${esc(s.inst)} · ${esc(s.dept)} · ${esc(s.subj)} ${esc(s.code)} · ${esc(s.grade)} · ${u.periods} periods · ${esc(s.teacher)}</p>
+    <p><b>General objective:</b> Students understand the core ideas of ${esc(u.title)} and apply them to academic and real-life problems.</p>
+    <table><thead><tr><th>#</th><th>Topic</th><th>Specific objective (Bloom level)</th><th>Periods</th><th>Activity</th></tr></thead><tbody>${rows}</tbody></table>
+    <p><b>Lesson sequence:</b> Motivation → Presentation → Explanation and demonstration → Guided practice → Group or individual activity → Application → Consolidation → Reflection.</p>
+    <p><b>Assessment:</b> Diagnostic quiz at the start, weekly formative exit tickets, unit exam at the end.</p>
+    <p class="note">Common misconceptions, learning resources and remedial notes are for the teacher to add. They are not generated because no verified source is available.</p>
+  </div>`;
+}
+
+function yearly(s){
+  const avail = s.weeks*s.ppw;
+  const M = s.months.length ? s.months : Array.from({length:10}, (_,i) => 'Month '+(i+1));
+  const per = (avail/M.length) || 1;
+  let cum = 0;
+  const rows = units.map(u => {
+    const st = Math.min(M.length-1, Math.floor(cum/per));
+    cum += u.periods;
+    const en = Math.min(M.length-1, Math.floor(Math.max(cum-1,0)/per));
+    return `<tr><td>${u.no}. ${esc(u.title)}</td><td>${esc(M[st])} – ${esc(M[en])}</td><td>${u.topics.map(esc).join('; ')||'—'}</td><td>${u.periods}</td><td>Unit exam at end of ${esc(M[en])}</td></tr>`;
+  }).join('');
+  const tot = units.reduce((a,u)=>a+u.periods, 0);
+  return `<div class="card">
+    <table><thead><tr><th>Unit</th><th>Months</th><th>Topics</th><th>Periods</th><th>Assessment</th></tr></thead><tbody>${rows}</tbody></table>
+    <p class="note">Available periods: ${avail} (${s.weeks} weeks × ${s.ppw} per week). Allocated: ${tot}. Holidays and institutional events are not yet subtracted.</p>
+  </div>`;
+}
+
+function unitExam(u, s){
+  const p = pattern(s.fm);
+  const T = u.topics.length ? u.topics : [u.title];
+  const t = i => esc(T[i % T.length]);
+  let A='', B='', C='';
+  for (let i=0;i<p.aM;i++) A += `<li>[${BLOOM[i%2]}] Which statement about <b>${t(i)}</b> is correct? (a) … (b) … (c) … (d) … <span class="note">[options: teacher to write]</span></li>`;
+  for (let i=0;i<p.bN;i++) B += `<li>[Understand] Define or explain <b>${t(i+p.aM)}</b> with one example. (2 marks)</li>`;
+  C = `<li>[Analyse] Analyse the relationship between <b>${t(0)}</b> and <b>${t(1)}</b>. (${p.cEach} marks)</li>
+       <li>[Apply] Apply <b>${t(2)}</b> to a real-life problem and justify your method. (${p.cEach} marks)</li>`;
+  return `<div class="card">
+    <h2>Unit ${u.no} exam: ${esc(u.title)} (${s.fm} marks)</h2>
+    <p class="note">${esc(s.inst)} · ${esc(s.subj)} · ${esc(s.grade)} · ${esc(s.year)}</p>
+    <h3>Section A: Objective (${p.aM} × 1 mark)</h3><ol>${A}</ol>
+    <h3>Section B: Short (${p.bN} × 2 marks)</h3><ol>${B}</ol>
+    <h3>Section C: Analytical (2 × ${p.cEach} marks)</h3><ol>${C}</ol>
+    <table><thead><tr><th>Bloom level</th><th>Items</th><th>Marks</th></tr></thead><tbody>
+      <tr><td>Remember / Understand</td><td>${p.aM+p.bN}</td><td>${p.aM+p.bM}</td></tr>
+      <tr><td>Apply / Analyse</td><td>2</td><td>${p.cEach*2}</td></tr>
+    </tbody></table>
+    <p><b>Marking scheme:</b> Section A: 1 mark per correct option. Section B: 1 mark for an accurate definition and 1 for a valid example. Section C: half the marks for correct method, half for justification.</p>
+    ${p.ok ? '' : '<p class="warn">Section C cannot be split evenly. Change the full marks.</p>'}
+    <p class="note">Answer key and model answers: teacher to write from the approved textbook. Not generated.</p>
+  </div>`;
+}
+
+function distribute(list, FM){
+  if (!list.length) return [];
+  const tot = list.reduce((a,u)=>a+u.periods, 0) || 1;
+  const m = list.map(u => Math.floor(FM*u.periods/tot));
+  let r = FM - m.reduce((a,b)=>a+b, 0);
+  for (let i=0; r>0; i=(i+1)%m.length, r--) m[i]++;
+  return m;
+}
+
+function markTable(list, marks){
+  const tot = list.reduce((a,u)=>a+u.periods, 0) || 1;
+  const rows = list.map((u,i) => `<tr><td>${u.no}</td><td>${esc(u.title)}</td><td>${u.periods}</td><td>${(u.periods/tot*100).toFixed(1)}%</td><td>${marks[i]}</td></tr>`).join('');
+  const sum = marks.reduce((a,b)=>a+b, 0);
+  return `<table><thead><tr><th>No</th><th>Unit</th><th>Periods</th><th>Weightage</th><th>Marks</th></tr></thead><tbody>${rows}
+    <tr><td colspan="4"><b>Total</b></td><td><b>${sum}</b></td></tr></tbody></table>`;
+}
+
+function termHTML(s, cov){
+  if (!cov.length) return '<p class="warn">No units selected for the terminal exam.</p>';
+  const marks = distribute(cov, s.tfm);
+  return `<div class="card">
+    <h2>Terminal examination: ${s.tfm} marks</h2>
+    <p class="note">${esc(s.inst)} · ${esc(s.dept)} · ${esc(s.subj)} ${esc(s.code)} · ${esc(s.grade)} · ${esc(s.year)} · Examiner: ${esc(s.teacher)}</p>
+    <p>Syllabus covered: ${cov.map(u=>esc(u.title)).join(', ')}</p>
+    ${markTable(cov, marks)}
+    <p class="note">Question paper: draw from the unit exam bank, scaled to the marks above. Pass marks, time and instructions follow your institution's rules, which are not assumed here.</p>
+  </div>`;
+}
+
+function annualHTML(s){
+  const marks = distribute(units, s.afm);
+  return `<div class="card">
+    <h2>Annual examination: ${s.afm} marks</h2>
+    <p class="note">Covers all ${units.length} units. Weightage follows teaching periods.</p>
+    ${markTable(units, marks)}
+    <p class="note">Blueprint, TOS and questions: to be drawn from the unit exam bank. Pass marks and time follow institutional rules.</p>
+  </div>`;
+}
+
+function auditHTML(s, cov){
+  const avail = s.weeks*s.ppw;
+  const total = units.reduce((a,u)=>a+u.periods, 0);
+  const p = pattern(s.fm);
+  const all = units.flatMap(u => u.topics.map(t => t.toLowerCase()));
+  const dup = [...new Set(all.filter((t,i) => all.indexOf(t) !== i))];
+  const checks = [
+    [units.length>0, `Units extracted: ${units.length}`],
+    [units.every(u=>u.topics.length>0), 'Every unit has at least one topic'],
+    [total<=avail, `Allocated periods ${total} against available ${avail} (${s.weeks} weeks × ${s.ppw})`],
+    [p.ok, `Unit exam marks total ${s.fm}${p.ok ? '' : ' (Section C does not split evenly)'}`],
+    [cov.length>0, 'At least one unit is selected for the terminal exam'],
+    [dup.length===0, dup.length ? `Duplicate topics: ${esc(dup.join(', '))}` : 'No duplicate topics'],
+    [!!s.subj && !!s.teacher, 'Subject and teacher name filled in'],
+    [s.months.length>0, 'Academic months defined (assumed list; confirm against your calendar)']
+  ];
+  const lines = checks.map(([ok,txt]) => `<li class="${ok?'ok':'warn'}">${ok?'✓':'⚠'} ${txt}</li>`).join('');
+  return `<div class="card"><h2>Academic quality audit</h2><ul>${lines}</ul>
+    <p class="note">This audit checks structure, arithmetic and allocation. It does not check subject accuracy. Teacher review is still required.</p></div>`;
+}
+
+function generate(){
+  if (!document.querySelector('#vrows tr')){ alert('Extract the syllabus first.'); return; }
+  sync();
+  const s = S();
+  const cov = units.filter(u => u.covered);
+  $('result').innerHTML =
+    `<h2 id="unitplans">1. Unit plans</h2>` + units.map(u => unitPlan(u,s)).join('') +
+    `<h2 id="yearly">2. Yearly teaching plan</h2>` + yearly(s) +
+    `<h2 id="unitexams">3. Unit-wise examination papers</h2>` + units.map(u => unitExam(u,s)).join('') +
+    `<h2 id="terminal">4. Terminal examination</h2>` + termHTML(s, cov) +
+    `<h2 id="annual">5. Annual examination</h2>` + annualHTML(s) +
+    `<h2 id="audit">Academic quality audit</h2>` + auditHTML(s, cov);
+  show('out');
+}
+
+function exportTxt(){
+  const blob = new Blob([$('result').innerText], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'academic_package.txt';
+  a.click();
+}
+</script>
+</body>
+</html>
