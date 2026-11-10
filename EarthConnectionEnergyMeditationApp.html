@@ -566,6 +566,285 @@
             background: #1e3a5f;
             border-left-color: #4a90a4;
         }
+    
+        /* Elegant, responsive footer */
+        .site-footer {
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+            margin: 3.5rem 0 0;
+            padding: 3.5rem 1.5rem 1.5rem;
+            border-radius: 22px 22px 0 0;
+            color: #f4fff8;
+            text-align: center;
+            background:
+                radial-gradient(circle at 15% 15%, rgba(131, 226, 174, .20), transparent 32%),
+                radial-gradient(circle at 85% 80%, rgba(105, 190, 220, .20), transparent 34%),
+                linear-gradient(135deg, #123d31 0%, #17634d 48%, #174b63 100%);
+            box-shadow: 0 -12px 40px rgba(19, 75, 58, .16);
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 2;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .footer-glow {
+            position: absolute;
+            z-index: 1;
+            width: 230px;
+            height: 230px;
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: footerFloat 9s ease-in-out infinite;
+        }
+
+        .footer-glow-one { top: -125px; left: -70px; }
+        .footer-glow-two { right: -100px; bottom: -150px; animation-delay: -4s; }
+
+        .footer-symbol {
+            display: inline-grid;
+            place-items: center;
+            width: 66px;
+            height: 66px;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255,255,255,.35);
+            border-radius: 50%;
+            background: rgba(255,255,255,.12);
+            font-size: 2rem;
+            box-shadow: 0 8px 28px rgba(0,0,0,.15);
+            animation: footerPulse 4s ease-in-out infinite;
+        }
+
+        .footer-eyebrow {
+            margin: 0 0 .65rem;
+            color: #c5f3d8;
+            font-size: .72rem;
+            font-weight: 700;
+            letter-spacing: .19em;
+        }
+
+        .footer-title {
+            margin: 0 auto .5rem;
+            color: #fff;
+            font-size: clamp(1.55rem, 4vw, 2.45rem);
+            line-height: 1.2;
+            font-weight: 750;
+            letter-spacing: -.035em;
+        }
+
+        .footer-title span { color: #a9e8c4; }
+
+        .footer-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 190px;
+            margin: 1.15rem auto 1.4rem;
+            color: #c7f4d9;
+        }
+
+        .footer-divider::before,
+        .footer-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(210,255,226,.75));
+        }
+        .footer-divider::after { transform: rotate(180deg); }
+
+        .footer-developed {
+            margin: 0 0 .3rem;
+            color: #ccebdd;
+            font-size: .9rem;
+            letter-spacing: .04em;
+        }
+
+        .footer-name {
+            margin: 0 0 .65rem;
+            color: #fff;
+            font-size: clamp(1.25rem, 3vw, 1.65rem);
+            font-weight: 750;
+        }
+
+        .footer-role {
+            margin: 0 auto .65rem;
+            color: #e3f5eb;
+            font-size: .98rem;
+            line-height: 1.65;
+        }
+
+        .footer-campus {
+            margin: 0 0 1.7rem;
+            color: #c5e8d8;
+            font-size: .92rem;
+        }
+
+        .sdri-view-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: .75rem;
+            min-height: 50px;
+            padding: .85rem 1.35rem;
+            border: 1px solid rgba(255,255,255,.65);
+            border-radius: 999px;
+            color: #164b3b;
+            background: linear-gradient(135deg, #effff4, #bdebd0);
+            box-shadow: 0 8px 24px rgba(0,0,0,.18);
+            font: inherit;
+            font-weight: 750;
+            cursor: pointer;
+            transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+        }
+
+        .sdri-view-button:hover {
+            transform: translateY(-3px);
+            background: #fff;
+            box-shadow: 0 13px 30px rgba(0,0,0,.25);
+        }
+
+        .sdri-view-button:focus-visible,
+        .sdri-close:focus-visible {
+            outline: 3px solid #ffe08a;
+            outline-offset: 4px;
+        }
+
+        .button-icon { font-size: 1.15rem; }
+        .button-arrow { font-size: 1.1rem; transition: transform .25s ease; }
+        .sdri-view-button:hover .button-arrow { transform: translate(3px, -3px); }
+
+        .footer-note {
+            margin: 1.65rem 0 .55rem;
+            color: #c5f3d8;
+            font-size: .82rem;
+            letter-spacing: .1em;
+        }
+
+        .footer-copyright {
+            margin: 0;
+            padding-top: .9rem;
+            border-top: 1px solid rgba(255,255,255,.17);
+            color: rgba(240,255,246,.72);
+            font-size: .75rem;
+        }
+
+        /* Accessible image lightbox */
+        .sdri-lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 5000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: .8rem;
+            padding: 3.5rem 1rem 2rem;
+            background: rgba(4, 15, 19, .92);
+            backdrop-filter: blur(9px);
+            opacity: 0;
+        }
+
+        .sdri-lightbox.is-open {
+            display: flex;
+            animation: sdriFadeIn .25s ease forwards;
+        }
+
+        .sdri-image-panel {
+            width: min(920px, 94vw);
+            max-height: 82vh;
+            padding: .8rem;
+            border: 1px solid rgba(255,255,255,.22);
+            border-radius: 18px;
+            background: rgba(255,255,255,.08);
+            box-shadow: 0 25px 80px rgba(0,0,0,.5);
+            animation: sdriZoomIn .3s ease both;
+        }
+
+        .sdri-image-caption {
+            margin: 0 0 .65rem;
+            color: #effff5;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .sdri-image-panel img {
+            display: block;
+            width: 100%;
+            max-height: calc(82vh - 65px);
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .sdri-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            display: grid;
+            place-items: center;
+            width: 46px;
+            height: 46px;
+            border: 1px solid rgba(255,255,255,.35);
+            border-radius: 50%;
+            color: white;
+            background: rgba(255,255,255,.12);
+            font-size: 2rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: background .2s ease, transform .2s ease;
+        }
+
+        .sdri-close:hover {
+            transform: rotate(90deg);
+            background: rgba(255,255,255,.25);
+        }
+
+        .sdri-lightbox-hint {
+            margin: 0;
+            color: rgba(255,255,255,.72);
+            font-size: .8rem;
+            text-align: center;
+        }
+
+        body.sdri-modal-open { overflow: hidden; }
+
+        @keyframes footerFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(18px) rotate(12deg); }
+        }
+
+        @keyframes footerPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+        }
+
+        @keyframes sdriFadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes sdriZoomIn {
+            from { opacity: 0; transform: scale(.96) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .site-footer { padding: 2.7rem 1rem 1.2rem; }
+            .footer-eyebrow { font-size: .62rem; letter-spacing: .12em; }
+            .sdri-view-button { width: 100%; max-width: 330px; }
+            .sdri-close { top: 10px; right: 10px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .footer-glow, .footer-symbol, .sdri-lightbox,
+            .sdri-image-panel, .sdri-view-button, .sdri-close {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -2134,31 +2413,98 @@ const appState = {
         });
     
                 
+    
+        // SDRI welcome image: open on demand, close by button, backdrop, or Escape.
+        let sdriPreviousFocus = null;
+
+        function openSDRIImage() {
+            const lightbox = document.getElementById("sdriImage");
+            if (!lightbox) return;
+
+            sdriPreviousFocus = document.activeElement;
+            lightbox.classList.add("is-open");
+            lightbox.setAttribute("aria-hidden", "false");
+            document.body.classList.add("sdri-modal-open");
+
+            const closeButton = lightbox.querySelector(".sdri-close");
+            if (closeButton) closeButton.focus();
+        }
+
+        function closeSDRIImage(event) {
+            if (event && event.type === "click" &&
+                event.target !== event.currentTarget &&
+                !event.target.classList.contains("sdri-close")) {
+                return;
+            }
+
+            const lightbox = document.getElementById("sdriImage");
+            if (!lightbox) return;
+
+            lightbox.classList.remove("is-open");
+            lightbox.setAttribute("aria-hidden", "true");
+            document.body.classList.remove("sdri-modal-open");
+
+            if (sdriPreviousFocus && typeof sdriPreviousFocus.focus === "function") {
+                sdriPreviousFocus.focus();
+            }
+        }
+
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "Escape") {
+                const lightbox = document.getElementById("sdriImage");
+                if (lightbox && lightbox.classList.contains("is-open")) {
+                    closeSDRIImage();
+                }
+            }
+        });
+
+        const footerYear = document.getElementById("footerYear");
+        if (footerYear) footerYear.textContent = new Date().getFullYear();
+
     </script>
 
 <footer class="site-footer">
-    <h3>Earth Connection Energy Meditation</h3>
+    <div class="footer-glow footer-glow-one" aria-hidden="true"></div>
+    <div class="footer-glow footer-glow-two" aria-hidden="true"></div>
 
-    <p>Developed By:</p>
+    <div class="footer-content">
+        <div class="footer-symbol" aria-hidden="true">🌍</div>
+        <p class="footer-eyebrow">A JOURNEY TOWARDS MINDFULNESS &amp; WELL-BEING</p>
+        <h2 class="footer-title">Earth Connection <span>&amp;</span> Energy Meditation</h2>
+        <div class="footer-divider"><span>✦</span></div>
 
-    <p><strong>Mr. Bishnu Singh Rayamajhi</strong></p>
+        <p class="footer-developed">Designed &amp; Developed By</p>
+        <h3 class="footer-name">Mr. Bishnu Singh Rayamajhi</h3>
+        <p class="footer-role">
+            Math Lecturer &amp; Department Head<br>
+            Humanities &amp; Social Sciences (KMC-HSSD)
+        </p>
+        <p class="footer-campus">Kapilvastu Multiple Campus (KMC), Taulihawa</p>
 
-    <p>
-        Math Lecturer and Department Head of Humanities &amp; Social Sciences (KMC-HSSD)
-    </p>
+        <button class="sdri-view-button" type="button"
+                onclick="openSDRIImage()"
+                aria-haspopup="dialog" aria-controls="sdriImage">
+            <span class="button-icon" aria-hidden="true">🖼️</span>
+            <span>View SDRI Welcome Image</span>
+            <span class="button-arrow" aria-hidden="true">↗</span>
+        </button>
 
-    <p>Kapilvastu Multiple Campus (KMC), Taulihawa</p>
-
-    <button onclick="openSDRIImage()">
-        View SDRI Welcome Image
-    </button>
-
-    <!-- Hidden image container -->
-    <div id="sdriImage" class="image-modal" onclick="closeSDRIImage(event)">
-        <span class="close">&times;</span>
-        <img src="SDRI.jpeg" alt="SDRI Welcome Image">
+        <p class="footer-note">Learn • Reflect • Connect • Grow</p>
+        <p class="footer-copyright">© <span id="footerYear"></span> Earth Connection Energy Meditation</p>
     </div>
 
+    <!-- Image is displayed only after the button is clicked -->
+    <div id="sdriImage" class="sdri-lightbox" role="dialog"
+         aria-modal="true" aria-label="SDRI Welcome Image"
+         aria-hidden="true" onclick="closeSDRIImage(event)">
+        <button class="sdri-close" type="button" aria-label="Close image"
+                onclick="closeSDRIImage(event)">×</button>
+        <div class="sdri-image-panel" onclick="event.stopPropagation()">
+            <p class="sdri-image-caption">SDRI Welcome Image</p>
+            <img src="SDRI.jpeg" alt="SDRI Welcome Image">
+        </div>
+        <p class="sdri-lightbox-hint">Click outside the image or press Esc to close</p>
+    </div>
 </footer>
 </body>
 </html>
