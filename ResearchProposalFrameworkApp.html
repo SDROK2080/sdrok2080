@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Research Proposal Framework | Teaching & Learning</title>
+<style>
+:root{
+  --bg:#0f1115; --surface:#181b22; --surface2:#1f232c; --line:#2c313c;
+  --text:#f2efe6; --muted:#a7a596; --gold:#e0a526; --orange:#e8742c;
+  --ok:#5fbf7a; --link:#f3c35a;
+  color-scheme: dark;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  box-sizing: border-box;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#fbf8f1; --surface:#ffffff; --surface2:#f3efe4; --line:#e2dccb;
+    --text:#1d1b16; --muted:#6b6657; --gold:#b57d0c; --orange:#c95e1a;
+    --ok:#2f8a4f; --link:#8a5a00; color-scheme: light;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#fbf8f1; --surface:#ffffff; --surface2:#f3efe4; --line:#e2dccb;
+  --text:#1d1b16; --muted:#6b6657; --gold:#b57d0c; --orange:#c95e1a;
+  --ok:#2f8a4f; --link:#8a5a00; color-scheme: light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Devanagari",sans-serif;line-height:1.55;min-height:100vh}
+header{padding:18px 16px 10px;border-bottom:1px solid var(--line);background:var(--surface)}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+h1{font-size:1.25rem;margin:0;color:var(--gold)}
+.sub{color:var(--muted);font-size:.85rem;margin-top:2px}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.lang button{background:none;border:0;color:var(--muted);padding:6px 14px;cursor:pointer;font-size:.85rem}
+.lang button.on{background:var(--gold);color:#1b1407;font-weight:600}
+.progress{margin-top:12px;height:8px;background:var(--surface2);border-radius:999px;overflow:hidden}
+.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--orange));transition:width .3s}
+.progress-label{font-size:.8rem;color:var(--muted);margin-top:6px}
+nav{display:flex;gap:8px;overflow-x:auto;padding:12px 16px;border-bottom:1px solid var(--line);scrollbar-width:thin}
+nav button{flex:0 0 auto;background:var(--surface2);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:7px 11px;cursor:pointer;font-size:.82rem;white-space:nowrap}
+nav button.on{border-color:var(--gold);color:var(--gold)}
+nav button.done::before{content:"✓ ";color:var(--ok)}
+main{max-width:860px;margin:0 auto;padding:18px 16px 40px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:16px}
+.step-no{color:var(--orange);font-weight:700;font-size:.85rem;letter-spacing:.05em;text-transform:uppercase}
+h2{margin:4px 0 6px;font-size:1.4rem}
+h3{margin:18px 0 8px;font-size:1rem;color:var(--gold)}
+p{margin:8px 0}
+.ne{font-family:"Noto Sans Devanagari",system-ui,sans-serif;color:var(--muted)}
+ul{padding-left:20px;margin:6px 0}
+li{margin:5px 0}
+.check{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:10px;background:var(--surface2);margin:6px 0;cursor:pointer}
+.check input{margin-top:4px;accent-color:var(--gold);width:18px;height:18px;flex:0 0 auto}
+.check.done{opacity:.7;text-decoration:line-through}
+.res{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:12px;margin:8px 0;text-decoration:none;color:var(--text);background:var(--surface2)}
+.res:hover{border-color:var(--gold)}
+.badge{flex:0 0 auto;font-size:.7rem;font-weight:700;padding:3px 8px;border-radius:999px;color:#1b1407;background:var(--gold);margin-top:2px}
+.badge.pdf{background:var(--orange);color:#fff}
+.badge.web{background:var(--ok);color:#fff}
+.res .t{font-weight:600;font-size:.95rem}
+.res .d{color:var(--muted);font-size:.82rem}
+.note-no{color:var(--muted);font-size:.8rem}
+textarea{width:100%;min-height:120px;background:var(--surface2);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:10px;font:inherit;resize:vertical}
+.row{display:flex;justify-content:space-between;gap:10px;margin-top:14px;flex-wrap:wrap}
+.btn{background:var(--surface2);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:9px 16px;cursor:pointer;font-size:.9rem}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#1b1407;font-weight:600}
+.btn:disabled{opacity:.4;cursor:default}
+.tip{border-left:3px solid var(--orange);padding:8px 12px;background:var(--surface2);border-radius:8px;margin:8px 0;font-size:.92rem}
+.framework{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:10px}
+.framework button{text-align:left;background:var(--surface2);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:10px;cursor:pointer;font-size:.88rem}
+.framework button:hover{border-color:var(--gold)}
+.draft{white-space:pre-wrap;background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:14px;font-size:.92rem;max-height:420px;overflow:auto}
+footer{text-align:center;color:var(--muted);font-size:.8rem;padding:20px 16px 40px;border-top:1px solid var(--line)}
+footer a{color:var(--link)}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <div>
+      <h1 id="appTitle">Research Proposal Framework</h1>
+      <div class="sub" id="appSub">Teaching & Learning for scholars, researchers, innovators and entrepreneurs</div>
+    </div>
+    <div class="lang" role="group" aria-label="Language">
+      <button id="langEn" class="on" onclick="setLang('en')">English</button>
+      <button id="langNe" onclick="setLang('ne')">नेपाली</button>
+    </div>
+  </div>
+  <div class="progress"><span id="progBar"></span></div>
+  <div class="progress-label" id="progLabel"></div>
+</header>
+
+<nav id="stepNav"></nav>
+
+<main>
+  <div id="stepView"></div>
+  <div id="draftView" class="card hidden">
+    <div class="step-no" id="draftNo"></div>
+    <h2 id="draftTitle"></h2>
+    <p class="sub" id="draftHint"></p>
+    <div class="draft" id="draftText"></div>
+    <div class="row"><button class="btn" onclick="showStep(current)">← Back to steps</button></div>
+  </div>
+  <div class="row">
+    <button class="btn" id="draftBtn" onclick="showDraft()">View my proposal draft</button>
+  </div>
+</main>
+
+<footer>
+  Framework adapted from the "Research Proposal Framework" poster (credit: Peter Munene).<br>
+  Created by Bishnu Singh Rayamajhi · UCDL Academy · HSS Department, Kapilvastu Multiple Campus (KMC), Taulihawa, Nepal · affiliated with Tribhuvan University ·
+  <a href="https://sdrok2080.github.io" target="_blank" rel="noopener">SDROK</a><br>
+  Video and PDF links point to free public resources. Progress and notes are saved in this browser only.
+</footer>
+
+<script>
+const STEPS = [
+  {
+    id:"title", no:1,
+    en:"Title", ne:"शीर्षक",
+    sumEn:"Concise, specific and informative. A good title tells the reader the topic, the population or setting and the approach in as few words as possible.",
+    sumNe:"संक्षिप्त, विशिष्ट र सूचनामूलक। राम्रो शीर्षकले विषय, जनसंख्या वा क्षेत्र र अध्ययन विधि कम शब्दमा देखाउँछ।",
+    tips:["Aim for roughly 10–15 words.","Name the variables or the population, e.g. 'Effects of X on Y among Z'.","Avoid jargon and abbreviations unless they are standard."],
+    checks:["Title states the topic clearly","Title names population or setting","Title is under about 15 words","Title reflects the research design"],
+    questions:["Could a stranger understand the study from the title alone?","Does the title promise only what the study will deliver?"],
+    res:[
+      {t:"How To Write A Research Proposal: guide with free template (Grad Coach)", u:"https://gradcoach.com/?p=8255", type:"pdf", d:"Written guide and free proposal template covering the title and each section"},
+      {t:"How To Write A Research Proposal For A Dissertation Or Thesis (With Examples)", u:"https://www.youtube.com/watch?v=eALzUfkQJRU", type:"video", d:"Grad Coach video walkthrough with examples, including provisional titles"}
+    ]
+  },
+  {
+    id:"abstract", no:2,
+    en:"Abstract / Summary", ne:"सारांश (Abstract)",
+    sumEn:"A brief overview of the problem, objectives, methods and expected outcomes, usually 150–300 words. Write it last, after the rest of the proposal is ready.",
+    sumNe:"समस्या, उद्देश्य, विधि र अपेक्षित परिणामको संक्षिप्त परिचय, सामान्यतः १५०–३०० शब्द। यो सबैभन्दा अन्त्यमा लेख्नुहोस्।",
+    tips:["Cover four parts: problem, objectives, methods, expected outcomes.","Keep it within 150–300 words.","No citations or long tables in the abstract."],
+    checks:["Problem is stated in 1–2 sentences","Objectives are summarised","Methods are summarised","Expected outcomes are included","Length is 150–300 words"],
+    questions:["If a reviewer reads only this paragraph, do they understand why the study matters?"],
+    res:[
+      {t:"Search: how to write a research abstract tutorial", u:"https://www.youtube.com/results?search_query=how+to+write+a+research+abstract+tutorial", type:"video", d:"YouTube search for abstract-writing videos (choose a recent, clear one)"},
+      {t:"Purdue OWL: Writing an abstract and APA guidance", u:"https://owl.purdue.edu/owl/research_and_citation/apa_style/apa_formatting_and_style_guide/abstract_and_introduction.html", type:"pdf", d:"Free online writing guide on abstracts and introductions"}
+    ]
+  },
+  {
+    id:"intro", no:3,
+    en:"Introduction / Background", ne:"परिचय / पृष्ठभूमि",
+    sumEn:"Give context: what is already known, what the research gap is, and why the study is important. Move from broad context to the specific gap.",
+    sumNe:"सन्दर्भ दिनुहोस्: के थाहा छ, अनुसन्धान अन्तर (gap) के हो, र अध्ययन किन महत्त्वपूर्ण छ। विस्तृतबाट विशिष्टतर्फ जानुहोस्।",
+    tips:["Funnel structure: broad → narrow → your gap → your study.","Every claim needs a source.","State the research gap explicitly."],
+    checks:["Broad context is given","Known facts are supported by sources","Research gap is clearly stated","Importance of the study is explained"],
+    questions:["What exactly is not yet known?","Why is it urgent for Nepal, your region or your field?"],
+    res:[
+      {t:"How to Write the Background of the Study (Philonotes, written series with transcripts)", u:"https://philonotes.com/index.php/2020/12/05/background-of-the-study/", type:"pdf", d:"Free written guide on writing the background of a study"},
+      {t:"How To Write A Research Proposal 101: The What, Why & How", u:"https://gradcoach.com/?p=17089", type:"pdf", d:"Plain-language explainer with examples on purpose and structure"}
+    ]
+  },
+  {
+    id:"problem", no:4,
+    en:"Problem Statement", ne:"समस्या कथन",
+    sumEn:"A clear, focused description of the issue. Answer: what problem are you solving, for whom, and where does it show up?",
+    sumNe:"समस्याको स्पष्ट र केन्द्रित विवरण। कुन समस्या समाधान गर्दै हुनुहुन्छ, कसको लागि, र कहाँ देखिन्छ, भन्ने उत्तर दिनुहोस्।",
+    tips:["Describe the problem with evidence (data, observation, reports).","Avoid stating the solution inside the problem statement.","Keep it to one focused problem."],
+    checks:["Problem is specific, not general","Evidence of the problem is cited","Affected group or setting is named","Problem is separate from the solution"],
+    questions:["Is the problem measurable or observable?","Would someone else agree this is a real problem?"],
+    res:[
+      {t:"What (Exactly) Is A Research Proposal? Plain-language explainer", u:"https://gradcoach.com/?p=17089", type:"pdf", d:"Explains how the problem leads into the proposal structure"},
+      {t:"How To Write A Research Proposal For A Dissertation Or Thesis (With Examples)", u:"https://www.youtube.com/watch?v=eALzUfkQJRU", type:"video", d:"Video with practical examples of problem statements"}
+    ]
+  },
+  {
+    id:"objectives", no:5,
+    en:"Research Objectives", ne:"अनुसन्धान उद्देश्य",
+    sumEn:"State one general objective (the overall aim) and several specific objectives (step-by-step goals). Specific objectives should be measurable and achievable.",
+    sumNe:"एउटा सामान्य उद्देश्य (समग्र लक्ष्य) र धेरै विशिष्ट उद्देश्य (चरणबद्ध लक्ष्य) लेख्नुहोस्। विशिष्ट उद्देश्य मापनयोग्य र प्राप्त गर्न सकिने हुनुपर्छ।",
+    tips:["Start each specific objective with an action verb: identify, examine, compare, develop, assess.","Use 3–5 specific objectives.","Each objective should map to a research question and a method."],
+    checks:["One general objective is stated","3–5 specific objectives are listed","Each uses an action verb","Objectives are measurable"],
+    questions:["Does each specific objective lead to the general aim?","Can you tell when each objective is achieved?"],
+    res:[
+      {t:"How To Write A Research Proposal For A Dissertation Or Thesis (With Examples)", u:"https://www.youtube.com/watch?v=eALzUfkQJRU", type:"video", d:"Covers aims and objectives with worked examples"},
+      {t:"Search: writing SMART research objectives video", u:"https://www.youtube.com/results?search_query=writing+research+objectives+general+and+specific", type:"video", d:"YouTube search for general vs specific objectives tutorials"}
+    ]
+  },
+  {
+    id:"questions", no:6,
+    en:"Research Questions / Hypotheses", ne:"अनुसन्धान प्रश्न / परिकल्पना",
+    sumEn:"Questions the study will answer, or testable hypotheses for quantitative studies. Questions suit qualitative and mixed studies; hypotheses suit testing relationships.",
+    sumNe:"अध्ययनले उत्तर दिने प्रश्न, वा परिमाणात्मक अध्ययनका लागि परीक्षण योग्य परिकल्पना। गुणात्मक अध्ययनमा प्रश्न, र सम्बन्ध परीक्षणमा परिकल्पना उपयोगी हुन्छ।",
+    tips:["Research questions are open; hypotheses are predictions that can be tested.","Hypotheses need null and alternative forms for statistical testing.","Link every question to an objective."],
+    checks:["Research questions or hypotheses are written","Each one links to an objective","Hypotheses are testable (quantitative studies)","Wording is precise"],
+    questions:["Can the data you plan to collect answer this question?","Is the hypothesis falsifiable?"],
+    res:[
+      {t:"Inferential Statistics: hypothesis testing (study with this app)", u:"https://www.youtube.com/results?search_query=null+and+alternative+hypothesis+explained", type:"video", d:"YouTube search: null and alternative hypotheses explained"},
+      {t:"How To Write A Research Proposal (Grad Coach guide)", u:"https://gradcoach.com/?p=8255", type:"pdf", d:"Guide with free template showing where questions fit"}
+    ]
+  },
+  {
+    id:"litreview", no:7,
+    en:"Literature Review", ne:"साहित्य समीक्षा",
+    sumEn:"Summarise existing research, key theories and models, identify gaps your study will address, and show how your work fits into the field. Organise by themes, not by author.",
+    sumNe:"विद्यमान अनुसन्धान, मुख्य सिद्धान्त र मोडेलको सारांश दिनुहोस्, आफ्नो अध्ययनले सम्बोधन गर्ने अन्तर पहिचान गर्नुहोस्, र तपाईंको काम क्षेत्रमा कहाँ पर्छ देखाउनुहोस्।",
+    tips:["Organise by theme or argument, not one paragraph per author.","Use a literature matrix (author, year, method, finding, gap).","Reference managers like Zotero or Mendeley save time."],
+    checks:["Key theories and models are summarised","Themes are organised logically","Gap is identified","Your study's place in the field is shown","Reference manager is used"],
+    questions:["What do the most recent 5 years of studies say?","Which studies disagree with each other, and why?"],
+    res:[
+      {t:"How To Write A Literature Review (Grad Coach video)", u:"https://www.youtube.com/watch?v=lw8HPXJP1VA", type:"video", d:"Step-by-step video on writing a literature review"},
+      {t:"How to Write the Literature Review (Philonotes, Part 1 with transcript)", u:"https://philonotes.com/index.php/2020/04/27/how-to-write-a-literature-review/", type:"pdf", d:"Written guide and transcript of the literature review series"},
+      {t:"Literature Review Catalogue Excel template (Grad Coach blog)", u:"https://gradcoach.com/blog/", type:"pdf", d:"Free Excel literature-matrix template linked from Grad Coach resources"}
+    ]
+  },
+  {
+    id:"method", no:8,
+    en:"Methodology", ne:"अनुसन्धान विधि (Methodology)",
+    sumEn:"Four parts: (a) Research design: qualitative, quantitative or mixed; (b) Population and sample: who or what you study and how you sample; (c) Data collection: surveys, interviews, experiments; (d) Data analysis: statistical tools or thematic analysis.",
+    sumNe:"चार भाग: (क) अनुसन्धान डिजाइन: गुणात्मक, परिमाणात्मक वा मिश्रित; (ख) जनसंख्या र नमुना: कसलाई वा के अध्ययन गर्दै हुनुहुन्छ र कसरी छान्नुहुन्छ; (ग) तथ्यांक संकलन: सर्वेक्षण, अन्तर्वार्ता, प्रयोग; (घ) तथ्यांक विश्लेषण: सांख्यिकीय उपकरण वा विषयगत विश्लेषण।",
+    subs:[
+      {h:"a. Research design", d:"Qualitative, quantitative or mixed-method. Justify your choice against the research questions."},
+      {h:"b. Population & sample", d:"Define the population, the sampling frame and the technique (random, stratified, purposive, snowball)."},
+      {h:"c. Data collection", d:"Surveys, interviews, focus groups, experiments or document analysis. Explain instruments and validity."},
+      {h:"d. Data analysis", d:"Statistical tools (e.g. SPSS, descriptive and inferential tests) or thematic / content analysis."}
+    ],
+    tips:["Match every method to a research question.","Describe the sample size and how it was determined.","Pilot-test your instruments and state reliability (e.g. Cronbach's alpha)."],
+    checks:["Research design is chosen and justified","Population and sampling technique are defined","Sample size is justified","Data collection instruments are described","Analysis method is named and justified"],
+    questions:["If you change the sampling method, does your answer change?","Can another researcher repeat your procedure from your description?"],
+    res:[
+      {t:"An Introduction to Business Research Methods (free Bookboon textbook: sampling, questionnaires, qualitative and quantitative data)", u:"https://bookboon.com/en/an-introduction-to-business-research-methods-ebook", type:"pdf", d:"Free e-textbook; chapters on sampling, questionnaire design and data analysis"},
+      {t:"How To Write A Research Proposal For A Dissertation Or Thesis (With Examples)", u:"https://www.youtube.com/watch?v=eALzUfkQJRU", type:"video", d:"Video covering the methodology section with examples"},
+      {t:"Search: sampling techniques explained video", u:"https://www.youtube.com/results?search_query=sampling+techniques+explained+research+methodology", type:"video", d:"YouTube search for probability and non-probability sampling tutorials"}
+    ]
+  },
+  {
+    id:"significance", no:9,
+    en:"Significance of the Study", ne:"अध्ययनको महत्त्व",
+    sumEn:"Explain why the research matters and who benefits: academia, policy, industry or society.",
+    sumNe:"अनुसन्धान किन महत्त्वपूर्ण छ र कसलाई फाइदा हुन्छ भनेर बताउनुहोस्: शैक्षिक क्षेत्र, नीति, उद्योग वा समाज।",
+    tips:["List beneficiaries separately: academics, policymakers, practitioners, communities.","Be realistic, not exaggerated."],
+    checks:["Academic contribution is stated","Practical or policy benefits are listed","Beneficiaries are named"],
+    questions:["Who would act differently because of your findings?"],
+    res:[
+      {t:"What (Exactly) Is A Research Proposal? (explains significance within the four proposal sections)", u:"https://gradcoach.com/?p=17089", type:"pdf", d:"Shows how significance connects to the rest of the proposal"}
+    ]
+  },
+  {
+    id:"timeline", no:10,
+    en:"Timeline / Work Plan", ne:"समयसीमा / कार्य योजना",
+    sumEn:"Break the project into phases with estimated time for each. A Gantt chart is the usual visual format.",
+    sumNe:"परियोजनालाई चरणमा विभाजन गर्नुहोस् र प्रत्येकको अनुमानित समय लेख्नुहोस्। गान्ट चार्ट सामान्य दृश्य ढाँचा हो।",
+    tips:["Include ethics approval, piloting, fieldwork, analysis, writing and revision.","Add buffer time for delays.","Use a simple Gantt chart in Excel or Google Sheets."],
+    checks:["Phases are listed","Each phase has a duration","Gantt chart is included","Buffer time is allowed"],
+    questions:["Which phase is most likely to delay the whole project?"],
+    res:[
+      {t:"Search: how to make a Gantt chart in Excel (video)", u:"https://www.youtube.com/results?search_query=how+to+make+a+gantt+chart+in+excel+research+timeline", type:"video", d:"YouTube search for Gantt chart tutorials"},
+      {t:"Grad Coach Research Proposal Blueprint (paid course; free sample lesson available)", u:"https://gradcoach.com/rpb/", type:"web", d:"Optional: the publisher offers a free sample lesson on planning a proposal"}
+    ]
+  },
+  {
+    id:"budget", no:11,
+    en:"Budget (if required)", ne:"बजेट (आवश्यक भए)",
+    sumEn:"Estimated costs for materials, travel, software, personnel and other expenses. Include this section only when funding is requested or required.",
+    sumNe:"सामग्री, यात्रा, सफ्टवेयर, जनशक्ति र अन्य खर्चको अनुमान। अनुदान माग्दा वा आवश्यक हुँदा मात्र समावेश गर्नुहोस्।",
+    tips:["Show unit cost × quantity for each line.","Add a contingency of about 10%.","Check the funder's own budget template if one exists."],
+    checks:["Each cost category is listed","Unit costs and totals are shown","Contingency is included","Funder template is followed (if any)"],
+    questions:["Which costs are essential, and which are optional?"],
+    res:[
+      {t:"Search: research project budget template tutorial", u:"https://www.youtube.com/results?search_query=research+project+budget+template+tutorial", type:"video", d:"YouTube search for budgeting tutorials for research projects"}
+    ]
+  },
+  {
+    id:"ethics", no:12,
+    en:"Ethical Considerations", ne:"नैतिक विचार",
+    sumEn:"Consent, confidentiality and data protection. Explain how participants are informed, how their identity is protected and how data is stored and destroyed.",
+    sumNe:"सहमति, गोपनीयता र तथ्यांक सुरक्षा। सहभागीलाई कसरी जानकारी दिइन्छ, पहिचान कसरी सुरक्षित हुन्छ, र तथ्यांक कसरी भण्डारण र नष्ट गरिन्छ बताउनुहोस्।",
+    tips:["Attach or describe the consent form.","Explain anonymisation and secure storage.","Mention approval from your institution's research ethics committee where required."],
+    checks:["Informed consent process is described","Confidentiality measures are listed","Data storage and deletion plan is stated","Ethics approval is noted (if required)"],
+    questions:["Could any participant be harmed by taking part?","How long will you keep the data, and who can access it?"],
+    res:[
+      {t:"An Introduction to Business Research Methods (free Bookboon textbook: includes research ethics)", u:"https://bookboon.com/en/an-introduction-to-business-research-methods-ebook", type:"pdf", d:"Free e-textbook with a chapter on research ethics"},
+      {t:"Search: research ethics informed consent video", u:"https://www.youtube.com/results?search_query=research+ethics+informed+consent+explained", type:"video", d:"YouTube search for consent and confidentiality explainers"}
+    ]
+  },
+  {
+    id:"references", no:13,
+    en:"References / Bibliography", ne:"सन्दर्भ सूची (References)",
+    sumEn:"List all sources used in the proposal in the required citation style (APA, MLA, Harvard, etc.). Every in-text citation must have an entry here, and every entry must be cited.",
+    sumNe:"प्रस्तावमा प्रयोग गरिएका सबै स्रोत आवश्यक उद्धरण शैली (APA, MLA, Harvard आदि) मा सूचीबद्ध गर्नुहोस्।",
+    tips:["Pick one citation style and use it throughout.","Use Zotero or Mendeley to avoid manual errors.","Check that every in-text citation matches a reference entry."],
+    checks:["One citation style is used throughout","Every in-text citation has a reference entry","Every reference is cited in the text","Reference manager is used"],
+    questions:["Are all sources current and peer-reviewed where possible?"],
+    res:[
+      {t:"Purdue OWL: APA Style guide (free)", u:"https://owl.purdue.edu/owl/research_and_citation/apa_style/apa_formatting_and_style_guide/general_format.html", type:"pdf", d:"Free official-style guide to APA formatting and references"},
+      {t:"Search: how to use Zotero for citations (video)", u:"https://www.youtube.com/results?search_query=how+to+use+zotero+for+citations+tutorial", type:"video", d:"YouTube search for Zotero tutorials"}
+    ]
+  },
+  {
+    id:"optional", no:"+",
+    en:"Optional Sections", ne:"ऐच्छिक खण्ड",
+    sumEn:"Include when relevant: Conceptual / Theoretical Framework, Limitations, and Appendices (questionnaires, tools, letters).",
+    sumNe:"सान्दर्भिक भए समावेश गर्नुहोस्: अवधारणात्मक / सैद्धान्तिक रूपरेखा, सीमितता, र परिशिष्ट (प्रश्नावली, उपकरण, पत्र)।",
+    tips:["A conceptual framework diagram shows how variables relate.","State limitations honestly; reviewers value this.","Put long tools and letters in appendices, not in the body."],
+    checks:["Conceptual or theoretical framework (if needed)","Limitations are stated","Appendices are prepared (questionnaire, consent form, letters)"],
+    questions:["Which optional section would make your proposal easier to judge?"],
+    res:[
+      {t:"Search: conceptual framework research proposal video", u:"https://www.youtube.com/results?search_query=conceptual+framework+research+proposal+tutorial", type:"video", d:"YouTube search for conceptual and theoretical framework tutorials"},
+      {t:"What (Exactly) Is A Research Proposal? (Grad Coach)", u:"https://gradcoach.com/?p=17089", type:"pdf", d:"Written guide covering the full structure of a proposal"}
+    ]
+  }
+];
+
+const UI = {
+  en:{ prev:"← Previous", next:"Next →", done:"Mark section complete", checklist:"Checklist", tips:"Tips", questions:"Reflect and answer", resources:"Free video & PDF resources", notes:"My notes for this section", saved:"Saved in this browser", draft:"View my proposal draft", draftTitle:"My proposal draft", draftHint:"Your notes from every section, in order. Copy and paste into your document.", progress:"sections complete", section:"Section", pdf:"PDF / Reading", video:"Video", web:"Web", explain:"Summary", optionalLabel:"Optional", nothing:"(no notes yet)", sub:"Teaching & Learning for scholars, researchers, innovators and entrepreneurs"},
+  ne:{ prev:"← अघिल्लो", next:"अर्को →", done:"खण्ड पूरा भयो भनी चिन्ह लगाउनुहोस्", checklist:"जाँच सूची", tips:"सुझाव", questions:"चिन्तन र उत्तर", resources:"नि:शुल्क भिडियो र PDF स्रोत", notes:"यस खण्डका मेरा टिप्पणी", saved:"यस ब्राउजरमा सुरक्षित", draft:"मेरो प्रस्ताव मस्यौदा हेर्नुहोस्", draftTitle:"मेरो प्रस्ताव मस्यौदा", draftHint:"सबै खण्डका टिप्पणी क्रमअनुसार। आफ्नो दस्तावेजमा कपी गर्नुहोस्।", progress:"खण्ड पूरा", section:"खण्ड", pdf:"PDF / पठन", video:"भिडियो", web:"वेब", explain:"सारांश", optionalLabel:"ऐच्छिक", nothing:"(अहिलेसम्म टिप्पणी छैन)", sub:"विद्वान, अनुसन्धानकर्ता, नवप्रवर्तक र उद्यमीका लागि शिक्षण-सिकाइ"}
+};
+
+let lang = "en";
+let current = 0;
+let showingDraft = false;
+let state = {};
+
+function loadState(){
+  try{ state = JSON.parse(localStorage.getItem("rpf-progress-v1")||"{}") || {}; }catch(e){ state = {}; }
+}
+function saveState(){
+  try{ localStorage.setItem("rpf-progress-v1", JSON.stringify(state)); }catch(e){}
+}
+function sectionState(id){
+  if(!state[id]) state[id]={checks:{}, notes:""};
+  return state[id];
+}
+function esc(s){ return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+function isDone(step){
+  const st = sectionState(step.id);
+  return step.checks.length>0 && step.checks.every((_,i)=>st.checks[i]);
+}
+
+function updateProgress(){
+  const done = STEPS.filter(isDone).length;
+  const pct = Math.round(done/STEPS.length*100);
+  document.getElementById("progBar").style.width = pct+"%";
+  document.getElementById("progLabel").textContent = done+" / "+STEPS.length+" "+UI[lang].progress+" ("+pct+"%)";
+}
+
+function renderNav(){
+  const nav = document.getElementById("stepNav");
+  nav.innerHTML = STEPS.map((s,i)=>{
+    const label = (typeof s.no==="number" ? s.no+". " : "") + (lang==="en"?s.en:s.ne);
+    const cls = [i===current && !showingDraft?"on":"", isDone(s)?"done":""].join(" ");
+    return `<button class="${cls}" onclick="showStep(${i})">${esc(label)}</button>`;
+  }).join("");
+}
+
+function resBadge(t){
+  const label = t==="pdf"?UI[lang].pdf : t==="video"?UI[lang].video : UI[lang].web;
+  return `<span class="badge ${t}">${label}</span>`;
+}
+
+function renderStep(){
+  const s = STEPS[current];
+  const st = sectionState(s.id);
+  const U = UI[lang];
+  const title = lang==="en"? s.en : s.ne;
+  const sum = lang==="en"? s.sumEn : s.sumNe;
+  const subs = s.subs ? `<h3>${U.explain}</h3><ul>${s.subs.map(x=>`<li><b>${esc(x.h)}</b>: ${esc(x.d)}</li>`).join("")}</ul>` : "";
+  const checks = s.checks.map((c,i)=>`
+    <label class="check ${st.checks[i]?"done":""}">
+      <input type="checkbox" ${st.checks[i]?"checked":""} onchange="toggleCheck('${s.id}',${i},this.checked)">
+      <span>${esc(c)}</span>
+    </label>`).join("");
+  const questions = s.questions.map(q=>`<li>${esc(q)}</li>`).join("");
+  const tips = s.tips.map(t=>`<div class="tip">${esc(t)}</div>`).join("");
+  const res = s.res.map(r=>`
+    <a class="res" href="${esc(r.u)}" target="_blank" rel="noopener">
+      ${resBadge(r.type)}
+      <div><div class="t">${esc(r.t)}</div><div class="d">${esc(r.d)}</div></div>
+    </a>`).join("");
+
+  document.getElementById("stepView").innerHTML = `
+    <div class="card">
+      <div class="step-no">${U.section} ${esc(s.no)}${s.id==="optional"?" · "+U.optionalLabel:""}</div>
+      <h2>${esc(title)}</h2>
+      <p>${esc(sum)}</p>
+      ${subs}
+      <h3>${U.tips}</h3>
+      ${tips}
+      <h3>${U.checklist}</h3>
+      ${checks}
+      <h3>${U.questions}</h3>
+      <ul>${questions}</ul>
+      <h3>${U.resources}</h3>
+      ${res}
+      <h3>${U.notes}</h3>
+      <textarea id="notes" placeholder="${lang==="en"?"Draft your text for this section here...":"यस खण्डका लागि मस्यौदा यहाँ लेख्नुहोस्..."}" oninput="saveNotes('${s.id}',this.value)">${esc(st.notes)}</textarea>
+      <div class="note-no">${U.saved}</div>
+      <div class="row">
+        <button class="btn" ${current===0?"disabled":""} onclick="showStep(${current-1})">${U.prev}</button>
+        <button class="btn primary" ${current===STEPS.length-1?"disabled":""} onclick="showStep(${current+1})">${U.next}</button>
+      </div>
+    </div>`;
+}
+
+function showStep(i){
+  if(i<0||i>=STEPS.length) return;
+  current = i; showingDraft = false;
+  document.getElementById("stepView").classList.remove("hidden");
+  document.getElementById("draftView").classList.add("hidden");
+  renderAll();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function toggleCheck(id,i,val){
+  sectionState(id).checks[i]=val; saveState(); renderAll();
+}
+function saveNotes(id,val){
+  sectionState(id).notes=val; saveState(); updateProgress();
+}
+
+function showDraft(){
+  showingDraft = true;
+  document.getElementById("stepView").classList.add("hidden");
+  const v = document.getElementById("draftView");
+  v.classList.remove("hidden");
+  const U = UI[lang];
+  document.getElementById("draftNo").textContent = "";
+  document.getElementById("draftTitle").textContent = U.draftTitle;
+  document.getElementById("draftHint").textContent = U.draftHint;
+  const text = STEPS.map(s=>{
+    const n = sectionState(s.id).notes.trim();
+    const t = (typeof s.no==="number"?s.no+". ":"")+(lang==="en"?s.en:s.ne);
+    return t+"\n"+(n||U.nothing);
+  }).join("\n\n");
+  document.getElementById("draftText").textContent = text;
+  renderNav();
+}
+
+function setLang(l){
+  lang = l;
+  document.documentElement.lang = l==="ne"?"ne":"en";
+  document.getElementById("langEn").classList.toggle("on", l==="en");
+  document.getElementById("langNe").classList.toggle("on", l==="ne");
+  document.getElementById("appSub").textContent = UI[l].sub;
+  document.getElementById("draftBtn").textContent = UI[l].draft;
+  renderAll();
+  if(showingDraft) showDraft();
+}
+
+function renderAll(){
+  renderNav();
+  if(!showingDraft) renderStep();
+  updateProgress();
+}
+
+loadState();
+renderAll();
+</script>
+</body>
+</html>
